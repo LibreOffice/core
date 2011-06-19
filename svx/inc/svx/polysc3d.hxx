@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 
 /*************************************************************************
 |*
-|* 3D-Szene mit Darstellung durch 2D-Polygone
+|* 3D scene displayed through 2D polygons
 |*
 \************************************************************************/
 
@@ -45,6 +46,9 @@ public:
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 
     virtual sal_uInt16 GetObjIdentifier() const;
+    virtual E3dPolyScene* Clone() const;
 };
 
 #endif          // _E3D_POLYSC3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

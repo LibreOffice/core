@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,11 +182,11 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
         return cloneDescriptor( descriptor );
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-    aSql += ::rtl::OUString::createFromAscii(" ADD ");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
     aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -203,12 +204,12 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
         ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
         aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-        aSql += ::rtl::OUString::createFromAscii(" DROP ");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP "));
         aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -223,3 +224,4 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

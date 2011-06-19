@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <editeng/cntritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
-#ifndef _SVX_CLIPBOARDCTL_HXX_
 #include "svx/clipfmtitem.hxx"
-#endif
 #include <editeng/fhgtitem.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/charreliefitem.hxx>
@@ -55,11 +54,10 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 
 #include <editeng/memberids.hrc>
 #define SFX_TYPEMAP
 #include "svxslots.hxx"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

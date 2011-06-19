@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,6 +76,7 @@ namespace drawinglayer
                 SdrTextVertAdjust aSdrTextVertAdjust,
                 bool bContour,
                 bool bFitToSize,
+                bool bAutoFit,
                 bool bHideContour,
                 bool bBlink,
                 bool bScroll,
@@ -97,6 +99,7 @@ namespace drawinglayer
             const OutlinerParaObject& getOutlinerParaObject() const;
             bool isContour() const;
             bool isFitToSize() const;
+            bool isAutoFit() const;
             bool isHideContour() const;
             bool isBlink() const;
             bool isScroll() const;
@@ -128,3 +131,5 @@ namespace drawinglayer
 #endif // _SDR_ATTRIBUTE_SDRTEXTATTRIBUTE_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

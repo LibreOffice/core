@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@ void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
-//  if( !mbUseColor )               // selection gets font color, if available
     if( !mbUseColor || bSel )       // selection always gets highlight color
     {
         const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -176,14 +176,10 @@ SvxFontListBox::SvxFontListBox( Context* pParent, const char* pFile)
 {
 }
 
-/*IMPL_IMPL (SvxFontListBox, ListBox);
-IMPL_CONSTRUCTORS (SvxFontListBox, ListBox, "svxfontlistbox");
-IMPL_GET_IMPL (SvxFontListBox);
-IMPL_GET_WINDOW (SvxFontListBox);*/
-
 };
 
 #endif
 
 // ============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

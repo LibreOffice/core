@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifdef ENABLE_INIMANAGER//MUSTINI
+#ifdef ENABLE_INIMANAGER
 #include "inimgr.hxx"
 #endif
 #include <sfx2/shell.hxx>
@@ -47,22 +48,18 @@ class SfxChildWindow;
 class SfxChildWindowContext;
 class SfxChildWinContextArr_Impl;
 
-//ASDBG #ifndef _XFRAME_REF
-//ASDBG #define _XFRAME_REF
-//ASDBG USR_DECLIMPL_REF( ::com::sun::star::frame::XFrame, ::com::sun::star::uno::XInterface );
-//ASDBG #endif
-
-#define SFX_CHILDWIN_ZOOMIN       0x01      // ganz eingeklapptes Float
-#define SFX_CHILDWIN_SMALL        0x02      // halb eingeklapptes Float
-#define SFX_CHILDWIN_FORCEDOCK    0x04      // Float verboten
-#define SFX_CHILDWIN_AUTOHIDE     0x08      // DockingWindow im AutoHide-Modus
-#define SFX_CHILDWIN_TASK         0x10      // ChildWindow innerhalb der Task
-#define SFX_CHILDWIN_CANTGETFOCUS 0x20      // ChildWindow kann keinen Focus bekommen
+#define SFX_CHILDWIN_ZOOMIN          0x01  // Fully retracted Float
+#define SFX_CHILDWIN_SMALL           0x02  // Half retracted Float
+#define SFX_CHILDWIN_FORCEDOCK       0x04  // Float forbidden
+#define SFX_CHILDWIN_AUTOHIDE        0x08  // DockingWindow in AutoHide mode
+#define SFX_CHILDWIN_TASK            0x10  // ChildWindow inside the Task
+#define SFX_CHILDWIN_CANTGETFOCUS    0x20  // ChildWindow can not get focus
 #define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
-#define SFX_CHILDWIN_NEVERHIDE    0x80      // ChildWindow is can always made visible/is visible
+#define SFX_CHILDWIN_NEVERHIDE       0x80  // ChildWindow is can always made
+                                           // visible/is visible
 #define CHILDWIN_NOPOS            USHRT_MAX
 
-// Konfiguration eines ChildWindows
+// ChildWindow Configuration
 struct SfxChildWinInfo
 {
     sal_Bool                bVisible;
@@ -77,30 +74,28 @@ struct SfxChildWinInfo
                             bVisible = sal_False;
                             nFlags = 0;
                         }
-//#if 0 // _SOLAR__PRIVATE
     sal_Bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
                                            SfxChildAlignment    *pLastAlign = 0,
                                            Size                 *pSize = 0,
                                            sal_uInt16               *pLine = 0,
                                            sal_uInt16               *pPos = 0 ) const;
-//#endif
 };
 
-// Factory-Methode eines ChildWindows
+// ChildWindow factory methods
 typedef SfxChildWindow* (*SfxChildWinCtor)( ::Window *pParentWindow,
                                             sal_uInt16 nId,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 
-// Factory-Methode eines ChildWindowsContexts
+// ChildWindowsContexts factory methods
 typedef SfxChildWindowContext* (*SfxChildWinContextCtor)( ::Window *pParentWindow,
                                             SfxBindings *pBindings,
                                             SfxChildWinInfo *pInfo);
 struct SfxChildWinContextFactory
 {
-    SfxChildWinContextCtor  pCtor;      // Factory-Methode
-    sal_uInt16                  nContextId; // Identifier f"ur das SfxInterface
-    SfxChildWinInfo         aInfo;      // Konfiguration
+    SfxChildWinContextCtor  pCtor;      // Factory method
+    sal_uInt16              nContextId; // Idenifier for SfxInterface
+    SfxChildWinInfo         aInfo;      // Configuration
 
     SfxChildWinContextFactory( SfxChildWinContextCtor pTheCtor, sal_uInt16 nID )
         : pCtor(pTheCtor)
@@ -112,11 +107,11 @@ SV_DECL_PTRARR_DEL( SfxChildWinContextArr_Impl, SfxChildWinContextFactory*, 2, 2
 
 struct SfxChildWinFactory
 {
-    SfxChildWinCtor     pCtor;          // Factory-Methode
+    SfxChildWinCtor            pCtor;  // Factory method
     sal_uInt16              nId;            // ChildWindow-Id ( SlotId )
-    SfxChildWinInfo     aInfo;          // Konfiguration
-    sal_uInt16              nPos;           // ggf. Position im UI
-    SfxChildWinContextArr_Impl *pArr;   // Array f"ur Contexte
+    SfxChildWinInfo            aInfo;  // Configuration
+    sal_uInt16                  nPos;  // Position in UI
+    SfxChildWinContextArr_Impl *pArr;  // Array for Contexts
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
             sal_uInt16 n )
@@ -126,16 +121,11 @@ struct SfxChildWinFactory
         , pArr( NULL )
     {}
 
-//#if 0 // _SOLAR__PRIVATE
     ~SfxChildWinFactory()
     {
         delete pArr;
     }
-//#else
-    // Der WIN16-Compiler versucht dort zu "ubersetzen, wo dieser Header
-    // included wird, und kann dann nat"urlich nicht linken, wenn inline ...
-//  ~SfxChildWinFactory();
-//#endif
+
 };
 
 class FloatingWindow;
@@ -173,13 +163,13 @@ class SFX2_DLLPUBLIC SfxChildWindow
     sal_uInt16              nType;          // ChildWindow-Id
 
 protected:
-    SfxChildAlignment       eChildAlignment;// aktuelles ::com::sun::star::drawing::Alignment
-    ::Window*               pWindow;        // eigentlicher Inhalt
-    SfxChildWindow_Impl*    pImp;           // Imp-Daten
+    SfxChildAlignment           eChildAlignment; // Current ::com::sun::star::drawing::Alignment
+    ::Window*                   pWindow;         // actual contents
+    SfxChildWindow_Impl*        pImp;            // Implementation data
 
 private:
-    SfxChildWindowContext*  pContext;       // bei kontextsensitiven ChildWindows:
-                                            // weiteres window in pWindow
+    SfxChildWindowContext*      pContext;        // With context-sensitive ChildWindows:
+                                                 // Annother window in pWindow
     SAL_DLLPRIVATE SfxChildWindowContext*
                         GetContext() const
                         { return pContext; }
@@ -202,10 +192,8 @@ public:
     void                SetPosSizePixel(const Point& rPoint, Size& rSize);
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
     virtual void                Hide();
     virtual void                Show( sal_uInt16 nFlags );
-//-->Modified by PengYunQuan for Validity Cell Range Picker
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
     sal_Bool                CanGetFocus() const;
@@ -240,11 +228,9 @@ public:
     virtual com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
     SAL_DLLPRIVATE void SetVisible_Impl( sal_Bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
-    //SfxWorkWindow*        GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();
 
@@ -252,25 +238,24 @@ public:
                         GetContext_Impl() const
                         { return pContext; }
     SAL_DLLPRIVATE void SetFactory_Impl( SfxChildWinFactory* );
-//#endif
 };
 
 //------------------------------------------------------------------
-//! demn"achst hinf"allig !
+//! soon obsolete !
 #define SFX_DECL_CHILDWINDOW_CONTEXT(Class) \
         static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(SfxModule *pMod=0); \
 
-//! Das Macro der Zukunft ...
+//! The Macro of the future ...
 #define SFX_DECL_CHILDWINDOWCONTEXT(Class) \
         static  SfxChildWindowContext* CreateImpl(::Window *pParent, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
         static  void RegisterChildWindowContext(sal_uInt16, SfxModule *pMod=0); \
 
-//! demn"achst hinf"allig !
+//! soon obsolete !
 #define SFX_IMPL_CHILDWINDOW_CONTEXT(Class, MyID, ShellClass) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent, \
@@ -286,11 +271,12 @@ public:
             SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, pFact); \
         }
 
-//! Das Macro der Zukunft ...
-// CreateImpl mu\s noch als Parameter die Factory mitbekommen wg. ContextId
-// Solange wird diese Id auf 0 gesetzt und in SfxChildWindow::CreateContext gepatched
+//! The Macro of the future ...
+// As a parameter and because of ContextId, CreateImpl must be handed the
+// factory. As long as Id is set to 0 and patched in
+// SfxChildWindow::CreateContext
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent,0,pBindings,pInfo);\
@@ -315,13 +301,13 @@ public:
         SFX_IMPL_POS_CHILDWINDOW(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
-        SfxChildWindow* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindow* Class::CreateImpl( ::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        sal_uInt16  __EXPORT Class::GetChildWindowId () \
+        sal_uInt16 Class::GetChildWindowId () \
                 { return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
@@ -334,7 +320,7 @@ public:
 
 #define SFX_IMPL_FLOATINGWINDOW(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -342,7 +328,7 @@ public:
 
 #define SFX_IMPL_MODELESSDIALOG(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
@@ -350,7 +336,7 @@ public:
 
 #define SFX_IMPL_DOCKINGWINDOW(Class, MyID) \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -358,7 +344,7 @@ public:
 
 #define SFX_IMPL_TOOLBOX(Class, MyID)   \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \
@@ -367,3 +353,5 @@ public:
 //------------------------------------------------------------------
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

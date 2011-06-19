@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
+
 #define _SVX_USE_UNOGLOBALS_
 
 #include <com/sun/star/table/XTable.hpp>
@@ -39,9 +42,10 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <boost/unordered_map.hpp>
 #include <tools/fldunit.hxx>
 #include <tools/shl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
@@ -645,8 +649,8 @@ SfxItemPropertyMapEntry* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         // #i112587#
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0},
-        { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
+        { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
         {0,0,0,0,0,0}
     };
 
@@ -818,7 +822,6 @@ comphelper::PropertyMapEntry* ImplGetSvxDrawingDefaultsPropertyMap()
     return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
-// OD 13.10.2003 #i18732#
 comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry aSvxAdditionalDefaultsPropertyMap_Impl[] =
@@ -831,107 +834,110 @@ comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap(
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-// ---------------------------------------------------------------------
-
-SvxUnoPropertyMapProvider aSvxMapProvider;
-
-UHashMapEntry pSdrShapeIdentifierMap[] =
-{
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),       OBJ_RECT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),         OBJ_UNO  ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),            OBJ_LINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),           OBJ_GRUP ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),            OBJ_TEXT ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),            OBJ_PAGE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),           OBJ_FRAME ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA ),
-
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG ),
-    UHashMapEntry (RTL_CONSTASCII_STRINGPARAM(""),  0 )
-};
-
-// ---------------------------------------------------------------------
-
-UHashMap aSdrShapeIdentifierMap( pSdrShapeIdentifierMap );
-
 /***********************************************************************
 * class UHashMap                                                       *
 ***********************************************************************/
 
-UHashMap::UHashMap( UHashMapEntry* pMap )
-{
-    while( pMap->aIdentifier.getLength() )
-    {
-        OUString aStr( pMap->aIdentifier );
-        size_t nHash = aStr.hashCode() & (HASHARRAYSIZE-1);
+typedef ::boost::unordered_map< rtl::OUString, sal_uInt32, rtl::OUStringHash > UHashMapImpl;
 
-        m_aHashList[nHash].Insert(pMap);
-        pMap++;
-    }
+namespace {
+  static const UHashMapImpl &GetUHashImpl()
+  {
+      static UHashMapImpl aImpl(63);
+      static bool bInited = false;
+      if (!bInited) {
+          struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),      OBJ_RECT },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),            OBJ_CIRC },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),            OBJ_UNO  },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),      OBJ_EDGE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),            OBJ_MEASURE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),           OBJ_LINE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),        OBJ_POLY },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),       OBJ_PLIN },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),     OBJ_PATHLINE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),   OBJ_PATHFILL },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),   OBJ_FREELINE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"), OBJ_FREEFILL },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"),    OBJ_PATHPOLY },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),   OBJ_PATHPLIN },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),  OBJ_GRAF },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),          OBJ_GRUP },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),           OBJ_TEXT },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),           OBJ_OLE2 },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),           OBJ_PAGE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),            OBJ_CAPTION },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),          OBJ_FRAME },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),         OBJ_OLE2_PLUGIN },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),         OBJ_OLE2_APPLET },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),         OBJ_CUSTOMSHAPE },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),          OBJ_MEDIA },
+
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),  E3D_POLYSCENE_ID  | E3D_INVENTOR_FLAG },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),   E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"), E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),  E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"),    E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
+              { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"),    E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
+          };
+          for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aInit); i++)
+              aImpl[rtl::OUString( aInit[i].name, aInit[i].length, RTL_TEXTENCODING_ASCII_US ) ] = aInit[i].id;
+          bInited = true;
+        }
+      return aImpl;
+  }
 }
 
-// ---------------------------------------------------------------------
+//----------------------------------------------------------------------
+rtl::OUString UHashMap::getNameFromId(sal_uInt32 nId)
+{
+    const UHashMapImpl &rMap = GetUHashImpl();
+
+    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); it++)
+    {
+        if (it->second == nId)
+            return it->first;
+    }
+    OSL_FAIL("[CL] unknown SdrObjekt identifier");
+    return rtl::OUString();
+}
+
+uno::Sequence< OUString > UHashMap::getServiceNames()
+{
+    const UHashMapImpl &rMap = GetUHashImpl();
+
+    int i = 0;
+    uno::Sequence< OUString > aSeq( rMap.size() );
+    OUString* pStrings = aSeq.getArray();
+
+    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); it++)
+        pStrings[i++] = it->first;
+
+    return aSeq;
+}
 
 sal_uInt32 UHashMap::getId( const OUString& rCompareString )
 {
-    size_t nHash = rCompareString.hashCode() & (HASHARRAYSIZE-1);
-
-    UHashMapEntryList& rList = m_aHashList[nHash];
-
-    UHashMapEntry * pMap = rList.First();
-
-    while(pMap)
-    {
-        if( rCompareString == pMap->aIdentifier )
-            return pMap->nId;
-
-        pMap = rList.Next();
-    }
-
-    return UHASHMAP_NOTFOUND;
+    const UHashMapImpl &rMap = GetUHashImpl();
+    UHashMapImpl::const_iterator it = rMap.find( rCompareString );
+    if( it == rMap.end() )
+        return UHASHMAP_NOTFOUND;
+    else
+        return it->second;
 }
 
 /***********************************************************************
 * class SvxUnoPropertyMapProvider                                      *
 ***********************************************************************/
 
-EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
-int _stdcall
-#else
-#ifdef WNT
-int _cdecl
-#else
-int
-#endif
-#endif
-Svx_CompareMap(const void* pSmaller, const void* pBigger )
+struct theSvxMapProvider :
+    public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
 {
-    int nDiff = strcmp( ((const SfxItemPropertyMapEntry*)pSmaller)->pName,
-                        ((const SfxItemPropertyMapEntry*)pBigger)->pName );
-    return nDiff;
+};
+
+SvxUnoPropertyMapProvider& getSvxMapProvider()
+{
+    return theSvxMapProvider::get();
 }
 
 // ---------------------------------------------------------------------
@@ -950,16 +956,6 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
     for(sal_uInt16 i=0;i<SVXMAP_END; i++)
         delete aSetArr[i];
 }
-
-// ---------------------------------------------------------------------
-
-/*void SvxUnoPropertyMapProvider::Sort(sal_uInt16 nId)
-{
-    SfxItemPropertyMapEntry* pTemp = aMapArr[nId];
-    sal_uInt16 i = 0;
-    while(pTemp[i].pName) { i++; }
-    qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMapEntry), Svx_CompareMap);
-}*/
 
 // ---------------------------------------------------------------------
 
@@ -996,7 +992,7 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPro
             case SVXMAP_PAGE: aMapArr[SVXMAP_PAGE] = ImplGetSvxPageShapePropertyMap(); break;
 
             default:
-                DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
+                OSL_FAIL( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
 //      Sort(nPropertyId);
     }
@@ -1165,21 +1161,6 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     return sal_True;
 }
 
-/*sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
-{
-    sal_Int16 nWhich = 0;
-
-    const SfxItemPropertyMapEntry* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
-    if( pMap )
-    {
-        const SfxItemPropertyMapEntry* pFound = SfxItemPropertyMapEntry::getByName( pMap, rPropName );
-        if( pFound )
-            nWhich = pFound->nWID;
-    }
-
-    return nWhich;
-} */
-
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {
     // first, calculate the search string length without an optional number behind the name
@@ -1233,7 +1214,7 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     return sal_False;
 }
 
-static sal_uInt16 __READONLY_DATA SvxUnoColorNameDefResId[] =
+static sal_uInt16 SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_BLUEGREY_DEF,
     RID_SVXSTR_BLACK_DEF,
@@ -1261,10 +1242,25 @@ static sal_uInt16 __READONLY_DATA SvxUnoColorNameDefResId[] =
     RID_SVXSTR_SALMON_DEF,
     RID_SVXSTR_SEABLUE_DEF,
     RID_SVXSTR_COLOR_SUN_DEF,
-    RID_SVXSTR_COLOR_CHART_DEF
+    RID_SVXSTR_COLOR_CHART_DEF,
+    RID_SVXSTR_LIBRE_GREEN_1_DEF,
+    RID_SVXSTR_LIBRE_GREEN_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_BLUE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_ORANGE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_PURPLE_DEF,
+    RID_SVXSTR_LIBRE_PURPLE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF,
+    RID_SVXSTR_TANGO_BUTTER_DEF,
+    RID_SVXSTR_TANGO_ORANGE_DEF,
+    RID_SVXSTR_TANGO_CHOCOLATE_DEF,
+    RID_SVXSTR_TANGO_CHAMELEON_DEF,
+    RID_SVXSTR_TANGO_SKY_BLUE_DEF,
+    RID_SVXSTR_TANGO_PLUM_DEF,
+    RID_SVXSTR_TANGO_SCARLET_RED_DEF,
+    RID_SVXSTR_TANGO_ALUMINIUM_DEF
 };
 
-static sal_uInt16 __READONLY_DATA SvxUnoColorNameResId[] =
+static sal_uInt16 SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_BLUEGREY,
     RID_SVXSTR_BLACK,
@@ -1292,17 +1288,44 @@ static sal_uInt16 __READONLY_DATA SvxUnoColorNameResId[] =
     RID_SVXSTR_SALMON,
     RID_SVXSTR_SEABLUE,
     RID_SVXSTR_COLOR_SUN,
-    RID_SVXSTR_COLOR_CHART
+    RID_SVXSTR_COLOR_CHART,
+    RID_SVXSTR_LIBRE_GREEN_1,
+    RID_SVXSTR_LIBRE_GREEN_ACCENT,
+    RID_SVXSTR_LIBRE_BLUE_ACCENT,
+    RID_SVXSTR_LIBRE_ORANGE_ACCENT,
+    RID_SVXSTR_LIBRE_PURPLE,
+    RID_SVXSTR_LIBRE_PURPLE_ACCENT,
+    RID_SVXSTR_LIBRE_YELLOW_ACCENT,
+    RID_SVXSTR_TANGO_BUTTER,
+    RID_SVXSTR_TANGO_ORANGE,
+    RID_SVXSTR_TANGO_CHOCOLATE,
+    RID_SVXSTR_TANGO_CHAMELEON,
+    RID_SVXSTR_TANGO_SKY_BLUE,
+    RID_SVXSTR_TANGO_PLUM,
+    RID_SVXSTR_TANGO_SCARLET_RED,
+    RID_SVXSTR_TANGO_ALUMINIUM
 };
 
 bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
 {
-    int i = 0;
+    //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
+    //replace "Red Hat 1" with the translation of Red :-)
+    rtl::OUString sStr(rString);
+    const sal_Unicode *pStr = sStr.getStr();
+    sal_Int32 nLength = sStr.getLength();
+    while( nLength > 0 )
+    {
+        const sal_Unicode nChar = pStr[nLength-1];
+        if (nChar != '%' && (nChar < '0' || nChar > '9'))
+            break;
+        nLength--;
+    }
+    sStr = rtl::OUString(pStr, nLength).trim();
 
-    for( i = 0; i < nCount; i++ )
+    for(int i = 0; i < nCount; ++i )
     {
         String aStrDefName = SVX_RESSTR( pSourceResIds[i] );
-        if( rString.Search( aStrDefName ) == 0 )
+        if( sStr.equals( aStrDefName ) )
         {
             String aReplace = SVX_RESSTR( pDestResIds[i] );
             rString.Replace( 0, aStrDefName.Len(), aReplace );
@@ -1318,7 +1341,6 @@ bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestRe
 */
 void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rInternalName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1344,7 +1366,6 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
             }
         }
     }
-#endif
 
     // just use previous name, if nothing else was found.
     rApiName = rInternalName;
@@ -1355,7 +1376,6 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rApiName;
 
     if( nWhich == XATTR_LINECOLOR )
@@ -1381,7 +1401,6 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
             }
         }
     }
-#endif // !SVX_LIGHT
 
     // just use previous name, if nothing else was found.
     rInternalName = rApiName;
@@ -1391,11 +1410,11 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( nServiceId > SVXUNO_SERVICEID_LASTID )
     {
-        DBG_ERROR( "unknown service id!" );
+        OSL_FAIL( "unknown service id!" );
         return NULL;
     }
 
@@ -1417,7 +1436,7 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
             break;
 
         default:
-            DBG_ERROR( "unknown service id!" );
+            OSL_FAIL( "unknown service id!" );
         }
     }
 
@@ -1426,3 +1445,4 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
 
 comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { NULL };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

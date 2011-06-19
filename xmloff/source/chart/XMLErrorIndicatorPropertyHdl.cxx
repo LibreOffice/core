@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bValue;
+    bool bValue;
     SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
 
     // modify existing value
@@ -103,3 +104,5 @@ sal_Bool XMLErrorIndicatorPropertyHdl::exportXML( ::rtl::OUString& rStrExpValue,
     // only export if set to true
     return bValue;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

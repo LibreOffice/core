@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,7 +196,6 @@ public:
     sal_Bool                    IsInModalMode() const;
     void                    Resize(sal_Bool bForce=sal_False);
 
-    //void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible );
     void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus=sal_True);
     void                        ToggleChildWindow(sal_uInt16);
     sal_Bool                        HasChildWindow(sal_uInt16);
@@ -205,7 +205,6 @@ public:
     void                        ChildWindowExecute(SfxRequest&);
     void                        ChildWindowState(SfxItemSet&);
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE sal_Bool IsDowning_Impl() const;
@@ -249,7 +248,6 @@ public:
     SAL_DLLPRIVATE void SetCurViewId_Impl( const sal_uInt16 i_nID );
     SAL_DLLPRIVATE void ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL );
 
-//#endif
 private:
     SAL_DLLPRIVATE sal_Bool SwitchToViewShell_Impl( sal_uInt16 nNo, sal_Bool bIsIndex = sal_False );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
@@ -343,8 +341,10 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ public:
                 sal_uInt16  );
     virtual ~SvxGrfCrop();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" from SfxPoolItem
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16 nVer) const;
     virtual SvStream&           Store(SvStream &, sal_uInt16 nIVer) const;
@@ -53,10 +54,10 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
+                           sal_uInt8 nMemberId = 0 );
 
     void SetLeft( sal_Int32 nVal )      { nLeft = nVal; }
     void SetRight( sal_Int32 nVal )     { nRight = nVal; }
@@ -78,3 +79,5 @@ public:
 
 
 #endif  // _GRFATR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

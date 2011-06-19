@@ -39,10 +39,10 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
 $(eval $(call gb_Library_set_include,sfx,\
-    -I$(SRCDIR)/sfx2/inc \
-    -I$(SRCDIR)/sfx2/inc/sfx2 \
-    -I$(SRCDIR)/sfx2/source/inc \
-    -I$(SRCDIR)/sfx2/inc/pch \
+    -I$(realpath $(SRCDIR)/sfx2/inc) \
+    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
+    -I$(realpath $(SRCDIR)/sfx2/source/inc) \
+    -I$(realpath $(SRCDIR)/sfx2/inc/pch) \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
@@ -64,7 +64,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     sax \
     sb \
     sot \
-    stl \
     svl \
     svt \
     tk \
@@ -72,7 +71,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -240,9 +238,9 @@ $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 
 $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/sfx2/inc/sfx2 \
-    -I$(SRCDIR)/sfx2/inc \
-    -I$(SRCDIR)/sfx2/sdi \
+    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
+    -I$(realpath $(SRCDIR)/sfx2/inc) \
+    -I$(realpath $(SRCDIR)/sfx2/sdi) \
 ))
 
 ifeq ($(OS),$(filter WNT MACOSX,$(OS)))
@@ -251,11 +249,6 @@ $(eval $(call gb_Library_add_defs,sfx,\
 ))
 endif
 
-ifeq ($(OS),OS2)
-$(eval $(call gb_Library_add_exception_objects,sfx,\
-    sfx2/source/appl/shutdowniconOs2.ob \
-))
-endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_objcxxobjects,sfx,\
     sfx2/source/appl/shutdowniconaqua \

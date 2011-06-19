@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 #define _CONNECTIVITY_MOZAB_CATALOG_HXX_
 
 #include "connectivity/sdbcx/VCatalog.hxx"
-// #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
-// #include "odbc/OFunctiondefs.hxx"
-// #endif
 
 namespace connectivity
 {
@@ -64,3 +62,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_MOZAB_CATALOG_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

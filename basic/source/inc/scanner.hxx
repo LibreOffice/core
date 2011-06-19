@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _SCANNER_HXX
 
 #include <tools/string.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 
 // Der Scanner ist stand-alone, d.h. er kann von ueberallher verwendet
 // werden. Eine BASIC-Instanz ist fuer Fehlermeldungen notwendig. Ohne
@@ -144,3 +143,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

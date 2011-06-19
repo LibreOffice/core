@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-//#include <stl_queue.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _TOOLERR_HXX //autogen
 #include <tools/errcode.hxx>
-#endif
 #include <svl/hint.hxx>
 
 #include <cppuhelper/implbase1.hxx>
@@ -64,6 +62,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -76,7 +75,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
-
+#include <com/sun/star/script/XAutomationInvocation.hpp>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star::uno;
@@ -99,7 +98,7 @@ using namespace cppu;
 #include<runtime.hxx>
 
 #include<math.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 
@@ -113,7 +112,7 @@ TYPEINIT1(SbUnoSingleton,SbxObject)
 
 typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
 
-// Flag, um immer ueber Invocation zu gehen
+// Flag to go via invocation
 //#define INVOCATION_ONLY
 
 
@@ -129,14 +128,14 @@ static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("ooo.vba") 
 // redirection built in. The property name specifies the name
 // of the default property.
 
-bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp )
+bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, ::rtl::OUString& sDfltProp )
 {
     bool result = false;
     Reference< XDefaultProperty> xDefaultProp( pUnoObj->maTmpUnoObj, UNO_QUERY );
     if ( xDefaultProp.is() )
     {
         sDfltProp = xDefaultProp->getDefaultPropertyName();
-        if ( sDfltProp.Len() )
+        if ( sDfltProp.getLength() )
             result = true;
     }
     return result;
@@ -162,11 +161,26 @@ SbxVariable* getDefaultProp( SbxVariable* pRef )
     return pDefaultProp;
 }
 
+void SetSbUnoObjectDfltPropName( SbxObject* pObj )
+{
+    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*) pObj);
+    if ( pUnoObj )
+    {
+        ::rtl::OUString sDfltPropName;
+
+        if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
+        {
+            OSL_TRACE("SetSbUnoObjectDfltPropName setting dflt prop for %s", rtl::OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            pUnoObj->SetDfltProperty( sDfltPropName );
+        }
+    }
+}
+
 Reference< XComponentContext > getComponentContext_Impl( void )
 {
     static Reference< XComponentContext > xContext;
 
-    // Haben wir schon CoreReflection, sonst besorgen
+    // Do we have already CoreReflection; if not obtain it
     if( !xContext.is() )
     {
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -182,12 +196,12 @@ Reference< XComponentContext > getComponentContext_Impl( void )
     return xContext;
 }
 
-// CoreReflection statisch speichern
+// save CoreReflection statically
 Reference< XIdlReflection > getCoreReflection_Impl( void )
 {
     static Reference< XIdlReflection > xCoreReflection;
 
-    // Haben wir schon CoreReflection, sonst besorgen
+    // Do we have already CoreReflection; if not obtain it
     if( !xCoreReflection.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -208,7 +222,7 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
     return xCoreReflection;
 }
 
-// CoreReflection statisch speichern
+// save CoreReflection statically
 Reference< XHierarchicalNameAccess > getCoreReflection_HierarchicalNameAccess_Impl( void )
 {
     static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
@@ -230,7 +244,7 @@ Reference< XHierarchicalNameAccess > getTypeProvider_Impl( void )
 {
     static Reference< XHierarchicalNameAccess > xAccess;
 
-    // Haben wir schon CoreReflection, sonst besorgen
+    // Do we have already CoreReflection; if not obtain it
     if( !xAccess.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -257,7 +271,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
 {
     static Reference< XTypeConverter > xTypeConverter;
 
-    // Haben wir schon CoreReflection, sonst besorgen
+    // Do we have already CoreReflection; if not obtain it
     if( !xTypeConverter.is() )
     {
         Reference< XComponentContext > xContext = getComponentContext_Impl();
@@ -282,7 +296,7 @@ Reference< XTypeConverter > getTypeConverter_Impl( void )
 
 
 // #111851 factory function to create an OLE object
-SbUnoObject* createOLEObject_Impl( const String& aType )
+SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType )
 {
     static Reference< XMultiServiceFactory > xOLEFactory;
     static bool bNeedsInit = true;
@@ -349,7 +363,7 @@ void implAppendExceptionMsg( ::rtl::OUStringBuffer& _inout_rBuffer, const Except
 
 }
 
-// Fehlermeldungs-Message bei Exception zusammenbauen
+// construct an error message for the exception
 ::rtl::OUString implGetExceptionMsg( const Exception& e, const ::rtl::OUString& aExceptionType_ )
 {
     ::rtl::OUStringBuffer aMessageBuf;
@@ -357,7 +371,7 @@ void implAppendExceptionMsg( ::rtl::OUStringBuffer& _inout_rBuffer, const Except
     return aMessageBuf.makeStringAndClear();
 }
 
-String implGetExceptionMsg( const Any& _rCaughtException )
+::rtl::OUString implGetExceptionMsg( const Any& _rCaughtException )
 {
     OSL_PRECOND( _rCaughtException.getValueTypeClass() == TypeClass_EXCEPTION, "implGetExceptionMsg: illegal argument!" );
     if ( _rCaughtException.getValueTypeClass() != TypeClass_EXCEPTION )
@@ -382,7 +396,7 @@ Any convertAny( const Any& rVal, const Type& aDestType )
     }
     catch( CannotConvertException& e2 )
     {
-        String aCannotConvertExceptionName
+        ::rtl::OUString aCannotConvertExceptionName
             ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
             implGetExceptionMsg( e2, aCannotConvertExceptionName ) );
@@ -396,10 +410,10 @@ Any convertAny( const Any& rVal, const Type& aDestType )
 TYPEINIT1(SbUnoAnyObject,SbxObject)
 
 
-// TODO: Spaeter auslagern
+// TODO: source out later
 Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 {
-    // void als Default-Klasse eintragen
+    // register void as default class
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
     rType.getDescription( &pTD );
@@ -415,15 +429,15 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 
 // Exception type unknown
 template< class EXCEPTION >
-String implGetExceptionMsg( const EXCEPTION& e )
+::rtl::OUString implGetExceptionMsg( const EXCEPTION& e )
 {
     return implGetExceptionMsg( e, ::getCppuType( &e ).getTypeName() );
 }
 
 // Error-Message fuer WrappedTargetExceptions
-String implGetWrappedMsg( const WrappedTargetException& e )
+::rtl::OUString implGetWrappedMsg( const WrappedTargetException& e )
 {
-    String aMsg;
+    ::rtl::OUString aMsg;
     Any aWrappedAny = e.TargetException;
     Type aExceptionType = aWrappedAny.getValueType();
 
@@ -431,7 +445,7 @@ String implGetWrappedMsg( const WrappedTargetException& e )
     if( aExceptionType.getTypeClass() == TypeClass_EXCEPTION )
     {
         Exception& e_ = *( (Exception*)aWrappedAny.getValue() );
-        aMsg = implGetExceptionMsg( e_, String( aExceptionType.getTypeName() ) );
+        aMsg = implGetExceptionMsg( e_, ::rtl::OUString( aExceptionType.getTypeName() ) );
     }
     // Otherwise use WrappedTargetException itself
     else
@@ -462,6 +476,32 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 
     SbError nError( ERRCODE_BASIC_EXCEPTION );
     ::rtl::OUStringBuffer aMessageBuf;
+
+    // Add for VBA, to get the correct error code and message.
+    if ( SbiRuntime::isVBAEnabled() )
+    {
+        if ( aExamine >>= aBasicError )
+        {
+            if ( aBasicError.ErrorCode != 0 )
+            {
+                nError = StarBASIC::GetSfxFromVBError( (sal_uInt16) aBasicError.ErrorCode );
+                if ( nError == 0 )
+                {
+                    nError = (SbError) aBasicError.ErrorCode;
+                }
+                aMessageBuf.append( aBasicError.ErrorMessageArgument );
+                aExamine.clear();
+            }
+        }
+
+        IndexOutOfBoundsException aIdxOutBndsExp;
+        if ( aExamine >>= aIdxOutBndsExp )
+        {
+            nError = SbERR_OUT_OF_RANGE;
+            aExamine.clear();
+        }
+    }
+    // End add
 
     // strip any other WrappedTargetException instances, but this time preserve the error messages.
     WrappedTargetException aWrapped;
@@ -516,7 +556,6 @@ static void implHandleAnyException( const Any& _rCaughtException )
     }
 }
 
-
 // NativeObjectWrapper handling
 struct ObjectItem
 {
@@ -554,7 +593,7 @@ SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
 }
 
 
-// Von Uno nach Sbx wandeln
+// convert from Uno to Sbx
 SbxDataType unoToSbxType( TypeClass eType )
 {
     SbxDataType eRetType = SbxVOID;
@@ -566,22 +605,11 @@ SbxDataType unoToSbxType( TypeClass eType )
         case TypeClass_STRUCT:
         case TypeClass_EXCEPTION:       eRetType = SbxOBJECT;   break;
 
-        /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ARRAY:           break;
-        */
         case TypeClass_ENUM:            eRetType = SbxLONG;     break;
         case TypeClass_SEQUENCE:
             eRetType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
             break;
 
-        /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
-        */
 
         case TypeClass_ANY:             eRetType = SbxVARIANT;  break;
         case TypeClass_BOOLEAN:         eRetType = SbxBOOL;     break;
@@ -589,18 +617,13 @@ SbxDataType unoToSbxType( TypeClass eType )
         case TypeClass_STRING:          eRetType = SbxSTRING;   break;
         case TypeClass_FLOAT:           eRetType = SbxSINGLE;   break;
         case TypeClass_DOUBLE:          eRetType = SbxDOUBLE;   break;
-        //case TypeClass_OCTET:                                 break;
         case TypeClass_BYTE:            eRetType = SbxINTEGER;  break;
-        //case TypeClass_INT:               eRetType = SbxINT;  break;
         case TypeClass_SHORT:           eRetType = SbxINTEGER;  break;
         case TypeClass_LONG:            eRetType = SbxLONG;     break;
         case TypeClass_HYPER:           eRetType = SbxSALINT64; break;
-        //case TypeClass_UNSIGNED_OCTET:                        break;
         case TypeClass_UNSIGNED_SHORT:  eRetType = SbxUSHORT;   break;
         case TypeClass_UNSIGNED_LONG:   eRetType = SbxULONG;    break;
         case TypeClass_UNSIGNED_HYPER:  eRetType = SbxSALUINT64;break;
-        //case TypeClass_UNSIGNED_INT:  eRetType = SbxUINT;     break;
-        //case TypeClass_UNSIGNED_BYTE: eRetType = SbxUSHORT;   break;
         default: break;
     }
     return eRetType;
@@ -622,7 +645,6 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
     Type aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
 
-    sal_Int32 indicesIndex = indices.getLength() -1;
     sal_Int32 dimCopy = dimension;
 
     if ( eTypeClass == TypeClass_SEQUENCE )
@@ -647,7 +669,6 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
                     sizes.realloc( sizes.getLength() + 1 );
                     sizes[ sizes.getLength() - 1 ] = nLen;
                     indices.realloc( indices.getLength() + 1 );
-                    indicesIndex = indices.getLength() - 1;
                 }
             }
 
@@ -716,12 +737,12 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             Any aClassAny;
             aClassAny <<= xClass;
 
-            // SbUnoObject instanzieren
-            String aName;
+            // instantiate SbUnoObject
+            ::rtl::OUString aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aClassAny );
             SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
 
-            // #51475 Wenn das Objekt ungueltig ist null liefern
+            // If the object is invalid deliver zero
             if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
             {
                 pVar->PutObject( NULL );
@@ -732,7 +753,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             }
         }
         break;
-        // Interfaces und Structs muessen in ein SbUnoObject gewrappt werden
+        // Interfaces and  Structs must be wrapped in a SbUnoObject
         case TypeClass_INTERFACE:
         case TypeClass_STRUCT:
         case TypeClass_EXCEPTION:
@@ -796,13 +817,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                                 oleautomation::Currency aCurrency;
                                 if( (aValue >>= aCurrency) )
                                 {
-                                    sal_Int64 nValue64 = aCurrency.Value;
-                                    SbxINT64 aInt64;
-                                    aInt64.nHigh =
-                                        sal::static_int_cast< sal_Int32 >(
-                                            nValue64 >> 32);
-                                    aInt64.nLow = (sal_uInt32)( nValue64 & 0xffffffff );
-                                    pVar->PutCurrency( aInt64 );
+                                    pVar->PutCurrency( aCurrency.Value );
                                     break;
                                 }
                             }
@@ -810,8 +825,8 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     }
                 }
             }
-            // SbUnoObject instanzieren
-            String aName;
+            // instantiate a SbUnoObject
+            ::rtl::OUString aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
             //If this is called externally e.g. from the scripting
             //framework then there is no 'active' runtime the default property will not be set up
@@ -819,14 +834,14 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             //test seems a bit of overkill
             //if ( SbiRuntime::isVBAEnabled() )
             {
-                String sDfltPropName;
+                ::rtl::OUString sDfltPropName;
 
                 if ( SbUnoObject::getDefaultPropName( pSbUnoObject, sDfltPropName ) )
                         pSbUnoObject->SetDfltProperty( sDfltPropName );
             }
             SbxObjectRef xWrapper = (SbxObject*)pSbUnoObject;
 
-            // #51475 Wenn das Objekt ungueltig ist null liefern
+            // If the object is invalid deliver zero
             if( pSbUnoObject->getUnoAny().getValueType().getTypeClass() == TypeClass_VOID )
             {
                 pVar->PutObject( NULL );
@@ -838,14 +853,6 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         }
         break;
 
-        /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
-        case TypeClass_ARRAY:           break;
-        */
 
         case TypeClass_ENUM:
         {
@@ -867,7 +874,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             Type aElementType( ((typelib_IndirectTypeDescription *)pTD)->pType );
             ::typelib_typedescription_release( pTD );
 
-            // In Basic Array anlegen
+            // build an Array in Basic
             SbxDimArrayRef xArray;
             SbxDataType eSbxElementType = unoToSbxType( aElementType.getTypeClass() );
             xArray = new SbxDimArray( eSbxElementType );
@@ -875,15 +882,15 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             {
                 xArray->unoAddDim32( 0, nLen - 1 );
 
-                // Elemente als Variablen eintragen
+                // register the elements as variables
                 for( i = 0 ; i < nLen ; i++ )
                 {
-                    // Elemente wandeln
+                    // convert elements
                     Any aElementAny = xIdlArray->get( aValue, (sal_uInt32)i );
                     SbxVariableRef xVar = new SbxVariable( eSbxElementType );
                     unoToSbxValue( (SbxVariable*)xVar, aElementAny );
 
-                    // Ins Array braten
+                    // put into the Array
                     xArray->Put32( (SbxVariable*)xVar, &i );
                 }
             }
@@ -892,30 +899,15 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                 xArray->unoAddDim( 0, -1 );
             }
 
-            // Array zurueckliefern
+            // return the Array
             sal_uInt16 nFlags = pVar->GetFlags();
             pVar->ResetFlag( SBX_FIXED );
             pVar->PutObject( (SbxDimArray*)xArray );
             pVar->SetFlags( nFlags );
 
-            // #54548, Die Parameter duerfen hier nicht weggehauen werden
-            //pVar->SetParameters( NULL );
         }
         break;
 
-        /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
-
-        case TypeClass_ANY:
-        {
-            // Any rausholen und konvertieren
-            //Any* pAny = (Any*)aValue.get();
-            //if( pAny )
-                //unoToSbxValue( pVar, *pAny );
-        }
-        break;
-        */
 
         case TypeClass_BOOLEAN:         pVar->PutBool( *(sal_Bool*)aValue.getValue() ); break;
         case TypeClass_CHAR:
@@ -923,32 +915,26 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             pVar->PutChar( *(sal_Unicode*)aValue.getValue() );
             break;
         }
-        case TypeClass_STRING:          { ::rtl::OUString val; aValue >>= val; pVar->PutString( String( val ) ); }  break;
+        case TypeClass_STRING:          { ::rtl::OUString val; aValue >>= val; pVar->PutString( val ); }  break;
         case TypeClass_FLOAT:           { float val = 0; aValue >>= val; pVar->PutSingle( val ); } break;
         case TypeClass_DOUBLE:          { double val = 0; aValue >>= val; pVar->PutDouble( val ); } break;
-        //case TypeClass_OCTET:         break;
         case TypeClass_BYTE:            { sal_Int8 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
-        //case TypeClass_INT:           break;
         case TypeClass_SHORT:           { sal_Int16 val = 0; aValue >>= val; pVar->PutInteger( val ); } break;
         case TypeClass_LONG:            { sal_Int32 val = 0; aValue >>= val; pVar->PutLong( val ); } break;
         case TypeClass_HYPER:           { sal_Int64 val = 0; aValue >>= val; pVar->PutInt64( val ); } break;
-        //case TypeClass_UNSIGNED_OCTET:break;
         case TypeClass_UNSIGNED_SHORT:  { sal_uInt16 val = 0; aValue >>= val; pVar->PutUShort( val ); } break;
         case TypeClass_UNSIGNED_LONG:   { sal_uInt32 val = 0; aValue >>= val; pVar->PutULong( val ); } break;
         case TypeClass_UNSIGNED_HYPER:  { sal_uInt64 val = 0; aValue >>= val; pVar->PutUInt64( val ); } break;
-        //case TypeClass_UNSIGNED_INT:  break;
-        //case TypeClass_UNSIGNED_BYTE: break;
         default:                        pVar->PutEmpty();                       break;
     }
 }
 
-// Reflection fuer Sbx-Typen liefern
+// Deliver the reflection for Sbx types
 Type getUnoTypeForSbxBaseType( SbxDataType eType )
 {
     Type aRetType = getCppuVoidType();
     switch( eType )
     {
-        //case SbxEMPTY:        eRet = TypeClass_VOID; break;
         case SbxNULL:       aRetType = ::getCppuType( (const Reference< XInterface > *)0 ); break;
         case SbxINTEGER:    aRetType = ::getCppuType( (sal_Int16*)0 ); break;
         case SbxLONG:       aRetType = ::getCppuType( (sal_Int32*)0 ); break;
@@ -964,52 +950,35 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
                                 aRetType = ::getCppuType( (oleautomation::Date*)0 );
                             }
                             break;
-        // case SbxDATE:        aRetType = ::getCppuType( (double*)0 ); break;
         case SbxSTRING:     aRetType = ::getCppuType( (::rtl::OUString*)0 ); break;
-        //case SbxOBJECT:   break;
-        //case SbxERROR:    break;
         case SbxBOOL:       aRetType = ::getCppuType( (sal_Bool*)0 ); break;
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
-        //case SbxDATAOBJECT: break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
         case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
-        //case SbxLONG64:   break;
-        //case SbxULONG64:  break;
-        // Maschinenabhaengige zur Sicherheit auf Hyper abbilden
+        // map machine-dependent ones on hyper for secureness
         case SbxINT:        aRetType = ::getCppuType( (sal_Int32*)0 ); break;
         case SbxUINT:       aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
-        //case SbxVOID:     break;
-        //case SbxHRESULT:  break;
-        //case SbxPOINTER:  break;
-        //case SbxDIMARRAY: break;
-        //case SbxCARRAY:   break;
-        //case SbxUSERDEF:  break;
-        //case SbxLPSTR:    break;
-        //case SbxLPWSTR:   break;
-        //case SbxCoreSTRING: break;
         default: break;
     }
     return aRetType;
 }
 
-// Konvertierung von Sbx nach Uno ohne bekannte Zielklasse fuer TypeClass_ANY
+// Converting of Sbx to Uno without a know target class for TypeClass_ANY
 Type getUnoTypeForSbxValue( SbxValue* pVal )
 {
     Type aRetType = getCppuVoidType();
     if( !pVal )
         return aRetType;
 
-    // SbxType nach Uno wandeln
+    // convert SbxType to Uno
     SbxDataType eBaseType = pVal->SbxValue::GetType();
     if( eBaseType == SbxOBJECT )
     {
         SbxBaseRef xObj = (SbxBase*)pVal->GetObject();
         if( !xObj )
         {
-            // #109936 No error any more
-            // StarBASIC::Error( SbERR_INVALID_OBJECT );
             aRetType = getCppuType( static_cast<Reference<XInterface> *>(0) );
             return aRetType;
         }
@@ -1029,8 +998,8 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
             {
                 if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
                 {
-                    // Wenn alle Elemente des Arrays vom gleichen Typ sind, wird
-                    // der genommen, sonst wird das ganze als Any-Sequence betrachtet
+                    // If all elements of the arrays are from the same type, take
+                    // this one - otherwise the whole will be considered as Any-Sequence
                     sal_Bool bNeedsInit = sal_True;
 
                     sal_Int32 nSize = nUpper - nLower + 1;
@@ -1043,7 +1012,6 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                         {
                             if( aType.getTypeClass() == TypeClass_VOID )
                             {
-                                // #88522
                                 // if only first element is void: different types  -> []any
                                 // if all elements are void: []void is not allowed -> []any
                                 aElementType = getCppuType( (Any*)0 );
@@ -1054,7 +1022,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                         }
                         else if( aElementType != aType )
                         {
-                            // Verschiedene Typen -> AnySequence
+                            // different types -> AnySequence
                             aElementType = getCppuType( (Any*)0 );
                             break;
                         }
@@ -1092,7 +1060,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                         }
                         else if( aElementType != aType )
                         {
-                            // Verschiedene Typen -> AnySequence
+                            // different types -> AnySequence
                             aElementType = getCppuType( (Any*)0 );
                             break;
                         }
@@ -1106,7 +1074,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
             }
         }
-        // Kein Array, sondern...
+        // No array, but ...
         else if( xObj->ISA(SbUnoObject) )
         {
             aRetType = ((SbUnoObject*)(SbxBase*)xObj)->getUnoAny().getValueType();
@@ -1116,9 +1084,9 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
         {
             aRetType = ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue().getValueType();
         }
-        // Sonst ist es ein Nicht-Uno-Basic-Objekt -> default==void liefern
+        // Otherwise it is a No-Uno-Basic-Object -> default==deliver void
     }
-    // Kein Objekt, Basistyp konvertieren
+    // No object, convert basic type
     else
     {
         aRetType = getUnoTypeForSbxBaseType( eBaseType );
@@ -1126,10 +1094,10 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
     return aRetType;
 }
 
-// Deklaration Konvertierung von Sbx nach Uno mit bekannter Zielklasse
+// Declaration converting of Sbx to Uno with known target class
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
 
-// Konvertierung von Sbx nach Uno ohne bekannte Zielklasse fuer TypeClass_ANY
+// converting of Sbx to Uno without known target class for TypeClass_ANY
 Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = false )
 {
     SbxDataType eBaseType = pVar->SbxValue::GetType();
@@ -1221,6 +1189,7 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                     aType = ::getCppuType( (sal_uInt16*)0 );
                 break;
             }
+            // TODO: need to add hyper types ?
             default: break;
         }
     }
@@ -1275,7 +1244,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
 
         try
         {
-            // In die Sequence uebernehmen
+            // transfer to the sequence
             xArray->set( aRetVal, i, aElementVal );
         }
         catch( const IllegalArgumentException& )
@@ -1296,7 +1265,6 @@ Any sbxToUnoValue( SbxVariable* pVar )
 {
     return sbxToUnoValueImpl( pVar );
 }
-
 
 // Funktion, um einen globalen Bezeichner im
 // UnoScope zu suchen und fuer Sbx zu wrappen
@@ -1321,7 +1289,7 @@ static bool implGetTypeByName( const String& rName, Type& rRetType )
 }
 
 
-// Konvertierung von Sbx nach Uno mit bekannter Zielklasse
+// converting of Sbx to Uno with known target class
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty )
 {
     Any aRetVal;
@@ -1352,7 +1320,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         {
             Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
 
-            // Null-Referenz?
+            // zero referenz?
             if( pVar->IsNull() && eType == TypeClass_INTERFACE )
             {
                 Reference< XInterface > xRef;
@@ -1377,13 +1345,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                         }
                         else if( rType == ::getCppuType( (oleautomation::Currency*)0 ) )
                         {
-                            SbxINT64 aInt64 = pVar->GetCurrency();
-                            oleautomation::Currency aCurrency;
-                            sal_Int64& rnValue64 = aCurrency.Value;
-                            rnValue64 = aInt64.nHigh;
-                            rnValue64 <<= 32;
-                            rnValue64 |= aInt64.nLow;
-                            aRetVal <<= aCurrency;
+                            // assumes per previous code that ole Currency is Int64
+                            aRetVal <<= (sal_Int64)( pVar->GetInt64() );
                             break;
                         }
                         else if( rType == ::getCppuType( (oleautomation::Date*)0 ) )
@@ -1403,7 +1366,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 }
                 else
                 {
-                    // #109936 NULL object -> NULL XInterface
+                    // zero object -> zero XInterface
                     Reference<XInterface> xInt;
                     aRetVal <<= xInt;
                 }
@@ -1444,16 +1407,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         }
         break;
 
-        /* folgende Typen lassen wir erstmal weg
-        case TypeClass_SERVICE:         break;
-        case TypeClass_CLASS:           break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
-        case TypeClass_ARRAY:           break;
-        */
 
-        // Array -> Sequence
         case TypeClass_ENUM:
         {
             aRetVal = int2enum( pVar->GetLong(), rType );
@@ -1476,7 +1430,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                 {
                     sal_Int32 nSeqSize = nUpper - nLower + 1;
 
-                    // Instanz der geforderten Sequence erzeugen
+                    // create the instanz of the required sequence
                     Reference< XIdlClass > xIdlTargetClass = TypeToIdlClass( rType );
                     xIdlTargetClass->createObject( aRetVal );
                     Reference< XIdlArray > xArray = xIdlTargetClass->getArray();
@@ -1488,20 +1442,19 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                     typelib_typedescription_getByName( &pSeqTD, aClassName.pData );
                     OSL_ASSERT( pSeqTD );
                     Type aElemType( ((typelib_IndirectTypeDescription *)pSeqTD)->pType );
-                    // Reference< XIdlClass > xElementClass = TypeToIdlClass( aElemType );
 
-                    // Alle Array-Member umwandeln und eintragen
+                    // convert all array member and register them
                     sal_Int32 nIdx = nLower;
                     for( sal_Int32 i = 0 ; i < nSeqSize ; i++,nIdx++ )
                     {
                         SbxVariableRef xVar = pArray->Get32( &nIdx );
 
-                        // Wert von Sbx nach Uno wandeln
+                        // Convert the value of Sbx to Uno
                         Any aAnyValue = sbxToUnoValue( (SbxVariable*)xVar, aElemType );
 
                         try
                         {
-                            // In die Sequence uebernehmen
+                            // take over to the sequence
                             xArray->set( aRetVal, i, aAnyValue );
                         }
                         catch( const IllegalArgumentException& )
@@ -1568,12 +1521,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         }
         break;
 
-        /*
-        case TypeClass_VOID:            break;
-        case TypeClass_UNKNOWN:         break;
-        */
 
-        // Bei Any die Klassen-unabhaengige Konvertierungs-Routine nutzen
+        // Use for Any the class indipendent converting routine
         case TypeClass_ANY:
         {
             aRetVal = sbxToUnoValueImpl( pVar );
@@ -1595,7 +1544,6 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
-        //case TypeClass_OCTET:         break;
 
         case TypeClass_BYTE:
         {
@@ -1618,46 +1566,137 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal <<= nByteVal;
             break;
         }
-        //case TypeClass_INT:           break;
         case TypeClass_SHORT:           aRetVal <<= (sal_Int16)( pVar->GetInteger() );  break;
         case TypeClass_LONG:            aRetVal <<= (sal_Int32)( pVar->GetLong() );     break;
         case TypeClass_HYPER:           aRetVal <<= (sal_Int64)( pVar->GetInt64() );    break;
-        //case TypeClass_UNSIGNED_OCTET:break;
         case TypeClass_UNSIGNED_SHORT:  aRetVal <<= (sal_uInt16)( pVar->GetUShort() );  break;
         case TypeClass_UNSIGNED_LONG:   aRetVal <<= (sal_uInt32)( pVar->GetULong() );   break;
         case TypeClass_UNSIGNED_HYPER:  aRetVal <<= (sal_uInt64)( pVar->GetUInt64() );  break;
-        //case TypeClass_UNSIGNED_INT:  break;
-        //case TypeClass_UNSIGNED_BYTE: break;
         default: break;
     }
 
     return aRetVal;
 }
 
-// Dbg-Hilfsmethode zum Auslesen der in einem Object implementierten Interfaces
-String Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
+void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOLEAutomation, sal_uInt32 nParamCount )
+{
+    AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
+    if( bOLEAutomation )
+        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
+
+    args.realloc( nParamCount );
+    Any* pAnyArgs = args.getArray();
+    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
+    sal_uInt32 i = 0;
+    if( pArgNamesArray )
+    {
+        Sequence< ::rtl::OUString >& rNameSeq = pArgNamesArray->getNames();
+        ::rtl::OUString* pNames = rNameSeq.getArray();
+        Any aValAny;
+        for( i = 0 ; i < nParamCount ; i++ )
+        {
+            sal_uInt16 iSbx = (sal_uInt16)(i+1);
+
+            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
+            bBlockConversionToSmallestType );
+
+            ::rtl::OUString aParamName = pNames[iSbx];
+            if( aParamName.getLength() )
+            {
+                oleautomation::NamedArgument aNamedArgument;
+                aNamedArgument.Name = aParamName;
+                aNamedArgument.Value = aValAny;
+                pAnyArgs[i] <<= aNamedArgument;
+            }
+            else
+            {
+                pAnyArgs[i] = aValAny;
+            }
+        }
+    }
+    else
+    {
+        for( i = 0 ; i < nParamCount ; i++ )
+        {
+            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (sal_uInt16)(i+1) ),
+            bBlockConversionToSmallestType );
+        }
+    }
+
+}
+enum INVOKETYPE
+{
+   GetProp = 0,
+   SetProp,
+   Func
+};
+Any invokeAutomationMethod( const rtl::OUString& Name, Sequence< Any >& args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation >& rxInvocation, INVOKETYPE invokeType = Func )
+{
+    Sequence< sal_Int16 > OutParamIndex;
+    Sequence< Any > OutParam;
+
+    Any aRetAny;
+    switch( invokeType )
+    {
+        case Func:
+            aRetAny = rxInvocation->invoke( Name, args, OutParamIndex, OutParam );
+            break;
+        case GetProp:
+            {
+                Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY );
+                aRetAny = xAutoInv->invokeGetProperty( Name, args, OutParamIndex, OutParam );
+                break;
+            }
+        case SetProp:
+            {
+                Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY_THROW );
+                aRetAny = xAutoInv->invokePutProperty( Name, args, OutParamIndex, OutParam );
+                break;
+            }
+        default:
+            break; // should introduce an error here
+
+    }
+    const sal_Int16* pIndices = OutParamIndex.getConstArray();
+    sal_uInt32 nLen = OutParamIndex.getLength();
+    if( nLen )
+    {
+        const Any* pNewValues = OutParam.getConstArray();
+        for( sal_uInt32 j = 0 ; j < nLen ; j++ )
+        {
+            sal_Int16 iTarget = pIndices[ j ];
+            if( iTarget >= (sal_Int16)nParamCount )
+                break;
+            unoToSbxValue( (SbxVariable*)pParams->Get( (sal_uInt16)(j+1) ), pNewValues[ j ] );
+        }
+    }
+    return aRetAny;
+}
+
+// Debugging help method to readout the imlemented interfaces of an object
+rtl::OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
 {
     Type aIfaceType = ::getCppuType( (const Reference< XInterface > *)0 );
     static Reference< XIdlClass > xIfaceClass = TypeToIdlClass( aIfaceType );
 
-    String aRetStr;
+    rtl::OUStringBuffer aRetStr;
     for( sal_uInt16 i = 0 ; i < nRekLevel ; i++ )
-        aRetStr.AppendAscii( "    " );
-    aRetStr += String( xClass->getName() );
+        aRetStr.appendAscii( "    " );
+    aRetStr.append( xClass->getName() );
     ::rtl::OUString aClassName = xClass->getName();
     Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
 
-    // Pruefen, ob das Interface wirklich unterstuetzt wird
+    // checking if the interface is realy supported
     if( !x->queryInterface( aClassType ).hasValue() )
     {
-        aRetStr.AppendAscii( " (ERROR: Not really supported!)\n" );
+        aRetStr.appendAscii( " (ERROR: Not really supported!)\n" );
     }
-    // Gibt es Super-Interfaces
+    // Are there super interfaces?
     else
     {
-        aRetStr.AppendAscii( "\n" );
+        aRetStr.appendAscii( "\n" );
 
-        // Super-Interfaces holen
+        // get the super interfaces
         Sequence< Reference< XIdlClass > > aSuperClassSeq = xClass->getSuperclasses();
         const Reference< XIdlClass >* pClasses = aSuperClassSeq.getConstArray();
         sal_uInt32 nSuperIfaceCount = aSuperClassSeq.getLength();
@@ -1665,19 +1704,19 @@ String Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference<
         {
             const Reference< XIdlClass >& rxIfaceClass = pClasses[j];
             if( !rxIfaceClass->equals( xIfaceClass ) )
-                aRetStr += Impl_GetInterfaceInfo( x, rxIfaceClass, nRekLevel + 1 );
+                aRetStr.append( Impl_GetInterfaceInfo( x, rxIfaceClass, nRekLevel + 1 ) );
         }
     }
-    return aRetStr;
+    return aRetStr.makeStringAndClear();
 }
 
-String getDbgObjectNameImpl( SbUnoObject* pUnoObj )
+::rtl::OUString getDbgObjectNameImpl( SbUnoObject* pUnoObj )
 {
-    String aName;
+    ::rtl::OUString aName;
     if( pUnoObj )
     {
         aName = pUnoObj->GetClassName();
-        if( !aName.Len() )
+        if( !aName.getLength() )
         {
             Any aToInspectObj = pUnoObj->getUnoAny();
             TypeClass eType = aToInspectObj.getValueType().getTypeClass();
@@ -1695,24 +1734,24 @@ String getDbgObjectNameImpl( SbUnoObject* pUnoObj )
     return aName;
 }
 
-String getDbgObjectName( SbUnoObject* pUnoObj )
+::rtl::OUString getDbgObjectName( SbUnoObject* pUnoObj )
 {
-    String aName = getDbgObjectNameImpl( pUnoObj );
-    if( !aName.Len() )
-        aName.AppendAscii( "Unknown" );
+    ::rtl::OUString aName = getDbgObjectNameImpl( pUnoObj );
+    if( !aName.getLength() )
+        aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
 
-    String aRet;
-    if( aName.Len() > 20 )
-        aRet.AppendAscii( "\n" );
-    aRet.AppendAscii( "\"" );
-    aRet += aName;
-    aRet.AppendAscii( "\":" );
-    return aRet;
+    ::rtl::OUStringBuffer aRet;
+    if( aName.getLength() > 20 )
+        aRet.appendAscii( "\n" );
+    aRet.appendAscii( "\"" );
+    aRet.append( aName );
+    aRet.appendAscii( "\":" );
+    return aRet.makeStringAndClear();
 }
 
-String getBasicObjectTypeName( SbxObject* pObj )
+::rtl::OUString getBasicObjectTypeName( SbxObject* pObj )
 {
-    String aName;
+    ::rtl::OUString aName;
     if( pObj )
     {
         SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
@@ -1764,7 +1803,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
             Reference<XIdlClass> xClass = TypeToIdlClass( rType );
             if( !xClass.is() )
             {
-                DBG_ERROR("failed to get XIdlClass for type");
+                OSL_FAIL("failed to get XIdlClass for type");
                 break;
             }
             ::rtl::OUString aInterfaceName = xClass->getName();
@@ -1799,35 +1838,34 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
     return result;
 }
 
-// Dbg-Hilfsmethode zum Auslesen der in einem Object implementierten Interfaces
-String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
+// Debugging help method to readout the imlemented interfaces of an object
+::rtl::OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
 {
     Any aToInspectObj = pUnoObj->getUnoAny();
 
-    // #54898: Nur TypeClass Interface zulasssen
+    // allow only TypeClass interface
     TypeClass eType = aToInspectObj.getValueType().getTypeClass();
-    String aRet;
+    ::rtl::OUStringBuffer aRet;
     if( eType != TypeClass_INTERFACE )
     {
-        aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
-        aRet.AppendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+        aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(ID_DBG_SUPPORTEDINTERFACES) );
+        aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
     {
-        // Interface aus dem Any besorgen
+        // get the interface from the Any
         const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
 
-        // XIdlClassProvider-Interface ansprechen
+        // address the XIdlClassProvider-Interface
         Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
-        aRet.AssignAscii( "Supported interfaces by object " );
-        String aObjName = getDbgObjectName( pUnoObj );
-        aRet += aObjName;
-        aRet.AppendAscii( "\n" );
+        aRet.appendAscii( "Supported interfaces by object " );
+        aRet.append( getDbgObjectName( pUnoObj ) );
+        aRet.appendAscii( "\n" );
         if( xTypeProvider.is() )
         {
-            // Interfaces der Implementation holen
+            // get the interfaces of the implementation
             Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
             const Type* pTypeArray = aTypeSeq.getConstArray();
             sal_uInt32 nIfaceCount = aTypeSeq.getLength();
@@ -1838,85 +1876,82 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
                 Reference<XIdlClass> xClass = TypeToIdlClass( rType );
                 if( xClass.is() )
                 {
-                    aRet += Impl_GetInterfaceInfo( x, xClass, 1 );
+                    aRet.append( Impl_GetInterfaceInfo( x, xClass, 1 ) );
                 }
                 else
                 {
                     typelib_TypeDescription * pTD = 0;
                     rType.getDescription( &pTD );
-                    String TypeName( ::rtl::OUString( pTD->pTypeName ) );
 
-                    aRet.AppendAscii( "*** ERROR: No IdlClass for type \"" );
-                    aRet += TypeName;
-                    aRet.AppendAscii( "\"\n*** Please check type library\n" );
+                    aRet.appendAscii( "*** ERROR: No IdlClass for type \"" );
+                    aRet.append( pTD->pTypeName );
+                    aRet.appendAscii( "\"\n*** Please check type library\n" );
                 }
             }
         }
         else if( xClassProvider.is() )
         {
 
-            DBG_ERROR( "XClassProvider not supported in UNO3" );
+            OSL_FAIL( "XClassProvider not supported in UNO3" );
         }
     }
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 
 
-// Dbg-Hilfsmethode SbxDataType -> String
-String Dbg_SbxDataType2String( SbxDataType eType )
+// Debugging help method SbxDataType -> String
+::rtl::OUString Dbg_SbxDataType2String( SbxDataType eType )
 {
-    String aRet( RTL_CONSTASCII_USTRINGPARAM("Unknown Sbx-Type!") );
+    ::rtl::OUStringBuffer aRet;
     switch( +eType )
     {
-        case SbxEMPTY:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxEMPTY") ); break;
-        case SbxNULL:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxNULL") ); break;
-        case SbxINTEGER:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINTEGER") ); break;
-        case SbxLONG:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG") ); break;
-        case SbxSINGLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSINGLE") ); break;
-        case SbxDOUBLE:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDOUBLE") ); break;
-        case SbxCURRENCY:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCURRENCY") ); break;
-        case SbxDECIMAL:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDECIMAL") ); break;
-        case SbxDATE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATE") ); break;
-        case SbxSTRING:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxSTRING") ); break;
-        case SbxOBJECT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxOBJECT") ); break;
-        case SbxERROR:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxERROR") ); break;
-        case SbxBOOL:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBOOL") ); break;
-        case SbxVARIANT:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVARIANT") ); break;
-        case SbxDATAOBJECT: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDATAOBJECT") ); break;
-        case SbxCHAR:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCHAR") ); break;
-        case SbxBYTE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBYTE") ); break;
-        case SbxUSHORT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSHORT") ); break;
-        case SbxULONG:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG") ); break;
-        case SbxLONG64:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG64") ); break;
-        case SbxULONG64:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG64") ); break;
-        case SbxSALINT64:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT64") ); break;
-        case SbxSALUINT64:  aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT64") ); break;
-        case SbxINT:        aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT") ); break;
-        case SbxUINT:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT") ); break;
-        case SbxVOID:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxVOID") ); break;
-        case SbxHRESULT:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxHRESULT") ); break;
-        case SbxPOINTER:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxPOINTER") ); break;
-        case SbxDIMARRAY:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxDIMARRAY") ); break;
-        case SbxCARRAY:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCARRAY") ); break;
-        case SbxUSERDEF:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSERDEF") ); break;
-        case SbxLPSTR:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPSTR") ); break;
-        case SbxLPWSTR:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLPWSTR") ); break;
-        case SbxCoreSTRING: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxCoreSTRING" ) ); break;
-        case SbxOBJECT | SbxARRAY: aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxARRAY") ); break;
-        default: break;
+        case SbxEMPTY:      aRet.appendAscii("SbxEMPTY"); break;
+        case SbxNULL:       aRet.appendAscii("SbxNULL"); break;
+        case SbxINTEGER:    aRet.appendAscii("SbxINTEGER"); break;
+        case SbxLONG:       aRet.appendAscii("SbxLONG"); break;
+        case SbxSINGLE:     aRet.appendAscii("SbxSINGLE"); break;
+        case SbxDOUBLE:     aRet.appendAscii("SbxDOUBLE"); break;
+        case SbxCURRENCY:   aRet.appendAscii("SbxCURRENCY"); break;
+        case SbxDECIMAL:    aRet.appendAscii("SbxDECIMAL"); break;
+        case SbxDATE:       aRet.appendAscii("SbxDATE"); break;
+        case SbxSTRING:     aRet.appendAscii("SbxSTRING"); break;
+        case SbxOBJECT:     aRet.appendAscii("SbxOBJECT"); break;
+        case SbxERROR:      aRet.appendAscii("SbxERROR"); break;
+        case SbxBOOL:       aRet.appendAscii("SbxBOOL"); break;
+        case SbxVARIANT:    aRet.appendAscii("SbxVARIANT"); break;
+        case SbxDATAOBJECT: aRet.appendAscii("SbxDATAOBJECT"); break;
+        case SbxCHAR:       aRet.appendAscii("SbxCHAR"); break;
+        case SbxBYTE:       aRet.appendAscii("SbxBYTE"); break;
+        case SbxUSHORT:     aRet.appendAscii("SbxUSHORT"); break;
+        case SbxULONG:      aRet.appendAscii("SbxULONG"); break;
+        case SbxSALINT64:   aRet.appendAscii("SbxINT64"); break;
+        case SbxSALUINT64:  aRet.appendAscii("SbxUINT64"); break;
+        case SbxINT:        aRet.appendAscii("SbxINT"); break;
+        case SbxUINT:       aRet.appendAscii("SbxUINT"); break;
+        case SbxVOID:       aRet.appendAscii("SbxVOID"); break;
+        case SbxHRESULT:    aRet.appendAscii("SbxHRESULT"); break;
+        case SbxPOINTER:    aRet.appendAscii("SbxPOINTER"); break;
+        case SbxDIMARRAY:   aRet.appendAscii("SbxDIMARRAY"); break;
+        case SbxCARRAY:     aRet.appendAscii("SbxCARRAY"); break;
+        case SbxUSERDEF:    aRet.appendAscii("SbxUSERDEF"); break;
+        case SbxLPSTR:      aRet.appendAscii("SbxLPSTR"); break;
+        case SbxLPWSTR:     aRet.appendAscii("SbxLPWSTR"); break;
+        case SbxCoreSTRING: aRet.appendAscii("SbxCoreSTRING"); break;
+        case SbxOBJECT | SbxARRAY: aRet.appendAscii("SbxARRAY"); break;
+        default: aRet.appendAscii("Unknown Sbx-Type!");break;
     }
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
-// Dbg-Hilfsmethode zum Anzeigen der Properties eines SbUnoObjects
-String Impl_DumpProperties( SbUnoObject* pUnoObj )
+// Debugging help method to display the properties of a SbUnoObjects
+::rtl::OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
 {
-    String aRet( RTL_CONSTASCII_USTRINGPARAM("Properties of object ") );
-    String aObjName = getDbgObjectName( pUnoObj );
-    aRet += aObjName;
+    ::rtl::OUStringBuffer aRet;
+    aRet.appendAscii("Properties of object ");
+    aRet.append( getDbgObjectName( pUnoObj ) );
 
-    // Uno-Infos auswerten, um Arrays zu erkennen
+    // analyse the Uno-Infos to recognise the arrays
     Reference< XIntrospectionAccess > xAccess = pUnoObj->getIntrospectionAccess();
     if( !xAccess.is() )
     {
@@ -1926,8 +1961,8 @@ String Impl_DumpProperties( SbUnoObject* pUnoObj )
     }
     if( !xAccess.is() )
     {
-        aRet.AppendAscii( "\nUnknown, no introspection available\n" );
-        return aRet;
+        aRet.appendAscii( "\nUnknown, no introspection available\n" );
+        return aRet.makeStringAndClear();
     }
 
     Sequence<Property> props = xAccess->getProperties( PropertyConcept::ALL - PropertyConcept::DANGEROUS );
@@ -1942,12 +1977,12 @@ String Impl_DumpProperties( SbUnoObject* pUnoObj )
         SbxVariable* pVar = pProps->Get( i );
         if( pVar )
         {
-            String aPropStr;
+            ::rtl::OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
-                aPropStr.AppendAscii( "\n" );
+                aPropStr.appendAscii( "\n" );
 
-            // Typ und Namen ausgeben
-            // Ist es in Uno eine Sequence?
+            // output the type and name
+            // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
 
             sal_Bool bMaybeVoid = sal_False;
@@ -1955,8 +1990,8 @@ String Impl_DumpProperties( SbUnoObject* pUnoObj )
             {
                 const Property& rProp = pUnoProps[ i ];
 
-                // #63133: Bei MAYBEVOID Typ aus Uno neu konvertieren,
-                // damit nicht immer nur SbxEMPTY ausgegben wird.
+                // By MAYBEVOID convert the type out of Uno newly,
+                // so that not only SbxEMPTY were outputed.
                 if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
                 {
                     eType = unoToSbxType( rProp.Type.getTypeClass() );
@@ -1969,31 +2004,31 @@ String Impl_DumpProperties( SbUnoObject* pUnoObj )
                         eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
                 }
             }
-            aPropStr += Dbg_SbxDataType2String( eType );
+            aPropStr.append( Dbg_SbxDataType2String( eType ) );
             if( bMaybeVoid )
-                aPropStr.AppendAscii( "/void" );
-            aPropStr.AppendAscii( " " );
-            aPropStr += pVar->GetName();
+                aPropStr.appendAscii( "/void" );
+            aPropStr.appendAscii( " " );
+            aPropStr.append( pVar->GetName() );
 
             if( i == nPropCount - 1 )
-                aPropStr.AppendAscii( "\n" );
+                aPropStr.appendAscii( "\n" );
             else
-                aPropStr.AppendAscii( "; " );
+                aPropStr.appendAscii( "; " );
 
-            aRet += aPropStr;
+            aRet.append( aPropStr.makeStringAndClear() );
         }
     }
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
-// Dbg-Hilfsmethode zum Anzeigen der Methoden eines SbUnoObjects
-String Impl_DumpMethods( SbUnoObject* pUnoObj )
+// Debugging help method to display the methods of an SbUnoObjects
+::rtl::OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
 {
-    String aRet( RTL_CONSTASCII_USTRINGPARAM("Methods of object ") );
-    String aObjName = getDbgObjectName( pUnoObj );
-    aRet += aObjName;
+    ::rtl::OUStringBuffer aRet;
+    aRet.appendAscii("Methods of object ");
+    aRet.append( getDbgObjectName( pUnoObj ) );
 
-    // XIntrospectionAccess, um die Typen der Parameter auch ausgeben zu koennen
+    // XIntrospectionAccess, so that the types of the parameter could be outputed
     Reference< XIntrospectionAccess > xAccess = pUnoObj->getIntrospectionAccess();
     if( !xAccess.is() )
     {
@@ -2003,8 +2038,8 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
     }
     if( !xAccess.is() )
     {
-        aRet.AppendAscii( "\nUnknown, no introspection available\n" );
-        return aRet;
+        aRet.appendAscii( "\nUnknown, no introspection available\n" );
+        return aRet.makeStringAndClear();
     }
     Sequence< Reference< XIdlMethod > > methods = xAccess->getMethods
         ( MethodConcept::ALL - MethodConcept::DANGEROUS );
@@ -2014,8 +2049,8 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
     sal_uInt16 nMethodCount = pMethods->Count();
     if( !nMethodCount )
     {
-        aRet.AppendAscii( "\nNo methods found\n" );
-        return aRet;
+        aRet.appendAscii( "\nNo methods found\n" );
+        return aRet.makeStringAndClear();
     }
     sal_uInt16 nPropsPerLine = 1 + nMethodCount / 30;
     for( sal_uInt16 i = 0; i < nMethodCount; i++ )
@@ -2023,14 +2058,14 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
         SbxVariable* pVar = pMethods->Get( i );
         if( pVar )
         {
-            String aPropStr;
+            ::rtl::OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
-                aPropStr.AppendAscii( "\n" );
+                aPropStr.appendAscii( "\n" );
 
-            // Methode ansprechen
+            // address the method
             const Reference< XIdlMethod >& rxMethod = pUnoMethods[i];
 
-            // Ist es in Uno eine Sequence?
+            // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
             if( eType == SbxOBJECT )
             {
@@ -2038,13 +2073,13 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
                 if( xClass.is() && xClass->getTypeClass() == TypeClass_SEQUENCE )
                     eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
             }
-            // Name und Typ ausgeben
-            aPropStr += Dbg_SbxDataType2String( eType );
-            aPropStr.AppendAscii( " " );
-            aPropStr += pVar->GetName();
-            aPropStr.AppendAscii( " ( " );
+            // output the name and the type
+            aPropStr.append( Dbg_SbxDataType2String( eType ) );
+            aPropStr.appendAscii( " " );
+            aPropStr.append ( pVar->GetName() );
+            aPropStr.appendAscii( " ( " );
 
-            // get-Methode darf keinen Parameter haben
+            // the get-method mustn't have a parameter
             Sequence< Reference< XIdlClass > > aParamsSeq = rxMethod->getParameterTypes();
             sal_uInt32 nParamCount = aParamsSeq.getLength();
             const Reference< XIdlClass >* pParams = aParamsSeq.getConstArray();
@@ -2053,27 +2088,25 @@ String Impl_DumpMethods( SbUnoObject* pUnoObj )
             {
                 for( sal_uInt16 j = 0; j < nParamCount; j++ )
                 {
-                    String aTypeStr = Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) );
-                    aPropStr += aTypeStr;
-
+                    aPropStr.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
                     if( j < nParamCount - 1 )
-                        aPropStr.AppendAscii( ", " );
+                        aPropStr.appendAscii( ", " );
                 }
             }
             else
-                aPropStr.AppendAscii( "void" );
+                aPropStr.appendAscii( "void" );
 
-            aPropStr.AppendAscii( " ) " );
+            aPropStr.appendAscii( " ) " );
 
             if( i == nMethodCount - 1 )
-                aPropStr.AppendAscii( "\n" );
+                aPropStr.appendAscii( "\n" );
             else
-                aPropStr.AppendAscii( "; " );
+                aPropStr.appendAscii( "; " );
 
-            aRet += aPropStr;
+            aRet.append( aPropStr );
         }
     }
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
@@ -2101,26 +2134,26 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 sal_Int32 nId = pProp->nId;
                 if( nId < 0 )
                 {
-                    // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
+                    // Id == -1: Display implemented interfaces according the ClassProvider
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
-                        String aRetStr = Impl_GetSupportedInterfaces( this );
+                        ::rtl::OUString aRetStr = Impl_GetSupportedInterfaces( this );
                         pVar->PutString( aRetStr );
                     }
-                    // Id == -2: Properties ausgeben
+                    // Id == -2: output properties
                     else if( nId == -2 )        // Property ID_DBG_PROPERTIES
                     {
-                        // Jetzt muessen alle Properties angelegt werden
+                        // by now all properties must be established
                         implCreateAll();
-                        String aRetStr = Impl_DumpProperties( this );
+                        ::rtl::OUString aRetStr = Impl_DumpProperties( this );
                         pVar->PutString( aRetStr );
                     }
-                    // Id == -3: Methoden ausgeben
+                    // Id == -3: output the methods
                     else if( nId == -3 )        // Property ID_DBG_METHODS
                     {
-                        // Jetzt muessen alle Properties angelegt werden
+                        // y now all properties must be established
                         implCreateAll();
-                        String aRetStr = Impl_DumpMethods( this );
+                        ::rtl::OUString aRetStr = Impl_DumpMethods( this );
                         pVar->PutString( aRetStr );
                     }
                     return;
@@ -2130,14 +2163,14 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     try
                     {
-                        // Wert holen
+                        // get the value
                         Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
                         Any aRetAny = xPropSet->getPropertyValue( pProp->GetName() );
-                        // Die Nutzung von getPropertyValue (statt ueber den Index zu gehen) ist
-                        // nicht optimal, aber die Umstellung auf XInvocation steht ja ohnehin an
-                        // Ansonsten kann auch FastPropertySet genutzt werden
+                        // The use of getPropertyValue (instead of using the index) is
+                        // suboptimal, but the refactoring to XInvocation is already pending
+                        // Otherwise it is posible to use FastPropertySet
 
-                        // Wert von Uno nach Sbx uebernehmen
+                        // take over the value from Uno to Sbx
                         unoToSbxValue( pVar, aRetAny );
                     }
                     catch( const Exception& )
@@ -2149,11 +2182,24 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 {
                     try
                     {
-                        // Wert holen
-                        Any aRetAny = mxInvocation->getValue( pProp->GetName() );
-
-                        // Wert von Uno nach Sbx uebernehmen
+                        sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
+                        sal_Bool bCanBeConsideredAMethod = mxInvocation->hasMethod( pProp->GetName() );
+                        Any aRetAny;
+                        if ( bCanBeConsideredAMethod && nParamCount )
+                        {
+                            // Automation properties have methods, so.. we need to invoke this through
+                            // XInvocation
+                            Sequence<Any> args;
+                            processAutomationParams( pParams, args, true, nParamCount );
+                            aRetAny = invokeAutomationMethod( pProp->GetName(), args, pParams, nParamCount, mxInvocation, GetProp );
+                        }
+                        else
+                            aRetAny = mxInvocation->getValue( pProp->GetName() );
+                        // take over the value from Uno to Sbx
                         unoToSbxValue( pVar, aRetAny );
+                        if( pParams && bCanBeConsideredAMethod )
+                            pVar->SetParameters( NULL );
+
                     }
                     catch( const Exception& )
                     {
@@ -2171,16 +2217,16 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         return;
                     }
 
-                    // Wert von Uno nach Sbx uebernehmen
+                    // take over the value from Uno to Sbx
                     Any aAnyValue = sbxToUnoValue( pVar, pProp->aUnoProp.Type, &pProp->aUnoProp );
                     try
                     {
-                        // Wert setzen
+                        // set the value
                         Reference< XPropertySet > xPropSet( mxUnoAccess->queryAdapter( ::getCppuType( (const Reference< XPropertySet > *)0 ) ), UNO_QUERY );
                         xPropSet->setPropertyValue( pProp->GetName(), aAnyValue );
-                        // Die Nutzung von getPropertyValue (statt ueber den Index zu gehen) ist
-                        // nicht optimal, aber die Umstellung auf XInvocation steht ja ohnehin an
-                        // Ansonsten kann auch FastPropertySet genutzt werden
+                        // The use of getPropertyValue (instead of using the index) is
+                        // suboptimal, but the refactoring to XInvocation is already pending
+                        // Otherwise it is posible to use FastPropertySet
                     }
                     catch( const Exception& )
                     {
@@ -2189,11 +2235,11 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
                 else if( bInvocation && mxInvocation.is() )
                 {
-                    // Wert von Uno nach Sbx uebernehmen
+                    // take over the value from Uno to Sbx
                     Any aAnyValue = sbxToUnoValueImpl( pVar );
                     try
                     {
-                        // Wert setzen
+                        // set the value
                         mxInvocation->setValue( pProp->GetName(), aAnyValue );
                     }
                     catch( const Exception& )
@@ -2208,7 +2254,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             bool bInvocation = pMeth->isInvocationBased();
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
-                // Anzahl Parameter -1 wegen Param0 == this
+                // number of Parameter -1 because of Param0 == this
                 sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
                 Sequence<Any> args;
                 sal_Bool bOutParams = sal_False;
@@ -2216,13 +2262,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
                 if( !bInvocation && mxUnoAccess.is() )
                 {
-                    // Infos holen
+                    // get info
                     const Sequence<ParamInfo>& rInfoSeq = pMeth->getParamInfos();
                     const ParamInfo* pParamInfos = rInfoSeq.getConstArray();
                     sal_uInt32 nUnoParamCount = rInfoSeq.getLength();
                     sal_uInt32 nAllocParamCount = nParamCount;
 
-                    // Ueberschuessige Parameter ignorieren, Alternative: Error schmeissen
+                    // ignore surplus parameter; alternative: throw an error
                     if( nParamCount > nUnoParamCount )
                     {
                         nParamCount = nUnoParamCount;
@@ -2258,14 +2304,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         {
                             const ParamInfo& rInfo = pParamInfos[i];
                             const Reference< XIdlClass >& rxClass = rInfo.aType;
-                            //const XIdlClassRef& rxClass = pUnoParams[i];
 
                             com::sun::star::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
 
-                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
+                            // ATTENTION: Don't forget for Sbx-Parameter the offset!
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( (sal_uInt16)(i+1) ), aType );
 
-                            // Wenn es nicht schon feststeht pruefen, ob Out-Parameter vorliegen
+                            // If it is not certain check whether the out-parameter are available.
                             if( !bOutParams )
                             {
                                 ParamMode aParamMode = rInfo.aMode;
@@ -2278,55 +2323,10 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 else if( bInvocation && pParams && mxInvocation.is() )
                 {
                     bool bOLEAutomation = true;
-                    // TODO: bOLEAutomation = xOLEAutomation.is()
-
-                    AutomationNamedArgsSbxArray* pArgNamesArray = NULL;
-                    if( bOLEAutomation )
-                        pArgNamesArray = PTR_CAST(AutomationNamedArgsSbxArray,pParams);
-
-                    args.realloc( nParamCount );
-                    Any* pAnyArgs = args.getArray();
-                    bool bBlockConversionToSmallestType = pINST->IsCompatibility();
-                    if( pArgNamesArray )
-                    {
-                        Sequence< ::rtl::OUString >& rNameSeq = pArgNamesArray->getNames();
-                        ::rtl::OUString* pNames = rNameSeq.getArray();
-
-                        Any aValAny;
-                        for( i = 0 ; i < nParamCount ; i++ )
-                        {
-                            sal_uInt16 iSbx = (sal_uInt16)(i+1);
-
-                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            aValAny = sbxToUnoValueImpl( pParams->Get( iSbx ),
-                                                        bBlockConversionToSmallestType );
-
-                            ::rtl::OUString aParamName = pNames[iSbx];
-                            if( aParamName.getLength() )
-                            {
-                                oleautomation::NamedArgument aNamedArgument;
-                                aNamedArgument.Name = aParamName;
-                                aNamedArgument.Value = aValAny;
-                                pAnyArgs[i] <<= aNamedArgument;
-                            }
-                            else
-                            {
-                                pAnyArgs[i] = aValAny;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for( i = 0 ; i < nParamCount ; i++ )
-                        {
-                            // ACHTUNG: Bei den Sbx-Parametern den Offset nicht vergessen!
-                            pAnyArgs[i] = sbxToUnoValueImpl( pParams->Get( (sal_uInt16)(i+1) ),
-                                                            bBlockConversionToSmallestType );
-                        }
-                    }
+                    processAutomationParams( pParams, args, bOLEAutomation, nParamCount );
                 }
 
-                // Methode callen
+                // call the method
                 GetSbData()->bBlockCompilerError = sal_True;  // #106433 Block compiler errors for API calls
                 try
                 {
@@ -2334,15 +2334,15 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     {
                         Any aRetAny = pMeth->m_xUnoMethod->invoke( getUnoAny(), args );
 
-                        // Wert von Uno nach Sbx uebernehmen
+                        // take over the value from Uno to Sbx
                         unoToSbxValue( pVar, aRetAny );
 
-                        // Muessen wir Out-Parameter zurueckkopieren?
+                        // Did we to copy back the Out-Parameter?
                         if( bOutParams )
                         {
                             const Any* pAnyArgs = args.getConstArray();
 
-                            // Infos holen
+                            // get info
                             const Sequence<ParamInfo>& rInfoSeq = pMeth->getParamInfos();
                             const ParamInfo* pParamInfos = rInfoSeq.getConstArray();
 
@@ -2358,40 +2358,12 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     }
                     else if( bInvocation && mxInvocation.is() )
                     {
-                        Reference< XDirectInvocation > xDirectInvoke;
-                        if ( pMeth->needsDirectInvocation() )
-                            xDirectInvoke.set( mxInvocation, UNO_QUERY );
-
-                        Any aRetAny;
-                        if ( xDirectInvoke.is() )
-                            aRetAny = xDirectInvoke->directInvoke( pMeth->GetName(), args );
-                        else
-                        {
-                            Sequence< sal_Int16 > OutParamIndex;
-                            Sequence< Any > OutParam;
-                            aRetAny = mxInvocation->invoke( pMeth->GetName(), args, OutParamIndex, OutParam );
-
-                            const sal_Int16* pIndices = OutParamIndex.getConstArray();
-                            sal_uInt32 nLen = OutParamIndex.getLength();
-                            if( nLen )
-                            {
-                                const Any* pNewValues = OutParam.getConstArray();
-                                for( sal_uInt32 j = 0 ; j < nLen ; j++ )
-                                {
-                                    sal_Int16 iTarget = pIndices[ j ];
-                                    if( iTarget >= (sal_Int16)nParamCount )
-                                        break;
-                                    unoToSbxValue( (SbxVariable*)pParams->Get( (sal_uInt16)(j+1) ), pNewValues[ j ] );
-                                }
-                            }
+                        Any aRetAny = invokeAutomationMethod( pMeth->GetName(), args, pParams, nParamCount, mxInvocation );
+                        unoToSbxValue( pVar, aRetAny );
                         }
 
-                        // Wert von Uno nach Sbx uebernehmen
-                        unoToSbxValue( pVar, aRetAny );
-                    }
-
-                    // #55460, Parameter hier weghauen, da das in unoToSbxValue()
-                    // bei Arrays wegen #54548 nicht mehr gemacht wird
+                    // remove parameter here, because this was not done anymore in unoToSbxValue()
+                    // for arrays
                     if( pParams )
                         pVar->SetParameters( NULL );
                 }
@@ -2409,27 +2381,27 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 
 #ifdef INVOCATION_ONLY
-// Aus USR
+// From USR
 Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 #endif
 
-SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
+SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( sal_True )
     , bNativeCOMObject( sal_False )
 {
     static Reference< XIntrospection > xIntrospection;
 
-    // Default-Properties von Sbx wieder rauspruegeln
+    // beat out again the default properties of Sbx
     Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
     Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
 
-    // Typ des Objekts pruefen
+    // check the type of the ojekts
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();
     Reference< XInterface > x;
     if( eType == TypeClass_INTERFACE )
     {
-        // Interface aus dem Any besorgen
+        // get the interface from the Any
         x = *(Reference< XInterface >*)aUnoObj_.getValue();
         if( !x.is() )
             return;
@@ -2437,10 +2409,10 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
 
     Reference< XTypeProvider > xTypeProvider;
 #ifdef INVOCATION_ONLY
-    // Invocation besorgen
+    // get the invocation
     mxInvocation = createDynamicInvocationFor( aUnoObj_ );
 #else
-    // Hat das Object selbst eine Invocation?
+    // Did the object have an invocation itself?
     mxInvocation = Reference< XInvocation >( x, UNO_QUERY );
 
     xTypeProvider = Reference< XTypeProvider >( x, UNO_QUERY );
@@ -2448,15 +2420,11 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
 
     if( mxInvocation.is() )
     {
-        // #94670: This is WRONG because then the MaterialHolder doesn't refer
-        // to the object implementing XInvocation but to the object passed to
-        // the invocation service!!!
-        // mxMaterialHolder = Reference< XMaterialHolder >::query( mxInvocation );
 
-        // ExactName holen
+        // get the ExactName
         mxExactNameInvocation = Reference< XExactName >::query( mxInvocation );
 
-        // Rest bezieht sich nur auf Introspection
+        // The remainder refers only to the introspection
         if( !xTypeProvider.is() )
         {
             bNeedIntrospection = sal_False;
@@ -2473,35 +2441,35 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     maTmpUnoObj = aUnoObj_;
 
 
-    //*** Namen bestimmen ***
+    //*** Define the name ***
     sal_Bool bFatalError = sal_True;
 
-    // Ist es ein Interface oder eine struct?
+    // Is it an interface or a struct?
     sal_Bool bSetClassName = sal_False;
-    String aClassName_;
+    rtl::OUString aClassName_;
     if( eType == TypeClass_STRUCT || eType == TypeClass_EXCEPTION )
     {
-        // Struct ist Ok
+        // Struct is Ok
         bFatalError = sal_False;
 
-        // #67173 Echten Klassen-Namen eintragen
-        if( aName_.Len() == 0 )
+        // insert the real name of the class
+        if( aName_.getLength() == 0 )
         {
-            aClassName_ = String( aUnoObj_.getValueType().getTypeName() );
+            aClassName_ = aUnoObj_.getValueType().getTypeName();
             bSetClassName = sal_True;
         }
     }
     else if( eType == TypeClass_INTERFACE )
     {
-        // #70197 Interface geht immer durch Typ im Any
+        // Interface works always through the type in the Any
         bFatalError = sal_False;
 
-        // Nach XIdlClassProvider-Interface fragen
+        // Ask for the XIdlClassProvider-Interface
         Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
         if( xClassProvider.is() )
         {
-            // #67173 Echten Klassen-Namen eintragen
-            if( aName_.Len() == 0 )
+            // Insert the real name of the class
+            if( aName_.getLength() == 0 )
             {
                 Sequence< Reference< XIdlClass > > szClasses = xClassProvider->getIdlClasses();
                 sal_uInt32 nLen = szClasses.getLength();
@@ -2510,7 +2478,7 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
                     const Reference< XIdlClass > xImplClass = szClasses.getConstArray()[ 0 ];
                     if( xImplClass.is() )
                     {
-                        aClassName_ = String( xImplClass->getName() );
+                        aClassName_ = xImplClass->getName();
                         bSetClassName = sal_True;
                     }
                 }
@@ -2520,14 +2488,14 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     if( bSetClassName )
         SetClassName( aClassName_ );
 
-    // Weder Interface noch Struct -> FatalError
+    // Neither interface nor Struct -> FatalError
     if( bFatalError )
     {
         StarBASIC::FatalError( ERRCODE_BASIC_EXCEPTION );
         return;
     }
 
-    // #67781 Introspection erst on demand durchfuehren
+    // pass the introspection primal on demand
 }
 
 SbUnoObject::~SbUnoObject()
@@ -2535,7 +2503,7 @@ SbUnoObject::~SbUnoObject()
 }
 
 
-// #76470 Introspection on Demand durchfuehren
+// pass the introspection on Demand
 void SbUnoObject::doIntrospection( void )
 {
     static Reference< XIntrospection > xIntrospection;
@@ -2546,14 +2514,13 @@ void SbUnoObject::doIntrospection( void )
 
     if( !xIntrospection.is() )
     {
-        // Introspection-Service holen
+        // get the introspection service
         Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
         if ( xFactory.is() )
         {
-            Reference< XInterface > xI = xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") );
+            Reference< XInterface > xI = xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) );
             if (xI.is())
                 xIntrospection = Reference< XIntrospection >::query( xI );
-                //xI->queryInterface( ::getCppuType( (const Reference< XIntrospection > *)0 ), xIntrospection );
         }
     }
     if( !xIntrospection.is() )
@@ -2562,7 +2529,7 @@ void SbUnoObject::doIntrospection( void )
         return;
     }
 
-    // Introspection durchfuehren
+    // pass the introspection
     try
     {
         mxUnoAccess = xIntrospection->inspect( maTmpUnoObj );
@@ -2574,21 +2541,21 @@ void SbUnoObject::doIntrospection( void )
 
     if( !mxUnoAccess.is() )
     {
-        // #51475 Ungueltiges Objekt kennzeichnen (kein mxMaterialHolder)
+        // #51475 mark an invalid objekt kennzeichnen (no mxMaterialHolder)
         return;
     }
 
-    // MaterialHolder vom Access holen
+    // get MaterialHolder from access
     mxMaterialHolder = Reference< XMaterialHolder >::query( mxUnoAccess );
 
-    // ExactName vom Access holen
+    // get ExactName from access
     mxExactName = Reference< XExactName >::query( mxUnoAccess );
 }
 
 
 
 
-// #67781 Start einer Liste aller SbUnoMethod-Instanzen
+// Start of a list of all SbUnoMethod-Instances
 static SbUnoMethod* pFirst = NULL;
 
 void clearUnoMethodsForBasic( StarBASIC* pBasic )
@@ -2645,7 +2612,7 @@ void clearUnoMethods( void )
 
 SbUnoMethod::SbUnoMethod
 (
-    const String& aName_,
+    const rtl::OUString& aName_,
     SbxDataType eSbxType,
     Reference< XIdlMethod > xUnoMethod_,
     bool bInvocation,
@@ -2658,7 +2625,7 @@ SbUnoMethod::SbUnoMethod
     m_xUnoMethod = xUnoMethod_;
     pParamInfoSeq = NULL;
 
-    // #67781 Methode in Liste eintragen
+    // enregister the method in a list
     pNext = pFirst;
     pPrev = NULL;
     pFirst = this;
@@ -2696,7 +2663,6 @@ SbxInfo* SbUnoMethod::GetInfo()
                 const ParamInfo& rInfo = pParamInfos[i];
                 ::rtl::OUString aParamName = rInfo.aName;
 
-                // const Reference< XIdlClass >& rxClass = rInfo.aType;
                 SbxDataType t = SbxVARIANT;
                 sal_uInt16 nFlags_ = SBX_READ;
                 pInfo->AddParam( aParamName, t, nFlags_ );
@@ -2718,7 +2684,7 @@ const Sequence<ParamInfo>& SbUnoMethod::getParamInfos( void )
 
 SbUnoProperty::SbUnoProperty
 (
-    const String& aName_,
+    const rtl::OUString& aName_,
     SbxDataType eSbxType,
     const Property& aUnoProp_,
     sal_Int32 nId_,
@@ -2729,7 +2695,7 @@ SbUnoProperty::SbUnoProperty
     , nId( nId_ )
     , mbInvocation( bInvocation )
 {
-    // #54548, bei bedarf Dummy-Array einsetzen, damit SbiRuntime::CheckArray() geht
+    // as needed establish an dummy array so that SbiRuntime::CheckArray() works
     static SbxArrayRef xDummyArray = new SbxArray( SbxVARIANT );
     if( eSbxType & SbxARRAY )
         PutObject( xDummyArray );
@@ -2749,8 +2715,8 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( bNeedIntrospection )
         doIntrospection();
 
-    // Neu 4.3.1999: Properties on Demand anlegen, daher jetzt perIntrospectionAccess
-    // suchen, ob doch eine Property oder Methode des geforderten Namens existiert
+    // New 1999-03-04: Create properties on demand. Therefore search now perIntrospectionAccess,
+    // if a property or a method of the required name exist
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
@@ -2767,14 +2733,14 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                 const Property& rProp = mxUnoAccess->
                     getProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS );
 
-                // #58455 Wenn die Property void sein kann, muss als Typ Variant gesetzt werden
+                // If the property could be void the type had to be set to Variant
                 SbxDataType eSbxType;
                 if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
                     eSbxType = SbxVARIANT;
                 else
                     eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
-                // Property anlegen und reinbraten
+                // create the property and superimpose it
                 SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0, false );
                 QuickInsert( (SbxVariable*)xVarRef );
                 pRes = xVarRef;
@@ -2782,18 +2748,18 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             else if( mxUnoAccess->hasMethod( aUName,
                 MethodConcept::ALL - MethodConcept::DANGEROUS ) )
             {
-                // Methode ansprechen
+                // address the method
                 const Reference< XIdlMethod >& rxMethod = mxUnoAccess->
                     getMethod( aUName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 
-                // SbUnoMethode anlegen und reinbraten
+                // create SbUnoMethod and superimpose it
                 SbxVariableRef xMethRef = new SbUnoMethod( rxMethod->getName(),
                     unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
                 QuickInsert( (SbxVariable*)xMethRef );
                 pRes = xMethRef;
             }
 
-            // Wenn immer noch nichts gefunden wurde, muss geprueft werden, ob NameAccess vorliegt
+            // Elsewise nothing would be found it had to be checked, if NameAccess is existent
             if( !pRes )
             {
                 try
@@ -2805,13 +2771,13 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                     {
                         Any aAny = xNameAccess->getByName( aUName2 );
 
-                        // ACHTUNG: Die hier erzeugte Variable darf wegen bei XNameAccess
+                        // ATTENTION: Die hier erzeugte Variable darf wegen bei XNameAccess
                         // nicht als feste Property in das Object aufgenommen werden und
                         // wird daher nirgendwo gehalten.
-                        // Wenn das Probleme gibt, muss das kuenstlich gemacht werden oder
-                        // es muss eine Klasse SbUnoNameAccessProperty geschaffen werden,
-                        // bei der die Existenz staendig neu ueberprueft und die ggf. weg-
-                        // geworfen wird, wenn der Name nicht mehr gefunden wird.
+                        // If this leads to problems, it has to be created synthetically or
+                        // a class SbUnoNameAccessProperty, whose existence had to be checked
+                        // constantly and which were if necessary thrown away
+                        // if the name was not found anymore.
                         pRes = new SbxVariable( SbxVARIANT );
                         unoToSbxValue( pRes, aAny );
                     }
@@ -2822,7 +2788,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                 }
                 catch( const Exception& )
                 {
-                    // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
+                    // Establish so that the exeption error will not be overwriten
                     if( !pRes )
                         pRes = new SbxVariable( SbxVARIANT );
 
@@ -2843,14 +2809,14 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             {
                 if( mxInvocation->hasProperty( aUName ) )
                 {
-                    // Property anlegen und reinbraten
+                    // create a property and superimpose it
                     SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0, true );
                     QuickInsert( (SbxVariable*)xVarRef );
                     pRes = xVarRef;
                 }
                 else if( mxInvocation->hasMethod( aUName ) )
                 {
-                    // SbUnoMethode anlegen und reinbraten
+                    // create SbUnoMethode and superimpose it
                     SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true );
                     QuickInsert( (SbxVariable*)xMethRef );
                     pRes = xMethRef;
@@ -2869,7 +2835,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             }
             catch( RuntimeException& e )
             {
-                // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
+                // Establish so that the exeption error will not be overwriten
                 if( !pRes )
                     pRes = new SbxVariable( SbxVARIANT );
 
@@ -2878,7 +2844,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
         }
     }
 
-    // Ganz am Schluss noch pruefen, ob die Dbg_-Properties gemeint sind
+    // At the very end checking if the Dbg_-Properties are meant
 
     if( !pRes )
     {
@@ -2886,10 +2852,10 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             rName.EqualsIgnoreCaseAscii( ID_DBG_PROPERTIES ) ||
             rName.EqualsIgnoreCaseAscii( ID_DBG_METHODS ) )
         {
-            // Anlegen
+            // Create
             implCreateDbgProperties();
 
-            // Jetzt muessen sie regulaer gefunden werden
+            // Now they have to be found regular
             pRes = SbxObject::Find( rName, SbxCLASS_DONTCARE );
         }
     }
@@ -2897,33 +2863,33 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
 }
 
 
-// Hilfs-Methode zum Anlegen der dbg_-Properties
+// help method to create the dbg_-Properties
 void SbUnoObject::implCreateDbgProperties( void )
 {
     Property aProp;
 
-    // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
-    SbxVariableRef xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, aProp, -1, false );
+    // Id == -1: display the implemented interfaces corresponding the ClassProvider
+    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, aProp, -1, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
-    // Id == -2: Properties ausgeben
-    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, aProp, -2, false );
+    // Id == -2: output the properties
+    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, aProp, -2, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
-    // Id == -3: Methoden ausgeben
-    xVarRef = new SbUnoProperty( String(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, aProp, -3, false );
+    // Id == -3: output the Methods
+    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, aProp, -3, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 
 void SbUnoObject::implCreateAll( void )
 {
-    // Bestehende Methoden und Properties alle wieder wegwerfen
+    // throw away all existing methods and properties
     pMethods   = new SbxArray;
     pProps     = new SbxArray;
 
     if( bNeedIntrospection ) doIntrospection();
 
-    // Instrospection besorgen
+    // get instrospection
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
     if( !xAccess.is() || bNativeCOMObject )
     {
@@ -2935,7 +2901,7 @@ void SbUnoObject::implCreateAll( void )
     if( !xAccess.is() )
         return;
 
-    // Properties anlegen
+    // Establish properties
     Sequence<Property> props = xAccess->getProperties( PropertyConcept::ALL - PropertyConcept::DANGEROUS );
     sal_uInt32 nPropCount = props.getLength();
     const Property* pProps_ = props.getConstArray();
@@ -2945,32 +2911,32 @@ void SbUnoObject::implCreateAll( void )
     {
         const Property& rProp = pProps_[ i ];
 
-        // #58455 Wenn die Property void sein kann, muss als Typ Variant gesetzt werden
+        // If the property could be void the type had to be set to Variant
         SbxDataType eSbxType;
         if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
             eSbxType = SbxVARIANT;
         else
             eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
-        // Property anlegen und reinbraten
+        // Create property and superimpose it
         SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, i, false );
         QuickInsert( (SbxVariable*)xVarRef );
     }
 
-    // Dbg_-Properties anlegen
+    // Create Dbg_-Properties
     implCreateDbgProperties();
 
-    // Methoden anlegen
+    // Create methods
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods
         ( MethodConcept::ALL - MethodConcept::DANGEROUS );
     sal_uInt32 nMethCount = aMethodSeq.getLength();
     const Reference< XIdlMethod >* pMethods_ = aMethodSeq.getConstArray();
     for( i = 0 ; i < nMethCount ; i++ )
     {
-        // Methode ansprechen
+        // address method
         const Reference< XIdlMethod >& rxMethod = pMethods_[i];
 
-        // SbUnoMethode anlegen und reinbraten
+        // Create SbUnoMethod and superimpose it
         SbxVariableRef xMethRef = new SbUnoMethod
             ( rxMethod->getName(), unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
         QuickInsert( (SbxVariable*)xMethRef );
@@ -2978,7 +2944,7 @@ void SbUnoObject::implCreateAll( void )
 }
 
 
-// Wert rausgeben
+// output the value
 Any SbUnoObject::getUnoAny( void )
 {
     Any aRetAny;
@@ -2990,15 +2956,15 @@ Any SbUnoObject::getUnoAny( void )
     return aRetAny;
 }
 
-// Hilfsmethode zum Anlegen einer Uno-Struct per CoreReflection
-SbUnoObject* Impl_CreateUnoStruct( const String& aClassName )
+// help method to create an Uno-Struct per CoreReflection
+SbUnoObject* Impl_CreateUnoStruct( const ::rtl::OUString& aClassName )
 {
-    // CoreReflection holen
+    // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
     if( !xCoreReflection.is() )
         return NULL;
 
-    // Klasse suchen
+    // search for the class
     Reference< XIdlClass > xClass;
     Reference< XHierarchicalNameAccess > xHarryName =
         getCoreReflection_HierarchicalNameAccess_Impl();
@@ -3007,25 +2973,25 @@ SbUnoObject* Impl_CreateUnoStruct( const String& aClassName )
     if( !xClass.is() )
         return NULL;
 
-    // Ist es ueberhaupt ein struct?
+    // Is it realy a struct?
     TypeClass eType = xClass->getTypeClass();
     if ( ( eType != TypeClass_STRUCT ) && ( eType != TypeClass_EXCEPTION ) )
         return NULL;
 
-    // Instanz erzeugen
+    // create an instance
     Any aNewAny;
     xClass->createObject( aNewAny );
 
-    // SbUnoObject daraus basteln
+    // make a SbUnoObject out of it
     SbUnoObject* pUnoObj = new SbUnoObject( aClassName, aNewAny );
     return pUnoObj;
 }
 
 
-// Factory-Klasse fuer das Anlegen von Uno-Structs per DIM AS NEW
+// Factory-Class to create Uno-Structs per DIM AS NEW
 SbxBase* SbUnoFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    // Ueber SbxId laeuft in Uno nix
+    // Via SbxId nothing works in Uno
     return NULL;
 }
 
@@ -3035,9 +3001,9 @@ SbxObject* SbUnoFactory::CreateObject( const String& rClassName )
 }
 
 
-// Provisorische Schnittstelle fuer UNO-Anbindung
-// Liefert ein SbxObject, das ein Uno-Interface wrappt
-SbxObjectRef GetSbUnoObject( const String& aName, const Any& aUnoObj_ )
+// Provisional interface for the UNO-Connection
+// Deliver a SbxObject, that wrap an Uno-Interface
+SbxObjectRef GetSbUnoObject( const ::rtl::OUString& aName, const Any& aUnoObj_ )
 {
     return new SbUnoObject( aName, aUnoObj_ );
 }
@@ -3061,22 +3027,22 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 1 Parameter
+    // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Klassen-Name der struct holen
-    String aClassName = rPar.Get(1)->GetString();
+    // get the name of the class of the struct
+    ::rtl::OUString aClassName = rPar.Get(1)->GetString();
 
-    // Versuchen, gleichnamige Struct zu erzeugen
+    // try to create Struct with the same name
     SbUnoObjectRef xUnoObj = Impl_CreateUnoStruct( aClassName );
     if( !xUnoObj )
         return;
 
-    // Objekt zurueckliefern
+    // return the objekt
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
@@ -3086,17 +3052,17 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWri
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 1 Parameter
+    // We need 1 Parameter minimum
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Klassen-Name der struct holen
-    String aServiceName = rPar.Get(1)->GetString();
+    // get the name of the class of the struct
+    ::rtl::OUString aServiceName = rPar.Get(1)->GetString();
 
-    // Service suchen und instanzieren
+    // search for the service and instatiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
     if ( xFactory.is() )
@@ -3117,11 +3083,11 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWri
         Any aAny;
         aAny <<= xInterface;
 
-        // SbUnoObject daraus basteln und zurueckliefern
+        // Create a SbUnoObject out of it and return it
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
-            // Objekt zurueckliefern
+            // return the object
             refVar->PutObject( (SbUnoObject*)xUnoObj );
         }
         else
@@ -3140,21 +3106,21 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 2 Parameter
+    // We need 2 parameter minimum
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Klassen-Name der struct holen
-    String aServiceName = rPar.Get(1)->GetString();
+    // get the name of the class of the struct
+    ::rtl::OUString aServiceName = rPar.Get(1)->GetString();
     Any aArgAsAny = sbxToUnoValue( rPar.Get(2),
                 getCppuType( (Sequence<Any>*)0 ) );
     Sequence< Any > aArgs;
     aArgAsAny >>= aArgs;
 
-    // Service suchen und instanzieren
+    // search for the service and instatiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
     if ( xFactory.is() )
@@ -3175,11 +3141,11 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
         Any aAny;
         aAny <<= xInterface;
 
-        // SbUnoObject daraus basteln und zurueckliefern
+        // Create a SbUnoObject out of it and return it
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
-            // Objekt zurueckliefern
+            // return the object
             refVar->PutObject( (SbUnoObject*)xUnoObj );
         }
         else
@@ -3200,15 +3166,15 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_B
 
     SbxVariableRef refVar = rPar.Get(0);
 
-    // Globalen Service-Manager holen
+    // get the global service manager
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
         Any aAny;
         aAny <<= xFactory;
 
-        // SbUnoObject daraus basteln und zurueckliefern
-        SbUnoObjectRef xUnoObj = new SbUnoObject( String( RTL_CONSTASCII_USTRINGPARAM("ProcessServiceManager") ), aAny );
+        // Create a SbUnoObject out of it and return it
+        SbUnoObjectRef xUnoObj = new SbUnoObject( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ProcessServiceManager") ), aAny );
         refVar->PutObject( (SbUnoObject*)xUnoObj );
     }
     else
@@ -3222,7 +3188,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 2 Parameter
+    // We need 2 parameter minimum
     sal_uInt16 nParCount = rPar.Count();
     if( nParCount < 3 )
     {
@@ -3230,11 +3196,11 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
         return;
     }
 
-    // Variable fuer Rueckgabewert
+    // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutBool( sal_False );
 
-    // Uno-Objekt holen
+    // get the Uno-Object
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
     if( !(pObj && pObj->ISA(SbUnoObject)) )
         return;
@@ -3243,32 +3209,32 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
     if( eType != TypeClass_INTERFACE )
         return;
 
-    // Interface aus dem Any besorgen
+    // get the interface out of the Any
     Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
 
-    // CoreReflection holen
+    // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
     if( !xCoreReflection.is() )
         return;
 
     for( sal_uInt16 i = 2 ; i < nParCount ; i++ )
     {
-        // Interface-Name der struct holen
-        String aIfaceName = rPar.Get( i )->GetString();
+        // get the name of the interface of the struct
+        rtl::OUString aIfaceName = rPar.Get( i )->GetString();
 
-        // Klasse suchen
+        // search for the class
         Reference< XIdlClass > xClass = xCoreReflection->forName( aIfaceName );
         if( !xClass.is() )
             return;
 
-        // Pruefen, ob das Interface unterstuetzt wird
+        // check if the interface will be supported
         ::rtl::OUString aClassName = xClass->getName();
         Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
         if( !x->queryInterface( aClassType ).hasValue() )
             return;
     }
 
-    // Alles hat geklappt, dann sal_True liefern
+    // Every thing works; then return TRUE
     refVar->PutBool( sal_True );
 }
 
@@ -3277,18 +3243,18 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen mindestens 1 Parameter
+    // We need 1 parameter minimum
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Variable fuer Rueckgabewert
+    // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutBool( sal_False );
 
-    // Uno-Objekt holen
+    // get the Uno-Object
     SbxVariableRef xParam = rPar.Get( 1 );
     if( !xParam->IsObject() )
         return;
@@ -3313,11 +3279,11 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         return;
     }
 
-    // Variable fuer Rueckgabewert
+    // variable for the return value
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutBool( sal_False );
 
-    // Uno-Objekte holen
+    // get the Uno-Objects
     SbxVariableRef xParam1 = rPar.Get( 1 );
     if( !xParam1->IsObject() )
         return;
@@ -3330,7 +3296,6 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         return;
     Reference< XInterface > x1;
     aAny1 >>= x1;
-    //XInterfaceRef x1 = *(XInterfaceRef*)aAny1.get();
 
     SbxVariableRef xParam2 = rPar.Get( 2 );
     if( !xParam2->IsObject() )
@@ -3344,13 +3309,12 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         return;
     Reference< XInterface > x2;
     aAny2 >>= x2;
-    //XInterfaceRef x2 = *(XInterfaceRef*)aAny2.get();
 
     if( x1 == x2 )
         refVar->PutBool( sal_True );
 }
 
-typedef std::hash_map< ::rtl::OUString, std::vector< ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleHash;
+typedef boost::unordered_map< ::rtl::OUString, std::vector< ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleHash;
 
 
 // helper wrapper function to interact with TypeProvider and
@@ -3377,13 +3341,18 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
     return xEnum;
 }
 
-typedef std::hash_map< ::rtl::OUString, Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+typedef boost::unordered_map< ::rtl::OUString, Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
 
-SbxVariable* getVBAConstant( const String& rName )
+VBAConstantHelper&
+VBAConstantHelper::instance()
 {
-    SbxVariable* pConst = NULL;
-    static VBAConstantsHash aConstCache;
-    static bool isInited = false;
+    static VBAConstantHelper aHelper;
+    return aHelper;
+}
+
+void
+VBAConstantHelper::init()
+{
     if ( !isInited )
     {
         Sequence< TypeClass > types(1);
@@ -3391,45 +3360,83 @@ SbxVariable* getVBAConstant( const String& rName )
         Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
 
         if ( !xEnum.is() )
-            return NULL;
+            return; //NULL;
 
         while ( xEnum->hasMoreElements() )
         {
             Reference< XConstantsTypeDescription > xConstants( xEnum->nextElement(), UNO_QUERY );
             if ( xConstants.is() )
             {
+                // store constant group name
+                ::rtl::OUString sFullName = xConstants->getName();
+                sal_Int32 indexLastDot = sFullName.lastIndexOf('.');
+                ::rtl::OUString sLeafName( sFullName );
+                if ( indexLastDot > -1 )
+                    sLeafName = sFullName.copy( indexLastDot + 1);
+                aConstCache.push_back( sLeafName ); // assume constant group names are unique
                 Sequence< Reference< XConstantTypeDescription > > aConsts = xConstants->getConstants();
                 Reference< XConstantTypeDescription >* pSrc = aConsts.getArray();
                 sal_Int32 nLen = aConsts.getLength();
                 for ( sal_Int32 index =0;  index<nLen; ++pSrc, ++index )
                 {
+                    // store constant member name
                     Reference< XConstantTypeDescription >& rXConst =
                         *pSrc;
-                    ::rtl::OUString sFullName = rXConst->getName();
-                    sal_Int32 indexLastDot = sFullName.lastIndexOf('.');
-                    ::rtl::OUString sLeafName;
+                    sFullName = rXConst->getName();
+                    indexLastDot = sFullName.lastIndexOf('.');
+                    sLeafName = sFullName;
                     if ( indexLastDot > -1 )
                         sLeafName = sFullName.copy( indexLastDot + 1);
-                    aConstCache[ sLeafName.toAsciiLowerCase() ] = rXConst->getConstantValue();
+                    aConstHash[ sLeafName.toAsciiLowerCase() ] = rXConst->getConstantValue();
                 }
             }
         }
         isInited = true;
     }
+}
+
+bool
+VBAConstantHelper::isVBAConstantType( const ::rtl::OUString& rName )
+{
+    init();
+    bool bConstant = false;
     ::rtl::OUString sKey( rName );
-    VBAConstantsHash::const_iterator it = aConstCache.find( sKey.toAsciiLowerCase() );
-    if ( it != aConstCache.end() )
+    VBAConstantsVector::const_iterator it = aConstCache.begin();
+
+    for( ; it != aConstCache.end(); ++it )
+    {
+        if( sKey.equalsIgnoreAsciiCase( *it ) )
+        {
+            bConstant = true;
+            break;
+        }
+    }
+    return bConstant;
+}
+
+SbxVariable*
+VBAConstantHelper::getVBAConstant( const ::rtl::OUString& rName )
+{
+    SbxVariable* pConst = NULL;
+    init();
+
+    ::rtl::OUString sKey( rName );
+
+    VBAConstantsHash::const_iterator it = aConstHash.find( sKey.toAsciiLowerCase() );
+
+    if ( it != aConstHash.end() )
     {
         pConst = new SbxVariable( SbxVARIANT );
         pConst->SetName( rName );
         unoToSbxValue( pConst, it->second );
     }
+
     return pConst;
 }
 
-// Funktion, um einen globalen Bezeichner im
-// UnoScope zu suchen und fuer Sbx zu wrappen
-SbUnoClass* findUnoClass( const String& rName )
+// Function to search for a global identifier in the
+// UnoScope and to wrap it for Sbx
+SbUnoClass* findUnoClass( const ::rtl::OUString& rName )
 {
     // #105550 Check if module exists
     SbUnoClass* pUnoClass = NULL;
@@ -3457,13 +3464,13 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
 
     SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_VARIABLE );
 
-    // Wenn nichts gefunden wird, ist das Sub-Modul noch nicht bekannt
+    // If nothing were located the submodule isn't known yet
     if( !pRes )
     {
-        // Wenn es schon eine Klasse ist, nach einen Feld fragen
+        // If it is already a class, ask for the field
         if( m_xClass.is() )
         {
-            // Ist es ein Field
+            // Is it a field(?)
             ::rtl::OUString aUStr( rName );
             Reference< XIdlField > xField = m_xClass->getField( aUStr );
             Reference< XIdlClass > xClass;
@@ -3474,7 +3481,7 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                     Any aAny;
                     aAny = xField->get( aAny );
 
-                    // Nach Sbx wandeln
+                    // Convert to Sbx
                     pRes = new SbxVariable( SbxVARIANT );
                     pRes->SetName( rName );
                     unoToSbxValue( pRes, aAny );
@@ -3487,16 +3494,16 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
         }
         else
         {
-            // Vollqualifizierten Namen erweitern
-            String aNewName = GetName();
-            aNewName.AppendAscii( "." );
+            // expand fully qualified name
+            ::rtl::OUString aNewName = GetName();
+            aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
             aNewName += rName;
 
-            // CoreReflection holen
+            // get CoreReflection
             Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
             if( xCoreReflection.is() )
             {
-                // Ist es eine Konstante?
+                // Is it a constant?
                 Reference< XHierarchicalNameAccess > xHarryName( xCoreReflection, UNO_QUERY );
                 if( xHarryName.is() )
                 {
@@ -3505,7 +3512,7 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                         Any aValue = xHarryName->getByHierarchicalName( aNewName );
                         TypeClass eType = aValue.getValueType().getTypeClass();
 
-                        // Interface gefunden? Dann ist es eine Klasse
+                        // Interface located? Then it is a class
                         if( eType == TypeClass_INTERFACE )
                         {
                             Reference< XInterface > xIface = *(Reference< XInterface >*)aValue.getValue();
@@ -3525,11 +3532,11 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                     }
                     catch( NoSuchElementException& e1 )
                     {
-                        String aMsg = implGetExceptionMsg( e1 );
+                        ::rtl::OUString aMsg = implGetExceptionMsg( e1 );
                     }
                 }
 
-                // Sonst wieder als Klasse annehmen
+                // Otherwise take it again as class
                 if( !pRes )
                 {
                     SbUnoClass* pNewClass = findUnoClass( aNewName );
@@ -3571,11 +3578,11 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
         {
             pRes->SetName( rName );
 
-            // Variable einfuegen, damit sie spaeter im Find gefunden wird
+            // Insert variable, so that it could be found later
             QuickInsert( pRes );
 
-            // Uns selbst gleich wieder als Listener rausnehmen,
-            // die Werte sind alle konstant
+            // Take us out as listener at once,
+            // the values are all constant
             if( pRes->IsBroadcaster() )
                 EndListening( pRes->GetBroadcaster(), sal_True );
         }
@@ -3584,7 +3591,7 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
 }
 
 
-SbUnoService* findUnoService( const String& rName )
+SbUnoService* findUnoService( const ::rtl::OUString& rName )
 {
     SbUnoService* pSbUnoService = NULL;
 
@@ -3615,7 +3622,7 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
 
     if( !pRes )
     {
-        // Wenn es schon eine Klasse ist, nach einen Feld fragen
+        // If it is already a class ask for a field
         if( m_bNeedsInit && m_xServiceTypeDesc.is() )
         {
             m_bNeedsInit = false;
@@ -3627,14 +3634,14 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
             {
                 Reference< XServiceConstructorDescription > xCtor = pCtorSeq[i];
 
-                String aName( xCtor->getName() );
-                if( !aName.Len() )
+                ::rtl::OUString aName( xCtor->getName() );
+                if( !aName.getLength() )
                 {
                     if( xCtor->isDefaultConstructor() )
-                        aName = String::CreateFromAscii( "create" );
+                        aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("create"));
                 }
 
-                if( aName.Len() )
+                if( aName.getLength() )
                 {
                     // Create and insert SbUnoServiceCtor
                     SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
@@ -3776,7 +3783,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 Any aRetAny;
                 if( xServiceMgr.is() )
                 {
-                    String aServiceName = GetName();
+                    ::rtl::OUString aServiceName = GetName();
                     Reference < XInterface > xRet;
                     try
                     {
@@ -3826,7 +3833,7 @@ void clearUnoServiceCtors( void )
     }
 }
 
-SbUnoServiceCtor::SbUnoServiceCtor( const String& aName_, Reference< XServiceConstructorDescription > xServiceCtorDesc )
+SbUnoServiceCtor::SbUnoServiceCtor( const ::rtl::OUString& aName_, Reference< XServiceConstructorDescription > xServiceCtorDesc )
     : SbxMethod( aName_, SbxOBJECT )
     , m_xServiceCtorDesc( xServiceCtorDesc )
 {
@@ -3844,7 +3851,7 @@ SbxInfo* SbUnoServiceCtor::GetInfo()
 }
 
 
-SbUnoSingleton* findUnoSingleton( const String& rName )
+SbUnoSingleton* findUnoSingleton( const ::rtl::OUString& rName )
 {
     SbUnoSingleton* pSbUnoSingleton = NULL;
 
@@ -3869,13 +3876,13 @@ SbUnoSingleton* findUnoSingleton( const String& rName )
     return pSbUnoSingleton;
 }
 
-SbUnoSingleton::SbUnoSingleton( const String& aName_,
+SbUnoSingleton::SbUnoSingleton( const ::rtl::OUString& aName_,
     const Reference< XSingletonTypeDescription >& xSingletonTypeDesc )
         : SbxObject( aName_ )
         , m_xSingletonTypeDesc( xSingletonTypeDesc )
 {
     SbxVariableRef xGetMethodRef =
-        new SbxMethod( String( RTL_CONSTASCII_USTRINGPARAM( "get" ) ), SbxOBJECT );
+        new SbxMethod( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "get" ) ), SbxOBJECT );
     QuickInsert( (SbxVariable*)xGetMethodRef );
 }
 
@@ -3916,7 +3923,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         Any aRetAny;
         if( xContextToUse.is() )
         {
-            String aSingletonName( RTL_CONSTASCII_USTRINGPARAM("/singletons/") );
+            ::rtl::OUString aSingletonName( RTL_CONSTASCII_USTRINGPARAM("/singletons/") );
             aSingletonName += GetName();
             Reference < XInterface > xRet;
             xContextToUse->getValueByName( aSingletonName ) >>= xRet;
@@ -3930,11 +3937,9 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 
 //========================================================================
-//========================================================================
-//========================================================================
 
-// Implementation eines EventAttacher-bezogenen AllListeners, der
-// nur einzelne Events an einen allgemeinen AllListener weiterleitet
+// Implementation of an EventAttacher-drawn AllListener, which
+// solely transmits several events to an general AllListener
 class BasicAllListener_Impl : public BasicAllListenerHelper
 {
     virtual void firing_impl(const AllEventObject& Event, Any* pRet);
@@ -3946,14 +3951,11 @@ public:
     BasicAllListener_Impl( const ::rtl::OUString& aPrefixName );
     ~BasicAllListener_Impl();
 
-    // Methoden von XInterface
-    //virtual sal_Bool queryInterface( Uik aUik, Reference< XInterface > & rOut );
-
-    // Methoden von XAllListener
+    // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) throw ( RuntimeException );
     virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw ( RuntimeException );
 
-    // Methoden von XEventListener
+    // Methods of XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source) throw ( RuntimeException );
 };
 
@@ -3976,7 +3978,7 @@ BasicAllListener_Impl::~BasicAllListener_Impl()
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
-    vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     if( xSbxObj.Is() )
     {
@@ -3990,13 +3992,13 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
             StarBASIC * pLib = PTR_CAST(StarBASIC,pP);
             if( pLib )
             {
-                // In Basic Array anlegen
+                // Create in a Basic Array
                 SbxArrayRef xSbxArray = new SbxArray( SbxVARIANT );
                 const Any * pArgs = Event.Arguments.getConstArray();
                 sal_Int32 nCount = Event.Arguments.getLength();
                 for( sal_Int32 i = 0; i < nCount; i++ )
                 {
-                    // Elemente wandeln
+                    // Convert elements
                     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
                     xSbxArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
@@ -4004,7 +4006,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
 
                 pLib->Call( aMethodName, xSbxArray );
 
-                // Return-Wert aus dem Param-Array holen, wenn verlangt
+                // get the return value from the Param-Array, if requestet
                 if( pRet )
                 {
                     SbxVariable* pVar = xSbxArray->Get( 0 );
@@ -4024,7 +4026,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
 }
 
 
-// Methoden von XAllListener
+// Methods of Listener
 void BasicAllListener_Impl::firing( const AllEventObject& Event ) throw ( RuntimeException )
 {
     firing_impl( Event, NULL );
@@ -4038,10 +4040,10 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 }
 
 //========================================================================
-// Methoden von XEventListener
+// Methods of XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     xSbxObj.Clear();
 }
@@ -4204,42 +4206,42 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const ::rtl::OUStri
 
 //========================================================================
 // Uno-Service erzeugen
-// 1. Parameter == Prefix-Name der Makros
-// 2. Parameter == voll qualifizierter Name des Listeners
+// 1. Parameter == Prefix-Name of the macro
+// 2. Parameter == fully qualified name of the listener
 void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 //RTLFUNC(CreateUnoListener)
 {
     (void)bWrite;
 
-    // Wir brauchen 2 Parameter
+    // We need 2 parameters
     if ( rPar.Count() != 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Klassen-Name der struct holen
-    String aPrefixName = rPar.Get(1)->GetString();
-    String aListenerClassName = rPar.Get(2)->GetString();
+    // get the name of the class of the struct
+    ::rtl::OUString aPrefixName = rPar.Get(1)->GetString();
+    ::rtl::OUString aListenerClassName = rPar.Get(2)->GetString();
 
-    // CoreReflection holen
+    // get the CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
     if( !xCoreReflection.is() )
         return;
 
-    // AllListenerAdapterService holen
+    // get the AllListenerAdapterService
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     if( !xFactory.is() )
         return;
 
-    // Klasse suchen
+    // search the class
     Reference< XIdlClass > xClass = xCoreReflection->forName( aListenerClassName );
     if( !xClass.is() )
         return;
 
-    // AB, 30.11.1999 InvocationAdapterFactory holen
+    // From 1999-11-30: get the InvocationAdapterFactory
     Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >(
-        xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+        xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ), UNO_QUERY );
 
     BasicAllListener_Impl * p;
     Reference< XAllListener > xAllLst = p = new BasicAllListener_Impl( aPrefixName );
@@ -4262,7 +4264,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     SbxArrayRef xBasicUnoListeners = pBasic->getUnoListeners();
     xBasicUnoListeners->Insert( pUnoObj, xBasicUnoListeners->Count() );
 
-    // Objekt zurueckliefern
+    // return the object
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( p->xSbxObj );
 }
@@ -4282,10 +4284,10 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     if( xPSMPropertySet.is() )
     {
         Any aContextAny = xPSMPropertySet->getPropertyValue(
-            String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) );
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) );
 
         SbUnoObjectRef xUnoObj = new SbUnoObject
-            ( String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ),
+            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ),
               aContextAny );
         refVar->PutObject( (SbUnoObject*)xUnoObj );
     }
@@ -4303,7 +4305,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     (void)pBasic;
     (void)bWrite;
 
-    static String aTypeTypeString( RTL_CONSTASCII_USTRINGPARAM("type") );
+    static rtl::OUString aTypeTypeString( RTL_CONSTASCII_USTRINGPARAM("type") );
 
     // 2 parameters needed
     if ( rPar.Count() != 3 )
@@ -4312,8 +4314,8 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
         return;
     }
 
-    // Klassen-Name der struct holen
-    String aTypeName = rPar.Get(1)->GetString();
+    // get the name of the class of the struct
+    rtl::OUString aTypeName = rPar.Get(1)->GetString();
     SbxVariable* pVal = rPar.Get(2);
 
     if( aTypeName == aTypeTypeString )
@@ -4360,7 +4362,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     }
     catch( NoSuchElementException& e1 )
     {
-        String aNoSuchElementExceptionName
+        ::rtl::OUString aNoSuchElementExceptionName
             ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.container.NoSuchElementException" ) );
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
             implGetExceptionMsg( e1, aNoSuchElementExceptionName ) );
@@ -4376,28 +4378,6 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
     Any aVal = sbxToUnoValueImpl( pVal );
     Any aConvertedVal = convertAny( aVal, aDestType );
 
-    /*
-    // Convert
-    Reference< XTypeConverter > xConverter = getTypeConverter_Impl();
-    try
-    {
-        aConvertedVal = xConverter->convertTo( aVal, aDestType );
-    }
-    catch( IllegalArgumentException& e1 )
-    {
-        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( ::cppu::getCaughtException() ) );
-        return;
-    }
-    catch( CannotConvertException& e2 )
-    {
-        String aCannotConvertExceptionName
-            ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
-        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( e2, aCannotConvertExceptionName ) );
-        return;
-    }
-    */
 
     SbxVariableRef refVar = rPar.Get(0);
     SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aConvertedVal );
@@ -4470,7 +4450,7 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Set ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4495,14 +4475,11 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
     SbxVariableRef xValue = new SbxVariable;
     pMeth->SetParameters( xArray );
     pMeth->Call( xValue );
-    //aRet = sbxToUnoValue( xValue );
     pMeth->SetParameters( NULL );
 
     // TODO: OutParameter?
 
-    // throw InvocationTargetException();
 
-    //return aRet;
 
 }
 
@@ -4511,7 +4488,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty )
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Get ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4549,7 +4526,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
                                             Sequence< Any >& )
     throw( CannotConvertException, InvocationTargetException )
 {
-    vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     Any aRet;
     SbxObjectRef xScopeObj = m_xScopeObj;
@@ -4862,3 +4839,4 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
     return bSuccess;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

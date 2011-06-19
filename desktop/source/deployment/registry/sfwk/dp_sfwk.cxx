@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,47 +179,10 @@ BackendImpl::BackendImpl(
                        OUSTR("application/vnd.sun.star.framework-script"),
                        OUString() /* no file filter */,
                        OUSTR("Scripting Framework Script Library"),
-                       RID_IMG_SCRIPTLIB, RID_IMG_SCRIPTLIB_HC ) )
+                       RID_IMG_SCRIPTLIB ) )
 {
     if (! transientMode())
     {
-/*
-        if (office_is_running())
-        {
-            Reference<XComponentContext> xContext( getComponentContext() );
-            m_xScriptLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationScriptLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-            m_xDialogLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationDialogLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-        }
-        else
-        {
-            OUString basic_path(
-                m_eContext == CONTEXT_USER
-                ? OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":UserInstallation}/user/basic")
-                : OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":BaseInstallation}/share/basic") );
-            m_basic_script_libs.reset(
-                new LibraryContainer(
-                    makeURL( basic_path, OUSTR("script.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-            m_dialog_libs.reset(
-                new LibraryContainer(
-                    makeURL( basic_path, OUSTR("dialog.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-        }
-*/
     }
 }
 
@@ -274,7 +238,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.framework-script"))
             {
-                OUString lang = OUString::createFromAscii("Script");
+                OUString lang = OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
                 OUString sParcelDescURL = makeURL(
                     url, OUSTR("parcel-descriptor.xml") );
 
@@ -328,7 +292,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 void BackendImpl::PackageImpl:: initPackageHandler()
 {
@@ -430,3 +393,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

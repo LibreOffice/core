@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -383,7 +384,6 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                 sal_Bool bKorregFlag(sal_False);
-                sal_Bool bInsAny(sal_False);
                 sal_uInt32 nMarkPtsAnz(pPts->GetCount());
                 sal_uInt32 nMax(pObj->GetHdlCount());
 
@@ -395,7 +395,6 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
                     if(pNeuObj)
                     {
-                        bInsAny = sal_True;
                         SdrInsertReason aReason(SDRREASON_VIEWCALL, pObj);
                         pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
                         if( bUndo )
@@ -570,7 +569,7 @@ void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen) // , 
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
             sal_Bool bClosed=pO->IsClosedObj();
-            if (pO->IsPolyObj() && (bClosed==bOpen) || bToggle)
+            if ((pO->IsPolyObj() && (bClosed==bOpen)) || bToggle)
             {
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
@@ -742,4 +741,4 @@ void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCo
     AdjustMarkHdl();
 }
 
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

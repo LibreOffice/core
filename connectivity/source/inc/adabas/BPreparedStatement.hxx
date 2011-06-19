@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@ namespace connectivity
     {
         class OAdabasPreparedStatement :    public  ::connectivity::odbc::OPreparedStatement
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         protected:
             virtual odbc::OResultSet* createResulSet();
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
@@ -50,3 +51,4 @@ namespace connectivity
 
 #endif // CONNECTIVITY_ADABAS_PREPAREDSTATEMENT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

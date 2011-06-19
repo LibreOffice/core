@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,10 +207,12 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( RuntimeException& e )
     {
-        ::rtl::OUString temp = ::rtl::OUString::createFromAscii("ProviderCache::createProvider() Error creating provider from factory!!!");
+        ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!"));
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 
     return details.provider;
 }
 } //end namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

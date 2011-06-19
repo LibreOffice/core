@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,7 +122,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
-            DBG_TRACE("SfxFrame: GotFocus");
+            OSL_TRACE("SfxFrame: GotFocus");
             pView->MakeActive_Impl( sal_False );
         }
 
@@ -154,7 +155,6 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
-        //EnableInput( sal_True, sal_True );
         pView->SetModalMode( sal_False );
         return sal_True;
     }
@@ -437,7 +437,6 @@ void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
 {
     Window *pWin = pImp->pExternalContainerWindow;
 
-    // Groesse setzen
     const Size aAppWindow( pImp->pExternalContainerWindow->GetDesktopRectPixel().GetSize() );
     Point aPos( rWinArea.TopLeft() );
     Size aSz( rWinArea.GetSize() );
@@ -479,3 +478,5 @@ bool SfxFrame::IsMarkedHidden_Impl() const
 {
     return pImp->bHidden;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

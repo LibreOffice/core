@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -349,7 +350,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         if ( !bWithPassword && aTestURL.Password.getLength() > 0 )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = ::rtl::OUString::createFromAscii( "<******>" );
+            aTestURL.Password = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<******>"));
             assemble( aTestURL );
         }
 
@@ -370,3 +371,4 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 
 }       //  namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

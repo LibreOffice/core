@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
  *************************************************************************/
 #include "ftpinpstr.hxx"
-#ifndef _RTL_ALLOC_H
 #include <rtl/alloc.h>
-#endif
 #ifndef STD_ALGORITHM
 #include <algorithm>
 #define STD_ALGORITHM
@@ -215,3 +214,5 @@ sal_Int64 SAL_CALL FTPInputStream::getLength(
 {
     return m_nLength;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

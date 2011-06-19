@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ namespace css = ::com::sun::star;
 namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle :
-    public rtl::StaticWithInit<const rtl::OUString, StrTitle>
+    public rtl::StaticWithInit<rtl::OUString, StrTitle>
 {
     const rtl::OUString operator () ();
 };
@@ -89,3 +90,5 @@ bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString>
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

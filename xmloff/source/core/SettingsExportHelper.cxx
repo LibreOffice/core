@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
              * This assertion pops up when exporting values which are set to:
              * PropertyAttribute::MAYBEVOID, and thus are _supposed_ to have
              * a VOID value...so I'm removing it ...mtg
-             * DBG_ERROR("no type");
+             * OSL_FAIL("no type");
              */
         }
         break;
@@ -179,7 +180,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 exportSymbolDescriptors(aProps, rName);
             }
             else {
-                DBG_ERROR("this type is not implemented now");
+                OSL_FAIL("this type is not implemented now");
             }
         }
         break;
@@ -310,7 +311,6 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const rtl::OUString rName) const
 {
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
@@ -430,7 +430,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
-    rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
+    rtl::OUString sEmpty;
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -460,7 +460,6 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         return;
 
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 
@@ -567,3 +566,5 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

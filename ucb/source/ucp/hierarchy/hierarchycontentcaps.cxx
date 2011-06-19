@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,6 +66,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <sal/macros.h>
 #include "hierarchycontent.hxx"
 
 using namespace com::sun::star;
@@ -77,10 +79,10 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS( a ) )
 
 #define MAKECMDSEQUENCE( a ) \
-    uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+    uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS( a ) )
 
 //=========================================================================
 //
@@ -763,3 +765,5 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

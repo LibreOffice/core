@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,8 +27,6 @@
  ************************************************************************/
 #ifndef _SFX_OBJSHIMP_HXX
 #define _SFX_OBJSHIMP_HXX
-
-//#include <hash_map>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -79,18 +78,18 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nVisualDocumentNumber;
     sal_Int16           nDocumentSignatureState;
     sal_Int16           nScriptingSignatureState;
-    sal_Bool            bInList:1,          // ob per First/Next erreichbar
-                        bClosing:1,         // sal_True w"aehrend Close(), um Benachrichtigungs-Rekursionen zu verhindern
+    sal_Bool            bInList:1,          // if reachable by First/Next
+                        bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
                         bPasswd:1,
                         bIsTmp:1,
                         bIsNamedVisible:1,
                         bIsTemplate:1,
-                        bIsAbortingImport:1,  // Importvorgang soll abgebrochen werden.
-                        bImportDone : 1, //Import schon fertig? Fuer AutoReload von Docs.
+                        bIsAbortingImport:1,  // Import operation should be canceled.
+                        bImportDone : 1, // Import finished already? For auto reload of Docs.
                         bInPrepareClose : 1,
                         bPreparedForClose : 1,
-                        bWaitingForPicklist : 1,// Muss noch in die Pickliste
+                        bWaitingForPicklist : 1, // Must go into pick list
                         bForbidReload : 1,
                         bBasicInitialized :1,
                         bIsPrintJobCancelable :1, // Stampit disable/enable cancel button for print jobs ... default = true = enable!
@@ -108,12 +107,13 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bUseUserData:1,
                         bSaveVersionOnClose:1,
                         m_bSharedXMLFlag:1, // whether the flag should be stored in xml file
-                        m_bAllowShareControlFileClean:1; // whether the flag should be stored in xml file
+                        m_bAllowShareControlFileClean:1, // whether the flag should be stored in xml file
+                        m_bConfigOptionsChecked:1; // whether or not the user options are checked after the Options dialog is closed.
 
     IndexBitSet         aBitSet;
     sal_uInt32               lErr;
-    sal_uInt16              nEventId;           // falls vor Activate noch ein
-                                            // Open/Create gesendet werden mu/s
+    sal_uInt16          nEventId;           // If Open/Create as to be sent
+                                            // before Activate
     AutoReloadTimer_Impl *pReloadTimer;
     MarkData_Impl*      pMarkData;
     sal_uInt16              nLoadedFlags;
@@ -174,3 +174,4 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,7 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 #define _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 
-#if STLPORT_VERSION>=321
-// jni.h needs cstdarg for std::va_list
 #include <cstdarg>
-#endif
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -44,11 +42,6 @@
 
 #ifdef HAVE_64BIT_POINTERS
 #error "no 64 bit pointer"
-#else
-#ifdef OS2
-#define PVOID_TO_INT64(x) (jlong)(sal_Int32)x
-#define INT64_TO_PVOID(x) (void *)x
-#endif // OS2
 #endif //HAVE_64BIT_POINTERS
 
 namespace comphelper
@@ -173,3 +166,4 @@ namespace connectivity
 #endif //_CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

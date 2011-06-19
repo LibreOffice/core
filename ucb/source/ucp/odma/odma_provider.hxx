@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ namespace odma {
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 #define ODMA_CONTENT_PROVIDER_SERVICE_NAME \
-                "com.sun.star.ucb.OdmaContentProvider"
+                "com.sun.star.ucb.ODMAContentProvider"
 //  #define ODMA_CONTENT_PROVIDER_SERVICE_NAME_LENGTH   34
 
 // URL scheme. This is the scheme the provider will be able to create
@@ -133,14 +134,21 @@ public:
     */
     ::rtl::Reference<ContentProperties> queryContentProperty(const ::rtl::OUString& _sDocumentName);
 
-    /** getContentProperty returns the ContentProperties for the first content with that title
+    /** getContentPropertyWithTitle returns the ContentProperties for the first content with that title
         @param  _sTitle the title of the document
 
         @return the content properties
     */
     ::rtl::Reference<ContentProperties> getContentPropertyWithTitle(const ::rtl::OUString& _sTitle) const;
 
-    /** getContentProperty returns the ContentProperties for the first content with that SavedAsName
+    /** getContentPropertyWithDocumentId returns the ContentProperties for the first content with that title
+        @param  _sTitle the title of the document
+
+        @return the content properties
+    */
+    ::rtl::Reference<ContentProperties> getContentPropertyWithDocumentId(const ::rtl::OUString& _sDocumentId) const;
+
+    /** getContentPropertyWithSavedAsName returns the ContentProperties for the first content with that SavedAsName
         @param  _sSaveAsName    the SavedAsName of the document
 
         @return the content properties
@@ -172,3 +180,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

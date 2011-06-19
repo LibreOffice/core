@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,13 +76,13 @@ namespace framework
 //-----------------------------------------------
 // Accelerators.xcu
 
-static const ::rtl::OUString CFG_ENTRY_PRIMARY      = ::rtl::OUString::createFromAscii("PrimaryKeys");
-static const ::rtl::OUString CFG_ENTRY_SECONDARY    = ::rtl::OUString::createFromAscii("SecondaryKeys");
+extern const ::rtl::OUString CFG_ENTRY_PRIMARY;
+extern const ::rtl::OUString CFG_ENTRY_SECONDARY;
 
-static const ::rtl::OUString CFG_ENTRY_GLOBAL       = ::rtl::OUString::createFromAscii("Global");
-static const ::rtl::OUString CFG_ENTRY_MODULES      = ::rtl::OUString::createFromAscii("Modules");
+extern const ::rtl::OUString CFG_ENTRY_GLOBAL;
+extern const ::rtl::OUString CFG_ENTRY_MODULES;
 
-static const ::rtl::OUString CFG_PROP_COMMAND       = ::rtl::OUString::createFromAscii("Command");
+extern const ::rtl::OUString CFG_PROP_COMMAND;
 
 /** "global" type to make accelerator presets unique, so they can be used
     in combination with the salhelper::SingletonRef mechanism! */
@@ -219,7 +220,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::uno::RuntimeException);
 
         // IStorageListener
-        virtual void changesOccured(const ::rtl::OUString& sPath);
+        virtual void changesOccurred(const ::rtl::OUString& sPath);
 
         //______________________________________
         // helper for derived classes
@@ -474,3 +475,5 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_ACCELERATORCONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

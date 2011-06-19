@@ -388,9 +388,7 @@ sal_Bool FirstStartWizard::onFinish()
     // return sal_True;
     if ( svt::RoadmapWizard::onFinish() )
     {
-#ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
         enableQuickstart();
-#endif
         disableWizard();
         return sal_True;
     }
@@ -447,15 +445,15 @@ void FirstStartWizard::storeAcceptDate()
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
         xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"),
-            makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
+        NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+            makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office"))));
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        Any result = pset->getPropertyValue(OUString::createFromAscii("LicenseAcceptDate"));
+        Any result = pset->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LicenseAcceptDate")));
 
         OUString aAcceptDate = _getCurrentDateString();
-        pset->setPropertyValue(OUString::createFromAscii("LicenseAcceptDate"), makeAny(aAcceptDate));
+        pset->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LicenseAcceptDate")), makeAny(aAcceptDate));
         Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
         // since the license is accepted the local user registry can be cleaned if required
@@ -474,16 +472,16 @@ void FirstStartWizard::setPatchLevel()
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
         xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"),
-            makeAny(OUString::createFromAscii("org.openoffice.Office.Common/Help/Registration")));
+        NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+            makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Help/Registration"))));
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        Any result = pset->getPropertyValue(OUString::createFromAscii("ReminderDate"));
+        Any result = pset->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ReminderDate")));
 
         OUString aPatchLevel( RTL_CONSTASCII_USTRINGPARAM( "Patch" ));
         aPatchLevel += OUString::valueOf( getBuildId(), 10 );
-        pset->setPropertyValue(OUString::createFromAscii("ReminderDate"), makeAny(aPatchLevel));
+        pset->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ReminderDate")), makeAny(aPatchLevel));
         Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
     } catch (const Exception&)
     {
@@ -546,12 +544,12 @@ void FirstStartWizard::disableWizard()
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
         xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"),
-            makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
+        NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+            makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office"))));
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        pset->setPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"), makeAny(sal_True));
+        pset->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FirstStartWizardCompleted")), makeAny(sal_True));
         Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
     } catch (const Exception&)
     {
@@ -569,7 +567,7 @@ void FirstStartWizard::enableQuickstart()
     aSeq[1] <<= bAutostart;
 
     Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-        OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))),UNO_QUERY );
     if ( xQuickstart.is() )
         xQuickstart->initialize( aSeq );
 

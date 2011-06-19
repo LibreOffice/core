@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 
  *************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -116,7 +117,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,
     Package*,
@@ -182,10 +183,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.PackageContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.PackageContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -250,8 +251,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
     if ( !rName.getLength() )
     {
-        OSL_ENSURE( sal_False,
-                    "ContentProvider::createPackage - Invalid URL!" );
+        OSL_FAIL( "ContentProvider::createPackage - Invalid URL!" );
         return uno::Reference< container::XHierarchicalNameAccess >();
     }
 
@@ -277,8 +277,8 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
         uno::Reference< uno::XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments );
 
         if ( xIfc.is() )
@@ -328,3 +328,4 @@ sal_Bool ContentProvider::removePackage( const rtl::OUString & rName )
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

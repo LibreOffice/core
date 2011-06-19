@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@ public:
         if( hasMoreElements() )
         {
             rtl::OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
-            if( sResourceUrl.indexOf( rtl::OUString::createFromAscii("private:resource/toolbar/") ) != -1 )
+            if( sResourceUrl.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/")) ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
                 uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False, sal_False ) );
@@ -122,7 +123,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Worksheet Menu Bar") ) )
             {
                 // spreadsheet menu bar
-                sResourceUrl = rtl::OUString::createFromAscii( ITEM_MENUBAR_URL );
+                sResourceUrl = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ));
                 bMenu = sal_True;
             }
             else if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Cell") ) )
@@ -136,7 +137,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Menu Bar") ) )
             {
                 // text processor menu bar
-                sResourceUrl = rtl::OUString::createFromAscii( ITEM_MENUBAR_URL );
+                sResourceUrl = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_MENUBAR_URL ));
                 bMenu = sal_True;
             }
         }
@@ -202,7 +203,7 @@ ScVbaCommandBars::getCount() throw(css::uno::RuntimeException)
     uno::Sequence< ::rtl::OUString > allNames = m_xNameAccess->getElementNames();
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
-        if(allNames[i].indexOf( rtl::OUString::createFromAscii("private:resource/toolbar/") ) != -1 )
+        if(allNames[i].indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/")) ) != -1 )
         {
             nCount++;
         }
@@ -225,10 +226,10 @@ ScVbaCommandBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) th
     if( nIndex == 1 )
     {
         uno::Any aSource;
-        if( m_pCBarHelper->getModuleId().equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
-            aSource <<= rtl::OUString::createFromAscii( "Worksheet Menu Bar" );
-        else if( m_pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
-            aSource <<= rtl::OUString::createFromAscii( "Menu Bar" );
+        if( m_pCBarHelper->getModuleId().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+            aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar"));
+        else if( m_pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
+            aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Menu Bar"));
         if( aSource.hasValue() )
             return createCollectionObject( aSource );
     }
@@ -254,3 +255,4 @@ ScVbaCommandBars::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

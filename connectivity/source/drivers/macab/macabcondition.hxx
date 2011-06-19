@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
 
-#ifndef _COMPHELPER_TYPES_H_
 #include <comphelper/types.hxx>
-#endif
 #include <connectivity/dbexception.hxx>
 
 namespace connectivity
@@ -167,3 +166,5 @@ class MacabConditionAnd : public MacabConditionBoolean
 }
 
 #endif // _CONNECTIVITY_MACAB_CONDITION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

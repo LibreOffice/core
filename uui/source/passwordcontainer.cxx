@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -432,7 +433,7 @@ PasswordContainerInteractionHandler::handle(
     if ( !xSupplyAuthentication.is() )
         return;
 
-    // Try to obatin credentials from password container.
+    // Try to obtain credentials from password container.
     if ( m_aPwContainerHelper.
              handleAuthenticationRequest( aAuthenticationRequest,
                                           xSupplyAuthentication,
@@ -479,3 +480,5 @@ PasswordContainerInteractionHandler::createServiceFactory(
 }
 
 } // namespace uui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -115,7 +115,6 @@ TabPage SID_REDLIN_FILTER_PAGE
             MASKCOLOR
         };
         // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
         QuickHelpText [ en-US ] = "Set Start Date/Time" ;
         // ------ IAccessibility2 implementation 2009.
     };
@@ -174,7 +173,6 @@ TabPage SID_REDLIN_FILTER_PAGE
             MASKCOLOR
         };
         // IAccessibility2 implementation 2009. ------
-        //QuickHelpText [ en-US ] = "Set Date/Time" ;
         QuickHelpText [ en-US ] = "Set End Date/Time" ;
         // ------ IAccessibility2 implementation 2009.
     };
@@ -254,11 +252,6 @@ TabPage SID_REDLIN_FILTER_PAGE
         Pos = MAP_APPFONT ( 60 , 70 ) ;
         Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
-    };
-    Image IMG_TIME_H
-    {
-        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
-        MASKCOLOR
     };
         /*IAccessibility2 Implementation 2009-----*/
     String STR_DATE_COMBOX

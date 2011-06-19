@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,8 +63,8 @@ public:
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem *Clone( SfxItemPool * = 0) const
     { return new SvXMLAttrContainerItem( *this ); }
@@ -89,3 +90,4 @@ public:
 
 #endif //  _SVX_XMLCNITM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

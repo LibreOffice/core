@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -62,7 +59,7 @@ class XFormTextShadowYValItem;
 
 /*************************************************************************
 |*
-|* ControllerItem fuer Fontwork
+|* ControllerItem for Fontwork
 |*
 \************************************************************************/
 
@@ -82,7 +79,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Fontwork-Dialog
+|* Derived from SfxChildWindow as "container" for fontwork dialog
 |*
 \************************************************************************/
 
@@ -95,7 +92,7 @@ class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 
 /*************************************************************************
 |*
-|* Floating Window zur Attributierung von Texteffekten
+|* Floating window for setting attributes of text effects
 |*
 \************************************************************************/
 
@@ -137,7 +134,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     long            nSaveShadowSize;
 
     ImageList       maImageList;
-    ImageList       maImageListH;
 
     const XColorTable* pColorTable;
 
@@ -195,3 +191,4 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
 #endif      // _SVX_FONTWORK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

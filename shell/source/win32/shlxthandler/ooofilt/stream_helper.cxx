@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,19 +39,6 @@
 
 #include <stdio.h>
 #include <objidl.h>
-
-/*#include <string.h>
-#include <filter.h>
-#include <filterr.h>
-#include <ntquery.h>
-#include "assert.h"
-#include "propspec.hxx"
-#ifdef __MINGW32__
-#include <algorithm>
-using ::std::min;
-#endif
-*/
-
 #include "internal/stream_helper.hxx"
 
 extern "C" {
@@ -179,3 +167,5 @@ extern "C" {
         pzlib_filefunc_def->zerror_file = cb_serror;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

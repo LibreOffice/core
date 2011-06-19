@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,8 @@
 
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxdefs.hxx>
+
+#include <boost/utility.hpp>
 
 class Window;
 class SfxFilter;
@@ -102,8 +105,6 @@ public:
                         SfxFilterContainer( const String& rName );
                         ~SfxFilterContainer();
 
-//                      SfxFilterContainerFlags GetFlags() const;
-//  void                SetFlags( SfxFilterContainerFlags eFlags );
 
     const String        GetName() const;
 
@@ -115,31 +116,27 @@ public:
     const SfxFilter*    GetFilter4FilterName( const String& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4UIName( const String& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static void ReadFilters_Impl( sal_Bool bUpdate=sal_False );
     SAL_DLLPRIVATE static void ReadSingleFilter_Impl( const ::rtl::OUString& rName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xTypeCFG,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                             sal_Bool bUpdate );
     SAL_DLLPRIVATE static const SfxFilter* GetDefaultFilter_Impl( const String& );
-//#endif
 };
 
 class SfxFilterMatcher_Impl;
 
-class SFX2_DLLPUBLIC SfxFilterMatcher
+class SFX2_DLLPUBLIC SfxFilterMatcher : private boost::noncopyable
 {
     friend class SfxFilterMatcherIter;
-    SfxFilterMatcher_Impl *pImpl;
+    SfxFilterMatcher_Impl &m_rImpl;
 public:
                         SfxFilterMatcher( const String& rFact );
                         SfxFilterMatcher();
                         ~SfxFilterMatcher();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static sal_Bool IsFilterInstalled_Impl( const SfxFilter* pFilter );
     DECL_DLLPRIVATE_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String* );
-//#endif
 
     sal_uInt32               GuessFilterIgnoringContent( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     sal_uInt32               GuessFilter( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
@@ -157,22 +154,23 @@ public:
 };
 
 class SfxFilterContainer_Impl;
-class SFX2_DLLPUBLIC SfxFilterMatcherIter
+class SFX2_DLLPUBLIC SfxFilterMatcherIter : private boost::noncopyable
+
 {
     SfxFilterFlags nOrMask;
     SfxFilterFlags nAndMask;
     sal_uInt16 nCurrent;
-    const SfxFilterMatcher_Impl *pMatch;
+    const SfxFilterMatcher_Impl &m_rMatch;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE const SfxFilter* Find_Impl();
-//#endif
 
 public:
-    SfxFilterMatcherIter( const SfxFilterMatcher* pMatchP, SfxFilterFlags nMask = 0, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
+    SfxFilterMatcherIter( const SfxFilterMatcher& rMatcher, SfxFilterFlags nMask = 0, SfxFilterFlags nNotMask = SFX_FILTER_NOTINSTALLED );
     const SfxFilter* First();
     const SfxFilter* Next();
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

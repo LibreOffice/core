@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,8 +73,8 @@ ScVbaListBox::getValue() throw (uno::RuntimeException)
     m_xProps->getPropertyValue( SELECTEDITEMS ) >>= sSelection;
     m_xProps->getPropertyValue( ITEMS ) >>= sItems;
     if( getMultiSelect() )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
     uno::Any aRet;
     if ( sSelection.getLength() )
         aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] );
@@ -85,8 +86,8 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     if( getMultiSelect() )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
     }
     rtl::OUString sValue = getAnyAsString( _value );
     uno::Sequence< rtl::OUString > sList;
@@ -104,13 +105,17 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
         }
     }
     if( nValue == -1 )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< sal_Int16 > nSelectedIndices(1);
+    uno::Sequence< sal_Int16 > nOldSelectedIndices;
+    m_xProps->getPropertyValue( SELECTEDITEMS ) >>= nOldSelectedIndices;
     nSelectedIndices[ 0 ] = nValue;
     m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nSelectedIndices ) );
-    m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
+    if ( nSelectedIndices != nOldSelectedIndices )
+        fireClickEvent();
+    //m_xProps->setPropertyValue( TEXT, uno::makeAny( sValue ) );
 }
 
 ::rtl::OUString SAL_CALL
@@ -127,19 +132,21 @@ ScVbaListBox::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeExcepti
     setValue( uno::makeAny( _text ) ); // seems the same
 }
 
-sal_Bool SAL_CALL
+sal_Int32 SAL_CALL
 ScVbaListBox::getMultiSelect() throw (css::uno::RuntimeException)
 {
     sal_Bool bMultiSelect = sal_False;
     m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiSelection" ) ) ) >>= bMultiSelect;
-    return bMultiSelect;
+    return bMultiSelect ? 1 : 0 ;
 }
 
 void SAL_CALL
-ScVbaListBox::setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException)
+ScVbaListBox::setMultiSelect( sal_Int32 _multiselect ) throw (css::uno::RuntimeException)
 {
-    m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiSelection" ) ), uno::makeAny( _multiselect ) );
+    sal_Bool bMultiSelect = _multiselect == 1 ? 1 : 0;
+    m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiSelection" ) ), uno::makeAny( bMultiSelect ) );
 }
+
 
 css::uno::Any SAL_CALL
 ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
@@ -151,8 +158,8 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
     // the indices are but sal_Int16
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Error Number." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Error Number." )), uno::Reference< uno::XInterface >() );
     m_nIndex = nIndex;
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
@@ -185,8 +192,8 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
 {
     sal_Bool bValue = sal_False;
     if( !(value >>= bValue) )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Invalid type\n. need boolean." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Invalid type\n. need boolean." )), uno::Reference< uno::XInterface >() );
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( SELECTEDITEMS ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );
@@ -205,6 +212,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 }
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
+                fireClickEvent();
         m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
                 return;
             }
@@ -223,6 +231,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
             nList[0] = nIndex;
         }
         //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
+        fireClickEvent();
         m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
     }
 }
@@ -290,3 +299,5 @@ ScVbaListBox::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

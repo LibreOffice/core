@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,7 +175,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
 
     if ( !m_pTable || !m_pTable->getConnection() )
     {
-        OSL_ENSURE( false, "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
+        OSL_FAIL( "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
         return sal_False;
     }
 
@@ -210,3 +211,4 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLEx
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
     else
     {
-        OSL_ENSURE( false, "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
+        OSL_FAIL( "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
     }
 }
 
@@ -312,3 +313,5 @@ void TableBorderHdl::CreateB2dIAObject()
 
 } // end of namespace table
 } // end of namespace sdr
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

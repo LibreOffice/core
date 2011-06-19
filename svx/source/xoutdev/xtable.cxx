@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #define GLOBALOVERFLOW
 
 // Vergleichsstrings
-sal_Unicode __FAR_DATA pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
+sal_Unicode pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
 
 // Konvertiert in echte RGB-Farben, damit in den Listboxen
 // endlich mal richtig selektiert werden kann.
@@ -509,3 +510,4 @@ void XPropertyList::SetName( const String& rString )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

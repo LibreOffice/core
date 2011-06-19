@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,23 +49,18 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -107,7 +103,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     VCLXPopupMenu*          pPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*              pVCLPopupMenu = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -181,7 +177,7 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
 {
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontMenuController"))).log(
             m_xServiceManager,
             m_xFrame,
             aTargetURL,
@@ -260,3 +256,4 @@ void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::un
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

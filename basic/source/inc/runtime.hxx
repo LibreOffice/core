@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,10 @@
 #ifndef _SBRUNTIME_HXX
 #define _SBRUNTIME_HXX
 
-#ifndef _SBX_HXX
 #include <basic/sbx.hxx>
-#endif
 
 #include "sb.hxx"
 
-// Define activates class UCBStream in iosys.cxx
-#define _USE_UNO
-
-#ifdef _USE_UNO
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/file.hxx>
@@ -54,16 +49,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
 
-// Define activates old file implementation
-// (only in non UCB case)
-// #define _OLD_FILE_IMPL
-
-
-//#include <sal/types.h>
-//#include <rtl/byteseq.hxx>
-//#include <rtl/ustring>
-
-
 namespace basicEncoder
 {
 
@@ -72,15 +57,9 @@ class AsciiEncoder
 {
 public:
     static ::rtl::OUString decodeUnoUrlParamValue(const rtl::OUString & rSource);
-    //static ::rtl::OUString encodeUnoUrlParamValue(const rtl::OUString & rSource);
-    //static ::rtl::ByteSequence decode(const ::rtl::OUString & string);
-    //static ::rtl::OUString encode(const ::rtl::ByteSequence & bytes);
-    //static void test();
 };
 
 }
-
-#endif /* _USE_UNO */
 
 class SbiInstance;                  // aktiver StarBASIC-Prozess
 class SbiRuntime;                   // aktive StarBASIC-Prozedur-Instanz
@@ -151,20 +130,14 @@ class SbiRTLData
 {
 public:
 
-#ifdef _OLD_FILE_IMPL
-    Dir*    pDir;
-#else
     ::osl::Directory* pDir;
-#endif
     sal_Int16   nDirFlags;
     short   nCurDirPos;
 
     String sFullNameToBeChecked;
     WildCard* pWildCard;
 
-#ifdef _USE_UNO
     Sequence< ::rtl::OUString > aDirSeq;
-#endif /* _USE_UNO */
 
     SbiRTLData();
     ~SbiRTLData();
@@ -203,7 +176,6 @@ class SbiInstance
     sal_Bool            bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
-
 public:
     SbiRuntime*  pRun;              // Call-Stack
     SbiInstance* pNext;             // Instanzen-Chain
@@ -251,7 +223,7 @@ public:
     sal_uInt32 GetStdTimeIdx() const { return nStdTimeIdx; }
     sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
 
-    // #39629# NumberFormatter auch statisch anbieten
+    // NumberFormatter auch statisch anbieten
     static void PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
         sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
@@ -294,7 +266,9 @@ class SbiRuntime
     SbxArrayRef   refExprStk;       // expression stack
     SbxArrayRef   refCaseStk;       // CASE expression stack
     SbxArrayRef   refRedimpArray;   // Array saved to use for REDIM PRESERVE
+    SbxVariableRef   refRedim;   // Array saved to use for REDIM
     SbxVariableRef xDummyVar;       // Ersatz fuer nicht gefundene Variablen
+    SbxVariable* mpExtCaller;       // Caller ( external - e.g. button name, shape, range object etc. - only in vba mode )
     SbiArgvStack*  pArgvStk;        // ARGV-Stack
     SbiGosubStack* pGosubStk;       // GOSUB stack
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
@@ -311,8 +285,7 @@ class SbiRuntime
     SbxArrayRef   refParams;        // aktuelle Prozedur-Parameter
     SbxArrayRef   refLocals;        // lokale Variable
     SbxArrayRef   refArgv;          // aktueller Argv
-    // AB, 28.3.2000 #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
-    //SbxVariableRef refSaveObj;      // #56368 Bei StepElem Referenz sichern
+    // #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
     short         nArgc;            // aktueller Argc
     sal_Bool          bRun;             // sal_True: Programm ist aktiv
     sal_Bool          bError;           // sal_True: Fehler behandeln
@@ -385,8 +358,7 @@ class SbiRuntime
     // #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    // #115829
-    bool implIsClass( SbxObject* pObj, const String& aClass );
+    bool implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );
 
@@ -418,7 +390,7 @@ class SbiRuntime
     void StepGOSUB( sal_uInt32 ),   StepRETURN( sal_uInt32 );
     void StepTESTFOR( sal_uInt32 ), StepCASETO( sal_uInt32 ),   StepERRHDL( sal_uInt32 );
     void StepRESUME( sal_uInt32 ),  StepSETCLASS( sal_uInt32 ), StepVBASETCLASS( sal_uInt32 ),  StepTESTCLASS( sal_uInt32 ), StepLIB( sal_uInt32 );
-    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors, bool bDefault = true );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const ::rtl::OUString& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( sal_uInt32 ),   StepPRCHAR( sal_uInt32 ),   StepARGTYP( sal_uInt32 );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( sal_uInt32, sal_uInt32 ),     StepPUBLIC( sal_uInt32, sal_uInt32 ),   StepPUBLIC_P( sal_uInt32, sal_uInt32 );
@@ -464,6 +436,7 @@ public:
     SbMethod* GetCaller();
     SbxArray* GetLocals();
     SbxArray* GetParams();
+    SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
     SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
 
@@ -532,3 +505,4 @@ bool IsBaseIndexOne();
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

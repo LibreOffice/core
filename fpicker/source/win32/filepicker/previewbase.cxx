@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,12 @@
 #include "precompiled_fpicker.hxx"
 #include "previewbase.hxx"
 
-#ifndef _COM_SUN_STAR_UI_DIALOG_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //-------------------------------
 //
@@ -91,11 +91,11 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
 {
     if (aImageFormat != ::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP)
         throw IllegalArgumentException(
-            OUString::createFromAscii("unsupported image format"), 0, 1);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("unsupported image format")), 0, 1);
 
     if (aImage.hasValue() && (aImage.getValueType() != getCppuType((Sequence<sal_Int8>*)0)))
         throw IllegalArgumentException(
-            OUString::createFromAscii("invalid image data"), 0, 2);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid image data")), 0, 2);
 
      // save the new image data and force a redraw
     m_ImageData   = aImage;
@@ -148,3 +148,5 @@ HWND SAL_CALL PreviewBase::getWindowHandle() const
 {
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,7 +103,7 @@ DataSupplier::~DataSupplier()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 }
 
@@ -129,7 +130,7 @@ DataSupplier::~DataSupplier()
             g_uri_escape_string( g_file_info_get_name(maResults[ nIndex ]->pInfo) , NULL, false);
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-                aId += rtl::OUString::createFromAscii( "/" );
+                aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aId += rtl::OUString::createFromAscii( escaped_name );
 
@@ -245,7 +246,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
                     xContent, uno::UNO_QUERY_THROW );
                 sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
                 ucb::Command aCmd;
-                aCmd.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+                aCmd.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
                 aCmd.Handle = -1;
                 aCmd.Argument <<= getResultSet()->getProperties();
                 uno::Any aResult( xCmdProc->execute(
@@ -280,3 +281,5 @@ void DataSupplier::validate() throw( ucb::ResultSetException )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

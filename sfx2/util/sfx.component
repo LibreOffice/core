@@ -31,6 +31,9 @@
   <implementation name="SfxDocumentMetaData">
     <service name="com.sun.star.document.DocumentProperties"/>
   </implementation>
+  <implementation name="CompatWriterDocPropsImpl">
+    <service name="com.sun.star.writer.DocumentProperties"/>
+  </implementation>
   <implementation name="com.sun.star.comp.desktop.QuickstartWrapper">
     <service name="com.sun.star.office.Quickstart"/>
   </implementation>

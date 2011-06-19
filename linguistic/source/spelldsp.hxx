@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@
 
 class LngSvcMgr;
 
-///////////////////////////////////////////////////////////////////////////
 
 class SpellCheckerDispatcher :
     public cppu::WeakImplHelper2
@@ -157,7 +157,7 @@ inline ::com::sun::star::uno::Reference<
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

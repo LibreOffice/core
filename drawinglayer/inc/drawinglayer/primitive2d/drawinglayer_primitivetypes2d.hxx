@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,8 @@
 #define PRIMITIVE2D_ID_EPSPRIMITIVE2D                       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 60)
 #define PRIMITIVE2D_ID_DISCRETESHADOWPRIMITIVE2D            (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 61)
 #define PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D            (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 62)
-#define PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 63)
+#define PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 63)
+#define PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 64)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -111,3 +113,5 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

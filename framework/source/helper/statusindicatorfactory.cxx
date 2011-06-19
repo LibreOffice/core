@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 // interface includes
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#ifndef _COM_SUN_STAR_AWT_XCONTROLS_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -56,9 +55,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 //-----------------------------------------------
 // includes of other projects
@@ -66,7 +63,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //-----------------------------------------------
 // namespace
@@ -77,7 +74,7 @@ namespace framework{
 // definitions
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
-static ::rtl::OUString PROGRESS_RESOURCE = ::rtl::OUString::createFromAscii("private:resource/progressbar/progressbar");
+static ::rtl::OUString PROGRESS_RESOURCE(RTL_CONSTASCII_USTRINGPARAM("private:resource/progressbar/progressbar"));
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
@@ -431,27 +428,21 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // is visible too.
     impl_showProgress();
 
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
-            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
-            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
             ::comphelper::ConfigurationHelper::E_READONLY) >>= bForceFrontAndFocus;
 
         pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
     }
 
-    /*
-    #i75167# dont disturb window manager handling .-)
-    css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
-    if (xParentWindowTop.is())
-        xParentWindowTop->toFront();
-    */
 }
 
 //-----------------------------------------------
@@ -652,3 +643,5 @@ void StatusIndicatorFactory::impl_stopWakeUpThread()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

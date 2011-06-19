@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,18 +38,12 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 #include <cstdio>
 #include <tools/time.hxx>
 #include <tools/stream.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "basic.hrc"
 #include "msgedit.hxx"
 #include "app.hxx"
@@ -80,7 +75,6 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , pAppError( pParent )
 , aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 {
-//  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( SttResId (MBP_PLUS) ), Bitmap( SttResId (MBP_MINUS) ) );
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
@@ -116,20 +110,6 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
     if ( LogMsg->aDebugData.aFilename.Copy(0,2).CompareToAscii( "--" ) == COMPARE_EQUAL )
         LogMsg->aDebugData.aFilename.Erase(0,2);
 
-    if ( LogMsg->aDebugData.aFilename.Len() && LogMsg->aDebugData.aFilename.GetChar(0) != '~' ) // do we want to convert
-    {
-        DirEntry aConvert( LogMsg->aDebugData.aFilename );
-        if ( pAppError->aBaseDir.Contains( aConvert ) )
-        {
-            aConvert.ToRel( pAppError->aBaseDir );
-            LogMsg->aDebugData.aFilename = CUniString("~");         // mark as converted
-            LogMsg->aDebugData.aFilename += aConvert.GetFull( FSYS_STYLE_VFAT );
-        }
-        else if ( !bFileLoading )
-        {
-            LogMsg->aDebugData.aFilename.Insert( CUniString("~-"), 0); // mark as unconvertable
-        }
-    }
     xub_StrLen nPos;
     LogMsg->aDebugData.aMsg.ConvertLineEnd();
     // does the message have several lines -> repeat the call for each line
@@ -172,7 +152,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             case LOG_ASSERTION: AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_ASSERTION_STACK:   AddAssertionStack( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_QA_ERROR:  AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
-            default:DBG_ERROR("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
+            default:OSL_FAIL("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
         }
 
         if ( !bFileLoading )
@@ -217,7 +197,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
                 // restore Original Msg
                 LogMsg->aDebugData.aMsg = aOriginalMsg;
 
-                printf( ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                printf( "%s", ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
             }
         }
     }
@@ -427,36 +407,6 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
         aEditTree.InvalidateEntry( pThisEntry );
 }
 
-/*
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
-
-
-
-    SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
-    SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
-    SvLBoxEntry*    PrevSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->PrevSibling( pEntry )); }
-
-    SvLBoxEntry*    FirstSelected() const { return (SvLBoxEntry*)SvListView::FirstSelected(); }
-    SvLBoxEntry*    NextSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::NextSelected(pEntry)); }
-    SvLBoxEntry*    PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
-    SvLBoxEntry*    LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
-
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
-
-    SvLBoxEntry*    GetParent( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetParent(pEntry)); }
-    SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
-
-    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
-    SvListEntry*    GetEntry( SvListEntry* pParent, sal_uIntPtr nPos ) const;
-    SvListEntry*    GetEntry( sal_uIntPtr nRootPos ) const;
-    SvListEntry*    GetEntryAtAbsPos( sal_uIntPtr nAbsPos ) const;
-    SvListEntry*    GetParent( SvListEntry* pEntry ) const;
-    SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
-*/
-
-//#define CHECK( pMemo ) if ( pMemo && !aEditTree.GetViewData( pMemo ) ) pMemo = NULL
 #define CHECK( pMemo ) if ( pMemo && !aEditTree.GetModel()->IsInChildList( NULL, pMemo ) ) pMemo = NULL
 void MsgEdit::Delete()
 {
@@ -491,7 +441,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
         case LOG_ASSERTION: break;
         case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");  break;
         case LOG_QA_ERROR:  break;
-        default:DBG_ERROR("Unknown type in ResultWindow!");
+        default:OSL_FAIL("Unknown type in ResultWindow!");
     }
     aRet += aEditTree.GetEntryText( pEntry );
     return aRet;
@@ -548,10 +498,9 @@ String MsgEdit::GetSelected()
 
 TextSelection MsgEdit::GetSelection() const
 {
-    sal_uIntPtr nStart=0,nEnd=0;
-
     if ( aEditTree.FirstSelected() )
     {
+        sal_uIntPtr nStart=0,nEnd=0;
         nStart = aEditTree.GetModel()->GetAbsPos(aEditTree.FirstSelected() );
         if ( aEditTree.LastSelected() )
             nEnd = aEditTree.GetModel()->GetAbsPos(aEditTree.LastSelected() );
@@ -590,7 +539,7 @@ void MsgEdit::ReplaceSelected( const String& rStr )
 {
     (void) rStr; /* avoid warning about unused parameter */
     Sound::Beep();
-    DBG_ERROR("Not Implemented");
+    OSL_FAIL("Not Implemented");
 }
 
 sal_Bool MsgEdit::IsModified(){ return bModified; }
@@ -614,7 +563,7 @@ void MsgEdit::SetText( const String& rStr )
 {
     (void) rStr; /* avoid warning about unused parameter */
     Sound::Beep();
-    DBG_ERROR("Not Implemented");
+    OSL_FAIL("Not Implemented");
 }
 
 sal_Bool MsgEdit::HasText() const
@@ -777,7 +726,6 @@ TTTreeListBox::TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinSt
 : SvTreeListBox( pParent, nWinStyle )
 , pBasicFrame(pBF)
 , pAppError( pParent )
-//, nDeselectParent(0)
 {}
 
 sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
@@ -795,9 +743,6 @@ sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
             else
             {
                 aFilename.Erase( 0,1 );
-                DirEntry aConvert( pAppError->aBaseDir );
-                aConvert += DirEntry( aFilename, FSYS_STYLE_VFAT );
-                aFilename = aConvert.GetFull();
             }
         }
 
@@ -825,47 +770,6 @@ sal_Bool TTTreeListBox::DoubleClickHdl()
 {
     return JumpToSourcecode( GetHdlEntry() );
 }
-
-/*sal_uIntPtr TTTreeListBox::SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect )
-{
-    SvLBoxEntry *pEntry = FirstChild( pParent );
-    sal_uIntPtr nRet = 0;
-    while ( pEntry )
-    {
-        nRet++;
-        Select( pEntry, bSelect );
-        pEntry = NextSibling( pEntry );
-    }
-    return nRet;
-}
-
-
-void TTTreeListBox::SelectHdl()
-{
-    SvLBoxEntry* pHdlEntry = GetHdlEntry();
-
-    SelectChildren( pHdlEntry, sal_True );
-    Select( pHdlEntry, sal_True );
-//  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // So daß Delete richtig ist
-}
-
-void TTTreeListBox::DeselectHdl()
-{
-    SvLBoxEntry* pHdlEntry = GetHdlEntry();
-    if ( GetParent( pHdlEntry ) )
-    {
-        nDeselectParent++;
-        Select( GetParent( pHdlEntry ), sal_False );
-        nDeselectParent--;
-    }
-    if ( !nDeselectParent )
-    {
-        SelectChildren( pHdlEntry, sal_False );
-        Select( pHdlEntry, sal_False );
-    }
-    Invalidate();
-} */
-
 
 void TTTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
@@ -922,7 +826,7 @@ TTFeatures TTTreeListBox::GetFeatures( SvLBoxEntry* pEntry )
         case LOG_QA_ERROR:
                 return HasQAError;
         default:
-            DBG_ERROR("Unknown type in ResultWindow");
+            OSL_FAIL("Unknown type in ResultWindow");
     }
     return HasNothing;
 }
@@ -953,7 +857,7 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
         if ( ( aFeatures & HasError ) == HasError )
             aCol = Color( 255, 130, 130 );  // Red
         else if ( ( aFeatures & HasWarning ) == HasWarning )
-            aCol = Color( 255, 200, 120 );  // Ocker oder so
+            aCol = Color( 255, 200, 120 );  // Ochre or so
         else if ( ( aFeatures & HasAssertion ) == HasAssertion )
             aCol = Color( 0xd0, 0xd0, 0xff );   // blueish
         else
@@ -997,3 +901,4 @@ void TTTreeListBox::InitEntry(SvLBoxEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

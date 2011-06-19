@@ -28,7 +28,7 @@
 #include <svx/svxids.hrc>
 #include "svx/fmresids.hrc"
 #include "fmexpl.hrc"
-#include "globlmn.hrc"
+#include "globlmn_tmpl.hrc"
 #include <svx/svxcommands.h>
 #include "fmhelp.hrc"
 
@@ -294,13 +294,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
 ImageList RID_SVXIMGLIST_FMEXPL
 {
     Prefix = "sx";
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-    NAVIGATOR_IMAGEIDS;
-};
-
-ImageList RID_SVXIMGLIST_FMEXPL_HC
-{
-    Prefix = "sxh";
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
     NAVIGATOR_IMAGEIDS;
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 #ifndef OASIS_FILTER_OOO_1X
 // Used to parse Scripting Framework URLs
@@ -45,7 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 
@@ -54,7 +53,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOASISEventMap_Impl:
-    public ::std::hash_map< NameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< NameKey_Impl, ::rtl::OUString,
                             NameHash_Impl, NameHash_Impl >
 {
 public:
@@ -67,7 +66,7 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
     if( pInit )
     {
         XMLTransformerOASISEventMap_Impl::key_type aKey;
-        XMLTransformerOASISEventMap_Impl::data_type aData;
+        XMLTransformerOASISEventMap_Impl::mapped_type aData;
         while( pInit->m_pOASISName )
         {
             aKey.m_nPrefix = pInit->m_nOASISPrefix;
@@ -204,8 +203,8 @@ bool ParseURL(
         xSMgr = ::comphelper::getProcessServiceFactory();
 
     Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance( OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        xFactory( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory" )) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -307,7 +306,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             GetXMLToken( XML_LANGUAGE ) ) );
 
                         pMutableAttrList->SetValueByIndex( idx,
-                            OUString::createFromAscii("StarBasic") );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                         OUString aLocQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -359,7 +358,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     GetXMLToken( XML_LANGUAGE ) ) );
 
                     pMutableAttrList->SetValueByIndex( idx,
-                    OUString::createFromAscii("StarBasic") );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                     OUString aLocQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -418,3 +417,5 @@ void XMLEventOASISTransformerContext::StartElement(
 
     XMLRenameElemTransformerContext::StartElement( xAttrList );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

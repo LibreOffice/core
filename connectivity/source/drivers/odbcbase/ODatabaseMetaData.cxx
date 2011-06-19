@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include "odbc/ODatabaseMetaData.hxx"
 #include "odbc/OTools.hxx"
-#ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
 #include "odbc/ODatabaseMetaDataResultSet.hxx"
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -63,7 +62,7 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         {
             m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
             ::rtl::OUString sVersion = getDriverVersion();
-            m_bOdbc3        =  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
+            m_bOdbc3        =  sVersion != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.50")) && sVersion != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.00"));
         }
         catch(SQLException& )
         { // doesn't matter here
@@ -735,13 +734,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     // there exists no possibility to get table types so we have to check
     static ::rtl::OUString sTableTypes[] =
     {
-        ::rtl::OUString::createFromAscii("TABLE"),
-        ::rtl::OUString::createFromAscii("VIEW"),
-        ::rtl::OUString::createFromAscii("SYSTEM TABLE"),
-        ::rtl::OUString::createFromAscii("GLOBAL TEMPORARY"),
-        ::rtl::OUString::createFromAscii("LOCAL TEMPORARY"),
-        ::rtl::OUString::createFromAscii("ALIAS"),
-        ::rtl::OUString::createFromAscii("SYNONYM")
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM TABLE")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GLOBAL TEMPORARY")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL TEMPORARY")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALIAS")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYNONYM"))
     };
     sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
@@ -1225,7 +1224,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     ::rtl::OUString aValue = m_pConnection->getURL();
     if ( !aValue.getLength() )
     {
-        aValue = ::rtl::OUString::createFromAscii("sdbc:odbc:");
+        aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:"));
         aValue += getURLImpl();
     }
     return aValue;
@@ -1741,3 +1740,5 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalo
     return NULL;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

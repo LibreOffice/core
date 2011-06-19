@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,12 @@ public:
     SdrTextAniAmountItem(SvStream& rIn): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual FASTBOOL HasMetrics() const;
-    virtual FASTBOOL ScaleMetrics(long nMul, long nDiv);
+    virtual bool HasMetrics() const;
+    virtual bool ScaleMetrics(long nMul, long nDiv);
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

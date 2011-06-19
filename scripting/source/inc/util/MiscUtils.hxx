@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,11 +115,11 @@ public:
         }
         catch ( css::lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Invalid document model!" );
+            OSL_FAIL( "Invalid document model!" );
         }
     }
 
-    OSL_ENSURE( false, "Unable to obtain URL for document model!" );
+    OSL_FAIL( "Unable to obtain URL for document model!" );
     return rtl::OUString();
 }
     static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const ::rtl::OUString& url )
@@ -175,3 +176,5 @@ static ::rtl::OUString parseLocationName( const ::rtl::OUString& location )
 };
 } // namespace sf_misc
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

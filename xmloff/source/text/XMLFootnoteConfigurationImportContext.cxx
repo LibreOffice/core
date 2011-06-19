@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
@@ -197,7 +196,7 @@ enum XMLFtnConfigToken
     XML_TOK_FTNCONFIG_POSITION
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
+static SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,      XML_TOK_FTNCONFIG_CITATION_STYLENAME },
     { XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME, XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
@@ -229,7 +228,7 @@ const SvXMLTokenMap&
     return *pAttrTokenMap;
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA aFootnoteNumberingMap[] =
+static SvXMLEnumMapEntry const aFootnoteNumberingMap[] =
 {
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
     { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },
@@ -344,11 +343,8 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     return pContext;
 }
 
-
-// --> OD 2005-01-31 #i40597# - rename method <CreateAndInsertLate(..)> to
-// <Finish(..)>
+// Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
 void XMLFootnoteConfigurationImportContext::Finish( sal_Bool bOverwrite )
-// <--
 {
 
     if (bOverwrite)
@@ -455,3 +451,5 @@ void XMLFootnoteConfigurationImportContext::SetEndNotice(
 {
     sEndNotice = sText;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

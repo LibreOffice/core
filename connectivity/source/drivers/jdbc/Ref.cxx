@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ java_sql_Ref::~java_sql_Ref()
 
 jclass java_sql_Ref::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/Ref");
     return theClass;
@@ -59,3 +60,4 @@ jclass java_sql_Ref::getMyClass() const
     return callStringMethod("getBaseTypeName",mID);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

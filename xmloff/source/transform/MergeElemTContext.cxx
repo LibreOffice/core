@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "MergeElemTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "AttrTransformerAction.hxx"
 #include "ElemTransformerAction.hxx"
@@ -344,3 +343,5 @@ void XMLMergeElemTransformerContext::Characters( const OUString& )
 {
     // ignore
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

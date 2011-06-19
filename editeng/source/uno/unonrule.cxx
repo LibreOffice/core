@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,10 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
 #include <toolkit/unohlp.hxx>
-#include <rtl/uuid.h>
-#include <rtl/memory.h>
 
 #include <editeng/brshitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -56,7 +55,6 @@ using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
 
 
-using namespace ::vos;
 using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -115,7 +113,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
     throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw IndexOutOfBoundsException();
@@ -130,7 +128,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 // XIndexAccess
 sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return maRule.GetLevelCount();
 }
@@ -138,7 +136,7 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
     throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( Index < 0 || Index >= maRule.GetLevelCount() )
         throw IndexOutOfBoundsException();
@@ -279,7 +277,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     aVal <<= (sal_Int16)rFmt.GetBulletRelSize();
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    DBG_ASSERT( nIdx <= nProps, "FixMe: Array uebergelaufen!!!! [CL]" );
+    DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
     Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
 
     delete [] pArray;
@@ -613,3 +611,5 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
     SvxNumRule aTempRule( 0, 10, false );
     return SvxCreateNumRule( &aTempRule );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

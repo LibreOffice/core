@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,11 +74,13 @@ private:
         // as specified in the component-schema (TYPE_ANY, ...,
         // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
-    com::sun::star::uno::Any value_;
-    rtl::OUString externalDescriptor_;
     bool extension_;
+    rtl::OUString externalDescriptor_;
+    com::sun::star::uno::Any value_;
 };
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

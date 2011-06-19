@@ -51,18 +51,6 @@ TabPage RID_FORMULATAB_FUNCTION
             < "Last Used" ; Default ; > ;
             < "All" ; Default ; > ;
         };
-        //  < "Database" ; Default ; > ;
-        //  < "Date&Time" ; Default ; > ;
-        //  < "Financial" ; Default ; > ;
-        //  < "Information" ; Default ; > ;
-        //  < "Logical" ; Default ; > ;
-        //  < "Mathematical" ; Default ; > ;
-        //  < "Array" ; Default ; > ;
-        //  < "Statistical" ; Default ; > ;
-        //  < "Spreadsheet" ; Default ; > ;
-        //  < "Text" ; Default ; > ;
-        //  < "Add-in" ; Default ; > ;
-        //};
     };
     ListBox LB_FUNCTION
     {
@@ -111,19 +99,9 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapclose.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image BMP_STR_CLOSE_H
-    {
-        ImageBitmap = Bitmap { File = "fapclose_h.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     Image BMP_STR_OPEN
     {
         ImageBitmap = Bitmap { File = "fapopen.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image BMP_STR_OPEN_H
-    {
-        ImageBitmap = Bitmap { File = "fapopen_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     Image BMP_STR_END
@@ -131,19 +109,9 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapok.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image BMP_STR_END_H
-    {
-        ImageBitmap = Bitmap { File = "fapok_h.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     Image BMP_STR_ERROR
     {
         ImageBitmap = Bitmap { File = "faperror.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image BMP_STR_ERROR_H
-    {
-        ImageBitmap = Bitmap { File = "faperror_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_STRUCT_ERR1
@@ -322,7 +290,6 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
 };
 ModelessDialog RID_FORMULADLG_FORMULA
 {
-    // OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 321 , 228 ) ;
@@ -497,15 +464,6 @@ Image RID_BMP_REFBTN1
     MaskColor = STD_MASKCOLOR;
 };
 
-Image RID_BMP_REFBTN1_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp1_h.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
 Image RID_BMP_REFBTN2
 {
     ImageBitmap = Bitmap
@@ -514,35 +472,3 @@ Image RID_BMP_REFBTN2
     };
     MaskColor = STD_MASKCOLOR;
 };
-
-Image RID_BMP_REFBTN2_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp2_h.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

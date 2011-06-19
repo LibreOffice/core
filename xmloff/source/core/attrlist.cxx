@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,8 @@
 #include <vector>
 #include <osl/mutex.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <xmloff/attrlist.hxx>
 
@@ -255,21 +256,15 @@ sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
     return -1;
 }
 
+namespace
+{
+    class theSvXMLAttributeListUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLAttributeListUnoTunnelId> {};
+}
+
 // XUnoTunnel & co
 const uno::Sequence< sal_Int8 > & SvXMLAttributeList::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvXMLAttributeListUnoTunnelId::get().getSeq();
 }
 
 SvXMLAttributeList* SvXMLAttributeList::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
@@ -299,3 +294,4 @@ sal_Int64 SAL_CALL SvXMLAttributeList::getSomething( const uno::Sequence< sal_In
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,7 +6,7 @@ Pre implementation steps
 - copy all files from connectivity/workben/skeleton into your new created directory under
   connectivity/source/drivers and rename the first char of the files to one which isn't used so far
   ( please have a look at the other drivers )
-- search all occurances of skeleton and replace them to a name which you prefer
+- search all occurrences of skeleton and replace them to a name which you prefer
 
 1. Implement a class called driver or modify the existing skeleton	-> have a look at SDriver.?xx 
 2. Implement a class called connection								-> have a look at SConnection.?xx 	

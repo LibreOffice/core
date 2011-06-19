@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HDL_
 #include <com/sun/star/drawing/GluePoint2.hpp>
-#endif
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -546,3 +545,5 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance(
 {
     return *new SvxUnoGluePointAccess(pObject);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

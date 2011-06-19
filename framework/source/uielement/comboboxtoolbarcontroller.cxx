@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #include "uielement/comboboxtoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,11 +53,9 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 #include <vcl/combobox.hxx>
 #include <tools/urlobj.hxx>
@@ -199,7 +194,7 @@ ComboboxToolbarController::~ComboboxToolbarController()
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pComboBox;
@@ -447,3 +442,4 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

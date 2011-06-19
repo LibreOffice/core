@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,7 +287,7 @@ void XMLTableImport::finishStyles()
             }
             catch( Exception& )
             {
-                DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+                OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
             }
 
             if( xTemplate.is() )
@@ -300,12 +301,12 @@ void XMLTableImport::finishStyles()
         }
         catch( Exception& )
         {
-            DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+            OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImport::finishStyles(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
     }
 }
 
@@ -388,7 +389,7 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, co
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
     }
 
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
@@ -428,7 +429,7 @@ void XMLTableImportContext::InitColumns()
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
     }
 }
 
@@ -453,9 +454,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
 
         Reference< XPropertySet > xRowSet( mxRows->getByIndex(mnCurrentRow), UNO_QUERY );
 
-        sal_Int32 nRepeated = 1;
         OUString sStyleName;
-        sal_Bool bVisibility = sal_True;
 
         // read attributes for the table-row
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -468,11 +467,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
             sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
             if( nPrefix2 == XML_NAMESPACE_TABLE )
             {
-                if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
-                {
-                    nRepeated = sValue.toInt32();
-                }
-                else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+                if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 {
                     sStyleName = sValue;
                 }
@@ -480,10 +475,16 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
                 {
                     msDefaultCellStyleName = sValue;
                 }
+#if 0
                 else if( IsXMLToken( aLocalName, XML_VISIBILITY ) )
                 {
                     bVisibility = IsXMLToken( sValue, XML_VISIBLE );
                 }
+                else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
+                {
+                    nRepeated = sValue.toInt32();
+                }
+#endif
             }
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&
                  IsXMLToken(aLocalName, XML_ID)   )
@@ -535,7 +536,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, cons
         const sal_Int32 nRepeated = pCellContext->getRepeated();
         if( nRepeated > 1 )
         {
-            DBG_ERROR("xmloff::XMLTableImportContext::ImportCell(), import of repeated Cells not implemented (TODO)");
+            OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), import of repeated Cells not implemented (TODO)");
             mnCurrentColumn  += nRepeated - 1;
         }
 
@@ -543,7 +544,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, cons
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
     }
 
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList);
@@ -596,7 +597,7 @@ void XMLTableImportContext::EndElement()
             }
             catch( Exception& )
             {
-                DBG_ERROR("XMLTableImportContext::EndElement(), exception caught while merging cells!");
+                OSL_FAIL("XMLTableImportContext::EndElement(), exception caught while merging cells!");
             }
         }
     }
@@ -824,3 +825,5 @@ SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPr
 }
 
 // --------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

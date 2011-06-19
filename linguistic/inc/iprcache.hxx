@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,6 @@
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 class Flushable
 {
@@ -56,7 +56,6 @@ public:
     virtual void    Flush() = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class FlushListener :
     public cppu::WeakImplHelper2
@@ -94,7 +93,6 @@ public:
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class SpellCache :
     public Flushable
@@ -123,9 +121,9 @@ public:
     bool    CheckWord( const ::rtl::OUString& rWord, LanguageType nLang );
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

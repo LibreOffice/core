@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+#include <sal/macros.h>
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>
@@ -61,7 +63,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -69,10 +70,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 
+using ::rtl::OUString;
+
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 //!! multi-thread safe mutex for all platforms !!
 struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
@@ -84,7 +86,6 @@ osl::Mutex &    GetLinguMutex()
     return LinguMutex::get();
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
@@ -101,7 +102,6 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
     return aLclDtaWrp;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 /**
     returns text-encoding used for ByteString unicode String conversion
@@ -173,7 +173,6 @@ rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage )
     return nEncoding;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
@@ -181,7 +180,6 @@ static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
     return nMin < n3 ? nMin : n3;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 class IntArray2D
 {
@@ -263,7 +261,6 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
     return nDist;
  }
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool IsUseDicList( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
@@ -456,7 +453,6 @@ sal_uInt8 AddEntryToDic(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 LanguageType LocaleToLanguage( const Locale& rLocale )
 {
@@ -516,7 +512,6 @@ uno::Sequence< sal_Int16 >
     return aLangs;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
 {
@@ -548,7 +543,6 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
@@ -704,7 +698,6 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 static CharClass & lcl_GetCharClass()
@@ -835,7 +828,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
 
 sal_Bool HasDigits( const OUString &rText )
 {
-    static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
+    static const int nNumDigitZeroes = SAL_N_ELEMENTS(the_aDigitZeroes);
     const sal_Int32 nLen = rText.getLength();
 
     sal_Int32 i = 0;
@@ -877,7 +870,6 @@ sal_Bool IsNumeric( const String &rText )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
 {
@@ -890,7 +882,7 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
         {
             try
             {
-                xRef = xMgr->createInstance( A2OU( pServiceName ) );
+                xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
             }
             catch (uno::Exception &)
             {
@@ -929,7 +921,6 @@ uno::Reference< XDictionary > GetIgnoreAllList()
     return xRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 AppExitListener::AppExitListener()
 {
@@ -987,7 +978,6 @@ void SAL_CALL
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
         throw(frame::TerminationVetoException, RuntimeException)
 {
-    //MutexGuard    aGuard( GetLinguMutex() );
 }
 
 
@@ -1003,7 +993,7 @@ void SAL_CALL
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

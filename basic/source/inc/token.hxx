@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _TOKEN_HXX
 
 #include "scanner.hxx"
-#ifndef _SBDEF_HXX
 #include <basic/sbdef.hxx>
-#endif
 
 #if defined( SHARED )
 #define SbiTokenSHAREDTMPUNDEF
@@ -72,7 +71,7 @@ enum SbiToken {
     IF, _IN_, INPUT,
     LET, LINE, LINEINPUT, LOCAL, LOOP, LPRINT, LSET,
     NAME, NEW, NEXT,
-    ON, OPEN, OPTION, IMPLEMENTS,
+    ON, OPEN, OPTION, ATTRIBUTE, IMPLEMENTS,
     PRINT, PRIVATE, PROPERTY, PUBLIC,
     REDIM, REM, RESUME, RETURN, RSET,
     SELECT, SET, SHARED, STATIC, STEP, STOP, SUB,
@@ -181,3 +180,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

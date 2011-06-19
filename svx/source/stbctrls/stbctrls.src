@@ -89,6 +89,16 @@ String RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG
     Text [ en-US ] = "Digital Signature: The document signature and the certificate are OK, but not all parts of the document are signed.";
 };
 
+String RID_SVXSTR_DOC_MODIFIED_YES
+{
+    Text [ en-US ] = "The document has been modified. Double-click to save the document.";
+};
+
+String RID_SVXSTR_DOC_MODIFIED_NO
+{
+    Text [ en-US ] = "The document has not been modified since the last save.";
+};
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {
@@ -250,30 +260,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SIGNET_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "signet_11x16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SIGNET_BROKEN_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "caution_11x16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "notcertificate_16_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
 
 
 Image RID_SVXBMP_SLIDERBUTTON
@@ -300,28 +286,19 @@ Image RID_SVXBMP_SLIDERINCREASE
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SLIDERBUTTON_HC
+Image RID_SVXBMP_DOC_MODIFIED_YES
 {
     ImageBitmap = Bitmap
     {
-        File = "navigationball_10_h.png" ;
+        File = "doc_modified_yes_14.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SLIDERDECREASE_HC
+Image RID_SVXBMP_DOC_MODIFIED_NO
 {
     ImageBitmap = Bitmap
     {
-        File = "slidezoomout_11_h.png" ;
+        File = "doc_modified_no_14.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
-Image RID_SVXBMP_SLIDERINCREASE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoomin_11_h.png" ;
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-

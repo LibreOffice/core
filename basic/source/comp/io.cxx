@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,27 +145,7 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( sal_True );
-    // sal_Bool bChan = Channel( sal_True );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
-    /* AB 15.1.96: Keinen allgemeinen Ausdruck mehr zulassen
-    SbiExpression* pExpr = new SbiExpression( this );
-    if( !pExpr->IsVariable() )
-    {
-        SbiToken eTok = Peek();
-        if( eTok == COMMA || eTok == SEMICOLON ) Next();
-        else Error( SbERR_EXPECTED, COMMA );
-        // mit Prompt
-        if( !bChan )
-        {
-            pExpr->Gen();
-            aGen.Gen( _PROMPT );
-        }
-        else
-            Error( SbERR_VAR_EXPECTED );
-        delete pExpr;
-        pExpr = new SbiExpression( this, SbOPERAND );
-    }
-    */
     if( !pExpr->IsVariable() )
         Error( SbERR_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
@@ -181,13 +162,7 @@ void SbiParser::Input()
 {
     aGen.Gen( _RESTART );
     Channel( sal_True );
-    // sal_Bool bChan = Channel( sal_True );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
-    /* ALT: Jetzt keinen allgemeinen Ausdruck mehr zulassen
-    SbiExpression* pExpr = new SbiExpression( this );
-    ...
-    siehe LineInput
-    */
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -234,7 +209,7 @@ void SbiParser::Open()
     {
         Next();
         eTok = Next();
-        // #27964# Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
+        // Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
         nMode &= ~(STREAM_READ | STREAM_WRITE);     // loeschen
         if( eTok == READ )
         {
@@ -356,3 +331,4 @@ void SbiParser::Close()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

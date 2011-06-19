@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -359,6 +360,7 @@
 #include "rtl/instance.hxx"
 #include "rtl/logfile.hxx"
 #include "rtl/random.h"
+#include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -368,9 +370,10 @@
 #include "rtl/ustring.hxx"
 
 #include "sal/alloca.h"
-#include "sal/main.h"
 
+#include "salhelper/simplereferenceobject.hxx"
 #include "salhelper/singletonref.hxx"
+#include "salhelper/timer.hxx"
 
 #include "sot/exchange.hxx"
 #include "sot/filelist.hxx"
@@ -484,12 +487,9 @@
 #include "vcl/window.hxx"
 #include "tools/wintypes.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/ref.hxx"
-#include "vos/thread.hxx"
-#include "vos/timer.hxx"
+
 
 //---MARKER---
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

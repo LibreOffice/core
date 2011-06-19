@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@ FormulaListBox::FormulaListBox( Window* pParent, const ResId& rResId ):
 void FormulaListBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyEvent aKEvt=rKEvt;
-    //ListBox::KeyInput(rKEvt);
 
     if(aKEvt.GetCharCode()==' ')
         DoubleClick();
@@ -83,7 +83,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
-    // Kategorie 0 == LRU, sonst Categories == LbPos-1
+    // Category 0 == LRU, otherwise Categories == LbPos-1
     if ( nLbPos > 0 )
         nLbPos -= 1;
 
@@ -94,7 +94,6 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
-    //
     aFtCategory     ( this, ModuleRes( FT_CATEGORY ) ),
     aLbCategory     ( this, ModuleRes( LB_CATEGORY ) ),
     aFtFunction     ( this, ModuleRes( FT_FUNCTION ) ),
@@ -160,7 +159,7 @@ void FuncPage::UpdateFunctionList()
             impl_addFunctions(pCategory);
         }
     }
-    else // LRU-Liste
+    else // LRU-List
     {
         ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
         ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
@@ -250,7 +249,7 @@ String FuncPage::GetSelFunctionName() const
 }
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_uInt16 nPos ) const
 {
-    // nicht schoen, aber hoffentlich selten
+    // not pretty, but hopefully rare
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);
 }
 
@@ -263,3 +262,4 @@ void FuncPage::InitLRUList()
 
 } // formula
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

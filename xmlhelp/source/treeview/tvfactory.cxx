@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -146,7 +147,7 @@ TVFactory::createInstance(
     aAny <<= rtl::OUString();
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
-        rtl::OUString::createFromAscii( "nodepath" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" )),
         -1,
         aAny,
         PropertyState_DIRECT_VALUE );
@@ -207,7 +208,7 @@ TVFactory::getAvailableServiceNames( )
     throw( RuntimeException )
 {
     Sequence< rtl::OUString > seq( 1 );
-    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HierarchyDataReadAccess" );
+    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HierarchyDataReadAccess" ));
     return seq;
 }
 
@@ -219,7 +220,7 @@ TVFactory::getAvailableServiceNames( )
 rtl::OUString SAL_CALL
 TVFactory::getImplementationName_static()
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.help.TreeViewImpl" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeViewImpl" ));
 }
 
 
@@ -227,8 +228,8 @@ Sequence< rtl::OUString > SAL_CALL
 TVFactory::getSupportedServiceNames_static()
 {
     Sequence< rtl::OUString > seq( 2 );
-    seq[0] = rtl::OUString::createFromAscii( "com.sun.star.help.TreeView" );
-    seq[1] = rtl::OUString::createFromAscii( "com.sun.star.ucb.HiearchyDataSource" );
+    seq[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.TreeView" ));
+    seq[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.HiearchyDataSource" ));
     return seq;
 }
 
@@ -256,7 +257,7 @@ TVFactory::CreateInstance(
 }
 
 //=========================================================================
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     (void)ppEnv;
@@ -265,7 +266,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //=========================================================================
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,void * pServiceManager,void * pRegistryKey )
 {
     (void)pRegistryKey;
@@ -296,3 +297,5 @@ extern "C" void * SAL_CALL component_getFactory(
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

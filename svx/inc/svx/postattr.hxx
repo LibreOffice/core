@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,7 @@
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt das Autoren-Kuerzel eines Notizzettels.
+The author shorthand symbol of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
@@ -69,8 +69,7 @@ public:
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt das Datum eines Notizzettels.
+The date of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
@@ -100,8 +99,7 @@ public:
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt den Text eines Notizzettels.
+The text of a note
 */
 
 class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
@@ -112,7 +110,7 @@ public:
     SvxPostItTextItem( sal_uInt16 nWhich  );
 
     SvxPostItTextItem( const String& rText, sal_uInt16 nWhich  );
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -131,3 +129,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

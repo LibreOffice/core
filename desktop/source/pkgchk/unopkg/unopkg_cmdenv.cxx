@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ namespace {
 
 //==============================================================================
 struct OfficeLocale :
-        public rtl::StaticWithInit<const lang::Locale, OfficeLocale> {
+        public rtl::StaticWithInit<lang::Locale, OfficeLocale> {
     const lang::Locale operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
@@ -85,6 +86,7 @@ class CommandEnvironmentImpl
     sal_Int32 m_logLevel;
     bool m_option_force_overwrite;
     bool m_option_verbose;
+    bool m_option_suppress_license;
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
@@ -98,7 +100,8 @@ public:
         Reference<XComponentContext> const & xComponentContext,
         OUString const & log_file,
         bool option_force_overwrite,
-        bool option_verbose);
+        bool option_verbose,
+        bool option_suppress_license);
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
@@ -123,10 +126,12 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
     bool option_force_overwrite,
-    bool option_verbose)
+    bool option_verbose,
+    bool option_suppressLicense)
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
+      m_option_suppress_license( option_suppressLicense ),
       m_xComponentContext(xComponentContext)
 {
     if (log_file.getLength() > 0) {
@@ -150,7 +155,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
     }
     catch (RuntimeException & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, osl_getThreadTextEncoding() ).getStr() );
     }
 }
@@ -279,7 +284,13 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= licExc)
     {
-        printLicense(licExc.ExtensionName, licExc.Text, approve, abort);
+        if ( !m_option_suppress_license )
+            printLicense(licExc.ExtensionName, licExc.Text, approve, abort);
+        else
+        {
+            approve = true;
+            abort = false;
+        }
     }
        else if (request >>= instExc)
     {
@@ -424,10 +435,12 @@ Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose)
+    bool option_verbose,
+    bool option_suppress_license)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose);
+        xContext, logFile, option_force_overwrite, option_verbose, option_suppress_license);
 }
 } // unopkg
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,14 +38,10 @@
 #include <svx/xflasit.hxx>
 #include <svx/xlnasit.hxx>
 
-#ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #include <tools/string.hxx>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include "svx/svxdllapi.h"
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -58,7 +55,7 @@ class XOutdevItemPool;
 #define BITMAP_HEIGHT 12
 
 // Standard-Vergleichsstring
-extern sal_Unicode __FAR_DATA pszStandard[]; // "standard"
+extern sal_Unicode pszStandard[]; // "standard"
 
 // Funktion zum Konvertieren in echte RGB-Farben, da mit
 // enum COL_NAME nicht verglichen werden kann.
@@ -93,8 +90,6 @@ class XColorEntry : public XPropertyEntry
 public:
             XColorEntry(const Color& rColor, const String& rName) :
                 XPropertyEntry(rName), aColor(rColor) {}
-            XColorEntry(const XColorEntry& rOther) :
-                XPropertyEntry(rOther), aColor(rOther.aColor) {}
 
     void    SetColor(const Color& rColor)   { aColor = rColor; }
     Color&  GetColor()                      { return aColor; }
@@ -112,11 +107,6 @@ public:
     XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
     :   XPropertyEntry(rName),
         aB2DPolyPolygon(rB2DPolyPolygon)
-    {}
-
-    XLineEndEntry(const XLineEndEntry& rOther)
-    :   XPropertyEntry(rOther),
-        aB2DPolyPolygon(rOther.aB2DPolyPolygon)
     {}
 
     void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
@@ -141,8 +131,6 @@ class XDashEntry : public XPropertyEntry
 public:
             XDashEntry(const XDash& rDash, const String& rName) :
                 XPropertyEntry(rName), aDash(rDash) {}
-            XDashEntry(const XDashEntry& rOther) :
-                XPropertyEntry(rOther), aDash(rOther.aDash) {}
 
     void    SetDash(const XDash& rDash)    { aDash = rDash; }
     XDash&  GetDash()                      { return aDash; }
@@ -159,8 +147,6 @@ class XHatchEntry : public XPropertyEntry
 public:
             XHatchEntry(const XHatch& rHatch, const String& rName) :
                 XPropertyEntry(rName), aHatch(rHatch) {}
-            XHatchEntry(const XHatchEntry& rOther) :
-                XPropertyEntry(rOther), aHatch(rOther.aHatch) {}
 
     void    SetHatch(const XHatch& rHatch)  { aHatch = rHatch; }
     XHatch& GetHatch()                      { return aHatch; }
@@ -177,8 +163,6 @@ class XGradientEntry : public XPropertyEntry
 public:
                 XGradientEntry(const XGradient& rGradient, const String& rName):
                     XPropertyEntry(rName), aGradient(rGradient) {}
-                XGradientEntry(const XGradientEntry& rOther) :
-                    XPropertyEntry(rOther), aGradient(rOther.aGradient) {}
 
     void        SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
     XGradient&  GetGradient()                       { return aGradient; }
@@ -195,8 +179,6 @@ class XBitmapEntry : public XPropertyEntry
 public:
             XBitmapEntry( const XOBitmap& rXOBitmap, const String& rName ):
                 XPropertyEntry( rName ), aXOBitmap( rXOBitmap ) {}
-            XBitmapEntry( const XBitmapEntry& rOther ) :
-                XPropertyEntry( rOther ), aXOBitmap( rOther.aXOBitmap ) {}
 
     void     SetXBitmap(const XOBitmap& rXOBitmap) { aXOBitmap = rXOBitmap; }
     XOBitmap& GetXBitmap()                    { return aXOBitmap; }
@@ -315,7 +297,7 @@ public:
 class SVX_DLLPUBLIC XColorTable : public XPropertyTable
 {
 public:
-                    XColorTable( const String& rPath,
+    explicit        XColorTable( const String& rPath,
                                  XOutdevItemPool* pXPool = NULL,
                                  sal_uInt16 nInitSize = 16,
                                  sal_uInt16 nReSize = 16 );
@@ -334,7 +316,7 @@ public:
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 
-    static XColorTable* GetStdColorTable();
+    static XColorTable& GetStdColorTable();
 };
 
 // -------------------
@@ -344,7 +326,7 @@ public:
 class XColorList : public XPropertyList
 {
 public:
-                    XColorList( const String& rPath,
+    explicit        XColorList( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
                                 sal_uInt16 nInitSize = 16,
                                 sal_uInt16 nReSize = 16 );
@@ -371,7 +353,7 @@ public:
 class XLineEndTable : public XPropertyTable
 {
 public:
-                    XLineEndTable( const String& rPath,
+    explicit        XLineEndTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     sal_uInt16 nInitSize = 16,
                                     sal_uInt16 nReSize = 16 );
@@ -405,7 +387,7 @@ private:
     void impDestroy();
 
 public:
-    XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XLineEndList();
 
     using XPropertyList::Replace;
@@ -429,7 +411,7 @@ public:
 class XDashTable : public XPropertyTable
 {
 public:
-                    XDashTable( const String& rPath,
+    explicit        XDashTable( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
                                 sal_uInt16 nInitSize = 16,
                                 sal_uInt16 nReSize = 16 );
@@ -463,7 +445,7 @@ private:
     void impDestroy();
 
 public:
-    XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XDashList();
 
     using XPropertyList::Replace;
@@ -487,7 +469,7 @@ public:
 class XHatchTable : public XPropertyTable
 {
 public:
-                    XHatchTable( const String& rPath,
+    explicit        XHatchTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     sal_uInt16 nInitSize = 16,
                                     sal_uInt16 nReSize = 16 );
@@ -521,7 +503,7 @@ private:
     void impDestroy();
 
 public:
-    XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     ~XHatchList();
 
     using XPropertyList::Replace;
@@ -545,7 +527,7 @@ public:
 class XGradientTable : public XPropertyTable
 {
 public:
-                    XGradientTable( const String& rPath,
+    explicit        XGradientTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     sal_uInt16 nInitSize = 16,
                                     sal_uInt16 nReSize = 16 );
@@ -579,7 +561,7 @@ private:
     void impDestroy();
 
 public:
-    XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XGradientList();
 
     using XPropertyList::Replace;
@@ -603,7 +585,7 @@ public:
 class XBitmapTable : public XPropertyTable
 {
 public:
-                    XBitmapTable( const String& rPath,
+    explicit        XBitmapTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     sal_uInt16 nInitSize = 16,
                                     sal_uInt16 nReSize = 16 );
@@ -630,7 +612,7 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 public:
-                    XBitmapList( const String& rPath,
+    explicit        XBitmapList( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     sal_uInt16 nInitSize = 16,
                                     sal_uInt16 nReSize = 16 );
@@ -651,3 +633,5 @@ public:
 };
 
 #endif // _XTABLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

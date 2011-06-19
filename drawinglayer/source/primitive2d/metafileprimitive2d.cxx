@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -365,7 +366,7 @@ namespace
 
         ~PropertyHolders()
         {
-            while(maPropertyHolders.size())
+            while(!maPropertyHolders.empty())
             {
                 delete maPropertyHolders.back();
                 maPropertyHolders.pop_back();
@@ -527,7 +528,7 @@ namespace
         void Pop()
         {
             OSL_ENSURE(maTargetHolders.size(), "TargetHolders: POP with no property holders (!)");
-            if(maTargetHolders.size())
+            if(!maTargetHolders.empty())
             {
                 delete maTargetHolders.back();
                 maTargetHolders.pop_back();
@@ -542,7 +543,7 @@ namespace
 
         ~TargetHolders()
         {
-            while(maTargetHolders.size())
+            while(!maTargetHolders.empty())
             {
                 delete maTargetHolders.back();
                 maTargetHolders.pop_back();
@@ -632,7 +633,7 @@ namespace
         PropertyHolder& rProperties,
         basegfx::BColor aBColor)
     {
-        if(rPositions.size())
+        if(!rPositions.empty())
         {
             if(rProperties.getTransformation().isIdentity())
             {
@@ -1589,7 +1590,7 @@ namespace
                     }
                 }
 
-                if(aTargetVector.size())
+                if(!aTargetVector.empty())
                 {
                     // add created text primitive to target
                     if(rProperty.getTransformation().isIdentity())
@@ -1662,9 +1663,9 @@ namespace
         PropertyHolders& rPropertyHolders,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation)
     {
-        const sal_uInt32 nCount(rMetaFile.GetActionCount());
+        const size_t nCount(rMetaFile.GetActionSize());
 
-        for(sal_uInt32 nAction(0); nAction < nCount; nAction++)
+        for(size_t nAction(0); nAction < nCount; nAction++)
         {
             MetaAction* pAction = rMetaFile.GetAction(nAction);
 
@@ -1687,7 +1688,7 @@ namespace
 
                         if(pA->GetColor() != aLastColor)
                         {
-                            if(aPositions.size())
+                            if(!aPositions.empty())
                             {
                                 createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                                 aPositions.clear();
@@ -1703,7 +1704,7 @@ namespace
 
                     nAction--;
 
-                    if(aPositions.size())
+                    if(!aPositions.empty())
                     {
                         createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), aLastColor.getBColor());
                     }
@@ -1727,7 +1728,7 @@ namespace
 
                         nAction--;
 
-                        if(aPositions.size())
+                        if(!aPositions.empty())
                         {
                             createPointArrayPrimitive(aPositions, rTargetHolders.Current(), rPropertyHolders.Current(), rPropertyHolders.Current().getLineColor());
                         }
@@ -2115,7 +2116,7 @@ namespace
                 case META_TEXTRECT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    // OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
+                    // OSL_FAIL("META_TEXTRECT_ACTION requested (!)");
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().Len());
@@ -2140,7 +2141,7 @@ namespace
                         aTextLayouterDevice.addTextRectActions(
                             rRectangle, pA->GetText(), pA->GetStyle(), aGDIMetaFile);
 
-                        if(aGDIMetaFile.GetActionCount())
+                        if(aGDIMetaFile.GetActionSize())
                         {
                             // cerate sub-content
                             drawinglayer::primitive2d::Primitive2DSequence xSubContent;
@@ -2729,7 +2730,7 @@ namespace
                             }
                             default :
                             {
-                                OSL_ENSURE(false, "interpretMetafile: META_MAPMODE_ACTION with unsupported MapUnit (!)");
+                                OSL_FAIL("interpretMetafile: META_MAPMODE_ACTION with unsupported MapUnit (!)");
                                 break;
                             }
                         }
@@ -2980,7 +2981,7 @@ namespace
                     {
                         const GDIMetaFile& rContent = pA->GetGDIMetaFile();
 
-                        if(rContent.GetActionCount())
+                        if(rContent.GetActionSize())
                         {
                             // create the sub-content with no embedding specific to the
                             // sub-metafile, this seems not to be used.
@@ -3174,7 +3175,7 @@ namespace
                 }
                 default:
                 {
-                    OSL_ENSURE(false, "Unknown MetaFile Action (!)");
+                    OSL_FAIL("Unknown MetaFile Action (!)");
                     break;
                 }
             }
@@ -3282,3 +3283,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

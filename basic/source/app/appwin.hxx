@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,15 @@
 #ifndef _APPWIN_HXX
 #define _APPWIN_HXX
 
-//#include <sb.hxx>
 #include <vcl/dockwin.hxx>
 #include <tools/fsys.hxx>
 
 #include "app.hxx"
 #include "dataedit.hxx"
 
+#include <vector>
 typedef sal_uInt16 QueryBits;
+
 #define QUERY_NONE              ( QueryBits ( 0x00 ) )
 #define QUERY_DIRTY             ( QueryBits ( 0x01 ) )
 #define QUERY_DISK_CHANGED      ( QueryBits ( 0x02 ) )
@@ -75,7 +77,6 @@ protected:
 
     short nId;                      // ID-Nummer( "Unnamed n" )
     BasicFrame* pFrame;             // Parent-Window
-//  Icon* pIcon;                    // Document icon
     String aFind;                   // Search string
     String aReplace;                // Replace string
     sal_Bool bFind;                     // sal_True if search not replace
@@ -133,6 +134,8 @@ public:
     void SetWinId( sal_uInt16 nWId ) { nWinId = nWId; }
 };
 
-DECLARE_LIST( EditList, AppWin* )
+typedef ::std::vector< AppWin* > EditList;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

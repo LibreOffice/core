@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,17 +54,18 @@ SfxPoolItem* FmInterfaceItem::Clone( SfxItemPool* ) const
 //------------------------------------------------------------------------------
 SvStream& FmInterfaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    DBG_ERROR( "FmInterfaceItem::Store: not implemented!" );
+    OSL_FAIL( "FmInterfaceItem::Store: not implemented!" );
     return rStrm;
 }
 
 //------------------------------------------------------------------------------
 SfxPoolItem* FmInterfaceItem::Create( SvStream& /*rStrm*/, sal_uInt16 ) const
 {
-    DBG_ERROR( "FmInterfaceItem::Create: not implemented!" );
+    OSL_FAIL( "FmInterfaceItem::Create: not implemented!" );
     return new FmInterfaceItem( *this );
 }
 
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

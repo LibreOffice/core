@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getColumns" );
-    OSL_ENSURE(0,"Should be overloaded!");
+    OSL_FAIL("Should be overloaded!");
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
 }
 
@@ -174,7 +175,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "isCaseSensitiveParentFolder: caught an unexpected exception!" );
+            OSL_FAIL( "isCaseSensitiveParentFolder: caught an unexpected exception!" );
         }
 
         return nIsCS;
@@ -196,7 +197,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
+    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -220,7 +221,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
     Reference < XSortedDynamicResultSetFactory > xSRSFac(
-                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
+                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory")) ), UNO_QUERY );
 
     Sequence< NumberedSortingInfo > aSortInfo( 1 );
     NumberedSortingInfo* pInfo = aSortInfo.getArray();
@@ -290,7 +291,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
                 sal_Unicode nChar = aName.toChar();
-                if ( match(tableNamePattern,aName.getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
                     aRow.push_back(new ORowSetValueDecorator(aName));
                     bNewRow = sal_True;
@@ -305,7 +306,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 if (!aURL.getExtension().getLength())
                 {
                     sal_Unicode nChar = aURL.getBase().getStr()[0];
-                    if(match(tableNamePattern,aURL.getBase().getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                    if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
@@ -425,13 +426,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
-            if(match(tableNamePattern,pBegin->getStr(),'\0'))
+            if(match(tableNamePattern,*pBegin,'\0'))
             {
                 static ODatabaseMetaDataResultSet::ORow aRow(8);
 
                 aRow[2] = new ORowSetValueDecorator(*pBegin);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-                aRow[7] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
+                aRow[7] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO")));
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
@@ -550,7 +551,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getIdentifierQuoteString_throw" );
-    static const ::rtl::OUString sQuote = ::rtl::OUString::createFromAscii("\"");
+    static const ::rtl::OUString sQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
     return sQuote;
 }
 // -------------------------------------------------------------------------
@@ -710,7 +711,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TABLE")));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"))));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
@@ -972,7 +973,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getURL" );
-    static const ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:file:");
+    static const ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:file:" ));
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -1221,3 +1222,4 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalo
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

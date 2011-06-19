@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -139,7 +140,7 @@ namespace ucb { namespace ucp { namespace ext
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString sScheme( rtl::OUString::createFromAscii( "vnd.sun.star.extension" ) );
+        const ::rtl::OUString sScheme( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.extension") );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 
@@ -206,3 +207,5 @@ namespace ucb { namespace ucp { namespace ext
 //......................................................................................................................
 } } }   // namespace ucb::ucp::ext
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

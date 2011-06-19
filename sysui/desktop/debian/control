@@ -1,6 +1,6 @@
 Description: %productname desktop integration
-Maintainer: OpenOffice.org
+Maintainer: LibreOffice
 Architecture: all
-Provides: openoffice.org-desktop-integration, openoffice.org-unbundled
-Conflicts: openofficeorg-desktop-integration, openofficeorg-debian-menus, openoffice.org-bundled
-Replaces: openofficeorg-desktop-integration, openofficeorg-debian-menus
+Provides: libreoffice-desktop-integration, libreoffice-unbundled
+Conflicts: libreoffice-desktop-integration, libreoffice-debian-menus, libreoffice-bundled
+Replaces: libreoffice-desktop-integration, libreoffice-debian-menus

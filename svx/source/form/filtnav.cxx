@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,15 @@
 #include "fmitems.hxx"
 #include "fmprop.hrc"
 #include "svx/fmresids.hrc"
-#include "gridcell.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/processfactory.hxx>
@@ -62,6 +66,7 @@
 #include <svx/svxids.hrc>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <functional>
 
@@ -145,7 +150,7 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 
 //========================================================================
 TYPEINIT0(FmFilterData);
-Image FmFilterData::GetImage( BmpColorMode /*_eMode*/ ) const
+Image FmFilterData::GetImage() const
 {
     return Image();
 }
@@ -163,20 +168,16 @@ FmParentData::~FmParentData()
 //========================================================================
 TYPEINIT1(FmFormItem, FmParentData);
 //------------------------------------------------------------------------
-Image FmFormItem::GetImage( BmpColorMode _eMode ) const
+Image FmFormItem::GetImage() const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FORM );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FORM );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -198,20 +199,16 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
+Image FmFilterItems::GetImage() const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FILTER );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FILTER );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -229,20 +226,16 @@ FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItem::GetImage( BmpColorMode _eMode ) const
+Image FmFilterItem::GetImage() const
 {
     static Image aImage;
-    static Image aImage_HC;
 
     if (!aImage)
     {
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-        ImageList aNavigatorImages_HC( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-
         aImage = aNavigatorImages.GetImage( RID_SVXIMG_FIELD );
-        aImage_HC = aNavigatorImages_HC.GetImage( RID_SVXIMG_FIELD );
     }
-    return ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? aImage_HC : aImage;
+    return aImage;
 }
 
 //========================================================================
@@ -445,7 +438,7 @@ namespace
 //------------------------------------------------------------------------
 void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_pModel )
         return;
@@ -495,7 +488,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
     Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
@@ -530,7 +523,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
     Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
@@ -545,7 +538,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     bool bValidIndex = ( nInsertPos >= 0 ) && ( (size_t)nInsertPos <= pFormItem->GetChildren().size() );
     if ( !bValidIndex )
     {
-        OSL_ENSURE( false, "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
+        OSL_FAIL( "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
         return;
     }
 
@@ -952,7 +945,7 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& r
 
     m_pAdapter->setText(nParentPos, pItem, rText);
 
-    if (!rText)
+    if (rText.isEmpty())
         Remove(pItem);
     else
     {
@@ -1171,22 +1164,11 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     {
-        {
-            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
-            SetNodeBitmaps(
-                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_NORMAL
-            );
-        }
-        {
-            ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
-            SetNodeBitmaps(
-                aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-                aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-                BMP_COLOR_HIGHCONTRAST
-            );
-        }
+        ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        SetNodeBitmaps(
+            aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+        );
     }
 
     m_pModel = new FmFilterModel(comphelper::getProcessServiceFactory());
@@ -1586,12 +1568,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 
     // insert the item
     SvLBoxEntry* pParentEntry = FindEntry( pParent );
-    SvLBoxEntry* pNewEntry = InsertEntry(pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
-    if ( pNewEntry )
-    {
-        SetExpandedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
-        SetCollapsedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
-    }
+    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
     if ( pParentEntry )
         Expand( pParentEntry );
 }
@@ -2083,3 +2060,5 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( Window *_pParent, sal_uInt16 _
 //........................................................................
 }   // namespace svxform
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

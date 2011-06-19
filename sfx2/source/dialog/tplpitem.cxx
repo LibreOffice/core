@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,8 @@ SfxTemplateItem::SfxTemplateItem() :
 SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
-    const String& rStyle, // Name des aktuellen Styles
-    sal_uInt16 nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+    const String& rStyle, // Name of the current Styles
+    sal_uInt16 nValue         // Flags for the filters of the automatic display
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
@@ -57,7 +58,7 @@ SfxTemplateItem::SfxTemplateItem
 
 //-------------------------------------------------------------------------
 
-// copy ctor
+// copy constuctor
 SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
 
     SfxFlagItem( rCopy ),
@@ -84,7 +85,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -92,11 +93,11 @@ sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 
     aTemplate.StyleName = aStyle;
     rVal <<= aTemplate;
 
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -104,10 +105,10 @@ sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uI
     {
         SetValue( sal::static_int_cast< sal_uInt16 >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //-------------------------------------------------------------------------
@@ -118,3 +119,4 @@ sal_uInt8 SfxTemplateItem::GetFlagCount() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

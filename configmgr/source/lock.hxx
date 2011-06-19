@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,15 @@
 #define INCLUDED_CONFIGMGR_SOURCE_LOCK_HXX
 
 #include "sal/config.h"
-
 #include "osl/mutex.hxx"
+#include "boost/shared_ptr.hpp"
 
 namespace configmgr {
 
-extern osl::Mutex lock;
+boost::shared_ptr<osl::Mutex> lock();
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,9 +139,9 @@ FTPURL::FTPURL(const rtl::OUString& url,
         malformed_exception
     )
     : m_pFCP(pFCP),
-      m_aUsername(rtl::OUString::createFromAscii("anonymous")),
+      m_aUsername(RTL_CONSTASCII_USTRINGPARAM("anonymous")),
       m_bShowPassword(false),
-      m_aPort(rtl::OUString::createFromAscii("21"))
+      m_aPort(RTL_CONSTASCII_USTRINGPARAM("21"))
 {
     parse(url);  // can reset m_bShowPassword
 }
@@ -219,7 +220,7 @@ void FTPURL::parse(const rtl::OUString& url)
         if(buffer[0]) {
             if(strcmp(buffer,"..") == 0 &&
                m_aPathSegmentVec.size() &&
-               ! m_aPathSegmentVec.back().equalsAscii(".."))
+               ! m_aPathSegmentVec.back().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
                 m_aPathSegmentVec.pop_back();
             else if(strcmp(buffer,".") == 0)
                 ; // Ignore
@@ -259,7 +260,7 @@ rtl::OUString FTPURL::ident(bool withslash,bool internal) const
     rtl::OUStringBuffer bff;
     bff.appendAscii("ftp://");
 
-    if(!m_aUsername.equalsAscii("anonymous")) {
+    if(!m_aUsername.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("anonymous"))) {
         bff.append(m_aUsername);
 
         rtl::OUString aPassword,aAccount;
@@ -278,7 +279,7 @@ rtl::OUString FTPURL::ident(bool withslash,bool internal) const
     }
     bff.append(m_aHost);
 
-    if(!m_aPort.equalsAscii("21"))
+    if(!m_aPort.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("21")))
         bff.append(sal_Unicode(':'))
             .append(m_aPort)
             .append(sal_Unicode('/'));
@@ -305,7 +306,7 @@ rtl::OUString FTPURL::parent(bool internal) const
 
     bff.appendAscii("ftp://");
 
-    if(!m_aUsername.equalsAscii("anonymous")) {
+    if(!m_aUsername.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("anonymous"))) {
         bff.append(m_aUsername);
 
         rtl::OUString aPassword,aAccount;
@@ -324,7 +325,7 @@ rtl::OUString FTPURL::parent(bool internal) const
 
     bff.append(m_aHost);
 
-    if(!m_aPort.equalsAscii("21"))
+    if(!m_aPort.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("21")))
         bff.append(sal_Unicode(':'))
             .append(m_aPort)
             .append(sal_Unicode('/'));
@@ -343,7 +344,7 @@ rtl::OUString FTPURL::parent(bool internal) const
 
     if(!last.getLength())
         bff.appendAscii("..");
-    else if(last.equalsAscii(".."))
+    else if(last.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
         bff.append(last).appendAscii("/..");
 
     bff.append(m_aType);
@@ -405,7 +406,7 @@ namespace ftp {
         // Setting username:password
 #define SET_USER_PASSWORD(username,password)                      \
    rtl::OUString combi(username  +                                \
-                       rtl::OUString::createFromAscii(":") +      \
+                       rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")) +      \
                        password);                                 \
    rtl::OString aUserPsswd(combi.getStr(),                        \
                            combi.getLength(),                     \
@@ -507,8 +508,8 @@ std::vector<FTPDirentry> FTPURL::list(
         }
         aDirEntry.m_aName = aDirEntry.m_aName.trim();
         if(osKind != int(FTP_UNKNOWN) &&
-           !aDirEntry.m_aName.equalsAscii("..") &&
-           !aDirEntry.m_aName.equalsAscii(".")) {
+           !aDirEntry.m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")) &&
+           !aDirEntry.m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))) {
             aDirEntry.m_aURL = viewurl + encodePathSegment(aDirEntry.m_aName);
 
             sal_Bool isDir =
@@ -555,7 +556,7 @@ rtl::OUString FTPURL::net_title() const
 
         if(try_more &&
            1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-            url += rtl::OUString::createFromAscii("/");  // add end-slash
+            url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));  // add end-slash
         else if(!try_more &&
                 1+url.lastIndexOf(sal_Unicode('/')) == url.getLength())
             url = url.copy(0,url.getLength()-1);         // remove end-slash
@@ -573,11 +574,11 @@ rtl::OUString FTPURL::net_title() const
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
             sal_Int32 index1 = aNetTitle.lastIndexOf(
-                rtl::OUString::createFromAscii("257"));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("257")));
             index1 = 1+aNetTitle.indexOf(sal_Unicode('"'),index1);
             sal_Int32 index2 = aNetTitle.indexOf(sal_Unicode('"'),index1);
             aNetTitle = aNetTitle.copy(index1,index2-index1);
-            if(!aNetTitle.equalsAscii("/")) {
+            if(!aNetTitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
                 index1 = aNetTitle.lastIndexOf(sal_Unicode('/'));
                 aNetTitle = aNetTitle.copy(1+index1);
             }
@@ -601,7 +602,7 @@ rtl::OUString FTPURL::net_title() const
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
                 // must be root
-                aNetTitle = rtl::OUString::createFromAscii("/");
+                aNetTitle = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             try_more = false;
         }
 
@@ -623,15 +624,15 @@ FTPDirentry FTPURL::direntry() const
     FTPDirentry aDirentry;
 
     aDirentry.m_aName = nettitle;                 // init aDirentry
-    if(nettitle.equalsAscii("/") ||
-       nettitle.equalsAscii(".."))
+    if(nettitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/")) ||
+       nettitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
         aDirentry.m_nMode = INETCOREFTP_FILEMODE_ISDIR;
     else
         aDirentry.m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
 
     aDirentry.m_nSize = 0;
 
-    if(!nettitle.equalsAscii("/")) {
+    if(!nettitle.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
         // try to open the parent directory
         FTPURL aURL(parent(),m_pFCP);
 
@@ -736,7 +737,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString::createFromAscii("/");
+        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -776,7 +777,7 @@ rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString::createFromAscii("/");
+        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -784,7 +785,7 @@ rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
     if(err != CURLE_OK)
         throw curl_exception(err);
     else if(m_aPathSegmentVec.size() &&
-            !m_aPathSegmentVec.back().equalsAscii(".."))
+            !m_aPathSegmentVec.back().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")))
         m_aPathSegmentVec.back() = encodePathSegment(NewTitle);
     return OldTitle;
 }
@@ -827,7 +828,7 @@ void FTPURL::del() const
 
     rtl::OUString url(parent(true));
     if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += rtl::OUString::createFromAscii("/");
+        url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -836,3 +837,4 @@ void FTPURL::del() const
         throw curl_exception(err);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

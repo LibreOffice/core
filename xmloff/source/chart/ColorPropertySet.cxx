@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,7 +156,7 @@ void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aP
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -164,7 +165,7 @@ void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -173,7 +174,7 @@ void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* Pr
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -182,7 +183,7 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -223,3 +224,5 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
 
 } //  namespace chart
 } //  namespace xmloff
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

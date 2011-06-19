@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_MASTERPASSWORDDLG_HRC
 #include <masterpassworddlg.hrc>
-#endif
 #include <masterpassworddlg.hxx>
 
 // MasterPasswordDialog---------------------------------------------------
@@ -78,3 +75,4 @@ MasterPasswordDialog::MasterPasswordDialog
     aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

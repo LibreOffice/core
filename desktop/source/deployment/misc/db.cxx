@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,7 +152,6 @@ int Db::del(Dbt *key, u_int32_t flags)
     if ((err = db->del(db, 0, key, flags)) != 0) {
         // DB_NOTFOUND is a "normal" return, so should not be
         // thrown as an error
-        //
         if (err != DB_NOTFOUND) {
             db_internal::check_error(err, "Db::del");
             return (err);
@@ -270,3 +270,4 @@ void db_internal::raise_error(int dberr, const char * where)
 //----------------------------------------------------------------------------
 } // namespace ecomp
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 
     delete m_pNamesOfChildren;
@@ -265,8 +266,7 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !rName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "ResultDataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "ResultDataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -326,8 +326,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
 
             if ( !rName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "ResultDataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "ResultDataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -439,7 +438,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
                 m_pImpl->m_xContent->getIdentifier()->getContentIdentifier(),
                 *pNamesOfChildren ) )
         {
-            OSL_ENSURE( false, "Got no list of children!" );
+            OSL_FAIL( "Got no list of children!" );
             m_pImpl->m_bThrowException = sal_True;
             return false;
         }
@@ -461,8 +460,10 @@ ResultSetDataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     aURL += aName;
     return aURL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

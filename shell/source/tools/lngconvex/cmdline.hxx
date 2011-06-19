@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _CMDLINE_HXX_
 #define _CMDLINE_HXX_
 
@@ -11,17 +12,13 @@ class CommandLine
 {
 public:
 
-    //################################
     // Creation
-    //################################
 
 
     CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix = std::string("-"));
 
 
-    //################################
     // Query
-    //################################
 
 
     /** Return the argument count
@@ -69,9 +66,7 @@ public:
     std::string get_arg(const std::string& ArgumentName) const;
 
 
-    //################################
     // Command
-    //################################
 
 
     /** Set the prefix used to identify arguments in
@@ -102,3 +97,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

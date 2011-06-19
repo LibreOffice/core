@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -366,25 +367,26 @@ Window* MediaWindow::getWindow() const
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
-    static const char* pFilters[] = {   "AIF Audio", "aif;aiff",
-                                        "AU Audio", "au",
-                                        "AVI", "avi",
-                                        "CD Audio", "cda",
-                                        "Matroska Media", "mkv",
-                                        "MIDI Audio", "mid;midi",
-                                        "MPEG Audio", "mp2;mp3;mpa",
-                                        "MPEG Video", "mpg;mpeg;mpv;mp4",
-                                        "Ogg bitstream", "ogg",
-                                        "Quicktime Video", "mov",
-                                        "Vivo Video", "viv",
-                                        "WAVE Audio", "wav" };
+    static const char* pFilters[] = { "AIF Audio", "aif;aiff",
+                                      "AU Audio", "au",
+                                      "AVI", "avi",
+                                      "CD Audio", "cda",
+                                      "FLAC Audio", "flac",
+                                      "Matroska Media", "mkv",
+                                      "MIDI Audio", "mid;midi",
+                                      "MPEG Audio", "mp2;mp3;mpa",
+                                      "MPEG Video", "mpg;mpeg;mpv;mp4",
+                                      "Ogg bitstream", "ogg",
+                                      "Quicktime Video", "mov",
+                                      "Vivo Video", "viv",
+                                      "WAVE Audio", "wav",
+                                      "WebM Video", "webm" };
 
-    unsigned int i;
-    for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
+    for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString::createFromAscii( pFilters[ i ] ),
-                                        ::rtl::OUString::createFromAscii( pFilters[ i + 1 ] ) ) );
+                                        ::rtl::OUString::createFromAscii(pFilters[i]),
+                                        ::rtl::OUString::createFromAscii(pFilters[i+1]) ) );
     }
 }
 
@@ -469,10 +471,8 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
         {
             try
             {
-                sal_Bool bIsJavaBasedMediaWindow;
                 uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
-                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ),
-                                                            bIsJavaBasedMediaWindow ) );
+                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
 
                 if( xPlayer.is() )
                 {
@@ -517,8 +517,7 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
 
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const ::rtl::OUString& rURL )
 {
-    sal_Bool bJavaBased = sal_False;
-    return priv::MediaWindowImpl::createPlayer( rURL, bJavaBased );
+    return priv::MediaWindowImpl::createPlayer( rURL );
 }
 
 // -------------------------------------------------------------------------
@@ -571,3 +570,5 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const ::rtl::OUStrin
 }
 
 } // namespace avemdia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

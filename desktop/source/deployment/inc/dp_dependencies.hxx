@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 
+#include "unotools/configmgr.hxx"
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -42,6 +44,14 @@ namespace dp_misc { class DescriptionInfoset; }
 namespace rtl { class OUString; }
 
 namespace dp_misc {
+
+struct BrandName : public ::rtl::StaticWithInit< ::rtl::OUString, BrandName > {
+    const ::rtl::OUString operator () () {
+        return ::utl::ConfigManager::GetDirectConfigProperty(
+            ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();
+    }
+};
+
 
 /**
    Dependency handling.
@@ -80,3 +90,5 @@ namespace Dependencies {
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

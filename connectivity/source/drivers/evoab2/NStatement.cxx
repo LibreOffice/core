@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,8 +208,8 @@ OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
     ::rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
     ::rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
 
-    return e_book_query_field_test( e_contact_field_id( sColumnName ),
-                                    eTest, sMatch );
+    return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
+                                    eTest, sMatch.getStr() );
 }
 
 // -------------------------------------------------------------------------
@@ -412,7 +413,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
-                                  rtl::OUString::createFromAscii( "" ) );
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
@@ -427,7 +428,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
         else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
-        {   // One occurance of '%'  matches...
+        {   // One occurrence of '%'  matches...
             if ( aMatchString.indexOf ( WILDCARD ) == 0 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
@@ -476,10 +477,10 @@ rtl::OUString OCommonStatement::getTableName()
                     OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,NULL);
             }
             else
-                OSL_ENSURE( false,  "odd table layout" );
+                OSL_FAIL( "odd table layout" );
         }
         else
-                OSL_ENSURE( false,  "unusual table layout" );
+                OSL_FAIL( "unusual table layout" );
     }
     return aTableName;
 }
@@ -601,7 +602,7 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const ::rtl::OUString& _rS
 
     // a postcondition of this method is that we properly determined the SELECT columns
     aData.xSelectColumns = m_aSQLIterator.getSelectColumns();
-    if ( !aData.xSelectColumns.isValid() )
+    if ( !aData.xSelectColumns.is() )
         m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
     return aData;
@@ -680,3 +681,5 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) t
 }
 
 } } // namespace ::connectivity::evoab
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

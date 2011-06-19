@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,20 @@
 #if ! defined INCLUDED_DP_LIB_CONTAINER_H
 #define INCLUDED_DP_LIB_CONTAINER_H
 
-#include "rtl/ustring.hxx"
-#include "xmlscript/xmllib_imexp.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include <com/sun/star/uno/Reference.hxx>
 
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class XComponentContext;
+    }
+    namespace ucb {
+        class XCommandEnvironment;
+    }
+}}}
+
+namespace rtl {
+    class OUString;
+}
 
 namespace css = ::com::sun::star;
 
@@ -55,3 +65,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

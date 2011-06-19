@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _SVX_CTREDLIN_HXX
 #define _SVX_CTREDLIN_HXX
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <vcl/lstbox.hxx>
@@ -57,7 +54,7 @@
 #define FLT_DATE_SAVE       5
 
 
-//  Struct fuer Datums-Sortierung
+//  Struct for sorting data
 
 class SVX_DLLPUBLIC RedlinData
 {
@@ -76,7 +73,7 @@ public:
         virtual     ~SvxRedlinEntry();
 };
 
-// Klasse fuer die Darstellung von schriftabhaengigen Strings
+// Class for the representation of Strings depending on the font
 class SvLBoxColorString : public SvLBoxString
 {
 private:
@@ -147,7 +144,7 @@ public:
     sal_Bool            IsValidCalcEntry(const String& ,RedlinData *pUserData);
     sal_Bool            IsValidWriterEntry(const String& ,RedlinData *pUserData);
 
-    // keine NULL-Ptr. ueberpruefung {
+    // no NULL-pointer checking {
     sal_Bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
     sal_Bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
     sal_Bool            IsValidComment(const String* pComment);
@@ -250,13 +247,13 @@ public:
     String          GetComment()const;
 
 
-    // Methoden fuer Calc {
+    // Methods for Calc {
     void            SetRange(const String& rString);
     String          GetRange() const;
     void            HideRange(sal_Bool bHide=sal_True);
     void            DisableRange(sal_Bool bFlag=sal_True);
     void            SetFocusToRange();
-    // } Methoden fuer Calc
+    // } Methods for Calc
 
     void            HideClocks(sal_Bool bHide=sal_True);
     void            DisableRef(sal_Bool bFlag);
@@ -293,7 +290,7 @@ public:
     const Link&     GetModifyCommentHdl() const { return aModifyComLink; }
 
 
-    // Methoden fuer Calc {
+    // Methods for Calc {
     void            SetModifyRangeHdl( const Link& rLink ) { aModifyRefLink = rLink; }
     const Link&     GetModifyRangeHdl() const { return aModifyRefLink; }
 
@@ -303,7 +300,7 @@ public:
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
 
-    // } Methoden fuer Calc
+    // } Methods for Calc
 };
 
 
@@ -429,3 +426,4 @@ public:
 
 #endif // _SVX_CTREDLIN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

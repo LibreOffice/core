@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventhelper.cxx,v $
- * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
+#include <sal/macros.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -46,11 +45,17 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 
@@ -58,12 +63,13 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/XFixedText.hpp> //liuchen 2009-6-5
-#include <com/sun/star/awt/XTextComponent.hpp> //liuchen 2009-6-5
-#include <com/sun/star/awt/XComboBox.hpp> //liuchen 2009-6-18
-#include <com/sun/star/awt/XRadioButton.hpp> //liuchen 2009-7-30
+#include <com/sun/star/awt/XFixedText.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XComboBox.hpp>
+#include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
 
-#include <msforms/ReturnInteger.hpp>
+#include "vbamsformreturntypes.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <basic/sbstar.hxx>
@@ -71,6 +77,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 
 
 
@@ -82,96 +89,33 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
 #include <set>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#define ASYNC 0
+
+// primitive support for asynchronous handling of
+// events from controls ( all event will be processed asynchronously
+// in the application thread )
+#if ASYNC
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))//liuchen 2009-6-8
+#define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
-const static rtl::OUString DELIM = rtl::OUString::createFromAscii( "::" );
+const static rtl::OUString DELIM(RTL_CONSTASCII_USTRINGPARAM("::"));
 const static sal_Int32 DELIMLEN = DELIM.getLength();
-
-#if 0
-void dumpListeners( const Reference< beans::XIntrospection >& xIntrospection, const Reference<XInterface>& xIfc)
-{
-    Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
-    if ( xIntrospection.is() )
-    {
-        xIntrospectionAccess = xIntrospection->inspect(
-            makeAny( xIfc ) );
-        Sequence< Type > aControlListeners =
-            xIntrospectionAccess->getSupportedListeners();
-        sal_Int32 nLength = aControlListeners.getLength();
-
-        for ( sal_Int32 i = 0; i< nLength; ++i )
-        {
-            Type& listType = aControlListeners[ i ];
-            rtl::OUString sFullTypeName = listType.getTypeName();
-            rtl::OUString sTypeName = listType.getTypeName();
-            sal_Int32 lastDotIndex = -1;
-            if ( ( lastDotIndex = sFullTypeName.lastIndexOf( '.' ) ) > -1 )
-            {
-                sTypeName = sFullTypeName.copy( lastDotIndex + 1 );
-            }
-            Sequence< ::rtl::OUString > sMeths = comphelper::getEventMethodsForType( listType );
-            sal_Int32 sMethLen = sMeths.getLength();
-            for ( sal_Int32 j=0 ; j < sMethLen; ++j )
-            {
-                OSL_TRACE("**Listener [%d] Type[%s] Method[%s]",j,
-                    rtl::OUStringToOString( sTypeName,
-                        RTL_TEXTENCODING_UTF8 ).getStr(),
-                    rtl::OUStringToOString( sMeths[ j ],
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-            }
-        }
-
-    }
-}
-
-void dumpEvent( const ScriptEvent& evt )
-{
-    OSL_TRACE("dumpEvent: Source %s",
-        rtl::OUStringToOString( comphelper::anyToString( makeAny(evt.Source)),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ScriptType %s",
-        rtl::OUStringToOString( evt.ScriptType,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ScriptCode %s",
-        rtl::OUStringToOString( evt.ScriptCode,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: ListenerType %s",
-        rtl::OUStringToOString( evt.ListenerType.getTypeName(),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: Listener methodname %s",
-        rtl::OUStringToOString( evt.MethodName,
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    OSL_TRACE("dumpEvent: arguments;");
-    sal_Int32 nLen = evt.Arguments.getLength();
-    for ( sal_Int32 index=0; index < nLen; ++index )
-    {
-        OSL_TRACE("\t [%d] %s", index,
-        rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[ index ] ),
-            RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    }
-}
-
-#endif
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
@@ -182,6 +126,14 @@ bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 }
 
 bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
+{
+    if ( !( params.getLength() > 0 ) ||
+        !( params[ 0 ] >>= evt ) )
+        return false;
+    return true;
+}
+
+bool isFocusEventOk( awt::FocusEvent& evt, const Sequence< Any >& params )
 {
     if ( !( params.getLength() > 0 ) ||
         !( params[ 0 ] >>= evt ) )
@@ -232,9 +184,14 @@ Sequence< Any > ooKeyPressedToVBAKeyPressed( const Sequence< Any >& params )
 
     translatedParams.realloc(1);
 
-    msforms::ReturnInteger keyCode;
-    keyCode.Value = evt.KeyCode;
-    translatedParams[0] <<= keyCode;
+    //The VBA events such as ComboBox_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger) may cause an error because
+    //the original input parameter data structure -- msforms::ReturnInteger -- is a struct, it cannot support default value.
+    //So the newly defined VbaReturnIntege class is used here to support default value.
+    VbaReturnInteger* pKeyCode = new VbaReturnInteger();
+    pKeyCode->Value = evt.KeyChar;
+    ::uno::Reference< msforms::XReturnInteger > xInteger =
+        static_cast< ::uno::Reference< msforms::XReturnInteger > > (pKeyCode);
+    translatedParams[0] <<= xInteger;
     return  translatedParams;
 }
 
@@ -248,19 +205,41 @@ Sequence< Any > ooKeyPressedToVBAKeyUpDown( const Sequence< Any >& params )
 
     translatedParams.realloc(2);
 
-    msforms::ReturnInteger keyCode;
-    sal_Int8 shift = sal::static_int_cast<sal_Int8>( evt.Modifiers );
+    //The VBA events such as ComboBox_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger) may cause an error because
+    //the original input parameter data structure -- msforms::ReturnInteger -- is a struct, it cannot support default value.
+    //So the newly defined VbaReturnIntege class is used here to support default value.
+    VbaReturnInteger* pKeyCode = new VbaReturnInteger();
+    sal_Int8 shift = evt.Modifiers;
 
-    // #TODO check whether values from OOO conform to values generated from vba
-    keyCode.Value = evt.KeyCode;
-    translatedParams[0] <<= keyCode;
+    pKeyCode->Value = evt.KeyChar;
+    ::uno::Reference< msforms::XReturnInteger > xInteger =  static_cast< ::uno::Reference< msforms::XReturnInteger > > (pKeyCode);
+    translatedParams[0] <<= xInteger;
     translatedParams[1] <<= shift;
     return  translatedParams;
 }
 
+Sequence< Any > ooFocusLostToVBAExit( const Sequence< Any >& params )
+{
+    Sequence< Any > translatedParams;
+    awt::FocusEvent evt;
+
+    if ( !isFocusEventOk( evt, params ) )
+        return Sequence< Any >();
+
+    translatedParams.realloc(1);
+
+    VbaReturnBoolean* pCancel = new VbaReturnBoolean();
+
+    ::uno::Reference< msforms::XReturnBoolean > xBoolean=
+        static_cast< ::uno::Reference< msforms::XReturnBoolean > > (pCancel);
+    translatedParams[0] <<= xBoolean;
+    return  translatedParams;
+}
+
+
 typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 
-//liuchen 2009-6-23
+
 //expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
 {
@@ -271,12 +250,12 @@ struct TranslateInfo
 };
 
 
-typedef std::hash_map< rtl::OUString,
+typedef boost::unordered_map< rtl::OUString,
 std::list< TranslateInfo >,
 ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventInfoHash;
 
-//liuchen 2009-6-23
+
 struct TranslatePropMap
 {
     rtl::OUString sEventInfo;   //OO event name
@@ -287,6 +266,7 @@ bool ApproveAll(const ScriptEvent& evt, void* pPara); //allow all types of contr
 bool ApproveType(const ScriptEvent& evt, void* pPara); //certain types of controls should execute the event, those types are given by pPara
 bool DenyType(const ScriptEvent& evt, void* pPara);    //certain types of controls should not execute the event, those types are given by pPara
 bool DenyMouseDrag(const ScriptEvent& evt, void* pPara); //used for VBA MouseMove event when "Shift" key is pressed
+bool DenyKeys(const ScriptEvent& evt, void* pPara);  //For some keys, press them will cause Symphony keyPressed event, but will not cause any events in Excel, so deny these key events
 
 struct TypeList
 {
@@ -294,28 +274,30 @@ struct TypeList
     int nListLength;
 };
 
-Type typeXFixedText = GET_TYPE(awt::XFixedText)
-Type typeXTextComponent = GET_TYPE(awt::XTextComponent)
-Type typeXComboBox = GET_TYPE(awt::XComboBox)
-Type typeXRadioButton = GET_TYPE(awt::XRadioButton)
+Type typeXFixedText = GET_TYPE(awt::XFixedText);
+Type typeXTextComponent = GET_TYPE(awt::XTextComponent);
+Type typeXComboBox = GET_TYPE(awt::XComboBox);
+Type typeXRadioButton = GET_TYPE(awt::XRadioButton);
+Type typeXListBox = GET_TYPE(awt::XListBox);
 
 
 TypeList fixedTextList = {&typeXFixedText, 1};
 TypeList textCompList = {&typeXTextComponent, 1};
 TypeList radioButtonList = {&typeXRadioButton, 1};
 TypeList comboBoxList = {&typeXComboBox, 1};
+TypeList listBoxList = {&typeXListBox, 1};
 
 //this array stores the OO event to VBA event translation info
 static TranslatePropMap aTranslatePropMap_Impl[] =
 {
+    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },
     // actionPerformed ooo event
     { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Click"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("actionPerformed"), { MAP_CHAR_LEN("_Change"), NULL, DenyType, (void*)(&radioButtonList) } },  //liuchen 2009-7-30, OptionalButton_Change event is not the same as OptionalButton_Click event
-
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } },
     // itemStateChanged ooo event
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },  //liuchen, add to support VBA ComboBox_Click event
-    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Change"), NULL, ApproveType, (void*)(&radioButtonList) } }, //liuchen 2009-7-30, OptionalButton_Change event should be triggered when the button state is changed
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&comboBoxList) } },
 
+    { MAP_CHAR_LEN("itemStateChanged"), { MAP_CHAR_LEN("_Click"), NULL, ApproveType, (void*)(&listBoxList) } },
     // changed ooo event
     { MAP_CHAR_LEN("changed"), { MAP_CHAR_LEN("_Change"), NULL, ApproveAll, NULL } },
 
@@ -324,7 +306,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // focusLost ooo event
     { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_LostFocus"), NULL, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), NULL, ApproveType, (void*)(&textCompList) } }, //liuchen, add to support VBA TextBox_Exit event
+    { MAP_CHAR_LEN("focusLost"), { MAP_CHAR_LEN("_Exit"), ooFocusLostToVBAExit, ApproveType, (void*)(&textCompList) } },
 
     // adjustmentValueChanged ooo event
     { MAP_CHAR_LEN("adjustmentValueChanged"), { MAP_CHAR_LEN("_Scroll"), NULL, ApproveAll, NULL } },
@@ -337,7 +319,7 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { MAP_CHAR_LEN("keyReleased"), { MAP_CHAR_LEN("_KeyUp"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
 
     // mouseReleased ooo event
-    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } }, //liuchen, add to support VBA Label_Click event
+    { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_Click"), ooMouseEvtToVBAMouseEvt, ApproveType, (void*)(&fixedTextList) } },
     { MAP_CHAR_LEN("mouseReleased"), { MAP_CHAR_LEN("_MouseUp"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
 
     // mousePressed ooo event
@@ -346,11 +328,11 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
 
     // mouseMoved ooo event
     { MAP_CHAR_LEN("mouseMoved"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } }, //liuchen, add to support VBA MouseMove event when the "Shift" key is pressed
+    { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } },
 
     // keyPressed ooo event
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyUpDown, DenyKeys, NULL } }
 };
 
 EventInfoHash& getEventTransInfo()
@@ -361,7 +343,7 @@ EventInfoHash& getEventTransInfo()
     {
         rtl::OUString sEventInfo = MAP_CHAR_LEN("");
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
-        int nCount = sizeof(aTranslatePropMap_Impl) / sizeof(aTranslatePropMap_Impl[0]);
+        int nCount = SAL_N_ELEMENTS(aTranslatePropMap_Impl);
 
         int i = 0;
         while (i < nCount)
@@ -380,7 +362,7 @@ EventInfoHash& getEventTransInfo()
     }
     return eventTransInfo;
 }
-//liuchen 2009-6-23 end
+
 
 // Helper class
 
@@ -429,8 +411,8 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = rtl::OUString::createFromAscii(
-            "VBAInterop" );
+        evtDesc.ScriptType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "VBAInterop" ));
         return true;
     }
     return false;
@@ -458,10 +440,7 @@ ScriptEventHelper::getEventListeners()
         Reference< beans::XIntrospection > xIntrospection(
             xMFac->createInstanceWithContext( rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection"  ) ), m_xCtx ), UNO_QUERY );
-#if 0
-        dumpListeners( xIntrospection, m_xControl );
-        dumpListeners( xIntrospection, m_xControl->getModel() );
-#endif
+
         Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
     if  ( xIntrospection.is() )
     {
@@ -540,18 +519,18 @@ public:
 
     virtual void SAL_CALL insertByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
 
     }
     virtual void SAL_CALL removeByName( const ::rtl::OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
 
     }
 
@@ -567,7 +546,7 @@ public:
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
-typedef std::hash_map< rtl::OUString, Any, ::rtl::OUStringHash,
+typedef boost::unordered_map< rtl::OUString, Any, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > EventSupplierHash;
 
     EventSupplierHash m_hEvents;
@@ -632,7 +611,7 @@ private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
 
-typedef ::cppu::WeakImplHelper2< XScriptListener, lang::XInitialization > EventListener_BASE;
+typedef ::cppu::WeakImplHelper3< XScriptListener, util::XCloseListener, lang::XInitialization > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
 #define EVENTLSTNR_PROPERTY_MODEL            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) )
@@ -653,6 +632,9 @@ public:
     // XScriptListener
     virtual void SAL_CALL firing(const ScriptEvent& evt) throw(RuntimeException);
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException);
+    // XCloseListener
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException);
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
     // XInitialization
@@ -664,6 +646,25 @@ public:
     DECLARE_XTYPEPROVIDER()
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
+        if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
+        {
+            uno::Reference< frame::XModel > xModel( rValue, uno::UNO_QUERY );
+            if( xModel != m_xModel)
+            {
+                // Remove the listener from the old XCloseBroadcaster.
+                uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
+                if (xCloseBroadcaster.is())
+                {
+                    xCloseBroadcaster->removeCloseListener( this );
+                }
+                // Add the listener into the new XCloseBroadcaster.
+                xCloseBroadcaster = uno::Reference< util::XCloseBroadcaster >( xModel, uno::UNO_QUERY );
+                if (xCloseBroadcaster.is())
+                {
+                    xCloseBroadcaster->addCloseListener( this );
+                }
+            }
+        }
         OPropertyContainer::setFastPropertyValue( nHandle, rValue );
     if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
             setShellFromModel();
@@ -677,21 +678,25 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const;
 
 private:
+#if ASYNC
+    DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
+#endif
     void setShellFromModel();
     void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=NULL ) throw( RuntimeException );
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
+    sal_Bool m_bDocClosed;
     SfxObjectShell* mpShell;
-
+    rtl::OUString msProject;
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
-OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), mpShell( 0 )
+OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(sal_False), mpShell( 0 )
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-
+    msProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 }
 
 void
@@ -709,6 +714,14 @@ EventListener::setShellFromModel()
         }
         pShell = SfxObjectShell::GetNext( *pShell );
     }
+    // set ProjectName from model
+    try
+    {
+        uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
+        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+        msProject = xVBAMode->getProjectName();
+    }
+    catch ( uno::Exception& ) {}
 }
 
 //XEventListener
@@ -722,8 +735,38 @@ EventListener::disposing(const lang::EventObject&)  throw( RuntimeException )
 void SAL_CALL
 EventListener::firing(const ScriptEvent& evt) throw(RuntimeException)
 {
+#if ASYNC
+    // needs some logic to check if the event handler is oneway or not
+    // if not oneway then firing_Impl otherwise... as below
+    acquire();
+    Application::PostUserEvent( LINK( this, EventListener, OnAsyncScriptEvent ), new ScriptEvent( evt ) );
+#else
     firing_Impl( evt );
+#endif
 }
+
+#if ASYNC
+IMPL_LINK( EventListener, OnAsyncScriptEvent, ScriptEvent*, _pEvent )
+{
+    if ( !_pEvent )
+        return 1L;
+
+    {
+        // #FIXME if we enable ASYNC we probably need something like
+        // below
+        //::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+        //if ( !impl_isDisposed_nothrow() )
+        //  impl_doFireScriptEvent_nothrow( aGuard, *_pEvent, NULL );
+        firing_Impl( *_pEvent, NULL );
+    }
+
+    delete _pEvent;
+    // we acquired ourself immediately before posting the event
+    release();
+    return 0L;
+ }
+#endif
 
 Any SAL_CALL
 EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::InvocationTargetException, RuntimeException)
@@ -731,6 +774,24 @@ EventListener::approveFiring(const ScriptEvent& evt) throw(reflection::Invocatio
     Any ret;
     firing_Impl( evt, &ret );
     return ret;
+}
+
+// XCloseListener
+void SAL_CALL
+EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
+{
+    //Nothing to do
+}
+
+void SAL_CALL
+EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+{
+    m_bDocClosed = sal_True;
+    uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
+    if (xCloseBroadcaster.is())
+    {
+        xCloseBroadcaster->removeCloseListener( this );
+    }
 }
 
 // XInitialization
@@ -776,7 +837,7 @@ EventListener::getPropertySetInfo(  ) throw (RuntimeException)
     return xInfo;
 }
 
-//liuchen 2009-6-23
+
 //decide if the control should execute the event
 bool ApproveAll(const ScriptEvent&, void* )
 {
@@ -835,35 +896,76 @@ bool DenyMouseDrag(const ScriptEvent& evt, void* )
     }
 }
 
+//For some keys, press them will cause Symphony keyPressed event, but will not cause any events in Excel, so deny these key events
+bool DenyKeys(const ScriptEvent& evt, void* /*pPara*/)
+{
+    awt::KeyEvent aEvent;
+    evt.Arguments[ 0 ] >>= aEvent;
+    if (aEvent.KeyChar == 0 || aEvent.KeyChar == 8)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
 
 
-//liuchen 2009-6-23
+
+
 // EventListener
 
 void
-EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(RuntimeException)
+EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeException)
 {
     OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
     static const ::rtl::OUString vbaInterOp =
-        ::rtl::OUString::createFromAscii("VBAInterop");
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop"));
 
     // let default handlers deal with non vba stuff
     if ( !evt.ScriptType.equals( vbaInterOp ) )
         return;
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
+    OSL_TRACE("evt.MethodName is  %s", rtl::OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Argument[0] is  %s", rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Getting Control");
-    uno::Reference< awt::XControl > xControl( aEvent.Source, uno::UNO_QUERY_THROW );
-    OSL_TRACE("Getting properties");
-    uno::Reference< beans::XPropertySet > xProps( xControl->getModel(), uno::UNO_QUERY_THROW );
-
     rtl::OUString sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm") );
     OSL_TRACE("Getting Name");
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
     if ( !xDlg.is() )
-        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sName;
+    {
+        OSL_TRACE("Getting Control");
+        // evt.Source is
+        // a) Dialog
+        // b) xShapeControl ( from api (sheet control) )
+        // c) eventmanager ( I guess )
+        // d) vba control ( from api also )
+        uno::Reference< drawing::XControlShape > xCntrlShape( evt.Source, uno::UNO_QUERY );
+        uno::Reference< awt::XControl > xControl( aEvent.Source, uno::UNO_QUERY );
+        if ( xCntrlShape.is() )
+        {
+            // for sheet controls ( that fire from the api ) we don't
+            // have the real control ( thats only available from the view )
+            // api code creates just a control instance that is transferred
+            // via aEvent.Arguments[ 0 ] that control though has no
+            // info like name etc.
+            OSL_TRACE("Got control shape");
+            uno::Reference< container::XNamed > xName( xCntrlShape->getControl(), uno::UNO_QUERY_THROW );
+            OSL_TRACE("Got xnamed ");
+            sName = xName->getName();
+        }
+        else
+        {
+            // Userform control ( fired from the api or from event manager )
+            uno::Reference< beans::XPropertySet > xProps;
+            OSL_TRACE("Getting properties");
+            xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
+            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sName;
+        }
+    }
     //dumpEvent( evt );
     EventInfoHash& infos = getEventTransInfo();
     EventInfoHash::const_iterator eventInfo_it = infos.find( evt.MethodName );
@@ -885,27 +987,55 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
         std::list< TranslateInfo >::const_iterator txInfo =
             eventInfo_it->second.begin();
         std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
-        rtl::OUString sMacroLoc = rtl::OUString::createFromAscii("Standard.").concat( evt.ScriptCode ).concat( rtl::OUString::createFromAscii(".") );
 
-        StarBASIC* pBasic = mpShell->GetBasic();
-        SbModule* pModule = pBasic->FindModule( evt.ScriptCode );
-        for ( ; pModule && txInfo != txInfo_end; ++txInfo )
+        BasicManager* pBasicManager = mpShell->GetBasicManager();
+        rtl::OUString sProject;
+        rtl::OUString sScriptCode( evt.ScriptCode );
+    // dialogs pass their own library, presence of Dot determines that
+    if ( sScriptCode.indexOf( '.' ) == -1 )
+    {
+       //'Project' is a better default but I want to force failures
+       //rtl::OUString sMacroLoc(RTL_CONSTASCII_USTRINGPARAM("Project"));
+        sProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+
+        if ( pBasicManager->GetName().Len() > 0 )
+            sProject =  pBasicManager->GetName();
+    }
+    else
+    {
+        sal_Int32 nIndex = sScriptCode.indexOf( '.' );
+        sProject = sScriptCode.copy( 0, nIndex );
+        sScriptCode = sScriptCode.copy( nIndex + 1 );
+    }
+        rtl::OUString sMacroLoc = sProject;
+        sMacroLoc = sMacroLoc.concat(  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
+        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
+
+        OSL_TRACE("sMacroLoc is %s", rtl::OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
+        for ( ; txInfo != txInfo_end; ++txInfo )
         {
+            // If the document is closed, we should not execute macro.
+            if (m_bDocClosed)
+            {
+                break;
+            }
+
+            rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName );
             // see if we have a match for the handlerextension
             // where ScriptCode is methodname_handlerextension
-            rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName );
+            rtl::OUString sToResolve = sMacroLoc.concat( sTemp );
 
             OSL_TRACE("*** trying to invoke %s ",
-                rtl::OUStringToOString( sTemp, RTL_TEXTENCODING_UTF8 ).getStr() );
-            SbMethod* pMeth = static_cast< SbMethod* >( pModule->Find( sTemp, SbxCLASS_METHOD ) );
-            if ( pMeth )
+                rtl::OUStringToOString( sToResolve, RTL_TEXTENCODING_UTF8 ).getStr() );
+            ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
+            if ( aMacroResolvedInfo.mbFound )
             {
-                //liuchen 2009-6-8
+
                 if (! txInfo->ApproveRule(evt, txInfo->pPara) )
                 {
                     continue;
                 }
-                //liuchen 2009-6-8
+
                 // !! translate arguments & emulate events where necessary
                 Sequence< Any > aArguments;
                 if  ( (*txInfo).toVBA )
@@ -916,24 +1046,21 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
                 {
                     // call basic event handlers for event
 
-                    static rtl::OUString part1 = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
-                    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document");
-
                     // create script url
-                    rtl::OUString url = part1 + sMacroLoc + sTemp + part2;
+                    rtl::OUString url = aMacroResolvedInfo.msResolvedMacro;
 
-                    OSL_TRACE("script url = %s",
+                    OSL_TRACE("resolved script = %s",
                         rtl::OUStringToOString( url,
                             RTL_TEXTENCODING_UTF8 ).getStr() );
-                    Sequence< sal_Int16 > aOutArgsIndex;
-                    Sequence< Any > aOutArgs;
                     try
                     {
-                        if ( mpShell )
+                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error")) );
+                        if ( pRet )
+                            ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
+                        else
                         {
                             uno::Any aRet;
-                            mpShell->CallXScript( url,
-                                aArguments, aRet, aOutArgsIndex, aOutArgs, false );
+                            ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
                         }
                     }
                     catch ( uno::Exception& e )
@@ -1043,3 +1170,5 @@ namespace ooevtdescgen
         return Sequence< ::rtl::OUString >( &strName, 1 );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

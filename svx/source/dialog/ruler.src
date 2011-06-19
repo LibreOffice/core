@@ -65,8 +65,7 @@ Menu RID_SVXMN_RULER
         {
             Identifier = ID_FOOT ;
             Checkable = TRUE ;
-            /* ### ACHTUNG: Neuer Text in Resource? Fuﬂ : Fuò */
-            /* ### ACHTUNG: Neuer Text in Resource? Fuﬂ : Fuò */
+            /* ### ATTENTION: New text in Resource? Feet : Feet */
             Text [ en-US ] = "Foot" ;
         };
         MenuItem
@@ -86,6 +85,18 @@ Menu RID_SVXMN_RULER
             Identifier = ID_PICA ;
             Checkable = TRUE ;
             Text [ en-US ] = "Pica" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_CHAR ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Char" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_LINE ;
+            Checkable = TRUE ;
+            Text[ en-US ] = "Line" ;
         };
     };
 };

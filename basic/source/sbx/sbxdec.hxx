@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,16 +34,14 @@
 
 #undef WB_LEFT
 #undef WB_RIGHT
-#include <tools/prewin.h>
-}   // close extern "C" {
+
+#include <prewin.h>
+#include <postwin.h>
 
 #ifndef __MINGW32__
 #include <comutil.h>
 #endif
 #include <oleauto.h>
-
-extern "C" {    // reopen extern "C" {
-#include <tools/postwin.h>
 
 #endif
 #endif
@@ -120,3 +119,4 @@ public:
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

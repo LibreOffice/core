@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -475,7 +476,7 @@ SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
         }
     }
 
-    DBG_ERROR( "xmloff::getAnimationsEnumMap(), invalid map!" );
+    OSL_FAIL( "xmloff::getAnimationsEnumMap(), invalid map!" );
     return NULL;
 }
 
@@ -525,11 +526,11 @@ public:
 
     Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget ) const;
 
-    void convertPath( OUStringBuffer& sTmp, const Any& rPath );
-    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue );
-    void convertTiming( OUStringBuffer& sTmp, const Any& rTiming );
-    void convertSource( OUStringBuffer& sTmp, const Any& rSource );
-    void convertTarget( OUStringBuffer& sTmp, const Any& rTarget );
+    void convertPath( OUStringBuffer& sTmp, const Any& rPath ) const;
+    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
+    void convertTiming( OUStringBuffer& sTmp, const Any& rTiming ) const;
+    void convertSource( OUStringBuffer& sTmp, const Any& rSource ) const;
+    void convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const;
 
     void prepareValue( const Any& rValue );
 
@@ -554,7 +555,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
     }
 }
 
@@ -670,7 +671,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
     }
 
 }
@@ -751,7 +752,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
     }
     catch( Exception& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException catched!" );
     }
 }
 
@@ -993,12 +994,12 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         }
         break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), invalid AnimationNodeType!" );
         }
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException catched!" );
     }
 
     // if something goes wrong, its always a good idea to clear the attribute list
@@ -1063,7 +1064,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
         case AnimationNodeType::SEQ:    eElementToken = XML_SEQ; break;
         case AnimationNodeType::ITERATE:eElementToken = XML_ITERATE; break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), invalid TimeContainerType!" );
             return;
         }
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
@@ -1081,7 +1082,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException catched!" );
     }
 }
 
@@ -1346,7 +1347,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
     }
 }
 
@@ -1379,7 +1380,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
     }
 }
 
@@ -1407,7 +1408,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
     }
 }
 
@@ -1429,14 +1430,14 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException catched!" );
     }
 
     Reference< XInterface > xRef;
     return xRef;
 }
 
-void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath )
+void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath ) const
 {
     OUString aStr;
     rPath >>= aStr;
@@ -1444,7 +1445,7 @@ void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath
     sTmp = aStr;
 }
 
-void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue )
+void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const
 {
     if( !rValue.hasValue() )
         return;
@@ -1491,37 +1492,6 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         {
             if( rValue >>= aString )
             {
-                /*
-                const sal_Char* pSource[] = { "$X", "$Y", "$Width", "$Height", NULL };
-                const sal_Char* pDest[] = { "$x", "$y", "$width", "$height", NULL };
-                const sal_Int32 nLength[] = { 2, 2, 6, 7, 0 };
-
-                sal_Int32 nIndex = 0;
-                while( (nIndex = aString.indexOf( (sal_Unicode)'$', nIndex )) != -1  )
-                {
-                    const sal_Char** ps = pSource;
-                    const sal_Char** pd = pDest;
-                    const sal_Int32* pl = nLength;
-
-                    while( *ps )
-                    {
-                        if( aString.matchAsciiL( *ps, *pl, nIndex ) )
-                        {
-                            const OUString aNew( OUString::createFromAscii( *pd ) );
-                            aString = aString.replaceAt( nIndex, *pl, aNew );
-                            nIndex += aNew.getLength();
-                            break;
-                        }
-
-                        ps++;
-                        pd++;
-                        pl++;
-                    }
-
-                    if( *ps == 0 )
-                        nIndex++;
-                }
-                */
                 sTmp.append( aString );
             }
             else if( rValue.getValueType() == ::getCppuType((const double*)0) )
@@ -1530,7 +1500,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             }
             else
             {
-                DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
+                OSL_FAIL( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
             }
             return;
         }
@@ -1552,7 +1522,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_OPACITY:
         case XML_TRANSITIONFILTER:  nType = XML_TYPE_DOUBLE;                    break;
         default:
-            DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!" );
+            OSL_FAIL( "xmloff::AnimationsExporterImpl::convertValue(), invalid AttributeName!" );
             nType = XML_TYPE_STRING;
         }
 
@@ -1563,24 +1533,9 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             sTmp.append( aString );
         }
     }
-
-/*
-    if( rValue.getValueType() == ::getCppuType((const double*)0) )
-    {
-        sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
-    }
-    else if( rValue.getValueType() == ::getCppuType((const OUString*)0) )
-    {
-        sTmp.append( *(static_cast< const OUString* >( rValue.getValue() )) );
-    }
-    else
-    {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
-    }
-*/
 }
 
-void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue )
+void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue ) const
 {
     if( !rValue.hasValue() )
         return;
@@ -1643,16 +1598,16 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     }
     else
     {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
+        OSL_FAIL( "xmloff::AnimationsExporterImpl::convertTiming(), invalid value type!" );
     }
 }
 
-void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource )
+void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource ) const
 {
     convertTarget( sTmp, rSource );
 }
 
-void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget )
+void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const
 {
     if( !rTarget.hasValue() )
         return;
@@ -1739,7 +1694,7 @@ void AnimationsExporter::prepare( Reference< XAnimationNode > xRootNode )
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporter::prepare(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::prepare(), exception catched" );
     }
 }
 
@@ -1775,8 +1730,10 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
+        OSL_FAIL( "xmloff::AnimationsExporter::exportAnimations(), exception catched" );
     }
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
 #define __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
@@ -86,3 +87,5 @@ class DispatchRecorder
 } // namespace framework
 
 #endif // define __FRAMEWORK...
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

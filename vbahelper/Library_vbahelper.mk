@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_linked_libs,vbahelper,\
     sal \
     sb \
     sfx \
-    stl \
     svl \
     svt \
 	svxcore \

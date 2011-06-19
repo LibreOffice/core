@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -146,7 +147,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
             }
             pO->SetSnapRect(aR1);
         } else {
-            DBG_ERROR("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
+            OSL_FAIL("SetMarkedObjRect(): pObj->GetSnapRect() liefert leeres Rect");
         }
     }
     if( bUndo )
@@ -1369,7 +1370,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         nRotateY = nOldRotateY = aRotateAxe.Y();
     }
 
-    long nNewShearAngle=0;
     long nShearAngle=0;
     long nShearX=0;
     long nShearY=0;
@@ -1377,7 +1377,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     sal_Bool bChgPos=sal_False;
     sal_Bool bChgSiz=sal_False;
-    sal_Bool bChgHgt=sal_False;
     sal_Bool bRotate=sal_False;
     sal_Bool bShear =sal_False;
 
@@ -1403,7 +1402,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem)) {
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=sal_True;
-        bChgHgt=sal_True;
     }
     if (bChgSiz) {
         eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
@@ -1425,7 +1423,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // Shear
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,sal_True,&pPoolItem)) {
-        nNewShearAngle=((const SfxInt32Item*)pPoolItem)->GetValue();
+        long nNewShearAngle=((const SfxInt32Item*)pPoolItem)->GetValue();
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
         if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
         if (nNewShearAngle!=nOldShearAngle) {
@@ -1536,20 +1534,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         // linear combination will not decompose to the same start values again, but to a
         // new combination. Thus it makes no sense to check if the wanted shear is reached
         // or not. Taking out.
-#if 0
-        long nTempAngle=GetMarkedObjShear();
-        if (nTempAngle!=0 && nTempAngle!=nNewShearAngle && !bShearVert) {
-            // noch eine 2. Iteration zur Kompensation der Rundungsfehler
-            double nOld=tan((double)nTempAngle*nPi180);
-            double nNew=tan((double)nNewShearAngle*nPi180);
-            nNew-=nOld;
-            nNew=atan(nNew)/nPi180;
-            nTempAngle=Round(nNew);
-            if (nTempAngle!=0) {
-                ShearMarkedObj(aRef,nTempAngle,bShearVert);
-            }
-        }
-#endif
     }
 
     // Position aendern
@@ -1782,3 +1766,4 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_B
         EndUndo();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

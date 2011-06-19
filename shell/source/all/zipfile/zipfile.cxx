@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,6 @@
 #include <functional>
 
 #include <string.h>
-
-#ifdef OS2
-#include <alloca.h>
-#define _alloca alloca
-#define ERROR_NOT_ENOUGH_MEMORY 8
-#endif
 
 namespace internal
 {
@@ -249,3 +244,4 @@ long ZipFile::GetFileLongestFileNameLength() const
     return lmax;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

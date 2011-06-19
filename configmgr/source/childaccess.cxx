@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
+#include "comphelper/servicehelper.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -49,7 +51,6 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "rtl/uuid.h"
 #include "sal/types.h"
 
 #include "access.hxx"
@@ -76,15 +77,14 @@ namespace css = com::sun::star;
 
 }
 
-css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
-    static css::uno::Sequence< sal_Int8 > id;
-    if (id.getLength() == 0) {
-        css::uno::Sequence< sal_Int8 > uuid(16);
-        rtl_createUuid(
-            reinterpret_cast< sal_uInt8 * >(uuid.getArray()), 0, false);
-        id = uuid;
-    }
-    return id;
+namespace
+{
+    class theChildAccessUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChildAccessUnoTunnelId > {};
+}
+
+css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId()
+{
+    return theChildAccessUnoTunnelId::get().getSeq();
 }
 
 ChildAccess::ChildAccess(
@@ -94,6 +94,7 @@ ChildAccess::ChildAccess(
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
 
@@ -102,6 +103,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Node > const & node):
     Access(components), root_(root), node_(node), inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && node.is());
 }
 
@@ -168,7 +170,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
 }
@@ -177,7 +179,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
@@ -189,7 +191,7 @@ sal_Int64 ChildAccess::getSomething(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
@@ -268,6 +270,17 @@ void ChildAccess::setProperty(
     localModifications->add(getRelativePath());
 }
 
+namespace
+{
+    rtl::OUString lcl_StripSegment(const rtl::OUString &rLocale)
+    {
+        sal_Int32 i = rLocale.getLength() ? rLocale.getLength() - 1 : 0;
+        while (i > 0 && rLocale[i] != '-' && rLocale[i] != '_')
+            --i;
+        return rLocale.copy(0, i);
+    }
+}
+
 css::uno::Any ChildAccess::asValue() {
     if (changedValue_.get() != 0) {
         return *changedValue_;
@@ -278,43 +291,62 @@ css::uno::Any ChildAccess::asValue() {
             getComponents());
     case Node::KIND_LOCALIZED_PROPERTY:
         {
-            rtl::OUString locale(getRootAccess()->getLocale());
-            if (!Components::allLocales(locale)) {
+            rtl::OUString sLocale(getRootAccess()->getLocale());
+            if (!Components::allLocales(sLocale))
+            {
+                rtl::Reference< ChildAccess > child;
                 // Find best match using an adaption of RFC 4647 lookup matching
-                // rules, removing "-" or "_" delimited segments from the end;
+                // rules, removing "-" or "_" delimited segments from the end
+                while (1)
+                {
+                    child = getChild(sLocale);
+                    if (child.is())
+                        break;
+                    rtl::OUString sTmpLocale = lcl_StripSegment(sLocale);
+                    if (!sTmpLocale.getLength())
+                        break;
+                    sLocale = sTmpLocale;
+                }
+
+                //Resolves: fdo#33638 Look for the first entry with the same
+                //first segment as the requested language tag, before falling
+                //back to en-US, etc.
+                typedef std::vector< rtl::Reference< ChildAccess > > ChildVector;
+                if (!child.is())
+                {
+                    const ChildVector &rAllChildren = getAllChildren();
+                    for (ChildVector::const_iterator aI = rAllChildren.begin(),
+                         aEnd = rAllChildren.end(); aI != aEnd; ++aI)
+                    {
+                        rtl::OUString sLanguage = lcl_StripSegment((*aI)->getNameInternal());
+                        if (sLocale == sLanguage)
+                        {
+                            child = *aI;
+                            break;
+                        }
+                    }
+                }
+
                 // defaults are the "en-US" locale, the "en" locale, the empty
                 // string locale, the first child (if any), or a nil value (even
                 // though it may be illegal for the given property), in that
                 // order:
-                rtl::Reference< ChildAccess > child;
-                for (;;) {
-                    child = getChild(locale);
-                    if (child.is() || locale.getLength() == 0) {
-                        break;
-                    }
-                    sal_Int32 i = locale.getLength() - 1;
-                    while (i > 0 && locale[i] != '-' && locale[i] != '_') {
-                        --i;
-                    }
-                    if (i == 0) {
-                        break;
-                    }
-                    locale = locale.copy(0, i);
-                }
-                if (!child.is()) {
+                if (!child.is())
+                {
                     child = getChild(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
-                    if (!child.is()) {
+                    if (!child.is())
+                    {
                         child = getChild(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")));
-                        if (!child.is()) {
+                        if (!child.is())
+                        {
                             child = getChild(rtl::OUString());
-                            if (!child.is()) {
-                                std::vector< rtl::Reference< ChildAccess > >
-                                    all(getAllChildren());
-                                if (!all.empty()) {
+                            if (!child.is())
+                            {
+                                ChildVector all(getAllChildren());
+                                if (!all.empty())
                                     child = all.front();
-                                }
                             }
                         }
                     }
@@ -359,7 +391,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 }
 
 ChildAccess::~ChildAccess() {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
@@ -389,7 +421,7 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()
@@ -400,3 +432,5 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

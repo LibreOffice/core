@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,19 +158,6 @@ SdrDropMarkerOverlay::~SdrDropMarkerOverlay()
     // OverlayManager and deletes them.
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@ @@ @@ @@@@@ @@   @@
-//  @@ @@ @@ @@    @@   @@
-//  @@ @@ @@ @@    @@ @ @@
-//  @@@@@ @@ @@@@  @@@@@@@
-//   @@@  @@ @@    @@@@@@@
-//   @@@  @@ @@    @@@ @@@
-//    @   @@ @@@@@ @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrView,SdrCreateView);
 
@@ -273,9 +261,6 @@ sal_Bool SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         if (DoMouseEvent(aVEvt)) bRet=sal_True;
     }
 
-    // #87792# Removed code which did let the mouse snap on object
-    // points
-
     return bRet;
 }
 
@@ -286,7 +271,6 @@ sal_Bool SdrView::Command(const CommandEvent& rCEvt, Window* pWin)
     return bRet;
 }
 
-/* new interface src537 */
 sal_Bool SdrView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     return SdrCreateView::GetAttributes(rTargetSet, bOnlyHardAttr);
@@ -294,8 +278,7 @@ sal_Bool SdrView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) 
 
 SfxStyleSheet* SdrView::GetStyleSheet() const
 {
-    //sal_Bool bOk=sal_False;
-    return SdrCreateView::GetStyleSheet(); //bOk);
+    return SdrCreateView::GetStyleSheet();
 }
 
 SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, sal_uInt16 nEventKind, SdrViewEvent& rVEvt) const
@@ -309,7 +292,6 @@ SdrHitKind SdrView::PickAnything(const MouseEvent& rMEvt, sal_uInt16 nEventKind,
     if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
-        //pOut=GetWin(0);
     }
     Point aPnt(rMEvt.GetPosPixel());
     if (pOut!=NULL) aPnt=pOut->PixelToLogic(aPnt);
@@ -346,7 +328,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     if (pOut==NULL)
     {
         pOut = GetFirstOutputDevice();
-        //pOut=GetWin(0);
     }
 
     // #i73628# Use a non-changeable copy of he logic pos
@@ -371,7 +352,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     sal_uInt16 nHitPassNum=0;
     sal_uInt16 nHlplIdx=0;
     sal_uInt16 nGlueId=0;
-    sal_Bool bUnmarkedObjHit=sal_False;
     if (bTextEditHit || bTextEditSel)
     {
         eHit=SDRHIT_TEXTEDIT;
@@ -409,7 +389,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             }
         }
     }
-    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|/*SDRSEARCH_TESTMARKABLE|*/SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,NULL,&nHitPassNum))
+    else if (PickObj(aLocalLogicPosition,nHitTolLog,pHitObj,pPV,SDRSEARCH_DEEP|SDRSEARCH_ALSOONMASTER|SDRSEARCH_WHOLEPAGE,&pObj,NULL,&nHitPassNum))
     {
         // MasterPages und WholePage fuer Macro und URL
         eHit=SDRHIT_UNMARKEDOBJECT;
@@ -429,7 +409,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     break;
             }
         }
-        bUnmarkedObjHit=sal_True;
     }
     else if (bEditMode && IsHlplVisible() && !IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV))
     {
@@ -502,8 +481,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
 
                 // FitToSize berueksichtigen
-                SdrFitToSizeType eFit=pTextObj->GetFitToSize();
-                sal_Bool bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+                bool bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
                     Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
                     Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
@@ -538,14 +516,12 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         // Ringsum die TextEditArea ein Rand zum Selektieren ohne Textedit
         Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
-        // #105130# Force to SnapRect when Fontwork
+        // Force to SnapRect when Fontwork
         if(pHitObj->ISA(SdrTextObj) && ((SdrTextObj*)pHitObj)->IsFontwork())
         {
             aBoundRect = pHitObj->GetSnapRect();
         }
 
-        // #105130# Old test for hit on BoundRect is completely wrong
-        // and never worked, doing it new here.
         sal_Int32 nTolerance(nHitTolLog);
         sal_Bool bBoundRectHit(sal_False);
 
@@ -662,7 +638,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
             eEvent=SDREVENT_BEGDRAGOBJ;    // Mark+Drag,AddMark+Drag,DeepMark+Drag,Unmark
             sal_Bool bGlue=pHdl->GetKind()==HDL_GLUE;
             sal_Bool bPoly=!bGlue && IsPointMarkable(*pHdl);
-            sal_Bool bMarked=bGlue || bPoly && pHdl->IsSelected();
+            sal_Bool bMarked=bGlue || (bPoly && pHdl->IsSelected());
             if (bGlue || bPoly)
             {
                 eEvent=bGlue ? SDREVENT_MARKGLUEPOINT : SDREVENT_MARKPOINT;
@@ -773,7 +749,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 #ifdef DGB_UTIL
     if (rVEvt.pRootObj!=NULL) {
         if (rVEvt.pRootObj->GetObjList()!=rVEvt.pPV->GetObjList()) {
-            DBG_ERROR("SdrView::PickAnything(): pRootObj->GetObjList()!=pPV->GetObjList() !");
+            OSL_FAIL("SdrView::PickAnything(): pRootObj->GetObjList()!=pPV->GetObjList() !");
         }
     }
 #endif
@@ -790,7 +766,6 @@ sal_Bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
     sal_Bool bCtrl=(rVEvt.nMouseCode & KEY_MOD1) !=0;
     sal_Bool bAlt=(rVEvt.nMouseCode & KEY_MOD2) !=0;
     sal_Bool bMouseLeft=(rVEvt.nMouseCode&MOUSE_LEFT)!=0;
-    //sal_Bool bMouseRight=(rVEvt.nMouseCode&MOUSE_RIGHT)!=0;
     sal_Bool bMouseDown=rVEvt.bMouseDown;
     sal_Bool bMouseUp=rVEvt.bMouseUp;
     if (bMouseDown) {
@@ -1003,7 +978,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         aHitRec.bDown=bMacroDown;
         return pMacroObj->GetMacroPointer(aHitRec);
     }
-    //sal_uInt16 nTol=nHitTolLog;
+
     // TextEdit, ObjEdit, Macro
     if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/)))
     {
@@ -1106,13 +1081,11 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 
                 // Sind 3D-Objekte selektiert?
                 sal_Bool b3DObjSelected = sal_False;
-#ifndef SVX_LIGHT
                 for (sal_uInt32 a=0; !b3DObjSelected && a<GetMarkedObjectCount(); a++) {
                     SdrObject* pObj = GetMarkedObjectByIndex(a);
                     if(pObj && pObj->ISA(E3dObject))
                         b3DObjSelected = sal_True;
                 }
-#endif
                 // Falls es um ein 3D-Objekt geht, muss trotz !IsShearAllowed
                 // weitergemacht werden, da es sich um eine Rotation statt um
                 // einen Shear handelt
@@ -1601,4 +1574,6 @@ void SdrView::SetMasterPagePaintCaching(sal_Bool bOn)
         }
     }
 }
-// eof
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

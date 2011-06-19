@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,12 +48,6 @@
 
 TYPEINIT1(E3dDragMethod, SdrDragMethod);
 
-/*************************************************************************
-|*
-|* Konstruktor aller 3D-DragMethoden
-|*
-\************************************************************************/
-
 E3dDragMethod::E3dDragMethod (
     SdrDragView &_rView,
     const SdrMarkList& rMark,
@@ -63,8 +58,7 @@ E3dDragMethod::E3dDragMethod (
     mbMoveFull(bFull),
     mbMovedAtAll(sal_False)
 {
-    // Fuer alle in der selektion befindlichen 3D-Objekte
-    // eine Unit anlegen
+    // Create a unit for all the 3D objects present in the selection
     const long nCnt(rMark.GetMarkCount());
     static bool bDoInvalidate(false);
     long nObjs(0);
@@ -113,8 +107,8 @@ E3dDragMethod::E3dDragMethod (
                 aNewUnit.maInvDisplayTransform.invert();
             }
 
-            // SnapRects der beteiligten Objekte invalidieren, um eine
-            // Neuberechnung beim Setzen der Marker zu erzwingen
+            // Invalidate SnapRects of the objects involved, to force a
+            // recalculation for setting the marker
             if(bDoInvalidate)
             {
                 pE3dObj->SetRectsDirty();
@@ -128,10 +122,10 @@ E3dDragMethod::E3dDragMethod (
                 aNewUnit.maWireframePoly.transform(aNewUnit.maTransform);
             }
 
-            // FullBound ermitteln
+            // Determine FullBound
             maFullBound.Union(pE3dObj->GetSnapRect());
 
-            // Unit einfuegen
+            // Insert Unit
             maGrp.push_back(aNewUnit);
         }
     }
@@ -145,11 +139,7 @@ void E3dDragMethod::TakeSdrDragComment(XubString& /*rStr*/) const
 {
 }
 
-/*************************************************************************
-|*
-|* Erstelle das Drahtgittermodel fuer alle Aktionen
-|*
-\************************************************************************/
+// Create the wireframe model for all actions
 
 bool E3dDragMethod::BeginSdrDrag()
 {
@@ -178,23 +168,17 @@ bool E3dDragMethod::BeginSdrDrag()
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* Schluss
-|*
-\************************************************************************/
-
 bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
 {
     const sal_uInt32 nCnt(maGrp.size());
 
     if(!mbMoveFull)
     {
-        // WireFrame ausblenden
+        // Hide wireframe
         Hide();
     }
 
-    // Alle Transformationen anwenden und UnDo's anlegen
+    // Apply all transformations and create undo's
     if(mbMovedAtAll)
     {
         const bool bUndo = getSdrDragView().IsUndoEnabled();
@@ -221,12 +205,6 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* Abbruch
-|*
-\************************************************************************/
-
 void E3dDragMethod::CancelSdrDrag()
 {
     if(mbMoveFull)
@@ -237,7 +215,7 @@ void E3dDragMethod::CancelSdrDrag()
 
             for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
             {
-                // Transformation restaurieren
+                // Restore transformation
                 E3dDragMethodUnit& rCandidate = maGrp[nOb];
                 E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
                 rCandidate.mp3DObj->SetTransform(rCandidate.maInitTransform);
@@ -246,27 +224,19 @@ void E3dDragMethod::CancelSdrDrag()
     }
     else
     {
-        // WireFrame ausblenden
+        // Hide WireFrame
         Hide();
     }
 }
 
-/*************************************************************************
-|*
-|* Gemeinsames MoveSdrDrag()
-|*
-\************************************************************************/
+// Common MoveSdrDrag()
 
 void E3dDragMethod::MoveSdrDrag(const Point& /*rPnt*/)
 {
     mbMovedAtAll = true;
 }
 
-/*************************************************************************
-|*
-|* Zeichne das Drahtgittermodel
-|*
-\************************************************************************/
+// Draw the wire frame model
 
 // for migration from XOR to overlay
 void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager)
@@ -324,7 +294,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     sal_Bool bFull)
 :   E3dDragMethod(_rView, rMark, eConstr, bFull)
 {
-    // Zentrum aller selektierten Objekte in Augkoordinaten holen
+    // Get center of all selected objects in eye coordinates
     const sal_uInt32 nCnt(maGrp.size());
 
     if(nCnt)
@@ -346,7 +316,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
                 maGlobalCenter += aObjCenter;
             }
 
-            // Teilen durch Anzahl
+            // Divide by the number
             if(nCnt > 1)
             {
                 maGlobalCenter /= (double)nCnt;
@@ -366,19 +336,16 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
             aInverseViewToEye.invert();
             aRotCenter3D = aInverseViewToEye * aRotCenter3D;
 
-        // X,Y des RotCenter und Tiefe der gemeinsamen Objektmitte aus
-        // Rotationspunkt im Raum benutzen
+        // Use X,Y of the RotCenter and depth of the common object centre
+        // as rotation point in the space
             maGlobalCenter.setX(aRotCenter3D.getX());
             maGlobalCenter.setY(aRotCenter3D.getY());
         }
     }
 }
 
-/*************************************************************************
-|*
-|* Das Objekt wird bewegt, bestimme die Winkel
-|*
-\************************************************************************/
+
+//The object is moved, determine the angle
 
 void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 {
@@ -387,7 +354,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
     if(DragStat().CheckMinMoved(rPnt))
     {
-        // Modifier holen
+        // Get modifier
         sal_uInt16 nModifier = 0;
         if(getSdrDragView().ISA(E3dView))
         {
@@ -395,12 +362,12 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             nModifier = rLastMouse.GetModifier();
         }
 
-        // Alle Objekte rotieren
+        // Rotate all objects
         const sal_uInt32 nCnt(maGrp.size());
 
         for(sal_uInt32 nOb(0); nOb < nCnt; nOb++)
         {
-            // Rotationswinkel bestimmen
+            // Determine rotation angle
             double fWAngle, fHAngle;
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
 
@@ -430,11 +397,11 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
                 fHAngle = (double)(((long) fHAngle + nSnap/2) / nSnap * nSnap);
             }
 
-            // nach radiant
+            // to radians
             fWAngle *= F_PI180;
             fHAngle *= F_PI180;
 
-            // Transformation bestimmen
+            // Determine transformation
             basegfx::B3DHomMatrix aRotMat;
             if(E3DDRAG_CONSTR_Y & meConstraint)
             {
@@ -455,8 +422,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
                 aRotMat.rotate(fHAngle, 0.0, 0.0);
             }
 
-            // Transformation in Eye-Koordinaten, dort rotieren
-            // und zurueck
+            // Transformation in eye coordinates, there rotate then and back
             const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rCandidate.mp3DObj->GetScene()->GetViewContact());
             const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
             basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
@@ -470,7 +436,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             aTransMat *= aInverseOrientation;
             aTransMat *= rCandidate.maInvDisplayTransform;
 
-            // ...und anwenden
+            // ...and apply
             rCandidate.maTransform *= aTransMat;
 
             if(mbMoveFull)
@@ -499,14 +465,9 @@ Pointer E3dDragRotate::GetSdrDragPointer() const
     return Pointer(POINTER_ROTATE);
 }
 
-/*************************************************************************
-|*
-|* E3dDragMove
-|* Diese DragMethod wird nur bei Translationen innerhalb von 3D-Scenen
-|* benoetigt. Wird eine 3D-Scene selbst verschoben, so wird diese DragMethod
-|* nicht verwendet.
-|*
-\************************************************************************/
+// E3dDragMove. This drag method is only required for translations inside
+// 3D scenes. If a 3D-scene itself moved, then this drag method will drag
+// not be used.
 
 TYPEINIT1(E3dDragMove, E3dDragMethod);
 
@@ -545,11 +506,11 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
             maScaleFixPos = maFullBound.TopLeft();
             break;
         default:
-            // Bewegen des Objektes, HDL_MOVE
+            // Moving the object, HDL_MOVE
             break;
     }
 
-    // Override wenn IsResizeAtCenter()
+    // Override when IsResizeAtCenter()
     if(getSdrDragView().IsResizeAtCenter())
     {
         meWhatDragHdl = HDL_USER;
@@ -557,11 +518,7 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
     }
 }
 
-/*************************************************************************
-|*
-|* Das Objekt wird bewegt, bestimme die Translation
-|*
-\************************************************************************/
+// The object is moved, determine the translations
 
 void E3dDragMove::MoveSdrDrag(const Point& rPnt)
 {
@@ -573,12 +530,12 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
         if(HDL_MOVE == meWhatDragHdl)
         {
             // Translation
-            // Bewegungsvektor bestimmen
+            // Determine the motion vector
             basegfx::B3DPoint aGlobalMoveHead((double)(rPnt.X() - maLastPos.X()), (double)(rPnt.Y() - maLastPos.Y()), 32768.0);
             basegfx::B3DPoint aGlobalMoveTail(0.0, 0.0, 32768.0);
             const sal_uInt32 nCnt(maGrp.size());
 
-            // Modifier holen
+            // Get modifier
             sal_uInt16 nModifier(0);
 
             if(getSdrDragView().ISA(E3dView))
@@ -622,7 +579,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                     aMoveTail3D.setZ(fZwi);
                 }
 
-                // Bewegungsvektor von Aug-Koordinaten nach Parent-Koordinaten
+                // Motion vector from eye coordinates to parent coordinates
                 basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());
                 aInverseOrientation.invert();
                 basegfx::B3DHomMatrix aCompleteTrans(rCandidate.maInvDisplayTransform * aInverseOrientation);
@@ -653,8 +610,8 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
         }
         else
         {
-            // Skalierung
-            // Skalierungsvektor bestimmen
+            // Scaling
+            // Determine scaling vector
             Point aStartPos = DragStat().GetStart();
             const sal_uInt32 nCnt(maGrp.size());
 
@@ -692,7 +649,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 {
                     case HDL_LEFT:
                     case HDL_RIGHT:
-                        // constrain to auf X -> Y equal
+                        // to constrain on X -> Y equal
                         aScNext.setY(aScFixPos.getY());
                         break;
                     case HDL_UPPER:
@@ -754,7 +711,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                 aNewTrans *= aInverseOrientation;
                 aNewTrans *= rCandidate.maInvDisplayTransform;
 
-                // ...und anwenden
+                // ...and apply
                 rCandidate.maTransform = aNewTrans;
 
                 if(mbMoveFull)
@@ -787,3 +744,5 @@ Pointer E3dDragMove::GetSdrDragPointer() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

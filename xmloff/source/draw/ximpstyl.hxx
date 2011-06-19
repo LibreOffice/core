@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <vector>
 
 class SvNumberFormatter;
 class SvXMLNumFmtHelper;
@@ -133,7 +135,7 @@ public:
     const rtl::OUString& GetDisplayName() const { return msDisplayName; }
 
 };
-DECLARE_LIST(ImpMasterPageList, SdXMLMasterPageContext*)
+typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
 //////////////////////////////////////////////////////////////////////////////
 // presentation:placeholder context
@@ -163,7 +165,7 @@ public:
     sal_Int32 GetWidth() const { return mnWidth; }
     sal_Int32 GetHeight() const { return mnHeight; }
 };
-DECLARE_LIST(ImpPlaceholderList, SdXMLPresentationPlaceholderContext*)
+typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
 //////////////////////////////////////////////////////////////////////////////
 // style:presentation-page-layout context
@@ -300,3 +302,5 @@ private:
 
 
 #endif  //  _XIMPSTYLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

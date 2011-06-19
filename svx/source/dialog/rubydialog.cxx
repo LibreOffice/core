@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include <svtools/colorcfg.hxx>
 
 using namespace com::sun::star::uno;
@@ -75,9 +74,7 @@ static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
 static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 static const sal_Char cRubies[] = "Rubies";
-/* -----------------------------09.01.01 17:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, sal_uInt16 nId,
     SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
     SfxChildWindow(_pParent, nId)
@@ -92,16 +89,12 @@ SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, sal_uInt16 nId,
 
     pDlg->Initialize( pInfo );
 }
-/* -----------------------------10.01.01 13:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
 {
     return SfxChildWindow::GetInfo();
 }
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                 <  ::com::sun::star::view::XSelectionChangeListener >
 {
@@ -209,9 +202,7 @@ void  SvxRubyData_Impl::AssertOneEntry()
         pValues[4].Name = C2U(cRubyCharStyleName);
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* _pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, _pParent, rResId ),
@@ -246,7 +237,7 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 {
     xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
-    //#85638# automatic detection not yet available
+    // automatic detection not yet available
     aAutoDetectionCB.Hide();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
     aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;
@@ -286,18 +277,14 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aRight3ED.SetAccessibleName(rightLabelName);
     aRight4ED.SetAccessibleName(rightLabelName);
 }
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxRubyDialog::~SvxRubyDialog()
 {
     ClearCharStyleList();
     EventObject aEvent;
     xImpl->disposing(aEvent);
 }
-/* -----------------------------01.02.01 10:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::ClearCharStyleList()
 {
     for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
@@ -307,9 +294,7 @@ void SvxRubyDialog::ClearCharStyleList()
     }
     aCharStyleLB.Clear();
 }
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
@@ -317,9 +302,7 @@ sal_Bool    SvxRubyDialog::Close()
                               SFX_CALLMODE_RECORD);
     return sal_True;
 }
-/* -----------------------------29.01.01 15:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
@@ -389,7 +372,7 @@ void SvxRubyDialog::Activate()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception in style access");
+                    OSL_FAIL("exception in style access");
                 }
                 if(sCharStyleSelect.Len())
                     aCharStyleLB.SelectEntry(sCharStyleSelect);
@@ -401,16 +384,12 @@ void SvxRubyDialog::Activate()
         aPreviewWin.Invalidate();
     }
 }
-/* -----------------------------29.01.01 15:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxRubyDialog::Deactivate()
 {
     SfxModelessDialog::Deactivate();
 }
-/* -----------------------------30.01.01 15:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;
@@ -544,17 +523,13 @@ void SvxRubyDialog::Update()
 
     ScrollHdl_Impl(&aScrollSB);
 }
-/* -----------------------------16.02.01 14:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
 {
     rBase = aEditArr[nCurrentEdit * 2]->GetText();
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
 }
-/* -----------------------------31.01.01 14:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nPos = pScroll->GetThumbPos();
@@ -570,9 +545,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------30.01.01 14:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
 {
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
@@ -596,22 +569,18 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception caught");
+            OSL_FAIL("Exception caught");
         }
     }
     return 0;
 }
-/* -----------------------------29.01.01 09:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
 {
     Close();
     return 0;
 }
-/* -----------------------------29.01.01 15:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
 {
     SfxPoolItem* pState = 0;
@@ -624,18 +593,14 @@ IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
     }
     return 0;
 }
-/* -----------------------------30.01.01 15:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AutomaticHdl_Impl, CheckBox*, pBox)
 {
     pImpl->UpdateRubyValues(pBox->IsChecked());
     Update();
     return 0;
 }
-/* -----------------------------31.01.01 16:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
@@ -655,9 +620,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------01.06.01 10:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
@@ -678,9 +641,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------01.02.01 10:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
 {
     AssertOneEntry();
@@ -703,9 +664,7 @@ IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
     }
     return 0;
 }
-/* -----------------------------16.02.01 08:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
 {
     for(sal_uInt16 i = 0; i < 8; i++)
@@ -719,9 +678,7 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------17.07.01 09:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
 {
     long nRet = 0;
@@ -749,9 +706,7 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
     }
     return nRet;
 }
-/* -----------------------------20.07.2001 15:18------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
 {
     sal_uInt16 nIndex = USHRT_MAX;
@@ -779,9 +734,7 @@ IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
     }
     return 0;
 };
-/* -----------------------------19.06.01 11:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::AssertOneEntry()
 {
     pImpl->AssertOneEntry();
@@ -819,9 +772,6 @@ void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
         UpdateColors();
 }
 
-/* -----------------------------29.01.01 15:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
 {
     Size aLeftSz(rLeft.GetSizePixel());
@@ -834,9 +784,7 @@ void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
     rRight.SetPosSizePixel(aRightPos, aRightSz);
 
 }
-/* -----------------------------16.02.01 08:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
         Window(&rParent, rResId),
         rParentDlg(rParent)
@@ -850,9 +798,7 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
-/* -----------------------------29.01.01 14:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void RubyPreview::Paint( const Rectangle& /* rRect */ )
 {
     Font aRubyFont = GetFont();
@@ -959,17 +905,13 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     }
     SetFont(aSaveFont);
 }
-/* -----------------------------16.02.01 15:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 void RubyEdit::GetFocus()
 {
     GetModifyHdl().Call(this);
     Edit::GetFocus();
 }
-/* -----------------------------17.07.01 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
@@ -996,3 +938,4 @@ long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

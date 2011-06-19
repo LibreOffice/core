@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -86,17 +87,17 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                    m_sURI = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
                     m_sURI += pBasic->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "." );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
                     m_sURI += pModule->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "." );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
                     if ( m_bIsAppScript )
-                        m_sURI += ::rtl::OUString::createFromAscii( "application" );
+                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application"));
                     else
-                        m_sURI += ::rtl::OUString::createFromAscii( "document" );
+                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document"));
                 }
             }
         }
@@ -129,7 +130,7 @@ namespace basprov
 
     ::rtl::OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ::rtl::OUString sMethodName;
         if ( m_pMethod )
@@ -142,7 +143,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return Sequence< Reference< browse::XBrowseNode > >();
     }
@@ -151,7 +152,7 @@ namespace basprov
 
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return sal_False;
     }
@@ -160,7 +161,7 @@ namespace basprov
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::SCRIPT;
     }
@@ -235,7 +236,7 @@ namespace basprov
                         for ( sal_Int32 i = 0; i < nProps; ++i )
                         {
                             // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
+                            if ( pProps[i].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
                             {
                                 pProps[i].Value >>= sDocURL;
                                 break;
@@ -279,17 +280,17 @@ namespace basprov
                             if ( xHelper.is() )
                             {
                                 Sequence < PropertyValue > aArgs(7);
-                                aArgs[0].Name = ::rtl::OUString::createFromAscii( "Document" );
+                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"));
                                 aArgs[0].Value <<= sDocURL;
-                                aArgs[1].Name = ::rtl::OUString::createFromAscii( "LibName" );
+                                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LibName"));
                                 aArgs[1].Value <<= sLibName;
-                                aArgs[2].Name = ::rtl::OUString::createFromAscii( "Name" );
+                                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                                 aArgs[2].Value <<= sModName;
-                                aArgs[3].Name = ::rtl::OUString::createFromAscii( "Type" );
-                                aArgs[3].Value <<= ::rtl::OUString::createFromAscii( "Module" );
-                                aArgs[4].Name = ::rtl::OUString::createFromAscii( "Line" );
+                                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
+                                aArgs[3].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Module"));
+                                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line"));
                                 aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                                xHelper->executeDispatch( xProv, ::rtl::OUString::createFromAscii( ".uno:BasicIDEAppear" ), ::rtl::OUString(), 0, aArgs );
+                                xHelper->executeDispatch( xProv, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:BasicIDEAppear")), ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }
@@ -356,3 +357,5 @@ namespace basprov
 //.........................................................................
 }   // namespace basprov
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

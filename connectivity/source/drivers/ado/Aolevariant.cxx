@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -450,7 +451,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
             throw ::com::sun::star::sdbc::SQLException(
                 sError,
                 NULL,
-                ::rtl::OUString::createFromAscii( "S1000" ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "S1000" )),
                 1000,
                 ::com::sun::star::uno::Any()
             );
@@ -789,3 +790,5 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

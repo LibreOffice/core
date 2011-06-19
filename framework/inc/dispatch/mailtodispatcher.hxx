@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ namespace framework{
 /**
     @short          protocol handler for "mailto:" URLs
     @descr          It's a special dispatch object which is used registered for "mailto:*" URLs and
-                    will be automaticly used from the framework dispatch mechanism if such URL occured.
+                    will be automaticly used from the framework dispatch mechanism if such URL occurred.
 
     @base           ThreadHelpBase
                         exports a lock member to guarantee right initialize value of it
@@ -143,3 +144,5 @@ class MailToDispatcher : // interfaces
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_MAILTODISPATCHER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

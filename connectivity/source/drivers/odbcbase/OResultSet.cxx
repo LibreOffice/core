@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,8 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::odbc;
@@ -66,14 +69,14 @@ using namespace com::sun::star::util;
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.odbc.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.odbc.ResultSet"));
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -119,7 +122,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
         N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
     }
     SQLINTEGER nCurType = 0;
@@ -131,7 +134,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
             (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)
             m_pSkipDeletedSet = new OSkipDeletedSet(this);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
     }
     try
@@ -140,7 +143,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
         m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
     }
-    catch(Exception&)
+    catch(const Exception&)
     { // we don't want our result destroy here
         m_bFetchData = sal_True;
     }
@@ -152,7 +155,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
             m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         m_bUseFetchScroll = sal_False;
     }
@@ -317,7 +320,7 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int8[m_aRow[_nColumnIndex].getSequence().getLength()]),_nType);
             break;
         default:
-            OSL_ENSURE(0,"Unknown type");
+            OSL_FAIL("Unknown type");
             aPair = TVoidPtr(0,_nType);
     }
     return aPair;
@@ -543,7 +546,7 @@ sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLExcepti
         const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SBIGINT,&nRet,sizeof nRet);
         return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int64)aValue;
     }
-    catch(SQLException&)
+    catch(const SQLException&)
     {
         nRet = getString(columnIndex).toInt64();
     }
@@ -870,7 +873,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     {
         OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
-    catch(SQLException e)
+    catch(const SQLException&)
     {
         nRet = unbind();
         throw;
@@ -1149,7 +1152,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
-        ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::std::select2nd<TBookmarkPosMap::value_type>()));
+        ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::o3tl::select2nd<TBookmarkPosMap::value_type>()));
 
     if ( aFind == m_aPosToBookmarks.end() )
     {
@@ -1257,7 +1260,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
                 *pRet = 1;
             }
         }
-        catch(SQLException&)
+        catch(const SQLException&)
         {
             *pRet = 0;
         }
@@ -1348,7 +1351,7 @@ sal_Bool  OResultSet::isBookmarkable() const
             break;
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         return sal_False;
     }
@@ -1368,7 +1371,7 @@ void OResultSet::setFetchDirection(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch direction!");
     if ( _par0 > 0 )
     {
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
     }
 }
 //------------------------------------------------------------------------------
@@ -1377,7 +1380,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
     if ( _par0 > 0 )
     {
-        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+        N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
         delete m_pRowStatusArray;
 
         m_pRowStatusArray = new SQLUSMALLINT[_par0];
@@ -1611,7 +1614,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
                 if ( aIter->second == _nOffset )
                     return moveToBookmark(makeAny(aIter->first));
             }
-            OSL_ENSURE(0,"Bookmark not found!");
+            OSL_FAIL("Bookmark not found!");
         }
         return sal_False;
     }
@@ -1746,7 +1749,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 }
                 default:
-                    OSL_ENSURE(0,"Not supported at the moment!");
+                    OSL_FAIL("Not supported at the moment!");
             }
             nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
         }
@@ -1762,3 +1765,4 @@ SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
     return aFind->second;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

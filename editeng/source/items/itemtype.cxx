@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_editeng.hxx"
 
 // include ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/editrids.hrc>
 #include <unotools/intlwrapper.hxx>
@@ -96,7 +96,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
             return sRet;
     }
 
@@ -123,7 +123,6 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         nRet %= nDiff;
         if( 4 == nDigits )
         {
-//            DBG_ASSERT(pIntl, "no IntlWrapper* set")
             if(pIntl)
                 sRet += pIntl->getLocaleData()->getNumDecimalSep();
             else
@@ -147,18 +146,15 @@ XubString GetSvxString( sal_uInt16 nId )
     return EE_RESSTR( nId );
 }
 
-#ifndef SVX_LIGHT
-
 // -----------------------------------------------------------------------
 
 XubString GetColorString( const Color& rCol )
 {
     XubString sStr;
 
-    FASTBOOL bFound = sal_False;
     ColorData nColData =
         RGB_COLORDATA( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
-    sal_uInt16 nColor = 0, nColCount = 16;
+    sal_uInt16 nColor = 0;
 
     static ColorData aColAry[] = {
         COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN,
@@ -166,15 +162,13 @@ XubString GetColorString( const Color& rCol )
         COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN,
         COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE };
 
-    while ( !bFound && nColor < nColCount )
+    while ( nColor < sizeof(aColAry)/sizeof(ColorData) &&
+            aColAry[nColor] != nColData )
     {
-        if ( aColAry[nColor] == nColData )
-            bFound = sal_True;
-        else
-            nColor++;
+        nColor += 1;
     }
 
-    if ( nColor < nColCount )
+    if ( nColor < sizeof(aColAry)/sizeof(ColorData) )
         sStr = EE_RESSTR( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
 
     if ( !sStr.Len() )
@@ -190,8 +184,6 @@ XubString GetColorString( const Color& rCol )
     }
     return sStr;
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -231,9 +223,10 @@ sal_uInt16 GetMetricId( SfxMapUnit eUnit )
             break;
 
         default:
-            DBG_ERROR( "not supported mapunit" );
+            OSL_FAIL( "not supported mapunit" );
     }
     return nId;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

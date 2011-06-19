@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,62 +36,62 @@
 //==============================================================================
 
 //------------------------------------------------------------------------------
-::vos::OMutex Tracer::s_aMapSafety;
-::std::map< ::vos::OThread::TThreadIdentifier, sal_Int32, ::std::less< ::vos::OThread::TThreadIdentifier > >
+::osl::Mutex Tracer::s_aMapSafety;
+::std::map< ::oslThreadIdentifier, sal_Int32, ::std::less< oslThreadIdentifier > >
         Tracer::s_aThreadIndents;
 
 //------------------------------------------------------------------------------
 Tracer::Tracer(const char* _pBlockDescription)
     :m_sBlockDescription(_pBlockDescription)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
-    sal_Int32 nIndent = s_aThreadIndents[ ::vos::OThread::getCurrentIdentifier() ]++;
+    ::osl::MutexGuard aGuard(s_aMapSafety);
+    sal_uInt32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ]++;
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::vos::OThread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
     sMessage += sIndent;
     sMessage += m_sBlockDescription;
     sMessage += " {";
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
 Tracer::~Tracer()
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
-    sal_Int32 nIndent = --s_aThreadIndents[ ::vos::OThread::getCurrentIdentifier() ];
+    ::osl::MutexGuard aGuard(s_aMapSafety);
+    sal_Int32 nIndent = --s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::vos::OThread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
     sMessage += sIndent;
     sMessage += "} // ";
     sMessage += m_sBlockDescription;
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
 void Tracer::TraceString(const char* _pMessage)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
-    sal_Int32 nIndent = s_aThreadIndents[ ::vos::OThread::getCurrentIdentifier() ];
+    ::osl::MutexGuard aGuard(s_aMapSafety);
+    sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::vos::OThread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -98,20 +99,20 @@ void Tracer::TraceString(const char* _pMessage)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE(sMessage.GetBuffer());
+    OSL_TRACE(sMessage.GetBuffer());
 }
 
 //------------------------------------------------------------------------------
 void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
 {
-    ::vos::OGuard aGuard(s_aMapSafety);
-    sal_Int32 nIndent = s_aThreadIndents[ ::vos::OThread::getCurrentIdentifier() ];
+    ::osl::MutexGuard aGuard(s_aMapSafety);
+    sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
     ByteString sIndent;
     while (nIndent--)
         sIndent += '\t';
 
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::vos::OThread::getCurrentIdentifier() ) );
+    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
     sThread += '\t';
 
     ByteString sMessage(sThread);
@@ -119,6 +120,8 @@ void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
     sMessage += m_sBlockDescription;
     sMessage += ": ";
     sMessage += _pMessage;
-    DBG_TRACE1(sMessage.GetBuffer(), _pParam);
+    OSL_TRACE(sMessage.GetBuffer(), _pParam);
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

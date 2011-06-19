@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "wincommon.hxx"
 #include <cppuhelper/interfacecontainer.h>
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYERWINDOW_HDL_
 #include "com/sun/star/media/XPlayerWindow.hdl"
-#endif
 
 struct IVideoWindow;
 
@@ -123,3 +122,5 @@ private:
 } // namespace avmedia
 
 #endif // _WINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

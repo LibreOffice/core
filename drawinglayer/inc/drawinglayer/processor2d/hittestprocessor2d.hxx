@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -48,7 +51,7 @@ namespace drawinglayer
             This processor implements a HitTest with the feeded primitives,
             given tolerance and extras
          */
-        class HitTestProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC HitTestProcessor2D : public BaseProcessor2D
         {
         private:
             /// discrete HitTest position
@@ -112,3 +115,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_HITTESTPROCESSOR2D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

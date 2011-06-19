@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,9 +77,9 @@ struct ProviderRequest
         {
             xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
         }
-        catch(::com::sun::star::uno::Exception)
+        catch(const ::com::sun::star::uno::Exception&)
         {
-            OSL_ENSURE(0,"Service Creation Exception");
+            OSL_FAIL("Service Creation Exception");
         }
         return xRet.is();
     }
@@ -87,7 +88,6 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
@@ -122,3 +122,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     return pRet;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

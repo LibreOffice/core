@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -152,45 +153,45 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) thr
 
 SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 (
-    const String&   rName,      // Name des Dokuments mit Pfad
-    sal_Bool            bSilent,    // sal_True: nicht nach neuer Sicht fragen
-    sal_Bool            bActivate,   // soll bestehende Sicht aktiviert werden
+    const String&   rName,      // Name of Documents including path
+    sal_Bool            bSilent,    // sal_True: do not ask for a new view
+    sal_Bool            bActivate,  // existing view to be activated
     sal_Bool            bForbidVisible,
     const String*   pPostStr
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Stellt fest, ob ein Dokument mit dem Namen 'rName' bereits geladen
-    ist und liefert einen Pointer darauf zu"uck.
+    Determines whether a document with the name 'rName' already is loaded and
+    returns a pointer to this document.
 
-    Ist das Dokument noch nicht geladen, wird ein 0-Pointer zur"uckgeliefert.
+    If the document is not loaded, a 0-pointer is returned.
 */
 
 {
-    // zu suchenden Namen als URL aufbereiten
+    // prepare to search for names as URL
     INetURLObject aUrlToFind( rName );
     DBG_ASSERT( aUrlToFind.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
     String aPostString;
     if (  pPostStr )
         aPostString = *pPostStr;
 
-    // noch offen?
+    // still open?
     SfxObjectShellRef xDoc;
 
     if ( !aUrlToFind.HasError() )
     {
-        // dann bei den normal geoeffneten Docs
+        // then with the normally open Documents
         if ( !xDoc.Is() )
         {
-            xDoc = SfxObjectShell::GetFirst( 0, sal_False ); // auch hidden Docs
+            xDoc = SfxObjectShell::GetFirst( 0, sal_False ); // also hidden Documents
             while( xDoc.Is() )
             {
                 if ( xDoc->GetMedium() &&
                      xDoc->GetCreateMode() == SFX_CREATE_MODE_STANDARD &&
                      !xDoc->IsAbortingImport() && !xDoc->IsLoading() )
                 {
-                    // Vergleiche anhand der URLs
+                    // Comparisons between URLs
                     INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
                          (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, sal_True )) &&
@@ -204,11 +205,10 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
         }
     }
 
-    // gefunden?
+    // Found?
     if ( xDoc.Is() && bActivate )
     {
-        DBG_ASSERT(
-            !bForbidVisible, "Unsichtbares kann nicht aktiviert werden" );
+        DBG_ASSERT(!bForbidVisible, "Invisible can not be enabled" );
 
         SfxViewFrame* pFrame;
         for( pFrame = SfxViewFrame::GetFirst( xDoc );
@@ -301,19 +301,17 @@ private:
 
 sal_uInt32 CheckPasswd_Impl
 (
-    //Window *pWin,             // Parent des Dialogs
     SfxObjectShell*  pDoc,
-    SfxItemPool&     /*rPool*/, // Pool, falls ein Set erzeugt werden mus
-    SfxMedium*       pFile      // das Medium, dessen Passwort gfs. erfragt werden soll
+    SfxItemPool&     /*rPool*/, // Pool, if a Set has to be created
+    SfxMedium*       pFile      // the Medium and its Password shold be obtained
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zu einem Medium das Passwort erfragen; funktioniert nur, wenn es sich
-    um einen Storage handelt.
-    Wenn in der Documentinfo das Passwort-Flag gesetzt ist, wird
-    das Passwort vom Benutzer per Dialog erfragt und an dem Set
-    des Mediums gesetzt; das Set wird, wenn nicht vorhanden, erzeugt.
+    Ask for the password for a medium, only works if it concerns storage.
+    If the password flag is set in the Document Info, then the password is
+    requested through a user dialogue and the set at the Set of the medium.
+    If the set does not exist the it is created.
 */
 {
     sal_uIntPtr nRet = ERRCODE_NONE;
@@ -328,16 +326,13 @@ sal_uInt32 CheckPasswd_Impl
             {
                 sal_Bool bIsEncrypted = sal_False;
                 try {
-                    xStorageProps->getPropertyValue( ::rtl::OUString::createFromAscii("HasEncryptedEntries") )
+                    xStorageProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasEncryptedEntries")) )
                         >>= bIsEncrypted;
                 } catch( uno::Exception& )
                 {
                     // TODO/LATER:
                     // the storage either has no encrypted elements or it's just
                     // does not allow to detect it, probably it should be implemented laiter
-                    /*
-                    bIsEncrypted = ( aInfo.Load( xStorage ) && aInfo.IsPasswd() );
-                    */
                 }
 
                 if ( bIsEncrypted )
@@ -398,7 +393,7 @@ sal_uInt32 CheckPasswd_Impl
             }
             else
             {
-                OSL_ENSURE( sal_False, "A storage must implement XPropertySet interface!" );
+                OSL_FAIL( "A storage must implement XPropertySet interface!" );
                 nRet = ERRCODE_SFX_CANTGETPASSWD;
             }
         }
@@ -491,8 +486,6 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
 
                xDoc->GetStorage()->copyToStorage( xTempStorage );
 
-//REMOVE                // the following operations should be done in one step
-//REMOVE                xDoc->DoHandsOff();
             if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
         }
@@ -521,7 +514,6 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
         SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        //pNew->Put( SfxStringItem( SID_FILTER_NAME, xDoc->GetFactory().GetFilter(0)->GetFilterName() ) );
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
@@ -576,7 +568,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
 
-    // keine Parameter vom BASIC nur Factory angegeben?
+    // No Parameter from BASIC only Factory given?
     SFX_REQUEST_ARG(rReq, pTemplNameItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
     SFX_REQUEST_ARG(rReq, pTemplFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
     SFX_REQUEST_ARG(rReq, pTemplRegionNameItem, SfxStringItem, SID_TEMPLATE_REGIONNAME, sal_False);
@@ -584,7 +576,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxObjectShellLock xDoc;
 
     String  aTemplateRegion, aTemplateName, aTemplateFileName;
-    sal_Bool    bDirect = sal_False; // "uber FileName anstelle Region/Template
+    sal_Bool    bDirect = sal_False; // through FileName instead of Region/Template
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
@@ -679,6 +671,29 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 }
 
 //---------------------------------------------------------------------------
+
+namespace {
+
+/**
+ * Check if a given filter type should open the hyperlinked document
+ * natively.
+ *
+ * @param rFilter filter object
+ */
+bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
+{
+    if (rFilter.IsOwnFormat())
+        return true;
+
+    ::rtl::OUString aName = rFilter.GetFilterName();
+    if (aName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel"))) == 0)
+        // We can handle all Excel variants natively.
+        return true;
+
+    return false;
+}
+
+}
 
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
@@ -797,8 +812,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.RemoveItem( SID_FILE_NAME );
                 rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURL ) );
 
-                // synchron ausf"uhren, damit beim Reschedulen nicht schon das n"achste Dokument
-                // geladen wird
+                // Run synchronous, so that not the next document is loaded
+                // when rescheduling
                 // TODO/LATER: use URLList argument and always remove one document after another, each step in asychronous execution, until finished
                 // but only if reschedule is a problem
                 GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
@@ -828,13 +843,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             return;
         }
         delete pURLList;
-    }
-
-    if ( !rReq.IsSynchronCall() )
-    {
-        // now check wether a stream is already there
-        // if not: download it in a thread and restart the call
-        // return;
     }
 
     sal_Bool bHyperlinkUsed = sal_False;
@@ -910,13 +918,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxBoolItem( SID_PREVIEW, sal_True ) );
         }
 
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0053 ) )               // S = 53h
-        {
-            // not supported anymore
-            //rReq.RemoveItem( SID_SILENT );
-            //rReq.AppendItem( SfxBoolItem( SID_SILENT, sal_True ) );
-        }
-
         rReq.RemoveItem( SID_OPTIONS );
     }
 
@@ -925,7 +926,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
-                                                                    ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" )),
+                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))),
                                                                     UNO_QUERY );
         if ( xTypeDetection.is() )
         {
@@ -934,49 +935,16 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
             SvtExtendedSecurityOptions aExtendedSecurityOptions;
             SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtendedSecurityOptions.GetOpenHyperlinkMode();
-            if ( eMode == SvtExtendedSecurityOptions::OPEN_WITHSECURITYCHECK )
+
+            if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
-                if ( aINetProtocol == INET_PROT_FILE )
-                {
-/*!!! pb: #i49802# no security warning any longer
-                    // Check if file URL is a directory. This is not insecure!
-                    osl::Directory aDir( aURL.Main );
-                    sal_Bool bIsDir = ( aDir.open() == osl::Directory::E_None );
-
-                    if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ) )
-                    {
-                        // Security check for local files depending on the extension
-                        vos::OGuard aGuard( Application::GetSolarMutex() );
-                        Window *pWindow = SFX_APP()->GetTopWindow();
-
-                        String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
-                        WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_HYPERLINK ));
-                        aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
-
-                        // Replace %s with the real file name
-                        String aMsgText = aSecurityWarningBox.GetMessText();
-                        String aMainURL( aURL.Main );
-                        String aFileName;
-
-                        utl::LocalFileHelper::ConvertURLToPhysicalName( aMainURL, aFileName );
-                        aMsgText.SearchAndReplaceAscii( "%s", aFileName );
-                        aSecurityWarningBox.SetMessText( aMsgText );
-
-                        if( aSecurityWarningBox.Execute() == RET_NO )
-                            return;
-                    }
-*/
-                }
-            }
-            else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
-            {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window *pWindow = SFX_APP()->GetTopWindow();
 
                 String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
@@ -989,11 +957,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
-            if ( !pFilter || !( pFilter->IsOwnFormat() ))
+            if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
                 Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), UNO_QUERY );
                 if ( xSystemShellExecute.is() )
                 {
                     if ( aINetProtocol == INET_PROT_MAILTO )
@@ -1014,13 +982,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         }
                         catch ( ::com::sun::star::lang::IllegalArgumentException& )
                         {
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
                             Window *pWindow = SFX_APP()->GetTopWindow();
                             ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
                         catch ( ::com::sun::star::system::SystemShellExecuteException& )
                         {
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
+                            SolarMutexGuard aGuard;
                             Window *pWindow = SFX_APP()->GetTopWindow();
                             ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
@@ -1033,14 +1001,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         Sequence < ::rtl::OUString > aProtocols(2);
 
                         // add special protocols that always should be treated as internal
-                        aProtocols[0] = ::rtl::OUString::createFromAscii("private:*");
-                        aProtocols[1] = ::rtl::OUString::createFromAscii("vnd.sun.star.*");
+                        aProtocols[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:*"));
+                        aProtocols[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.*"));
 
                         try
                         {
                             // get registered protocol handlers from configuration
                             Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
-                                ::rtl::OUString::createFromAscii("org.openoffice.Office.ProtocolHandler/HandlerSet"), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.ProtocolHandler/HandlerSet")), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
                             if ( xAccess.is() )
                             {
                                 Sequence < ::rtl::OUString > aNames = xAccess->getElementNames();
@@ -1052,7 +1020,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                     if ( xSet.is() )
                                     {
                                         // copy protocols
-                                        aRet = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("Protocols") );
+                                        aRet = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Protocols")) );
                                         Sequence < ::rtl::OUString > aTmp;
                                         aRet >>= aTmp;
 
@@ -1097,7 +1065,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 }
                                 catch ( ::com::sun::star::lang::IllegalArgumentException& )
                                 {
-                                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                                    SolarMutexGuard aGuard;
                                     Window *pWindow = SFX_APP()->GetTopWindow();
                                     ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                 }
@@ -1105,7 +1073,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 {
                                     if ( !pFilter )
                                     {
-                                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                                        SolarMutexGuard aGuard;
                                         Window *pWindow = SFX_APP()->GetTopWindow();
                                         ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                     }
@@ -1189,7 +1157,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         if (!pInteractionItem)
         {
-            Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
+            Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))), UNO_QUERY );
             if (xHdl.is())
                 rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
         }
@@ -1218,8 +1186,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     Reference < XController > xController;
-//    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
-//    {
         // if a frame is given, it must be used for the starting point of the targetting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
         if ( !xTargetFrame.is() )
@@ -1230,7 +1196,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             }
             else
             {
-                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+                xTargetFrame.set( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY );
             }
         }
 
@@ -1256,15 +1222,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             // if loading must be done synchron, we must wait for completion to get a return value
             // find frame by myself; I must konw the exact frame to get the controller for the return value from it
-            //if( aTarget.getLength() )
-            //    xTargetFrame = xTargetFrame->findFrame( aTarget, FrameSearchFlag::ALL );
             Reference < XComponent > xComp;
 
             try
             {
                 xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
-//                Reference < XComponentLoader > xLoader( xTargetFrame, UNO_QUERY );
-//                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
             }
             catch(const RuntimeException&)
             {
@@ -1285,7 +1247,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             URL aURL;
             aURL.Complete = aFileName;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
             Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
@@ -1294,37 +1256,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }
-    /*
-    }
-    else
-    {
-        // synchron loading without a given frame or as blank frame
-        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
-
-        // Desktop service must exists! dont catch() or check for problems here ...
-        // But loading of documents can fail by other reasons. Handle it more gracefully.
-        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-        Reference < XComponent >       xComp;
-        try
-        {
-            xComp = xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs );
-        }
-        catch(const RuntimeException&)
-        {
-            throw;
-        }
-        catch(const ::com::sun::star::uno::Exception&)
-        {
-            xDesktop.clear();
-            xComp.clear();
-        }
-
-        Reference < XModel > xModel( xComp, UNO_QUERY );
-        if ( xModel.is() )
-            xController = xModel->getCurrentController();
-        else
-            xController = Reference < XController >( xComp, UNO_QUERY );
-    }*/
 
     if ( xController.is() )
     {
@@ -1358,3 +1289,5 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         delete pLinkItem;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

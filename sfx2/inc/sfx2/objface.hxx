@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/string.hxx>
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 
 #include <sfx2/msg.hxx>
 
@@ -109,12 +108,10 @@ public:
 
     void                    Register( SfxModule* );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE int      ContainsSlot_Impl( const SfxSlot *pSlot ) const
                             { return pSlot >= pSlots && pSlot < pSlots + Count(); }
     SAL_DLLPRIVATE ResMgr*  GetResManager_Impl() const
                             { return aNameResId.GetResMgr(); }
-//#endif
 };
 
 //--------------------------------------------------------------------
@@ -135,7 +132,6 @@ inline SfxSlot* SfxInterface::operator[]( sal_uInt16 nPos ) const
     return nPos < nCount? pSlots+nPos: 0;
 }
 
-//#if 0 // _SOLAR__PRIVATE
 class SfxIFConfig_Impl
 {
 friend class SfxInterface;
@@ -149,6 +145,7 @@ public:
     void            RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
     sal_uInt16          GetType();
 };
-//#endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

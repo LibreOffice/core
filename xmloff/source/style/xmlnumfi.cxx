@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,6 @@
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-
-// #110680#
-//#include <comphelper/processfactory.hxx>
 
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -102,12 +100,9 @@ class SvXMLNumImpData
     LocaleDataWrapper*  pLocaleData;
     SvXMLNumFmtEntryArr aNameEntries;
 
-    // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
 public:
-    // #110680#
-    // SvXMLNumImpData( SvNumberFormatter* pFmt );
     SvXMLNumImpData(
         SvNumberFormatter* pFmt,
         const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory );
@@ -333,14 +328,14 @@ static ColorData aNumFmtStdColors[XML_NUMF_COLORCOUNT] =
 
 // maps for SvXMLUnitConverter::convertEnum
 
-static __FAR_DATA SvXMLEnumMapEntry aStyleValueMap[] =
+static SvXMLEnumMapEntry aStyleValueMap[] =
 {
     { XML_SHORT,            sal_False   },
     { XML_LONG,             sal_True    },
     { XML_TOKEN_INVALID,    0 }
 };
 
-static __FAR_DATA SvXMLEnumMapEntry aFormatSourceMap[] =
+static SvXMLEnumMapEntry aFormatSourceMap[] =
 {
     { XML_FIXED,            sal_False },
     { XML_LANGUAGE,         sal_True  },
@@ -362,7 +357,7 @@ struct SvXMLDefaultDateFormat
     sal_Bool                    bSystem;
 };
 
-static __FAR_DATA SvXMLDefaultDateFormat aDefaultDateFormats[] =
+static SvXMLDefaultDateFormat aDefaultDateFormats[] =
 {
     // format                           day-of-week     day             month               year            hours           minutes         seconds         format-source
 
@@ -393,8 +388,6 @@ SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 //  SvXMLNumImpData
 //
 
-// #110680#
-// SvXMLNumImpData::SvXMLNumImpData( SvNumberFormatter* pFmt ) :
 SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -405,7 +398,6 @@ SvXMLNumImpData::SvXMLNumImpData(
     pStyleElemAttrTokenMap(NULL),
     pLocaleData(NULL),
 
-    // #110680#
     mxServiceFactory(xServiceFactory)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -503,7 +495,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
 {
     if( !pStylesElemTokenMap )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStylesElemMap[] =
+        static SvXMLTokenMapEntry aStylesElemMap[] =
         {
             //  style elements
             { XML_NAMESPACE_NUMBER, XML_NUMBER_STYLE,      XML_TOK_STYLES_NUMBER_STYLE      },
@@ -525,7 +517,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
 {
     if( !pStyleElemTokenMap )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStyleElemMap[] =
+        static SvXMLTokenMapEntry aStyleElemMap[] =
         {
             //  elements in a style
             { XML_NAMESPACE_NUMBER, XML_TEXT,               XML_TOK_STYLE_TEXT              },
@@ -560,7 +552,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
 {
     if( !pStyleAttrTokenMap )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStyleAttrMap[] =
+        static SvXMLTokenMapEntry aStyleAttrMap[] =
         {
             //  attributes for a style
             { XML_NAMESPACE_STYLE,  XML_NAME,                  XML_TOK_STYLE_ATTR_NAME                  },
@@ -587,7 +579,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 {
     if( !pStyleElemAttrTokenMap )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStyleElemAttrMap[] =
+        static SvXMLTokenMapEntry aStyleElemAttrMap[] =
         {
             //  attributes for an element within a style
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
@@ -614,11 +606,6 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
-        // #110680#
-        //pLocaleData = new LocaleDataWrapper(
-        //  (pFormatter ? pFormatter->GetServiceManager() :
-        //  ::comphelper::getProcessServiceFactory()),
-        //  MsLangId::convertLanguageToLocale( nLang ) );
         pLocaleData = new LocaleDataWrapper(
             (pFormatter ? pFormatter->GetServiceManager() :
             mxServiceFactory),
@@ -846,7 +833,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
-        //  (one occurence is enough even if there are several percent characters in the string)
+        //  (one occurrence is enough even if there are several percent characters in the string)
 
         rtl::OUString aString( rContent.getStr() );
         sal_Int32 nPos = aString.indexOf( (sal_Unicode) '%' );
@@ -892,7 +879,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
             // and a quote to resume quoting.
-            rtl::OUString aInsert( rtl::OUString::createFromAscii( "\"\\\"" ) );
+            rtl::OUString aInsert( RTL_CONSTASCII_USTRINGPARAM( "\"\\\"" ) );
 
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
@@ -950,7 +937,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     sal_Int32 nAttrVal;
-    sal_Bool bAttrBool;
+    bool bAttrBool;
     sal_uInt16 nAttrEnum;
     double fAttrDouble;
 
@@ -1092,7 +1079,6 @@ void SvXMLNumFmtElementContext::EndElement()
 
                 if ( rParent.ReplaceNfKeyword( NF_KEY_NNN, NF_KEY_NNNN ) )
                 {
-                    //!aContent.setLength(0);       //! doesn't work, #76293#
                     aContent = OUStringBuffer();
                 }
 
@@ -1122,25 +1108,16 @@ void SvXMLNumFmtElementContext::EndElement()
 
         case XML_TOK_STYLE_DAY:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDay( rParent.GetInternational(), bLong );
-#endif
+
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_DD : NF_KEY_D ) );
             break;
         case XML_TOK_STYLE_MONTH:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-            {
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongMonth( rParent.GetInternational(), bLong );
-                bTextual = SvXMLNumFmtDefaults::IsSystemTextualMonth( rParent.GetInternational(), bLong );
-            }
-#endif
+
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bTextual
@@ -1149,11 +1126,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongYear( rParent.GetInternational(), bLong );
-#endif
             // Y after G (era) is replaced by E
             if ( rParent.HasEra() )
                 rParent.AddNfKeyword(
@@ -1166,11 +1139,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongEra( rParent.GetInternational(), bLong );
-#endif
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_GGG : NF_KEY_G ) );
@@ -1178,11 +1147,7 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             rParent.UpdateCalendar( sCalendar );
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-            if ( rParent.IsFromSystem() )
-                bEffLong = SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( rParent.GetInternational(), bLong );
-#endif
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_NNNN : NF_KEY_NN ) );
@@ -1253,86 +1218,18 @@ void SvXMLNumFmtElementContext::EndElement()
             {
                 rParent.AddNumber( aNumInfo );      // simple number
 
-                rParent.AddToCode( OUString::createFromAscii( "E+" ) );
+                rParent.AddToCode( OUString(RTL_CONSTASCII_USTRINGPARAM("E+")) );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
             }
             break;
 
         default:
-            DBG_ERROR("invalid element ID");
+            OSL_FAIL("invalid element ID");
     }
 }
 
 //-------------------------------------------------------------------------
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale&, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return bLong ? rIntn.IsLongDateDayLeadingZero() : rIntn.IsDateDayLeadingZero();
-#else
-    return !bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale&, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    if (bLong)
-    {
-        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
-        return ( eMonth == MONTH_ZERO || eMonth == MONTH_LONG );
-    }
-    else
-        return rIntn.IsDateMonthLeadingZero();
-#else
-    return !bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale&, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    if (bLong)
-    {
-        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
-        return ( eMonth == MONTH_SHORT || eMonth == MONTH_LONG );
-    }
-    else
-        return sal_False;
-#else
-    return bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const SvtSysLocale&, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return bLong ? rIntn.IsLongDateCentury() : rIntn.IsDateCentury();
-#else
-    return bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const SvtSysLocale& rSysLoc, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-    return IsSystemLongYear( rSysLoc, bLong );      // no separate setting
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const SvtSysLocale&, sal_Bool bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return ( bLong && rIntn.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
-#else
-    return bLong && true;
-#endif
-}
 
 sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
@@ -1399,7 +1296,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
-    sal_Bool bAttrBool;
+    bool bAttrBool;
     sal_uInt16 nAttrEnum;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1415,7 +1312,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         switch (nToken)
         {
             case XML_TOK_STYLE_ATTR_NAME:
-//              aName = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_LANGUAGE:
                 sLanguage = sValue;
@@ -1646,7 +1542,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 {
     if (!pFormatter)
     {
-        DBG_ERROR("no number formatter");
+        OSL_FAIL("no number formatter");
         return -1;
     }
 
@@ -1739,58 +1635,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-#if 0
 //! I18N doesn't provide SYSTEM or extended date information yet
-    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bFromSystem )
-    {
-        //  instead of automatic date format, use fixed formats if bFromSystem is not set
-        //! prevent use of automatic formats in other cases, force user-defined format?
-
-        sal_uInt32 nNewIndex = nIndex;
-
-        NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
-        if ( eOffset == NF_DATE_SYSTEM_SHORT )
-        {
-            const International& rInt = pData->GetInternational( nFormatLang );
-            if ( rInt.IsDateDayLeadingZero() && rInt.IsDateMonthLeadingZero() )
-            {
-                if ( rInt.IsDateCentury() )
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
-                else
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
-            }
-        }
-        else if ( eOffset == NF_DATE_SYSTEM_LONG )
-        {
-            const International& rInt = pData->GetInternational( nFormatLang );
-            if ( !rInt.IsLongDateDayLeadingZero() )
-            {
-                sal_Bool bCentury = rInt.IsLongDateCentury();
-                MonthFormat eMonth = rInt.GetLongDateMonthFormat();
-                if ( eMonth == MONTH_LONG && bCentury )
-                {
-                    if ( rInt.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG )
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
-                    else
-                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
-                }
-                else if ( eMonth == MONTH_SHORT && !bCentury )
-                    nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
-            }
-        }
-
-        if ( nNewIndex != nIndex )
-        {
-            //  verify the fixed format really matches the format string
-            //  (not the case with some formats from locale data)
-
-            const SvNumberformat* pFixedFormat = pFormatter->GetEntry( nNewIndex );
-            if ( pFixedFormat && pFixedFormat->GetFormatstring() == String(sFormat) )
-                nIndex = nNewIndex;
-        }
-    }
-#endif
-
     if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
     {
         //  use fixed-order formats instead of SYS... if bAutoOrder is false
@@ -1827,7 +1672,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 
     if ( nIndex == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        DBG_ERROR("invalid number format");
+        OSL_FAIL("invalid number format");
         nIndex = pFormatter->GetStandardIndex( nFormatLang );
     }
 
@@ -1842,24 +1687,12 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     if (!bRemoveAfterUse)
         GetImport().AddNumberStyle( nKey, GetName() );
 
-#if 0
-    ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );
-    aByte.Append( " | " );
-    aByte.Append(ByteString( String(sFormat), gsl_getSystemTextEncoding() ));
-    aByte.Append( " | " );
-    aByte.Append(ByteString::CreateFromInt32( nIndex ));
-
-//  DBG_ERROR(aByte.GetBuffer());
-    int xxx=42;
-#endif
-
     return nKey;
 }
 
 void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
 {
     SvXMLStyleContext::Finish( bOverwrite );
-//  AddCondition();
 }
 
 const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
@@ -2015,10 +1848,6 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
     OUString aSymbol = rContent;
     if ( aSymbol.getLength() == 0 )
     {
-        //  get currency symbol for language
-
-        //aSymbol = pData->GetLocaleData( nFormatLang ).getCurrSymbol();
-
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
         {
@@ -2186,7 +2015,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
@@ -2236,7 +2065,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData )
 {
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( rCondition.copy( 0, nValLen ) == sValue )
@@ -2335,9 +2164,6 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
 //  SvXMLNumFmtHelper
 //
 
-// #110680#
-//SvXMLNumFmtHelper::SvXMLNumFmtHelper(
-//                      const uno::Reference<util::XNumberFormatsSupplier>& rSupp )
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -2351,13 +2177,9 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    // #110680#
-    // pData = new SvXMLNumImpData( pFormatter );
     pData = new SvXMLNumImpData( pFormatter, mxServiceFactory );
 }
 
-// #110680#
-// SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     SvNumberFormatter* pNumberFormatter,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -2365,8 +2187,6 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
 
-    // #110680#
-    // pData = new SvXMLNumImpData( pNumberFormatter );
     pData = new SvXMLNumImpData( pNumberFormatter, mxServiceFactory );
 }
 
@@ -2410,9 +2230,4 @@ const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()
     return pData->GetStylesElemTokenMap();
 }
 
-/*sal_uInt32 SvXMLNumFmtHelper::GetKeyForName( const rtl::OUString& rName )
-{
-    return pData->GetKeyForName( rName );
-}*/
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,10 +25,6 @@
  *
  *************************************************************************/
 
-#if !defined(ENGLISH)
-#define LG_D 					// generate always german version
-#endif
-
 #define VER_FIRSTYEAR	2009
 
 #include <windows.h>
@@ -55,32 +51,15 @@ VS_VERSION_INFO versioninfo
 	VS_FF_PRERELEASE |
 #endif
 	0
-#ifndef WIN32
-	fileos VOS_DOS_WINDOWS16
-#else
 	fileos VOS_NT_WINDOWS32
-#endif
 	filetype VFT_APP
 	{
 		block "StringFileInfo"
 		{
-#ifdef LG_D
-			block "040704E4"
-			{
-				// German StringTable
-				value "CompanyName",		"Oracle\0"
-				value "FileDescription", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
-				value "InternalName",		PPS(RES_APP_NAME) "\0"
-				value "LegalCopyright",		S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
-			}
-#else
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"Oracle\0"
+				value "CompanyName", 		"The Document Foundation\0"
 				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
@@ -88,15 +67,10 @@ VS_VERSION_INFO versioninfo
 				value "InternalName",		PPS(RES_APP_NAME) "\0"
 				value "LegalCopyright", 	S_CRIGHT " Oracle and/or its affiliates. All rights reserved.\0"
 			}
-#endif
 		}
 
 		block "VarFileInfo"
 		{
-#ifdef LG_D
-			value "Translation", 0x0407, 1252
-#else
 			value "Translation", 0x0409, 1252
-#endif
 		}
 	}

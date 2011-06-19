@@ -324,16 +324,6 @@ ToolBox RID_HELPBAR
         {
             Identifier = SID_HELP_ANNOTATE ;
         };
-        /*
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_DOWNLOAD ;
-        };
-*/
     };
 };
 
@@ -399,7 +389,7 @@ String STR_QUICKSTART_RECENTDOC
 
 String STR_QUERY_UPDATE_LINKS
 {
-    Text [ en-US ] = "Update all links?" ;
+    Text [ en-US ] = "This document contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?" ;
 };
 
 String STR_DDE_ERROR
@@ -417,7 +407,6 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
 
 WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
 {
-    //HelpId = HID_WARNING_SECURITY_NO_HYPERLINKS;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
@@ -435,7 +424,6 @@ String RID_DESKTOP
 
 QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 {
-//    HelpId = HID_XMLSEC_QUERY_LOSINGSIGNATURE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
@@ -443,7 +431,6 @@ QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 
 QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 {
-//    HelpId = HID_XMLSEC_QUERY_SAVEBEFORESIGN;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
     Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
@@ -451,7 +438,6 @@ QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 
 InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 {
-//    HelpId = HID_XMLSEC_INFO_WRONGDOCFORMAT;
     Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
 };
 
@@ -516,3 +502,57 @@ String RID_SVXSTR_GRFILTER_TOOBIG
     Text [ en-US ] = "Not enough memory to insert graphic" ;
 };
 
+ModalDialog DLG_HELP_LICENSING
+{
+    // Size is computed
+    Text [ en-US ] = "Licensing and Legal information";
+    MOVEABLE = TRUE ;
+    CLOSEABLE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    SVLOOK = TRUE ;
+    String STR_LICENSING_INFORMATION_1
+    {
+        Text [ en-US ] =
+            "%PRODUCTNAME is made available subject to the terms of GNU Lesser General Public\n"
+            "License Version 3. A copy of the LGPL license can be found at\n"
+            "http://www.gnu.org/licenses/lgpl-3.0.html" ;
+    };
+    String STR_LICENSING_INFORMATION_2
+    {
+        Text [ en-US ] =
+            "Third Party Code Additional copyright notices and license terms applicable to\n"
+            "portions of the Software are set forth in the THIRDPARTYLICENSEREADME.html\n"
+            "file; choose Show License to see exact details in English." ;
+    };
+    String STR_LICENSING_INFORMATION_3
+    {
+        Text [ en-US ] =
+            "All trademarks and registered trademarks mentioned herein are the property of\n"
+            "their respective owners." ;
+    };
+    String STR_LICENSING_INFORMATION_4
+    {
+        Text [ en-US ] =
+            "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights\n"
+            "reserved." ;
+    };
+    String STR_LICENSING_INFORMATION_5
+    {
+        Text [ en-US ] =
+            "This product was created by %OOOVENDOR, based on OpenOffice.org,\n"
+            "which is Copyright 2000, 2010 Oracle and/or its affiliates.\n"
+            "%OOOVENDOR acknowledges all community members, please see\n"
+            "http://www.libreoffice.org/ for more details." ;
+    };
+    OKButton PB_LICENSING_SHOW
+    {
+        // Position and size is computed
+        Text [ en-US ] = "~Show License" ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_LICENSING_CLOSE
+    {
+        // Position and size is computed
+        Text [ en-US ] = "~Close" ;
+    };
+};

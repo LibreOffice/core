@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
@@ -52,7 +55,7 @@ namespace drawinglayer
             decomposition, but on pixel oututs the areas where the tiled pieces are
             aligned tend to show up (one overlapping or empty pixel)
          */
-        class FillBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometric definition
@@ -93,3 +96,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

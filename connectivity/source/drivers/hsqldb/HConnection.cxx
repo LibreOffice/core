@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -218,7 +219,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException)
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
 
@@ -226,7 +227,7 @@ namespace connectivity { namespace hsqldb
         if ( !impl_isTextTable_nothrow( _TableName ) )
             return NULL;
 
-        return impl_getTextTableIcon_nothrow( _ColorMode );
+        return impl_getTextTableIcon_nothrow();
     }
 
     // -------------------------------------------------------------------
@@ -280,44 +281,6 @@ namespace connectivity { namespace hsqldb
     }
 
     //TODO: resource
-#if 0
-    // -------------------------------------------------------------------
-    Reference< XExecutableDialog > OHsqlConnection::impl_createLinkedTableEditor_throw( const Reference< XDatabaseDocumentUI >& _rxDocumentUI, const ::rtl::OUString& _rTableName )
-    {
-        OSL_PRECOND( _rxDocumentUI.is(), "OHsqlConnection::impl_createLinkedTableEditor_throw: illegal document UI!" );
-        Reference< XExecutableDialog > xDialog;
-        try
-        {
-            ::comphelper::ComponentContext aContext( m_xORB );
-            Sequence< Any > aArguments(3);
-            aArguments[0] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableContainer" ) ),
-                makeAny( impl_getTableContainer_throw() )
-            );
-            aArguments[1] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TableName" ) ),
-                makeAny( _rTableName )
-            );
-            aArguments[2] <<= NamedValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
-                makeAny( _rxDocumentUI->getApplicationMainWindow() )
-            );
-
-            aContext.createComponentWithArguments( "com.sun.star.sdb.hsql.LinkedTableEditor", aArguments, xDialog );
-            if ( !xDialog.is() )
-                throw ServiceNotRegisteredException( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.hsql.LinkedTableEditor" ), *this );
-        }
-        catch( const RuntimeException& ) { throw; }
-        catch( const Exception& )
-        {
-            ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_TABLE_EDITOR_DIALOG));
-            throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
-        }
-        return xDialog;
-    }
-#endif
-
     // -------------------------------------------------------------------
     void OHsqlConnection::impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName )
     {
@@ -372,7 +335,7 @@ namespace connectivity { namespace hsqldb
             {
                 Reference< XRow > xValueAccess( xTableHsqlType, UNO_QUERY_THROW );
                 ::rtl::OUString sTableType = xValueAccess->getString( 1 );
-                bIsTextTable = sTableType.equalsAscii( "TEXT" );
+                bIsTextTable = sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TEXT" ) );
             }
         }
         catch( const Exception& )
@@ -384,7 +347,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow( ::sal_Int32 _ColorMode )
+    Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow()
     {
         Reference< XGraphic > xGraphic;
         try
@@ -396,13 +359,12 @@ namespace connectivity { namespace hsqldb
 
             // assemble the image URL
             ::rtl::OUStringBuffer aImageURL;
-            aImageURL.appendAscii( "private:graphicrepository/" );  // load the graphic from the global graphic repository
-            aImageURL.appendAscii( "database/" );                   // the relative path within the images.zip
-            if ( _ColorMode == GraphicColorMode::NORMAL )
-                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
-            else
-                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE_HC );
-                                                                    // the name of the graphic to use
+            // load the graphic from the global graphic repository
+            aImageURL.appendAscii( "private:graphicrepository/" );
+            // the relative path within the images.zip
+            aImageURL.appendAscii( "database/" );
+            aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
+            // the name of the graphic to use
             ::rtl::OUString sImageURL( aImageURL.makeStringAndClear() );
 
             // ask the provider to obtain a graphic
@@ -420,3 +382,5 @@ namespace connectivity { namespace hsqldb
     }
 
 } } // namespace connectivity::hsqldb
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -621,7 +622,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (throw_exc)
                 throw;
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1088,13 +1089,13 @@ PackageManagerImpl::getDeployedPackages_(
         catch (lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1273,7 +1274,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
     typedef ActivePackages::Entries::const_iterator ITActive;
     bool bShared = m_context.equals(OUSTR("shared"));
 
-    for (ITActive i = id2temp.begin(); i != id2temp.end(); i++)
+    for (ITActive i = id2temp.begin(); i != id2temp.end(); ++i)
     {
         try
         {
@@ -1317,7 +1318,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 //There may be another extensions at the same place
                 dp_misc::DescriptionInfoset infoset =
                     dp_misc::getDescriptionInfoset(url);
-                OSL_ENSURE(infoset.hasDescription(),
+                OSL_ENSURE(infoset.hasDescription() && infoset.getIdentifier(),
                            "Extension Manager: bundled and shared extensions "
                            "must have an identifer and a version");
                 if (infoset.hasDescription() &&
@@ -1511,7 +1512,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         ActivePackages::Entries::const_iterator i = id2temp.begin();
         bool bShared = m_context.equals(OUSTR("shared"));
 
-        for (; i != id2temp.end(); i++ )
+        for (; i != id2temp.end(); ++i )
         {
             //Get the database entry
             ActivePackages::Data const & dbData = i->second;
@@ -1618,7 +1619,6 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     }
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()
@@ -1686,3 +1686,4 @@ void PackageManagerImpl::CmdEnvWrapperImpl::pop() throw (RuntimeException)
 
 } // namespace dp_manager
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

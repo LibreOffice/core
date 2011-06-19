@@ -53,8 +53,6 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 205 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -169,8 +167,6 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_DELETE ;
                     HelpId = HID_ORGANIZE_DELETE ;
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
@@ -264,57 +260,4 @@ ModalDialog DLG_ORGANIZE
         MASKCOLOR ;
         ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
     };
-    Image IMG_OPENED_FOLDER_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "folderop_h.bmp" ; } ;
-    };
-    Image IMG_CLOSED_FOLDER_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "foldercl_h.bmp" ; } ;
-    };
-    Image IMG_OPENED_DOC_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
-    };
-    Image IMG_CLOSED_DOC_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
-    };
-    /*    FixedText FT_DEFAULT_TEMPLATE_LABEL
-    {
-        Pos = MAP_APPFONT ( 3 , 161 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Default template:" ;
-    };
-    FixedText FT_DEFAULT_TEMPLATE
-    {
-        Pos = MAP_APPFONT ( 66 , 161 ) ;
-        Size = MAP_APPFONT ( 131 , 10 ) ;
-    };*/
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

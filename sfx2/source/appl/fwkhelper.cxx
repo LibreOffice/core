@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include "sal/config.h"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "workwin.hxx"
@@ -39,7 +40,7 @@
 
 void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( xFrame.is() )
     {
         SfxFrame* pFrame=0;
@@ -57,3 +58,5 @@ void SAL_CALL RefreshToolbars( ::com::sun::star::uno::Reference< ::com::sun::sta
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

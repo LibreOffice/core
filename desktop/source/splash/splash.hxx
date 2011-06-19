@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,13 +72,8 @@ private:
     DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
     virtual ~SplashScreen();
     void loadConfig();
-    void initBitmap();
     void updateStatus();
-    bool findScreenBitmap(rtl::OUString const & path);
-    bool findAppBitmap(rtl::OUString const & path);
-    bool findBitmap(rtl::OUString const & path);
-    bool loadBitmap(
-        rtl::OUString const & path, const rtl::OUString &rBmpFileName );
+    void SetScreenBitmap(BitmapEx &rBitmap);
     void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static  SplashScreen *_pINSTANCE;
@@ -134,3 +130,5 @@ public:
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

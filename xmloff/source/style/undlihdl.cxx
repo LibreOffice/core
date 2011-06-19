@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_UnderlineType_Enum[] =
+SvXMLEnumMapEntry const pXML_UnderlineType_Enum[] =
 {
     { XML_NONE,                         FontUnderline::NONE },
     { XML_SINGLE,               FontUnderline::SINGLE },
@@ -66,7 +67,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_UnderlineType_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_UnderlineStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_UnderlineStyle_Enum[] =
 {
     { XML_NONE,                         FontUnderline::NONE },
     { XML_SOLID,                        FontUnderline::SINGLE },
@@ -89,7 +90,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_UnderlineStyle_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_UnderlineWidth_Enum[] =
+SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
 {
     { XML_AUTO,                         FontUnderline::NONE },
     { XML_AUTO,                         FontUnderline::SINGLE },
@@ -379,3 +380,4 @@ sal_Bool XMLUnderlineWidthPropHdl::exportXML( OUString& rStrExpValue, const uno:
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,6 @@
 #include <string.h>
 
 namespace /* private */ {
-    //########################################
     typedef std::vector<string_t> string_container_t;
 
     #define TAG_RECENT_FILES "RecentFiles"
@@ -218,11 +218,9 @@ namespace /* private */ {
     typedef std::vector<recently_used_item*> recently_used_item_list_t;
     typedef void (recently_used_item::* SET_COMMAND)(const string_t&);
 
-    //########################################
     // thrown if we encounter xml tags that we do not know
     class unknown_xml_format_exception {};
 
-    //########################################
     class recently_used_file_filter : public i_xml_parser_event_handler
     {
     public:
@@ -395,8 +393,8 @@ namespace /* private */ {
             uri_(uri)
         {}
 
-        bool operator() (const recently_used_item* item)
-        { return (item->uri_ == uri_); }
+        bool operator() (const recently_used_item* item) const
+            { return (item->uri_ == uri_); }
     private:
         string_t uri_;
     };
@@ -474,7 +472,6 @@ namespace /* private */ {
 
 } // namespace private
 
-//###########################################
 /*
    example (see http::www.freedesktop.org):
     <?xml version="1.0"?>
@@ -512,15 +509,17 @@ extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, co
     }
     catch(const char* ex)
     {
-        OSL_ENSURE(false, ex);
+        OSL_FAIL(ex);
     }
     catch(const xml_parser_exception&)
     {
-        OSL_ENSURE(false, "XML parser error");
+        OSL_FAIL("XML parser error");
     }
     catch(const unknown_xml_format_exception&)
     {
-        OSL_ENSURE(false, "XML format unknown");
+        OSL_FAIL("XML format unknown");
     }
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

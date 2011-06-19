@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -159,7 +162,7 @@ namespace drawinglayer
             be helpful to add many for the purpose not interesting higher level primitives
             to not force their decomposition to be created and/or parsed.
          */
-        class BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC BaseProcessor2D
         {
         private:
             /// The ViewInformation2D itself. It's private to isolate accesses to it
@@ -197,44 +200,8 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        /** CollectingProcessor2D class
-
-            A processor which just collects all primitives given to it in
-            process(..) calls to maPrimitive2DSequence. This can e.g. be used to
-            hand around as instance over various methods where every called
-            method can add graphic content to it.
-         */
-        class CollectingProcessor2D : public BaseProcessor2D
-        {
-        private:
-            primitive2d::Primitive2DSequence                        maPrimitive2DSequence;
-
-        public:
-            CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation);
-            virtual ~CollectingProcessor2D();
-
-            /// the central processing method
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
-
-            /// helpers for adding to local sequence
-            void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource)
-            {
-                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
-            }
-
-            /// data access and reset
-            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            void reset() { maPrimitive2DSequence = primitive2d::Primitive2DSequence(); }
-        };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

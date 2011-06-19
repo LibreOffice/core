@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,8 @@
 
 //------------------------------------------------------------
 // class SdrAngleItem
-// Fuer alle Metriken. GetPresentation liefert dann bei
-// Value=2500 z.B. ein "25mm".
+// For all metrics. GetPresentation returns for example for
+// Value=2500 a "25mm".
 //------------------------------------------------------------
 class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
@@ -44,18 +45,16 @@ public:
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual FASTBOOL HasMetrics() const;
-    virtual FASTBOOL ScaleMetrics(long nMul, long nDiv);
+    virtual bool HasMetrics() const;
+    virtual bool ScaleMetrics(long nMul, long nDiv);
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
                                                 SfxMapUnit eCoreMetric,
                                                 SfxMapUnit ePresMetric,
                                                 String& rText, const IntlWrapper * = 0) const;
-
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

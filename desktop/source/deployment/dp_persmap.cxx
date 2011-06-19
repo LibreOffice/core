@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
     buf.append( OUString( msg.getStr(), msg.getLength(),
                           osl_getThreadTextEncoding() ) );
     const OUString msg_(buf.makeStringAndClear());
-    OSL_ENSURE( 0, rtl::OUStringToOString(
+    OSL_FAIL( rtl::OUStringToOString(
                     msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
     throw RuntimeException( msg_, Reference<XInterface>() );
 }
@@ -73,7 +74,7 @@ PersistentMap::~PersistentMap()
     }
     catch (DbException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, DbEnv::strerror( exc.get_errno() ) );
+        OSL_FAIL( DbEnv::strerror( exc.get_errno() ) );
     }
 }
 
@@ -227,15 +228,14 @@ t_string2string_map PersistentMap::getEntries() const
             if (err != 0)
                 throw_rtexc(err);
 
-            ::std::pair<t_string2string_map::iterator, bool > insertion(
-                ret.insert( t_string2string_map::value_type(
-                                t_string2string_map::value_type(
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbKey.get_data()),
-                                             dbKey.get_size() ),
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbData.get_data()),
-                                             dbData.get_size() ) ) ) ) );
+#if OSL_DEBUG_LEVEL > 0
+            ::std::pair<t_string2string_map::iterator, bool> insertion =
+#endif
+            ret.insert(
+                t_string2string_map::value_type(
+                    OString( static_cast<sal_Char const*>(dbKey.get_data()), dbKey.get_size() ),
+                    OString( static_cast<sal_Char const*>(dbData.get_data()), dbData.get_size() )
+                ) );
             OSL_ASSERT( insertion.second );
         }
         err = pcurs->close();
@@ -251,3 +251,4 @@ t_string2string_map PersistentMap::getEntries() const
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

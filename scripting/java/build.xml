@@ -29,7 +29,6 @@
   <!-- =================== Environmental Properties ======================= -->
 
   <property name="prj" value=".."/>
-  <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="off"/>
   <property name="debug"   value="on"/>
   <property name="jardir" value="${out}/class"/>
@@ -98,12 +97,12 @@
   <target name="compile" depends="prepare">
     <javac srcdir="com" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath"
-         debug="${debug}" optimize="${optimize}" deprecation="off">
+         debug="${debug}" optimize="${optimize}" deprecation="off" includeantruntime="false">
       <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
     </javac>
     <javac srcdir="Framework/" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath" debug="${debug}"
-         optimize="${optimize}" deprecation="off">
+         optimize="${optimize}" deprecation="off" includeantruntime="false">
      <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
     </javac>
   </target>

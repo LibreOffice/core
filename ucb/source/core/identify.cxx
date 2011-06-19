@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,10 +37,11 @@
 
 #include "identify.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+
+using ::rtl::OUString;
 
 //=========================================================================
 //
@@ -114,3 +116,4 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
     return m_aProviderScheme;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

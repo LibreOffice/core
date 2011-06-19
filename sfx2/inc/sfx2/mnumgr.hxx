@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <stdarg.h>
 
-#ifndef _MENU_HXX //autogen //wg. MENU_APPEND !!!!
 #include <vcl/menu.hxx>
-#endif
 #include <tools/wintypes.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
@@ -58,9 +57,9 @@ class SfxMenuManager
 {
 friend class SfxPopupMenuManager;
 
-    SfxVirtualMenu*         pMenu;          // das eigentliche Menu
+    SfxVirtualMenu*  pMenu;     // the actual Menu
     SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
-    sal_Bool                    bMenuBar;       // Popup oder MenuBar
+    sal_Bool         bMenuBar;  // Popup or MenuBar
     SfxBindings*            pBindings;
     ResMgr*                 pResMgr;
     sal_uInt32              nType;
@@ -89,9 +88,7 @@ public:
     ResMgr*                 GetResMgr() const { return pResMgr; }
     void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
 
-//#if 0 // _SOLAR__PRIVATE
     void            Construct_Impl( Menu* pMenu, sal_Bool bWithHelp );
-//#endif
 };
 
 //--------------------------------------------------------------------
@@ -119,7 +116,6 @@ public:
     // @deprecated!!
     // Don't use this method any longer. The whole class will be removed in the future.
     // Changing code which relies on Popup would need much more effort.
-    // Please contact cd@openoffice.org if you have questions or need help
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     sal_uInt16              Execute( const Point& rPos, Window *pWindow );
@@ -129,7 +125,6 @@ public:
     // @deprecated (start)!!
     // Don't use these methods any longer. The whole class will be removed in the future.
     // Changing code which relies on these methods would need much more effort!
-    // Please contact cd@openoffice.org if you have questions or need help
     void                StartInsert();
     void                EndInsert();
     void                CheckItem( sal_uInt16, sal_Bool );
@@ -146,3 +141,4 @@ public:
 
 #endif // #ifndef _SFXMNUMGR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

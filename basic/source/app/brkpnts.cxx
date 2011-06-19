@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include <tools/list.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -37,9 +37,7 @@
 #include <tools/config.hxx>
 #include <vcl/gradient.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "brkpnts.hxx"
 #include "basic.hrc"
@@ -48,14 +46,11 @@
 
 struct Breakpoint
 {
-    sal_uInt16 nLine;
-
-    Breakpoint( sal_uInt16 nL ) { nLine = nL; }
+    sal_uInt32 nLine;
+    Breakpoint( sal_uInt32 nL ) { nLine = nL; }
 };
 
-
 ImageList* BreakpointWindow::pImages = NULL;
-
 
 BreakpointWindow::BreakpointWindow( Window *pParent )
 : Window( pParent )
@@ -76,13 +71,9 @@ BreakpointWindow::BreakpointWindow( Window *pParent )
 
 void BreakpointWindow::Reset()
 {
-    Breakpoint* pBrk = First();
-    while ( pBrk )
-    {
-        delete pBrk;
-        pBrk = Next();
-    }
-    Clear();
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
+        delete BreakpointList[ i ];
+    BreakpointList.clear();
 
     pModule->ClearAllBP();
 }
@@ -103,14 +94,13 @@ void BreakpointWindow::SetBPsInModule()
 {
     pModule->ClearAllBP();
 
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
+        Breakpoint* pBrk = BreakpointList[ i ];
         pModule->SetBP( (sal_uInt16)pBrk->nLine );
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (sal_uInt16)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
-        pBrk = Next();
     }
     for ( sal_uInt16 nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
     {
@@ -121,27 +111,30 @@ void BreakpointWindow::SetBPsInModule()
 }
 
 
-void BreakpointWindow::InsertBreakpoint( sal_uInt16 nLine )
+void BreakpointWindow::InsertBreakpoint( sal_uInt32 nLine )
 {
     Breakpoint* pNewBrk = new Breakpoint( nLine );
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+
+    for ( ::std::vector< Breakpoint* >::iterator i = BreakpointList.begin();
+          i < BreakpointList.end();
+          ++ i
+        )
     {
+        Breakpoint* pBrk = *i;
         if ( nLine <= pBrk->nLine )
         {
-            if ( pBrk->nLine != nLine )
-                Insert( pNewBrk );
+            if ( nLine != pBrk->nLine )
+                BreakpointList.insert( i, pNewBrk );
             else
                 delete pNewBrk;
             pNewBrk = NULL;
-            pBrk = NULL;
+            break;
         }
-        else
-            pBrk = Next();
     }
+
     // No insert position found => LIST_APPEND
     if ( pNewBrk )
-        Insert( pNewBrk, LIST_APPEND );
+        BreakpointList.push_back( pNewBrk );
 
     Invalidate();
 
@@ -166,35 +159,34 @@ void BreakpointWindow::InsertBreakpoint( sal_uInt16 nLine )
 }
 
 
-Breakpoint* BreakpointWindow::FindBreakpoint( sal_uIntPtr nLine )
+Breakpoint* BreakpointWindow::FindBreakpoint( sal_uInt32 nLine )
 {
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
-        if ( pBrk->nLine == nLine )
-            return pBrk;
-
-        pBrk = Next();
+        Breakpoint* pBP = BreakpointList[ i ];
+        if ( pBP->nLine == nLine )
+            return pBP;
     }
-
-    return (Breakpoint*)0;
+    return NULL;
 }
 
 
-void BreakpointWindow::AdjustBreakpoints( sal_uIntPtr nLine, sal_Bool bInserted )
+void BreakpointWindow::AdjustBreakpoints( sal_uInt32 nLine, bool bInserted )
 {
     if ( nLine == 0 ) //TODO: nLine == TEXT_PARA_ALL+1
         return;
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+
+    for ( size_t i = 0; i < BreakpointList.size(); )
     {
-        sal_Bool bDelBrk = sal_False;
+        Breakpoint* pBrk = BreakpointList[ i ];
+        bool bDelBrk = false;
+
         if ( pBrk->nLine == nLine )
         {
             if ( bInserted )
                 pBrk->nLine++;
             else
-                bDelBrk = sal_True;
+                bDelBrk = true;
         }
         else if ( pBrk->nLine > nLine )
         {
@@ -203,18 +195,19 @@ void BreakpointWindow::AdjustBreakpoints( sal_uIntPtr nLine, sal_Bool bInserted 
             else
                 pBrk->nLine--;
         }
-
         if ( bDelBrk )
         {
-            sal_uIntPtr n = GetCurPos();
-            delete Remove( pBrk );
-            pBrk = Seek( n );
+            delete pBrk;
+            ::std::vector< Breakpoint* >::iterator it = BreakpointList.begin();
+            ::std::advance( it, i );
+            BreakpointList.erase( it );
         }
         else
         {
-            pBrk = Next();
+            ++i;
         }
     }
+
     Invalidate();
 }
 
@@ -241,14 +234,12 @@ void BreakpointWindow::SaveBreakpoints( String aFilename )
 {
     ByteString aBreakpoints;
 
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
+        Breakpoint* pBrk = BreakpointList[ i ];
         if ( aBreakpoints.Len() )
             aBreakpoints += ';';
-
         aBreakpoints += ByteString::CreateFromInt32( pBrk->nLine );
-        pBrk = Next();
     }
 
     Config aConfig(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -274,16 +265,15 @@ void BreakpointWindow::Paint( const Rectangle& )
     aBmpOff.X() = ( aOutSz.Width() - aBmpSz.Width() ) / 2;
     aBmpOff.Y() = ( nLineHeight - aBmpSz.Height() ) / 2;
 
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
+        Breakpoint* pBrk = BreakpointList[ i ];
 #if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
-        sal_uIntPtr nLine = pBrk->nLine-1;
-        sal_uIntPtr nY = nLine*nLineHeight - nCurYOffset;
+        sal_Int32 nLine = pBrk->nLine-1;
+        sal_Int32 nY = nLine*nLineHeight - nCurYOffset;
         DrawImage( Point( 0, nY ) + aBmpOff, aBrk );
-        pBrk = Next();
     }
     ShowMarker( sal_True );
 }
@@ -291,39 +281,46 @@ void BreakpointWindow::Paint( const Rectangle& )
 
 Breakpoint* BreakpointWindow::FindBreakpoint( const Point& rMousePos )
 {
-    long nLineHeight = GetTextHeight();
-    long nYPos = rMousePos.Y() + nCurYOffset;
+    sal_Int32 nLineHeight = GetTextHeight();
+    sal_Int32 nYPos = rMousePos.Y() + nCurYOffset;
 
-    Breakpoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
-        sal_uIntPtr nLine = pBrk->nLine-1;
-        long nY = nLine*nLineHeight;
+        Breakpoint* pBrk = BreakpointList[ i ];
+        sal_Int32 nLine = pBrk->nLine-1;
+        sal_Int32 nY = nLine * nLineHeight;
         if ( ( nYPos > nY ) && ( nYPos < ( nY + nLineHeight ) ) )
             return pBrk;
-        pBrk = Next();
     }
-    return 0;
+    return NULL;
 }
 
 
-void BreakpointWindow::ToggleBreakpoint( sal_uInt16 nLine )
+void BreakpointWindow::ToggleBreakpoint( sal_uInt32 nLine )
 {
-    Breakpoint* pBrk = FindBreakpoint( nLine );
-    if ( pBrk ) // remove
+    bool Removed = false;
+    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
-        pModule->ClearBP( nLine );
-        delete Remove( pBrk );
+        Breakpoint* pBP = BreakpointList[ i ];
+        if ( pBP->nLine == nLine )              // remove
+        {
+            pModule->ClearBP( nLine );
+            delete pBP;
+            ::std::vector< Breakpoint* >::iterator it = BreakpointList.begin();
+            ::std::advance( it, i );
+            BreakpointList.erase( it );
+            Removed = true;
+            break;
+        }
     }
-    else // create one
-    {
+
+    if ( !Removed )                             // create one
         InsertBreakpoint( nLine );
-    }
 
     Invalidate();
 }
 
-void BreakpointWindow::ShowMarker( sal_Bool bShow )
+void BreakpointWindow::ShowMarker( bool bShow )
 {
     if ( nMarkerPos == MARKER_NOMARKER )
         return;
@@ -367,12 +364,12 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-void BreakpointWindow::SetMarkerPos( sal_uInt16 nLine, sal_Bool bError )
+void BreakpointWindow::SetMarkerPos( sal_uInt32 nLine, bool bError )
 {
-    ShowMarker( sal_False );   // Remove old one
+    ShowMarker( false );   // Remove old one
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( sal_True );    // Draw new one
+    ShowMarker( true );    // Draw new one
     Update();
 }
 
@@ -384,3 +381,4 @@ void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nF
     Window::Scroll( nHorzScroll, nVertScroll );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

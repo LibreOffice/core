@@ -28,6 +28,7 @@
 #ifndef __ooo_vba_msforms_XGroupBox_idl__
 #define __ooo_vba_msforms_XGroupBox_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/msforms/XNewFont.idl>
 
 //=============================================================================

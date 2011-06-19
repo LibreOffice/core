@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,7 +129,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                         {
                             aPropSeq[i].Value >>= aLabel;
                             break;
@@ -278,3 +279,5 @@ IMPL_LINK( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar )
 
     return 1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,7 @@ struct SbiStatement {
 #define N   sal_False
 
 static SbiStatement StmntTable [] = {
+{ ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
 { CALL,     &SbiParser::Call,       N, Y, }, // CALL
 { CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
 { _CONST_,  &SbiParser::Dim,        Y, Y, }, // CONST
@@ -193,7 +195,6 @@ sal_Bool SbiParser::HasGlobalCode()
     {
         aGen.BackChain( nGblChain );
         aGen.Gen( _LEAVE );
-        // aGen.Gen( _STOP );
         nGblChain = 0;
     }
     return bGblDefs;
@@ -387,6 +388,18 @@ sal_Bool SbiParser::Parse()
         Next(); return sal_True;
     }
 
+        // In vba it's possible to do Error.foobar ( even if it results in
+    // a runtime error
+        if ( eCurTok == _ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+        {
+            SbiTokenizer tokens( *(SbiTokenizer*)this );
+            tokens.Next();
+            if ( tokens.Peek()  == DOT )
+            {
+                eCurTok = SYMBOL;
+        ePush = eCurTok;
+            }
+    }
     // Kommt ein Symbol, ist es entweder eine Variable( LET )
     // oder eine SUB-Prozedur( CALL ohne Klammern )
     // DOT fuer Zuweisungen im WITH-Block: .A=5
@@ -501,7 +514,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( aRtlName.EqualsIgnoreCaseAscii("Mid") )
         {
             SbiExprNode* pExprNode = aVar.GetExprNode();
-            // SbiNodeType eNodeType;
             if( pExprNode && pExprNode->GetNodeType() == SbxVARVAL )
             {
                 SbiExprList* pPar = pExprNode->GetParameters();
@@ -535,7 +547,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
             SbiExpression aExpr( this );
             aExpr.Gen();
             SbiOpcode eOp = _PUT;
-            // SbiSymDef* pDef = aVar.GetRealVar();
             if( pDef )
             {
                 if( pDef->GetConstDef() )
@@ -598,7 +609,6 @@ void SbiParser::Set()
         TypeDecl( *pTypeDef, sal_True );
 
         aLvalue.Gen();
-        // aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
         aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
         aGen.Gen( _SETCLASS, pDef->GetTypeId() );
     }
@@ -627,7 +637,6 @@ void SbiParser::Set()
                 aGen.Gen( _SET );
         }
     }
-    // aGen.Gen( _SET );
 }
 
 // JSM 07.10.95
@@ -681,7 +690,6 @@ void SbiParser::DefXXX()
             else
             {
                 ch2 = aSym.ToUpperAscii().GetBuffer()[0];
-                //ch2 = aSym.Upper();
                 if( ch2 < ch1 ) Error( SbERR_SYNTAX ), ch2 = 0;
             }
         }
@@ -795,7 +803,7 @@ void SbiParser::Option()
             bClassModule = sal_True;
             aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
-        case VBASUPPORT:
+        case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode
             if( Next() == NUMBER )
             {
                 if ( nVal == 1 || nVal == 0 )
@@ -861,3 +869,4 @@ void SbiParser::ErrorStmnt()
     aGen.Gen( _ERROR );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

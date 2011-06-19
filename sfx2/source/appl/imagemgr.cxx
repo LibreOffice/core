@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -61,17 +62,17 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-typedef std::hash_map< ::rtl::OUString,
+typedef boost::unordered_map< ::rtl::OUString,
                        WeakReference< XImageManager >,
                        ::rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
 
-static WeakReference< XModuleManager >                        m_xModuleManager;
-static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSupplier;
-static WeakReference< XURLTransformer >                       m_xURLTransformer;
-static ModuleIdToImagegMgr                                    m_aModuleIdToImageMgrMap;
 
-Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast )
+Image SAL_CALL GetImage(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& aURL,
+    bool bBig
+)
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
@@ -90,22 +91,6 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
     rtl::OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
-        /*
-        // Support old way to retrieve image via slot URL
-        Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
-        if ( !xURLTransformer.is() )
-        {
-            xURLTransformer = Reference< XURLTransformer >(
-                                ::comphelper::getProcessServiceFactory()->createInstance(
-                                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
-                                UNO_QUERY );
-            m_xURLTransformer = xURLTransformer;
-        }
-
-        URL aTargetURL;
-        aTargetURL.Complete = aURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        sal_uInt16 nId = ( sal_uInt16 ) aTargetURL.Path.toInt32();*/
         sal_uInt16 nId = ( sal_uInt16 ) String(aURL).Copy(5).ToInt32();
         const SfxSlot* pSlot = 0;
         if ( xModel.is() )
@@ -147,8 +132,6 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
                             ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
     if ( bBig )
         nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
-    if ( bHiContrast )
-        nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
     if ( xDocImgMgr.is() )
     {
@@ -170,6 +153,8 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
         }
     }
 
+    static WeakReference< XModuleManager > m_xModuleManager;
+
     Reference< XModuleManager > xModuleManager = m_xModuleManager;
 
     if ( !xModuleManager.is() )
@@ -188,11 +173,16 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
         {
             Reference< XImageManager > xModuleImageManager;
             rtl::OUString aModuleId = xModuleManager->identify( rFrame );
+
+            static ModuleIdToImagegMgr m_aModuleIdToImageMgrMap;
+
             ModuleIdToImagegMgr::iterator pIter = m_aModuleIdToImageMgrMap.find( aModuleId );
             if ( pIter != m_aModuleIdToImageMgrMap.end() )
                 xModuleImageManager = pIter->second;
             else
             {
+                static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSupplier;
+
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier = m_xModuleCfgMgrSupplier;
 
                 if ( !xModuleCfgMgrSupplier.is() )
@@ -223,7 +213,7 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
             if ( !!aImage )
                 return aImage;
             else if ( nProtocol != INET_PROT_UNO && nProtocol != INET_PROT_SLOT )
-                return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
+                return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
         }
     }
     catch ( Exception& )
@@ -232,3 +222,5 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
 
     return Image();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

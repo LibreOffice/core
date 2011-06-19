@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,9 @@
 #include "impastpl.hxx"
 
 using namespace std;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 //#############################################################################
 //
@@ -59,3 +62,5 @@ SvXMLAutoStylePoolPropertiesP_Impl::SvXMLAutoStylePoolPropertiesP_Impl( XMLFamil
     }
     while( pFamilyData->mpNameList->Seek_Entry( &msName, 0 ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

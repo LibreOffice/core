@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -324,3 +323,5 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_HELPER_INTERCEPTIONHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

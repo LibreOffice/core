@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,7 +84,7 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                OSL_FAIL( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
@@ -103,7 +104,7 @@ bool MacabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc,
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "macabdrv1" ) );
+    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "macabdrv1" )) );
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -234,7 +235,7 @@ Sequence< ::rtl::OUString > MacabDriver::getSupportedServiceNames_Static(  ) thr
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
 
     return aSNS;
 }
@@ -292,7 +293,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:macab:"), 18));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab:")), 18));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
@@ -346,3 +347,4 @@ Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiSe
     return *(new MacabDriver(_rxFactory));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

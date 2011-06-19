@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
 #include "soundhandler.hxx"
-#endif
 
-#ifndef __COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -259,7 +256,6 @@ void SAL_CALL SoundHandler::impl_initService()
 {
 }
 
-
 /*-************************************************************************************************************//**
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed informations for work.
@@ -333,7 +329,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException)
 {
     // SAFE {
-    const ::vos::OGuard aLock( m_aLock );
+    const ::osl::MutexGuard aLock( m_aLock );
 
     {
     //close streams otherwise on windows we can't reopen the file in the
@@ -427,7 +423,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString::createFromAscii("wav_Wave_Audio_File");
+        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wav_Wave_Audio_File"));
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
@@ -452,7 +448,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
 IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
 {
     // SAFE {
-    ::vos::OClearableGuard aLock( m_aLock );
+    ::osl::ClearableMutexGuard aLock( m_aLock );
 
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {
@@ -492,7 +488,7 @@ IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -501,7 +497,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void* pReturn = NULL;
     if  (pServiceManager !=  NULL )
@@ -523,3 +519,5 @@ extern "C" void* SAL_CALL component_getFactory(const sal_Char* pImplementationNa
     /* Return with result of this operation. */
     return pReturn;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

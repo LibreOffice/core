@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: fillattribute.hxx,v $
- *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +30,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <sal/types.h>
 
@@ -74,7 +71,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class FillGradientAttribute
+        class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
         {
         private:
             ImpFillGradientAttribute*           mpFillGradientAttribute;
@@ -119,3 +116,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

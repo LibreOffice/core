@@ -43,11 +43,10 @@ OBJFILES=       $(OBJ)$/main.obj
 APP1TARGET= $(TARGET)
 APP1OBJS=       $(OBJFILES)
 APPSTDLIBS=$(SALLIB) \
-            $(VOSLIB) \
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
             $(SLB)$/sql.lib
-            
+
 
 # ... cfgapi ..............................
 APP1STDLIBS = $(APPSTDLIBS)

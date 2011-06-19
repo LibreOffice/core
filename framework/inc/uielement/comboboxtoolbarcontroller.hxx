@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
-//#include <vcl/toolbox.hxx>
-//#include <vcl/combobox.hxx>
 #include <uielement/complextoolbarcontroller.hxx>
 
 namespace framework
@@ -94,3 +89,5 @@ class ComboboxToolbarController : public IComboBoxListener,
 }
 
 #endif // __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

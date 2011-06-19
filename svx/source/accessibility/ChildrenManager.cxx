@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/ChildrenManager.hxx>
-#ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_IMPL_HXX
 #include "ChildrenManagerImpl.hxx"
-#endif
 #include <svx/AccessibleShape.hxx>
 
 using namespace ::com::sun::star;
@@ -54,8 +53,8 @@ ChildrenManager::ChildrenManager (
         mpImpl->Init ();
     else
         throw uno::RuntimeException(
-            ::rtl::OUString::createFromAscii(
-                "ChildrenManager::ChildrenManager can't create implementation object"), NULL);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "ChildrenManager::ChildrenManager can't create implementation object")), NULL);
 }
 
 
@@ -178,3 +177,4 @@ void ChildrenManager::ViewForwarderChanged (ChangeType aChangeType,
 
 } // end of namespace accessibility
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

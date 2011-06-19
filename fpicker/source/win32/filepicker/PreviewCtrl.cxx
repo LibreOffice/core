@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -225,12 +226,12 @@ CFilePreview* CFilePreview::createInstance(
         catch( CPreviewException& )
         {
             OSL_ASSERT( !s_FilePreviewInst );
-            OSL_ENSURE( sal_False, "Creation of the preview window failed" );
+            OSL_FAIL( "Creation of the preview window failed" );
         }
         catch( CAutoOleInit::COleInitException& )
         {
             OSL_ASSERT( !s_FilePreviewInst );
-            OSL_ENSURE( sal_False, "OleInitalize failed" );
+            OSL_FAIL( "OleInitalize failed" );
         }
     }
 
@@ -418,7 +419,7 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
 // if the preview is shown and enabled
 // preview of the given file will be shown
 // returns true on success or false if an error
-// occured (the file in not there or not accessible etc.)
+// occurred (the file in not there or not accessible etc.)
 //---------------------------------------------------
 
 sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )
@@ -613,3 +614,4 @@ LRESULT CALLBACK CFilePreview::WndProc(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

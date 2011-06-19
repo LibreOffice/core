@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -263,7 +264,7 @@ namespace
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // search for any view of this document that is currently printing
     const Printer *pPrinter = NULL;
@@ -322,7 +323,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
 {
-    // alten Printer beschaffen
+    // Get old Printer
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
@@ -435,13 +436,12 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
-    //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
+    // The PaperSize may be set only when actually PAPER_USER
+    // applies, otherwise the driver could choose a invalid format.
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
-        //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
-        //          Device gesetzten umrechnen. Zusaetzlich nur dann
-        //          setzen, wenn sie wirklich veraendert wurden.
+        // Bug 56929 - MapMode of 100mm which recalculated when
+        // the device is set. Additionally only set if they were really changed.
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
@@ -450,7 +450,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    // #96772#: wait until printing is done
+    //wait until printing is done
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
     while ( pDocPrinter->IsPrinting() )
         Application::Yield();
@@ -460,7 +460,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxViewShell* pViewSh = NULL;
     SfxPrinter* pPrinter = NULL;
@@ -505,7 +505,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         {
             /* SAFE { */
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 while( m_pPrinter->IsPrinting() )
                     Application::Yield();
                 m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
@@ -559,10 +559,10 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch( ::com::sun::star::ucb::ContentCreationException& ) { DBG_ERROR("content create exception"); }
-            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { DBG_ERROR("command abort exception"); }
-            catch( ::com::sun::star::uno::RuntimeException&         ) { DBG_ERROR("runtime exception"); }
-            catch( ::com::sun::star::uno::Exception&                ) { DBG_ERROR("unknown exception"); }
+            catch( ::com::sun::star::ucb::ContentCreationException& ) { OSL_FAIL("content create exception"); }
+            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { OSL_FAIL("command abort exception"); }
+            catch( ::com::sun::star::uno::RuntimeException&         ) { OSL_FAIL("runtime exception"); }
+            catch( ::com::sun::star::uno::Exception&                ) { OSL_FAIL("unknown exception"); }
 
             // kill the temp file!
             delete *ppTempFile;
@@ -583,7 +583,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // object already disposed?
     // object already disposed?
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // get view for sfx printing capabilities
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
@@ -593,8 +593,6 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     SfxViewShell* pView = pViewFrm->GetViewShell();
     if ( !pView )
         return;
-
-//  SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
@@ -648,7 +646,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sTemp );
             }
             else
@@ -664,7 +662,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sPath );
             }
             else
@@ -682,7 +680,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LocalFileName"));
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
@@ -707,7 +705,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
             {
-                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("Collate");
+                aCheckedArgs[nProps].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Collate"));
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else
@@ -819,14 +817,15 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
 
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
 }
 
 void SAL_CALL SfxPrintHelper::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference < view::XPrintJobListener>*)0), xListener );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

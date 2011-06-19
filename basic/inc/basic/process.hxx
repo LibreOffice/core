@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define _PROCESS_HXX
 
 #include <tools/string.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 #include <map>
 
@@ -39,9 +40,12 @@ typedef Environment::value_type EnvironmentVariable;
 class Process
 {
     // Internal members and methods
-    vos::OArgumentList *pArgumentList;
-    vos::OEnvironment *pEnvList;
-    vos::OProcess *pProcess;
+    sal_uInt32                  m_nArgumentCount;
+    rtl_uString               **m_pArgumentList;
+    sal_uInt32                  m_nEnvCount;
+    rtl_uString               **m_pEnvList;
+    rtl::OUString               m_aProcessName;
+    oslProcess                  m_pProcess;
     sal_Bool ImplIsRunning();
     long ImplGetExitCode();
     sal_Bool bWasGPF;
@@ -61,3 +65,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

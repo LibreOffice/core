@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,7 +84,7 @@ namespace xmloff
 
         // get and convert the value
         ::rtl::OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
-        sal_Bool bValue = _bDefault;
+        bool bValue = _bDefault;
         GetImport().GetMM100UnitConverter().convertBool(bValue, sAttributeValue);
 
         // set the property
@@ -113,7 +114,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormsRootImport::StartElement: caught an exception while setting the document properties!");
+            OSL_FAIL("OFormsRootImport::StartElement: caught an exception while setting the document properties!");
         }
     }
 
@@ -182,7 +183,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormsRootExport::addModelAttributes: caught an exception while retrieving the document properties!");
+            OSL_FAIL("OFormsRootExport::addModelAttributes: caught an exception while retrieving the document properties!");
         }
     }
 
@@ -191,3 +192,4 @@ namespace xmloff
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

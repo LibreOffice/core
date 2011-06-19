@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ namespace framework{
 /**
     @short          protocol handler for "service:*" URLs
     @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
-                    be automaticly used by the framework dispatch mechanism if such URL occured.
+                    be automaticly used by the framework dispatch mechanism if such URL occurred.
                     His job is to create any registered uno components which must be coded inside
                     dispatched URL (may with some optional given parameters). After that such created
                     service must be hold his self alive. Such mechanism can be usefull for UI components
@@ -147,3 +148,5 @@ class ServiceHandler : // interfaces
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

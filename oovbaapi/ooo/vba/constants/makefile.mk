@@ -37,11 +37,9 @@ PACKAGE=org$/vba$/constants
 
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------------
-# I tried to use the IDLFILES target but it failed dismally
 MY_GEN_IDL_PATH=$(MISC)$/idl
 MY_GEN_UCR_PATH=$(OUT)$/ucr$/$(PACKAGE)
 MYTMPIDLFILES=$(shell @ls $(MY_GEN_IDL_PATH))
-#IDLFILES=$(foreach,i,$(MYTMPIDLFILES) $(MY_GEN_IDL_PATH)$/$(i))
 MYIDLFILES=$(foreach,i,$(MYTMPIDLFILES) $(MY_GEN_IDL_PATH)$/$(i))
 MYURDFILES=$(foreach,i,$(MYIDLFILES) $(MY_GEN_UCR_PATH)$/$(i:b).urd)
 MYDBTARGET=$(OUT)$/ucr/constants.db

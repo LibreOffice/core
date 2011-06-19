@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
 {
     switch (eParam)
     {
-        sal_Bool bTmp;
+        bool bTmp;
 
         case XML_TOK_INDEXSOURCE_USE_OTHER_OBJECTS:
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
@@ -188,3 +189,5 @@ SvXMLImportContext* XMLIndexObjectSourceContext::CreateChildContext(
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

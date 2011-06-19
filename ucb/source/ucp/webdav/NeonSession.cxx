@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <string.h>
 #include "osl/diagnose.h"
@@ -38,7 +39,16 @@
 #include <ne_auth.h>
 #include <ne_redirect.h>
 #include <ne_ssl.h>
+
+#if NEON_VERSION < 0x0260
+// old neon versions forgot to set this
+extern "C" {
+#endif
 #include <ne_compress.h>
+#if NEON_VERSION < 0x0260
+}
+#endif
+
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
 #include "comphelper/sequence.hxx"
@@ -108,7 +118,7 @@ struct hashPtr
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ne_request*,
     RequestData,
@@ -127,15 +137,15 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 
     if ( rStatusText.getLength() < 3 )
     {
-        OSL_ENSURE(
-            sal_False, "makeStatusCode - status text string to short!" );
+        OSL_FAIL(
+            "makeStatusCode - status text string to short!" );
         return 0;
     }
 
     sal_Int32 nPos = rStatusText.indexOf( ' ' );
     if ( nPos == -1 )
     {
-        OSL_ENSURE( sal_False, "makeStatusCode - wrong status text format!" );
+        OSL_FAIL( "makeStatusCode - wrong status text format!" );
         return 0;
     }
 
@@ -250,15 +260,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
 
-#if 0
-    // Give'em only a limited mumber of retries..
-    if ( attempt > 9 )
-    {
-        // abort
-        return -1;
-    }
-#endif
-
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
     DAVAuthListener * pListener
         = theSession->getRequestEnvironment().m_xAuthListener.get();
@@ -328,8 +329,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
     if ( aUser.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
-        OSL_ENSURE(
-            sal_False, "NeonSession_NeonAuth - username to long!" );
+        OSL_FAIL(
+            "NeonSession_NeonAuth - username to long!" );
         return -1;
     }
 
@@ -337,8 +338,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
     if ( aPass.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
-        OSL_ENSURE(
-            sal_False, "NeonSession_NeonAuth - password to long!" );
+        OSL_FAIL(
+            "NeonSession_NeonAuth - password to long!" );
         return -1;
     }
 
@@ -359,7 +360,7 @@ namespace {
     ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
     {
         ::rtl::OUString sPart;
-        ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
+        ::rtl::OUString sPartId(RTL_CONSTASCII_USTRINGPARAM("CN="));
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
@@ -386,8 +387,8 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         xCertificateContainer
             = uno::Reference< security::XCertificateContainer >(
                 pSession->getMSF()->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.security.CertificateContainer" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.security.CertificateContainer" )) ),
                 uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -419,7 +420,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     {
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             pSession->getMSF()->createInstance(
-                rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ) ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT )) ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -606,7 +607,12 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
 // -------------------------------------------------------------------
 // static members!
 bool NeonSession::m_bGlobalsInited = false;
-osl::Mutex NeonSession::m_aGlobalMutex;
+//See https://bugzilla.redhat.com/show_bug.cgi?id=544619#c4
+//neon is threadsafe, but uses gnutls which is only thread-safe
+//if initialized to be thread-safe. cups, unfortunately, generally
+//initializes it first, and as non-thread-safe, leaving the entire
+//stack unsafe
+osl::Mutex aGlobalNeonMutex;
 NeonLockStore NeonSession::m_aNeonLockStore;
 
 // -------------------------------------------------------------------
@@ -635,7 +641,10 @@ NeonSession::~NeonSession( )
 {
     if ( m_pHttpSession )
     {
-        ne_session_destroy( m_pHttpSession );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            ne_session_destroy( m_pHttpSession );
+        }
         m_pHttpSession = 0;
     }
     delete static_cast< RequestDataMap * >( m_pRequestData );
@@ -661,11 +670,7 @@ void NeonSession::Init()
     if ( m_pHttpSession == 0 )
     {
         // Ensure that Neon sockets are initialized
-
-        // --> tkr #151111# crashed if copy and pasted pictures from the internet
-        // ne_sock_init() was executed by two threads at the same time.
-        osl::Guard< osl::Mutex > theGlobalGuard( m_aGlobalMutex );
-        // <--
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
         if ( !m_bGlobalsInited )
         {
             if ( ne_sock_init() != 0 )
@@ -714,7 +719,10 @@ void NeonSession::Init()
             m_nProxyPort = rProxyCfg.nPort;
 
             // new session needed, destroy old first
-            ne_session_destroy( m_pHttpSession );
+            {
+                osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+                ne_session_destroy( m_pHttpSession );
+            }
             m_pHttpSession = 0;
             bCreateNewSession = true;
         }
@@ -727,14 +735,15 @@ void NeonSession::Init()
         //     currently (0.22.0) neon does not allow to pass the user info
         //     to the session
 
-        m_pHttpSession = ne_session_create(
-            rtl::OUStringToOString( m_aScheme,
-                RTL_TEXTENCODING_UTF8 ).getStr(),
-            /* theUri.GetUserInfo(),
-               @@@ for FTP via HTTP proxy, but not supported by Neon */
-            rtl::OUStringToOString( m_aHostName,
-                                    RTL_TEXTENCODING_UTF8 ).getStr(),
-            m_nPort );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            m_pHttpSession = ne_session_create(
+                rtl::OUStringToOString( m_aScheme, RTL_TEXTENCODING_UTF8 ).getStr(),
+                /* theUri.GetUserInfo(),
+                   @@@ for FTP via HTTP proxy, but not supported by Neon */
+                rtl::OUStringToOString( m_aHostName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                m_nPort );
+        }
 
         if ( m_pHttpSession == 0 )
             throw DAVException( DAVException::DAV_SESSION_CREATE,
@@ -805,10 +814,13 @@ void NeonSession::Init()
         ne_redirect_register( m_pHttpSession );
 
         // authentication callbacks.
-        ne_add_server_auth(
-            m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-        ne_add_proxy_auth(
-            m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+#if NEON_VERSION >= 0x0260
+        ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+        ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
+#else
+        ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+        ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
+#endif
     }
 }
 
@@ -1002,8 +1014,7 @@ void NeonSession::PROPPATCH( const rtl::OUString & inPath,
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                                "NeonSession::PROPPATCH - unsupported type!" );
+                    OSL_FAIL( "NeonSession::PROPPATCH - unsupported type!" );
                     // Error!
                     pItems[ n ].value = 0;
                     theRetVal = NE_ERROR;
@@ -1626,12 +1637,11 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
 void NeonSession::abort()
     throw ( DAVException )
 {
-    // 11.11.09 (tkr): The following code lines causing crashes if
-    // closing a ongoing connection. It turned out that this existing
-    // solution doesn't work in multi-threading environments.
-    // So I disabled them in 3.2. . Issue #73893# should fix it in OOo 3.3.
-    //if ( m_pHttpSession )
-    //    ne_close_connection( m_pHttpSession );
+    if ( m_pHttpSession )
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ne_close_connection( m_pHttpSession );
+    }
 }
 
 // -------------------------------------------------------------------
@@ -1911,16 +1921,19 @@ int NeonSession::GET( ne_session * sess,
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
-    void *cursor = NULL;
-    const char *name, *value;
 
     ne_decompress * dc
         = ne_decompress_reader( req, ne_accept_2xx, reader, userdata );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
     if ( getheaders )
     {
+        void *cursor = NULL;
+        const char *name, *value;
         while ( ( cursor = ne_response_header_iterate(
                                req, cursor, &name, &value ) ) != NULL )
         {
@@ -1956,7 +1969,10 @@ int NeonSession::PUT( ne_session * sess,
 
     ne_set_request_body_buffer( req, buffer, size );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
@@ -2001,7 +2017,10 @@ int NeonSession::POST( ne_session * sess,
 
     ne_set_request_body_buffer( req, buffer, strlen( buffer ) );
 
-    ret = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
 
     //if ( ctx.error )
     //    ret = NE_ERROR;
@@ -2121,7 +2140,7 @@ NeonSession::isDomainMatch( rtl::OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+    if ( 0 == certHostName.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );
@@ -2164,3 +2183,5 @@ rtl::OUString NeonSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
     // error.
     return rtl::OUString();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <i18npool/lang.h>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 DBG_NAMEEX( EditView )
 DBG_NAMEEX( EditEngine )
@@ -92,6 +93,8 @@ class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
+class Window;
+
 #include <editeng/SpellPortions.hxx>
 
 #include <editeng/eedata.hxx>
@@ -289,7 +292,7 @@ public:
 
     sal_Bool            IsVertical() const;
 
-    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent );
+    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
     sal_Bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     sal_Bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -332,7 +335,7 @@ public:
 
     sal_Bool            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
 
-//  Fuer die SelectionEngine...
+//  For the Selection Engine...
     void            CreateAnchor();
     void            DeselectAll();
     sal_Bool        SetCursorAtPoint( const Point& rPointPixel );
@@ -373,7 +376,7 @@ public:
     const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const;
     void                DeleteSelected();
 
-    // Ggf. mehr als OutputArea invalidieren, fuer den DrawingEngine-Textrahmen...
+    //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
     sal_uInt16      GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
 };
@@ -387,8 +390,8 @@ SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 )
 
 class ImpEditEngine : public SfxListener
 {
-    // Die Undos muessen direkt manipulieren ( private-Methoden ),
-    // damit keine neues Undos eingefuegt werden!
+    // The Undos have to manipulate directly ( private-Methods ),
+    // do that no new Undo is inserted!
     friend class EditUndoInsertChars;
     friend class EditUndoRemoveChars;
     friend class EditUndoDelContent;
@@ -399,26 +402,26 @@ class ImpEditEngine : public SfxListener
 
     friend class EditView;
     friend class ImpEditView;
-    friend class EditEngine;        // Fuer Zugriff auf Imp-Methoden
-    friend class EditRTFParser;     // Fuer Zugriff auf Imp-Methoden
-    friend class EditHTMLParser;    // Fuer Zugriff auf Imp-Methoden
-    friend class EdtAutoCorrDoc;    // Fuer Zugriff auf Imp-Methoden
-    friend class EditDbg;           // DebugRoutinen
+    friend class EditEngine;        // For access to Imp-Methods
+    friend class EditRTFParser;     // For access to Imp-Methods
+    friend class EditHTMLParser;    // For access to Imp-Methods
+    friend class EdtAutoCorrDoc;    // For access to Imp-Methods
+    friend class EditDbg;           // Debug Routines
 
 private:
 
     // ================================================================
-    // Daten...
+    // Data ...
     // ================================================================
 
-    // Dokument-Spezifische Daten...
-    ParaPortionList     aParaPortionList;       // Formatierung
+    // Document Specific data ...
+    ParaPortionList     aParaPortionList;       // Formatting
     Size                aPaperSize;             // Layout
     Size                aMinAutoPaperSize;      // Layout ?
     Size                aMaxAutoPaperSize;      // Layout ?
-    EditDoc             aEditDoc;               // Dokumenteninhalt
+    EditDoc             aEditDoc;               // Document content
 
-    // Engine-Spezifische Daten....
+    // Engine Specific data ...
     EditEngine*         pEditEngine;
     EditViews           aEditViews;
     EditView*           pActiveView;
@@ -493,18 +496,19 @@ private:
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
-    // Fuer Formatierung / Update....
+    // For Formatting / Update ....
     DeletedNodesList    aDeletedNodes;
     Rectangle           aInvalidRec;
     sal_uInt32          nCurTextHeight;
+    sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16          nOnePixelInRef;
 
     IdleFormattter      aIdleFormatter;
 
     Timer               aOnlineSpellTimer;
 
-    // Wenn an einer Stelle erkannt wird, dass der StatusHdl gerufen werden
-    // muss, dies aber nicht sofort geschehen darf (kritischer Abschnitt):
+    // If it is detected at one point that the StatusHdl has to be called, but
+    // this should not happen immediately (critical section):
     Timer               aStatusTimer;
     Link                aStatusHdlLink;
     Link                aNotifyHdl;
@@ -517,11 +521,11 @@ private:
     Link                maBeginDropHdl;
     Link                maEndDropHdl;
 
-    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 
     // ================================================================
-    // Methoden...
+    // Methods...
     // ================================================================
 
     void                CursorMoved( ContentNode* pPrevNode );
@@ -529,7 +533,7 @@ private:
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
-    // ggf. lieber inline, aber so einiges...
+    // may prefer in-line, but so few ...
     void                InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge = sal_False );
     void                ResetUndoManager();
     sal_Bool            HasUndoManager() const  { return pUndoManager ? sal_True : sal_False; }
@@ -646,7 +650,7 @@ private:
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
     sal_Bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
-    long                LogicToTwips( long n );
+    sal_Int32               LogicToTwips( sal_Int32 n );
 
     inline short        GetXValue( short nXValue ) const;
     inline sal_uInt16   GetXValue( sal_uInt16 nXValue ) const;
@@ -663,6 +667,8 @@ private:
 
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
     Color               GetBackgroundColor() const { return maBackgroundColor; }
+
+    long                CalcVertLineSpacing(Point& rStartPos) const;
 
     Color               GetAutoColor() const;
     void                EnableAutoColor( sal_Bool b ) { bUseAutoColor = b; }
@@ -781,7 +787,7 @@ public:
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
     EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
-    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
+    EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
     EditPaM         InsertLineBreak( EditSelection aEditSelection );
@@ -801,8 +807,9 @@ public:
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos, EditView* pCurView );
 
-    sal_uInt32      CalcTextHeight();
+    sal_uInt32      CalcTextHeight( sal_uInt32* pHeightNTP );
     sal_uInt32      GetTextHeight() const;
+    sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( sal_Bool bIgnoreExtraSpace );
     sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, sal_Bool bIgnoreExtraSpace );
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
@@ -839,7 +846,7 @@ public:
 
     void            IndentBlock( EditView* pView, sal_Bool bRight );
 
-//  Fuer Undo/Redo
+//  For Undo/Redo
     sal_Bool        Undo( EditView* pView );
     sal_Bool        Redo( EditView* pView );
     sal_Bool        Repeat( EditView* pView );
@@ -986,6 +993,8 @@ public:
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
     SvxAdjust               GetJustification( sal_uInt16 nPara ) const;
+    SvxCellJustifyMethod    GetJustifyMethod( sal_uInt16 nPara ) const;
+    SvxCellVerJustify       GetVerJustification( sal_uInt16 nPara ) const;
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
@@ -1015,8 +1024,8 @@ public:
     void                SetAddExtLeading( sal_Bool b );
     sal_Bool                IsAddExtLeading() const { return bAddExtLeading; }
 
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( sal_Bool bGetInternal = sal_True ) const;
-    void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable( sal_Bool bGetInternal = sal_True ) const;
+    void                SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     sal_Bool                mbLastTryMerge;
 
@@ -1041,8 +1050,8 @@ inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
 
 inline EditPaM ImpEditEngine::CreateEditPaM( const EPaM& rEPaM )
 {
-    DBG_ASSERT( rEPaM.nPara < aEditDoc.Count(), "CreateEditPaM: Ungueltiger Absatz" );
-    DBG_ASSERT( aEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: Ungueltiger Index" );
+    DBG_ASSERT( rEPaM.nPara < aEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
+    DBG_ASSERT( aEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index" );
     return EditPaM( aEditDoc[ rEPaM.nPara], rEPaM.nIndex );
 }
 
@@ -1060,14 +1069,14 @@ inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel )
 
 inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
 {
-    DBG_ASSERT( rSel.nStartPara < aEditDoc.Count(), "CreateSel: Ungueltiger Start-Absatz" );
-    DBG_ASSERT( rSel.nEndPara < aEditDoc.Count(), "CreateSel: Ungueltiger End-Absatz" );
+    DBG_ASSERT( rSel.nStartPara < aEditDoc.Count(), "CreateSel: invalid start paragraph" );
+    DBG_ASSERT( rSel.nEndPara < aEditDoc.Count(), "CreateSel: invalid end paragraph" );
     EditSelection aSel;
     aSel.Min().SetNode( aEditDoc[ rSel.nStartPara ] );
     aSel.Min().SetIndex( rSel.nStartPos );
     aSel.Max().SetNode( aEditDoc[ rSel.nEndPara ] );
     aSel.Max().SetIndex( rSel.nEndPos );
-    DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "CreateSel: Fehlerhafte Selektion!" );
+    DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "CreateSel: incorrect selection!" );
     return aSel;
 }
 
@@ -1101,14 +1110,12 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
     aIdleFormatter.DoIdleFormat( pCurView );
 }
 
-#ifndef SVX_LIGHT
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
         pUndoManager = new EditUndoManager( this );
     return *pUndoManager;
 }
-#endif
 
 inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
 {
@@ -1212,3 +1219,4 @@ Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 #endif // _IMPEDIT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_XVBAToOOEventDescGen_idl__
 #define __ooo_vba_XVBAToOOEventDescGen_idl__
 
-#ifndef __com_sun_star_script_ScriptEventDescriptor_idl__
 #include <com/sun/star/script/ScriptEventDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_script_XScriptEventsSupplier_idl__
 #include <com/sun/star/script/XScriptEventsSupplier.idl>
-#endif
 
 module ooo {  module vba {
 interface XVBAToOOEventDescGen : com::sun::star::uno::XInterface

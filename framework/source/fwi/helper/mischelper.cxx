@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         {
             m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
                     m_xServiceManager->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing")) ),
                         uno::UNO_QUERY );
         }
         catch (uno::Exception &r)
@@ -76,7 +77,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     return m_xLanguageGuesser;
 }
 
-////////////////////////////////////////////////////////////
 
 ::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& aCmdURL,
@@ -152,7 +152,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     return aLabel;
 }
 
-////////////////////////////////////////////////////////////
 
 void FillLangItems( std::set< OUString > &rLangItems,
         const SvtLanguageTable &    rLanguageTable,
@@ -240,3 +239,4 @@ void FillLangItems( std::set< OUString > &rLangItems,
 } // namespace framework
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

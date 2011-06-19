@@ -199,6 +199,22 @@
 					</info>
 				</prop>
 			</group>
+			<group oor:name="Shadow">
+				<info>
+					<desc>Specifies the settings for shadows.</desc>
+				</info>
+				<prop oor:name="IsVisible" oor:type="xs:boolean">
+					<info>
+						<desc>Specifies the visibility of shadows (true = visible).</desc>
+					</info>
+					<value>true</value>
+				</prop>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc>Specifies the color used for shadows.</desc>
+					</info>
+				</prop>
+			</group>
 			<group oor:name="WriterTextGrid">
 				<info>
 					<desc>Specifies the settings for the text grid in Writer.</desc>

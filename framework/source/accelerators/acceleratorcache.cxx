@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,22 +33,16 @@
 //_______________________________________________
 // own includes
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 #include <xml/acceleratorconfigurationreader.hxx>
-#endif
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
 
 //_______________________________________________
 // other includes
@@ -248,3 +243,5 @@ void AcceleratorCache::removeCommand(const ::rtl::OUString& sCommand)
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,13 +40,9 @@
 //__________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 //__________________________________________
 // other includes
@@ -533,3 +530,5 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

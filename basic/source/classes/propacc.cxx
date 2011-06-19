@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #define CDECL
 #endif
 
@@ -119,7 +120,7 @@ sal_Int32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) co
             bsearch( &rPropName, _aPropVals.GetData(), _aPropVals.Count(),
                       sizeof( PropertyValue* ),
                       SbCompare_UString_PropertyValue_Impl );
-    return ppPV ? ( (ppPV-_aPropVals.GetData()) / sizeof(ppPV) ) : USHRT_MAX;
+    return ppPV ? ppPV - _aPropVals.GetData() : USHRT_MAX;
 }
 
 //----------------------------------------------------------------------------
@@ -238,7 +239,7 @@ sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName )
             bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
                       sizeof( Property ),
                       SbCompare_UString_Property_Impl );
-    return pP ? sal::static_int_cast<sal_Int32>( (pP-_aProps.getConstArray()) / sizeof(pP) ) : -1;
+    return pP ? sal::static_int_cast<sal_Int32>( pP - _aProps.getConstArray() ) : -1;
 }
 
 Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
@@ -391,15 +392,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     // Get class names of struct
     String aServiceName( RTL_CONSTASCII_USTRINGPARAM("stardiv.uno.beans.PropertySet") );
 
-#if 0
-    // Service suchen und instanzieren
-    Reference< XMultiServiceFactory > xServiceManager = getProcessServiceFactory();
-    Reference< XInterface > xInterface;
-    if( xProv.is() )
-        xInterface = xProv->newInstance();
-#else
     Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
-#endif
 
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
@@ -428,3 +421,4 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     refVar->PutObject( NULL );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

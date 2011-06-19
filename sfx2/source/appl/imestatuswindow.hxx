@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,9 +118,13 @@ private:
     osl::Mutex m_aMutex;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
         m_xConfig;
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >
+        m_xConfigListener;
     bool m_bDisposed;
 };
 
 } }
 
 #endif // INCLUDED_SFX2_APPL_IMESTATUSWINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

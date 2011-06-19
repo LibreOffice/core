@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,12 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
@@ -63,7 +60,8 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 sal_Unicode const pszExtGradient[]  = {'s','o','g'};
 
@@ -370,3 +368,5 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

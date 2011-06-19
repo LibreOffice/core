@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
@@ -156,9 +157,6 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
 
 //=========================================================================
 
-
-//=========================================================================
-
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
@@ -178,15 +176,14 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::E
 
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-
     // am I ThisComponent in AppBasic?
+    SolarMutexGuard aSolarGuard;
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
         // remove ThisComponent reference from AppBasic
@@ -207,8 +204,13 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         }
     }
 
-    if ( !mpDoc->Get_Impl()->bClosing )
-        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
+    if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
+    {
+        mpDoc->Get_Impl()->bHiddenLockedByAPI = sal_False;
+        mpDoc->OwnerLock(sal_False);
+    }
+    else if ( !mpDoc->Get_Impl()->bClosing )
+        // GCC crashes when already in the destructor, so first query the Flag
         mpDoc->DoClose();
 }
 
@@ -255,6 +257,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bSaveVersionOnClose( sal_False )
     ,m_bSharedXMLFlag( sal_False )
     ,m_bAllowShareControlFileClean( sal_True )
+    ,m_bConfigOptionsChecked( sal_False )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,pReloadTimer ( 0)
@@ -319,30 +322,28 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
 
 SfxObjectShell::SfxObjectShell
 (
-    SfxObjectCreateMode eMode   /*  Zweck, zu dem die SfxObjectShell
-                                    erzeugt wird:
+    SfxObjectCreateMode eMode   /*  Purpose, io which the SfxObjectShell
+                                    is created:
 
                                     SFX_CREATE_MODE_EMBEDDED (default)
-                                        als SO-Server aus einem anderen
-                                        Dokument heraus
+                                        as SO-Server from within another
+                                        Document
 
                                     SFX_CREATE_MODE_STANDARD,
-                                        als normales, selbst"aendig ge"offnetes
-                                        Dokument
+                                        as a normal Document open stand-alone
 
                                     SFX_CREATE_MODE_PREVIEW
-                                        um ein Preview durchzuf"uhren,
-                                        ggf. werden weniger Daten ben"otigt
+                                        to enable a Preview, if possible are
+                                        only little information is needed
 
                                     SFX_CREATE_MODE_ORGANIZER
-                                        um im Organizer dargestellt zu
-                                        werden, hier werden keine Inhalte
-                                        ben"otigt */
+                                        to be displayed in the Organizer, here
+                                        notning of the contents is used  */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor der Klasse SfxObjectShell.
+    Constructor of the class SfxObjectShell.
 */
 
 :   pImp( new SfxObjectShell_Impl( *this ) ),
@@ -356,7 +357,7 @@ SfxObjectShell::SfxObjectShell
 
 //--------------------------------------------------------------------
 
-// virtual dtor of typical base-class SfxObjectShell
+// virtual destructor of typical base-class SfxObjectShell
 
 SfxObjectShell::~SfxObjectShell()
 {
@@ -365,9 +366,8 @@ SfxObjectShell::~SfxObjectShell()
     if ( IsEnableSetModified() )
         EnableSetModified( sal_False );
 
-    // Niemals GetInPlaceObject() aufrufen, der Zugriff auf den
-    // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
-    // erlaubt
+    // Never call GetInPlaceObject(), the access to the derivative branch
+    // SfxInternObject is not allowed because of a compiler bug
     SfxObjectShell::Close();
     pImp->pBaseModel.set( NULL );
 
@@ -377,7 +377,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
-    // Basic-Manager zerst"oren
+    // Destroy Basic-Manager
     pImp->pBasicManager->reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
@@ -437,9 +437,9 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 void SfxObjectShell::ViewAssigned()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird gerufen, wenn eine View zugewiesen wird.
+    This method is called when a view is assigned.
 */
 
 {
@@ -454,7 +454,7 @@ sal_Bool SfxObjectShell::Close()
     SfxObjectShellRef aRef(this);
     if ( !pImp->bClosing )
     {
-        // falls noch ein Progress l"auft, nicht schlie\sen
+        // Do not close if a progress is still running
         if ( !pImp->bDisposing && GetProgress() )
             return sal_False;
 
@@ -475,7 +475,7 @@ sal_Bool SfxObjectShell::Close()
 
         if ( pImp->bClosing )
         {
-            // aus Document-Liste austragen
+            // remove from Document list
             SfxApplication *pSfxApp = SFX_APP();
             SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
             const SfxObjectShell *pThis = this;
@@ -576,7 +576,8 @@ struct BoolEnv_Impl
 
 sal_uInt16 SfxObjectShell::PrepareClose
 (
-    sal_Bool    bUI,        // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool    bUI,  // sal_True: Dialog and so on is allowed
+                      // sal_False: silent-mode
     sal_Bool    bForBrowsing
 )
 {
@@ -596,7 +597,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
     for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
           pFrm; pFrm = SfxViewFrame::GetNext( *pFrm, this ) )
     {
-        DBG_ASSERT(pFrm->GetViewShell(),"KeineShell");
+        DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
             sal_uInt16 nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
@@ -614,24 +615,20 @@ sal_uInt16 SfxObjectShell::PrepareClose
         return sal_True;
     }
 
-    // ggf. nachfragen, ob gespeichert werden soll
-        // nur fuer in sichtbaren Fenstern dargestellte Dokumente fragen
+    // Ask if possible if it should be saved
+    // only ask for the Document in the visable window
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
 
-    sal_Bool bClose = sal_False;
     if ( bUI && IsModified() && pFrame )
     {
-        // minimierte restoren
+        // restore minimized
         SfxFrame& rTop = pFrame->GetTopFrame();
         SfxViewFrame::SetViewFrame( rTop.GetCurrentViewFrame() );
         pFrame->GetFrame().Appear();
 
-        // fragen, ob gespeichert werden soll
+        // Ask if to save
         short nRet = RET_YES;
-        //TODO/CLEANUP
-        //brauchen wir UI=2 noch?
-        //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
         {
             //initiate help agent to inform about "print modifies the document"
             SvtPrintWarningOptions aPrintOptions;
@@ -648,7 +645,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
         if ( RET_YES == nRet )
         {
-            // per Dispatcher speichern
+            // Save by each Dispatcher
             const SfxPoolItem *pPoolItem;
             if ( IsSaveVersionOnClose() )
             {
@@ -666,20 +663,13 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
             if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                 return sal_False;
-            else
-                bClose = sal_True;
         }
         else if ( RET_CANCEL == nRet )
-            // abgebrochen
+            // Cancelled
             return sal_False;
         else if ( RET_NEWTASK == nRet )
         {
             return RET_NEWTASK;
-        }
-        else
-        {
-            // Bei Nein nicht noch Informationlost
-            bClose = sal_True;
         }
     }
 
@@ -793,7 +783,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     if ( pBasMgr )
         return pBasMgr->GetDialogLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetDialogContainer();
 }
 
@@ -808,7 +798,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
     if ( pBasMgr )
         return pBasMgr->GetScriptLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetBasicContainer();
 }
 
@@ -822,16 +812,16 @@ StarBASIC* SfxObjectShell::GetBasic() const
 //--------------------------------------------------------------------
 
 void SfxObjectShell::InitBasicManager_Impl()
-/*  [Beschreibung]
+/*  [Description]
 
-    creates a document's BasicManager and loads it, if we are already based on
+    Creates a document's BasicManager and loads it, if we are already based on
     a storage.
 
-    [Anmerkung]
+    [Note]
 
-    Diese Methode mu"s aus den "Uberladungen von <SvPersist::Load()> (mit
-    dem pStor aus dem Parameter von Load()) sowie aus der "Uberladung
-    von <SvPersist::InitNew()> (mit pStor = 0) gerufen werden.
+    This method has to be called  through the overloading of
+    <SvPersist::Load()> (With the PStore from the parameters of load ())
+    and from the overloading of <SvPersist::InitNew()> (with PStore = 0).
 */
 
 {
@@ -893,7 +883,7 @@ uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
 
     if ( !pEventNameContainer )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !pEventNameContainer )
         {
             static uno::Sequence< ::rtl::OUString > aEventNameContainer = GlobalEventConfig().getElementNames();
@@ -927,9 +917,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
     return pImp->pBaseModel.get();
 }
-/* -----------------------------10.09.2001 15:56------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
 {
     pImp->nStyleFilter = nSet;
@@ -1013,43 +1001,43 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
 
     if ( aFact.EqualsAscii("swriter") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
     }
     else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"));
     }
     else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"));
     }
     else if ( aFact.EqualsAscii("scalc") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"));
     }
     else if ( aFact.EqualsAscii("sdraw") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
     }
     else if ( aFact.EqualsAscii("simpress") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
     }
     else if ( aFact.EqualsAscii("schart") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"));
     }
     else if ( aFact.EqualsAscii("smath") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
     }
     else if ( aFact.EqualsAscii("sbasic") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
     }
     else if ( aFact.EqualsAscii("sdatabase") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OfficeDatabaseDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
     }
 
     return aServiceName;
@@ -1086,12 +1074,18 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
 
 SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame )
 {
+    Reference<lang::XComponent> xComp = CreateAndLoadComponent(rSet, pFrame);
+    return GetShellFromComponent(xComp);
+}
+
+Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame )
+{
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
     SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
     SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
-    ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
+    ::rtl::OUString aTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
     if ( pFileNameItem )
         aURL = pFileNameItem->GetValue();
     if ( pTargetItem )
@@ -1104,22 +1098,33 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
     }
     else
         xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
 
-    uno::Reference < lang::XUnoTunnel > xObj;
+    Reference <lang::XComponent> xComp;
     try
     {
-        xObj = uno::Reference< lang::XUnoTunnel >( xLoader->loadComponentFromURL( aURL, aTarget, 0, aProps ), uno::UNO_QUERY );
+        xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps);
     }
     catch( uno::Exception& )
     {}
 
-    if ( xObj.is() )
+    return xComp;
+}
+
+SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XComponent>& xComp )
+{
+    try
     {
-        ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj->getSomething( aSeq );
-        if ( nHandle )
-            return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
+        Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY_THROW);
+        Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        sal_Int64 nHandle = xTunnel->getSomething( aSeq );
+        if (!nHandle)
+            return NULL;
+
+        return reinterpret_cast< SfxObjectShell* >(sal::static_int_cast< sal_IntPtr >(  nHandle ));
+    }
+    catch (const Exception&)
+    {
     }
 
     return NULL;
@@ -1178,3 +1183,4 @@ bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence<
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

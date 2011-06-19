@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -199,14 +200,14 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "got no service manager" );
+                OSL_FAIL( "got no service manager" );
                 return sal_False;
             }
 
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
             if( !xWriter.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
                 return sal_False;
             }
 
@@ -219,7 +220,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
                 if( !xStorage.is() )
                 {
-                    DBG_ERROR( "no storage!" );
+                    OSL_FAIL( "no storage!" );
                     break;
                 }
 
@@ -237,7 +238,7 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
                 SvStream* pStream = pMedium->GetOutStream();
                 if( NULL == pStream )
                 {
-                    DBG_ERROR( "no output stream!" );
+                    OSL_FAIL( "no output stream!" );
                     break;
                 }
 
@@ -343,7 +344,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
             }
             else
             {
-                DBG_ERROR( "unknown type for export");
+                OSL_FAIL( "unknown type for export");
                 break;
             }
 
@@ -367,7 +368,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
 
         GetDocHandler()->endDocument();
     }
-    catch( Exception e )
+    catch( Exception const& )
     {
         bRet = sal_False;
     }
@@ -490,3 +491,5 @@ void SvxXMLBitmapEntryExporter::exportEntry( const OUString& rStrName, const Any
 {
     maImageStyle.exportXML( rStrName, rValue, mrExport );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

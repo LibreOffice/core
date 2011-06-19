@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,3 +176,5 @@ void VbaWindowBase::construct( const uno::Reference< frame::XController >& xCont
     m_xController = xController;
     m_xWindow = xWindow;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

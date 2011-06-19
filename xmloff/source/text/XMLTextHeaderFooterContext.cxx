@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include "XMLTextHeaderFooterContext.hxx"
-#ifndef _XMLOFF_TEXTTABLECONTEXT_HXX_
 #include <xmloff/XMLTextTableContext.hxx>
-#endif
 #include <xmloff/xmlimp.hxx>
 
 
@@ -44,12 +43,8 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::text;
 
 
 TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
@@ -62,12 +57,12 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
-    sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
-    sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
-                                                      : "HeaderIsShared" ) ),
-    sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
-    sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
-                                                     : "HeaderTextLeft" ) ),
+    sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
+    sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
+                                                      : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
+    sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
+    sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
+                                                     : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" )) ),
     bInsertContent( sal_True ),
     bLeft( bLft )
 {
@@ -196,3 +191,4 @@ void XMLTextHeaderFooterContext::EndElement()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

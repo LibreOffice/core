@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,10 @@
 #ifndef _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
 #define _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
 
-
 #include "ado/AStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -69,7 +68,7 @@ namespace connectivity
 
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql);
 
             virtual void SAL_CALL acquire() throw();
@@ -122,3 +121,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_ADO_APREPAREDSTATEMENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

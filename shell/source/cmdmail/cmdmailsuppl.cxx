@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,14 +88,12 @@ namespace // private
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.system.SimpleCommandMail");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SimpleCommandMail"));
         return aRet;
     }
 
 } // end private namespace
 
-//-------------------------------------------------
-//
 //-------------------------------------------------
 
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
@@ -105,7 +104,7 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     if ( xServiceManager.is() ) {
         m_xConfigurationProvider = Reference< XMultiServiceFactory > (
             xServiceManager->createInstanceWithContext(
-                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), xContext ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), xContext ),
             UNO_QUERY );
     }
 }
@@ -177,7 +176,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/ExternalMailer" ) );
 
         PropertyValue aProperty;
-        aProperty.Name = OUString::createFromAscii( "nodepath" );
+        aProperty.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
         aProperty.Value = makeAny( aConfigRoot );
 
         Sequence< Any > aArgumentList( 1 );
@@ -186,7 +185,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         Reference< XNameAccess > xNameAccess =
             Reference< XNameAccess > (
                 m_xConfigurationProvider->createInstanceWithArguments(
-                    OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                     aArgumentList ),
                 UNO_QUERY );
 
@@ -196,7 +195,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
             // Retrieve the value for "Program" node and append it feed senddoc with it
             // using the (undocumented) --mailclient switch
-            xNameAccess->getByName( OUString::createFromAscii( "Program" ) ) >>= aMailer;
+            xNameAccess->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Program")) ) >>= aMailer;
 
             if( aMailer.getLength() )
             {
@@ -219,7 +218,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     {
         m_xConfigurationProvider.clear();
         OSL_TRACE( "RuntimeException caught accessing configuration provider." );
-        OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        OSL_TRACE( "%s", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         throw e;
     }
 
@@ -297,7 +296,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( COMP_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( COMP_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -326,3 +325,4 @@ Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
     return Component_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

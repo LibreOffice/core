@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SOURCE_FORM_FMCONTROLBORDERMANAGER_HXX
 #include "fmcontrolbordermanager.hxx"
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
@@ -183,7 +180,7 @@ namespace svxform
         if ( _nStatus & CONTROL_STATUS_MOUSE_HOVER )
             return m_nMouseHoveColor;
 
-        OSL_ENSURE( sal_False, "ControlBorderManager::getControlColorByStatus: invalid status!" );
+        OSL_FAIL( "ControlBorderManager::getControlColorByStatus: invalid status!" );
         return 0x00000000;
     }
 
@@ -259,7 +256,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::controlStatusGained: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::controlStatusGained: caught an exception!" );
         }
     }
 
@@ -283,7 +280,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::controlStatusLost: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::controlStatusLost: caught an exception!" );
         }
     }
 
@@ -315,7 +312,7 @@ namespace svxform
             m_nInvalidColor = _nColor;
             break;
         default:
-            OSL_ENSURE( sal_False, "ControlBorderManager::setStatusColor: invalid status!" );
+            OSL_FAIL( "ControlBorderManager::setStatusColor: invalid status!" );
         }
     }
 
@@ -435,7 +432,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::validityChanged: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::validityChanged: caught an exception!" );
         }
     }
 
@@ -443,3 +440,4 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

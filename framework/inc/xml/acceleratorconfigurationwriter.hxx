@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 //_______________________________________________
 // other includes
@@ -117,3 +116,5 @@ class AcceleratorConfigurationWriter : private ThreadHelpBase
 } // namespace framework
 
 #endif // _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

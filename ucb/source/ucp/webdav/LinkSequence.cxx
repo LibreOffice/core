@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <string.h>
 #include <ne_xml.h>
 
-#ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
-#endif
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
@@ -201,9 +200,9 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )
     {
-        rtl::OUString aPre( rtl::OUString::createFromAscii( "<link><src>" ) );
-        rtl::OUString aMid( rtl::OUString::createFromAscii( "</src><dst>" ) );
-        rtl::OUString aEnd( rtl::OUString::createFromAscii( "</dst></link>" ) );
+        rtl::OUString aPre( RTL_CONSTASCII_USTRINGPARAM("<link><src>") );
+        rtl::OUString aMid( RTL_CONSTASCII_USTRINGPARAM("</src><dst>") );
+        rtl::OUString aEnd( RTL_CONSTASCII_USTRINGPARAM("</dst></link>") );
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
@@ -217,3 +216,5 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
     }
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

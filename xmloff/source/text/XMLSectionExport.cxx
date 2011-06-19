@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -304,7 +305,7 @@ void XMLSectionExport::ExportSectionEnd(
                         break;
 
                     default:
-                        OSL_ENSURE(false, "unknown index type");
+                        OSL_FAIL("unknown index type");
                         // default: skip index!
                         break;
                 }
@@ -330,7 +331,7 @@ void XMLSectionExport::ExportSectionEnd(
         }
         else
         {
-            OSL_ENSURE(false, "Need element name!");
+            OSL_FAIL("Need element name!");
         }
     }
     // else: autostyles -> ignore
@@ -374,7 +375,7 @@ void XMLSectionExport::ExportIndexStart(
 
         default:
             // skip index
-            OSL_ENSURE(false, "unknown index type");
+            OSL_FAIL("unknown index type");
             break;
     }
 }
@@ -392,7 +393,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
 }
 
 
-SvXMLEnumStringMapEntry __READONLY_DATA aIndexTypeMap[] =
+SvXMLEnumStringMapEntry const aIndexTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ContentIndex", TEXT_SECTION_TYPE_TOC ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.DocumentIndex", TEXT_SECTION_TYPE_ALPHABETICAL ),
@@ -895,7 +896,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = xLevelTemplates->getByIndex(i);
         aAny >>= aTemplateSequence;
 
-        // export the sequence (abort export if an error occured; #91214#)
+        // export the sequence (abort export if an error occurred; #91214#)
         sal_Bool bResult =
             ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
         if ( !bResult )
@@ -1158,7 +1159,7 @@ enum TemplateParamEnum
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
-SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
+SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenEntryNumber",  TOK_TTYPE_ENTRY_NUMBER ),
     ENUM_STRING_MAP_ENTRY( "TokenEntryText",    TOK_TTYPE_ENTRY_TEXT ),
@@ -1172,7 +1173,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
+SvXMLEnumStringMapEntry const aTemplateParamMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenType",             TOK_TPARAM_TOKEN_TYPE ),
     ENUM_STRING_MAP_ENTRY( "CharacterStyleName",    TOK_TPARAM_CHAR_STYLE ),
@@ -1188,7 +1189,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
+SvXMLEnumMapEntry const aBibliographyDataFieldMap[] =
 {
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
@@ -1240,7 +1241,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     // tab position
     sal_Bool bRightAligned = sal_False;
-    sal_Bool bRightAlignedOK = sal_False;
 
     // tab position
     sal_Int32 nTabPosition = 0;
@@ -1314,7 +1314,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
                     bRightAligned =
                         *(sal_Bool *)rValues[i].Value.getValue();
-                    bRightAlignedOK = sal_True;
                     break;
 
                 case TOK_TPARAM_TAB_POSITION:
@@ -1342,7 +1341,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                     rValues[i].Value >>= nLevel;
                     bLevelOK = sal_True;
                     break;
-//<---
                 case TOK_TPARAM_BIBLIOGRAPHY_DATA:
                     rValues[i].Value >>= nBibliographyData;
                     bBibliographyDataOK = sal_True;
@@ -1450,7 +1448,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
             bChapterFormatOK = sal_False;
         }
     }
-//<---
 
     // ... and write Element
     if (eElement != XML_TOKEN_INVALID)
@@ -1538,7 +1535,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
             if (bLevelOK)
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                                      OUString::valueOf((sal_Int32)nLevel));
-//<---
         }
 
 //--->i53420
@@ -1553,7 +1549,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                                      OUString::valueOf((sal_Int32)nLevel));
         }
-//<---
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,
                                             GetXMLToken(eElement),
@@ -1928,3 +1923,5 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
 
     bHeadingDummiesExported  = sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

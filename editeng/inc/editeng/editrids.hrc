@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svxids.hrc,v $
- * $Revision: 1.10.132.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -282,25 +279,23 @@
 #define RID_SVXITEMS_SHADOW_BOTTOMLEFT      (RID_EDIT_START + 232)
 #define RID_SVXITEMS_SHADOW_BOTTOMRIGHT     (RID_EDIT_START + 233)
 
-// Umrandungslinien
-#define RID_SINGLE_LINE0                    (RID_EDIT_START + 234)
-#define RID_SINGLE_LINE1                    (RID_EDIT_START + 235)
-#define RID_SINGLE_LINE2                    (RID_EDIT_START + 236)
-#define RID_SINGLE_LINE3                    (RID_EDIT_START + 237)
-#define RID_SINGLE_LINE4                    (RID_EDIT_START + 238)
-#define RID_DOUBLE_LINE0                    (RID_EDIT_START + 239)
-#define RID_DOUBLE_LINE1                    (RID_EDIT_START + 240)
-#define RID_DOUBLE_LINE2                    (RID_EDIT_START + 241)
-#define RID_DOUBLE_LINE3                    (RID_EDIT_START + 242)
-#define RID_DOUBLE_LINE4                    (RID_EDIT_START + 243)
-#define RID_DOUBLE_LINE5                    (RID_EDIT_START + 244)
-#define RID_DOUBLE_LINE6                    (RID_EDIT_START + 245)
-#define RID_DOUBLE_LINE7                    (RID_EDIT_START + 246)
-#define RID_DOUBLE_LINE8                    (RID_EDIT_START + 247)
-#define RID_DOUBLE_LINE9                    (RID_EDIT_START + 248)
-#define RID_DOUBLE_LINE10                   (RID_EDIT_START + 249)
+// Border lines
+#define RID_SOLID                           (RID_EDIT_START + 234)
+#define RID_DOTTED                          (RID_EDIT_START + 235)
+#define RID_DASHED                          (RID_EDIT_START + 236)
+#define RID_DOUBLE                          (RID_EDIT_START + 237)
+#define RID_THINTHICK_SMALLGAP              (RID_EDIT_START + 238)
+#define RID_THINTHICK_MEDIUMGAP             (RID_EDIT_START + 239)
+#define RID_THINTHICK_LARGEGAP              (RID_EDIT_START + 240)
+#define RID_THICKTHIN_SMALLGAP              (RID_EDIT_START + 241)
+#define RID_THICKTHIN_MEDIUMGAP             (RID_EDIT_START + 242)
+#define RID_THICKTHIN_LARGEGAP              (RID_EDIT_START + 243)
+#define RID_EMBOSSED                        (RID_EDIT_START + 244)
+#define RID_ENGRAVED                        (RID_EDIT_START + 245)
+#define RID_OUTSET                          (RID_EDIT_START + 246)
+#define RID_INSET                           (RID_EDIT_START + 247)
 
-// Metric-Texte
+// Metric-Text
 #define RID_SVXITEMS_METRIC_MM              (RID_EDIT_START + 250)
 #define RID_SVXITEMS_METRIC_CM              (RID_EDIT_START + 251)
 #define RID_SVXITEMS_METRIC_INCH            (RID_EDIT_START + 252)
@@ -381,7 +376,25 @@
 #define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION (RID_EDIT_START + 314)
 #define RID_SVXSTR_A11Y_IMAGEBULLET_NAME        (RID_EDIT_START + 315)
 
-#if 315 > (RID_EDIT_END-RID_EDIT_START)
+// enum SvxCellHorJustify
+#define RID_SVXITEMS_HORJUST_STANDARD       (RID_EDIT_START + 316)
+#define RID_SVXITEMS_HORJUST_LEFT           (RID_EDIT_START + 317)
+#define RID_SVXITEMS_HORJUST_CENTER         (RID_EDIT_START + 318)
+#define RID_SVXITEMS_HORJUST_RIGHT          (RID_EDIT_START + 319)
+#define RID_SVXITEMS_HORJUST_BLOCK          (RID_EDIT_START + 320)
+#define RID_SVXITEMS_HORJUST_REPEAT         (RID_EDIT_START + 321)
+
+// enum SvxCellVerJustify
+#define RID_SVXITEMS_VERJUST_STANDARD       (RID_EDIT_START + 322)
+#define RID_SVXITEMS_VERJUST_TOP            (RID_EDIT_START + 323)
+#define RID_SVXITEMS_VERJUST_CENTER         (RID_EDIT_START + 324)
+#define RID_SVXITEMS_VERJUST_BOTTOM         (RID_EDIT_START + 325)
+
+// enum SvxCellJustifyMethod
+#define RID_SVXITEMS_JUSTMETHOD_AUTO            (RID_EDIT_START + 326)
+#define RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE      (RID_EDIT_START + 327)
+
+#if 327 > (RID_EDIT_END-RID_EDIT_START)
 #error Resource-Ueberlauf in #line, #file
 #endif
 

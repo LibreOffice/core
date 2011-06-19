@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -771,6 +772,9 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     aLock.clear();
     // <- SYNCHRONIZED
 
+    if (lFilters.size() == 0)
+        return;
+
     COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
     iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);
     iDialog->SetFileTypeIndex(nCurrentFilter + 1);
@@ -1261,3 +1265,5 @@ bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

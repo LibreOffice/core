@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dSphereObj* Clone() const;
 
     void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }
@@ -86,3 +87,5 @@ public:
 };
 
 #endif          // _E3D_SPHERE3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

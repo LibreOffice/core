@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -77,7 +80,7 @@ namespace drawinglayer
             rasterconvertB3DPolyPolygon for filled geometry is called. It is a beseclass to
             e.g. base a Z-Buffer supported renderer on the 3D primitive processing.
          */
-        class DefaultProcessor3D : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC DefaultProcessor3D : public BaseProcessor3D
         {
         protected:
             /// read-only scene infos (normal handling, etc...)
@@ -162,3 +165,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

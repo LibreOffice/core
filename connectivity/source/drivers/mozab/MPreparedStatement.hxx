@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 #define CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 
-#ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
-#endif
 #include "MStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -77,7 +76,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             sal_Bool                                    m_bPrepared;
             ::rtl::Reference< OResultSet >              m_pResultSet;
-            ::vos::ORef<connectivity::OSQLColumns>      m_xParamColumns;    // the parameter columns
+            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;
 
 
@@ -167,3 +166,5 @@ namespace connectivity
     }
 }
 #endif // CONNECTIVITY_SPREPAREDSTATEMENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

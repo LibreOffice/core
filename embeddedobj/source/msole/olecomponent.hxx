@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,13 +90,10 @@ class OleComponent : public ::cppu::WeakImplHelper5< ::com::sun::star::util::XCl
     // such objects report the dirty state wrongly sometimes and do not allow to store them any time
     sal_Bool m_bWorkaroundActive;
 
-
     sal_Bool InitializeObject_Impl();
 
     void CreateNewIStorage_Impl();
-
     void RetrieveObjectDataFlavors_Impl();
-
     void Dispose();
 
 
@@ -117,32 +115,22 @@ public:
 
     // ==== Initialization ==================================================
     void LoadEmbeddedObject( const ::rtl::OUString& aTempURL );
-
     void CreateObjectFromClipboard();
-
     void CreateNewEmbeddedObject( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeqCLSID );
-
     void CreateObjectFromData(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransfer );
-
     void CreateObjectFromFile( const ::rtl::OUString& aFileName );
-
     void CreateLinkFromFile( const ::rtl::OUString& aFileName );
-
     void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
 
     // ======================================================================
-
     void RunObject(); // switch OLE object to running state
-
     void CloseObject(); // switch OLE object to loaded state
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > GetVerbList();
 
     void ExecuteVerb( sal_Int32 nVerbID );
-
     void SetHostName( const ::rtl::OUString& aContName, const ::rtl::OUString& aEmbDocName );
-
     void SetExtent( const ::com::sun::star::awt::Size& aVisAreaSize, sal_Int64 nAspect );
 
     ::com::sun::star::awt::Size GetExtent( sal_Int64 nAspect );
@@ -154,7 +142,6 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCLSID();
 
     sal_Bool IsWorkaroundActive() { return m_bWorkaroundActive; }
-
     sal_Bool IsDirty();
 
     void StoreOwnTmpIfNecessary();
@@ -192,3 +179,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

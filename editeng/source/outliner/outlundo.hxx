@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,9 +100,9 @@ public:
     virtual void    Repeat();
 };
 
-// Hilfs-Undo: Wenn es fuer eine Aktion keine OutlinerUndoAction gibst, weil
-// die EditEngine das handelt, aber z.B. noch das Bullet neu berechnet werden muss.
-
+// Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
+// because this is handled by the EditEngine, but for example the bullet has
+// to be recalculated.
 class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
@@ -132,9 +133,11 @@ public:
     virtual void Redo();
     virtual void Repeat();
 
-    sal_uInt16* pParas;  // 0 == nCount enthaelt Absatznummer
+    sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;
     sal_uInt16 nCount;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

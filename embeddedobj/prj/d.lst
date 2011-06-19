@@ -1,8 +1,8 @@
-mkdir: %_DEST%\xml%_EXT%\registry\spool
-..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\dtd\*.dtd %_DEST%\bin%_EXT%\*.*
-..\%__SRC%\misc\embobj.component %_DEST%\xml%_EXT%\embobj.component
-..\%__SRC%\misc\emboleobj.component %_DEST%\xml%_EXT%\emboleobj.component
+mkdir: %_DEST%\xml\registry\spool
+..\%__SRC%\misc\*.map %_DEST%\bin\*.map
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\dtd\*.dtd %_DEST%\bin\*.*
+..\%__SRC%\misc\embobj.component %_DEST%\xml\embobj.component
+..\%__SRC%\misc\emboleobj.component %_DEST%\xml\emboleobj.component

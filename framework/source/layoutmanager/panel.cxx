@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/unohlp.hxx>
 
@@ -64,7 +64,7 @@ Panel::Panel(
     uno::Reference< awt::XWindowPeer > xWindowPeer( rParent, uno::UNO_QUERY );
     m_xPanelWindow = uno::Reference< awt::XWindow >( createToolkitWindow( rSMGR, xWindowPeer, "splitwindow" ), uno::UNO_QUERY );
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SplitWindow* pSplitWindow = dynamic_cast< SplitWindow* >( VCLUnoHelper::GetWindow( m_xPanelWindow ));
 
     if ( pSplitWindow )
@@ -86,3 +86,5 @@ Panel::~Panel()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

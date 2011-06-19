@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,11 @@
 #include <vcl/msgbox.hxx>
 #include <tools/date.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 namespace desktop
 {
@@ -116,3 +118,5 @@ sal_Bool CheckInstallation( OUString& rTitle )
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

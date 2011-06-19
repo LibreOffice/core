@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -166,24 +167,24 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
       m_xMultiServiceFactory( xMultiServiceFactory ),
-      Title( rtl::OUString::createFromAscii( "Title" ) ),
+      Title( RTL_CONSTASCII_USTRINGPARAM("Title") ),
       CasePreservingURL(
-          rtl::OUString::createFromAscii( "CasePreservingURL" ) ),
-      IsDocument( rtl::OUString::createFromAscii( "IsDocument" ) ),
-      IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
-      DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
-      Size( rtl::OUString::createFromAscii( "Size" ) ),
-      IsVolume( rtl::OUString::createFromAscii( "IsVolume" ) ),
-      IsRemoveable( rtl::OUString::createFromAscii( "IsRemoveable" ) ),
-      IsRemote( rtl::OUString::createFromAscii( "IsRemote" ) ),
-      IsCompactDisc( rtl::OUString::createFromAscii( "IsCompactDisc" ) ),
-      IsFloppy( rtl::OUString::createFromAscii( "IsFloppy" ) ),
-      IsHidden( rtl::OUString::createFromAscii( "IsHidden" ) ),
-      ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
-      IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
-      CreatableContentsInfo( rtl::OUString::createFromAscii( "CreatableContentsInfo" ) ),
-      FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
-      FileContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-file" ) ),
+          RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL") ),
+      IsDocument( RTL_CONSTASCII_USTRINGPARAM("IsDocument") ),
+      IsFolder( RTL_CONSTASCII_USTRINGPARAM("IsFolder") ),
+      DateModified( RTL_CONSTASCII_USTRINGPARAM("DateModified") ),
+      Size( RTL_CONSTASCII_USTRINGPARAM("Size") ),
+      IsVolume( RTL_CONSTASCII_USTRINGPARAM("IsVolume") ),
+      IsRemoveable( RTL_CONSTASCII_USTRINGPARAM("IsRemoveable") ),
+      IsRemote( RTL_CONSTASCII_USTRINGPARAM("IsRemote") ),
+      IsCompactDisc( RTL_CONSTASCII_USTRINGPARAM("IsCompactDisc") ),
+      IsFloppy( RTL_CONSTASCII_USTRINGPARAM("IsFloppy") ),
+      IsHidden( RTL_CONSTASCII_USTRINGPARAM("IsHidden") ),
+      ContentType( RTL_CONSTASCII_USTRINGPARAM("ContentType") ),
+      IsReadOnly( RTL_CONSTASCII_USTRINGPARAM("IsReadOnly") ),
+      CreatableContentsInfo( RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo") ),
+      FolderContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder") ),
+      FileContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-file") ),
       m_sCommandInfo( 9 )
 {
     // Title
@@ -299,7 +300,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
             | beans::PropertyAttribute::BOUND
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
         ));
 #else
     | beans::PropertyAttribute::READONLY)); // under unix/linux only readable
@@ -363,45 +364,45 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Commands
-    m_sCommandInfo[0].Name = rtl::OUString::createFromAscii( "getCommandInfo" );
+    m_sCommandInfo[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo"));
     m_sCommandInfo[0].Handle = -1;
     m_sCommandInfo[0].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[1].Name = rtl::OUString::createFromAscii( "getPropertySetInfo" );
+    m_sCommandInfo[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo"));
     m_sCommandInfo[1].Handle = -1;
     m_sCommandInfo[1].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[2].Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+    m_sCommandInfo[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     m_sCommandInfo[2].Handle = -1;
     m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
 
-    m_sCommandInfo[3].Name = rtl::OUString::createFromAscii( "setPropertyValues" );
+    m_sCommandInfo[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     m_sCommandInfo[3].Handle = -1;
     m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
 
-    m_sCommandInfo[4].Name = rtl::OUString::createFromAscii( "open" );
+    m_sCommandInfo[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     m_sCommandInfo[4].Handle = -1;
     m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
 
-    m_sCommandInfo[5].Name = rtl::OUString::createFromAscii( "transfer" );
+    m_sCommandInfo[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer"));
     m_sCommandInfo[5].Handle = -1;
     m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
 
-    m_sCommandInfo[6].Name = rtl::OUString::createFromAscii( "delete" );
+    m_sCommandInfo[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
     m_sCommandInfo[6].Handle = -1;
     m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString::createFromAscii( "insert" );
+    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert"));
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString::createFromAscii( "createNewContent" );
+    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
     if(m_bWithConfig)
     {
-        rtl::OUString Store = rtl::OUString::createFromAscii( "com.sun.star.ucb.Store" );
+        rtl::OUString Store(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Store"));
         uno::Reference< XPropertySetRegistryFactory > xRegFac(
             m_xMultiServiceFactory->createInstance( Store ),
             uno::UNO_QUERY );
@@ -593,7 +594,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 {
     uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
-    osl::FileBase::RC err = aFile.open( OpenFlag_Read );
+    osl::FileBase::RC err = aFile.open( osl_File_OpenFlag_Read );
 
     if( err != osl::FileBase::E_None )
     {
@@ -904,7 +905,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                 {   // valid value for the size
                     osl::File aFile(aUnqPath);
                     bool err =
-                        aFile.open(OpenFlag_Write) != osl::FileBase::E_None ||
+                        aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None ||
                         aFile.setSize(sal_uInt64(newSize)) != osl::FileBase::E_None ||
                         aFile.close() != osl::FileBase::E_None;
 
@@ -913,7 +914,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         ret[0] <<= beans::PropertyValue(
-                            rtl::OUString::createFromAscii("Uri"), -1,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
@@ -940,33 +941,33 @@ shell::setv( const rtl::OUString& aUnqPath,
                     sal_uInt64 nAttributes(0);
                     if(err == osl::FileBase::E_None)
                     {
-                        osl::FileStatus aFileStatus(FileStatusMask_Attributes);
+                        osl::FileStatus aFileStatus(osl_FileStatus_Mask_Attributes);
                         err = aDirItem.getFileStatus(aFileStatus);
                         if(err == osl::FileBase::E_None &&
-                           aFileStatus.isValid(FileStatusMask_Attributes))
+                           aFileStatus.isValid(osl_FileStatus_Mask_Attributes))
                             nAttributes = aFileStatus.getAttributes();
                     }
                     // now we have the attributes provided all went well.
                     if(err == osl::FileBase::E_None) {
                         if(values[i].Name == IsReadOnly)
                         {
-                            nAttributes &= ~(Attribute_OwnWrite |
-                                             Attribute_GrpWrite |
-                                             Attribute_OthWrite |
-                                             Attribute_ReadOnly);
+                            nAttributes &= ~(osl_File_Attribute_OwnWrite |
+                                             osl_File_Attribute_GrpWrite |
+                                             osl_File_Attribute_OthWrite |
+                                             osl_File_Attribute_ReadOnly);
                             if(value)
-                                nAttributes |= Attribute_ReadOnly;
+                                nAttributes |= osl_File_Attribute_ReadOnly;
                             else
                                 nAttributes |= (
-                                    Attribute_OwnWrite |
-                                    Attribute_GrpWrite |
-                                    Attribute_OthWrite);
+                                    osl_File_Attribute_OwnWrite |
+                                    osl_File_Attribute_GrpWrite |
+                                    osl_File_Attribute_OthWrite);
                         }
                         else if(values[i].Name == IsHidden)
                         {
-                            nAttributes &= ~(Attribute_Hidden);
+                            nAttributes &= ~(osl_File_Attribute_Hidden);
                             if(value)
-                                nAttributes |= Attribute_Hidden;
+                                nAttributes |= osl_File_Attribute_Hidden;
                         }
                         err = osl::File::setAttributes(
                             aUnqPath,nAttributes);
@@ -977,7 +978,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         names[0] <<= beans::PropertyValue(
-                            rtl::OUString::createFromAscii("Uri"), -1,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
@@ -1137,7 +1138,6 @@ shell::move( sal_Int32 CommandId,
     // srcUnqPath and dstUnqPathIn are equal
     if( srcUnqPath == dstUnqPathIn )
         return;
-    // <--
     //
     osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
@@ -1161,13 +1161,13 @@ shell::move( sal_Int32 CommandId,
             // stat to determine whether we have a symlink
             rtl::OUString targetPath(dstUnqPath);
 
-            osl::FileStatus aStatus(FileStatusMask_Type|FileStatusMask_LinkTargetURL);
+            osl::FileStatus aStatus(osl_FileStatus_Mask_Type|osl_FileStatus_Mask_LinkTargetURL);
             osl::DirectoryItem aItem;
             osl::DirectoryItem::get(dstUnqPath,aItem);
             aItem.getFileStatus(aStatus);
 
-            if( aStatus.isValid(FileStatusMask_Type)          &&
-                aStatus.isValid(FileStatusMask_LinkTargetURL) &&
+            if( aStatus.isValid(osl_FileStatus_Mask_Type)          &&
+                aStatus.isValid(osl_FileStatus_Mask_LinkTargetURL) &&
                 aStatus.getFileType() == osl::FileStatus::Link )
                 targetPath = aStatus.getLinkTargetURL();
 
@@ -1207,7 +1207,7 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1278,9 +1278,9 @@ shell::move( sal_Int32 CommandId,
                       nError );
         return;
     }
-    osl::FileStatus aStatus( FileStatusMask_Type );
+    osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
     nError = aItem.getFileStatus( aStatus );
-    if( nError != osl::FileBase::E_None || ! aStatus.isValid( FileStatusMask_Type ) )
+    if( nError != osl::FileBase::E_None || ! aStatus.isValid( osl_FileStatus_Mask_Type ) )
     {
         installError( CommandId,
                       TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT,
@@ -1329,7 +1329,7 @@ bool getType(
         task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);
         return false;
     }
-    osl::FileStatus stat(FileStatusMask_Type);
+    osl::FileStatus stat(osl_FileStatus_Mask_Type);
     err = item->getFileStatus(stat);
     if (err != osl::FileBase::E_None) {
         task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT, err);
@@ -1364,7 +1364,7 @@ shell::copy(
     }
     rtl::OUString rslvdSrcUnqPath;
     if (type == osl::FileStatus::Link) {
-        osl::FileStatus stat(FileStatusMask_LinkTargetURL);
+        osl::FileStatus stat(osl_FileStatus_Mask_LinkTargetURL);
         nError = item.getFileStatus(stat);
         if (nError != osl::FileBase::E_None) {
             installError(
@@ -1437,7 +1437,7 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1524,7 +1524,7 @@ shell::remove( sal_Int32 CommandId,
                sal_Bool  MustExist )
     throw()
 {
-    sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FileURL;
+    sal_Int32 nMask = osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL;
 
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
@@ -1799,12 +1799,12 @@ shell::write( sal_Int32 CommandId,
 
     if( OverWrite )
     {
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
         if( err != osl::FileBase::E_None )
         {
             aFile.close();
-            err = aFile.open( OpenFlag_Write );
+            err = aFile.open( osl_File_OpenFlag_Write );
 
             if( err != osl::FileBase::E_None )
             {
@@ -1829,7 +1829,7 @@ shell::write( sal_Int32 CommandId,
     }
     else
     {
-        err = aFile.open( OpenFlag_Read | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock );
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
             installError( CommandId,
@@ -1842,7 +1842,7 @@ shell::write( sal_Int32 CommandId,
 
         // as a temporary solution the creation does not lock the file at all
         // in future it should be possible to create the file without lock explicitly
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 
         if( err != osl::FileBase::E_None )
         {
@@ -1976,11 +1976,11 @@ void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
 
 sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
 {
-    if( 0 == Url.compareToAscii( "file:///" ) ||
-        0 == Url.compareToAscii( "file://localhost/" ) ||
-        0 == Url.compareToAscii( "file://127.0.0.1/" ) )
+    if (Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://localhost/")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://127.0.0.1/")))
     {
-        Unq = rtl::OUString::createFromAscii( "file:///" );
+        Unq = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
         return false;
     }
 
@@ -2033,7 +2033,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
         osl::FileBase::RC next = err;
         if( err == osl::FileBase::E_None )
         {
-            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
+            sal_Int32 n_Mask = osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Type;
 
             osl::DirectoryItem aDirItem;
 
@@ -2042,26 +2042,26 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 sal_Bool IsDoc = false;
                 osl::FileStatus aFileStatus( n_Mask );
                 aDirItem.getFileStatus( aFileStatus );
-                if( aFileStatus.isValid( FileStatusMask_Type ) )
+                if( aFileStatus.isValid( osl_FileStatus_Mask_Type ) )
                     IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
                 // Getting the information for the next recursive copy
                 sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
 
                 rtl::OUString newSrcUnqPath;
-                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
                     newSrcUnqPath = aFileStatus.getFileURL();
 
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
                     tit = rtl::Uri::encode( aFileStatus.getFileName(),
                                           rtl_UriCharClassPchar,
                                           rtl_UriEncodeIgnoreEscapes,
                                           RTL_TEXTENCODING_UTF8 );
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                 newDstUnqPath += tit;
 
@@ -2167,9 +2167,9 @@ shell::getMaskFromProperties(
     n_Mask = 0;
     for(sal_Int32 j = 0; j < seq.getLength(); ++j) {
         if(seq[j].Name == Title)
-            n_Mask |= FileStatusMask_FileName;
+            n_Mask |= osl_FileStatus_Mask_FileName;
         else if(seq[j].Name == CasePreservingURL)
-            n_Mask |= FileStatusMask_FileURL;
+            n_Mask |= osl_FileStatus_Mask_FileURL;
         else if(seq[j].Name == IsDocument ||
                 seq[j].Name == IsFolder ||
                 seq[j].Name == IsVolume ||
@@ -2178,23 +2178,16 @@ shell::getMaskFromProperties(
                 seq[j].Name == IsCompactDisc ||
                 seq[j].Name == IsFloppy ||
                 seq[j].Name == ContentType)
-            n_Mask |= (FileStatusMask_Type | FileStatusMask_LinkTargetURL);
+            n_Mask |= (osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL);
         else if(seq[j].Name == Size)
-            n_Mask |= (FileStatusMask_FileSize |
-                      FileStatusMask_Type |
-                      FileStatusMask_LinkTargetURL);
+            n_Mask |= (osl_FileStatus_Mask_FileSize |
+                      osl_FileStatus_Mask_Type |
+                      osl_FileStatus_Mask_LinkTargetURL);
         else if(seq[j].Name == IsHidden ||
                 seq[j].Name == IsReadOnly)
-            n_Mask |= FileStatusMask_Attributes;
+            n_Mask |= osl_FileStatus_Mask_Attributes;
         else if(seq[j].Name == DateModified)
-            n_Mask |= FileStatusMask_ModifyTime;
-//         n_Mask = FileStatusMask_FileURL;
-//         n_Mask |= FileStatusMask_LinkTargetURL;
-//         n_Mask |= FileStatusMask_FileName;
-//         n_Mask |= FileStatusMask_Type;
-//         n_Mask |= FileStatusMask_ModifyTime;
-//         n_Mask |= FileStatusMask_FileSize;
-//         n_Mask |= FileStatusMask_Attributes;
+            n_Mask |= osl_FileStatus_Mask_ModifyTime;
     }
 }
 
@@ -2289,7 +2282,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( Title ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_FileName ) )
+        if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
         {
             aAny <<= aFileStatus.getFileName();
             it1->setValue( aAny );
@@ -2299,7 +2292,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( CasePreservingURL ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+        if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
         {
             aAny <<= aFileStatus.getFileURL();
             it1->setValue( aAny );
@@ -2311,19 +2304,19 @@ shell::commit( const shell::ContentMap::iterator& it,
 
     sal_Int64 dirSize = 0;
 
-    if( aFileStatus.isValid( FileStatusMask_FileSize ) )
+    if( aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
         dirSize = aFileStatus.getFileSize();
 
-    if( aFileStatus.isValid( FileStatusMask_Type ) )
+    if( aFileStatus.isValid( osl_FileStatus_Mask_Type ) )
     {
         if( osl::FileStatus::Link == aFileStatus.getFileType() &&
-            aFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
+            aFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
         {
             osl::DirectoryItem aDirItem;
-            osl::FileStatus aFileStatus2( FileStatusMask_Type );
+            osl::FileStatus aFileStatus2( osl_FileStatus_Mask_Type );
             if( osl::FileBase::E_None == osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(),aDirItem ) &&
                 osl::FileBase::E_None == aDirItem.getFileStatus( aFileStatus2 )    &&
-                aFileStatus2.isValid( FileStatusMask_Type ) )
+                aFileStatus2.isValid( osl_FileStatus_Mask_Type ) )
             {
                 isVolume = osl::FileStatus::Volume == aFileStatus2.getFileType();
                 isDirectory =
@@ -2332,7 +2325,7 @@ shell::commit( const shell::ContentMap::iterator& it,
                 isFile =
                     osl::FileStatus::Regular == aFileStatus2.getFileType();
 
-                if( aFileStatus2.isValid( FileStatusMask_FileSize ) )
+                if( aFileStatus2.isValid( osl_FileStatus_Mask_FileSize ) )
                     dirSize = aFileStatus2.getFileSize();
             }
             else
@@ -2370,10 +2363,10 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( it1 != properties.end() )
             it1->setValue( uno::makeAny( isFile ) );
 
-        osl::VolumeInfo aVolumeInfo( VolumeInfoMask_Attributes );
+        osl::VolumeInfo aVolumeInfo( osl_VolumeInfo_Mask_Attributes );
         if( isVolume &&
             osl::FileBase::E_None == osl::Directory::getVolumeInfo( it->first,aVolumeInfo ) &&
-            aVolumeInfo.isValid( VolumeInfoMask_Attributes ) )
+            aVolumeInfo.isValid( osl_VolumeInfo_Mask_Attributes ) )
         {
             // Retrieve the flags;
             isRemote = aVolumeInfo.getRemoteFlag();
@@ -2430,10 +2423,10 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( IsReadOnly ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_Attributes ) )
+        if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool readonly = ( Attr & Attribute_ReadOnly ) != 0;
+            sal_Bool readonly = ( Attr & osl_File_Attribute_ReadOnly ) != 0;
             it1->setValue( uno::makeAny( readonly ) );
         }
     }
@@ -2441,10 +2434,10 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( IsHidden ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_Attributes ) )
+        if( aFileStatus.isValid( osl_FileStatus_Mask_Attributes ) )
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
-            sal_Bool ishidden = ( Attr & Attribute_Hidden ) != 0;
+            sal_Bool ishidden = ( Attr & osl_File_Attribute_Hidden ) != 0;
             it1->setValue( uno::makeAny( ishidden ) );
         }
     }
@@ -2452,7 +2445,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( DateModified ) );
     if( it1 != properties.end() )
     {
-        if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
+        if( aFileStatus.isValid( osl_FileStatus_Mask_ModifyTime ) )
         {
             TimeValue temp = aFileStatus.getModifyTime();
 
@@ -2478,7 +2471,7 @@ shell::commit( const shell::ContentMap::iterator& it,
     it1 = properties.find( MyProperty( CreatableContentsInfo ) );
     if( it1 != properties.end() )
         it1->setValue( uno::makeAny(
-            isDirectory || !aFileStatus.isValid( FileStatusMask_Type )
+            isDirectory || !aFileStatus.isValid( osl_FileStatus_Mask_Type )
                 ? queryCreatableContentsInfo()
                 : uno::Sequence< ucb::ContentInfo >() ) );
 }
@@ -2503,9 +2496,9 @@ shell::getv(
 
     // Always retrieve the type and the target URL because item might be a link
     osl::FileStatus aFileStatus( n_Mask |
-                                 FileStatusMask_FileURL |
-                                 FileStatusMask_Type |
-                                 FileStatusMask_LinkTargetURL );
+                                 osl_FileStatus_Mask_FileURL |
+                                 osl_FileStatus_Mask_Type |
+                                 osl_FileStatus_Mask_LinkTargetURL );
     aDirItem.getFileStatus( aFileStatus );
     aUnqPath = aFileStatus.getFileURL();
 
@@ -2520,7 +2513,7 @@ shell::getv(
         osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
         if ( aTargetItem.is() )
         {
-            osl::FileStatus aTargetStatus( FileStatusMask_Type );
+            osl::FileStatus aTargetStatus( osl_FileStatus_Mask_Type );
 
             if ( osl::FileBase::E_None ==
                  ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
@@ -3032,7 +3025,7 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
         -1,
         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
         beans::PropertyAttribute::MAYBEVOID
@@ -3055,20 +3048,22 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 void SAL_CALL
 shell::getScheme( rtl::OUString& Scheme )
 {
-  Scheme = rtl::OUString::createFromAscii( "file" );
+  Scheme = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file"));
 }
 
 rtl::OUString SAL_CALL
 shell::getImplementationName_static( void )
 {
-  return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileProvider" );
+  return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ucb.FileProvider"));
 }
 
 
 uno::Sequence< rtl::OUString > SAL_CALL
 shell::getSupportedServiceNames_static( void )
 {
-  rtl::OUString Supported = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ;
+  rtl::OUString Supported(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
   com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
   return Seq;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

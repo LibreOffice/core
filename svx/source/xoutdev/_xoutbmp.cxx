@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -327,7 +328,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
         String          aExt;
-        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+        GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
         sal_Bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
@@ -397,19 +398,19 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
             if( bWriteTransGrf )
                 aFilter = FORMAT_GIF;
 
-            nFilter = pFilter->GetExportFormatNumberForShortName( aFilter );
+            nFilter = rFilter.GetExportFormatNumberForShortName( aFilter );
 
             if( GRFILTER_FORMAT_NOTFOUND == nFilter )
             {
-                nFilter = pFilter->GetExportFormatNumberForShortName( FORMAT_JPG );
+                nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_JPG );
 
                 if( GRFILTER_FORMAT_NOTFOUND == nFilter )
-                    nFilter = pFilter->GetExportFormatNumberForShortName( FORMAT_BMP );
+                    nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_BMP );
             }
 
             if( GRFILTER_FORMAT_NOTFOUND != nFilter )
             {
-                aExt = pFilter->GetExportFormatShortName( nFilter ).ToLowerAscii();
+                aExt = rFilter.GetExportFormatShortName( nFilter ).ToLowerAscii();
 
                 if( bWriteTransGrf )
                 {
@@ -476,7 +477,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                     if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
                         aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    nErr = ExportGraphic( aGraphic, aURL, *pFilter, nFilter, NULL );
+                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, NULL );
                 }
             }
         }
@@ -768,3 +769,5 @@ sal_Bool DitherBitmap( Bitmap& rBitmap )
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

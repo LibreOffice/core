@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,6 +93,8 @@ void process_headers( ne_request * req,
 // Constructor
 // -------------------------------------------------------------------
 
+extern osl::Mutex aGlobalNeonMutex;
+
 NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
                                   const rtl::OUString & inPath,
                                   const std::vector< ::rtl::OUString > &
@@ -110,7 +113,10 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ) );
 
-    nError = ne_request_dispatch( req );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        nError = ne_request_dispatch( req );
+    }
 
     process_headers( req, ioResource, inHeaderNames );
 
@@ -127,3 +133,4 @@ NeonHeadRequest::~NeonHeadRequest()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

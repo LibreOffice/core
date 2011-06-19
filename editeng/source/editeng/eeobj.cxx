@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <sot/formats.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/itempool.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star;
 
@@ -68,7 +69,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     }
     else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
     {
-        // MT 01/2002: No RTF on demand any more:
+        // No RTF on demand any more:
         // 1) Was not working, because I had to flush() the clipboard immediately anyway
         // 2) Don't have the old pool defaults and the StyleSheetPool here.
 
@@ -105,8 +106,10 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
     sal_Bool bSupported = sal_False;
 
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) /* || ( nT == SOT_FORMAT_XML ) */ || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
+    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
         bSupported = sal_True;
 
     return bSupported;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

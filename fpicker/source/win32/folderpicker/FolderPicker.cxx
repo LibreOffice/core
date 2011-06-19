@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#ifndef _FOLDERPICKER_HXX_
 #include "folderpicker.hxx"
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "WinFOPImpl.hxx"
 
@@ -72,7 +71,7 @@ namespace
     Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFolderPicker");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFolderPicker"));
         return aRet;
     }
 }
@@ -167,7 +166,7 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( FOLDERPICKER_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDERPICKER_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -217,3 +216,4 @@ void SAL_CALL CFolderPicker::disposing()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -49,9 +48,7 @@
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 
-#ifndef _SOT_EXCHANGE_HXX_
 #include <sot/exchange.hxx>
-#endif
 
 namespace framework
 {
@@ -106,3 +103,5 @@ class DropTargetListener : private ThreadHelpBase
 } // namespace framework
 
 #endif // __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 #include "editeng/editengdllapi.h"
@@ -45,10 +46,10 @@ protected:
     /** this virtual function is called if the forbidden characters are changed */
     virtual void onChange();
 
-    vos::ORef<SvxForbiddenCharactersTable> mxForbiddenChars;
+    rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenChars;
 
 public:
-    SvxUnoForbiddenCharsTable(vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars);
+    SvxUnoForbiddenCharsTable(rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars);
     ~SvxUnoForbiddenCharsTable();
 
     // XForbiddenCharacters
@@ -63,3 +64,5 @@ public:
 };
 
 #endif // _SVX_UNOFORBIDDENCHARSTABLE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -142,7 +142,7 @@
 
         <node oor:name="Dictionary" oor:op="fuse" oor:mandatory="true">
             <node oor:name="InternalPaths">
-                <node oor:name="$(insturl)/share/wordbook/$(vlang)" oor:op="fuse"/>
+                <node oor:name="$(insturl)/share/wordbook" oor:op="fuse"/>
             </node>
             <prop oor:name="WritePath">
                 <value>$(userurl)/wordbook</value>

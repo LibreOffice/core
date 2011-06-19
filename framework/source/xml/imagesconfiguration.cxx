@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 
@@ -70,26 +69,19 @@ SV_IMPL_PTRARR( ExternalImageItemListDescriptor, ExternalImageItemDescriptorPtr 
 SV_IMPL_PTRARR( ImageListDescriptor, ImageListItemDescriptorPtr );
 
 static Reference< XParser > GetSaxParser(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
     return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
-// #110897#
 sal_Bool ImagesConfiguration::LoadImages(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rInStream, ImageListsDescriptor& aItems )
@@ -130,8 +122,6 @@ sal_Bool ImagesConfiguration::LoadImages(
     }
 }
 
-
-// #110897#
 sal_Bool ImagesConfiguration::StoreImages(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rOutStream, const ImageListsDescriptor& aItems )
@@ -235,3 +225,4 @@ sal_Bool ImagesConfiguration::StoreImages(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

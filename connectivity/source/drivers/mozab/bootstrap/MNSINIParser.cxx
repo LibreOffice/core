@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         if (iniUrl.getLength())
             fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
     }
-    catch(::com::sun::star::io::IOException e)
+    catch(::com::sun::star::io::IOException&)
     {
 #if OSL_DEBUG_LEVEL > 0
         OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
@@ -61,7 +62,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         sal_uInt64 nSize = 0;
 
         osl_getFileSize(handle, &nSize);
-        OUString sectionName = OUString::createFromAscii("no name section");
+        OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
         while (true)
         {
             sal_uInt64 nPos;
@@ -92,7 +93,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                     sectionName =  OStringToOUString(
                         line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                     if (!sectionName.getLength())
-                        sectionName = OUString::createFromAscii("no name section");
+                        sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
 
                     ini_Section *aSection = &mAllSection[sectionName];
                     aSection->sName = sectionName;
@@ -137,3 +138,4 @@ void IniParser::Dump()
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

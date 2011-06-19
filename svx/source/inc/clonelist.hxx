@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,9 @@
 #ifndef _CLONELIST_HXX_
 #define _CLONELIST_HXX_
 
+#include <vector>
+
 #include <sal/types.h>
-#include <tools/list.hxx>
 
 // predeclarations
 class SdrObject;
@@ -38,12 +40,10 @@ class SdrObject;
 // re-creating the connections for contained connectors
 class CloneList
 {
-    List                        maOriginalList;
-    List                        maCloneList;
+    std::vector<const SdrObject*> maOriginalList;
+    std::vector<SdrObject*> maCloneList;
 
 public:
-    CloneList();
-    ~CloneList();
 
     void AddPair(const SdrObject* pOriginal, SdrObject* pClone);
     sal_uInt32 Count() const;
@@ -55,3 +55,5 @@ public:
 };
 
 #endif // _CLONELIST_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

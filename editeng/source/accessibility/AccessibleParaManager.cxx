@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,9 +196,8 @@ namespace accessibility
             if( !IsReferencable( nParagraphIndex ) )
             {
                 // there is no hard reference available, create object then
-                // --> OD 2006-01-11 #i27138#
+                // #i27138#
                 AccessibleEditableTextPara* pChild = new AccessibleEditableTextPara( xFrontEnd, this );
-                // <--
                 uno::Reference< XAccessible > xChild( static_cast< ::cppu::OWeakObject* > (pChild), uno::UNO_QUERY );
 
                 if( !xChild.is() )
@@ -418,3 +418,5 @@ namespace accessibility
 }
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

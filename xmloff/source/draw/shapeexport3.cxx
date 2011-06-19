@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <tools/gen.hxx>
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -496,3 +495,5 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
 }
 
 //////////////////////////////////////////////////////////////////////////////
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

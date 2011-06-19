@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-
+#include <sal/macros.h>
 #include <osl/time.h>
 
 #include <osl/diagnose.h>
@@ -149,8 +150,8 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 rtl::OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
 {
     return isFolder(uno::Reference< ucb::XCommandEnvironment >())
-        ? rtl::OUString::createFromAscii( GIO_FOLDER_TYPE )
-        : rtl::OUString::createFromAscii( GIO_FILE_TYPE );
+        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FOLDER_TYPE ))
+        : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FILE_TYPE ));
 }
 
 #define EXCEPT(aExcept) \
@@ -304,7 +305,7 @@ uno::Any Content::mapGIOError( GError *pError )
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException(
-        rtl::OUString::createFromAscii( "Wrong argument type!" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong argument type!")),
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
 
@@ -528,7 +529,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 static lang::IllegalAccessException
 getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
 {
-    return lang::IllegalAccessException ( rtl::OUString::createFromAscii( "Property is read-only!" ), rContext );
+    return lang::IllegalAccessException ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")), rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )
@@ -544,7 +545,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -676,7 +677,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( rtl::OUString::createFromAscii( "Property value has wrong type!" ),
+                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")),
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
@@ -684,7 +685,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( aNewTitle.getLength() <= 0 )
             {
                 aRet[ n ] <<= lang::IllegalArgumentException
-                    ( rtl::OUString::createFromAscii( "Empty title not allowed!" ),
+                    ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty title not allowed!")),
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
 
@@ -700,7 +701,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 g_warning ("Set new name to '%s'", newName);
 #endif
 
-                aEvent.PropertyName = rtl::OUString::createFromAscii( "Title" );
+                aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
                 if (oldName)
                     aEvent.OldValue = uno::makeAny(rtl::OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
                 aEvent.NewValue = uno::makeAny(aNewTitle);
@@ -744,7 +745,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if (!exchangeIdentity( xNewId ) )
                 {
                     aRet[ nTitlePos ] <<= uno::Exception
-                        ( rtl::OUString::createFromAscii( "Exchange failed!" ),
+                        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1025,7 +1026,8 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     GError *pError = NULL;
     GFileInfo *pInfo = getGFileInfo(xEnv);
 
-    if ( g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
+    if ( pInfo &&
+         g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) &&
          g_file_info_get_file_type(pInfo) == G_FILE_TYPE_DIRECTORY )
     {
 #ifdef DEBUG
@@ -1066,6 +1068,9 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     }
 }
 
+const GFileCopyFlags DEFAULT_COPYDATA_FLAGS =
+    static_cast<GFileCopyFlags>(G_FILE_COPY_OVERWRITE|G_FILE_COPY_TARGET_DEFAULT_PERMS);
+
 void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
@@ -1083,7 +1088,7 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
     if (aTransferInfo.MoveData)
         bSuccess = g_file_move(pSource, pDest, G_FILE_COPY_OVERWRITE, NULL, NULL, 0, &pError);
     else
-        bSuccess = g_file_copy(pSource, pDest, G_FILE_COPY_OVERWRITE, NULL, NULL, 0, &pError);
+        bSuccess = g_file_copy(pSource, pDest, DEFAULT_COPYDATA_FLAGS, NULL, NULL, 0, &pError);
     g_object_unref(pSource);
     g_object_unref(pDest);
     if (!bSuccess)
@@ -1101,19 +1106,19 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            rtl::OUString::createFromAscii( "Title" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
             -1,
             getCppuType( static_cast< rtl::OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = rtl::OUString::createFromAscii( GIO_FILE_TYPE );
+        seq[0].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FILE_TYPE ));
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = rtl::OUString::createFromAscii( GIO_FOLDER_TYPE );
+        seq[1].Type       = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GIO_FOLDER_TYPE ));
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
@@ -1158,7 +1163,7 @@ uno::Reference< ucb::XContent >
     rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     aURL += rtl::OUString::createFromAscii( name );
@@ -1254,7 +1259,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
 
-    const int nProps = sizeof (aGenericProperties) / sizeof (aGenericProperties[0]);
+    const int nProps = SAL_N_ELEMENTS(aGenericProperties);
     return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
 }
 
@@ -1296,7 +1301,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
-    const int nProps = sizeof (aCommandInfoTable) / sizeof (aCommandInfoTable[0]);
+    const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
     return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 
@@ -1320,15 +1325,17 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno
 
 rtl::OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
 {
-       return rtl::OUString::createFromAscii("com.sun.star.comp.GIOContent" );
+       return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.GIOContent"));
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
        throw( uno::RuntimeException )
 {
        uno::Sequence< rtl::OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = rtl::OUString::createFromAscii("com.sun.star.ucb.GIOContent" );
+       aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.GIOContent"));
        return aSNS;
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

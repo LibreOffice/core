@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,18 @@
 #ifndef _LEX_HXX
 #define _LEX_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <hash.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
-/******************** enum ***********************************************/
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,
                     SVTOKEN_BOOL,       SVTOKEN_IDENTIFIER,
                     SVTOKEN_CHAR,       SVTOKEN_RTTIBASE,
                     SVTOKEN_EOF,        SVTOKEN_HASHID };
 
-/******************** class SvToken **************************************/
 class BigInt;
 class SvToken
 {
@@ -52,7 +53,6 @@ friend class SvTokenStream;
         sal_uLong               nLong;
         sal_Bool                bBool;
         char                cChar;
-//      SvRttiBase *        pComplexObj;
         SvStringHashEntry * pHash;
     };
 public:
@@ -62,7 +62,6 @@ public:
             SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
             SvToken( char c );
             SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr );
-//            SvToken( SvRttiBase * pComplexObj );
             SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
@@ -101,7 +100,6 @@ public:
     sal_uLong       GetNumber() const       { return nLong;         }
     sal_Bool        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
-//    SvRttiBase *GetObject() const       { return pComplexObj;   }
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKEN_HASHID; }
@@ -127,26 +125,17 @@ inline SvToken::SvToken( char c )
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr )
     : nType( nTypeP ), aString( rStr ) {}
 
-/*
-inline SvToken::SvToken( SvRttiBase * pObj )
-    : nType( SVTOKEN_RTTIBASE ), pComplexObj( pObj )
-        { pObj->AddRef(); }
-*/
-
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )
 : nType( nTypeP ) {}
 
-DECLARE_LIST( SvTokenList, SvToken * )
-
-/******************** class SvTokenStream ********************************/
 class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
     int         nBufPos;
-    int         c;          // naechstes Zeichen
+    int         c;          // next character
     CharSet     nCharSet;
-    char *      pCharTab;   // Zeiger auf die Konverierungstabelle
-    sal_uInt16      nTabSize;   // Tabulator Laenge
+    char *      pCharTab;   // pointer to conversion table
+    sal_uInt16      nTabSize;   // length of tabulator
     ByteString      aStrTrue;
     ByteString      aStrFalse;
     sal_uLong       nMaxPos;
@@ -154,8 +143,8 @@ class SvTokenStream
     SvFileStream *  pInStream;
     SvStream &      rInStream;
     String          aFileName;
-    SvTokenList     aTokList;
-    SvToken *       pCurToken;
+    boost::ptr_vector<SvToken> aTokList;
+    boost::ptr_vector<SvToken>::iterator pCurToken;
 
     void        InitCtor();
 
@@ -178,7 +167,7 @@ class SvTokenStream
                     }
     void            CalcColumn()
                     {
-                        // wenn Zeilenende berechnung sparen
+                        // if end of line spare calculation
                         if( 0 != c )
                         {
                             sal_uInt16 n = 0;
@@ -202,30 +191,37 @@ public:
                     { nTabSize = nTabSizeP; }
     sal_uInt16          GetTabSize() const { return nTabSize; }
 
-    SvToken *       GetToken_PrevAll()
-                    {
-                        SvToken * pRetToken = pCurToken;
-                        if( NULL == (pCurToken = aTokList.Prev()) )
-                            // Current Zeiger nie Null
-                            pCurToken = pRetToken;
+    SvToken* GetToken_PrevAll()
+    {
+        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken;
 
-                        return pRetToken;
-                    }
-    SvToken *       GetToken_NextAll()
-                    {
-                        SvToken * pRetToken = pCurToken;
-                        if( NULL == (pCurToken = aTokList.Next()) )
-                            // Current Zeiger nie Null
-                            pCurToken = pRetToken;
-                        SetMax();
-                        return pRetToken;
-                    }
-    SvToken *       GetToken_Next()
-                    {
-                        // Kommentare werden initial entfernt
-                        return GetToken_NextAll();
-                    }
-    SvToken *       GetToken() const { return pCurToken; }
+        // current iterator always valid
+        if(pCurToken != aTokList.begin())
+            --pCurToken;
+
+        return &(*pRetToken);
+    }
+
+    SvToken* GetToken_NextAll()
+    {
+        boost::ptr_vector<SvToken>::iterator pRetToken = pCurToken++;
+
+        if (pCurToken == aTokList.end())
+            pCurToken = pRetToken;
+
+        SetMax();
+
+        return &(*pRetToken);
+    }
+
+    SvToken* GetToken_Next()
+    {
+        // comments get removed initially
+        return GetToken_NextAll();
+    }
+
+    SvToken* GetToken() const { return &(*pCurToken); }
+
     sal_Bool            Read( char cChar )
                     {
                         if( pCurToken->IsChar()
@@ -237,6 +233,7 @@ public:
                         else
                             return sal_False;
                     }
+
     void            ReadDelemiter()
                     {
                         if( pCurToken->IsChar()
@@ -247,25 +244,33 @@ public:
                         }
                     }
 
-    sal_uInt32          Tell() const
-                    { return aTokList.GetCurPos(); }
-    void            Seek( sal_uInt32 nPos )
-                    {
-                        pCurToken = aTokList.Seek( nPos );
-                        SetMax();
-                    }
-    void            SeekRel( sal_Int32 nRelPos )
-                    {
-                        pCurToken = aTokList.Seek( Tell() + nRelPos );
-                        SetMax();
-                    }
-    void            SeekEnd()
-                    {
-                        pCurToken = aTokList.Seek( nMaxPos );
-                    }
+    sal_uInt32 Tell() const { return pCurToken-aTokList.begin(); }
+
+    void Seek( sal_uInt32 nPos )
+    {
+        pCurToken = aTokList.begin() + nPos;
+        SetMax();
+    }
+
+    void SeekRel( sal_uInt32 nRelPos )
+    {
+        sal_uInt32 relIdx = Tell() + nRelPos;
+
+        if ( relIdx < aTokList.size())
+        {
+            pCurToken = aTokList.begin()+ (Tell() + nRelPos );
+            SetMax();
+        }
+    }
+
+    void SeekEnd()
+    {
+        pCurToken = aTokList.begin()+nMaxPos;
+    }
 };
 
 
 
 #endif // _LEX_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

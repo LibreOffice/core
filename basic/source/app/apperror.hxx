@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@ public:
     TYPEINFO();
     AppError( BasicFrame*, String );
     ~AppError();
-//  long Command( short nID );
     virtual long InitMenu( Menu* );
     virtual long DeInitMenu( Menu* );
     sal_uInt16 GetLineNr();
@@ -47,3 +47,4 @@ public:
     DirEntry aBaseDir;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

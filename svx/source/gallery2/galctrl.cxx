@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,9 +95,9 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     }
     else
     {
-        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress aProgress( pFilter );
-        if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
+        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress aProgress( &rFilter );
+        if( rFilter.ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
             bRet = false;
     }
 
@@ -693,13 +694,8 @@ sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-       if( mpTheme && !mpTheme->IsReadOnly() && !mpTheme ->IsImported() )
-    {
-        if( !mpTheme->IsDragging() )
-            nRet = DND_ACTION_COPY;
-        else
-            nRet = DND_ACTION_COPY;
-    }
+    if( mpTheme && !mpTheme->IsReadOnly() && !mpTheme ->IsImported() )
+        nRet = DND_ACTION_COPY;
 
     return nRet;
 }
@@ -721,3 +717,5 @@ void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     ( (GalleryBrowser2*) GetParent() )->StartDrag( this, &rPosPixel );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

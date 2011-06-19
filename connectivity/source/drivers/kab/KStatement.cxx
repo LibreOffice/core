@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -310,11 +311,11 @@ sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 //------------------------------------------------------------------------------
 void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
 {
-    ::vos::ORef<connectivity::OSQLColumns> xColumns;    // selected columns
+    ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
     KabResultSetMetaData *pMeta;                // meta information - holds the list of KAddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
-    if (!xColumns.isValid())
+    if (!xColumns.is())
     {
         lcl_throwError(STR_INVALID_COLUMN_SELECTION);
     }
@@ -582,3 +583,5 @@ KabStatement::KabStatement(KabConnection* _pConnection)
     : KabStatement_BASE(_pConnection)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

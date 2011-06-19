@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,15 +58,14 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
-using namespace rtl;
 using namespace ::com::sun::star;
+
+using ::rtl::OUString;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 static const char GLOBALSETTINGS_ROOT_ACCESS[]              = "/org.openoffice.Office.UI.GlobalSettings/Toolbars";
 
@@ -354,3 +354,5 @@ sal_Bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eSt
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

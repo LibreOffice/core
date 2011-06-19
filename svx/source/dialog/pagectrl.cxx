@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ struct PageWindow_Impl
 {
     SvxBoxItem*     pBorder;
     Bitmap          aBitmap;
-    FASTBOOL        bBitmap;
+    bool            bBitmap;
     sal_Bool        bResetBackground;
     sal_Bool        bFrameDirection;
     sal_Int32       nFrameDirection;
@@ -101,7 +102,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent, const ResId& rId ) :
 {
     pImpl = new PageWindow_Impl;
 
-    // defaultmaessing in Twips rechnen
+    // Count in Twips by default
     SetMapMode( MapMode( MAP_TWIP ) );
     aWinSize = GetOutputSizePixel();
     aWinSize.Height() -= 4;
@@ -122,7 +123,7 @@ SvxPageWindow::~SvxPageWindow()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SvxPageWindow::Paint( const Rectangle& )
+void SvxPageWindow::Paint( const Rectangle& )
 {
     Fraction aXScale( aWinSize.Width(), std::max( (long) (aSize.Width() * 2 + aSize.Width() / 8), 1L ) );
     Fraction aYScale( aWinSize.Height(), std::max( aSize.Height(), 1L ) );
@@ -144,10 +145,10 @@ void __EXPORT SvxPageWindow::Paint( const Rectangle& )
 
     if ( eUsage == SVX_PAGE_ALL )
     {
-        // alle Seiten gleich -> eine Seite malen
+        // all pages are equal -> draw one page
         if ( aSize.Width() > aSize.Height() )
         {
-            // Querformat in gleicher Gr"osse zeichnen
+            // Draw Landscape page of the same size
             Fraction aX = aMapMode.GetScaleX();
             Fraction aY = aMapMode.GetScaleY();
             Fraction a2( 1.5 );
@@ -162,12 +163,12 @@ void __EXPORT SvxPageWindow::Paint( const Rectangle& )
             DrawPage( Point( nXPos, nYPos ), sal_True, sal_True );
         }
         else
-            // Hochformat
+            // Portrait
             DrawPage( Point( ( aSz.Width() - aSize.Width() ) / 2, nYPos ), sal_True, sal_True );
     }
     else
     {
-        // Linke und rechte Seite unterschiedlich -> ggf. zwei Seiten malen
+        // Left and right page are different -> draw two pages if possible
         DrawPage( Point( 0, nYPos ), sal_False, (sal_Bool)( eUsage & SVX_PAGE_LEFT ) );
         DrawPage( Point( aSize.Width() + aSize.Width() / 8, nYPos ), sal_True,
                   (sal_Bool)( eUsage & SVX_PAGE_RIGHT ) );
@@ -195,9 +196,9 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
             pImpl->bResetBackground = sal_False;
     }
     SetLineColor( rFieldTextColor );
-    // Schatten
+    // Shadow
     Size aTempSize = aSize;
-    // Seite
+    // Page
     if ( !bEnabled )
     {
         SetFillColor( rDisableColor );
@@ -216,7 +217,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( eUsage == SVX_PAGE_MIRROR && !bSecond )
     {
-        // f"ur gespiegelt drehen
+        // turn for mirrored
         nL = nRight;
         nR = nLeft;
     }
@@ -233,7 +234,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( bHeader )
     {
-        // ggf. Header anzeigen
+        // show headers if possible
         aHdRect.Left() += nHdLeft;
         aHdRect.Right() -= nHdRight;
         aHdRect.Bottom() = aRect.Top() + nHdHeight;
@@ -244,7 +245,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( bFooter )
     {
-        // ggf. Footer anzeigen
+        // show footer if possible
         aFtRect.Left() += nFtLeft;
         aFtRect.Right() -= nFtRight;
         aFtRect.Top() = aRect.Bottom() - nFtHeight;
@@ -253,7 +254,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         DrawRect( aFtRect );
     }
 
-    // Body malen
+    // Paint Body
     SetFillColor( aColor );
     if ( pImpl->bBitmap )
     {
@@ -273,7 +274,6 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if(pImpl->bFrameDirection && !bTable)
     {
-       //pImpl->nFrameDirection
         Point aPos;
         Font aFont(GetFont());
         const Size aSaveSize = aFont.GetSize();
@@ -339,7 +339,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     }
     if ( bTable )
     {
-        // Tabelle malen, ggf. zentrieren
+        // Paint Table, if necessary center it
         SetLineColor( Color(COL_LIGHTGRAY) );
 
         long nW = aRect.GetWidth(), nH = aRect.GetHeight();
@@ -400,16 +400,12 @@ void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
     delete pFtBorder;
     pFtBorder = new SvxBoxItem( rNew );
 }
-/* -----------------------------13.06.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxPageWindow::EnableFrameDirection(sal_Bool bEnable)
 {
     pImpl->EnableFrameDirection(bEnable);
 }
-/* -----------------------------13.06.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxPageWindow::SetFrameDirection(sal_Int32 nFrameDirection)
 {
     pImpl->SetFrameDirection(nFrameDirection);
@@ -419,3 +415,5 @@ void SvxPageWindow::ResetBackground()
 {
     pImpl->bResetBackground = sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

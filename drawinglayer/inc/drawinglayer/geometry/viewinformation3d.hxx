@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 #define INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 // the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
 // pre-declarations of com/sun/star namespace), include sal/config.h here
@@ -60,7 +63,7 @@ namespace drawinglayer
             It is an implementation to support the sequence of PropertyValues used in a
             ::com::sun::star::graphic::XPrimitive3D for C++ implementations working with those
         */
-        class ViewInformation3D
+        class DRAWINGLAYER_DLLPUBLIC ViewInformation3D
         {
         private:
             /// pointer to private implementation class
@@ -175,3 +178,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

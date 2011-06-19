@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,8 @@
 #include "svx/DescriptionGenerator.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <rtl/uuid.h>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -56,14 +52,13 @@
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 
-#ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
-#endif
 #include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/svdview.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::com::sun::star;
@@ -383,7 +378,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("shape has no child with index ")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape has no child with index "))
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
@@ -486,7 +481,7 @@ uno::Reference<XAccessible > SAL_CALL
 awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed ();
@@ -518,7 +513,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
                         aValue >>= aBoundingBox;
                         bFoundBoundRect = true;
                     }
-                    catch (beans::UnknownPropertyException e)
+                    catch (beans::UnknownPropertyException const&)
                     {
                         // Handled below (bFoundBoundRect stays false).
                     }
@@ -574,27 +569,6 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
-            /*        //  The following block is a workarround for bug #99889# (property
-            //  BoundRect returnes coordinates relative to document window
-            //  instead of absolute coordinates for shapes in Writer).  Has to
-            //  be removed as soon as bug is fixed.
-
-            // Use a non-null anchor position as flag that the shape is in a
-            // Writer document.
-            if (xSetInfo.is())
-                if (xSetInfo->hasPropertyByName (sAnchorPositionName))
-                {
-                    uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
-                    awt::Point aAnchorPosition;
-                    aPos >>= aAnchorPosition;
-                    if (aAnchorPosition.X > 0)
-                    {
-                        x = aPixelPosition.getX();
-                        y = aPixelPosition.getY();
-                    }
-                }
-            //  End of workarround.
-            */
             // Clip with parent (with coordinates relative to itself).
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
@@ -681,7 +655,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) );
             aColor >>= nColor;
         }
     }
@@ -707,7 +681,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) );
             aColor >>= nColor;
         }
     }
@@ -850,8 +824,6 @@ uno::Sequence<uno::Type> SAL_CALL
         ::getCppuType((const uno::Reference<document::XEventListener>*)0);
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-    //    const uno::Type aStateSetType =
-    //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),
@@ -883,7 +855,7 @@ void SAL_CALL
     AccessibleShape::disposing (const lang::EventObject& aEvent)
     throw (uno::RuntimeException)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     try
@@ -896,7 +868,7 @@ void SAL_CALL
         }
 
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
         OSL_TRACE ("caught exception while disposing");
     }
@@ -935,30 +907,18 @@ void SAL_CALL
     }
 }
 
-
-
-
 //=====  lang::XUnoTunnel  ================================================
+
+namespace
+{
+    class theAccessibleShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleShapeImplementationId > {};
+}
 
 const uno::Sequence< sal_Int8 >&
     AccessibleShape::getUnoTunnelImplementationId()
     throw()
 {
-    static uno::Sequence< sal_Int8 >* pSeq = 0;
-
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*) aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-
-    return( *pSeq );
+    return theAccessibleShapeImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------------------
@@ -1039,7 +999,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) ));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -1109,10 +1069,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
                 DescriptionGenerator::COLOR,
                 OUString());
-            aDG.AddProperty (OUString::createFromAscii ("ControlBorder"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;
@@ -1148,7 +1108,7 @@ uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
 // protected
 void AccessibleShape::disposing (void)
 {
-    ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard (maMutex);
 
     // Make sure to send an event that this object looses the focus in the
@@ -1242,3 +1202,5 @@ void AccessibleShape::UpdateNameAndDescription (void)
 
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

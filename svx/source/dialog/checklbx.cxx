@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,10 +62,8 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId ) :
 // -----------------------------------------------------------------------
 
 SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId,
-                                  const Image& rNormalStaticImage,
-                                  const Image& /*TODO#i72485# rHighContrastStaticImage*/ ) :
-
-    SvTreeListBox( pParent, rResId )
+                                  const Image& rNormalStaticImage )
+    : SvTreeListBox( pParent, rResId )
 
 {
     Init_Impl();
@@ -275,3 +274,4 @@ SvLBoxEntry* SvxCheckListBox::InsertEntry( const XubString& rText, SvLBoxEntry* 
     return SvTreeListBox::InsertEntry( rText, pParent, bChildsOnDemand, nPos, pUserData, eButtonKind );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

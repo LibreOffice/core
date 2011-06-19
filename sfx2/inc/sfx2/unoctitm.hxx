@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,6 @@ public:
     SfxDispatcher*          GetDispatcher_Impl();
 };
 
-//#if 0 // _SOLAR__PRIVATE
 class SfxDispatchController_Impl : public SfxControllerItem
 {
     ::com::sun::star::util::URL aDispatchURL;
@@ -205,7 +205,7 @@ public:
     SfxDispatcher*      GetDispatcher();
     void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 };
-//#endif
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

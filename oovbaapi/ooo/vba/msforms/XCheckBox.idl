@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -24,10 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 #ifndef __ooo_vba_msforms_XCheckBox_idl__
 #define __ooo_vba_msforms_XCheckBox_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/msforms/XNewFont.idl>
 
 //=============================================================================
@@ -35,8 +35,7 @@
 module ooo {  module vba {  module msforms {
 
 //=============================================================================
-
-interface XCheckBox
+interface XCheckBox: com::sun::star::uno::XInterface
 {
     [attribute] string Caption;
     [attribute] any Value;
@@ -48,5 +47,3 @@ interface XCheckBox
 }; }; };
 
 #endif
-
-

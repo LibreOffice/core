@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/XApplicationBase.hpp>
@@ -73,13 +75,8 @@ VbaDocumentBase::getName() throw (uno::RuntimeException)
     }
     else
     {
-        const static rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM("Title" ) );
-        // process "UntitledX - $(PRODUCTNAME)"
-        uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
-        uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue(sTitle ) >>= sName;
-        sal_Int32 pos = 0;
-        sName = sName.getToken(0,'-',pos);
+        uno::Reference< frame::XTitle > xTitle( getModel(), uno::UNO_QUERY_THROW );
+        sName = xTitle->getTitle();
         sName = sName.trim();
     }
     return sName;
@@ -175,16 +172,31 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
             // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
             // assume ownership if they object the closure by throwing a CloseVetoException
             // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-            xCloseable->close(sal_True);
+            try{
+                xCloseable->close(sal_True);
+            }
+            catch( util::CloseVetoException )
+            {
+                //close is cancelled, nothing to do
+            }
         }
+        // If close is not supported by this model - try to dispose it.
+        // But if the model disagree with a reset request for the modify state
+        // we shouldn't do so. Otherwhise some strange things can happen.
         else
         {
-            // If close is not supported by this model - try to dispose it.
-            // But if the model disagree with a reset request for the modify state
-            // we shouldn't do so. Otherwhise some strange things can happen.
             uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
             if ( xDisposable.is() )
-                xDisposable->dispose();
+            {
+                // To be on the safe side, catch possible veto exception anyway.
+                try
+                {
+                    xDisposable->dispose();
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
         }
     }
 }
@@ -194,7 +206,7 @@ VbaDocumentBase::Protect( const uno::Any &aPassword ) throw (uno::RuntimeExcepti
 {
     rtl::OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    SC_VBA_FIXME(("Workbook::Protect stub"));
+    OSL_TRACE("Workbook::Protect stub");
     if(  aPassword >>= rPassword )
         xProt->protect( rPassword );
     else
@@ -302,3 +314,4 @@ VbaDocumentBase::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

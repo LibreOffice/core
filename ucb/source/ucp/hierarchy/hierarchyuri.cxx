@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ void HierarchyUri::init() const
         if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString::createFromAscii( "/" );
+            m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             return;
         }
 
@@ -138,17 +139,17 @@ void HierarchyUri::init() const
                 if ( nStart == m_aUri.getLength() )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     return;
                 }
 
                 // Empty path segments?
                 if ( m_aUri.indexOf(
-                        rtl::OUString::createFromAscii( "//" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("//")),
                         nStart ) != -1 )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     return;
                 }
 
@@ -158,7 +159,7 @@ void HierarchyUri::init() const
                 if ( nEnd == nStart )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     return;
                 }
 
@@ -166,7 +167,7 @@ void HierarchyUri::init() const
                 {
                     // Trailing slash missing.
                     nEnd = m_aUri.getLength();
-                    m_aUri += rtl::OUString::createFromAscii( "/" );
+                    m_aUri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                 }
 
                 m_aService = m_aUri.copy( nStart, nEnd - nStart );
@@ -202,8 +203,9 @@ void HierarchyUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString::createFromAscii( "/" );
+            m_aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         }
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

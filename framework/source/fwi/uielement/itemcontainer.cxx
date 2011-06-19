@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <threadhelp/resetableguard.hxx>
+#include <comphelper/servicehelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -81,7 +83,7 @@ ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer,
                     Reference< XIndexAccess > xIndexAccess;
                     for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                     {
-                        if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                        if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
                         {
                             aPropSeq[j].Value >>= xIndexAccess;
                             nContainerIndex = j;
@@ -117,7 +119,7 @@ void ItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValu
         Reference< XIndexAccess > xIndexAccess;
         for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
         {
-            if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+            if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
             {
                 aPropSeq[j].Value >>= xIndexAccess;
                 nContainerIndex = j;
@@ -158,20 +160,14 @@ sal_Int64 ItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sa
     return 0;
 }
 
+namespace
+{
+    class theItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theItemContainerUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 >& ItemContainer::GetUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theItemContainerUnoTunnelId::get().getSeq();
 }
 
 ItemContainer* ItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
@@ -264,3 +260,4 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

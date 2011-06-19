@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -52,13 +52,13 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
 
     {
         jvalue args[2];
-        // Parameter konvertieren
+        // Convert Parameter
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
-        // temporaere Variable initialisieren
+        // Initialize temporary Variables
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         static const char * cMethodName = "setProperty";
-        // Java-Call absetzen
+        // Turn off Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
@@ -69,7 +69,7 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         if(out)
             t.pEnv->DeleteLocalRef(out);
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: The caller will be owner of the returned pointers!!!
 }
 jclass java_util_Properties::theClass = 0;
 
@@ -78,7 +78,7 @@ java_util_Properties::~java_util_Properties()
 
 jclass java_util_Properties::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs only be called once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/util/Properties");
     return theClass;
@@ -90,8 +90,8 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // Turn off Java-Call for the constructor
+    // Initialize temperary Variables
     static const char * cSignature = "()V";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -191,7 +191,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
+sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 {
     if ( !pEnv )
         return sal_False;
@@ -224,8 +224,8 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // Turn off Java-Call for the constructor
+    // Initialize temperary variables
     jclass clazz = java_lang_Object::findMyClass("java/io/ByteArrayInputStream");
     static jmethodID mID(NULL);
     if  ( !mID )
@@ -251,8 +251,8 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // Turn off Java-Call for the constructor
+    // Initialize temperary Variables
     jclass clazz = java_lang_Object::findMyClass("java/io/CharArrayReader");
     static jmethodID mID(NULL);
     if  ( !mID )
@@ -273,3 +273,5 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     return out;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

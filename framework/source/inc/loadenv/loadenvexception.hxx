@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ namespace css = ::com::sun::star;
             load environment only.
 
     @descr  Of course outside code must wrapp it, to transport
-            the occured information to its caller.
+            the occurred information to its caller.
 
     @author as96863
  */
@@ -132,7 +133,7 @@ class LoadEnvException
         /** @short  An ID, which make this exception unique among others. */
         sal_Int32 m_nID;
 
-        /** @short  Contains the original exception, if any occured. */
+        /** @short  Contains the original exception, if any occurred. */
         css::uno::Any m_exOriginal;
 
         /** TODO
@@ -195,3 +196,5 @@ class LoadEnvException
 } // namespace framework
 
 #endif // __FRAMEWORK_LOADENV_LOADENVEXCEPTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

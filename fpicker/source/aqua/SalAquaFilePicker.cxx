@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,17 +41,13 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLS_URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include "resourceprovider.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.hxx>
-#endif
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
@@ -97,9 +94,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
-        aRet[2] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFilePicker" );
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFilePicker" ));
         return aRet;
     }
 }
@@ -146,7 +143,7 @@ void SAL_CALL SalAquaFilePicker::addFilePickerListener( const uno::Reference<XFi
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener = xListener;
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -157,7 +154,7 @@ void SAL_CALL SalAquaFilePicker::removeFilePickerListener( const uno::Reference<
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener.clear();
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -171,7 +168,7 @@ void SAL_CALL SalAquaFilePicker::setTitle( const rtl::OUString& aTitle ) throw( 
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     implsetTitle(aTitle);
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -181,7 +178,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 retVal = 0;
 
@@ -190,7 +187,6 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
     // if m_pDialog is nil after initialization, something must have gone wrong before
     // or there was no initialization (see issue http://www.openoffice.org/issues/show_bug.cgi?id=100214)
     if (m_pDialog == nil) {
-        //throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
         m_nDialogType = NAVIGATIONSERVICES_OPEN;
     }
 
@@ -209,7 +205,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
                     rtl::OUString ouName = [windowTitle OUString];
                     //a window title will typically be something like "Untitled1 - OpenOffice.org Writer"
                     //but we only want the "Untitled1" part of it
-                    sal_Int32 indexOfDash = ouName.indexOf(rtl::OUString::createFromAscii(" - "));
+                    sal_Int32 indexOfDash = ouName.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
                     if (indexOfDash > -1) {
                         m_sSaveFileName = ouName.copy(0,indexOfDash);
                         if (m_sSaveFileName.getLength() > 0) {
@@ -247,7 +243,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
             break;
 
         default:
-            throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog returned with an unknown result!"), static_cast< XFilePicker* >( this ));
+            throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFilePicker* >( this ));
             break;
     }
 
@@ -266,7 +262,7 @@ void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( 
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "multiSelectable?", bMode);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (m_nDialogType == NAVIGATIONSERVICES_OPEN) {
         [(NSOpenPanel*)m_pDialog setAllowsMultipleSelection:YES];
@@ -281,7 +277,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "name", aName);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     m_sSaveFileName = aName;
 
@@ -293,7 +289,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "directory", rDirectory);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(rDirectory);
 
@@ -314,7 +310,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // OSL_TRACE("starting work");
     /*
@@ -375,7 +371,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ensureFilterHelper();
     m_pFilterHelper->appendFilter( aTitle, aFilter );
@@ -391,7 +387,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
     OSL_TRACE( "Setting current filter to %s",
                OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ensureFilterHelper();
     m_pFilterHelper->setCurrentFilter(aTitle);
@@ -405,7 +401,7 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 rtl::OUString SAL_CALL SalAquaFilePicker::getCurrentFilter() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ensureFilterHelper();
 
@@ -422,7 +418,7 @@ void SAL_CALL SalAquaFilePicker::appendFilterGroup( const rtl::OUString& sGroupT
 throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ensureFilterHelper();
     m_pFilterHelper->appendFilterGroup(sGroupTitle, aFilters);
@@ -440,7 +436,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     m_pControlHelper->setValue(nControlId, nControlAction, rValue);
 
@@ -477,7 +473,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSString* sLabel = [NSString stringWithOUString:aLabel];
     m_pControlHelper->setLabel( nControlId, sLabel ) ;
@@ -504,19 +500,19 @@ throw( uno::Exception, uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "arguments size", aArguments.getLength());
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // parameter checking
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
-        throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "no arguments" ),
+        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
                                              static_cast<XFilePicker*>( this ), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
         (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
-        throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "invalid argument type" ),
+        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
                                              static_cast<XFilePicker*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -569,7 +565,7 @@ throw( uno::Exception, uno::RuntimeException )
             OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION" );
             break;
         default:
-            throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "Unknown template" ),
+            throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                                                  static_cast< XFilePicker* >( this ),
                                                  1 );
     }
@@ -590,7 +586,7 @@ void SAL_CALL SalAquaFilePicker::cancel() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (m_pDialog != nil) {
         [m_pDialog cancel:nil];
@@ -608,7 +604,7 @@ void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent ) th
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, ::com::sun::star::uno::UNO_QUERY );
 
@@ -628,7 +624,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal = rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
@@ -726,7 +722,7 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
 void SalAquaFilePicker::ensureFilterHelper() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (NULL == m_pFilterHelper) {
         m_pFilterHelper = new FilterHelper;
@@ -765,7 +761,7 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
     // we need to set this here again because initial setting does
     //[m_pDialog setExtensionHidden:YES];
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (m_pControlHelper->isAutoExtensionEnabled() == false) {
         OSL_TRACE("allowing other file types");
@@ -797,7 +793,7 @@ void SalAquaFilePicker::filterControlChanged() {
         return;
     }
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     updateSaveFileNameExtension();
 
@@ -810,3 +806,4 @@ void SalAquaFilePicker::filterControlChanged() {
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

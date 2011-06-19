@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _SBIOSYS_HXX
 
 #include <tools/stream.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 
 class SvStream;
 
@@ -111,3 +110,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

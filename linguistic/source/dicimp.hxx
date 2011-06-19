@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,15 +43,10 @@
 #include "defs.hxx"
 #include "linguistic/misc.hxx"
 
-
-///////////////////////////////////////////////////////////////////////////
-
 #define DIC_MAX_ENTRIES     30000
 
 sal_Int16           ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNeg );
 const String    GetDicExtension();
-
-///////////////////////////////////////////////////////////////////////////
 
 class DictionaryNeo :
     public ::cppu::WeakImplHelper2
@@ -195,7 +191,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 class DicEntry :
     public cppu::WeakImplHelper1
@@ -232,7 +227,7 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

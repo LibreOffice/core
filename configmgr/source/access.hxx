@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <vector>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XExactName.hpp"
@@ -128,15 +130,12 @@ public:
     bool isValue();
 
     void markChildAsModified(rtl::Reference< ChildAccess > const & child);
-
     void releaseChild(rtl::OUString const & name);
 
     virtual Path getAbsolutePath() = 0;
-
     virtual Path getRelativePath() = 0;
 
     virtual rtl::OUString getRelativePathRepresentation() = 0;
-
     virtual rtl::Reference< Node > getNode() = 0;
 
     virtual bool isFinalized() = 0;
@@ -153,9 +152,7 @@ protected:
     virtual ~Access();
 
     virtual rtl::OUString getNameInternal() = 0;
-
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
-
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
     virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
@@ -165,7 +162,6 @@ protected:
         std::vector< rtl::OUString > * services) = 0;
 
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
-
     virtual void clearListeners() throw ();
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -177,9 +173,7 @@ protected:
     void checkLocalizedPropertyAccess();
 
     rtl::Reference< Node > getParentNode();
-
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
-
     std::vector< rtl::Reference< ChildAccess > > getAllChildren();
 
     void checkValue(
@@ -568,6 +562,8 @@ private:
     PropertiesChangeListeners propertiesChangeListeners_;
     bool disposed_;
 
+    boost::shared_ptr<osl::Mutex> lock_;
+
 #if OSL_DEBUG_LEVEL > 0
 protected:
     enum {
@@ -580,3 +576,5 @@ protected:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

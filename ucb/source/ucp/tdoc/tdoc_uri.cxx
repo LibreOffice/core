@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,9 +128,11 @@ void Uri::init() const
             if ( nSlash != - 1 )
                 m_aInternalPath = m_aPath.copy( nSlash );
             else
-                m_aInternalPath = rtl::OUString::createFromAscii( "/" );
+                m_aInternalPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         }
 
         m_eState = VALID;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

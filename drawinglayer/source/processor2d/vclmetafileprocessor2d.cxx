@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -850,7 +851,7 @@ namespace drawinglayer
                         }
                         catch(const uno::Exception&)
                         {
-                            OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                            OSL_FAIL("VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
                         }
                     }
 
@@ -927,7 +928,7 @@ namespace drawinglayer
                             }
                             catch( const uno::Exception& )
                             {
-                                OSL_ENSURE(false, "VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
+                                OSL_FAIL("VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
                             }
                         }
 
@@ -1076,7 +1077,7 @@ namespace drawinglayer
                         if(!mxBreakIterator.is())
                         {
                             uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), uno::UNO_QUERY);
+                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))), uno::UNO_QUERY);
                         }
 
                         if(mxBreakIterator.is())
@@ -1934,15 +1935,6 @@ namespace drawinglayer
                                 aBufferProcessor.process(rTransparence);
                                 const AlphaMask aBmAlpha(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
 
-#ifdef DBG_UTIL
-                                static bool bDoSaveForVisualControl(false);
-                                if(bDoSaveForVisualControl)
-                                {
-                                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                                    aNew << aBmContent;
-                                }
-#endif
-
                                 // paint
                                 mpOutputDevice->DrawBitmapEx(
                                     aRectLogic.TopLeft(),
@@ -2035,3 +2027,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

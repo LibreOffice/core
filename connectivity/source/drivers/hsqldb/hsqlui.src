@@ -32,7 +32,7 @@
 /*  Note:
     The resource file built here (hsqldb.res, finally) is *not* included
     in the final OOo installation. Instead, it is only built to ensure that
-    the two images below are included in the application-wide image repository
+    the image below is included in the application-wide image repository
     (images.zip). This way, they can be accessed at runtime, but without the
     indirection via a resource file - the GraphicProvider service supports
     a "private:imagerepository/*" protocol meanwhile, which allows this.
@@ -45,9 +45,4 @@
 Image 1000
 {
     ImageBitmap = Bitmap { File = LINKED_TEXT_TABLE_IMAGE_RESOURCE; };
-};
-
-Image 1001
-{
-    ImageBitmap = Bitmap { File = LINKED_TEXT_TABLE_IMAGE_RESOURCE_HC; };
 };

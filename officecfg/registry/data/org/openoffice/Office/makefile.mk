@@ -83,6 +83,7 @@ MODULEFILES= \
     Scripting-python.xcu   \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
+    Common-ctlseqcheck.xcu   \
     Common-korea.xcu   \
     Paths-macosx.xcu    \
     Paths-unxwnt.xcu    \
@@ -99,7 +100,8 @@ MODULEFILES= \
     Embedding-base.xcu   \
     Embedding-writer.xcu \
     UI-brand.xcu \
-    Recovery-gconflockdown.xcu
+    Recovery-gconflockdown.xcu \
+    DataAccess-evoab2.xcu
 
 LOCALIZEDFILES= \
     Accelerators.xcu \

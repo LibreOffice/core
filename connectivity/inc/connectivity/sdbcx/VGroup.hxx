@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase4.hxx>
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sdbcx/VCollection.hxx"
 #include <comphelper/propertycontainer.hxx>
@@ -111,3 +109,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_SDBCX_GROUP_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

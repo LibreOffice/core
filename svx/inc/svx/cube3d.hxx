@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,13 @@
 /*************************************************************************
 |*
 |*                                                              |
-|* 3D-Quader erzeugen; aPos: Zentrum oder links, unten, hinten  |__
-|*                           (abhaengig von bPosIsCenter)      /
-|* Mit nSideFlags kann angegeben werden, ob nur ein Teil der
-|* Quaderflaechen erzeugt werden kann; die entsprechenden Bits
-|* sind in dem enum definiert. Das Flag bDblSided legt fest,
-|* ob die erzeugten Flaechen doppelseitig sind (nur sinnvoll,
-|* wenn nicht alle Flaechen erzeugt wurden).
+|* Create a 3D cuboid; aPos: Center oder left, bottom, behind   |__
+|*                           (depending on bPosIsCenter)       /
+|* nSideFlags indicates, if only some of the cuboid surfaces can
+|* be created; the corresponding bits are defined in the enum.
+|* The flag bDblSided indicates whether the created surfaces are
+|* two-sided (which only makes sense if not all of the surfaces were
+|* created).
 |*
 \************************************************************************/
 
@@ -72,9 +73,9 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dCubeObj* Clone() const;
 
-    // Lokale Parameter setzen mit Geometrieneuerzeugung
+    // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);
     const basegfx::B3DPoint& GetCubePos() { return aCubePos; }
 
@@ -87,9 +88,11 @@ public:
     void SetSideFlags(sal_uInt16 nNew);
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 };
 
 #endif          // _E3D_CUBE3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

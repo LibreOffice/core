@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -130,7 +131,7 @@ namespace connectivity
         {
         public:
             OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
-            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
+            void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::rtl::Reference<connectivity::OSQLColumns> _xParamColumns);
 
             TYPEINFO();
         };
@@ -394,3 +395,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_FILE_FCODE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

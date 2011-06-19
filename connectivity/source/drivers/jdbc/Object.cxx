@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,12 @@
 #include "precompiled_connectivity.hxx"
 
 
-#ifndef _CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_
 #include "java/lang/Class.hxx"
-#endif
 #include "connectivity/CommonTools.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "java/LocalRef.hxx"
@@ -106,7 +104,7 @@ void SDBThreadAttach::releaseRef()
     }
 }
 // -----------------------------------------------------------------------------
-// statische Variablen der Klasse:
+// static variables of the class
 jclass java_lang_Object::theClass = 0;
 
 jclass java_lang_Object::getMyClass() const
@@ -115,14 +113,14 @@ jclass java_lang_Object::getMyClass() const
         theClass = findMyClass("java/lang/Object");
     return theClass;
 }
-// der eigentliche Konstruktor
+// the actual constructor
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : m_xFactory(_rxFactory),object( 0 )
 {
     SDBThreadAttach::addRef();
 }
 
-// der protected-Konstruktor fuer abgeleitete Klassen
+// the protected-constructor for the derived classes
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
     : object( NULL )
 {
@@ -157,7 +155,7 @@ void java_lang_Object::clearObject()
         clearObject(*t.pEnv);
     }
 }
-// der protected-Konstruktor fuer abgeleitete Klassen
+// the protected-constructor for the derived classes
 void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 {
     OSL_ENSURE( myObj, "object in c++ -> Java Wrapper" );
@@ -283,7 +281,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 
@@ -322,7 +320,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -335,7 +333,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -414,7 +412,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
 // -----------------------------------------------------------------------------
 jclass java_lang_Object::findMyClass(const char* _pClassName)
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     SDBThreadAttach t;
     jclass tempClass = t.pEnv->FindClass(_pClassName); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
     if(!tempClass)
@@ -427,3 +425,4 @@ jclass java_lang_Object::findMyClass(const char* _pClassName)
     return globClass;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _SXSIITM_HXX
 #define _SXSIITM_HXX
 
-#ifndef _SXFIITM_HXX
 #include <svx/sxfiitm.hxx>
-#endif
 
 class SdrScaleItem: public SdrFractionItem {
 public:
@@ -43,3 +42,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

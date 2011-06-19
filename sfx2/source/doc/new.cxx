@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,9 +157,6 @@ void SfxPreviewWin_Impl::ImpPaint(
         pWindow->SetLineColor( aBlackCol );
         pWindow->SetFillColor( aWhiteCol );
         pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
-//!     pFile->Move( Point( FRAME, FRAME ) );
-//!     pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
-//!                   Fraction( aTmpSize.Height(), aSize.Height() ) );
         pFile->WindStart();
         pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
     }
@@ -176,10 +174,9 @@ SfxPreviewWin::SfxPreviewWin(
     SetHelpId( HID_PREVIEW_FRAME );
 
     // adjust contrast mode initially
-    bool bUseContrast = UseHighContrastSetting();
-    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( OUTPUT_DRAWMODE_COLOR );
 
-    // #107818# This preview window is for document previews.  Therefore
+    // This preview window is for document previews.  Therefore
     // right-to-left mode should be off
     EnableRTL( sal_False );
 }
@@ -218,17 +215,9 @@ void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        // adjust contrast mode
-        bool bUseContrast = UseHighContrastSetting();
-        SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+        SetDrawMode( OUTPUT_DRAWMODE_COLOR );
     }
 }
-
-bool SfxPreviewWin::UseHighContrastSetting() const
-{
-    return GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
 
 class SfxNewFileDialog_Impl
 {
@@ -287,8 +276,8 @@ public:
     SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags );
     ~SfxNewFileDialog_Impl();
 
-        // Liefert sal_False, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() sal_True liefert, koennen Vorlagennamen
+        // Returns sal_False if '- No -' is set as a template
+        // Template name can only be obtained if IsTemplate() is TRUE
         // erfragt werden
     sal_Bool IsTemplate() const;
     String GetTemplateRegion() const;
@@ -447,12 +436,12 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 
 IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 {
-    // noch am Laden
+    // Still loading
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
 
     if ( !MORE_BTN(GetState()) )
-        // Dialog nicht aufgeklappt
+        // Dialog is not opened
         return 0;
 
     aPrevTimer.Start();
@@ -464,7 +453,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
     (void)pListBox;
-    // noch am Laden
+    // Still loadning
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
     return 0;
@@ -679,8 +668,6 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aPrevTimer.SetTimeout( 500 );
     aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
-//   else
-//        aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
     aRegionLb.SelectEntryPos(0);
     RegionSelect(&aRegionLb);
 }
@@ -739,3 +726,4 @@ void    SfxNewFileDialog::SetTemplateFlags(sal_uInt16 nSet)
     pImpl->SetTemplateFlags(nSet);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

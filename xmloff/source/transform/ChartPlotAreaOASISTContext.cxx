@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ void XMLAxisOASISContext::StartElement(
             }
             else
             {
-                OSL_ENSURE( false, "ChartAxis: Invalid attribute value" );
+                OSL_FAIL( "ChartAxis: Invalid attribute value" );
             }
 
             if( eToken != XML_TOKEN_INVALID )
@@ -254,3 +255,5 @@ void XMLChartPlotAreaOASISTContext::ExportCategories()
         m_rCategoriesContext.clear();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

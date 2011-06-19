@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/stream.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX
 #include <basic/sbxvar.hxx>
-#endif
 #if defined UNX && !defined LINUX
 #include <wchar.h>
 #endif
@@ -159,7 +158,7 @@ SfxPoolItem* SvxChartTextOrderItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -179,12 +178,12 @@ sal_Bool SvxChartTextOrderItem::QueryValue( ::com::sun::star::uno::Any& rVal, sa
 
     rVal <<= eAO;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // the order of the two enums is not equal, so a mapping is required
     ::com::sun::star::chart::ChartAxisArrangeOrderType eAO;
@@ -195,7 +194,7 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
         // also try an int (for Basic)
         sal_Int32 nAO = 0;
         if(!(rVal >>= nAO))
-            return sal_False;
+            return false;
         eAO = static_cast< ::com::sun::star::chart::ChartAxisArrangeOrderType >( nAO );
     }
 
@@ -210,12 +209,12 @@ sal_Bool SvxChartTextOrderItem::PutValue( const ::com::sun::star::uno::Any& rVal
         case ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO:
             eOrder = CHTXTORDER_AUTO; break;
         default:
-            return sal_False;
+            return false;
     }
 
     SetValue( (sal_uInt16)eOrder );
 
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -361,14 +360,14 @@ SfxFieldUnit SvxDoubleItem::GetUnit() const
 
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= fVal;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     return rVal >>= fVal;
 }
@@ -502,3 +501,4 @@ sal_uInt16 SvxChartRegressItem::GetVersion (sal_uInt16 nFileFormatVersion) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

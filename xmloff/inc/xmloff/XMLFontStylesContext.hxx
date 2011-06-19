@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,9 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
-#ifndef _XMLOFF_XMLSTYLE_HXX_
 #include <xmloff/xmlstyle.hxx>
-#endif
 
 struct XMLPropertyState;
 class SvXMLTokenMap;
@@ -97,3 +94,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

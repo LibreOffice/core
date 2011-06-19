@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -72,3 +73,5 @@ class UICategoryDescription :  public UICommandDescription
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_UICOMMANDCATEGORY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <svl/itemprop.hxx>
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
-#include <vos/refernce.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -60,15 +60,13 @@ namespace com { namespace sun { namespace star {
 
 
 
-///////////////////////////////////////////////////////////////////////////
 // LinguOptions
 // This class represents all Linguistik relevant options.
-//
 
 class LinguOptions
 {
     static SvtLinguOptions     *pData;
-    static vos::ORefCount       aRefCount;  // number of objects of this class
+    static oslInterlockedCount  nRefCount;  // number of objects of this class
 
     //! uses default assignment-operator
 
@@ -95,7 +93,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 // uses templates from <cppuhelper/interfacecontainer.h>
 
@@ -113,7 +110,6 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
         std::equal_to< sal_Int32 >
     > OPropertyListenerContainerHelper;
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class LinguProps :
@@ -180,7 +176,7 @@ inline ::rtl::OUString LinguProps::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.LinguProps" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

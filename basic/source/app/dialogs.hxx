@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,37 +29,25 @@
 #ifndef _DIALOGS_HXX
 #define _DIALOGS_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/config.hxx>
-#ifndef _TOOLS_LIST_HXX
-#include <tools/list.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vector>
 
 class SbxVariable;
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 class AboutDialog : public ModalDialog {
     FixedText a1,a4,aVersionString;
@@ -92,7 +81,6 @@ public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
 };
 
-////////////////////////////////////////////////////////////////////
 
 class ConfEdit : public PushButton
 {
@@ -250,8 +238,7 @@ public:
     void Save( Config &aConfig );
 };
 
-
-DECLARE_LIST( StringList, String * )
+typedef ::std::vector< String* > StringList;
 #define C_KEY_ALLE          CByteString("All")
 #define C_KEY_AKTUELL       CByteString("Current")
 #define C_KEY_TYPE          CByteString("Type")
@@ -284,7 +271,7 @@ class GenericOptions : public TabPage
     StringList* GetAllGroups();
     void LoadData();
 
-    void ShowSelectPath( const String aType );
+    void ShowSelectPath( const String& rType );
 
     DECL_LINK( LoadGroup, ComboBox* );
     DECL_LINK( DelGroup, Button* );
@@ -360,12 +347,11 @@ protected:
 
     DECL_LINK( OKClick, Button * );
 
-//  sal_Bool bCompare = sal_False;
-//  String aCompareString;
-
 public:
     VarEditDialog( Window * pParent, SbxVariable *pPVar );
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

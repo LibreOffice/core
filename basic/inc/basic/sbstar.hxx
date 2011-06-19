@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 #include <basic/sbdef.hxx>
@@ -225,3 +224,4 @@ SV_DECL_IMPL_REF(StarBASIC)
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

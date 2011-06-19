@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,13 @@
 #include "precompiled_desktop.hxx"
 
 #include "app.hxx"
+#include "cmdlineargs.hxx"
+#include "cmdlinehelp.hxx"
 
 #include <rtl/logfile.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
-sal_Bool SVMain();
+int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -46,7 +49,23 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
-    SVMain();
-
-    return 0;
+    aDesktop.CreateProcessServiceFactory();
+#ifdef UNX
+    // handle --version and --help already here, otherwise they would be handled
+    // after VCL initialization that might fail if $DISPLAY is not set
+    const desktop::CommandLineArgs& rCmdLineArgs = aDesktop.GetCommandLineArgs();
+    if ( rCmdLineArgs.IsHelp() )
+    {
+        desktop::displayCmdlineHelp();
+        return EXIT_SUCCESS;
+    }
+    else if ( rCmdLineArgs.IsVersion() )
+    {
+        desktop::displayVersion();
+        return EXIT_SUCCESS;
+    }
+#endif
+    return SVMain();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@ class SvStringHashEntry;
 class SvIdlDataBase;
 class SvTokenStream;
 
-/******************** class SvUINT32 **********************************/
 class SvUINT32
 {
     sal_uInt32  nVal;
@@ -60,7 +60,6 @@ public:
 };
 
 
-/******************** class SvINT16 **********************************/
 class SvINT16
 {
     short   nVal;
@@ -78,7 +77,6 @@ public:
 };
 
 
-/******************** class SvUINT16 **********************************/
 class SvUINT16
 {
     sal_uInt16  nVal;
@@ -96,7 +94,6 @@ public:
 };
 
 
-/******************** class SvINT32 **********************************/
 class SvINT32
 {
     sal_Int32   nVal;
@@ -114,7 +111,6 @@ public:
 };
 
 
-/******************** class Svint **********************************/
 class Svint
 {
     int     nVal;
@@ -135,7 +131,6 @@ public:
 };
 
 
-/******************** class SvBOOL **********************************/
 class SvBOOL
 {
     sal_Bool  nVal:1,
@@ -164,7 +159,6 @@ public:
 };
 
 
-/******************** class SvIdentifier **********************************/
 class SvIdentifier : public ByteString
 {
 public:
@@ -183,11 +177,10 @@ public:
 };
 
 
-/******************** class SvIdentifier **********************************/
 class SvNumberIdentifier : public SvIdentifier
 {
     sal_uInt32  nValue;
-    // darf nicht benutzt werden
+    // must not be used
     sal_Bool    ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
 public:
                 SvNumberIdentifier() : nValue( 0 ) {};
@@ -208,7 +201,6 @@ public:
 };
 
 
-/******************** class SvString **********************************/
 class SvString : public ByteString
 {
 public:
@@ -227,7 +219,6 @@ public:
 };
 
 
-/******************** class SvHelpText **********************************/
 class SvHelpText : public SvString
 {
 public:
@@ -240,12 +231,10 @@ public:
 };
 
 
-/******************** class SvHelpContext *******************************/
 class SvHelpContext : public SvNumberIdentifier
 {
 };
 
-/******************** class SvUUId *************************************/
 class SvUUId : public SvGlobalName
 {
 public:
@@ -257,7 +246,6 @@ public:
 };
 
 
-/******************** class SvVersion **********************************/
 class SvVersion
 {
     sal_uInt16  nMajorVersion;
@@ -288,3 +276,4 @@ public:
 
 #endif // _BASTYPE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

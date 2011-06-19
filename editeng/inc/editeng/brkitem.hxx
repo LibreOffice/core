@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,10 @@ namespace rtl
 
 // class SvxFmtBreakItem -------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt ein Umbruch-Attribut
-    Automatisch?, Seiten- oder Spaltenumbruch, davor oder danach?
+/*  [Description]
+
+    This item Describes a wrap-attribute
+    Automatic?, Page or column break, before or after?
 */
 #define FMTBREAK_NOAUTO ((sal_uInt16)0x0001)
 
@@ -57,10 +58,10 @@ public:
     inline SvxFmtBreakItem( const SvxFmtBreakItem& rBreak );
     inline SvxFmtBreakItem& operator=( const SvxFmtBreakItem& rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -74,7 +75,7 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const;
     virtual sal_uInt16           GetValueCount() const;
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void             SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     SvxBreak             GetBreak() const { return SvxBreak( GetValue() ); }
@@ -101,3 +102,4 @@ inline SvxFmtBreakItem& SvxFmtBreakItem::operator=(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

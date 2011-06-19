@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _CTRL_HXX //autogen
 #include <vcl/ctrl.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 
@@ -68,3 +67,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

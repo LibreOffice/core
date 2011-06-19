@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,9 @@
 
 #include <basic/sbxdef.hxx>
 #include <svl/svarray.hxx>
+#include <rtl/ustring.hxx>
+
+using rtl::OUString;
 
 #define _BASIC_TEXTPORTIONS
 
@@ -75,7 +79,7 @@ String getBasicTypeName( SbxDataType eType );
 // important for SbUnoObj instances
 // implementation: basic/source/classes/sbunoobj.cxx
 class SbxObject;
-String getBasicObjectTypeName( SbxObject* pObj );
+::rtl::OUString getBasicObjectTypeName( SbxObject* pObj );
 
 // Allows Basic IDE to set watch mode to suppress errors
 // implementation: basic/source/runtime/runtime.cxx
@@ -98,7 +102,6 @@ void setBasicWatchMode( bool bOn );
 #define SBX_HINT_BASICSTART     SFX_HINT_USER04
 #define SBX_HINT_BASICSTOP      SFX_HINT_USER05
 
-// #115826
 enum PropertyMode
 {
     PROPERTY_MODE_NONE,
@@ -108,3 +111,5 @@ enum PropertyMode
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

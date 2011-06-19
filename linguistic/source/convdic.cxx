@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,18 +73,18 @@
 using namespace std;
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
+
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 #define SN_HCD_CONV_DICTIONARY  "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
 
-///////////////////////////////////////////////////////////////////////////
 void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.Len() == 0)
@@ -110,8 +111,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
-    sal_uLong nError = sal::static_int_cast< sal_uLong >(-1);
-
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xIn;
@@ -130,8 +129,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     if (!xParser.is())
         return;
 
-    // get filter
-    //ConvDicXMLImport *pImport = new ConvDicXMLImport( this, rMainURL );
     //!! keep a reference until everything is done to
     //!! ensure the proper lifetime of the object
     uno::Reference < xml::sax::XDocumentHandler > xFilter(
@@ -144,18 +141,12 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     try
     {
         xParser->parseStream( aParserInput );   // implicitly calls ConvDicXMLImport::CreateContext
-        if (rImport.GetSuccess())
-            nError = 0;
     }
     catch( xml::sax::SAXParseException& )
     {
-//        if( bEncrypted )
-//            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( xml::sax::SAXException& )
     {
-//        if( bEncrypted )
-//            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( io::IOException& )
     {
@@ -201,7 +192,6 @@ sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvTy
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 ConvDic::ConvDic(
         const String &rName,
@@ -304,7 +294,7 @@ void ConvDic::Save()
         {
             xSaxWriter = uno::Reference< io::XActiveDataSource >(
                     xServiceFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) ), UNO_QUERY );
         }
         catch (uno::Exception &)
         {
@@ -717,7 +707,7 @@ sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAscii( SN_CONV_DICTIONARY ))
+    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)))
         bRes = sal_True;
     return bRes;
 }
@@ -739,6 +729,6 @@ uno::Sequence< OUString > ConvDic::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

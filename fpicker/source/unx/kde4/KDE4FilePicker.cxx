@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 
 #include <svtools/svtools.hrc>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
@@ -62,6 +63,7 @@
 #include <kapplication.h>
 #include <kfilefiltercombo.h>
 
+#include <qclipboard.h>
 #include <QWidget>
 #include <QCheckBox>
 #include <QGridLayout>
@@ -97,9 +99,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFilePicker");
-        aRet[2] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.KDE4FilePicker");
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDE4FilePicker"));
         return aRet;
     }
 }
@@ -152,14 +154,14 @@ KDE4FilePicker::~KDE4FilePicker()
 void SAL_CALL KDE4FilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener = xListener;
 }
 
 void SAL_CALL KDE4FilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener.clear();
 }
 
@@ -187,8 +189,24 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->setFilter(_filter);
     _dialog->filterWidget()->setEditable(false);
 
+    // At this point, SolarMutex is held. Opening the KDE file dialog here
+    // can lead to QClipboard asking for clipboard contents. If LO core
+    // is the owner of the clipboard content, this will block for 5 seconds
+    // and timeout, since the clipboard thread will not be able to acquire
+    // SolarMutex and thus won't be able to respond. If the event loops
+    // are properly integrated and QClipboard can use a nested event loop
+    // (see the KDE VCL plug), then this won't happen, but otherwise
+    // simply release the SolarMutex here. The KDE file dialog does not
+    // call back to the core, so this should be safe (and if it does,
+    // SolarMutex will need to be re-acquired).
+    long mutexrelease = 0;
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        mutexrelease = Application::ReleaseSolarMutex();
     //block and wait for user input
-    if (_dialog->exec() == KFileDialog::Accepted)
+    int result = _dialog->exec();
+    if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
+        Application::AcquireSolarMutex( mutexrelease );
+    if( result == KFileDialog::Accepted)
         return ExecutableDialogResults::OK;
 
     return ExecutableDialogResults::CANCEL;
@@ -230,20 +248,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     QStringList rawFiles = _dialog->selectedFiles();
     QStringList files;
 
-    // check if we need to add an extension
-    QString extension = "";
-    if ( _dialog->operationMode() == KFileDialog::Saving )
-    {
-        QCheckBox *cb = dynamic_cast<QCheckBox*> (
-            _customWidgets[ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION ]);
-
-        if (cb && cb->isChecked())
-        {
-            extension = _dialog->currentFilter(); // assuming filter value is like this *.ext
-            extension.replace("*","");
-        }
-    }
-
     // Workaround for the double click selection KDE4 bug
     // kde file picker returns the file and directories for selectedFiles()
     // when a file is double clicked
@@ -270,12 +274,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
 
             if (singleFile)
                 filename.prepend(dir + "/");
-
-            //prevent extension append if we already have one
-            if (filename.endsWith(extension))
-                files.append(filename);
-            else
-                files.append(filename + extension);
+            files.append(filename);
         }
     }
 
@@ -300,10 +299,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     if (!_filter.isNull())
         _filter.append("\n");
 
-    //add to hash map for reverse lookup in getCurrentFilter
-    _filters.insert(f, t);
-
-    // '/' meed to be escaped to else they are assumed to be mime types by kfiledialog
+    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
     //see the docs
     t.replace("/", "\\/");
 
@@ -324,7 +320,11 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const rtl::OUString &title )
 rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     throw( uno::RuntimeException )
 {
-    QString filter = _filters[_dialog->currentFilter()];
+    // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
+    // without the description, and there may be several filters with the same pattern
+    QString filter = _dialog->filterWidget()->currentText();
+    filter = filter.mid( filter.indexOf( '|' ) + 1 ); // convert from the pattern|description format if needed
+    filter.replace( "\\/", "/" );
 
     //default if not found
     if (filter.isNull())
@@ -363,6 +363,9 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const un
         switch (controlId)
         {
             case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            // we actually rely on KFileDialog and ignore CHECKBOX_AUTOEXTENSION completely,
+            // otherwise the checkbox would be duplicated
+                break;
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -399,6 +402,10 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 )
         switch (controlId)
         {
             case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            // we ignore this one and rely on KFileDialog to provide the function,
+            // always return true, here meaning "it's been taken care of"
+                res = uno::Any( true );
+                break;
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -445,7 +452,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const ::rtl::OUStri
     {
         switch (controlId)
         {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -480,7 +487,7 @@ rtl::OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     {
         switch (controlId)
         {
-            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
+            case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION: // ignored
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
             case ExtendedFilePickerElementIds::CHECKBOX_READONLY:
@@ -573,6 +580,10 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
             }
 
             widget = new QCheckBox(label, _extraControls);
+            // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
+            // code, but the checkbox is hidden and ignored
+            if( controlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION )
+                widget->hide();
 
             break;
         }
@@ -598,14 +609,13 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     throw( uno::Exception, uno::RuntimeException )
 {
     _filter.clear();
-    _filters.clear();
 
     // parameter checking
     uno::Any arg;
     if (args.getLength() == 0)
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "no arguments" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
                 static_cast< XFilePicker* >( this ), 1 );
     }
 
@@ -615,7 +625,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         ( arg.getValueType() != ::getCppuType((sal_Int8*)0)))
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "invalid argument type" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
                 static_cast< XFilePicker* >( this ), 1 );
     }
 
@@ -636,13 +646,12 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION:
             operationMode = KFileDialog::Saving;
-            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
+            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD:
         {
             operationMode = KFileDialog::Saving;
-            //addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD );
             break;
         }
@@ -662,6 +671,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             operationMode = KFileDialog::Saving;
+            addCustomControl( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION );
             addCustomControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE );
             break;
 
@@ -687,7 +697,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString::createFromAscii( "Unknown template" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                     static_cast< XFilePicker* >( this ),
                     1 );
     }
@@ -716,7 +726,7 @@ void SAL_CALL KDE4FilePicker::disposing( const lang::EventObject &rEvent )
 rtl::OUString SAL_CALL KDE4FilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 }
 
 sal_Bool SAL_CALL KDE4FilePicker::supportsService( const rtl::OUString& ServiceName )
@@ -738,3 +748,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNam
 {
     return FilePicker_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

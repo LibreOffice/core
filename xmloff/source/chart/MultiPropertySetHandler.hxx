@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -213,14 +214,6 @@ MultiPropertySetHandler::~MultiPropertySetHandler (void)
 }
 
 
-/*
-template<class T> void  MultiPropertySetHandler::Add (const ::rtl::OUString & sName, T& pValue)
-{
-    aPropertyList[sName] = new PropertyWrapper<T> (sName, pValue);
-}
-*/
-
-
 
 sal_Bool    MultiPropertySetHandler::GetProperties  (void)
 {
@@ -292,3 +285,4 @@ sal_Bool    MultiPropertySetHandler::SingleGet  (const ::com::sun::star::uno::Se
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

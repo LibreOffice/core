@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,8 +161,8 @@ sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 
 // ------------------------------------------------------------
 
-// Sollte spaeter zentral nach TOOLS/STRING (Aktuell: 303)
-// fuer Grep: WS_TARGET
+// Should later be moved to TOOLS/STRING (Current: 303)
+// for Grep: WS_TARGET
 
 DBG_NAME( EE_TextPortion );
 DBG_NAME( EE_EditLine );
@@ -178,13 +179,15 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_HYPHENATE
         { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_BULLETSTATE
         { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },
-        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },
-        { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },
+        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },         // EE_PARA_OUTLLEVEL
+        { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },            // EE_PARA_BULLET
+        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_LRSPACE
+        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_ULSPACE
+        { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },         // EE_PARA_SBL
+        { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },            // EE_PARA_JUST
+        { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },                // EE_PARA_TABS
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // EE_PARA_JUST_METHOD
+        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },      // EE_PARA_VER_JUST
         { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
@@ -267,7 +270,7 @@ int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
 {
-    // das neue Attribut im Pool anlegen
+    // Create a new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rAttr );
 
     EditCharAttrib* pNew = 0;
@@ -375,7 +378,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         break;
         case EE_CHAR_XMLATTRIBS:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );  // Attrib is only for holding XML information...
+            pNew = new EditCharAttrib( rNew, nS, nE );  // Attribute is only for holding XML information...
         }
         break;
         case EE_FEATURE_TAB:
@@ -395,22 +398,19 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         break;
         default:
         {
-            DBG_ERROR( "Ungueltiges Attribut!" );
+            OSL_FAIL( "Invalid Attribute!" );
         }
     }
     return pNew;
 }
-
-// -------------------------------------------------------------------------
-// class EditLine
-// -------------------------------------------------------------------------
 
 EditLine::EditLine()
 {
     DBG_CTOR( EE_EditLine, 0 );
 
     nStart = nEnd = 0;
-    nStartPortion = 0;              // damit in ungueltiger Zeile ohne Portions von einer gueltigen Zeile mit der Portion Nr0 unterscieden werden kann.
+    nStartPortion = 0;  // to be able to tell the difference between a line
+                        // without Ptorions form one with the Portion number 0
     nEndPortion = 0;
     nHeight = 0;
     nStartPosX = 0;
@@ -507,7 +507,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
 
     sal_uInt16 nIndex = GetStart();
 
-    DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize vor CreatePortions !" );
+    DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !" );
 
     for ( sal_uInt16 n = nStartPortion; n <= nEndPortion; n++ )
     {
@@ -525,7 +525,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
             case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }
@@ -538,9 +537,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
     return aSz;
 }
 
-// -------------------------------------------------------------------------
-// class EditLineList
-// -------------------------------------------------------------------------
 EditLineList::EditLineList()
 {
 }
@@ -577,13 +573,10 @@ sal_uInt16 EditLineList::FindLine( sal_uInt16 nChar, sal_Bool bInclEnd )
         }
     }
 
-    DBG_ASSERT( !bInclEnd, "Zeile nicht gefunden: FindLine" );
+    DBG_ASSERT( !bInclEnd, "Line not found: FindLine" );
     return ( Count() - 1 );
 }
 
-// -------------------------------------------------------------------------
-// class EditSelection
-// -------------------------------------------------------------------------
 sal_Bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
     if ( !pNode )
@@ -612,15 +605,15 @@ EditSelection::EditSelection()
 
 EditSelection::EditSelection( const EditPaM& rStartAndAnd )
 {
-    // koennte noch optimiert werden!
-    // nicht erst Def-CTOR vom PaM rufen!
+    // could still be optimized!
+    // do no first call the Def-constructor from PaM!
     aStartPaM = rStartAndAnd;
     aEndPaM = rStartAndAnd;
 }
 
 EditSelection::EditSelection( const EditPaM& rStart, const EditPaM& rEnd )
 {
-    // koennte noch optimiert werden!
+    // could still be optimized!
     aStartPaM = rStart;
     aEndPaM = rEnd;
 }
@@ -647,8 +640,8 @@ sal_Bool EditSelection::IsInvalid() const
 
 sal_Bool EditSelection::Adjust( const ContentList& rNodes )
 {
-    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index im Wald in Adjust(1)" );
-    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index im Wald in Adjust(2)" );
+    DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );
+    DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index out of range in Adjust(2)" );
 
     ContentNode* pStartNode = aStartPaM.GetNode();
     ContentNode* pEndNode = aEndPaM.GetNode();
@@ -656,8 +649,8 @@ sal_Bool EditSelection::Adjust( const ContentList& rNodes )
     sal_uInt16 nStartNode = rNodes.GetPos( pStartNode );
     sal_uInt16 nEndNode = rNodes.GetPos( pEndNode );
 
-    DBG_ASSERT( nStartNode != USHRT_MAX, "Node im Wald in Adjust(1)" );
-    DBG_ASSERT( nEndNode != USHRT_MAX, "Node im Wald in Adjust(2)" );
+    DBG_ASSERT( nStartNode != USHRT_MAX, "Node out of range in Adjust(1)" );
+    DBG_ASSERT( nEndNode != USHRT_MAX, "Node out of range in Adjust(2)" );
 
     sal_Bool bSwap = sal_False;
     if ( nStartNode > nEndNode )
@@ -675,10 +668,6 @@ sal_Bool EditSelection::Adjust( const ContentList& rNodes )
     return bSwap;
 }
 
-
-// -------------------------------------------------------------------------
-// class EditPaM
-// -------------------------------------------------------------------------
 sal_Bool operator == ( const EditPaM& r1,  const EditPaM& r2  )
 {
     if ( r1.GetNode() != r2.GetNode() )
@@ -702,10 +691,6 @@ sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  )
     return !( r1 == r2 );
 }
 
-
-// -------------------------------------------------------------------------
-// class ContentNode
-// -------------------------------------------------------------------------
 ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
     DBG_CTOR( EE_ContentNode, 0 );
@@ -722,9 +707,7 @@ ContentNode::ContentNode( const XubString& rStr, const ContentAttribs& rContentA
 ContentNode::~ContentNode()
 {
     DBG_DTOR( EE_ContentNode, 0 );
-#ifndef SVX_LIGHT
     delete pWrongList;
-#endif
 }
 
 void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool& rItemPool )
@@ -732,14 +715,12 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
     if ( !nNew )
         return;
 
-    // Da Features anders behandelt werden als normale Zeichenattribute,
-    // kann sich hier auch die Sortierung der Start-Liste aendern!
-    // In jedem if..., in dem weiter (n) Moeglichkeiten aufgrund von
-    // bFeature oder Spezialfall existieren,
-    // muessen (n-1) Moeglichkeiten mit bResort versehen werden.
-    // Die wahrscheinlichste Moeglichkeit erhaelt kein bResort,
-    // so dass nicht neu sortiert wird, wenn sich alle Attribute
-    // gleich verhalten.
+    // Since features are treated differently than normal character attributes,
+    // can also the order of the start list be change!
+    // In every if ...,  in the next (n) opportunities due to bFeature or
+    // an existing special case, must (n-1) opportunities be provided with
+    // bResort. The most likely possibility receives no bResort, so that is
+    // not sorted anew when all attributes are the same.
     sal_Bool bResort = sal_False;
     sal_Bool bExpandedEmptyAtIndexNull = sal_False;
 
@@ -749,29 +730,30 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
     {
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Alle Attribute hinter der Einfuegeposition verschieben...
+            // Move all attributes behind the insertion point...
             if ( pAttrib->GetStart() > nIndex )
             {
                 pAttrib->MoveForward( nNew );
             }
-            // 0: Leeres Attribut expandieren, wenn an Einfuegestelle
+            // 0: Expand empty attribute, if at insertion point
             else if ( pAttrib->IsEmpty() )
             {
-                // Index nicht pruefen, leeres durfte nur dort liegen.
-                // Wenn spaeter doch Ueberpruefung:
-                //   Spezialfall: Start == 0; AbsLen == 1, nNew = 1 => Expand, weil durch Absatzumbruch!
+                // Do not check Index, a emty one could only be there
+                // When later checking it anyhow:
+                //   Special caase: Start == 0; AbsLen == 1, nNew = 1
+                // => Expand, because of paragraph break!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
 //              if ( pAttrib->GetStart() == nIndex )
                 pAttrib->Expand( nNew );
                 if ( pAttrib->GetStart() == 0 )
                     bExpandedEmptyAtIndexNull = sal_True;
             }
-            // 1: Attribut startet davor, geht bis Index...
-            else if ( pAttrib->GetEnd() == nIndex ) // Start muss davor liegen
+            // 1: Attribute starts before, goes to index ...
+            else if ( pAttrib->GetEnd() == nIndex ) // Start must be before
             {
-                // Nur expandieren, wenn kein Feature,
-                // und wenn nicht in ExcludeListe!
-                // Sonst geht z.B. ein UL bis zum neuen ULDB, beide expandieren
+                // Only expand when there is no feature
+                // and if not in exclude list!
+                // Otherwise, a UL will go on until a new ULDB, expaning both
 //              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
                 if ( !pAttrib->IsFeature() && !aCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {
@@ -781,13 +763,13 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
                 else
                     bResort = sal_True;
             }
-            // 2: Attribut startet davor, geht hinter Index...
+            // 2: Attribute starts before, goes past the Index...
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
-                DBG_ASSERT( !pAttrib->IsFeature(), "Grosses Feature?!" );
+                DBG_ASSERT( !pAttrib->IsFeature(), "Large Feature?!" );
                 pAttrib->Expand( nNew );
             }
-            // 3: Attribut startet auf Index...
+            // 3: Attribute starts on index...
             else if ( pAttrib->GetStart() == nIndex )
             {
                 if ( pAttrib->IsFeature() )
@@ -835,11 +817,11 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
 
         DBG_ASSERT( !pAttrib->IsFeature() || ( pAttrib->GetLen() == 1 ), "Expand: FeaturesLen != 1" );
 
-        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Expand: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= Len() ), "Expand: Attrib groesser als Absatz!" );
+        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Expand: Attribute distorted!" );
+        DBG_ASSERT( ( pAttrib->GetEnd() <= Len() ), "Expand: Attribute larger than paragraph!" );
         if ( pAttrib->IsEmpty() )
         {
-            DBG_ERROR( "Leeres Attribut nach ExpandAttribs?" );
+            OSL_FAIL( "Empty Attribute after ExpandAttribs?" );
             bResort = sal_True;
             aCharAttribList.GetAttribs().Remove( nAttr );
             rItemPool.Remove( *pAttrib->GetItem() );
@@ -853,16 +835,14 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-#ifndef SVX_LIGHT
     if ( pWrongList )
     {
         sal_Bool bSep = ( GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
         pWrongList->TextInserted( nIndex, nNew, bSep );
     }
-#endif // !SVX_LIGHT
 
 #ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Expand: Start-Liste verdreht" );
+    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Expand: Start List distorted" );
 #endif
 }
 
@@ -871,8 +851,8 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
     if ( !nDeleted )
         return;
 
-    // Da Features anders behandelt werden als normale Zeichenattribute,
-    // kann sich hier auch die Sortierung der Start-Liste aendern!
+    // Since features are treated differently than normal character attributes,
+    // can also the order of the start list be change!
     sal_Bool bResort = sal_False;
     sal_Bool bDelAttr = sal_False;
     sal_uInt16 nEndChanges = nIndex+nDeleted;
@@ -884,34 +864,34 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
         bDelAttr = sal_False;
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Alles Attribute hinter der Einfuegeposition verschieben...
+            // Move all Attribute behind the insert point...
             if ( pAttrib->GetStart() >= nEndChanges )
             {
                 pAttrib->MoveBackward( nDeleted );
             }
-            // 1. Innenliegende Attribute loeschen...
+            // 1. Delete Internal attributes...
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() <= nEndChanges ) )
             {
-                // Spezialfall: Attrubt deckt genau den Bereich ab
-                // => als leeres Attribut behalten.
+                // Special case: Attribute covers the area exactly
+                // => keep as empty Attribute.
                 if ( !pAttrib->IsFeature() && ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex; // leer
+                    pAttrib->GetEnd() = nIndex; // empty
                 else
                     bDelAttr = sal_True;
             }
-            // 2. Attribut beginnt davor, endet drinnen oder dahinter...
+            // 2. Attribute starts earlier, ends inside or behind it ...
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
                 DBG_ASSERT( !pAttrib->IsFeature(), "Collapsing Feature!" );
-                if ( pAttrib->GetEnd() <= nEndChanges ) // endet drinnen
+                if ( pAttrib->GetEnd() <= nEndChanges ) // ends inside
                     pAttrib->GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );       // endet dahinter
+                    pAttrib->Collaps( nDeleted );       // ends behind
             }
-            // 3. Attribut beginnt drinnen, endet dahinter...
+            // 3. Attribute starts inside, ending behind ...
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
             {
-                // Features duerfen nicht expandieren!
+                // Features not allowed to expand!
                 if ( pAttrib->IsFeature() )
                 {
                     pAttrib->MoveBackward( nDeleted );
@@ -926,9 +906,9 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
         }
         DBG_ASSERT( !pAttrib->IsFeature() || ( pAttrib->GetLen() == 1 ), "Expand: FeaturesLen != 1" );
 
-        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= Len()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
-        if ( bDelAttr /* || pAttrib->IsEmpty() */ )
+        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut distorted!" );
+        DBG_ASSERT( ( pAttrib->GetEnd() <= Len()) || bDelAttr, "Collaps: Attribute larger than paragraph!" );
+        if ( bDelAttr )
         {
             bResort = sal_True;
             aCharAttribList.GetAttribs().Remove( nAttr );
@@ -946,19 +926,17 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-#ifndef SVX_LIGHT
     if ( pWrongList )
         pWrongList->TextDeleted( nIndex, nDeleted );
-#endif // !SVX_LIGHT
 
 #ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start-Liste verdreht" );
+    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start list distorted" );
 #endif
 }
 
 void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs )
 {
-    DBG_ASSERT( pPrevNode, "kopieren von Attributen auf einen NULL-Pointer ?" );
+    DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
 
     xub_StrLen nCut = pPrevNode->Len();
 
@@ -968,32 +946,31 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
     {
         if ( pAttrib->GetEnd() < nCut )
         {
-            // bleiben unveraendert....
+            // remain unchanged ....
             ;
         }
         else if ( pAttrib->GetEnd() == nCut )
         {
-            // muessen als leeres Attribut kopiert werden.
+            // must be copied as an empty attributes.
             if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !aCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
             {
                 EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
-                DBG_ASSERT( pNewAttrib, "MakeCharAttrib fehlgeschlagen!" );
+                DBG_ASSERT( pNewAttrib, "MakeCharAttrib failed!" );
                 aCharAttribList.InsertAttrib( pNewAttrib );
             }
         }
         else if ( pAttrib->IsInside( nCut ) || ( !nCut && !pAttrib->GetStart() && !pAttrib->IsFeature() ) )
         {
-            // Wenn ganz vorne gecuttet wird, muss das Attribut erhalten bleiben!
-            // muessen kopiert und geaendert werden
+            // If cut is done right at the front then the attribute must be
+            // kept! Has to be copied and changed.
             EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
-            DBG_ASSERT( pNewAttrib, "MakeCharAttrib fehlgeschlagen!" );
+            DBG_ASSERT( pNewAttrib, "MakeCharAttrib failed!" );
             aCharAttribList.InsertAttrib( pNewAttrib );
-            // stutzen:
             pAttrib->GetEnd() = nCut;
         }
         else
         {
-            // alle dahinter verschieben in den neuen Node (this)
+            // Move all attributes in the current node (this)
 //          pPrevNode->GetCharAttribs().RemoveAttrib( pAttrib );
             pPrevNode->GetCharAttribs().GetAttribs().Remove( nAttr );
             aCharAttribList.InsertAttrib( pAttrib );
@@ -1010,23 +987,23 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 
 void ContentNode::AppendAttribs( ContentNode* pNextNode )
 {
-    DBG_ASSERT( pNextNode, "kopieren von Attributen von einen NULL-Pointer ?" );
+    DBG_ASSERT( pNextNode, "Copy of attributes to a null pointer?" );
 
     sal_uInt16 nNewStart = Len();
 
 #ifdef EDITDEBUG
-    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute VOR AppendAttribs kaputt" );
+    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
 #endif
 
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttrib = GetAttrib( pNextNode->GetCharAttribs().GetAttribs(), nAttr );
     while ( pAttrib )
     {
-        // alle Attribute verschieben in den aktuellen Node (this)
+        // Move all attributes in the current node (this)
         sal_Bool bMelted = sal_False;
         if ( ( pAttrib->GetStart() == 0 ) && ( !pAttrib->IsFeature() ) )
         {
-            // Evtl koennen Attribute zusammengefasst werden:
+            // Attributes can possibly be summarized as:
             sal_uInt16 nTmpAttr = 0;
             EditCharAttrib* pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
             while ( !bMelted && pTmpAttrib )
@@ -1039,7 +1016,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         pNextNode->GetCharAttribs().GetAttribs().Remove( nAttr );
-                        // Vom Pool abmelden ?!
+                        // Unsubscribe from the pool?!
                         delete pAttrib;
                         bMelted = sal_True;
                     }
@@ -1058,22 +1035,22 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
         }
         pAttrib = GetAttrib( pNextNode->GetCharAttribs().GetAttribs(), nAttr );
     }
-    // Fuer die Attribute, die nur ruebergewandert sind:
+    // For the Attributes that just moved over:
     pNextNode->GetCharAttribs().Clear();
 
 #ifdef EDITDEBUG
-    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute NACH AppendAttribs kaputt" );
+    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute after AppendAttribs broken" );
 #endif
 }
 
 void ContentNode::CreateDefFont()
 {
-    // Erst alle Informationen aus dem Style verwenden...
+    // First use the information from the style ...
     SfxStyleSheet* pS = aContentAttribs.GetStyleSheet();
     if ( pS )
         CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
 
-    // ... dann die harte Absatzformatierung rueberbuegeln...
+    // ... then iron out the hard paragraph formatting...
     CreateFont( GetCharAttribs().GetDefFont(),
         GetContentAttribs().GetItems(), pS == NULL );
 }
@@ -1082,9 +1059,10 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
 {
     aContentAttribs.SetStyleSheet( pS );
 
-    // Erst alle Informationen aus dem Style verwenden...
+
+    // First use the information from the style ...
     GetCharAttribs().GetDefFont() = rFontFromStyle;
-    // ... dann die harte Absatzformatierung rueberbuegeln...
+    // ... then iron out the hard paragraph formatting...
     CreateFont( GetCharAttribs().GetDefFont(),
         GetContentAttribs().GetItems(), pS == NULL );
 }
@@ -1098,29 +1076,22 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont )
 
 void ContentNode::DestroyWrongList()
 {
-#ifndef SVX_LIGHT
     delete pWrongList;
-#endif
     pWrongList = NULL;
 }
 
 void ContentNode::CreateWrongList()
 {
-    DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
-#ifndef SVX_LIGHT
+    DBG_ASSERT( !pWrongList, "WrongList already exist!" );
     pWrongList = new WrongList;
-#endif
 }
 
 void ContentNode::SetWrongList( WrongList* p )
 {
-    DBG_ASSERT( !pWrongList, "WrongList existiert schon!" );
+    DBG_ASSERT( !pWrongList, "WrongList already exist!" );
     pWrongList = p;
 }
 
-// -------------------------------------------------------------------------
-// class ContentAttribs
-// -------------------------------------------------------------------------
 ContentAttribs::ContentAttribs( SfxItemPool& rPool ) :
                     aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
 {
@@ -1147,7 +1118,7 @@ SvxTabStop ContentAttribs::FindTabStop( long nCurPos, sal_uInt16 nDefTab )
             return rTab;
     }
 
-    // DefTab ermitteln...
+    // Determine DefTab ...
     SvxTabStop aTabStop;
     long x = nCurPos / nDefTab + 1;
     aTabStop.GetTabPos() = nDefTab * x;
@@ -1158,15 +1129,16 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 {
     sal_Bool bStyleChanged = ( pStyle != pS );
     pStyle = pS;
-    // #104799# Only when other style sheet, not when current style sheet modified
+    // Only when other style sheet, not when current style sheet modified
     if ( pStyle && bStyleChanged )
     {
-        // Gezielt die Attribute aus der Absatzformatierung entfernen, die im Style
-        // spezifiziert sind, damit die Attribute des Styles wirken koennen.
+        // Selectively remove the attributes from the paragraph formatting
+        // which are specified in the style, so that the attributes of the
+        // style can have an affect.
         const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
         for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            // #99635# Don't change bullet on/off
+            // Don't change bullet on/off
             if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON ) )
                 aAttribSet.ClearItem( nWhich );
         }
@@ -1175,7 +1147,7 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 
 const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich )
 {
-    // Harte Absatzattribute haben Vorrang!
+    // Hard paragraph attributes take precedence!
     SfxItemSet* pTakeFrom = &aAttribSet;
     if ( pStyle && ( aAttribSet.GetItemState( nWhich, sal_False ) != SFX_ITEM_ON  ) )
         pTakeFrom = &pStyle->GetItemSet();
@@ -1195,22 +1167,41 @@ sal_Bool ContentAttribs::HasItem( sal_uInt16 nWhich )
 }
 
 
-
-// ----------------------------------------------------------------------
-//  class ItemList
-//  ----------------------------------------------------------------------
-const SfxPoolItem* ItemList::FindAttrib( sal_uInt16 nWhich )
+ItemList::ItemList() : CurrentItem( 0 )
 {
-    const SfxPoolItem* pItem = First();
-    while ( pItem && ( pItem->Which() != nWhich ) )
-        pItem = Next();
-
-    return pItem;
 }
 
-// -------------------------------------------------------------------------
-// class EditDoc
-// -------------------------------------------------------------------------
+const SfxPoolItem* ItemList::FindAttrib( sal_uInt16 nWhich )
+{
+    for ( size_t i = 0, n = aItemPool.size(); i < n; ++i )
+        if ( aItemPool[ i ]->Which() == nWhich )
+            return aItemPool[ i ];
+    return NULL;
+}
+
+const SfxPoolItem* ItemList::First()
+{
+    CurrentItem = 0;
+    return aItemPool.empty() ? NULL : aItemPool[ 0 ];
+}
+
+const SfxPoolItem* ItemList::Next()
+{
+    if ( CurrentItem + 1 < aItemPool.size() )
+    {
+        ++CurrentItem;
+        return aItemPool[ CurrentItem ];
+    }
+    return NULL;
+}
+
+void ItemList::Insert( const SfxPoolItem* pItem )
+{
+    aItemPool.push_back( pItem );
+    CurrentItem = aItemPool.size() - 1;
+}
+
+
 EditDoc::EditDoc( SfxItemPool* pPool )
 {
     if ( pPool )
@@ -1321,12 +1312,12 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SFX_ITEM_ON ) )
         rFont.SetRelief( (FontRelief)((const SvxCharReliefItem&)rSet.Get( EE_CHAR_RELIEF )).GetValue() );
 
-    // Ob ich jetzt den ganzen Font vergleiche, oder vor jeder Aenderung
-    // pruefe, ob der Wert sich aendert, bleibt sich relativ gleich.
-    // So ggf ein MakeUniqFont im Font mehr, dafuer bei Aenderung schnellerer
-    // Abbruch der Abfrage, oder ich musste noch jedesmal ein bChanged pflegen.
+    // If comparing the entire font, or if checking before each alteration
+    // whether the value changes, remains relatively the same thing.
+    // So possible one MakeUniqFont more in the font, but as a result a quicker
+    // abortion of the query, or one must each time check bChanged.
     if ( rFont == aPrevFont  )
-        rFont = aPrevFont;  // => Gleicher ImpPointer fuer IsSameInstance
+        rFont = aPrevFont;  // => The same ImpPointer for IsSameInstance
 }
 
 void EditDoc::CreateDefFont( sal_Bool bUseStyles )
@@ -1373,7 +1364,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
         nLen += nNodes * nSepSize;
     if ( nLen > 0xFFFb / sizeof(xub_Unicode) )
     {
-        DBG_ERROR( "Text zu gross fuer String" );
+        OSL_FAIL( "Text to large for String" );
         return XubString();
     }
     xub_Unicode* pStr = new xub_Unicode[nLen+1];
@@ -1406,7 +1397,7 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sa
     if ( nEndPos > pNode->Len() )
         nEndPos = pNode->Len();
 
-    DBG_ASSERT( nStartPos <= nEndPos, "Start und Ende vertauscht?" );
+    DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
 
     sal_uInt16 nIndex = nStartPos;
     XubString aStr;
@@ -1417,9 +1408,9 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sa
         if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
             nEnd = pNextFeature->GetStart();
         else
-            pNextFeature = 0;   // Feature interessiert unten nicht
+            pNextFeature = 0;   // Feature does not interest the below
 
-        DBG_ASSERT( nEnd >= nIndex, "Ende vorm Index?" );
+        DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
         //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
         //!! thus would result in adding the whole sub string up to the end of the node !!
         if (nEnd > nIndex)
@@ -1436,7 +1427,7 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sa
                 case EE_FEATURE_FIELD:  if ( bResolveFields )
                                             aStr += ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                 break;
-                default:    DBG_ERROR( "Was fuer ein Feature ?" );
+                default:    OSL_FAIL( "What feature?" );
             }
             pNextFeature = pNode->GetCharAttribs().FindFeature( ++nEnd );
         }
@@ -1452,7 +1443,7 @@ sal_uLong EditDoc::GetTextLen() const
     {
         ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
-        // Felder k�nnen laenger sein als der Platzhalter im Node.
+        // Fields can be longer than the placeholder in the Node
         const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
         {
@@ -1496,7 +1487,7 @@ void EditDoc::SetModified( sal_Bool b )
 
 EditPaM EditDoc::RemoveText()
 {
-    // Das alte ItemSetmerken, damit z.B. im Chart Font behalten bleibt
+    // Keep the old ItemSet, to keep the chart Font.
     ContentNode* pPrevFirstNode = GetObject(0);
     SfxStyleSheet* pPrevStyle = pPrevFirstNode->GetStyleSheet();
     SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
@@ -1519,9 +1510,9 @@ EditPaM EditDoc::RemoveText()
 
 void EditDoc::InsertText( const EditPaM& rPaM, xub_Unicode c )
 {
-    DBG_ASSERT( c != 0x0A, "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    DBG_ASSERT( c != 0x0D, "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    DBG_ASSERT( c != '\t', "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    DBG_ASSERT( c != 0x0A, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( c != 0x0D, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( c != '\t', "EditDoc::InsertText: Newlines prohibited in paragraph!" );
 
     rPaM.GetNode()->Insert( c, rPaM.GetIndex() );
     rPaM.GetNode()->ExpandAttribs( rPaM.GetIndex(), 1, GetItemPool() );
@@ -1531,9 +1522,9 @@ void EditDoc::InsertText( const EditPaM& rPaM, xub_Unicode c )
 
 EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
 {
-    DBG_ASSERT( rStr.Search( 0x0A ) == STRING_NOTFOUND, "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    DBG_ASSERT( rStr.Search( 0x0D ) == STRING_NOTFOUND, "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
-    DBG_ASSERT( rStr.Search( '\t' ) == STRING_NOTFOUND, "EditDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
+    DBG_ASSERT( rStr.Search( 0x0A ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.Search( 0x0D ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.Search( '\t' ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertText1" );
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
@@ -1559,10 +1550,10 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     // for a new paragraph we like to have the bullet/numbering visible by default
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_True), EE_PARA_BULLETSTATE );
 
-    // ContenNode-CTOR kopiert auch die Absatzattribute
+    // ContenNode constructor copies also the paragraph attributes
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
 
-    // Den Default-Font kopieren
+    // Copy the Default Font
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();
     SfxStyleSheet* pStyle = aPaM.GetNode()->GetStyleSheet();
     if ( pStyle )
@@ -1575,7 +1566,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
         }
     }
 
-    // Zeichenattribute muessen ggf. kopiert bzw gestutzt werden:
+    // Character attributes may need to be copied or trimmed:
     pNode->CopyAndCutAttribs( aPaM.GetNode(), GetItemPool(), bKeepEndingAttribs );
 
     Insert( pNode, nPos+1 );
@@ -1594,9 +1585,9 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     aPaM.GetNode()->Insert( CH_FEATURE, aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
-    // Fuer das Feature ein Feature-Attribut anlegen...
+    // Create a feature-attribute for the feature...
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
-    DBG_ASSERT( pAttrib, "Warum kann ich kein Feature anlegen ?" );
+    DBG_ASSERT( pAttrib, "Why can not the feature be created?" );
     aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
 
     SetModified( sal_True );
@@ -1609,12 +1600,12 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 {
     const EditPaM aPaM( pLeft, pLeft->Len() );
 
-    // Erst die Attribute, da sonst nLen nicht stimmt!
+    // First the attributes, otherwise nLen will not be correct!
     pLeft->AppendAttribs( pRight );
-    // Dann den Text...
+    // then the Text...
     *pLeft += *pRight;
 
-    // der rechte verschwindet.
+    // the one to the right disappears.
     RemoveItemsFromPool( pRight );
     sal_uInt16 nRight = GetPos( pRight );
     Remove( nRight );
@@ -1627,7 +1618,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 
 EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_uInt16 nChars )
 {
-    // Evtl. Features entfernen!
+    // Maybe remove Features!
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
@@ -1638,16 +1629,16 @@ EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_uInt16 nChars )
 
 void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
 {
-    DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
+    DBG_ASSERT( pNode, "What to do with the attribute?" );
+    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
-    // fuer Optimierung:
-    // dieses endet am Anfang der Selektion => kann erweitert werden
+    // for Optimization:
+    // This ends at the beginning of the selection => can be expanded
     EditCharAttrib* pEndingAttrib = 0;
-    // dieses startet am Ende der Selektion => kann erweitert werden
+    // This starts at the end of the selection => can be expanded
     EditCharAttrib* pStartingAttrib = 0;
 
-    DBG_ASSERT( nStart <= nEnd, "Kleiner Rechenfehler in InsertAttribInSelection" );
+    DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
     RemoveAttribs( pNode, nStart, nEnd, pStartingAttrib, pEndingAttrib, rPoolItem.Which() );
 
@@ -1655,7 +1646,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sa
          ( *(pStartingAttrib->GetItem()) == rPoolItem ) &&
          ( *(pEndingAttrib->GetItem()) == rPoolItem ) )
     {
-        // wird ein groesses Attribut.
+        // Will become a large Attribute.
         pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
         GetItemPool().Remove( *(pStartingAttrib->GetItem()) );
         pNode->GetCharAttribs().GetAttribs().Remove( pNode->GetCharAttribs().GetAttribs().GetPos( pStartingAttrib ) );
@@ -1683,65 +1674,62 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
 
 sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich )
 {
-    DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
 
-    // dieses endet am Anfang der Selektion => kann erweitert werden
+    DBG_ASSERT( pNode, "What to do with the attribute?" );
+    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
+
+    // This ends at the beginning of the selection => can be expanded
     rpEnding = 0;
-    // dieses startet am Ende der Selektion => kann erweitert werden
+    // This starts at the end of the selection => can be expanded
     rpStarting = 0;
 
     sal_Bool bChanged = sal_False;
 
-    DBG_ASSERT( nStart <= nEnd, "Kleiner Rechenfehler in InsertAttribInSelection" );
+    DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
-    // ueber die Attribute iterieren...
+    // iterate over the attributes ...
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     while ( pAttr )
     {
         sal_Bool bRemoveAttrib = sal_False;
-        // MT 11.9.97:
-        // Ich denke dass in dieser Methode generell keine Features geloescht
-        // werden sollen.
-        // => Dann koennen die Feature-Abfragen weiter unten entfallen
         sal_uInt16 nAttrWhich = pAttr->Which();
         if ( ( nAttrWhich < EE_FEATURE_START ) && ( !nWhich || ( nAttrWhich == nWhich ) ) )
         {
-            // Attribut beginnt in Selection
+            // Attribute starts in Selection
             if ( ( pAttr->GetStart() >= nStart ) && ( pAttr->GetStart() <= nEnd ) )
             {
                 bChanged = sal_True;
                 if ( pAttr->GetEnd() > nEnd )
                 {
-                    pAttr->GetStart() = nEnd;   // dann faengt es dahinter an
+                    pAttr->GetStart() = nEnd;   // then it starts after this
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;  // es kann kein weiteres Attrib hier liegen
+                        break;  // There can be no further attributes here
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
-                    // Feature nur loeschen, wenn genau an der Stelle
+                    // Delete feature only if on the exact spot
                     bRemoveAttrib = sal_True;
                 }
             }
 
-            // Attribut endet in Selection
+            // Attribute ends in Selection
             else if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetEnd() <= nEnd ) )
             {
                 bChanged = sal_True;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
-                    pAttr->GetEnd() = nStart;   // dann hoert es hier auf
+                    pAttr->GetEnd() = nStart;   // then it ends here
                     rpEnding = pAttr;
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
-                    // Feature nur loeschen, wenn genau an der Stelle
+                    // Delete feature only if on the exact spot
                     bRemoveAttrib = sal_True;
                 }
             }
-            // Attribut ueberlappt die Selektion
+            // Attribute overlaps the selection
             else if ( ( pAttr->GetStart() <= nStart ) && ( pAttr->GetEnd() >= nEnd ) )
             {
                 bChanged = sal_True;
@@ -1750,29 +1738,29 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;  // es kann weitere Attribute geben!
+                        break;  // There can be further attributes!
                 }
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     if ( nWhich )
-                        break;  // es kann weitere Attribute geben!
+                        break;  // There can be further attributes!
                 }
-                else // Attribut muss gesplittet werden...
+                else // Attribute must be split ...
                 {
                     sal_uInt16 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
                     if ( nWhich )
-                        break;  // es kann weitere Attribute geben!
+                        break;  // There can be further attributes!
                 }
             }
         }
         if ( bRemoveAttrib )
         {
-            DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Loeschen und behalten des gleichen Attributs ?" );
+            DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Delete and retain the same attribute?" );
             DBG_ASSERT( !pAttr->IsFeature(), "RemoveAttribs: Remove a feature?!" );
             pNode->GetCharAttribs().GetAttribs().Remove(nAttr);
             GetItemPool().Remove( *pAttr->GetItem() );
@@ -1796,11 +1784,10 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt
 
 void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
-    // Diese Methode prueft nicht mehr, ob ein entspr. Attribut
-    // schon an der Stelle existiert!
-
+    // This method no longer checks whether a corresponding attribute already
+    // exists at this place!
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rPoolItem, nStart, nEnd );
-    DBG_ASSERT( pAttrib, "MakeCharAttrib fehlgeschlagen!" );
+    DBG_ASSERT( pAttrib, "MakeCharAttrib failed!" );
     pNode->GetCharAttribs().InsertAttrib( pAttrib );
 
     SetModified( sal_True );
@@ -1814,24 +1801,22 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
     }
     else
     {
-        // Pruefen, ob schon ein neues Attribut mit der WhichId an der Stelle:
+        // Check whether already a new attribute with WhichId exists at this place:
         EditCharAttrib* pAttr = pNode->GetCharAttribs().FindEmptyAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            // Attribut entfernen....
+            // Remove attribute....
             pNode->GetCharAttribs().GetAttribs().Remove(
                 pNode->GetCharAttribs().GetAttribs().GetPos( pAttr ) );
         }
 
-        // pruefen, ob ein 'gleiches' Attribut an der Stelle liegt.
+        // check whether 'the same' attribute exist at this place.
         pAttr = pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            if ( pAttr->IsInside( nStart ) )    // splitten
+            if ( pAttr->IsInside( nStart ) )    // split
             {
-                // ???????????????????????????????
-                // eigentlich noch pruefen, ob wirklich splittet, oder return !
-                // ???????????????????????????????
+                // check again if really splitting, or return !
                 sal_uInt16 nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
                 pAttr = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
@@ -1839,8 +1824,8 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
             }
             else if ( pAttr->GetEnd() == nStart )
             {
-                DBG_ASSERT( !pAttr->IsEmpty(), "Doch noch ein leeres Attribut?" );
-                // pruefen, ob genau das gleiche Attribut
+                DBG_ASSERT( !pAttr->IsEmpty(), "Still an empty attribute?" );
+                // Check if exactly the same attribute
                 if ( *(pAttr->GetItem()) == rPoolItem )
                     return;
             }
@@ -1853,35 +1838,35 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
 
 void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet )
 {
-    DBG_ASSERT( pNode, "Wo soll ich suchen ?" );
-    DBG_ASSERT( nStartPos <= nEndPos, "Ungueltiger Bereich!" );
+    DBG_ASSERT( pNode, "Where to search?" );
+    DBG_ASSERT( nStartPos <= nEndPos, "Invalid region!" );
 
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    // keine Selection...
+    // No Selection...
     if ( nStartPos == nEndPos )
     {
         while ( pAttr && ( pAttr->GetStart() <= nEndPos) )
         {
             const SfxPoolItem* pItem = 0;
-            // Attribut liegt dadrueber...
+            // Attribute is about...
             if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
                 pItem = pAttr->GetItem();
-            // Attribut endet hier, ist nicht leer
+            // Attribute ending here is not empty
             else if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
             {
                 if ( !pNode->GetCharAttribs().FindEmptyAttrib( pAttr->GetItem()->Which(), nStartPos ) )
                     pItem = pAttr->GetItem();
             }
-            // Attribut endet hier, ist leer
+            // Attribute ending here is empty
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
             {
                 pItem = pAttr->GetItem();
             }
-            // Attribut beginnt hier
+            // Attribute starts here
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
             {
-                if ( nStartPos == 0 )   // Sonderfall
+                if ( nStartPos == 0 )   // special case
                     pItem = pAttr->GetItem();
             }
 
@@ -1905,41 +1890,33 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         }
     }
-    else    // Selektion
+    else    // Selection
     {
         while ( pAttr && ( pAttr->GetStart() < nEndPos) )
         {
             const SfxPoolItem* pItem = 0;
-            // Attribut liegt dadrueber...
+            // Attribut is about...
             if ( ( pAttr->GetStart() <= nStartPos ) && ( pAttr->GetEnd() >= nEndPos ) )
                 pItem = pAttr->GetItem();
-            // Attribut startet mitten drin...
+            // Attribute starts right in the middle ...
             else if ( pAttr->GetStart() >= nStartPos )
             {
                 // !!! pItem = pAttr->GetItem();
-                // einfach nur pItem reicht nicht, da ich z.B. bei Shadow
-                // niemals ein ungleiches Item finden wuerde, da ein solche
-                // seine Anwesenheit durch Abwesenheit repraesentiert!
-                // if ( ... )
-                // Es muesste geprueft werden, on genau das gleiche Attribut
-                // an der Bruchstelle aufsetzt, was recht aufwendig ist.
-                // Da ich beim Einfuegen von Attributen aber etwas optimiere
-                // tritt der Fall nicht so schnell auf...
-                // Also aus Geschwindigkeitsgruenden:
+                // PItem is simply not enough, since one for example in case
+                // of Shadow, would never find an unequal item, since such a
+                // item represents its presence by absence!
+                // If (...)
+                // It needs to be examined on exactly the same attribute at the
+                // breaki point, which is quite expensive.
+                // Since optimazation is done when inserting the  attributes
+                // this case does not appear so fast ...
+                // So based on the need for speed:
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
 
             }
-            // Attribut endet mitten drin...
+            // Attribute ends in the middle of it ...
             else if ( pAttr->GetEnd() > nStartPos )
             {
-                // pItem = pAttr->GetItem();
-                // s.o.
-                /*-----------------31.05.95 16:01-------------------
-                 Ist falsch, wenn das gleiche Attribut sofort wieder
-                 eingestellt wird!
-                 => Sollte am besten nicht vorkommen, also gleich beim
-                    Setzen von Attributen richtig machen!
-                --------------------------------------------------*/
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
             }
 
@@ -1965,10 +1942,6 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 
     }
 }
 
-
-// -------------------------------------------------------------------------
-// class EditCharAttribList
-// -------------------------------------------------------------------------
 
 CharAttribList::CharAttribList()
 {
@@ -1994,18 +1967,16 @@ CharAttribList::~CharAttribList()
 void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// optimieren: binaere Suche ? !
+// optimize: binary search?    !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    // MT: 26.11.98
-    // Vielleicht aber auch einfach nur rueckwaerts iterieren:
-    // Der haeufigste und kritischste Fall: Attribute kommen bereits
-    // sortiert an (InsertBinTextObject!)
-    // Hier waere auch binaere Suche nicht optimal.
-    // => Wuerde einiges bringen!
+    // Maybe just simply iterate backwards:
+    // The most common and critical case: Attributes are already sorted
+    // (InsertBinTextObject!) binary search would not be optimal here.
+    // => Would bring something!
 
     const sal_uInt16 nCount = Count();
-    const sal_uInt16 nStart = pAttrib->GetStart(); // vielleicht besser fuer Comp.Opt.
+    const sal_uInt16 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
 
     if ( pAttrib->IsEmpty() )
         bHasEmptyAttribs = sal_True;
@@ -2068,8 +2039,8 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 
 EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
-    // Rueckwaerts, falls eins dort endet, das naechste startet.
-    // => Das startende gilt...
+    // Backwards, if one ends where the next starts.
+    // => The starting one is the valid one ...
     sal_uInt16 nAttr = aAttribs.Count()-1;
     EditCharAttrib* pAttr = GetAttrib( aAttribs, nAttr );
     while ( pAttr )
@@ -2120,8 +2091,8 @@ sal_Bool CharAttribList::HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) c
 
 sal_Bool CharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
-    // Rueckwaerts, falls eins dort endet, das naechste startet.
-    // => Das startende gilt...
+    // Backwards, if one ends where the next starts.
+    // => The starting one is the valid one ...
     sal_uInt16 nAttr = aAttribs.Count()-1;
     EditCharAttrib* pAttr = GetAttrib( aAttribs, nAttr );
     while ( pAttr && ( pAttr->GetEnd() >= nBound ) )
@@ -2155,14 +2126,14 @@ EditCharAttrib* CharAttribList::FindFeature( sal_uInt16 nPos ) const
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pNextAttrib = GetAttrib( aAttribs, nAttr );
 
-    // erstmal zur gewuenschten Position...
+    // first to the desired position ...
     while ( pNextAttrib && ( pNextAttrib->GetStart() < nPos ) )
     {
         nAttr++;
         pNextAttrib = GetAttrib( aAttribs, nAttr );
     }
 
-    // jetzt das Feature suchen...
+    // Now search for the Feature...
     while ( pNextAttrib && !pNextAttrib->IsFeature() )
     {
         nAttr++;
@@ -2199,12 +2170,12 @@ sal_Bool CharAttribList::DbgCheckAttribs()
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
             bOK = sal_False;
-            DBG_ERROR( "Attr verdreht" );
+            OSL_FAIL( "Attribute is distorted" );
         }
         else if ( pAttr->IsFeature() && ( pAttr->GetLen() != 1 ) )
         {
             bOK = sal_False;
-            DBG_ERROR( "Feature, Len != 1" );
+            OSL_FAIL( "Feature, Len != 1" );
         }
     }
     return bOK;
@@ -2238,7 +2209,7 @@ sal_uLong SvxFontTable::GetId( const SvxFontItem& rFontItem )
             return GetCurKey();
         pItem = Next();
     }
-    DBG_WARNING( "Font nicht gefunden: GetId()" );
+    DBG_WARNING( "Font not found: GetId()" );
     return 0;
 }
 
@@ -2248,25 +2219,37 @@ SvxColorList::SvxColorList()
 
 SvxColorList::~SvxColorList()
 {
-    SvxColorItem* pItem = First();
-    while( pItem )
+    for ( size_t i = 0, n = aColorList.size(); i < n; ++i )
+        delete aColorList[ i ];
+    aColorList.clear();
+}
+
+size_t SvxColorList::GetId( const SvxColorItem& rColorItem )
+{
+    for ( size_t i = 0, n = aColorList.size(); i < n; ++i )
+        if ( *aColorList[ i ] == rColorItem )
+            return i;
+    DBG_WARNING( "Color not found: GetId()" );
+    return 0;
+}
+
+void SvxColorList::Insert( SvxColorItem* pItem, size_t nIndex )
+{
+    if ( nIndex >= aColorList.size() )
     {
-        delete pItem;
-        pItem = Next();
+        aColorList.push_back( pItem );
+    }
+    else
+    {
+        DummyColorList::iterator it = aColorList.begin();
+        ::std::advance( it, nIndex );
+        aColorList.insert( it, pItem );
     }
 }
 
-sal_uLong SvxColorList::GetId( const SvxColorItem& rColorItem )
+SvxColorItem* SvxColorList::GetObject( size_t nIndex )
 {
-    SvxColorItem* pItem = First();
-    while ( pItem )
-    {
-        if ( *pItem == rColorItem )
-            return GetCurPos();
-        pItem = Next();
-    }
-    DBG_WARNING( "Color nicht gefunden: GetId()" );
-    return 0;
+    return ( nIndex >= aColorList.size() ) ? NULL : aColorList[ nIndex ];
 }
 
 EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
@@ -2279,8 +2262,7 @@ EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
     SetVersionMap( 4, 3994, 4022, aV4Map );
     SetVersionMap( 5, 3994, 4037, aV5Map );
 
-    DBG_ASSERT( EE_DLL(), "EditDLL?!" );
-    SfxPoolItem** ppDefItems = EE_DLL()->GetGlobalData()->GetDefItems();
+    SfxPoolItem** ppDefItems = EE_DLL().GetGlobalData()->GetDefItems();
     SetDefaults( ppDefItems );
 }
 
@@ -2290,11 +2272,11 @@ EditEngineItemPool::~EditEngineItemPool()
 
 SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
 {
-    // Bei einem 3.1-Export muess ein Hack eingebaut werden, da BUG im
-    // SfxItemSet::Load, aber nicht nachtraeglich in 3.1 fixbar.
+    // for a 3.1 export a hack has to be installed, as in there is a BUG in
+    // SfxItemSet::Load, but not subsequently after 3.1.
 
-    // Der eingestellte Range muss nach Store erhalten bleiben, weil dann
-    // erst die ItemSets gespeichert werden...
+    // The selected range must be kept after Store, because itemsets are not
+    // stored until then...
 
     long nVersion = rStream.GetVersion();
     sal_Bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
@@ -2308,3 +2290,5 @@ SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
 
     return SfxItemPool::Store( rStream );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

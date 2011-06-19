@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
 
 #include <sal/config.h>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -150,3 +149,5 @@ private:
 } // namespace connectivity
 // -------------------------------------------------------------------------
 #endif /* CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

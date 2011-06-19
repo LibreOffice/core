@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <osl/module.h>
-#include <vos/process.hxx>
+#include <osl/security.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -81,14 +82,14 @@
 
 #define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
-using namespace rtl;
-using namespace vos;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ucb;
+
+using ::rtl::OUString;
 
 namespace desktop
 {
@@ -102,12 +103,12 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
         xServiceFactory( comphelper::getProcessServiceFactory() );
     if (!xServiceFactory.is())
     {
-        DBG_ERROR("configureUcb(): No XMultiServiceFactory");
+        OSL_FAIL("configureUcb(): No XMultiServiceFactory");
         return false;
     }
 
     rtl::OUString aPipe;
-    vos::OSecurity().getUserIdent(aPipe);
+    osl::Security().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
     if (rPortalConnect.getLength() != 0)
@@ -118,14 +119,13 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 
     Sequence< Any > aArgs(6);
     aArgs[0]
-        <<= rtl::OUString::createFromAscii(bServer ?
-                                               UCB_CONFIGURATION_KEY1_SERVER :
-                                               UCB_CONFIGURATION_KEY1_LOCAL);
+        <<= bServer ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_SERVER)) :
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[1]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
-    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
+    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aPipe;
-    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
+    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
     aArgs[5] <<= aPortal.makeStringAndClear();
 
     bool ret =
@@ -146,34 +146,13 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                 );
                 rtl::OUString aDesktopEnvironment;
                 if ((aValue >>= aDesktopEnvironment)
-                    && aDesktopEnvironment.equalsAscii("GNOME"))
+                    && aDesktopEnvironment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME")))
                 {
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();
-#if 0
-                    try
-                    {
 
-                        Reference<XContentProviderFactory> xCPF(
-                            xServiceFactory->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.ContentProviderProxyFactory")),
-                            UNO_QUERY);
-                        if(xCPF.is())
-                            xCPM->registerContentProvider(
-                                xCPF->createContentProvider(
-                                    rtl::OUString::createFromAscii(
-                                        "com.sun.star.ucb.GnomeVFSContentProvider"
-                                    )
-                                ),
-                                rtl::OUString::createFromAscii(".*"),
-                                false);
-                    } catch (...)
-                    {
-                    }
-#else
 
-            // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
+            //Instanciate GNOME-VFS-UCP in the thread that initialized
              // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
             // a different thread. The latter may happen when calling the Office remotely via UNO.
             // THIS IS NOT A FIX, JUST A WORKAROUND!
@@ -182,21 +161,20 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     {
                         Reference<XContentProvider> xCP(
                             xServiceFactory->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.GnomeVFSContentProvider")),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.ucb.GnomeVFSContentProvider"))),
                             UNO_QUERY);
                         if(xCP.is())
                             xCPM->registerContentProvider(
                                 xCP,
-                                rtl::OUString::createFromAscii(".*"),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")),
                                 false);
                     } catch (...)
                     {
                     }
                 }
-#endif
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException &e) {
         }
     }
 #endif // GNOME_VFS_ENABLED
@@ -254,16 +232,16 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         sal_Bool        bHeadlessMode = sal_False;
 
         // interpret command line arguments
-        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+        CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
         // read accept string from configuration
         conDcp = SvtStartOptions().GetConnectionURL();
 
-        if ( pCmdLine->GetAcceptString( aTmpString ))
+        if ( rCmdLine.GetAcceptString( aTmpString ))
             conDcp = aTmpString;
 
         // Headless mode for FAT Office
-        bHeadlessMode   = pCmdLine->IsHeadless();
+        bHeadlessMode   = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode();
 
@@ -276,7 +254,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
 
         // improves parallel processing on Sun ONE Webtop
         // servicemanager up -> copy user installation
-        if ( pCmdLine->IsServer() )
+        if ( rCmdLine.IsServer() )
         {
             // Check some mandatory environment states if "-server" is possible. Otherwise ignore
             // this parameter.
@@ -288,19 +266,19 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
                 if ( !rEnum.is() )
                 {
                     // Reset server parameter so it is ignored in the furthermore startup process
-                    pCmdLine->SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
+                    rCmdLine.SetBoolParam( CommandLineArgs::CMD_BOOLPARAM_SERVER, sal_False );
                 }
             }
         }
 
         ::rtl::OUString aPortalConnect;
-        bool bServer = (bool)pCmdLine->IsServer();
+        bool bServer = (bool)rCmdLine.IsServer();
 
-        pCmdLine->GetPortalConnectString( aPortalConnect );
+        rCmdLine.GetPortalConnectString( aPortalConnect );
         if ( !configureUcb( bServer, aPortalConnect ) )
         {
-            DBG_ERROR( "Can't configure UCB" );
-            throw com::sun::star::uno::Exception(rtl::OUString::createFromAscii("RegisterServices, configureUcb"), NULL);
+            OSL_FAIL( "Can't configure UCB" );
+            throw com::sun::star::uno::Exception(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegisterServices, configureUcb")), NULL);
         }
 
         CreateTemporaryDirectory();
@@ -328,7 +306,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
         aSeq[1] <<= bAccept;
         Reference<XInitialization> rAcceptor(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii( "com.sun.star.office.Acceptor" )), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Acceptor" ))), UNO_QUERY );
         if ( rAcceptor.is() ) {
             try{
                 rAcceptor->initialize( aSeq );
@@ -336,11 +314,11 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             } catch (com::sun::star::uno::Exception&) {
             // no error handling needed...
             // acceptor just won't come up
-            OSL_ENSURE(sal_False, "Acceptor could not be created.");
+            OSL_FAIL("Acceptor could not be created.");
         }
     } else {
         // there is already an acceptor with this description
-        OSL_ENSURE(sal_False, "Acceptor already exists.");
+        OSL_FAIL("Acceptor already exists.");
     }
 
     }
@@ -390,7 +368,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
             // this is the last reference and the acceptor will be destructed
             rMap.erase(aAcceptString);
         } else {
-            OSL_ENSURE(sal_False, "Found no acceptor to remove");
+            OSL_FAIL("Found no acceptor to remove");
         }
     }
 }
@@ -482,3 +460,5 @@ void Desktop::RemoveTemporaryDirectory()
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

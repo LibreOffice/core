@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,10 @@ public:
     void*           pUpdateEditingObject;
     sal_Bool            bExecState;
 
-                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ) {}
+                    IMapOwnData( SvxIMapDlg* pIMapDlg ) : pIMap ( pIMapDlg ), pUpdateEditingObject( NULL )  {}
 };
 
 
 #endif // _IMAPIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

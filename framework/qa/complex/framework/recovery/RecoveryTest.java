@@ -160,10 +160,7 @@ public class RecoveryTest extends ComplexTestCase {
         restoreBackupRecoveryData();
         startOffice();
         int expectedDocumentCount = 3;
-//        handleRecoveryDialog_QuickExit(expectedDocumentCount);
         handleRecoveryDialog_QuickExitAndSave(expectedDocumentCount);
-        //handleCrashReporterDialog(true, true);
-        //checkDocumentCount(expectedDocumentCount);
     }
 
     public void before() throws Exception {
@@ -194,7 +191,6 @@ public class RecoveryTest extends ComplexTestCase {
         // make window ranges
         makeWindowPositionRage();
 
-        //makeRecoveryData();
     }
 
     private void makeRecoveryData(){
@@ -482,10 +478,8 @@ public class RecoveryTest extends ComplexTestCase {
 
                 rt.pause();
 
-                //XAccessibleContext oButton = oUITools.getButton("Start Recovery >");
                 int counter = 0;
                 int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
-                //boolean enabeld = oButton.getAccessibleStateSet().contains(com.sun.star.accessibility.AccessibleStateType.ENABLED);
 
                 XAccessibleContext oButton = null;
                 while ((oButton == null) && (counter < maximum)){
@@ -632,23 +626,9 @@ public class RecoveryTest extends ComplexTestCase {
 
         // create some documents with content
         makeWriterDoc("WriterDoc1", true);
-//        makeCalcDoc("CalcDoc1", true);
-//        makeDrawDoc("DrawDoc1", true);
-//        makeImpressDoc("ImpressDoc1", true);
-//        makeMathDoc("MathDoc1", true);
 
-        // create some documents without content
-//        makeMathDoc("_blank_math", false);
-//        makeDrawDoc("_blank_draw", false);
-//        makeCalcDoc("_blank_calc", false);
-//        makeWriterDoc("_blank_writer", false);
-//        makeImpressDoc("_blank_impress", false);
 
-//        makeMathDoc("MathDocEmpty", false);
-//        makeDrawDoc("DrawDocEmpty", false);
-//        makeCalcDoc("CalcDocEmpty", false);
         makeWriterDoc("WriterDocEmpty", false);
-//        makeImpressDoc("ImpressDocEmpty", false);
 
         log.println("Test object successfully created.");
 
@@ -729,7 +709,7 @@ public class RecoveryTest extends ComplexTestCase {
         try{
             xMathDoc = SOF.createMathDoc(frameName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while creating math document '"+frameName+"':");
+            log.println("Exception occurred while creating math document '"+frameName+"':");
             failed("Couldn't create test environment");
         }
         return xMathDoc;
@@ -743,16 +723,16 @@ public class RecoveryTest extends ComplexTestCase {
         try {
             xPS.setPropertyValue("Formula", expFormula);
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while filling math document with content.");
+            log.println("Exception occurred while filling math document with content.");
             failed("Couldn't create test environment");
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while filling math document with content.");
+            log.println("Exception occurred while filling math document with content.");
             failed("Couldn't create test environment");
         } catch(com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occured while filling math document with content.");
+            log.println("Exception occurred while filling math document with content.");
             failed("Couldn't create test environment");
         } catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured while filling math document with content.");
+            log.println("Exception occurred while filling math document with content.");
             failed("Couldn't create test environment");
         }
     }
@@ -762,7 +742,7 @@ public class RecoveryTest extends ComplexTestCase {
         try{
             xImpressDoc = SOF.createImpressDoc(frameName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while creating impress document '"+frameName+"':");
+            log.println("Exception occurred while creating impress document '"+frameName+"':");
             failed("Couldn't create test environment");
         }
         return xImpressDoc;
@@ -813,7 +793,7 @@ public class RecoveryTest extends ComplexTestCase {
         try{
             xDrawDoc = SOF.createDrawDoc(frameName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while creating draw document '"+frameName+"':");
+            log.println("Exception occurred while creating draw document '"+frameName+"':");
             failed("Couldn't create test environment");
         }
         return xDrawDoc;
@@ -865,16 +845,16 @@ public class RecoveryTest extends ComplexTestCase {
                 new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
             oShapeProps.setPropertyValue("ZOrder", new Integer(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while setting or getting property value while filling draw document with content.");
+            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured while setting or getting property value while filling draw document with content.");
+            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while setting or getting property value while filling draw document with content.");
+            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occured while setting or getting property value while filling draw document with content.");
+            log.println("Exception occurred while setting or getting property value while filling draw document with content.");
             failed("Couldn't create test environment");
         }
     }
@@ -892,7 +872,7 @@ public class RecoveryTest extends ComplexTestCase {
         try {
             xTextDoc = SOF.createTextDoc(frameName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while creating text document '"+frameName+"':");
+            log.println("Exception occurred while creating text document '"+frameName+"':");
             failed("Couldn't create test environment");
         }
         return xTextDoc;
@@ -919,10 +899,10 @@ public class RecoveryTest extends ComplexTestCase {
                 oCursor, ControlCharacter.LINE_BREAK, false );
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            log.println("Exception occured while filling text document with content.");
+            log.println("Exception occurred while filling text document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while filling text document with content.");
+            log.println("Exception occurred while filling text document with content.");
             failed("Couldn't create test environment");
         }
     }
@@ -934,7 +914,7 @@ public class RecoveryTest extends ComplexTestCase {
         try {
             xSheetDoc = SOF.createCalcDoc(frameName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while creating calc document '"+frameName+"':");
+            log.println("Exception occurred while creating calc document '"+frameName+"':");
             failed("Couldn't create test environment");
         }
         return xSheetDoc;
@@ -960,19 +940,19 @@ public class RecoveryTest extends ComplexTestCase {
             oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
             oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while filling calc document with content.");
+            log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occured while filling calc document with content.");
+            log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured while filling calc document with content.");
+            log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while filling calc document with content.");
+            log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while filling calc document with content.");
+            log.println("Exception occurred while filling calc document with content.");
             failed("Couldn't create test environment");
         }
     }

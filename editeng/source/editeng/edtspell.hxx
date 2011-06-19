@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ private:
 
 protected:
     virtual void            SpellStart( SvxSpellArea eArea );
-    virtual sal_Bool            SpellContinue();    // Bereich pruefen
+    virtual sal_Bool            SpellContinue();    // Check area
     virtual void            ReplaceAll( const String &rNewText, sal_Int16 nLanguage );
     virtual void            SpellEnd();
     virtual sal_Bool            SpellMore();
@@ -101,7 +102,7 @@ public:
 
     sal_uInt16          Count() const               { return WrongRanges::Count(); }
 
-    // Wenn man weiss was man tut:
+    // When one knows what to do:
     WrongRange&     GetObject( sal_uInt16 n ) const { return WrongRanges::GetObject( n ); }
     void            InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos );
 
@@ -133,7 +134,7 @@ inline void WrongList::InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos )
 {
     WrongRanges::Insert( rWrong, nPos );
 #ifdef DBG_UTIL
-    DBG_ASSERT( !DbgIsBuggy(), "Insert: WrongList kaputt!" );
+    DBG_ASSERT( !DbgIsBuggy(), "Insert: WrongList broken!" );
 #endif
 }
 
@@ -178,3 +179,4 @@ public:
 
 #endif  // EDTSPELL
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

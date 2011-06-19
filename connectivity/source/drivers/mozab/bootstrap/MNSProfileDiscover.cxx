@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,16 +73,15 @@
 
 
 #if defined (XP_UNIX)
-#define USER_ENVIRONMENT_VARIABLE "USER"
-#define LOGNAME_ENVIRONMENT_VARIABLE "LOGNAME"
-#define HOME_ENVIRONMENT_VARIABLE "HOME"
-#define PROFILE_NAME_ENVIRONMENT_VARIABLE "PROFILE_NAME"
-#define PROFILE_HOME_ENVIRONMENT_VARIABLE "PROFILE_HOME"
-#define DEFAULT_UNIX_PROFILE_NAME "default"
-#ifndef XP_MACOSX   /* Don't use symlink-based locking on OS X */
-#define USE_SYMLINK_LOCKING
-#endif
-#elif defined (XP_BEOS)
+#   define USER_ENVIRONMENT_VARIABLE "USER"
+#   define LOGNAME_ENVIRONMENT_VARIABLE "LOGNAME"
+#   define HOME_ENVIRONMENT_VARIABLE "HOME"
+#   define PROFILE_NAME_ENVIRONMENT_VARIABLE "PROFILE_NAME"
+#   define PROFILE_HOME_ENVIRONMENT_VARIABLE "PROFILE_HOME"
+#   define DEFAULT_UNIX_PROFILE_NAME "default"
+#   ifndef XP_MACOSX   /* Don't use symlink-based locking on OS X */
+#       define USE_SYMLINK_LOCKING
+#   endif
 #endif
 
 // IID and CIDs of all the services needed
@@ -90,9 +90,9 @@ static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CI
 
 // Registry Keys
 
-static ::rtl::OUString szProfileSubtreeString=::rtl::OUString::createFromAscii("Profiles");
-static ::rtl::OUString szCurrentProfileString= ::rtl::OUString::createFromAscii("CurrentProfile");
-static ::rtl::OUString szDirectoryString =::rtl::OUString::createFromAscii("directory");
+static ::rtl::OUString szProfileSubtreeString( RTL_CONSTASCII_USTRINGPARAM( "Profiles" ));
+static ::rtl::OUString szCurrentProfileString( RTL_CONSTASCII_USTRINGPARAM( "CurrentProfile" ));
+static ::rtl::OUString szDirectoryString( RTL_CONSTASCII_USTRINGPARAM( "directory" ));
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
@@ -166,13 +166,13 @@ namespace connectivity
 #endif
             ::rtl::OUString regDir = getRegistryDir(product);
             ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString::createFromAscii( "profiles.ini" );
+            profilesIni += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("profiles.ini"));
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
             IniSectionMap::iterator iEnd = mAllSection.end();
-            for(;iBegin != iEnd;iBegin++)
+            for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
                 ::rtl::OUString profileName;
@@ -182,35 +182,35 @@ namespace connectivity
 
                 for(NameValueList::iterator itor=aSection->lList.begin();
                     itor != aSection->lList.end();
-                    itor++)
+                    ++itor)
                 {
                         struct ini_NameValue * aValue = &(*itor);
-                        if (aValue->sName.equals(::rtl::OUString::createFromAscii("Name")))
+                        if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
                         {
                             profileName = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("IsRelative")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRelative"))))
                         {
                             sIsRelative = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Path")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path"))))
                         {
                             profilePath = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Default")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default"))))
                         {
                             sIsDefault = aValue->sValue;
                         }
                 }
                 if (profileName.getLength() != 0 || profilePath.getLength() != 0)
                 {
+#ifndef MINIMAL_PROFILEDISCOVER
                     sal_Int32 isRelative = 0;
                     if (sIsRelative.getLength() != 0)
                     {
                         isRelative = sIsRelative.toInt32();
                     }
 
-#ifndef MINIMAL_PROFILEDISCOVER
                     nsCOMPtr<nsILocalFile> rootDir;
                     rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
                                             getter_AddRefs(rootDir));
@@ -419,3 +419,4 @@ namespace connectivity
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

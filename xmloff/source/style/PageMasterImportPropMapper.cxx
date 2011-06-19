@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include "PageMasterPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <xmloff/maptype.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmloff/xmlimp.hxx>
 
@@ -57,7 +58,7 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
 {
 }
 
-sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
+bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         ::std::vector< XMLPropertyState >& rProperties,
         const ::rtl::OUString& rValue,
@@ -259,15 +260,16 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pBorderWidths[i]->mnIndex = -1;
         if( pBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pBorders[i]->maValue >>= aBorderLine;
              if( pBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
                 pBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -281,15 +283,16 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pHeaderBorderWidths[i]->mnIndex = -1;
         if( pHeaderBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pHeaderBorders[i]->maValue >>= aBorderLine;
              if( pHeaderBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pHeaderBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
                 pHeaderBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -303,15 +306,16 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
             pFooterBorderWidths[i]->mnIndex = -1;
         if( pFooterBorders[i] )
         {
-            table::BorderLine aBorderLine;
+            table::BorderLine2 aBorderLine;
             pFooterBorders[i]->maValue >>= aBorderLine;
              if( pFooterBorderWidths[i] )
             {
-                table::BorderLine aBorderLineWidth;
+                table::BorderLine2 aBorderLineWidth;
                 pFooterBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
                 aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
                 aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+                aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
                 pFooterBorders[i]->maValue <<= aBorderLine;
             }
         }
@@ -402,3 +406,4 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

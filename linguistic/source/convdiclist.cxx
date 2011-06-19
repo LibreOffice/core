@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -56,9 +55,7 @@
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -66,10 +63,11 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
+
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
 
-///////////////////////////////////////////////////////////////////////////
 
 bool operator == ( const Locale &r1, const Locale &r2 )
 {
@@ -78,7 +76,6 @@ bool operator == ( const Locale &r1, const Locale &r2 )
             r1.Variant  == r2.Variant;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
 {
@@ -98,7 +95,6 @@ String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
         return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDicNameContainer :
     public cppu::WeakImplHelper1
@@ -179,7 +175,7 @@ void ConvDicNameContainer::FlushDics() const
             }
             catch(Exception &)
             {
-                DBG_ERROR( "flushing of conversion dictionary failed" );
+                OSL_FAIL( "flushing of conversion dictionary failed" );
             }
         }
     }
@@ -321,7 +317,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
         {
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                                     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
@@ -394,7 +390,6 @@ void ConvDicNameContainer::AddConvDics(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -427,9 +422,6 @@ ConvDicList::ConvDicList() :
 
 ConvDicList::~ConvDicList()
 {
-    // NameContainer will deleted when the reference xNameContainer
-    // is destroyed.
-    // delete pNameContainer;
 
     if (!bDisposing && pNameContainer)
         pNameContainer->FlushDics();
@@ -544,8 +536,6 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    /*sal_Int16 nLang = LocaleToLanguage( rLocale );*/
 
     sal_Int32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );
@@ -662,7 +652,7 @@ sal_Bool SAL_CALL ConvDicList::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return rServiceName.equalsAscii( SN_CONV_DICTIONARY_LIST );
+    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY_LIST));
 }
 
 
@@ -683,7 +673,6 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
@@ -712,5 +701,5 @@ void * SAL_CALL ConvDicList_getFactory(
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

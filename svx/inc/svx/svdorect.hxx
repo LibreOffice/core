@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ protected:
 
 protected:
     // Liefert sal_True, wenn das Painten ein Polygon erfordert.
-    FASTBOOL PaintNeedsXPoly(long nEckRad) const;
+    bool PaintNeedsXPoly(long nEckRad) const;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
@@ -98,7 +99,7 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrRectObj* Clone() const;
     virtual void RecalcSnapRect();
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
@@ -120,9 +121,9 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
 
-    virtual FASTBOOL DoMacro(const SdrObjMacroHitRec& rRec);
+    virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
@@ -135,3 +136,4 @@ public:
 
 #endif //_SVDORECT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

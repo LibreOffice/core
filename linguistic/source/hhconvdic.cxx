@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"
@@ -53,16 +52,16 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
+
 #define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
-///////////////////////////////////////////////////////////////////////////
 
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
@@ -100,7 +99,6 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
     ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
@@ -141,8 +139,8 @@ sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAscii( SN_CONV_DICTIONARY )||
-        rServiceName.equalsAscii( SN_HH_CONV_DICTIONARY ))
+    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)) ||
+        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_HH_CONV_DICTIONARY)))
         bRes = sal_True;
     return bRes;
 }
@@ -165,5 +163,5 @@ uno::Sequence< OUString > HHConvDic::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

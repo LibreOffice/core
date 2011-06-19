@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer 3D Window
+|* Derived from SfxChildWindow as "container" for 3D Window
 |*
 \************************************************************************/
 
@@ -49,3 +50,4 @@ class SVX_DLLPUBLIC Svx3DChildWindow : public SfxChildWindow
 
 #endif      // _SVX_F3DCHILD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

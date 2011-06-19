@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: thessubmenu.hxx,v $
- * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +42,6 @@ class Menu;
 
 namespace css = ::com::sun::star;
 
-////////////////////////////////////////////////////////////
-
 class SfxThesSubMenuControl : public SfxMenuControl
 {
     PopupMenu*          pMenu;
@@ -64,7 +60,6 @@ public:
     SFX_DECL_MENU_CONTROL();
 };
 
-////////////////////////////////////////////////////////////
 
 class SfxThesSubMenuHelper
 {
@@ -73,7 +68,7 @@ class SfxThesSubMenuHelper
 
 private:
 
-    // don't use copy c-tor and assignment operator
+    // don't use copy constructor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
 
@@ -95,9 +90,9 @@ public:
     String  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
-////////////////////////////////////////////////////////////
 
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

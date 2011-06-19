@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
@@ -44,7 +47,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineFillShadowAttribute3D
+        class DRAWINGLAYER_DLLPUBLIC SdrLineFillShadowAttribute3D
         {
         private:
             const SdrLineAttribute          maLine;
@@ -84,3 +87,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

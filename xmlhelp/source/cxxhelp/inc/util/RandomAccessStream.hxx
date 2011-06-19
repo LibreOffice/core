@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,9 @@ namespace xmlsearch {
 
         protected:
 
-            enum OPENFLAG { Read = OpenFlag_Read,
-                            Write = OpenFlag_Write,
-                            Create = OpenFlag_Create };
+            enum OPENFLAG { Read = osl_File_OpenFlag_Read,
+                            Write = osl_File_OpenFlag_Write,
+                            Create = osl_File_OpenFlag_Create };
 
         };
 
@@ -61,3 +62,5 @@ namespace xmlsearch {
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

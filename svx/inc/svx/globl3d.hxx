@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <tools/solar.h>
 
-//#define ESODEBUG
 #define E3D_STREAMING
 
 const double PrecisionLimit = 1.0e-14;
@@ -51,3 +51,5 @@ const sal_uInt16 E3D_COMPOUNDOBJ_ID = 8;
 const sal_uInt16 E3D_POLYGONOBJ_ID  = 9;
 
 #endif      // _E3D_GLOBL3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,9 @@
 #include "precompiled_xmloff.hxx"
 #include <osl/mutex.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <xmloff/attrlist.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"
 
 using ::rtl::OUString;
@@ -73,22 +74,15 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
     m_xAttrList = 0;
 }
 
+namespace
+{
+    class theXMLMutableAttributeListUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theXMLMutableAttributeListUnoTunnelId> {};
+}
 
 // XUnoTunnel & co
 const Sequence< sal_Int8 > & XMLMutableAttributeList::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theXMLMutableAttributeListUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel
@@ -201,3 +195,5 @@ sal_Int16 XMLMutableAttributeList::GetIndexByName( const OUString& rName ) const
     }
     return nIndex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

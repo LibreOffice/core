@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -91,7 +88,7 @@ enum XMLImageMapToken
     XML_TOK_IMAP_TARGET
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
+static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
     { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
@@ -721,3 +718,4 @@ void XMLImageMapContext::EndElement()
         xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

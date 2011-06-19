@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -465,6 +466,7 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 #include "osl/security.hxx"
+#include "osl/socket.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
 #include "rsc/rscsfx.hxx"
@@ -596,8 +598,6 @@
 #include "tools/globname.hxx"
 #include "tools/inetmime.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
-#include "tools/ownlist.hxx"
 #include "tools/rc.hxx"
 #include "tools/rcid.h"
 #include "tools/ref.hxx"
@@ -654,14 +654,11 @@
 #include "vcl/timer.hxx"
 #include "vcl/unohelp.hxx"
 #include "tools/wintypes.hxx"
-#include "vos/diagnose.hxx"
-#include "vos/module.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/security.hxx"
-#include "vos/socket.hxx"
-#include "vos/thread.hxx"
-#include "vos/xception.hxx"
+#include "osl/diagnose.h"
+#include "osl/module.hxx"
+#include "osl/mutex.hxx"
+#include "osl/process.h"
 //---MARKER---
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

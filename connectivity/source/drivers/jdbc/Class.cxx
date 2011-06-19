@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ java_lang_Class::~java_lang_Class()
 
 jclass java_lang_Class::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/lang/Class");
     return theClass;
@@ -57,10 +58,10 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
     {
         ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
-        out = t.pEnv->FindClass(sClassName);
+        out = t.pEnv->FindClass(sClassName.getStr());
         ThrowSQLException(t.pEnv,0);
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
 }
 
@@ -71,3 +72,4 @@ jobject java_lang_Class::newInstanceObject()
     return callObjectMethod(t.pEnv,"newInstance","()Ljava/lang/Object;", mID);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

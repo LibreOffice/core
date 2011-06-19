@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,11 @@
 #include "DateTimeHelper.hxx"
 
 using namespace com::sun::star::util;
-using namespace rtl;
 
 using namespace webdav_ucp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     DateTime& dateTime)
@@ -268,3 +271,4 @@ bool DateTimeHelper::convert (const OUString& s, DateTime& dateTime)
         return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

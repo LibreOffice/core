@@ -80,6 +80,22 @@ ModalDialog DLG_PASSWD
         Pos = MAP_APPFONT( 57, 44 );
         Size = MAP_APPFONT( 75, 12 );
     };
+
+    String STR_PASSWD_MIN_LEN
+    {
+        Text [ en-US ] = "(Minimum $(MINLEN) characters)" ;
+    };
+    String STR_PASSWD_EMPTY
+    {
+        Text [ en-US ] = "(The password can be empty)" ;
+    };
+
+    FixedText FT_PASSWD_MINLEN
+    {
+        Pos = MAP_APPFONT(12, 65 );
+        Size = MAP_APPFONT( 126, 10 );
+    };
+
     FixedLine GB_PASSWD_PASSWORD
     {
         Pos = MAP_APPFONT( 6, 3 );

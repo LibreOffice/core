@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,9 @@
 
 class SfxTemplateControllerItem;
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svl/eitem.hxx>
@@ -55,6 +50,7 @@ class SfxStyleFamilies;
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;
+class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
 class SvTreeListBox ;
 class StyleTreeListBox_Impl;
@@ -166,9 +162,9 @@ protected:
     ListBox                     aFilterLb;
     Size                        aSize;
 
-    sal_uInt16                      nActFamily; // Id in der ToolBox = Position - 1
+    sal_uInt16                      nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16                      nActFilter; // FilterIdx
-    sal_uInt16                      nAppFilter; // Filter, den die Applikation gesetzt hat (fuer automatisch)
+    sal_uInt16                      nAppFilter; // Filter, which has set the application (for automatic)
 
     sal_Bool                        bDontUpdate             :1,
                                 bIsWater                :1,
@@ -213,7 +209,7 @@ protected:
 
     void                        UpdateStyles_Impl(sal_uInt16 nFlags);
     const SfxStyleFamilyItem*   GetFamilyItem_Impl() const;
-    sal_Bool                        IsInitialized() { return nActFamily != 0xffff; }
+    sal_Bool                    IsInitialized() const { return nActFamily != 0xffff; }
     void                        ResetFocus();
     void                        EnableDelete();
     void                        Initialize();
@@ -223,13 +219,14 @@ protected:
     void                SetWaterCanState( const SfxBoolItem* pItem );
 
     void                SelectStyle( const String& rStyle );
-    sal_Bool                HasSelectedStyle() const;
+    sal_Bool            HasSelectedStyle() const;
+    SfxStyleSheetBase  *GetSelectedStyle() const;
     void                FillTreeBox();
     void                Update_Impl();
     void                UpdateFamily_Impl();
 
-    // In welchem FamilyState muss ich nachsehen, um die Info der i-ten
-    // Family in der pStyleFamilies zu bekommen.
+    // In which FamilyState do I have to look , in order to get the
+    // information of the ith Family in the pStyleFamilies.
     sal_uInt16              StyleNrToInfoOffset( sal_uInt16 i );
     sal_uInt16              InfoOffsetToStyleNr( sal_uInt16 i );
 
@@ -274,14 +271,11 @@ public:
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
 
-    // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
+    // converts from SFX_STYLE_FAMILY Ids to 1-5
     static sal_uInt16       SfxFamilyIdToNId( SfxStyleFamily nFamily );
 
     void                SetAutomaticFilter();
 };
-/* -----------------10.12.2003 11:42-----------------
-
- --------------------------------------------------*/
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper
 {
@@ -392,3 +386,4 @@ friend class SfxTemplateCatalog;
 #endif // #ifndef _SFX_TEMPDLGI_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

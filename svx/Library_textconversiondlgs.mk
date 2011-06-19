@@ -30,8 +30,8 @@ $(eval $(call gb_Library_Library,textconversiondlgs))
 $(eval $(call gb_Library_set_componentfile,textconversiondlgs,svx/util/textconversiondlgs))
 
 $(eval $(call gb_Library_set_include,textconversiondlgs,\
-    -I$(SRCDIR)/svx/inc \
-    -I$(SRCDIR)/svx/inc/pch \
+    -I$(realpath $(SRCDIR)/svx/inc) \
+    -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
 ))
@@ -43,7 +43,6 @@ $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     sal \
     svl \
     svt \
-    stl \
     tk \
     tl \
     utl \

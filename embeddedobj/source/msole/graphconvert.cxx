@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/link.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
@@ -62,22 +63,21 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
         uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
         {
-            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.graphic.GraphicProvider") ), uno::UNO_QUERY );
+            uno::Reference < graphic::XGraphicProvider > xGraphicProvider( comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ), uno::UNO_QUERY );
             if( xGraphicProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aMediaProperties( 1 );
-                aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                aMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
                 aMediaProperties[0].Value <<= xIn;
                 uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
                 if( xGraphic.is() )
                 {
                     SvMemoryStream aNewStream( 65535, 65535 );
-//                  uno::Reference < io::XOutputStream > xOut = new utl::OOutputStreamHelper( aNewStream.GetLockBytes() );
                     uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 2 );
-                    aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                    aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
                     aOutMediaProperties[0].Value <<= xOut;
-                    aOutMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                    aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MimeType" ));
                     aOutMediaProperties[1].Value <<= aMimeType;
 
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
@@ -131,3 +131,5 @@ void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (un
 MainThreadNotificationRequest::~MainThreadNotificationRequest()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

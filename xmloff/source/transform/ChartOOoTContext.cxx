@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 #include "ChartOOoTContext.hxx"
 #include "MutableAttrList.hxx"
 #include "xmloff/xmlnmspe.hxx"
-#ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
-#endif
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 using ::rtl::OUString;
 
@@ -148,3 +145,5 @@ void XMLChartOOoTransformerContext::StartElement(
 
     XMLTransformerContext::StartElement( xAttrList );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

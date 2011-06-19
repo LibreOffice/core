@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,7 @@
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/lboxctrl.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #include <svx/svxids.hrc>
@@ -70,7 +69,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    FixedInfo       aInfo;
     ListBox *       pListBox;
     ToolBox &       rToolBox;
     sal_Bool            bUserSel;
@@ -95,7 +93,6 @@ public:
 
     void                        StartSelection();
     inline ListBox &            GetListBox()    { return *pListBox; }
-    inline FixedInfo &          GetInfo()       { return aInfo; }
 
     sal_Bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( sal_Bool bVal )    { bUserSel = bVal; }
@@ -106,7 +103,6 @@ public:
 
 SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const rtl::OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
-    aInfo       ( this, SVX_RES( FT_NUM_OPERATIONS ) ),
     rToolBox    ( rTbx ),
     bUserSel    ( sal_False ),
     nTbxId      ( nId ),
@@ -189,7 +185,7 @@ SvxListBoxControl::~SvxListBoxControl()
 
 SfxPopupWindow* SvxListBoxControl::CreatePopupWindow()
 {
-    DBG_ERROR( "not implemented" );
+    OSL_FAIL( "not implemented" );
     return 0;
 }
 
@@ -242,7 +238,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
 
     String aText( aActionStr );
     aText.SearchAndReplaceAllAscii( "$(ARG1)", String::CreateFromInt32( nCount ) );
-    pPopupWin->GetInfo().SetText( aText );
+    pPopupWin->SetText( aText );
 }
 
 
@@ -306,13 +302,10 @@ void SvxUndoRedoControl::StateChanged(
         if ( pState && pState->ISA( SfxStringListItem ) )
         {
             SfxStringListItem &rItem = *(SfxStringListItem *)pState;
-            const List* pLst = rItem.GetList();
-            DBG_ASSERT( pLst, "no undo actions available" );
-            if ( pLst )
-            {
-                for( long nI = 0, nEnd = pLst->Count(); nI < nEnd; ++nI )
-                    aUndoRedoList.push_back( rtl::OUString( *(String *)pLst->GetObject( nI )));
-            }
+
+            const std::vector<String> &aLst = rItem.GetList();
+            for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )
+                aUndoRedoList.push_back( rtl::OUString( aLst[nI] ));
         }
     }
 }
@@ -321,7 +314,7 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 {
     DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
-    if ( m_aCommandURL.equalsAscii( ".uno:Undo" ))
+    if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:Undo" ) ))
         updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetUndoStrings" )));
     else
         updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GetRedoStrings" )));
@@ -349,3 +342,5 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
 
     return pPopupWin;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

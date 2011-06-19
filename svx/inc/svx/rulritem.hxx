@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,14 +39,14 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
-    long    lRight;        // der unproblematische rechte Rand
+    long    lLeft;         // nLeft or the negativ first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -74,14 +75,14 @@ public:
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
-    long    lRight;        // der unproblematische rechte Rand
+    long    lLeft;         // nLeft or the negative first-line indentation
+    long    lRight;        // the unproblematic right edge
 
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -115,8 +116,8 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
     long lHeight;
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -143,9 +144,9 @@ public:
 
 struct SvxColumnDescription
 {
-    long nStart;                    /* Spaltenbeginn */
-    long nEnd;                      /* Spaltenende */
-    sal_Bool   bVisible;                   /* Sichtbarkeit */
+    long nStart;                    /* Start of the column */
+    long nEnd;                      /* End of the column */
+    sal_Bool bVisible;              /* Visibility */
 
     long nEndMin;         //min. possible position of end
     long nEndMax;         //max. possible position of end
@@ -190,13 +191,13 @@ typedef SvPtrarr SvxColumns;
 
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
-    SvxColumns aColumns;// Spaltenarray
-    long    nLeft,      // Linker Rand bei Tabelle
-           nRight;      // Rechter Rand bei Tabelle; bei Spalten immer gleich
-                        // zum umgebenden Rahmen
-    sal_uInt16 nActColumn;  // die aktuelle Spalte
-    sal_Bool    bTable;     // Tabelle?
-    sal_Bool    bOrtho;     // Gleichverteilte Spalten
+    SvxColumns aColumns;// Column array
+    long    nLeft,      // Left edge for the table
+           nRight;      // Right edge for the table; for columns always
+                                // equal to the surrounding frame
+    sal_uInt16 nActColumn;  // the current column
+    sal_uInt8  bTable;      // table?
+    sal_uInt8  bOrtho;     // evenly spread columns
 
     void DeleteAndDestroyColumns();
 
@@ -210,15 +211,15 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 public:
     TYPEINFO();
-    // rechter Rand des umgebenden Rahmens
-    // nLeft, nRight jeweils der Abstand zum umgebenden Rahmen
-    SvxColumnItem(sal_uInt16 nAct = 0); // Spalten
+    // right edge of the surrounding frame
+    // nLeft, nRight each the distance to the surrounding frame
+    SvxColumnItem(sal_uInt16 nAct = 0); // columns
     SvxColumnItem(sal_uInt16 nActCol,
-                  sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Tabelle mit Raendern
+                  sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
     SvxColumnItem(const SvxColumnItem &);
     ~SvxColumnItem();
 
@@ -251,7 +252,7 @@ public:
     sal_Bool   IsOrtho () const { return sal_False ; }
 
     sal_Bool IsConsistent() const  { return nActColumn < aColumns.Count(); }
-    long   GetVisibleRight() const;// rechter sichtbare Rand der aktuellen Spalte
+    long   GetVisibleRight() const;// right visible edge of the current column
 };
 
 // class SvxObjectItem ---------------------------------------------------
@@ -259,11 +260,11 @@ public:
 class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
-    long   nStartX;                    /* Beginn in X-Richtung */
-    long   nEndX;                      /* Ende in X-Richtung */
-    long   nStartY;                    /* Beginn in Y-Richtung */
-    long   nEndY;                      /* Ende in Y-Richtung */
-    sal_Bool   bLimits;                    /* Grenzwertkontrolle durch die Applikation */
+    long   nStartX;                    /* Start in x direction */
+    long   nEndX;                      /* End in x direction */
+    long   nStartY;                    /* Start in y direction */
+    long   nEndY;                      /* Ende in y direction */
+    sal_Bool bLimits;                  /* boundary limit control by the application */
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 
@@ -274,8 +275,8 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:
@@ -301,3 +302,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

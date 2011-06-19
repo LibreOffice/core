@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,20 +30,9 @@
 #include "precompiled_svx.hxx"
 #include "fmtextcontroldialogs.hxx"
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
-#ifndef _SVX_CHARDLG_HXX
-//#include "chardlg.hxx"
-#endif
-#ifndef _SVX_PARAGRPH_HXX
-//#include "paragrph.hxx"
-#endif
 #include <editeng/eeitem.hxx>
-#ifndef _SVX_TABSTPGE_HXX
-//#include "tabstpge.hxx"
-#endif
 
 #include "svx/flagsdef.hxx"
 #include <svl/intitem.hxx>
@@ -129,3 +119,4 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

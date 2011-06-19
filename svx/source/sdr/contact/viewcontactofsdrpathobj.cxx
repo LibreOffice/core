@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ namespace sdr
 
             if(!nPointCount)
             {
-                OSL_ENSURE(false, "PolyPolygon object without geometry detected, this should not be created (!)");
+                OSL_FAIL("PolyPolygon object without geometry detected, this should not be created (!)");
                 basegfx::B2DPolygon aFallbackLine;
                 aFallbackLine.append(basegfx::B2DPoint(0.0, 0.0));
                 aFallbackLine.append(basegfx::B2DPoint(1000.0, 1000.0));
@@ -143,3 +144,5 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

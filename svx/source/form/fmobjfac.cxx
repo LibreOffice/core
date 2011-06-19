@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,32 +33,20 @@
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 
-#ifndef _FM_FMOBJFAC_HXX
 #include "svx/fmobjfac.hxx"
-#endif
 
-#ifndef _FM_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
 
-#ifndef _FM_FMOBJ_HXX
 #include "fmobj.hxx"
-#endif
 #include "fmshimp.hxx"
 
-#ifndef _FM_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "tbxform.hxx"
 #include <tools/resid.hxx>
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"
@@ -65,9 +54,7 @@
 #include "fmexpl.hxx"
 #include "filtnav.hxx"
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmPropBrw.hxx"
 #include "datanavi.hxx"
 
@@ -143,7 +130,7 @@ namespace
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "lcl_initProperty: caught an exception!" );
+            OSL_FAIL( "lcl_initProperty: caught an exception!" );
         }
     }
 }
@@ -276,3 +263,4 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

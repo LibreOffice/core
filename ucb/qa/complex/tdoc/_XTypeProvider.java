@@ -51,7 +51,7 @@ public class _XTypeProvider {
 
     /**
     * Just calls the method.<p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public boolean _getImplementationId() {
         boolean result = true;

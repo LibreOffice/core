@@ -33,7 +33,6 @@ TARGET  = ooo
 
 .INCLUDE : settings.mk
 
-#SOLAR_JAVA=
 # --- Files --------------------------------------------------------
 
 READMEFILES = \

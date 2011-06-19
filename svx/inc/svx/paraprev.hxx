@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,18 +55,18 @@ private:
     Size                aWinSize;
     Size                aSize;
 
-    // Einzuege
+    // indentation
     long                nLeftMargin;
     long                nRightMargin;
     short               nFirstLineOfst;
-    // Abstaende
+    // distances
     sal_uInt16              nUpper;
     sal_uInt16              nLower;
-    // Ausrichtung
+    // adjustment
     SvxAdjust           eAdjust;
-    // Letzte Zeile im Blocksatz
+    // last line in justification
     SvxAdjust           eLastLine;
-    // Zeilenabstand
+    // line distance
     SvxPrevLineSpace    eLine;
     sal_uInt16              nLineVal;
 
@@ -111,3 +112,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

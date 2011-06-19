@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,7 +132,7 @@ void SchemaRestrictionContext::CreateDataType()
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     DBG_ASSERT( mxDataType.is(), "can't create type" );
 }
@@ -356,7 +357,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         break;
 
     default:
-        DBG_ERROR( "unknown facet" );
+        OSL_FAIL( "unknown facet" );
     }
 
     // finally, set the property
@@ -378,3 +379,5 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
 
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

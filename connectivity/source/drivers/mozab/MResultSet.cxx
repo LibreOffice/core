@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -171,7 +172,7 @@ void OResultSet::methodEntry()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if ( !m_pTable )
     {
-        OSL_ENSURE( false, "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
+        OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
         throw DisposedException( ::rtl::OUString(), *this );
     }
 }
@@ -410,7 +411,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
-        OSL_ASSERT("fetchRow() returned False" );
+        OSL_FAIL("fetchRow() returned False" );
         m_bWasNull = sal_True;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
@@ -426,7 +427,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
     OSL_ENSURE(columnIndex <= (sal_Int32)m_xColumns->get().size(), "Trying to access invalid columns number");
     checkIndex( columnIndex );
 
@@ -641,7 +642,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    OSL_ENSURE( false, "OResultSet::convertFastPropertyValue: not implemented!" );
+    OSL_FAIL( "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -662,7 +663,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (Exception)
 {
-    OSL_ENSURE( false, "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
+    OSL_FAIL( "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -721,7 +722,7 @@ void SAL_CALL OResultSet::release() throw()
 // -----------------------------------------------------------------------------
 void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
 {
-    if(!_rRow.isValid())
+    if(!_rRow.is())
     {
         _rRow   = new OValueVector(_nColumnCount);
         (_rRow->get())[0].setBound(sal_True);
@@ -749,7 +750,7 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     m_nParamIndex ++;
     OSL_TRACE("Parameter name [%d]: %s\n", m_nParamIndex,OUtoCStr(aParameterName) );
 
-    if ( m_aParameterRow.isValid() ) {
+    if ( m_aParameterRow.is() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
         rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
 #if OSL_DEBUG_LEVEL > 0
@@ -774,8 +775,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         return;
 
     if ( m_pSQLIterator->getParseTree() != NULL ) {
-        ::vos::ORef<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
-        if(xColumns.isValid())
+        ::rtl::Reference<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
+        if(xColumns.is())
         {
             ::rtl::OUString aTabName,aColName,aParameterName,aParameterValue;
             OSQLColumns::Vector::iterator aIter = xColumns->get().begin();
@@ -784,7 +785,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             {
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                 OSL_TRACE("Prop Column Name : %s\n", OUtoCStr( aColName ) );
-                if ( m_aParameterRow.isValid() ) {
+                if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
 #if OSL_DEBUG_LEVEL > 0
                     OSL_TRACE("Prop Value       : %s\n", OUtoCStr( aParameterValue ) );
@@ -835,7 +836,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             queryExpression.setExpressionCondition( MQueryExpression::AND );
         }
         else {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
+            OSL_FAIL("analyseSQL: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
@@ -899,6 +900,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         pColumn     = parseTree->getChild(0);                        // Match Item
         pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
         pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
+        (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -980,7 +982,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                   && matchString.indexOf( MATCHCHAR ) == -1
                 )
             {
-                // One occurance of '%' - no '_' matches...
+                // One occurrence of '%' - no '_' matches...
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
                     op = MQueryOp::EndsWith;
@@ -1064,7 +1066,7 @@ void OResultSet::fillRowData()
     OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
     m_xColumns = m_pSQLIterator->getSelectColumns();
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
     const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
@@ -1165,7 +1167,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 {
     OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, nCardNum = %u", nCardNum );
 
-    if ( m_pKeySet.isValid() )
+    if ( m_pKeySet.is() )
     {
         sal_Int32  nPos;
         for(nPos=0;nPos < (sal_Int32)m_pKeySet->get().size();nPos++)
@@ -1203,7 +1205,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
     fillRowData();
 
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
+    OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     // sal_Int32 nColumnCount = m_xColumns->size();
     // initializeRow(m_aRow,nColumnCount);
@@ -1223,7 +1225,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             else
             {
                 sal_Bool bDistinct = sal_False;
-                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1232,8 +1233,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
-                    else
-                        bWasSorted = sal_True;
                     bDistinct = sal_True;
                 }
 
@@ -1264,11 +1263,10 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                             eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
                             break;
 
-                    // Andere Typen sind nicht implementiert (und damit immer
-                    // FALSE)
+                    // Other types aren't implemented (so they are always FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("MResultSet::executeQuery: Order By Data Type not implemented");
+                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
                 }
@@ -1328,7 +1326,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     m_pKeySet = new OKeySet();
 
                 // Handle the DISTINCT case
-                if ( bDistinct && m_pKeySet.isValid() )
+                if ( bDistinct && m_pKeySet.is() )
                 {
                     OValueRow aSearchRow = new OValueVector( m_aRow->get().size() );
 
@@ -1368,7 +1366,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 // -----------------------------------------------------------------------------
 
 void OResultSet::setBoundedColumns(const OValueRow& _rRow,
-                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                   const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                    const Reference<XIndexAccess>& _xNames,
                                    sal_Bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
@@ -1441,7 +1439,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
+            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
 }
@@ -1515,7 +1513,7 @@ sal_Int32 OResultSet::deletedCount()
 sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
     ResultSetEntryGuard aGuard( *this );
-    if ( !m_pKeySet.isValid() )
+    if ( !m_pKeySet.is() )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ILLEGAL_MOVEMENT, *this );
 
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
@@ -1661,7 +1659,7 @@ sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark )
 
 sal_Int32 OResultSet::getCurrentCardNumber()
 {
-    if ( ( m_nRowPos == 0 ) || !m_pKeySet.isValid() )
+    if ( ( m_nRowPos == 0 ) || !m_pKeySet.is() )
         return 0;
     if (m_pKeySet->get().size() < m_nRowPos)
         return 0;
@@ -1978,3 +1976,5 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& /*
     ::dbtools::throwFeatureNotImplementedException( "XDeleteRows::deleteRows", *this );
     return Sequence< sal_Int32 >();
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::data_type aData;
+        XMLTransformerActions::mapped_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;
@@ -70,7 +71,7 @@ void XMLTransformerActions::Add( XMLTransformerActionInit *pInit )
     if( pInit )
     {
         XMLTransformerActions::key_type aKey;
-        XMLTransformerActions::data_type aData;
+        XMLTransformerActions::mapped_type aData;
         while( pInit->m_nActionType != XML_TACTION_EOT )
         {
             aKey.m_nPrefix = pInit->m_nPrefix;
@@ -90,3 +91,5 @@ void XMLTransformerActions::Add( XMLTransformerActionInit *pInit )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

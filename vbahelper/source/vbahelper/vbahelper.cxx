@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -80,9 +82,6 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include <sfx2/app.hxx>
-// #FIXME needs service
-//#include "vbashape.hxx"
-//#include "unonames.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -120,158 +119,6 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
     }
     return false;
 }
-#if 0
-namespace excel // all in this namespace probably can be moved to sc
-{
-
-
-const ::rtl::OUString REPLACE_CELLS_WARNING(  RTL_CONSTASCII_USTRINGPARAM( "ReplaceCellsWarning"));
-class PasteCellsWarningReseter
-{
-private:
-    bool bInitialWarningState;
-    static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
-    {
-        static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
-        static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" ) ) ,xContext ), uno::UNO_QUERY_THROW );
-        return xProps;
-    }
-
-    bool getReplaceCellsWarning() throw ( uno::RuntimeException )
-    {
-        sal_Bool res = sal_False;
-        getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
-        return ( res == sal_True );
-    }
-
-    void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
-    {
-        getGlobalSheetSettings()->setPropertyValue( REPLACE_CELLS_WARNING, uno::makeAny( bState ) );
-    }
-public:
-    PasteCellsWarningReseter() throw ( uno::RuntimeException )
-    {
-        bInitialWarningState = getReplaceCellsWarning();
-        if ( bInitialWarningState )
-            setReplaceCellsWarning( false );
-    }
-    ~PasteCellsWarningReseter()
-    {
-        if ( bInitialWarningState )
-        {
-            // don't allow dtor to throw
-            try
-            {
-                setReplaceCellsWarning( true );
-            }
-            catch ( uno::Exception& /*e*/ ){}
-        }
-    }
-};
-
-void
-implnPaste()
-{
-    PasteCellsWarningReseter resetWarningBox;
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-    {
-        pViewShell->PasteFromSystem();
-        pViewShell->CellContentChanged();
-    }
-}
-
-
-void
-implnCopy()
-{
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-        pViewShell->CopyToClip(NULL,false,false,true);
-}
-
-void
-implnCut()
-{
-    ScTabViewShell* pViewShell =  getCurrentBestViewShell();
-    if ( pViewShell )
-        pViewShell->CutToClip( NULL, sal_True );
-}
-void implnPasteSpecial(SfxViewShell* pViewShell, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
-{
-    PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
-    InsCellCmd eMoveMode = INS_NONE;
-
-    if ( !pTabViewShell )
-        // none active, try next best
-        pTabViewShell = getCurrentBestViewShell();
-    if ( pTabViewShell )
-    {
-        ScViewData* pView = pTabViewShell->GetViewData();
-        Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
-        if ( pView && pWin )
-        {
-            if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
-            else
-            {
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pDoc = NULL;
-                if ( pOwnClip )
-                    pDoc = pOwnClip->GetDocument();
-                pTabViewShell->PasteFromClip( nFlags, pDoc,
-                    nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, sal_True );
-                pTabViewShell->CellContentChanged();
-            }
-        }
-    }
-
-}
-
-ScDocShell*
-getDocShell( css::uno::Reference< css::frame::XModel>& xModel )
-{
-    uno::Reference< uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
-    ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
-    ScDocShell* pDocShell = NULL;
-    if ( pModel )
-        pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
-    return pDocShell;
-
-}
-
-ScTabViewShell*
-getBestViewShell(  css::uno::Reference< css::frame::XModel>& xModel )
-{
-    ScDocShell* pDocShell = getDocShell( xModel );
-    if ( pDocShell )
-        return pDocShell->GetBestViewShell();
-    return NULL;
-}
-
-ScTabViewShell*
-getCurrentBestViewShell()
-{
-    uno::Reference< frame::XModel > xModel = getCurrentDocument();
-    return getBestViewShell( xModel );
-}
-
-SfxViewFrame*
-getCurrentViewFrame()
-{
-    ScTabViewShell* pViewShell = getCurrentBestViewShell();
-    if ( pViewShell )
-        return pViewShell->GetViewFrame();
-    return NULL;
-}
-};
-
-#endif
 
 uno::Reference< beans::XIntrospectionAccess >
 getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
@@ -280,7 +127,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }
@@ -314,7 +161,7 @@ void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCa
 }
 
 void
-dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUString& aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps, const uno::Reference< frame::XDispatchResultListener >& rListener, const sal_Bool bSilent )
 {
     util::URL url;
     url.Complete = aUrl;
@@ -346,6 +193,7 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
     }
 
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
+    uno::Reference< frame::XNotifyingDispatch > xNotifyingDispatcher( xDispatcher, uno::UNO_QUERY );
 
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 
@@ -361,11 +209,20 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
             *pDest = *pSrc;
     }
 
-    (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
-    (*pDest).Value <<= (sal_Bool)sal_True;
+    if ( bSilent )
+    {
+        (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
+        (*pDest).Value <<= (sal_Bool)sal_True;
+    }
 
-    if (xDispatcher.is())
+    if ( !rListener.is() && xDispatcher.is() )
+    {
         xDispatcher->dispatch( url, dispatchProps );
+    }
+    else if ( rListener.is() && xNotifyingDispatcher.is() )
+    {
+        xNotifyingDispatcher->dispatchWithNotification( url, dispatchProps, rListener );
+    }
 }
 
 void
@@ -867,7 +724,7 @@ double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, 
 double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
-    return HmmToPoints( fPixels/fConvertFactor );
+    return HmmToPoints(static_cast<sal_Int32>(fPixels/fConvertFactor));
 }
 
 sal_Int32 PointsToHmm( double fPoints )
@@ -970,6 +827,23 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
         throw uno::RuntimeException();
 }
 
+uno::Any getDefaultPropByIntrospection( const uno::Any& aObj ) throw ( uno::RuntimeException )
+{
+    uno::Any aValue;
+    uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
+    uno::Reference< script::XDefaultProperty > xDefaultProperty( aObj, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet;
+
+    if ( xUnoAccess.is() )
+        xPropSet.set( xUnoAccess->queryAdapter( ::getCppuType( (const uno::Reference< beans::XPropertySet > *)0 ) ), uno::UNO_QUERY );
+
+    if ( xPropSet.is() )
+        aValue = xPropSet->getPropertyValue( xDefaultProperty->getDefaultPropertyName() );
+    else
+        throw uno::RuntimeException();
+    return aValue;
+}
+
 uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName )
 {
     uno::Any result;
@@ -995,6 +869,18 @@ sal_Bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const r
         }
     }
     return sal_False;
+}
+
+void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const rtl::OUString& aName, const uno::Any& aValue )
+{
+   if( setPropertyValue( aProp, aName, aValue ) )
+    return;
+
+  // append the property
+  sal_Int32 nLength = aProp.getLength();
+  aProp.realloc( nLength + 1 );
+  aProp[ nLength ].Name = aName;
+  aProp[ nLength ].Value = aValue;
 }
 
 // ====UserFormGeomentryHelper====
@@ -1168,169 +1054,189 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
 
 // ============================================================================
 
-    double ConcreteXShapeGeometryAttributes::getLeft() const
-    {
-        return m_pShapeHelper->getLeft();
-    }
-    void ConcreteXShapeGeometryAttributes::setLeft( double nLeft )
-    {
-        m_pShapeHelper->setLeft( nLeft );
-    }
-    double ConcreteXShapeGeometryAttributes::getTop() const
-    {
-        return m_pShapeHelper->getTop();
-    }
-    void ConcreteXShapeGeometryAttributes::setTop( double nTop )
-    {
-        m_pShapeHelper->setTop( nTop );
+double ConcreteXShapeGeometryAttributes::getLeft() const
+{
+    return m_pShapeHelper->getLeft();
+}
+void ConcreteXShapeGeometryAttributes::setLeft( double nLeft )
+{
+    m_pShapeHelper->setLeft( nLeft );
+}
+double ConcreteXShapeGeometryAttributes::getTop() const
+{
+    return m_pShapeHelper->getTop();
+}
+void ConcreteXShapeGeometryAttributes::setTop( double nTop )
+{
+    m_pShapeHelper->setTop( nTop );
+}
+
+double ConcreteXShapeGeometryAttributes::getHeight() const
+{
+    return m_pShapeHelper->getHeight();
+}
+void ConcreteXShapeGeometryAttributes::setHeight( double nHeight )
+{
+    m_pShapeHelper->setHeight( nHeight );
+}
+double ConcreteXShapeGeometryAttributes::getWidth() const
+{
+    return m_pShapeHelper->getWidth();
+}
+void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
+{
+    m_pShapeHelper->setWidth( nWidth );
+}
+
+
+ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
+{
+    if( !xShape.is() )
+        throw css::uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No valid shape for helper")), css::uno::Reference< css::uno::XInterface >() );
+}
+
+double ShapeHelper::getHeight() const
+{
+        return  Millimeter::getInPoints(xShape->getSize().Height);
     }
 
-    double ConcreteXShapeGeometryAttributes::getHeight() const
-    {
-        return m_pShapeHelper->getHeight();
-    }
-    void ConcreteXShapeGeometryAttributes::setHeight( double nHeight )
-    {
-        m_pShapeHelper->setHeight( nHeight );
-    }
-    double ConcreteXShapeGeometryAttributes::getWidth() const
-    {
-        return m_pShapeHelper->getWidth();
-    }
-    void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
-    {
-        m_pShapeHelper->setWidth( nWidth );
-    }
 
-
-    ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
+    void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
+{
+    try
     {
-        if( !xShape.is() )
-            throw css::uno::RuntimeException( rtl::OUString::createFromAscii("No valid shape for helper"), css::uno::Reference< css::uno::XInterface >() );
+        css::awt::Size aSize = xShape->getSize();
+        aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
+        xShape->setSize(aSize);
     }
-
-    double ShapeHelper::getHeight() const
+    catch ( css::uno::Exception& /*e*/)
     {
-            return  Millimeter::getInPoints(xShape->getSize().Height);
+        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
         }
-
-
-        void ShapeHelper::setHeight(double _fheight) throw ( css::script::BasicErrorException )
-    {
-        try
-        {
-            css::awt::Size aSize = xShape->getSize();
-            aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
-            xShape->setSize(aSize);
-        }
-        catch ( css::uno::Exception& /*e*/)
-        {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-            }
+}
+double ShapeHelper::getWidth() const
+{
+    return Millimeter::getInPoints(xShape->getSize().Width);
     }
 
-
-    double ShapeHelper::getWidth() const
+void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
+{
+    try
     {
-        return Millimeter::getInPoints(xShape->getSize().Width);
-        }
-
-    void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorException )
-    {
-        try
-        {
-            css::awt::Size aSize = xShape->getSize();
-            aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
-            xShape->setSize(aSize);
-        }
-        catch (css::uno::Exception& /*e*/)
-        {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-        }
+        css::awt::Size aSize = xShape->getSize();
+        aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
+        xShape->setSize(aSize);
     }
-
-
-    double ShapeHelper::getLeft() const
+    catch (css::uno::Exception& /*e*/)
     {
-        return Millimeter::getInPoints(xShape->getPosition().X);
+        throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
+}
 
 
-    void ShapeHelper::setLeft(double _fLeft)
-    {
-        css::awt::Point aPoint = xShape->getPosition();
-        aPoint.X = Millimeter::getInHundredthsOfOneMillimeter(_fLeft);
-        xShape->setPosition(aPoint);
-    }
+double ShapeHelper::getLeft() const
+{
+    return Millimeter::getInPoints(xShape->getPosition().X);
+}
 
 
-    double ShapeHelper::getTop() const
-    {
-            return Millimeter::getInPoints(xShape->getPosition().Y);
-    }
+void ShapeHelper::setLeft(double _fLeft)
+{
+    css::awt::Point aPoint = xShape->getPosition();
+    aPoint.X = Millimeter::getInHundredthsOfOneMillimeter(_fLeft);
+    xShape->setPosition(aPoint);
+}
 
 
-    void ShapeHelper::setTop(double _fTop)
-    {
-        css::awt::Point aPoint = xShape->getPosition();
-        aPoint.Y = Millimeter::getInHundredthsOfOneMillimeter(_fTop);
-        xShape->setPosition(aPoint);
-    }
+double ShapeHelper::getTop() const
+{
+        return Millimeter::getInPoints(xShape->getPosition().Y);
+}
 
-    void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
-    {
-        // #TODO #FIXME ( do we want to support additionalArg here )
-        throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString::createFromAscii(" ") ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
-    }
 
-    void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
-    {
-        exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
-    }
-    void DebugHelper::exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException )
-    {
-        exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
-    }
+void ShapeHelper::setTop(double _fTop)
+{
+    css::awt::Point aPoint = xShape->getPosition();
+    aPoint.Y = Millimeter::getInHundredthsOfOneMillimeter(_fTop);
+    xShape->setPosition(aPoint);
+}
 
-    Millimeter::Millimeter():m_nMillimeter(0) {}
+void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
+{
+    // #TODO #FIXME ( do we want to support additionalArg here )
+    throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
+}
 
-    Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
+void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
+{
+    exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
+}
+void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+{
+    exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
+}
 
-    void Millimeter::set(double mm) { m_nMillimeter = mm; }
-    void Millimeter::setInPoints(double points)
-    {
-        m_nMillimeter = points * factor / 100.0;
-    }
+Millimeter::Millimeter():m_nMillimeter(0) {}
 
-    void Millimeter::setInHundredthsOfOneMillimeter(double hmm)
-    {
-        m_nMillimeter = hmm / 100;
-    }
+Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
 
-    double Millimeter::get()
-    {
-        return m_nMillimeter;
-    }
-    double Millimeter::getInHundredthsOfOneMillimeter()
-    {
-        return m_nMillimeter * 100;
-    }
-    double Millimeter::getInPoints()
-    {
-        return m_nMillimeter / factor * 100.0;
-    }
+void Millimeter::set(double mm) { m_nMillimeter = mm; }
+void Millimeter::setInPoints(double points)
+{
+    m_nMillimeter = points * factor / 100.0;
+}
 
-    sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)
-    {
-        sal_Int32 mm = static_cast<sal_Int32>(points * factor);
-        return mm;
-    }
+void Millimeter::setInHundredthsOfOneMillimeter(double hmm)
+{
+    m_nMillimeter = hmm / 100;
+}
 
-    double Millimeter::getInPoints(int _hmm)
-    {
-        double points = double( static_cast<double>(_hmm) / factor);
-        return points;
-    }
+double Millimeter::get()
+{
+    return m_nMillimeter;
+}
+double Millimeter::getInHundredthsOfOneMillimeter()
+{
+    return m_nMillimeter * 100;
+}
+double Millimeter::getInPoints()
+{
+    return m_nMillimeter / factor * 100.0;
+}
+
+sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)
+{
+    sal_Int32 mm = static_cast<sal_Int32>(points * factor);
+    return mm;
+}
+
+double Millimeter::getInPoints(int _hmm)
+{
+    double points = double( static_cast<double>(_hmm) / factor);
+    return points;
+}
+
+// Listener for XNotifyingDispatch
+VBADispatchListener::VBADispatchListener() : m_State( sal_False )
+{
+}
+
+// Listener for XNotifyingDispatch
+VBADispatchListener::~VBADispatchListener()
+{
+}
+
+// Listener for XNotifyingDispatch
+void SAL_CALL VBADispatchListener::dispatchFinished( const frame::DispatchResultEvent& aEvent ) throw ( uno::RuntimeException )
+{
+    m_Result = aEvent.Result;
+    m_State = ( aEvent.State == frame::DispatchResultState::SUCCESS ) ? sal_True : sal_False;
+}
+
+// Listener for XNotifyingDispatch
+void SAL_CALL VBADispatchListener::disposing( const lang::EventObject& /*aEvent*/ ) throw( uno::RuntimeException )
+{
+}
 
 uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::XModel >& xModel )
 {
@@ -1379,3 +1285,5 @@ SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) 
 
 } // openoffice
 } //org
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

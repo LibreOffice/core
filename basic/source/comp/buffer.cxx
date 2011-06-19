@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,9 @@
 
 const static sal_uInt32 UP_LIMIT=0xFFFFFF00L;
 
-// Der SbiBuffer wird in Inkrements von mindestens 16 Bytes erweitert.
-// Dies ist notwendig, da viele Klassen von einer Pufferlaenge
-// von x*16 Bytes ausgehen.
+// The SbiBuffer will be expanded in increments of at least 16 Bytes.
+// This is necessary, because many classes emanate from a buffer length
+// of x*16 Bytes.
 
 SbiBuffer::SbiBuffer( SbiParser* p, short n )
 {
@@ -55,8 +56,8 @@ SbiBuffer::~SbiBuffer()
     delete[] pBuf;
 }
 
-// Rausreichen des Puffers
-// Dies fuehrt zur Loeschung des Puffers!
+// Reach out the buffer
+// This lead to the deletion of the buffer!
 
 char* SbiBuffer::GetBuffer()
 {
@@ -66,8 +67,8 @@ char* SbiBuffer::GetBuffer()
     return p;
 }
 
-// Test, ob der Puffer n Bytes aufnehmen kann.
-// Im Zweifelsfall wird er vergroessert
+// Test, if the buffer can contain n Bytes.
+// In case of doubt it will be enlarged
 
 sal_Bool SbiBuffer::Check( sal_uInt16 n )
 {
@@ -100,7 +101,7 @@ sal_Bool SbiBuffer::Check( sal_uInt16 n )
     return sal_True;
 }
 
-// Angleich des Puffers auf die uebergebene Byte-Grenze
+// Conditioning of the buffer onto the passed Byte limit
 
 void SbiBuffer::Align( sal_Int32 n )
 {
@@ -119,7 +120,7 @@ void SbiBuffer::Align( sal_Int32 n )
     }
 }
 
-// Patch einer Location
+// Patch of a Location
 
 void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 {
@@ -135,9 +136,9 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
     }
 }
 
-// Forward References auf Labels und Prozeduren
-// bauen eine Kette auf. Der Anfang der Kette ist beim uebergebenen
-// Parameter, das Ende der Kette ist 0.
+// Forward References upon label und procedures
+// establish a linkage. The beginning of the linkage is at the passed parameter,
+// the end of the linkage is 0.
 
 void SbiBuffer::Chain( sal_uInt32 off )
 {
@@ -248,3 +249,4 @@ sal_Bool SbiBuffer::Add( const void* p, sal_uInt16 len )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

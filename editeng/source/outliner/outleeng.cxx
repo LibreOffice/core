@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,7 +158,6 @@ XubString OutlinerEditEng::GetUndoComment( sal_uInt16 nUndoId ) const
     }
 }
 
-// #101498#
 void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
     const sal_Int32* pDXArray, const SvxFont& rFont, sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
     const EEngineData::WrongSpellVector* pWrongSpellVector,
@@ -169,44 +169,22 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const XubString& rTex
     const Color& rOverlineColor,
     const Color& rTextLineColor)
 {
-    // why do bullet here at all? Just use GetEditEnginePtr()->PaintingFirstLine
-    // inside of ImpEditEngine::Paint which calls pOwner->PaintBullet with the correct
-    // values for hor and ver. No change for not-layouting (painting).
-    // changed, bullet rendering now using PaintBullet via
-/*  if ( nIndex == 0 )
-    {
-        // Dann das Bullet 'malen', dort wird bStrippingPortions ausgewertet
-        // und Outliner::DrawingText gerufen
-
-        // DrawingText liefert die BaseLine, DrawBullet braucht Top().
-
-        if(true)
-        {
-            // ##
-            // another error: This call happens when only stripping, but the position
-            // is already aligned to text output. For bullet rendering, it needs to be reset
-            // to the correct value in x and y. PaintBullet takes care of X-start offset itself
-            const Point aDocPosTopLeft(GetDocPosTopLeft( nPara ));
-            const Point aCorrectedPos(rStartPos.X() - aDocPosTopLeft.X(), aDocPosTopLeft.Y() + GetFirstLineOffset( nPara ));
-            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-        }
-        else
-        {
-            Point aCorrectedPos( rStartPos );
-            aCorrectedPos.Y() = GetDocPosTopLeft( nPara ).Y();
-            aCorrectedPos.Y() += GetFirstLineOffset( nPara );
-            pOwner->PaintBullet( nPara, aCorrectedPos, Point(), 0, GetRefDevice() );
-        }
-    } */
-
-    // #101498#
     pOwner->DrawingText(rStartPos,rText,nTextStart,nTextLen,pDXArray,rFont,nPara,nIndex,nRightToLeft,
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
 
+void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
+    const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+    bool bEndOfLine, bool bEndOfParagraph,
+    const Color& rOverlineColor, const Color& rTextLineColor)
+{
+    pOwner->DrawingTab(rStartPos, nWidth, rChar, rFont, nPara, nIndex, nRightToLeft,
+            bEndOfLine, bEndOfParagraph, rOverlineColor, rTextLineColor );
+}
+
 void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos )
 {
-    EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
+    EditEngine::FieldClicked( rField, nPara, nPos );    // If URL
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 
@@ -231,14 +209,14 @@ void OutlinerEditEng::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
         EditEngine::SetParaAttribs( (sal_uInt16)nPara, rSet );
 
         pOwner->ImplCheckNumBulletItem( (sal_uInt16)nPara );
-        // --> OD 2009-03-10 #i100014#
+        // #i100014#
         // It is not a good idea to substract 1 from a count and cast the result
-        // to sal_uInt16 without check, if the count is 0.
+        // to USHORT without check, if the count is 0.
         pOwner->ImplCheckParagraphs( (sal_uInt16)nPara, (sal_uInt16) (pOwner->pParaList->GetParagraphCount()) );
-        // <--
 
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionEnd( OLUNDO_ATTR );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

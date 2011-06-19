@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,6 +82,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     nLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
+    fScaleX(0.0),fScaleY(0.0),
     bFntDirty(sal_True),
     bLastObjWasPolyWithoutLine(sal_False),bNoLine(sal_False),bNoFill(sal_False),bLastObjWasLine(sal_False)
 {
@@ -112,7 +114,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     pPage = rOL.GetPage();
     GDIMetaFile* pTmpMtf=NULL;
     GDIMetaFile* pMtf = (GDIMetaFile*) &rMtf;
-    sal_uIntPtr nActionAnz=pMtf->GetActionCount();
+    size_t nActionAnz = pMtf->GetActionSize();
     sal_Bool bError = sal_False;
 
 
@@ -154,7 +156,7 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     if(pProgrInfo)
         pProgrInfo->SetActionCount(nActionAnz);
 
-    sal_uIntPtr nActionsToReport = 0;
+    size_t nActionsToReport = 0;
 
     for( MetaAction* pAct = pMtf->FirstAction(); pAct; pAct = pMtf->NextAction() )
     {
@@ -221,11 +223,11 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // Objekte in vorgegebenes Rechteck hineinskalieren
     sal_uIntPtr nAnz=aTmpList.GetObjCount();
 
-    // Beim berechnen der Fortschrittsanzeige wird GetActionCount()*3 benutzt.
-    // Da in aTmpList allerdings weniger eintraege als GetActionCount()
+    // Beim berechnen der Fortschrittsanzeige wird GetActionSize()*3 benutzt.
+    // Da in aTmpList allerdings weniger eintraege als GetActionSize()
     // existieren koennen, muessen hier die zuviel vermuteten Actionen wieder
     // hinzugefuegt werden.
-    nActionsToReport = (pMtf->GetActionCount() - nAnz)*2;
+    nActionsToReport = (pMtf->GetActionSize() - nAnz)*2;
 
 
     // Alle noch nicht gemeldeten Rescales melden
@@ -268,12 +270,12 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     return aTmpList.GetObjCount();
 }
 
-void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr)
+void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
 {
     bNoLine = sal_False; bNoFill = sal_False;
-    FASTBOOL bLine=sal_True && !bForceTextAttr;
-    FASTBOOL bFill=pObj==NULL || ( pObj->IsClosedObj() && !bForceTextAttr );
-    FASTBOOL bText=bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
+    bool bLine = !bForceTextAttr;
+    bool bFill = (pObj==NULL) || (pObj->IsClosedObj() && !bForceTextAttr);
+    bool bText = bForceTextAttr || (pObj!=NULL && pObj->GetOutlinerParaObject()!=NULL);
 
     if ( bLine )
     {
@@ -431,7 +433,7 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
         aTmpList.InsertObject( pObj );
         if ( HAS_BASE( SdrPathObj, pObj ) )
         {
-            FASTBOOL bClosed=pObj->IsClosedObj();
+            bool bClosed=pObj->IsClosedObj();
             bLastObjWasPolyWithoutLine=bNoLine && bClosed;
             bLastObjWasLine=!bClosed;
         }
@@ -444,12 +446,11 @@ void ImpSdrGDIMetaFileImport::InsertObj( SdrObject* pObj, sal_Bool bScale )
 }
 
 /**************************************************************************************************/
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/) const
 {
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/)
+void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/) const
 {
 }
 
@@ -1047,3 +1048,5 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRenderGraphicAction& rAct)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

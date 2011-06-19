@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ namespace connectivity
         public:
             ::rtl::OUString                             sTable;
             QueryFilterType                             eFilterType;
-            ::vos::ORef< ::connectivity::OSQLColumns >  xSelectColumns;
+            ::rtl::Reference< ::connectivity::OSQLColumns >  xSelectColumns;
             SortDescriptor                              aSortOrder;
 
             QueryData()
@@ -286,3 +287,5 @@ namespace connectivity
     }
 }
 #endif // CONNECTIVITY_SSTATEMENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

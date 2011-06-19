@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,15 +42,11 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 
-#ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
 
 #include <memory>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <list>
 
@@ -61,8 +58,8 @@
 // forward declarations
 //----------------------------------------------------------
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 struct FilterEntry;
 struct ElementEntry_Impl;
 
@@ -246,7 +243,6 @@ class SalGtkFilePicker :
 
         void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-        rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
         void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
     private:
@@ -314,11 +310,13 @@ class SalGtkFilePicker :
         gulong mnHID_SelectionChange;
 
         ::rtl::OUString m_aCurrentFilter;
+        ::rtl::OUString m_aInitialFilter;
 
         bool bVersionWidthUnset;
         sal_Bool mbPreviewState;
         gulong mHID_Preview;
         GtkWidget* m_pPreview;
+        GtkFileFilter* m_pPseudoFilter;
         sal_Int32 m_PreviewImageWidth;
         sal_Int32 m_PreviewImageHeight;
 
@@ -329,8 +327,8 @@ class SalGtkFilePicker :
         void UpdateFilterfromUI();
 
         void implChangeType( GtkTreeSelection *selection );
-        int implAddFilter( const OUString& rFilter, const OUString& rType);
-        int implAddFilterGroup( const OUString& rFilter,
+        GtkFileFilter * implAddFilter( const OUString& rFilter, const OUString& rType );
+        void implAddFilterGroup( const OUString& rFilter,
                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
         void updateCurrentFilterFromName(const gchar* filtername);
         void unselect_type();
@@ -352,5 +350,6 @@ class SalGtkFilePicker :
          virtual ~SalGtkFilePicker();
 
 };
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 #endif // _SALGTKFILEPICKER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

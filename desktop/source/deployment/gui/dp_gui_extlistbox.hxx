@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,13 +138,9 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nExtraHeight;
     Size            m_aOutputSize;
     Image           m_aSharedImage;
-    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
-    Image           m_aLockedImageHC;
     Image           m_aWarningImage;
-    Image           m_aWarningImageHC;
     Image           m_aDefaultImage;
-    Image           m_aDefaultImageHC;
     Link            m_aClickHdl;
 
     ScrollBar      *m_pScrollBar;
@@ -172,7 +169,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     bool            HandleTabKey( bool bReverse );
     bool            HandleCursorKey( sal_uInt16 nKeyCode );
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
-    bool            isHCMode();
     void            DeleteRemoved();
 
     //-----------------
@@ -269,3 +265,5 @@ public:
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,12 +51,15 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 // #i37011#
 #include <svx/svdoashp.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+
+#include <vector>
+using ::std::vector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +146,7 @@ void SdrEditView::MovMarkedToTop()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=sal_True;
                 }
                 else if (pCmpObj==pMaxObj)
@@ -231,7 +235,7 @@ void SdrEditView::MovMarkedToBtm()
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL)
                 {
-                    DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
+                    OSL_FAIL("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=sal_True;
                 }
                 else if (pCmpObj==pMaxObj)
@@ -800,7 +804,7 @@ struct ImpDistributeEntry
     sal_Int32                       mnLength;
 };
 
-DECLARE_LIST(ImpDistributeEntryList, ImpDistributeEntry*)
+typedef vector< ImpDistributeEntry*> ImpDistributeEntryList;
 
 void SdrEditView::DistributeMarkedObjects()
 {
@@ -809,12 +813,12 @@ void SdrEditView::DistributeMarkedObjects()
     if(nMark > 2)
     {
         SfxItemSet aNewAttr(pMod->GetItemPool());
-        //CHINA001 SvxDistributeDialog* pDlg = new SvxDistributeDialog(NULL, aNewAttr);
+
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
             AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
             sal_uInt16 nResult = pDlg->Execute();
 
@@ -823,7 +827,8 @@ void SdrEditView::DistributeMarkedObjects()
                 SvxDistributeHorizontal eHor = pDlg->GetDistributeHor();
                 SvxDistributeVertical eVer = pDlg->GetDistributeVer();
                 ImpDistributeEntryList aEntryList;
-                sal_uInt32 a, nInsPos, nFullLength;
+                ImpDistributeEntryList::iterator itEntryList;
+                sal_uInt32 nFullLength;
 
                 const bool bUndo = IsUndoEnabled();
                 if( bUndo )
@@ -834,13 +839,12 @@ void SdrEditView::DistributeMarkedObjects()
                     // build sorted entry list
                     nFullLength = 0L;
 
-                    for(a=0;a<nMark;a++)
+                    for( sal_uInt32 a = 0; a < nMark; a++ )
                     {
                         SdrMark* pMark = GetSdrMarkByIndex(a);
                         ImpDistributeEntry* pNew = new ImpDistributeEntry;
 
                         pNew->mpObj = pMark->GetMarkedSdrObj();
-                        nInsPos = 0;
 
                         switch(eHor)
                         {
@@ -869,25 +873,29 @@ void SdrEditView::DistributeMarkedObjects()
                             default: break;
                         }
 
-                        while(nInsPos < aEntryList.Count() && aEntryList.GetObject(nInsPos)->mnPos < pNew->mnPos)
-                            nInsPos++;
-
-                        aEntryList.Insert(pNew, nInsPos);
+                        for ( itEntryList = aEntryList.begin();
+                              itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
+                              ++itEntryList )
+                        {};
+                        if ( itEntryList < aEntryList.end() )
+                            aEntryList.insert( itEntryList, pNew );
+                        else
+                            aEntryList.push_back( pNew );
                     }
 
                     if(eHor == SvxDistributeHorizontalDistance)
                     {
                         // calc room in-between
                         sal_Int32 nWidth = GetAllMarkedBoundRect().GetWidth() + 1;
-                        double fStepWidth = ((double)nWidth - (double)nFullLength) / (double)(aEntryList.Count() - 1);
-                        double fStepStart = (double)aEntryList.GetObject(0)->mnPos;
-                        fStepStart += fStepWidth + (double)((aEntryList.GetObject(0)->mnLength + aEntryList.GetObject(1)->mnLength) / 2);
+                        double fStepWidth = ((double)nWidth - (double)nFullLength) / (double)(aEntryList.size() - 1);
+                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
+                        fStepStart += fStepWidth + (double)((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
 
                         // move entries 1..n-1
-                        for(a=1;a<aEntryList.Count()-1;a++)
+                        for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i )
                         {
-                            ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
-                            ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
+                            ImpDistributeEntry* pCurr = aEntryList[ i    ];
+                            ImpDistributeEntry* pNext = aEntryList[ i + 1];
                             sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
@@ -898,15 +906,15 @@ void SdrEditView::DistributeMarkedObjects()
                     else
                     {
                         // calc distances
-                        sal_Int32 nWidth = aEntryList.GetObject(aEntryList.Count() - 1)->mnPos - aEntryList.GetObject(0)->mnPos;
-                        double fStepWidth = (double)nWidth / (double)(aEntryList.Count() - 1);
-                        double fStepStart = (double)aEntryList.GetObject(0)->mnPos;
+                        sal_Int32 nWidth = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
+                        double fStepWidth = (double)nWidth / (double)(aEntryList.size() - 1);
+                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
                         fStepStart += fStepWidth;
 
                         // move entries 1..n-1
-                        for(a=1;a<aEntryList.Count()-1;a++)
+                        for( size_t i = 1 ; i < aEntryList.size()-1 ; ++i )
                         {
-                            ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
+                            ImpDistributeEntry* pCurr = aEntryList[ i ];
                             sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
@@ -916,8 +924,9 @@ void SdrEditView::DistributeMarkedObjects()
                     }
 
                     // clear list
-                    while(aEntryList.Count())
-                        delete aEntryList.Remove((sal_uIntPtr)0L);
+                    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
+                        delete aEntryList[ i ];
+                    aEntryList.clear();
                 }
 
                 if(eVer != SvxDistributeVerticalNone)
@@ -925,13 +934,12 @@ void SdrEditView::DistributeMarkedObjects()
                     // build sorted entry list
                     nFullLength = 0L;
 
-                    for(a=0;a<nMark;a++)
+                    for( sal_uInt32 a = 0; a < nMark; a++ )
                     {
                         SdrMark* pMark = GetSdrMarkByIndex(a);
                         ImpDistributeEntry* pNew = new ImpDistributeEntry;
 
                         pNew->mpObj = pMark->GetMarkedSdrObj();
-                        nInsPos = 0;
 
                         switch(eVer)
                         {
@@ -960,25 +968,29 @@ void SdrEditView::DistributeMarkedObjects()
                             default: break;
                         }
 
-                        while(nInsPos < aEntryList.Count() && aEntryList.GetObject(nInsPos)->mnPos < pNew->mnPos)
-                            nInsPos++;
-
-                        aEntryList.Insert(pNew, nInsPos);
+                        for ( itEntryList = aEntryList.begin();
+                              itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
+                              ++itEntryList )
+                        {};
+                        if ( itEntryList < aEntryList.end() )
+                            aEntryList.insert( itEntryList, pNew );
+                        else
+                            aEntryList.push_back( pNew );
                     }
 
                     if(eVer == SvxDistributeVerticalDistance)
                     {
                         // calc room in-between
                         sal_Int32 nHeight = GetAllMarkedBoundRect().GetHeight() + 1;
-                        double fStepWidth = ((double)nHeight - (double)nFullLength) / (double)(aEntryList.Count() - 1);
-                        double fStepStart = (double)aEntryList.GetObject(0)->mnPos;
-                        fStepStart += fStepWidth + (double)((aEntryList.GetObject(0)->mnLength + aEntryList.GetObject(1)->mnLength) / 2);
+                        double fStepWidth = ((double)nHeight - (double)nFullLength) / (double)(aEntryList.size() - 1);
+                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
+                        fStepStart += fStepWidth + (double)((aEntryList[ 0 ]->mnLength + aEntryList[ 1 ]->mnLength) / 2);
 
                         // move entries 1..n-1
-                        for(a=1;a<aEntryList.Count()-1;a++)
+                        for( size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
                         {
-                            ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
-                            ImpDistributeEntry* pNext = aEntryList.GetObject(a+1);
+                            ImpDistributeEntry* pCurr = aEntryList[ i     ];
+                            ImpDistributeEntry* pNext = aEntryList[ i + 1 ];
                             sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
@@ -989,15 +1001,15 @@ void SdrEditView::DistributeMarkedObjects()
                     else
                     {
                         // calc distances
-                        sal_Int32 nHeight = aEntryList.GetObject(aEntryList.Count() - 1)->mnPos - aEntryList.GetObject(0)->mnPos;
-                        double fStepWidth = (double)nHeight / (double)(aEntryList.Count() - 1);
-                        double fStepStart = (double)aEntryList.GetObject(0)->mnPos;
+                        sal_Int32 nHeight = aEntryList[ aEntryList.size() - 1 ]->mnPos - aEntryList[ 0 ]->mnPos;
+                        double fStepWidth = (double)nHeight / (double)(aEntryList.size() - 1);
+                        double fStepStart = (double)aEntryList[ 0 ]->mnPos;
                         fStepStart += fStepWidth;
 
                         // move entries 1..n-1
-                        for(a=1;a<aEntryList.Count()-1;a++)
+                        for(size_t i = 1, n = aEntryList.size()-1; i < n; ++i)
                         {
-                            ImpDistributeEntry* pCurr = aEntryList.GetObject(a);
+                            ImpDistributeEntry* pCurr = aEntryList[ i ];
                             sal_Int32 nDelta = (sal_Int32)(fStepStart + 0.5) - pCurr->mnPos;
                             if( bUndo )
                                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pCurr->mpObj));
@@ -1007,8 +1019,9 @@ void SdrEditView::DistributeMarkedObjects()
                     }
 
                     // clear list
-                    while(aEntryList.Count())
-                        delete aEntryList.Remove((sal_uIntPtr)0L);
+                    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
+                        delete aEntryList[ i ];
+                    aEntryList.clear();
                 }
 
                 // UNDO-Comment and end of UNDO
@@ -1972,7 +1985,6 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, sal_Bool bPath, sal_Bo
 void SdrEditView::ImpConvertTo(sal_Bool bPath, sal_Bool bLineToArea)
 {
     sal_Bool bMrkChg=sal_False;
-    sal_Bool bModChg=sal_False;
     if (AreObjectsMarked()) {
         sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
         sal_uInt16 nDscrID=0;
@@ -2007,12 +2019,11 @@ void SdrEditView::ImpConvertTo(sal_Bool bPath, sal_Bool bLineToArea)
                 SdrObjListIter aIter(*pGrp,IM_DEEPNOGROUPS);
                 while (aIter.IsMore()) {
                     pObj=aIter.Next();
-                    if (ImpConvertOneObj(pObj,bPath,bLineToArea)) bModChg=sal_True;
+                    ImpConvertOneObj(pObj,bPath,bLineToArea);
                 }
             } else {
                 SdrObject* pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
                 if (pNewObj!=NULL) {
-                    bModChg=sal_True;
                     bMrkChg=sal_True;
                     GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj,pPV),nm);
                 }
@@ -2137,3 +2148,4 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

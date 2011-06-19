@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,16 +32,11 @@
 #include <basic/sbstar.hxx>
 
 #include <svl/svdde.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/eitem.hxx>
 
 #include <unotools/saveopt.hxx>
 #include <unotools/misccfg.hxx>
-
-#ifndef GCC
-#endif
 
 #include "app.hrc"
 #include <sfx2/app.hxx>
@@ -76,13 +72,13 @@ sal_Bool SfxApplication::QueryExit_Impl()
 {
     sal_Bool bQuit = sal_True;
 
-    // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
+    // Does some instance, that can not be shut down, still require the app?
     if ( !bQuit )
     {
-        // nicht wirklich beenden, nur minimieren
+        // Not really exit, only minimize
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
-        DBG_TRACE( "QueryExit => FALSE (in use)" );
+        OSL_TRACE( "QueryExit => sal_False (in use)" );
         return sal_False;
     }
 
@@ -98,14 +94,14 @@ void SfxApplication::Deinitialize()
 
     StarBASIC::Stop();
 
-    // ggf. BASIC speichern
+    // Save BASIC if possible
     BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
     if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
     SaveBasicAndDialogContainer();
 
-    pAppData_Impl->bDowning = sal_True; // wegen Timer aus DecAliveCount und QueryExit
+    pAppData_Impl->bDowning = sal_True; // due to Timer from DecAliveCount and QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
@@ -113,8 +109,6 @@ void SfxApplication::Deinitialize()
     // this method. Therefore this call makes no sense and is the source of
     // some stack traces, which we don't understand.
     // For more information see:
-    // #123501#
-    //SetViewFrame(0);
     pAppData_Impl->bDowning = sal_False;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
@@ -128,8 +122,8 @@ void SfxApplication::Deinitialize()
     // call derived application-exit
     Exit();
 
-    // Controller u."a. freigeben
-    // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
+    // Release Controller and others
+    // then the remaining components should alse disapear ( Beamer! )
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
         // this will also delete pBasMgr
@@ -143,7 +137,7 @@ void SfxApplication::Deinitialize()
     SfxResId::DeleteResMgr();
     DELETEZ(pAppData_Impl->pOfaResMgr);
 
-    // ab hier d"urfen keine SvObjects mehr existieren
+    // from here no SvObjects have to exists
     DELETEZ(pAppData_Impl->pMatcher);
 
     DELETEX(pAppData_Impl->pSlotPool);
@@ -159,14 +153,18 @@ void SfxApplication::Deinitialize()
 
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
-/* This leak is intended !
-   Otherwise the TestTool cant use .uno:QuitApp ...
-   because every destructed ItemSet work's on an already
-   released pool pointer .-)
-
-    NoChaos::ReleaseItemPool();
-*/
     pAppData_Impl->pPool = NULL;
+    NoChaos::ReleaseItemPool();
+
     DELETEZ(pAppData_Impl->pBasicResMgr);
     DELETEZ(pAppData_Impl->pSvtResMgr);
+
+    delete pAppData_Impl->m_pSbxErrorHdl;
+    delete pAppData_Impl->m_pSoErrorHdl;
+    delete pAppData_Impl->m_pToolsErrorHdl;
+#ifdef DBG_UTIL
+    delete pAppData_Impl->m_pSimpleErrorHdl;
+#endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

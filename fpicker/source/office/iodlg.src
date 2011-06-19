@@ -53,13 +53,6 @@ ImageList RID_FILEPICKER_IMAGES
     FILEPICKER_IL_IDLIST
 };
 
-ImageList RID_FILEPICKER_IMAGES_HC
-{
-    Prefix = "fph";
-    MASKCOLOR
-    FILEPICKER_IL_IDLIST
-};
-
  // dialogs *******************************************************************
 
 ModalDialog DLG_SVT_EXPLORERFILE
@@ -99,21 +92,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
         };
         QuickHelpText [ en-US ] = "List";
     };
-    ImageButton BTN_EXPLORERFILE_DETAILSVIEW
-    {
         HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_DETAILSVIEW";
-        TabStop = FALSE ;
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "sc06356.bmp" ;
-            };
-            MASKCOLOR
-        };
-        QuickHelpText [ en-US ] = "Details";
-    };
     MenuButton BTN_EXPLORERFILE_UP
     {
         HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP";
@@ -320,7 +299,7 @@ String STR_FILTERNAME_ALL
 
 String STR_SVT_ALREADYEXISTOVERWRITE
 {
-    Text [ en-US ] = "The file already exists. Overwrite?" ;
+    Text [ en-US ] = "A file named \"$filename$\" already exists.\n\nDo you want to replace it?" ;
 };
 
 String STR_SVT_NEW_FOLDER
@@ -331,6 +310,11 @@ String STR_SVT_NEW_FOLDER
 String STR_SVT_NOREMOVABLEDEVICE
 {
     Text [ en-US ] = "No removable storage device detected.\nMake sure it is plugged in properly and try again." ;
+};
+
+String STR_SVT_ALLFORMATS
+{
+    Text [ en-US ] = "All Formats" ;
 };
 
 //******************************************************************** EOF

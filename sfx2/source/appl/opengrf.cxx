@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,12 +127,12 @@ short SvxOpenGraphicDialog::Execute()
     {
         if( GetPath().Len() )
         {
-            GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
             String  aCurFilter( GetCurrentFilter() );
-            sal_uInt16  nFormatNum = pFilter->GetImportFormatNumber( aCurFilter );
+            sal_uInt16  nFormatNum = rFilter.GetImportFormatNumber( aCurFilter );
             sal_uInt16  nRetFormat = 0;
             sal_uInt16  nFound = USHRT_MAX;
 
@@ -143,23 +144,23 @@ short SvxOpenGraphicDialog::Execute()
                 SvStream* pStream = aMed.GetInStream();
 
                 if( pStream )
-                    nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
+                    nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
                 else
-                    nImpRet = pFilter->CanImportGraphic( aObj, nFormatNum, &nRetFormat );
+                    nImpRet = rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat );
 
                 if ( GRFILTER_OK != nImpRet )
                 {
                     if ( !pStream )
-                        nImpRet = pFilter->CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
+                        nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                     else
-                        nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
+                        nImpRet = rFilter.CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
                                                              GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                 }
             }
             else
             {
-                if( (nImpRet=pFilter->CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != GRFILTER_OK )
-                    nImpRet = pFilter->CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
+                if( (nImpRet=rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != GRFILTER_OK )
+                    nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
             }
 
             if ( GRFILTER_OK == nImpRet )
@@ -174,9 +175,9 @@ short SvxOpenGraphicDialog::Execute()
             else
             {
                 // setup appropriate filter (so next time, it will work)
-                if( pFilter->GetImportFormatCount() )
+                if( rFilter.GetImportFormatCount() )
                 {
-                    String  aFormatName(pFilter->GetImportFormatName(nFound));
+                    String  aFormatName(rFilter.GetImportFormatName(nFound));
                     SetCurrentFilter(aFormatName);
                 }
 
@@ -210,10 +211,10 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
         {
             mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
         }
-        catch(IllegalArgumentException)
+        catch(const IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot enable \"link\" checkbox" );
+            OSL_FAIL( "Cannot enable \"link\" checkbox" );
 #endif
         }
     }
@@ -229,10 +230,10 @@ void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
             Any aAny; aAny <<= bState;
             mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
         }
-        catch(IllegalArgumentException)
+        catch(const IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
-            DBG_ERROR( "Cannot check \"link\" checkbox" );
+            OSL_FAIL( "Cannot check \"link\" checkbox" );
 #endif
         }
     }
@@ -250,10 +251,10 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
             return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
         }
     }
-    catch(IllegalArgumentException)
+    catch(const IllegalArgumentException&)
     {
 #ifdef DBG_UTIL
-        DBG_ERROR( "Cannot access \"link\" checkbox" );
+        OSL_FAIL( "Cannot access \"link\" checkbox" );
 #endif
     }
 
@@ -290,3 +291,5 @@ void SvxOpenGraphicDialog::SetControlHelpIds( const sal_Int16* _pControlId, cons
 }
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,13 +26,14 @@
  *
  ************************************************************************/
 
-
 #if ! defined INCLUDED_DP_EXTBACKENDDB_HXX
 #define INCLUDED_DP_EXTBACKENDDB_HXX
 
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
+#include <utility>
 #include <vector>
+
+#include "rtl/ustring.hxx"
+
 #include "dp_backenddb.hxx"
 
 namespace css = ::com::sun::star;
@@ -73,11 +75,9 @@ public:
         ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> > items;
         typedef ::std::vector<
             ::std::pair< ::rtl::OUString, ::rtl::OUString> >::const_iterator ITC_ITEMS;
-
     };
 
 public:
-
     ExtensionBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                         ::rtl::OUString const & url);
 
@@ -87,10 +87,9 @@ public:
 
 };
 
-
-
 }
 }
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

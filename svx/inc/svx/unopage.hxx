@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapeCombiner.hpp>
 #include <com/sun/star/drawing/XShapeBinder.hpp>
-#ifndef _COM_SUN_STAR_UNO_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <svl/lstner.hxx>
@@ -61,7 +60,6 @@ class SvxShape;
 class SvxShapeGroup;
 class SvxShapeConnector;
 class SvxShapeList;
-class SvxDrawPageList;
 
 /***********************************************************************
 * Macros fuer Umrechnung Twips<->100tel mm                             *
@@ -158,3 +156,4 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

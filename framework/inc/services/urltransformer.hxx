@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>
@@ -221,3 +220,5 @@ class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::ut
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

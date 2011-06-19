@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@ namespace dp_gui {
 
 class LicenseDialog
     : public ::cppu::WeakImplHelper1<ui::dialogs::XExecutableDialog>
-//                                     task::XJobExecutor>
 {
     Reference<XComponentContext> const m_xComponentContext;
     Reference<awt::XWindow> /* const */ m_parent;
@@ -62,10 +62,8 @@ public:
     virtual void SAL_CALL setTitle( OUString const & title )
         throw (RuntimeException);
     virtual sal_Int16 SAL_CALL execute() throw (RuntimeException);
-
-    //// XJobExecutor
-    //virtual void SAL_CALL trigger( OUString const & event )
-    //    throw (RuntimeException);
 };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

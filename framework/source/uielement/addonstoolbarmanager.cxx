@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,30 +36,18 @@
 //_________________________________________________________________________________________________________________
 
 
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBAR_HXX
 #include <uielement/toolbar.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include <uielement/generictoolbarcontroller.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
-#ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <framework/addonsoptions.hxx>
-#ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #include <uielement/comboboxtoolbarcontroller.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_IMAGEBUTTONTOOLBARCONTROLLER_HXX
 #include <uielement/imagebuttontoolbarcontroller.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_TOGGLEBUTTONTOOLBARCONTROLLER_HXX
 #include <uielement/togglebuttontoolbarcontroller.hxx>
-#endif
 #include <uielement/buttontoolbarcontroller.hxx>
 #include <uielement/spinfieldtoolbarcontroller.hxx>
 #include <uielement/edittoolbarcontroller.hxx>
@@ -71,14 +60,10 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
-#endif
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -86,9 +71,7 @@
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
@@ -159,25 +142,25 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            sal_Bool bBigImage,
-                            sal_Bool bHiContrast )
+                            sal_Bool bBigImage
+)
 {
     Image aImage;
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage, bHiContrast );
+        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
         if ( !!aImage )
             return aImage;
         else
-            aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
+            aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
+    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
     if ( !aImage )
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
+        aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
 
     return aImage;
 }
@@ -232,11 +215,10 @@ void AddonsToolBarManager::RefreshImages()
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
 
-            m_pToolBar->SetItemImage( nId, RetrieveImage( m_xFrame,
-                                                          aImageId,
-                                                          aCommandURL,
-                                                          bBigImages,
-                                                          m_bIsHiContrast ));
+            m_pToolBar->SetItemImage(
+                nId,
+                RetrieveImage( m_xFrame, aImageId, aCommandURL, bBigImages )
+            );
         }
     }
 }
@@ -315,7 +297,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols, m_bIsHiContrast );
+                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols );
                 if ( !!aImage )
                     m_pToolBar->SetItemImage( nId, aImage );
 
@@ -525,7 +507,6 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 {
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     return 1;
@@ -537,7 +518,6 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 
@@ -557,3 +537,4 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

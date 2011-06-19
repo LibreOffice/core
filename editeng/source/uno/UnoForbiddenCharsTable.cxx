@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_editeng.hxx"
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx> // LocalToLanguage, LanguageToLocale
 
@@ -39,10 +40,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::cppu;
 
-SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(ORef<SvxForbiddenCharactersTable> xForbiddenChars) :
+SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(::rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars) :
     mxForbiddenChars( xForbiddenChars )
 {
 }
@@ -58,9 +58,9 @@ void SvxUnoForbiddenCharsTable::onChange()
 ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Locale& rLocale )
     throw(NoSuchElementException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.isValid())
+    if(!mxForbiddenChars.is())
         throw RuntimeException();
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
@@ -74,9 +74,9 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
 sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.isValid())
+    if(!mxForbiddenChars.is())
         return sal_False;
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
@@ -88,9 +88,9 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
 void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.isValid())
+    if(!mxForbiddenChars.is())
         throw RuntimeException();
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
@@ -102,9 +102,9 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, co
 void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.isValid())
+    if(!mxForbiddenChars.is())
         throw RuntimeException();
 
     const LanguageType eLang = SvxLocaleToLanguage( rLocale );
@@ -117,9 +117,9 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
 Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    const sal_Int32 nCount = mxForbiddenChars.isValid() ? mxForbiddenChars->Count() : 0;
+    const sal_Int32 nCount = mxForbiddenChars.is() ? mxForbiddenChars->Count() : 0;
 
     Sequence< Locale > aLocales( nCount );
     if( nCount )
@@ -139,7 +139,9 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
 sal_Bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const Locale& aLocale )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return hasForbiddenCharacters( aLocale );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

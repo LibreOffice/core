@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,7 +141,7 @@ namespace param
                 return pProperties->Name;
         }
 
-        OSL_ENSURE( sal_False, "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
+        OSL_FAIL( "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
         return ::rtl::OUString();
     }
 
@@ -362,3 +363,4 @@ namespace param
 } } // namespace dbtools::param
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

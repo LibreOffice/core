@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_basic.hxx"
 
 #include "runtime.hxx"
-#ifndef GCC
-#endif
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbintern.hxx"
@@ -90,7 +89,6 @@ SbxVariable* SbiRuntime::FindElement
             SbxVariable* p = new SbxVariable;
             p->PutString( sArg );
             PushVar( p );
-            //
             StepARGV();
             nOp1 = nOp1 | 0x8000; // indicate params are present
             aName = String::CreateFromAscii("Evaluate");
@@ -141,7 +139,7 @@ SbxVariable* SbiRuntime::FindElement
                     if ( pElem )
                         bSetName = false; // don't overwrite uno name
                     else
-                        pElem = getVBAConstant( aName );
+                        pElem = VBAConstantHelper::instance().getVBAConstant( aName );
                 }
 
                 if( !pElem )
@@ -182,7 +180,6 @@ SbxVariable* SbiRuntime::FindElement
                 // Hat das Ding Parameter, nicht einrichten!
                 if( nOp1 & 0x8000 )
                     bFatalError = sal_True;
-                    // ALT: StarBASIC::FatalError( nNotFound );
 
                 // Sonst, falls keine Parameter sind, anderen Error Code verwenden
                 if( !bLocal || pImg->GetFlag( SBIMG_EXPLICIT ) )
@@ -253,7 +250,7 @@ SbxVariable* SbiRuntime::FindElement
             // Erst nach dem Setzen anfassen, da z.B. LEFT()
             // den Unterschied zwischen Left$() und Left() kennen muss
 
-            // AB 12.8.96: Da in PopVar() die Parameter von Methoden weggehauen
+            // Da in PopVar() die Parameter von Methoden weggehauen
             // werden, muessen wir hier explizit eine neue SbxMethod anlegen
             SbxVariable* pNew = new SbxMethod( *((SbxMethod*)pElem) ); // das ist der Call!
             //ALT: SbxVariable* pNew = new SbxVariable( *pElem ); // das ist der Call!
@@ -287,7 +284,7 @@ SbxVariable* SbiRuntime::FindElement
 // Find-Funktion ueber Name fuer aktuellen Scope (z.B. Abfrage aus BASIC-IDE)
 SbxBase* SbiRuntime::FindElementExtern( const String& rName )
 {
-    // Hinweis zu #35281#: Es darf nicht davon ausgegangen werden, dass
+    // Hinweis zu: Es darf nicht davon ausgegangen werden, dass
     // pMeth != null, da im RunInit noch keine gesetzt ist.
 
     SbxVariable* pElem = NULL;
@@ -489,7 +486,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
     // Falls wir ein Array haben, wollen wir bitte das Array-Element!
     SbxArray* pPar;
-    if( pElem->GetType() & SbxARRAY )
+    if( ( pElem->GetType() & SbxARRAY ) && (SbxVariable*)refRedim != pElem )
     {
         SbxBase* pElemObj = pElem->GetObject();
         SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
@@ -521,7 +518,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && (!pElem->ISA(SbxMethod) || (bVBAEnabled && !pElem->IsBroadcaster()) ) )
+    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || ( bVBAEnabled && !pElem->ISA(SbxProperty) ) ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
@@ -736,7 +733,6 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     p = refParams->Get( i );
 
     if( p->GetType() == SbxERROR && ( i ) )
-    //if( p->GetType() == SbxEMPTY && ( i ) )
     {
         // Wenn ein Parameter fehlt, kann er OPTIONAL sein
         sal_Bool bOpt = sal_False;
@@ -771,6 +767,8 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         SaveRef( q );
         *q = *p;
         p = q;
+        if ( i )
+            refParams->Put( p, i );
     }
     SetupArgs( p, nOp1 );
     PushVar( CheckArray( p ) );
@@ -845,10 +843,6 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // Der Expr-Stack ist nun nicht mehr notwendig
     ClearExprStack();
 
-    // #56368 Kuenstliche Referenz fuer StepElem wieder freigeben,
-    // damit sie nicht ueber ein Statement hinaus erhalten bleibt
-    //refSaveObj = NULL;
-    // #74254 Jetzt per Liste
     ClearRefs();
 
     // Wir muessen hier hart abbrechen, da sonst Zeile und Spalte nicht mehr
@@ -885,7 +879,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // #29955 for-Schleifen-Ebene korrigieren, #67452 NICHT im Error-Handler sonst Chaos
     if( !bInError )
     {
-        // (Bei Sprüngen aus Schleifen tritt hier eine Differenz auf)
+        // (Bei Sprï¿½ngen aus Schleifen tritt hier eine Differenz auf)
         sal_uInt16 nExspectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
         if( pGosubStk )
             nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
@@ -897,9 +891,8 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 
     // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
-    // Erklärung siehe bei _ImplGetBreakCallLevel.
+    // Erklï¿½rung siehe bei _ImplGetBreakCallLevel.
     if( pInst->nCallLvl <= pInst->nBreakCallLvl )
-    //if( nFlags & SbDEBUG_STEPINTO )
     {
         StarBASIC* pStepBasic = GetCurrentBasic( &rBasic );
         sal_uInt16 nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
@@ -918,9 +911,6 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
         // Neuen BreakCallLevel ermitteln
         pInst->CalcBreakCallLevel( nNewFlags );
-        //16.10.96, ALT:
-        //if( nNewFlags != SbDEBUG_CONTINUE )
-        //  nFlags = nNewFlags;
     }
 }
 
@@ -1303,3 +1293,4 @@ void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     StepSTATIC_Impl( aName, t );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

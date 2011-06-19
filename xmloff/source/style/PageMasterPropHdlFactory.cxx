@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,10 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlbahdl.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
-#endif
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include "PageMasterPropHdl.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <com/sun/star/text/TextGridMode.hpp>
 
 
@@ -148,3 +145,4 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

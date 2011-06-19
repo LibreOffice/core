@@ -69,18 +69,18 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 
 # --- Library -----------------------------------
-#SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
+
 SHL1TARGET=	$(EVOAB_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SVLLIB)					\
     $(TOOLSLIB)					\
     $(UNOTOOLSLIB)				\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
+    $(SALHELPERLIB)					\
     $(DBTOOLSLIB)				\
     $(DBFILELIB)				\
     $(COMPHELPERLIB)
@@ -107,6 +107,7 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 
 .ENDIF
+
 # --- Targets ----------------------------------
 
 .INCLUDE : $(PRJ)$/target.pmk

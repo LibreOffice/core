@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,12 +42,45 @@
 #include <sfx2/docfac.hxx>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //*****************************************************************************************************************
 //  namespaces
 //*****************************************************************************************************************
 using namespace ::com::sun::star;
+
+
+class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::XRefreshListener>
+{
+    private:
+        SfxFilterListener *m_pOwner;
+
+    public:
+        SfxRefreshListener(SfxFilterListener *pOwner)
+            : m_pOwner(pOwner)
+        {
+        }
+
+        virtual ~SfxRefreshListener()
+        {
+        }
+
+        // util.XRefreshListener
+        virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& rEvent )
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            m_pOwner->refreshed(rEvent);
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            m_pOwner->disposing(rEvent);
+        }
+};
+
+
 
 //*****************************************************************************************************************
 //  definitions
@@ -84,7 +118,8 @@ SfxFilterListener::SfxFilterListener()
         if( xNotifier.is() == sal_True )
         {
             m_xFilterCache = xNotifier;
-            m_xFilterCache->addRefreshListener( this );
+            m_xFilterCacheListener = new SfxRefreshListener(this);
+            m_xFilterCache->addRefreshListener( m_xFilterCacheListener );
         }
     }
 }
@@ -95,7 +130,7 @@ SfxFilterListener::~SfxFilterListener()
 
 void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
     if(
         (xContainer.is()           ) &&
@@ -108,7 +143,7 @@ void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) t
 
 void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xNotifier( aSource.Source, uno::UNO_QUERY );
     if (!xNotifier.is())
         return;
@@ -116,3 +151,5 @@ void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) t
     if (xNotifier == m_xFilterCache)
         m_xFilterCache.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

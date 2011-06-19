@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 
 
 using namespace connectivity::mozab;
-using namespace rtl;
 
 bool
 MNameMapper::ltstr::operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const
@@ -140,3 +140,4 @@ MNameMapper::getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook )
     return( (*abook) != NULL );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

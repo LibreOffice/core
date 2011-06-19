@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ enum EVAnchorMode       {
 #define EE_APPEND               0xFFFF
 #define EE_INDEX_NOT_FOUND      0xFFFF
 
-// Fehlermeldungen fuer Read/Write-Methode
+// Error messages for Read / Write Method
 #define EE_READWRITE_OK              (SVSTREAM_OK)
 #define EE_READWRITE_WRONGFORMAT     (SVSTREAM_ERRBASE_USER+1)
 #define EE_READWRITE_GENERALERROR    (SVSTREAM_ERRBASE_USER+2)
@@ -103,9 +104,9 @@ class ImpEditEngine;
 class EditTextObject;
 class SfxStyleSheet;
 
-#define RGCHK_NONE          0   // Keine Korrektur der ViusArea beim Scrollen
-#define RGCHK_NEG           1   // Keine neg. ViusArea beim Scrollen
-#define RGCHK_PAPERSZ1      2   // VisArea muss in Papierbreite,Texthoehe liegen
+#define RGCHK_NONE          0   // No correction of ViusArea when scrolling
+#define RGCHK_NEG           1   // No negative ViusArea when scrolling
+#define RGCHK_PAPERSZ1      2   // VisArea must be within paper width, Text Size
 
 struct EPosition
 {
@@ -177,8 +178,8 @@ inline sal_Bool ESelection::IsEqual( const ESelection& rS ) const
 
 inline sal_Bool ESelection::IsLess( const ESelection& rS ) const
 {
-    // Selektion muss justiert sein.
-    // => Nur pueffen, ob Ende von 'this' < Start von rS
+    // The selection must be adjusted.
+    // => Only check if end of 'this' < Start of rS
 
     if ( ( nEndPara < rS.nStartPara ) ||
          ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !IsEqual( rS ) ) )
@@ -190,8 +191,8 @@ inline sal_Bool ESelection::IsLess( const ESelection& rS ) const
 
 inline sal_Bool ESelection::IsGreater( const ESelection& rS ) const
 {
-    // Selektion muss justiert sein.
-    // => Nur pueffen, ob Ende von 'this' > Start von rS
+    // The selection must be adjusted.
+    // => Only check if end of 'this' < Start of rS
 
     if ( ( nStartPara > rS.nEndPara ) ||
          ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !IsEqual( rS ) ) )
@@ -234,12 +235,12 @@ struct EDITENG_DLLPUBLIC EFieldInfo
 // -----------------------------------------------------------------------
 
 enum ImportState {
-                    RTFIMP_START, RTFIMP_END,               // nur pParser, nPara, nIndex
+                    RTFIMP_START, RTFIMP_END,               // only pParser, nPara, nIndex
                     RTFIMP_NEXTTOKEN, RTFIMP_UNKNOWNATTR,   // nToken+nTokenValue
                     RTFIMP_SETATTR,                         // pAttrs
                     RTFIMP_INSERTTEXT,                      // aText
                     RTFIMP_INSERTPARA,                      // -
-                    HTMLIMP_START, HTMLIMP_END,             // nur pParser, nPara, nIndex
+                    HTMLIMP_START, HTMLIMP_END,             // only pParser, nPara, nIndex
                     HTMLIMP_NEXTTOKEN, HTMLIMP_UNKNOWNATTR, // nToken
                     HTMLIMP_SETATTR,                        // pAttrs
                     HTMLIMP_INSERTTEXT,                     // aText
@@ -292,7 +293,7 @@ struct ParagraphInfos
     sal_uInt16  nFirstLineTextHeight;
     sal_uInt16  nFirstLineMaxAscent;
 
-    sal_Bool    bValid; // Bei einer Abfrage waehrend der Formatierung ungueltig!
+    sal_Bool    bValid; // A query during formatting is not valid!
 };
 
 struct EECharAttrib
@@ -386,3 +387,5 @@ struct EENotify
 };
 
 #endif // _MyEDITDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,9 +30,9 @@ $(eval $(call gb_Library_Library,svx))
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
 
 $(eval $(call gb_Library_set_include,svx,\
-    -I$(SRCDIR)/svx/inc \
-    -I$(SRCDIR)/svx/source/inc \
-    -I$(SRCDIR)/svx/inc/pch \
+    -I$(realpath $(SRCDIR)/svx/inc) \
+    -I$(realpath $(SRCDIR)/svx/source/inc) \
+    -I$(realpath $(SRCDIR)/svx/inc/pch) \
     $$(SOLARINC) \
     -I$(OUTDIR)/inc/offuh \
 ))
@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     sal \
     sfx \
     sot \
-    stl \
     svl \
     svt \
     svxcore \
@@ -63,7 +62,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     xo \
     xcr \
     $(gb_STDLIBS) \
@@ -117,9 +115,9 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/grfflt \
     svx/source/dialog/hdft \
     svx/source/dialog/hyperdlg \
-    svx/source/dialog/hyprlink \
     svx/source/dialog/imapdlg \
     svx/source/dialog/imapwnd \
+    svx/source/dialog/linkwarn \
     svx/source/dialog/measctrl \
     svx/source/dialog/optgrid \
     svx/source/dialog/orienthelper \
@@ -214,7 +212,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogalthemeprovider \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportunx \
 ))

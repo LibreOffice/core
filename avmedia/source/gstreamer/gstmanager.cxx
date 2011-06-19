@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -28,58 +29,81 @@
 #include "gstmanager.hxx"
 #include "gstplayer.hxx"
 
+#include <tools/urlobj.hxx>
+
+#define AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_GStreamer"
+#define AVMEDIA_GST_MANAGER_SERVICENAME "com.sun.star.media.Manager"
+
+#if OSL_DEBUG_LEVEL > 2
+#define DBG OSL_TRACE
+#else
+#define DBG(...)
+#endif
+
 using namespace ::com::sun::star;
 
-namespace avmedia
-{
-namespace gst
-{
+namespace avmedia { namespace gstreamer {
 // ----------------
 // - Manager -
 // ----------------
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr )
-{}
-
-// ------------------------------------------------------------------------------
-
-Manager::~Manager()
-{}
-
-// ------------------------------------------------------------------------------
-
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
-     throw( uno::RuntimeException )
 {
-    return( ::avmedia::gst::Player::create( rURL ) );
+    DBG( "avmediagst: Manager::Manager" );
 }
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Manager::getImplementationName()
-     throw( uno::RuntimeException )
+Manager::~Manager()
 {
-    return( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME ) ) );
+}
+
+// ------------------------------------------------------------------------------
+
+uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
+    throw (uno::RuntimeException)
+{
+    Player*                             pPlayer( new Player( mxMgr ) );
+    uno::Reference< media::XPlayer >    xRet( pPlayer );
+    const INetURLObject                 aURL( rURL );
+
+    DBG( "avmediagst: Manager::createPlayer" );
+
+    if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) )  )
+        xRet = uno::Reference< media::XPlayer >();
+
+    return xRet;
+}
+
+// ------------------------------------------------------------------------------
+
+::rtl::OUString SAL_CALL Manager::getImplementationName(  )
+    throw (uno::RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GST_MANAGER_IMPLEMENTATIONNAME ) );
 }
 
 // ------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
-     throw( uno::RuntimeException )
+    throw (uno::RuntimeException)
 {
-    return( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AVMEDIA_GSTREAMER_MANAGER_SERVICENAME ) ) );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_GST_MANAGER_SERVICENAME ) );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
-     throw( uno::RuntimeException )
+uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+    throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet( 1 );
-    aRet[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GSTREAMER_MANAGER_SERVICENAME ) );
+    uno::Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_GST_MANAGER_SERVICENAME ) );
 
-    return( aRet );
+    return aRet;
 }
-} // namespace gst
+
+} // namespace gstreamer
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

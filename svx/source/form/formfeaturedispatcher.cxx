@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,7 +125,7 @@ namespace svx
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught an exception!" );
+                OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught an exception!" );
             }
         }
         else
@@ -140,12 +141,12 @@ namespace svx
                 }
                 catch( const DisposedException& )
                 {
-                    OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught a DisposedException - removing the listener!" );
+                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a DisposedException - removing the listener!" );
                     aIter.remove( );
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OSingleFeatureDispatcher::notifyStatus: caught a generic exception while notifying a single listener!" );
+                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a generic exception while notifying a single listener!" );
                 }
             }
         }
@@ -239,3 +240,5 @@ namespace svx
 //........................................................................
 }   // namespace svx
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

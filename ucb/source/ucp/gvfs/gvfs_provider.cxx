@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,10 +86,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-            "com.sun.star.comp.GnomeVFSContentProvider" ),
-                     rtl::OUString::createFromAscii(
-            "com.sun.star.ucb.GnomeVFSContentProvider" ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.comp.GnomeVFSContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.ucb.GnomeVFSContentProvider" )) );
 //=========================================================================
 //
 // Service factory implementation.
@@ -143,15 +144,13 @@ ContentProvider::queryContent(
 
 //============================ shlib entry points =============================================
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment( const sal_Char  **ppEnvTypeName,
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char  **ppEnvTypeName,
                     uno_Environment **/*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" void * SAL_CALL
-component_getFactory( const sal_Char *pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char *pImplName,
               void           *pServiceManager,
               void           */*pRegistryKey*/ )
 {
@@ -181,3 +180,4 @@ component_getFactory( const sal_Char *pImplName,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

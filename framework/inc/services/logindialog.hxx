@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_THREADHELPER_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>
@@ -65,13 +64,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/morebtn.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -126,11 +121,9 @@ namespace framework{
 //  UseProxy=[browser|custom|none]
 //  SecurityProxy=so-webcache:3128
 //  dialog=[big|small]
-//
 //  [DefaultPorts]
 //  https=8445
 //  http=8090
-//
 //  [ServerHistory]
 //  Server_1=localhost
 //  Server_2=munch:7202
@@ -809,7 +802,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @short      helper methods to read/write  properties from/to ini file
             @descr      Using of Config-Class isn't easy everytime :-(
                         Thats the reason for these helper. State of operation isn't realy important ..
-                        but we assert impossible cases or occured errors!
+                        but we assert impossible cases or occurred errors!
 
             @seealso    -
 
@@ -888,3 +881,5 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

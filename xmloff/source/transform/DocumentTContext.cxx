@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,14 +37,10 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "MutableAttrList.hxx"
 
-#ifndef _XMLOFF_METATCONTEXT_HXX
 #include "DocumentTContext.hxx"
-#endif
 
 using ::rtl::OUString;
 
@@ -147,3 +144,5 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
     }
     XMLTransformerContext::StartElement( xAttrList );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

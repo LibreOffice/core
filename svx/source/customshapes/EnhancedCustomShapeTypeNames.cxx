@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,15 @@
 #include "precompiled_svx.hxx"
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
+struct THash
+{
+    size_t operator()( const char* s ) const
+    {
+        return rtl_str_hashCode(s);
+    }
+};
 struct TCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -38,7 +46,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef std::hash_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, MSO_SPT, THash, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
@@ -319,3 +327,5 @@ rtl::OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
         ? rtl::OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
         : rtl::OUString();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

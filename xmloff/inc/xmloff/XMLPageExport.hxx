@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/attrlist.hxx>
 #include <xmloff/uniref.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -112,3 +111,4 @@ public:
 
 #endif  //  _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -136,9 +137,9 @@ void SdrRectObj::SetXPolyDirty()
     }
 }
 
-FASTBOOL SdrRectObj::PaintNeedsXPoly(long nEckRad) const
+bool SdrRectObj::PaintNeedsXPoly(long nEckRad) const
 {
-    FASTBOOL bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
+    bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || nEckRad!=0;
     return bNeed;
 }
 
@@ -183,7 +184,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 
 void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    FASTBOOL bNoTextFrame=!IsTextFrame();
+    bool bNoTextFrame=!IsTextFrame();
     rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
     rInfo.bResizePropAllowed=sal_True;
     rInfo.bRotateFreeAllowed=sal_True;
@@ -202,7 +203,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=sal_True;
 
-    FASTBOOL bCanConv=!HasText() || ImpCanConvTextToCurve();
+    bool bCanConv=!HasText() || ImpCanConvTextToCurve();
     if (bCanConv && !bNoTextFrame && !HasText()) {
         bCanConv=HasFill() || HasLine();
     }
@@ -280,9 +281,9 @@ void SdrRectObj::TakeObjNamePlural(XubString& rName) const
     }
 }
 
-void SdrRectObj::operator=(const SdrObject& rObj)
+SdrRectObj* SdrRectObj::Clone() const
 {
-    SdrTextObj::operator=(rObj);
+    return CloneHelper< SdrRectObj >();
 }
 
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
@@ -509,7 +510,7 @@ void SdrRectObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrRectObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     SetXPolyDirty();
@@ -521,7 +522,7 @@ void SdrRectObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetXPolyDirty();
 }
 
-FASTBOOL SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return SdrTextObj::DoMacro(rRec);
 }
@@ -586,7 +587,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
-    { // #40608# Nur Uebergangsweise bis zum neuen TakeContour()
+    { // Nur Uebergangsweise bis zum neuen TakeContour()
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];
     }
@@ -617,4 +618,4 @@ void SdrRectObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetXPolyDirty();
 }
 
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

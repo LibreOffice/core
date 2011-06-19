@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,14 +55,14 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-///////////////////////////////////////////////////////////////////////////
+using ::rtl::OUString;
+
 
 #define BUFSIZE             4096
 #define VERS2_NOLANGUAGE    1024
@@ -201,7 +202,6 @@ const String GetDicExtension()
     return String::CreateFromAscii( pDicExt );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 DictionaryNeo::DictionaryNeo() :
     aDicEvtListeners( GetLinguMutex() ),
@@ -297,7 +297,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
 
-    // Header einlesen
+    // read header
     sal_Bool bNegativ;
     sal_uInt16 nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
@@ -320,7 +320,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         sal_uInt16  nLen = 0;
         sal_Char aWordBuf[ BUFSIZE ];
 
-        // Das erste Wort einlesen
+        // Read the first word
         if (!pStream->IsEof())
         {
             *pStream >> nLen;
@@ -337,8 +337,8 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 
         while(!pStream->IsEof())
         {
-            // Aus dem File einlesen
-            // Einfuegen ins Woerterbuch ohne Konvertierung
+            // Read from file
+            // Paste in dictionary without converting
             if(*aWordBuf)
             {
                 ByteString aDummy( aWordBuf );
@@ -349,7 +349,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
             }
 
             *pStream >> nLen;
-            if (pStream->IsEof())   // #75082# GPF in online-spelling
+            if (pStream->IsEof())
                 break;
             if (0 != (nErr = pStream->GetError()))
                 return nErr;
@@ -1076,7 +1076,6 @@ void SAL_CALL DictionaryNeo::storeToURL(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 DicEntry::DicEntry()
 {
@@ -1150,5 +1149,5 @@ OUString SAL_CALL DicEntry::getReplacementText(  )
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

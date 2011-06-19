@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <svx/simptabl.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/intlwrapper.hxx>
 
 // SvxSimpTblContainer  ------------------------------------------------------
@@ -226,7 +225,6 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
     SvHeaderTabListBox::Paint(rRect );
 
     sal_uInt16 nPrivTabCount = TabCount();
-    sal_uInt16 nPos = 0;
     sal_uInt16 nNewSize = ( nPrivTabCount > 0 ) ? (sal_uInt16)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
@@ -240,6 +238,7 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
+        sal_uInt16 nPos = 0;
         for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
             nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
@@ -442,15 +441,14 @@ void SvxSimpleTable::HBarEndDrag()
 {
     HideTracking();
     sal_uInt16 nPrivTabCount=TabCount();
-    sal_uInt16 nPos=0;
-    sal_uInt16 nNewSize=0;
 
     if(nPrivTabCount)
     {
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        //for(sal_uInt16 i=1;i<=nPrivTabCount;i++)
+        sal_uInt16 nPos=0;
+        sal_uInt16 nNewSize=0;
         for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
             nNewSize = static_cast< sal_uInt16 >( aHeaderBar.GetItemSize(i) ) + nPos;
@@ -577,3 +575,4 @@ IMPL_LINK( SvxSimpleTable, CompareHdl, SvSortData*, pData)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

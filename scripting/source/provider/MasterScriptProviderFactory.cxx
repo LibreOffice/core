@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,8 +92,8 @@ Sequence< ::rtl::OUString > SAL_CALL
 mspf_getSupportedServiceNames( )
     SAL_THROW( () )
 {
-    ::rtl::OUString str_name = ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.provider.MasterScriptProviderFactory");
+    ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.script.provider.MasterScriptProviderFactory"));
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -101,8 +102,8 @@ mspf_getSupportedServiceNames( )
 mspf_getImplementationName( )
     SAL_THROW( () )
 {
-    return ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.provider.MasterScriptProviderFactory");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.script.provider.MasterScriptProviderFactory"));
 }
 
 Reference< XInterface > SAL_CALL
@@ -151,3 +152,5 @@ sal_Bool MasterScriptProviderFactory::supportsService(
 }
 
 } // namespace browsenodefactory
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

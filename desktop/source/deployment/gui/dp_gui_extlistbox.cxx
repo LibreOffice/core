@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -184,13 +185,9 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
     m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
-    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
-    m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
-    m_aWarningImageHC( DialogHelper::getResId( RID_IMG_WARNING_HC ) ),
     m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
-    m_aDefaultImageHC( DialogHelper::getResId( RID_IMG_EXTENSION_HC ) ),
     m_pScrollBar( NULL ),
     m_pManager( pManager )
 {
@@ -354,7 +351,6 @@ void ExtensionBox_Impl::select( const rtl::OUString & sName )
     }
 }
 
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 // Title + description
 void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
@@ -531,9 +527,9 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
     Image aImage;
     if ( ! pEntry->m_aIcon )
-        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
+        aImage = m_aDefaultImage;
     else
-        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
+        aImage = pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
@@ -639,14 +635,14 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         if ( pEntry->m_bLocked )
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
         else
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
+        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
     }
 
     SetLineColor( Color( COL_LIGHTGRAY ) );
@@ -989,7 +985,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
         }
         else if ( !m_bInCheckMode )
         {
-            OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
+            OSL_FAIL( "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
 
@@ -1154,7 +1150,7 @@ void ExtensionBox_Impl::checkEntries()
                     nNewPos = nPos;
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
-                iIndex++;
+                ++iIndex;
             }
             else
             {   // remove entry from list
@@ -1168,7 +1164,7 @@ void ExtensionBox_Impl::checkEntries()
             }
         }
         else
-            iIndex++;
+            ++iIndex;
     }
     guard.clear();
 
@@ -1183,11 +1179,6 @@ void ExtensionBox_Impl::checkEntries()
         if ( IsReallyVisible() )
             Invalidate();
     }
-}
-//------------------------------------------------------------------------------
-bool ExtensionBox_Impl::isHCMode()
-{
-    return (bool)GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //------------------------------------------------------------------------------
@@ -1219,3 +1210,5 @@ IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar )
 }
 
 } //namespace dp_gui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

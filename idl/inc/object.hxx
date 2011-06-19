@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,9 @@
 #define _OBJECT_HXX
 
 #define _SVSTDARR_ULONGS
-//#include <svtools/svstdarr.hxx>
 #include <types.hxx>
 #include <slot.hxx>
+#include <vector>
 
 struct SvSlotElement
 {
@@ -42,19 +43,11 @@ struct SvSlotElement
                 , aPrefix( rPrefix )
              {}
 };
-DECLARE_LIST( SvSlotElementList, SvSlotElement* )
+typedef std::vector< SvSlotElement* > SvSlotElementList;
+
 class SvMetaClass;
-DECLARE_LIST( SvMetaClassList, SvMetaClass* )
+typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-class SvULongs : public List
-{
-public:
-    void    Insert( sal_uLong& rId, sal_uLong nPos ) { sal_uLong nId(rId ); List::Insert( (void*) nId, nPos ); }
-    void    Remove( sal_uLong& rId ){ sal_uLong nId(rId ); List::Remove( (void*) nId ); }
-    sal_uLong   GetObject( sal_uLong nPos ){ return (sal_uLong) List::GetObject( nPos ); }
-};
-
-/******************** class SvClassElement *******************************/
 SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
@@ -84,7 +77,6 @@ public:
 SV_DECL_IMPL_REF(SvClassElement)
 SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-/******************** class SvMetaClass *********************************/
 class SvMetaModule;
 SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 class SvMetaClass : public SvMetaType
@@ -95,9 +87,6 @@ class SvMetaClass : public SvMetaType
     SvBOOL                      aAutomation;
     SvMetaClassRef              xAutomationInterface;
 
-//    void                FillSbxMemberObject( SvIdlDataBase & rBase,
-//                                            SbxObject *, StringList &,
-//                                            sal_Bool bVariable );
     sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
 #ifdef IDL_COMPILER
@@ -113,7 +102,7 @@ class SvMetaClass : public SvMetaType
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
-    void                InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
+    void                InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                                     SvMetaClassList & rClassList,
                                     const ByteString & rPrefix, SvIdlDataBase& rBase );
 
@@ -141,7 +130,6 @@ public:
                         { return aSuperClass; }
 
     void                FillClasses( SvMetaClassList & rList );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * );
 
     const SvClassElementMemberList&
                         GetClassList() const
@@ -168,3 +156,4 @@ SV_IMPL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 
 #endif // _OBJECT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

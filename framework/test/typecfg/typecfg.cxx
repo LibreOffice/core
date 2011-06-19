@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -72,7 +73,6 @@
 //_________________________________________________________________________________________________________________
 
 using namespace ::std                       ;
-using namespace ::vos                       ;
 using namespace ::rtl                       ;
 using namespace ::framework                 ;
 using namespace ::comphelper                ;
@@ -157,14 +157,13 @@ void TypeApplication::Main()
 //*****************************************************************************************************************
 void TypeApplication::impl_parseCommandLine()
 {
-    OStartupInfo    aInfo       ;
     OUString        sArgument   ;
     sal_Int32       nArgument   = 0                         ;
-    sal_Int32       nCount      = aInfo.getCommandArgCount();
+    sal_Int32       nCount =  osl_getCommandArgCount();
 
     while( nArgument<nCount )
     {
-        aInfo.getCommandArg( nArgument, sArgument );
+        osl_getCommandArg( nArgument, &sArgument.pData );
 
         if( sArgument == ARGUMENT_GENERATE_CFGVIEW )
         {
@@ -247,3 +246,5 @@ void TypeApplication::impl_generateTypeDetectionXCD()
     aCache.impldbg_generateXCD( "org.openoffice.Office.TypeDetection.xcd", bWriteable, cSeparator );
     #endif  //ENABLE_GENERATEFILTERCACHE
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

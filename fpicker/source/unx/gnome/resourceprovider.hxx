@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring>
-#endif
+#include <rtl/ustring.hxx>
 
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
@@ -45,6 +44,7 @@
 #define FILE_PICKER_TITLE_SAVE        503
 #define FILE_PICKER_FILE_TYPE         504
 #define FILE_PICKER_OVERWRITE         505
+#define FILE_PICKER_ALLFORMATS        506
 
 //------------------------------------------------------------------------
 // deklarations
@@ -65,3 +65,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

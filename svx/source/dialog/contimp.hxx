@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,20 +28,12 @@
 #ifndef _CONTIMP_HXX_
 #define _CONTIMP_HXX_
 
-#ifndef _CONTDLG_HXX
 #include <svx/contdlg.hxx>
-#endif
 #include "contwnd.hxx"
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
 
 #define CONT_RESID(nId)  ResId( nId, DIALOG_MGR() )
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class SvxSuperContourDlg : public SvxContourDlg
 {
@@ -68,7 +61,6 @@ class SvxSuperContourDlg : public SvxContourDlg
     sal_Bool                bUpdateGraphicLinked;
     sal_Bool                bGraphicLinked;
     ImageList           maImageList;
-    ImageList           maImageListH;
 
     virtual void        Resize();
     virtual sal_Bool        Close();
@@ -125,3 +117,4 @@ public:
 
 #endif // _CONTIMP_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

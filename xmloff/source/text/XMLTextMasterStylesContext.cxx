@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -100,3 +97,5 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
 {
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

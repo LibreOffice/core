@@ -311,36 +311,6 @@ String STR_ObjNamePluralTEXTLNK
 {
     Text [ en-US ] = "Linked text frames" ;
 };
- //String STR_ObjNameSingulXTXT {
- //    Text="Textfortsetzungsrahmen";
- //    Text[ENGLISH]="drawobject";
- //    Text[norwegian]="Tegneobjekt";
- //    Text[italian]="Disegna oggetto";
- //    Text[portuguese_brazilian]="Desenhar objeto";
- //    Text[portuguese]="Desenhar objecto";
- //    Text[finnish]="Piirto-objekti";
- //    Text[danish]="Tegneobjekt";
- //    Text[french]="Drawobject";
- //    Text[swedish]="Ritobjekt";
- //    Text[dutch]="Tekenobject";
- //    Text[spanish]="Objeto de dibujo";
- //    Text[english_us]="drawobject";
- //};
- //String STR_ObjNamePluralXTXT {
- //    Text="Textfortsetzungsrahmen";
- //    Text[ENGLISH]="drawobjects";
- //    Text[norwegian]="Tegneobjektr";
- //    Text[italian]="Disegna  oggetti";
- //    Text[portuguese_brazilian]="Desenhar objetos";
- //    Text[portuguese]="Desenhar objectos";
- //    Text[finnish]="Piirto-objektit";
- //    Text[danish]="Tegneobjekter";
- //    Text[french]="Drawobjects";
- //    Text[swedish]="Ritobjekt";
- //    Text[dutch]="Tekenobjecten";
- //    Text[spanish]="Objetos de dibujo";
- //    Text[english_us]="drawobjects";
- //};
 String STR_ObjNameSingulFITTEXT
 {
     Text [ en-US ] = "Fit-to-size text object" ;
@@ -1124,7 +1094,7 @@ String STR_UndoMovLayer
 {
     Text [ en-US ] = "Change order of layers" ;
 };
-// --> OD 2009-07-09 #i73249#
+// Undo/Redo for setting object's name (#i73249#)
 String STR_UndoObjName
 {
     Text [ en-US ] = "Change object name of %1 to" ;
@@ -1137,7 +1107,6 @@ String STR_UndoObjDescription
 {
     Text [ en-US ] = "Change object description of %1" ;
 };
-// <--
 String STR_StandardLayerName
 {
     Text [ en-US ] = "Standard" ;
@@ -1600,8 +1569,8 @@ String STR_ItemNam_SHEARANGLE
  // Ende der gecachten Strings
 
  // und hier noch Bitmaps
-Bitmap BMAP_GrafikEi { File = "grafikei.bmp" ; };
-Bitmap BMAP_GrafikDe { File = "grafikde.bmp" ; };
+Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };
+Bitmap BMAP_GrafikDe { File = "grafikde.png" ; };
 
 // Strings fuer den Vorlagen-Dialog
 String SIP_UNKNOWN_ATTR
@@ -2753,24 +2722,17 @@ Bitmap SIP_SA_PAGESHADOW35X35
 
 Bitmap SIP_SA_MARKERS
 {
-    File = "markers.bmp";
+    File = "markers.png";
 };
 
 Bitmap SIP_SA_FINE_MARKERS
 {
-    File = "markers2.bmp";
+    File = "markers2.png";
 };
 
-// #100499#
 Bitmap BMP_SVXOLEOBJ
 {
-    File = "oleobj.bmp" ;
-};
-
-// #101928#
-Bitmap SIP_SA_ACCESSIBILITY_MARKERS
-{
-    File = "markersACC.bmp";
+    File = "oleobj.png" ;
 };
 
 String STR_ObjNameSingulMEDIA
@@ -2852,20 +2814,14 @@ String STR_ObjNamePluralTable
 
 Bitmap SIP_SA_CROP_MARKERS
 {
-    File = "cropmarkers.bmp";
+    File = "cropmarkers.png";
 };
 
 Bitmap SIP_SA_CROP_FINE_MARKERS
 {
-    File = "cropmarkers2.bmp";
+    File = "cropmarkers2.png";
 };
 
-Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
-{
-    File = "cropmarkersACC.bmp";
-};
-
-//IAccessibility2 Implementation 2009-----
 String STR_ObjNameSingulFONTWORK
 {
     Text [ en-US ] = "font work" ;
@@ -2874,5 +2830,4 @@ String STR_ObjNamePluralFONTWORK
 {
     Text [ en-US ] = "font works" ;
 };
-//-----IAccessibility2 Implementation 2009
 

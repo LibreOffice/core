@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,13 +77,13 @@ namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.evoab.ResultSet"));
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -181,7 +182,8 @@ static bool isLDAP( EBook *pBook )
 
 static bool isLocal( EBook *pBook )
 {
-    return pBook && !strncmp( "file://", e_book_get_uri( pBook ), 6 );
+    return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
+                      !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
 }
 
 static bool isAuthRequired( EBook *pBook )
@@ -232,7 +234,7 @@ executeQuery (EBook* pBook, EBookQuery* pQuery, GList **ppList,
     {
         rtl::OString aUser( getUserName( pBook ) );
         const char *pAuth = e_source_get_property( pSource, "auth" );
-        bAuthSuccess = e_book_authenticate_user( pBook, aUser, rPassword, pAuth, pError );
+        bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, pError );
     }
 
     if (bAuthSuccess)
@@ -516,7 +518,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
 
-    EBook *pBook = openBook( ::rtl::OUStringToOString( _rData.sTable, RTL_TEXTENCODING_UTF8 ) );
+    EBook *pBook = openBook(::rtl::OUStringToOString(_rData.sTable, RTL_TEXTENCODING_UTF8).getStr());
     if ( !pBook )
         m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
 
@@ -1018,3 +1020,5 @@ OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeExce
 // -----------------------------------------------------------------------------
 
 } } // connectivity::evoab
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

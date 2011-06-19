@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -298,12 +299,8 @@ void SdrCreateView::TakeActionRect(Rectangle& rRect) const
 
 sal_Bool SdrCreateView::CheckEdgeMode()
 {
-    sal_uInt32 nInv=nAktInvent;
-    sal_uInt16 nIdn=nAktIdent;
     if (pAktCreate!=NULL)
     {
-        nInv=pAktCreate->GetObjInventor();
-        nIdn=pAktCreate->GetObjIdentifier();
         // wird vom EdgeObj gemanaged
         if (nAktInvent==SdrInventor && nAktIdent==OBJ_EDGE) return sal_False;
     }
@@ -472,7 +469,6 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             }
             if (pAktCreate!=NULL)
             {
-                sal_Bool bStartEdit=sal_False; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
                 // #101618# SW uses a naked SdrObject for frame construction. Normally, such an
@@ -491,8 +487,6 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
-
-                    bStartEdit=sal_True;
                 }
                 if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
@@ -505,8 +499,6 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
-
-                    bStartEdit=sal_True;
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 
@@ -962,3 +954,4 @@ sal_Bool SdrCreateView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDont
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

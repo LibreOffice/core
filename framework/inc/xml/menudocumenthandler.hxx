@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -122,13 +121,11 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
 class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        // #110897#
         OReadMenuDocumentHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
         virtual ~OReadMenuDocumentHandler();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
@@ -166,14 +163,12 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
 class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
 {
     public:
-        // #110897#
         OReadMenuBarHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rMenuBarContainer,
             const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuBarHandler();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         // XDocumentHandler
@@ -205,7 +200,6 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > m_xMenuBarContainer;
         com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > m_xContainerFactory;
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };  // OReadMenuBarHandler
 
@@ -317,3 +311,5 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
 } // namespace framework
 
 #endif  // #ifndef __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

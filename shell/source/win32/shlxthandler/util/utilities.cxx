@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
+#include <osl/diagnose.h>
 
 #include "internal/config.hxx"
-#include "internal/dbgmacros.hxx"
 #include "internal/utilities.hxx"
 
 //-----------------------------
@@ -84,7 +85,7 @@ std::wstring GetResString(int ResId)
     int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
     OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
-    ENSURE(rc, "String resource not found");
+    OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
 }
@@ -170,21 +171,6 @@ std::wstring getShortPathName( const std::wstring& aLongName )
     return shortName;
 }
 
-/** convert LocaleSet pair into Microsoft List of Locale ID (LCID)
-    according to ISO-639 and ISO-3166.
-    http://etext.lib.virginia.edu/tei/iso639.html
-    http://nl.ijs.si/gnusl/cee/std/ISO_3166.html
-    @param
-        Locale, LocaleSet
-    @returns
-        Windows Locale Identifier corresponding to input LocaleSet.
-    @Usage Sample
-        LocaleSet_t myDefaultLocale( ::std::wstring( L"zh" ),::std::wstring(L"HK") );
-        DWORD myLCID = LocaleSetToLCID( myDefaultLocale );
-        wchar_t  buffer[20];
-        _ultow( myLCID, buffer, 16 );
-        MessageBox( NULL, buffer,L"the LCID is:",MB_OK );
-*/
 
 LCID LocaleSetToLCID( const LocaleSet_t & Locale )
 {
@@ -313,8 +299,6 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
     else if ( wsLanguage == L"es" )
     {
         usPrimaryLang = LANG_SPANISH;                     //Spanish
-        //else if ( wsCountry == L"ES" )
-        //  usSubLang = SUBLANG_SPANISH;                      // Spanish (Castilian)
         if ( wsCountry == L"MX" )
             usSubLang = SUBLANG_SPANISH_MEXICAN;              // Spanish (Mexican)
         else if ( wsCountry == L"ES" )
@@ -417,8 +401,6 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
         usPrimaryLang = LANG_NORWEGIAN;                   //Norwegian
         if ( wsCountry == L"NO" )
             usSubLang = SUBLANG_NORWEGIAN_BOKMAL;             // Norwegian (Bokmal)
-        //else if ( wsCountry == L"NO" )
-        //  usSubLang = SUBLANG_NORWEGIAN_NYNORSK;            // Norwegian (Nynorsk)
         else
             usSubLang = SUBLANG_DEFAULT;                      //default sub language
     }
@@ -505,13 +487,7 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
     else if ( wsLanguage == L"hy" )
         usPrimaryLang = LANG_ARMENIAN;                    //Armenian
     else if ( wsLanguage == L"az" )
-    {
         usPrimaryLang = LANG_AZERI;                       //Azeri
-        //if ( wsCountry == L"  " )
-        //  usSubLang = SUBLANG_AZERI_LATIN;                   // Azeri (Latin)
-        //else if ( wsCountry == L"  " )
-        //  usSubLang = SUBLANG_AZERI_CYRILLIC;                // Azeri (Cyrillic)
-    }
     else if ( wsLanguage == L"eu" )
         usPrimaryLang = LANG_BASQUE;                      //Basque
     else if ( wsLanguage == L"mk" )
@@ -584,16 +560,10 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
         usPrimaryLang = LANG_KASHMIRI;                    //Not supported.
     else if ( wsLanguage == L"ne" )
         usPrimaryLang = LANG_NEPALI;                      //Not supported.
-    //else if ( wsLanguage == L"  " )
-    //  usPrimaryLang = LANG_MANIPURI;                    //Not supported.
-    //else if ( wsLanguage == L"  " )
-    //  usPrimaryLang = LANG_KONKANI;                     //Konkani
-    //else if ( wsLanguage == L"  " )
-    //  usPrimaryLang = LANG_SYRIAC;                      //Syriac
-    //else if ( wsLanguage == L"  " )
-    //  usPrimaryLang = LANG_DIVEHI;                      //Divehi
     else
         return GetSystemDefaultLCID();                    //System Default Locale
 
     return MAKELCID( MAKELANGID( usPrimaryLang, usSubLang ), SORT_DEFAULT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

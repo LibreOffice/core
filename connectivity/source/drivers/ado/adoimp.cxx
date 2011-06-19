@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,7 +132,7 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
         case adVariant:
                                     nType = DataType::OTHER;        break;
         default:
-            OSL_ENSURE(0,"MapADOType2Jdbc: Unknown Type!");
+            OSL_FAIL("MapADOType2Jdbc: Unknown Type!");
             ;
     }
     return nType;
@@ -164,7 +165,7 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
         case DataType::TINYINT:         return isJetEngine(_nJetEngine) ? adUnsignedTinyInt : adTinyInt;break;
         case DataType::OBJECT:          return adGUID;      break;
     default:
-        OSL_ENSURE(0,"MapJdbc2ADOType: Unknown Type!");
+        OSL_FAIL("MapJdbc2ADOType: Unknown Type!");
             ;
     }
     return adEmpty;
@@ -263,7 +264,7 @@ sal_Int32 ADOS::mapAdoType2Object(ObjectTypeEnum objType)
             nType = PrivilegeObject::COLUMN;
             break;
         default:
-            OSL_ENSURE( false, "ADOS::mapAdoType2Object: privilege type cannot be translated!" );
+            OSL_FAIL( "ADOS::mapAdoType2Object: privilege type cannot be translated!" );
             break;
     }
     return nType;
@@ -335,3 +336,4 @@ WpADOField ADOS::getField(ADORecordset* _pRecordSet,sal_Int32 _nColumnIndex) thr
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

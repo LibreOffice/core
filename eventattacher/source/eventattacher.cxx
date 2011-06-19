@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 
 #define SERVICENAME "com.sun.star.script.EventAttacher"
@@ -252,7 +254,7 @@ private:
     Mutex                               m_aMutex;
     Reference< XMultiServiceFactory >   m_xSMgr;
 
-    // Services merken
+    // Save Services
     Reference< XIntrospection >             m_xIntrospection;
     Reference< XIdlReflection >             m_xReflection;
     Reference< XTypeConverter >             m_xConverter;
@@ -373,42 +375,39 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) th
 }
 
 //*************************************************************************
-//*** Private Hilfs-Methoden ***
+//*** Private helper methods ***
 Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    // Haben wir den Service schon? Sonst anlegen
     if( !m_xIntrospection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ) );
         m_xIntrospection = Reference< XIntrospection >( xIFace, UNO_QUERY );
     }
     return m_xIntrospection;
 }
 
 //*************************************************************************
-//*** Private Hilfs-Methoden ***
+//*** Private helper methods ***
 Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    // Haben wir den Service schon? Sonst anlegen
     if( !m_xReflection.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ) );
         m_xReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return m_xReflection;
 }
 
 //*************************************************************************
-//*** Private Hilfs-Methoden ***
+//*** Private helper methods ***
 Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterService() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    // Haben wir den Service schon? Sonst anlegen
     if( !m_xInvocationAdapterFactory.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ) );
         m_xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >( xIFace, UNO_QUERY );
     }
     return m_xInvocationAdapterFactory;
@@ -416,14 +415,13 @@ Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterSe
 
 
 //*************************************************************************
-//*** Private Hilfs-Methoden ***
+//*** Private helper methods ***
 Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
-    // Haben wir den Service schon? Sonst anlegen
     if( !m_xConverter.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString::createFromAscii("com.sun.star.script.Converter") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ) );
         m_xConverter = Reference< XTypeConverter >( xIFace, UNO_QUERY );
     }
     return m_xConverter;
@@ -432,8 +430,8 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-// Implementation eines EventAttacher-bezogenen AllListeners, der
-// nur einzelne Events an einen allgemeinen AllListener weiterleitet
+// Implementation of an EventAttacher-related AllListeners, which brings
+// a few Events to a general AllListener
 class FilterAllListenerImpl : public WeakImplHelper1< XAllListener  >
 {
 public:
@@ -472,7 +470,6 @@ FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OU
 void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
     throw( RuntimeException )
 {
-    // Nur durchreichen, wenn es die richtige Methode ist
     if( Event.MethodName == m_EventMethod && m_AllListener.is() )
         m_AllListener->firing( Event );
 }
@@ -528,7 +525,6 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
 {
     Any aRet;
 
-    // Nur durchreichen, wenn es die richtige Methode ist
     if( Event.MethodName == m_EventMethod && m_AllListener.is() )
         aRet = m_AllListener->approveFiring( Event );
     else
@@ -578,35 +574,30 @@ Reference< XEventListener > EventAttacherImpl::attachListener
 
     Reference< XEventListener > xRet = NULL;
 
-    // InvocationAdapterService holen
     Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
 
-    // Listener-Klasse per Reflection besorgen
     Reference< XIdlReflection > xReflection = getReflection();
     if( !xReflection.is() )
         throw ServiceNotRegisteredException();
 
-    // Anmelden, dazu passende addListener-Methode aufrufen
-    // Zunaechst ueber Introspection gehen, da die Methoden in der gleichen
-    // Weise analysiert werden koennen. Fuer bessere Performance entweder
-    // hier nochmal implementieren oder die Impl-Methode der Introspection
-    // fuer diesen Zweck konfigurierbar machen.
-
-    // Introspection-Service holen
+    // Sign in, Call the fitting addListener method
+    // First Introspection, as the Methods can be analyzed in the same way
+    // For better perfomance it is implemented here again or make the Impl-Method
+    // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
         return xRet;
 
-    // und unspecten
+    // Inspect Introspection
     Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
 
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )
         return xRet;
 
-    // Name der addListener-Methode zusammenbasteln
+    // Construct the name of the addListener-Method.
     OUString aAddListenerName;
     OUString aListenerName( ListenerType );
     sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
@@ -621,17 +612,16 @@ Reference< XEventListener > EventAttacherImpl::attachListener
         aListenerName = aListenerName.copy( nIndex +1 );
     aAddListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM( "add" ) ) + aListenerName;
 
-    // Methoden nach der passenden addListener-Methode durchsuchen
+    // Send Methods to the correct addListener-Method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
     sal_uInt32 i, nLen = aMethodSeq.getLength();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
 
     for( i = 0 ; i < nLen ; i++ )
     {
-        // Methode ansprechen
         const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
-        // Ist es die richtige Methode?
+        // Is it the correct method?
         OUString aMethName = rxMethod->getName();
 
         if( aAddListenerName == aMethName )
@@ -645,7 +635,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
             else if( nParamCount == 2 )
                 xListenerType = params.getConstArray()[1];
 
-            // Adapter zum eigentlichen Listener-Typ anfordern
+            // Request Adapter for the actual Listener type
             Reference< XInterface > xAdapter = createAllListenerAdapter
                 ( xInvocationAdapterFactory, xListenerType, AllListener, Helper );
 
@@ -654,7 +644,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
             xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
 
 
-            // Nur der Listener als Parameter?
+            // Just the Listener as parameter?
             if( nParamCount == 1 )
             {
                 Sequence< Any > args( 1 );
@@ -668,23 +658,23 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                     throw IntrospectionException();
                 }
             }
-            // Sonst den Zusatzparameter mit uebergeben
+            // Else, pass the other parameter now
             else if( nParamCount == 2 )
             {
                 Sequence< Any > args( 2 );
                 Any* pAnys = args.getArray();
 
-                // Typ des 1. Parameters pruefen
+                // Check the type of the 1st parameter
                 Reference< XIdlClass > xParamClass = params.getConstArray()[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                 {
                     pAnys[0] <<= AddListenerParam;
                 }
 
-                // 2. Parameter == Listener? TODO: Pruefen!
+                // 2nd Parameter == Listener? TODO: Test!
                 pAnys[1] <<= xAdapter;
 
-                // TODO: Konvertierung String -> ?
+                // TODO: Convert String -> ?
                 // else
                 try
                 {
@@ -697,7 +687,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
             }
             break;
             // else...
-            // Alles andere wird nicht unterstuetzt
+            // Anything else is not supported
         }
     }
 
@@ -716,7 +706,7 @@ Reference< XEventListener > EventAttacherImpl::attachSingleEventListener
 )
     throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException )
 {
-    // FilterListener anmelden
+    // Subscribe FilterListener
     Reference< XAllListener > aFilterListener = (XAllListener*)
         new FilterAllListenerImpl( this, EventMethod, AllListener );
     return attachListener( xObject, aFilterListener, Helper, ListenerType, AddListenerParam);
@@ -735,29 +725,25 @@ void EventAttacherImpl::removeListener
     if( !xObject.is() || !aToRemoveListener.is() )
         throw IllegalArgumentException();
 
-    // Listener-Klasse per Reflection besorgen
     Reference< XIdlReflection > xReflection = getReflection();
     if( !xReflection.is() )
         throw IntrospectionException();
 
-    // Abmelden, dazu passende removeListener-Methode aufrufen
-    // Zunaechst ueber Introspection gehen, da die Methoden in der gleichen
-    // Weise analysiert werden koennen. Fuer bessere Performance entweder
-    // hier nochmal implementieren oder die Impl-Methode der Introspection
-    // fuer diesen Zweck konfigurierbar machen.
-
-    // Introspection-Service holen
+    // Sign off, Call the fitting removeListener method
+    // First Introspection, as the Methods can be analyzed in the same way
+    // For better perfomance it is implemented here again or make the Impl-Method
+    // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
         throw IntrospectionException();
 
-    // und inspecten
+    //Inspect Introspection
     Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )
         throw IntrospectionException();
 
-    // Name der removeListener-Methode zusammenbasteln
+    // Create name of the removeListener-Method
     OUString aRemoveListenerName;
     OUString aListenerName( ListenerType );
     sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
@@ -772,22 +758,22 @@ void EventAttacherImpl::removeListener
         aListenerName = aListenerName.copy( nIndex +1 );
     aRemoveListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM("remove") ) + aListenerName;
 
-    // Methoden nach der passenden addListener-Methode durchsuchen
+    // Search methods for the correct removeListener method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
     sal_uInt32 i, nLen = aMethodSeq.getLength();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
     for( i = 0 ; i < nLen ; i++ )
     {
-        // Methode ansprechen
+        // Call Methode
         const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
-        // Ist es die richtige Methode?
+        // Is it the right method?
         if( aRemoveListenerName == rxMethod->getName() )
         {
             Sequence< Reference< XIdlClass > > params = rxMethod->getParameterTypes();
             sal_uInt32 nParamCount = params.getLength();
 
-            // Nur der Listener als Parameter?
+            // Just the Listener as parameter?
             if( nParamCount == 1 )
             {
                 Sequence< Any > args( 1 );
@@ -801,21 +787,21 @@ void EventAttacherImpl::removeListener
                     throw IntrospectionException();
                 }
             }
-            // Sonst den Zusatzparameter mit uebergeben
+            // Else pass the other parameter
             else if( nParamCount == 2 )
             {
                 Sequence< Any > args( 2 );
                 Any* pAnys = args.getArray();
 
-                // Typ des 1. Parameters pruefen
+                // Check the type of the 1st parameter
                 Reference< XIdlClass > xParamClass = params.getConstArray()[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                     pAnys[0] <<= AddListenerParam;
 
-                // 2. Parameter == Listener? TODO: Pruefen!
+                // 2nd parameter == Listener? TODO: Test!
                 pAnys[1] <<= aToRemoveListener;
 
-                // TODO: Konvertierung String -> ?
+                // TODO: Convert String -> ?
                 // else
                 try
                 {
@@ -836,13 +822,13 @@ void EventAttacherImpl::removeListener
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
@@ -868,3 +854,4 @@ void * SAL_CALL component_getFactory(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

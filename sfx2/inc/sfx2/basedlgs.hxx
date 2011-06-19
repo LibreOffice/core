@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,9 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
 class TabPage;
 class SfxTabPage;
@@ -217,11 +214,10 @@ private:
     HelpButton*         pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
-//  const SfxItemSet*   pOptions;
-//  SfxItemSet*         pOutSet;
 
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

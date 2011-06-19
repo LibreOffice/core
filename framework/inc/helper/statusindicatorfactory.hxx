@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,9 +59,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifndef _COM_SUN_STAR_URTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
-#endif
 
 //_______________________________________________
 // include others
@@ -147,14 +146,6 @@ struct IndicatorInfo
             return (m_xIndicator == xIndicator);
         }
 };
-/*
-    //---------------------------------------------------------------------------------------------------------
-    // norm nValue to fit range of 0..100%
-    sal_Int32 calcPercentage()
-    {
-    return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
-    }
-*/
 
 //===============================================
 /** @descr  Define a lits of child indicator objects and her data. */
@@ -339,3 +330,5 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

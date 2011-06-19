@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
 #include "svx/hyperdlg.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 
@@ -65,11 +66,10 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
     mpDlg( NULL )
 
 {
-    //CHINA001 pWindow = new SvxHpLinkDlg( _pParent, pBindings );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
-    DBG_ASSERT(mpDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(mpDlg, "Dialogdiet fail!");
     pWindow = mpDlg->GetWindow();
     ((MyStruct*)pImp)->bVisible = sal_False;
 
@@ -105,3 +105,4 @@ sal_Bool SvxHlinkDlgWrapper::QueryClose()
     return mpDlg ? mpDlg->QueryClose() : sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

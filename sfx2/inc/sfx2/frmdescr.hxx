@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,16 +47,14 @@ typedef SfxFrameDescriptor* SfxFrameDescriptorPtr;
 SV_DECL_PTRARR(SfxFramesArr, SfxFrameDescriptorPtr, 4, 2)
 
 //===========================================================================
-// Die SfxFrame...descriptoren bauen eine rekursive Struktur auf, die
-// s"amtliche zur Anzeige des Frame-Dokuments erforderlichen Daten umfa\st.
-// "Uber einen SfxFrameSetDescriptor hat man Zugriff auf die gesamte darunter
-// liegende Struktur.
-// Aufgrund der besonderen Eigenschaften des SfxFrames-Dokuments ist ein
-// SfxFramesSetDescriptor nicht nur der Inhalt dieses Dokuments, sondern
-// beschreibt auch die View darauf.
-// Das FrameSet wird aus Zeilen aufgebaut, die wiederum die eigentlichen
-// Fenster enthalten. Eine Zeile kann horizontal oder vertikal ausgerichtet
-// sein, woraus sich auch das Alignment des FrameSets ergibt.
+// The SfxFrame descriptors build a recursive structure, that covers all the
+// required data in-order to display the frame document.
+// Through a SfxFrameSetDescriptor access is given to the whole underlying
+// structure. Due to the nature of the SfxFrames document, the
+// SfxFramesSetDescriptor is not only the content of this document, but also
+// describes the view on it. The FrameSet is made up of lines, which in turn,
+// contains the actual window . A line can be horizontally or vertically
+// aligned, from which also the alignment of the FrameSet is given.
 //===========================================================================
 
 enum ScrollingMode
@@ -104,7 +103,7 @@ public:
                             SfxFrameDescriptor();
                             ~SfxFrameDescriptor();
 
-                            // Eigenschaften
+                            // Properties
     void                    TakeProperties( const SfxFrameProperties& rProp );
 
                             // FileName/URL
@@ -183,7 +182,7 @@ public:
     void                    SetHasUI( sal_Bool bOn )
                             { bHasUI = bOn; }
 
-                            // Attribute f"ur das Splitwindow
+                            // Attribute for Splitwindow
     sal_uInt16                  GetItemId() const
                             { return nItemId; }
     void                    SetItemId( sal_uInt16 nId )
@@ -192,11 +191,11 @@ public:
     long                    GetSize() const;
     sal_uInt16                  GetItemPos() const;
 
-                            // Kopie z.B. f"ur die Views
+                            // Copy for example for Views
     SfxFrameDescriptor*     Clone( sal_Bool bWithIds = sal_True ) const;
 };
 
-// Kein Bock, einen operator= zu implementieren...
+// No block to implement a =operator
 struct SfxFrameProperties
 {
     String                              aURL;
@@ -280,9 +279,6 @@ public:
                                             UniString &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const;
-    //virtual SfxPoolItem*              Create(SvStream &, sal_uInt16) const;
-    //virtual SvStream&                 Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    //virtual sal_uInt16                        GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
     const SfxFrameProperties&           GetProperties() const
                                         { return aProperties; }
@@ -292,3 +288,4 @@ public:
 
 #endif // #ifndef _SFX_FRMDESCRHXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

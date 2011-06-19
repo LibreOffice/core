@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -183,8 +184,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    ::rtl::OUString sKey;
-    sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
+    ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
     ConfigAccess aConfig(m_xSMGR, sKey);
@@ -318,8 +318,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        ::rtl::OUString sKey;
-        sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
+        ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
         ConfigAccess aConfig(m_xSMGR, sKey);
@@ -428,15 +427,15 @@ JobData::EEnvironment JobData::getEnvironment() const
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = ::rtl::OUString::createFromAscii("EXECUTOR");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTOR"));
             break;
 
         case E_DISPATCH :
-            sDescriptor = ::rtl::OUString::createFromAscii("DISPATCH");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISPATCH"));
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = ::rtl::OUString::createFromAscii("DOCUMENTEVENT");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCUMENTEVENT"));
             break;
         default:
             break;
@@ -586,7 +585,7 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static ::rtl::OUString PATTERN_ISO8601 = ::rtl::OUString::createFromAscii("\?\?\?\?-\?\?-\?\?*\0");
+    static ::rtl::OUString PATTERN_ISO8601(RTL_CONSTASCII_USTRINGPARAM("\?\?\?\?-\?\?-\?\?*\0"));
     WildCard aISOPattern(PATTERN_ISO8601);
 
     sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
@@ -748,3 +747,5 @@ void JobData::impl_reset()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

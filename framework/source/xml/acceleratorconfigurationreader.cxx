@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 //_______________________________________________
 // own includes
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 
 //_______________________________________________
 // interface includes
@@ -59,7 +58,7 @@ namespace framework{
    structure was detected.
 
    This macro combined the given comment with a generic
-   way to find out the XML line (where the error occured)
+   way to find out the XML line (where the error occurred)
    to format a suitable message.
 
    @param   COMMENT
@@ -336,3 +335,5 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

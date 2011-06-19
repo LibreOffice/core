@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 #include "vcl/scrbar.hxx"
 #include "vcl/svapp.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "svtools/extensionlistbox.hxx"
 
@@ -99,10 +100,10 @@ namespace dp_gui {
 #define PROGRESS_HEIGHT     14
 
 //------------------------------------------------------------------------------
-struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
+struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
 {
     const OUString operator () () {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::std::auto_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
         OSL_ASSERT( resmgr.get() != 0 );
         String ret( ResId( STR_FILTERNAME_ALL, *resmgr.get() ) );
@@ -208,8 +209,6 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
     delete m_pRemoveBtn;
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 {
@@ -425,6 +424,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsLeft() )
     {
+        const SolarMutexGuard aGuard;
         if ( rMEvt.IsMod1() && HasActive() )
             selectEntry( EXTENSION_LISTBOX_ENTRY_NOTFOUND );   // Selecting an not existing entry will deselect the current one
         else
@@ -570,7 +570,7 @@ DialogHelper::~DialogHelper()
 //------------------------------------------------------------------------------
 ResId DialogHelper::getResId( sal_uInt16 nId )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     return ResId( nId, *DeploymentGuiResMgr::get() );
 }
 
@@ -579,7 +579,7 @@ String DialogHelper::getResourceString( sal_uInt16 id )
 {
     // init with non-acquired solar mutex:
     BrandName::get();
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
@@ -604,7 +604,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         WarningBox aInfoBox( pParent, getResId( nResID ) );
         String aMsgText = aInfoBox.GetMessText();
         aMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
@@ -638,7 +638,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     {
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
         aErrorBox.SetText( sTitle );
         aErrorBox.Execute();
@@ -648,7 +648,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 //------------------------------------------------------------------------------
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     WarningBox aInfo( m_pVCLWindow, getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
 
     String sText( aInfo.GetMessText() );
@@ -661,7 +661,7 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 //------------------------------------------------------------------------------
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
 
     String sMsgText = aQuery.GetMessText();
@@ -778,6 +778,7 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      bool bLicenseMissing )
 {
+    const SolarMutexGuard aGuard;
     m_aUpdateBtn.Enable( true );
     return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
 }
@@ -791,14 +792,14 @@ void ExtMgrDialog::prepareChecking()
 //------------------------------------------------------------------------------
 void ExtMgrDialog::checkEntries()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 }
 
 //------------------------------------------------------------------------------
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_REMOVE_EXTENSION ) );
 
     String sText( aInfo.GetMessText() );
@@ -938,7 +939,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilterManager->appendFilter( iPos->first, iPos->second );
         }
         catch (lang::IllegalArgumentException & exc) {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             (void) exc;
         }
@@ -957,7 +958,6 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 //------------------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
 {
-    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -966,7 +966,7 @@ IMPL_LINK( ExtMgrDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1049,6 +1049,7 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
 //------------------------------------------------------------------------------
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
+    const SolarMutexGuard aGuard;
     m_pExtensionBox->updateEntry( xPackage );
 }
 
@@ -1162,12 +1163,11 @@ void ExtMgrDialog::Resize()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1334,6 +1334,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
+        const SolarMutexGuard aGuard;
         m_aUpdateBtn.Enable( true );
         return m_pExtensionBox->addEntry( xPackage );
     }
@@ -1349,7 +1350,7 @@ void UpdateRequiredDialog::prepareChecking()
 //------------------------------------------------------------------------------
 void UpdateRequiredDialog::checkEntries()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 
     if ( ! hasActiveEntries() )
@@ -1371,7 +1372,6 @@ bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 //------------------------------------------------------------------------------
 IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
 {
-    // m_dialog->m_cmdEnv->m_aborted = true;
     if ( m_xAbortChannel.is() )
     {
         try
@@ -1380,7 +1380,7 @@ IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
         }
         catch ( uno::RuntimeException & )
         {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
         }
     }
     return 1;
@@ -1462,6 +1462,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
     // We will remove all updated packages with satisfied dependencies, but
     // we will show all disabled entries so the user sees the result
     // of the 'disable all' button
+    const SolarMutexGuard aGuard;
     if ( isEnabled( xPackage ) && checkDependencies( xPackage ) )
         m_pExtensionBox->removeEntry( xPackage );
     else
@@ -1605,12 +1606,11 @@ void UpdateRequiredDialog::Resize()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1688,7 +1688,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     catch ( uno::RuntimeException & ) { throw; }
     catch ( uno::Exception & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRegistered = false;
     }
 
@@ -1820,9 +1820,8 @@ sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 SelectedPackage::~SelectedPackage() {}
 
 } //namespace dp_gui
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

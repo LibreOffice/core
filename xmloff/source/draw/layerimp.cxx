@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,7 +153,7 @@ void SdXMLLayerContext::EndElement()
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdXMLLayerContext::EndElement(), exception caught!");
+        OSL_FAIL("SdXMLLayerContext::EndElement(), exception caught!");
     }
 }
 
@@ -178,3 +179,5 @@ SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefi
 {
     return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

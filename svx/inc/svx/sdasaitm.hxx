@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,9 @@
 #ifndef _SDASAITM_HXX
 #define _SDASAITM_HXX
 
+#include <vector>
+
 #include <svl/poolitem.hxx>
-#include <tools/list.hxx>
 
 class SdrCustomShapeAdjustmentValue
 {
@@ -46,7 +48,7 @@ class SdrCustomShapeAdjustmentValue
 
 class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 {
-            List    aAdjustmentValueList;
+            std::vector<SdrCustomShapeAdjustmentValue>  aAdjustmentValueList;
 
     public :
 
@@ -64,15 +66,10 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = NULL ) const;
             virtual sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-            virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-            virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+            virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+            virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-
-#ifdef SDR_ISPOOLABLE
-            virtual int IsPoolable() const;
-#endif
-
-            sal_uInt32                          GetCount() const { return aAdjustmentValueList.Count(); };
+            sal_uInt32                          GetCount() const { return aAdjustmentValueList.size(); };
             SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
             SVX_DLLPUBLIC void                              SetValue( sal_uInt32 nIndex,
                                                         const SdrCustomShapeAdjustmentValue& rVal );
@@ -80,3 +77,4 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

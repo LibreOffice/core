@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#define _WIN32_WINNT 0x0501
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
@@ -90,14 +93,14 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.ado.ODriver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.ado.ODriver"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -147,7 +150,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:ado:"),9));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:ado:")),9));
 }
 // -----------------------------------------------------------------------------
 void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
@@ -264,7 +267,7 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
 
     pErrors->AddRef( );
 
-    // alle aufgelaufenen Fehler auslesen und ausgeben
+    // read all noted errors and issue them
     sal_Int32 nLen;
     pErrors->get_Count(&nLen);
     if (nLen)
@@ -300,3 +303,4 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

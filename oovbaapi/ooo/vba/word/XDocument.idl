@@ -27,21 +27,10 @@
 #ifndef __ooo_vba_word_XDocument_idl__
 #define __ooo_vba_word_XDocument_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __ooo_vba_word_XRange_idl__
 #include <ooo/vba/word/XRange.idl>
-#endif
-
-#ifndef __com_sun_star_script_XInvocation_idl__
 #include <com/sun/star/script/XInvocation.idl>
-#endif
 
 module ooo {  module vba {  module word {
 
@@ -49,6 +38,11 @@ interface XDocument : com::sun::star::script::XInvocation
 {
     [attribute, readonly] XRange Content;
     [attribute] any AttachedTemplate;
+    [attribute] long ProtectionType;
+    [attribute] boolean UpdateStylesOnOpen;
+    [attribute] boolean AutoHyphenation;
+    [attribute] long HyphenationZone;
+    [attribute] long ConsecutiveHyphensLimit;
 
     XRange Range( [in] any Start, [in] any End );
     any BuiltInDocumentProperties( [in] any Index );
@@ -63,6 +57,14 @@ interface XDocument : com::sun::star::script::XInvocation
     any Sections( [in] any Index );
     void Activate();
     any PageSetup();
+    any TablesOfContents([in] any Index);
+    any FormFields([in] any Index);
+    void Protect( [in] long Type, [in] any NOReset, [in] any Password, [in] any UseIRM, [in] any EnforceStyleLock );
+    void PrintOut([in] any Background, [in] any Append, [in] any Range, [in] any OutputFileName, [in] any From, [in] any To, [in] any Item, [in] any Copies, [in] any Pages, [in] any PageType, [in] any PrintToFile, [in] any Collate, [in] any FileName, [in] any ActivePrinterMacGX, [in] any ManualDuplexPrint, [in] any PrintZoomColumn, [in] any PrintZoomRow, [in] any PrintZoomPaperWidth, [in] any PrintZoomPaperHeight);
+    void PrintPreview();
+    void ClosePrintPreview();
+    any Revisions( [in] any index );
+    any Frames( [in] any index );
 };
 
 }; }; };

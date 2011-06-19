@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vector>
@@ -54,7 +57,7 @@ namespace drawinglayer
         };
 
         /// class to hold one Slice3D
-        class Slice3D
+        class DRAWINGLAYER_DLLPUBLIC Slice3D
         {
         protected:
             basegfx::B3DPolyPolygon                 maPolyPolygon;
@@ -88,7 +91,7 @@ namespace drawinglayer
         typedef ::std::vector< Slice3D > Slice3DVector;
 
         /// helpers for creation
-        void createLatheSlices(
+        void DRAWINGLAYER_DLLPUBLIC createLatheSlices(
             Slice3DVector& rSliceVector,
             const basegfx::B2DPolyPolygon& rSource,
             double fBackScale,
@@ -99,7 +102,7 @@ namespace drawinglayer
             bool bCloseFront,
             bool bCloseBack);
 
-        void createExtrudeSlices(
+        void DRAWINGLAYER_DLLPUBLIC createExtrudeSlices(
             Slice3DVector& rSliceVector,
             const basegfx::B2DPolyPolygon& rSource,
             double fBackScale,
@@ -110,10 +113,10 @@ namespace drawinglayer
             bool bCloseBack);
 
         /// helpers for geometry extraction
-        basegfx::B3DPolyPolygon extractHorizontalLinesFromSlice(const Slice3DVector& rSliceVector, bool bCloseHorLines);
-        basegfx::B3DPolyPolygon extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
+        basegfx::B3DPolyPolygon DRAWINGLAYER_DLLPUBLIC extractHorizontalLinesFromSlice(const Slice3DVector& rSliceVector, bool bCloseHorLines);
+        basegfx::B3DPolyPolygon DRAWINGLAYER_DLLPUBLIC extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
 
-        void extractPlanesFromSlice(
+        void DRAWINGLAYER_DLLPUBLIC extractPlanesFromSlice(
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const Slice3DVector& rSliceVector,
             bool bCreateNormals,
@@ -126,7 +129,7 @@ namespace drawinglayer
             bool bCreateTextureCoordinates,
             const basegfx::B2DHomMatrix& rTexTransform);
 
-        void createReducedOutlines(
+        void DRAWINGLAYER_DLLPUBLIC createReducedOutlines(
             const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B3DPolygon& rLoopA,
@@ -141,3 +144,5 @@ namespace drawinglayer
 #endif //_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

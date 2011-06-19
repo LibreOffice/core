@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _SVX_ZOOMITEM_HXX
 
 #include <svl/intitem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "svx/svxdllapi.h"
 
 //-------------------------------------------------------------------------
@@ -61,7 +60,7 @@ public:
 
     void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
     sal_uInt16                  GetValueSet() const { return nValueSet; }
-    FASTBOOL                IsValueAllowed( sal_uInt16 nValue ) const
+    bool                    IsValueAllowed( sal_uInt16 nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }
@@ -72,8 +71,8 @@ public:
     virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const;
     virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 //------------------------------------------------------------------------
@@ -89,3 +88,5 @@ public:
 #define SVX_ZOOM_ENABLE_ALL         0x701F
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

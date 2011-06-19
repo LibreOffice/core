@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
@@ -100,7 +101,7 @@ void SAL_CALL PanelWrapper::dispose() throw ( RuntimeException )
         ModelWinService* pService = dynamic_cast< ModelWinService* >( xNameAccess.get() );
         if ( pService != 0 )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             PanelWindow* pPanelWindow = dynamic_cast< PanelWindow* >( m_xPanelWindow.get() );
             if ( pPanelWindow != NULL )
             {
@@ -147,7 +148,7 @@ void SAL_CALL PanelWrapper::initialize( const Sequence< Any >& aArguments ) thro
             PanelWindow* pPanelWindow(0);
             Window*      pContentWindow(0);
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 pContentWindow  = VCLUnoHelper::GetWindow( xContentWindow );
                 if ( pWindow )
@@ -224,3 +225,5 @@ void SAL_CALL PanelWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

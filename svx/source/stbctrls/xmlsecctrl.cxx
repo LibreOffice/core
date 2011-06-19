@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
-//#ifndef _SFXITEMPOOL_HXX
-//#include <svl/itempool.hxx>
-//#endif
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -58,21 +51,6 @@
 
 #define PAINT_OFFSET    5
 
-//#include <editeng/sizeitem.hxx>
-//#include <svx/dialmgr.hxx>
-//#include "svx/dlgutil.hxx"
-//#include "stbctrls.h"
-
-//#include <svx/dialogs.hrc>
-
-/*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif*/
-
-
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxUInt16Item );
 
@@ -89,17 +67,13 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 
 XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16 _nId, StatusBar& _rStb )
     :SfxStatusBarControl( _nSlotId, _nId, _rStb )
-
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
 
-    sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maImage = Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
-    mpImpl->maImageBroken =
-        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
-    mpImpl->maImageNotValidated =
-        Image( SVX_RES( bHC ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
+    mpImpl->maImage             = Image( SVX_RES( RID_SVXBMP_SIGNET              ) );
+    mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
+    mpImpl->maImageNotValidated = Image( SVX_RES( RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -115,7 +89,6 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
-//      mpImpl->mbSigned = ( ( SfxUInt16Item* ) pState )->GetValue() == 1 /* SIGNED*/ ;
         mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();
     }
     else
@@ -170,8 +143,6 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     OutputDevice*       pDev = rUsrEvt.GetDevice();
     DBG_ASSERT( pDev, "-XmlSecStatusBarControl::Paint(): no Output Device... this will lead to nirvana..." );
     Rectangle           aRect = rUsrEvt.GetRect();
-    StatusBar&          rBar = GetStatusBar();
-    Point               aItemPos = rBar.GetItemTextPos( GetId() );
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
 
@@ -206,3 +177,4 @@ long XmlSecStatusBarControl::GetDefItemWidth( StatusBar& )
     return 16;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

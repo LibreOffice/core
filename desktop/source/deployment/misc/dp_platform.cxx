@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 
 #define PLATFORM_ALL                "all"
 #define PLATFORM_WIN_X86            "windows_x86"
+#define PLATFORM_WIN_X86_64         "windows_x86_64"
 #define PLATFORM_LINUX_X86          "linux_x86"
 #define PLATFORM_LINUX_X86_64       "linux_x86_64"
 #define PLATFORM_KFREEBSD_X86       "kfreebsd_x86"
@@ -62,11 +64,17 @@
 #define PLATFORM_SOLARIS_X86        "solaris_x86"
 #define PLATFORM_FREEBSD_X86        "freebsd_x86"
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
+#define PLATFORM_NETBSD_X86         "netbsd_x86"
+#define PLATFORM_NETBSD_X86_64      "netbsd_x86_64"
 #define PLATFORM_MACOSX_X86         "macosx_x86"
 #define PLATFORM_MACOSX_PPC         "macosx_powerpc"
-#define PLATFORM_OS2_X86            "os2_x86"
+#define PLATFORM_OPENBSD_X86        "openbsd_x86"
+#define PLATFORM_OPENBSD_X86_64     "openbsd_x86_64"
+#define PLATFORM_DRAGONFLY_X86      "dragonfly_x86"
+#define PLATFORM_DRAGONFLY_X86_64   "dragonfly_x86_64"
 
 
+#define PLATFORM_AIX_POWERPC        "aix_powerpc"
 
 
 
@@ -83,7 +91,7 @@ namespace dp_misc
 namespace
 {
     struct StrOperatingSystem :
-        public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
+        public rtl::StaticWithInit<OUString, StrOperatingSystem> {
             const OUString operator () () {
                 OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
                 ::rtl::Bootstrap::expandMacros( os );
@@ -92,7 +100,7 @@ namespace
     };
 
     struct StrCPU :
-        public rtl::StaticWithInit<const OUString, StrCPU> {
+        public rtl::StaticWithInit<OUString, StrCPU> {
             const OUString operator () () {
                 OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
                 ::rtl::Bootstrap::expandMacros( arch );
@@ -102,14 +110,12 @@ namespace
 
 
     struct StrPlatform : public rtl::StaticWithInit<
-        const OUString, StrPlatform> {
+        OUString, StrPlatform> {
             const OUString operator () () {
                 ::rtl::OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( static_cast<sal_Unicode>('_') );
-                OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
-                ::rtl::Bootstrap::expandMacros( arch );
-                buf.append( arch );
+                buf.append( StrCPU::get() );
                 return buf.makeStringAndClear();
             }
     };
@@ -127,6 +133,8 @@ namespace
             ret = true;
         else if (token.equals(OUSTR(PLATFORM_WIN_X86)))
             ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_WIN_X86_64)))
+            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
@@ -171,16 +179,28 @@ namespace
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_FREEBSD_X86_64)))
             ret = checkOSandCPU(OUSTR("FreeBSD"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_NETBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("NetBSD"), OUSTR("X86_64"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_X86)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("PowerPC"));
-        else if (token.equals(OUSTR(PLATFORM_OS2_X86)))
-            ret = checkOSandCPU(OUSTR("OS2"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_AIX_POWERPC)))
+            ret = checkOSandCPU(OUSTR("AIX"), OUSTR("PowerPC"));
+        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86)))
+            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86)))
+            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86_64)))
+            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("X86_64"));
         else
         {
-            OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
-            "Check the platform element in the descripion.xml");
+            OSL_FAIL("Extension Manager: The extension supports an unknown platform. "
+            "Check the platform element in the description.xml");
             ret = false;
         }
         return ret;
@@ -230,3 +250,4 @@ bool hasValidPlatform( css::uno::Sequence<OUString> const & platformStrings)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

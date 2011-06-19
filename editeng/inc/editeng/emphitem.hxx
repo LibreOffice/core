@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@ namespace rtl
 
 // class SvxEmphasisMarkItem ----------------------------------------------
 
-/* [Beschreibung]
+/* [Description]
 
-    Dieses Item beschreibt die Font-Betonung.
+    This item describes the Font emphasis.
 */
 
 class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
@@ -54,7 +55,7 @@ public:
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
                           const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -66,10 +67,8 @@ public:
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
     virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal,
-                                            sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal,
-                                            sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     inline SvxEmphasisMarkItem& operator=(const SvxEmphasisMarkItem& rItem )
     {
@@ -86,3 +85,4 @@ public:
 
 #endif // #ifndef _SVX_EMPHITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

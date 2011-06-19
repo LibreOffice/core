@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #define CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
 
 #include "odbc/OResultSetMetaData.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -41,10 +42,10 @@ namespace connectivity
         typedef odbc::OResultSetMetaData OAdabasResultSetMetaData_BASE;
         class OAdabasResultSetMetaData :    public  OAdabasResultSetMetaData_BASE
         {
-            ::vos::ORef<OSQLColumns>    m_aSelectColumns;
+            ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::vos::ORef<OSQLColumns>& _rSelectColumns);
+            // a Constructor, that is needed for when Returning the Object is needed:
+            OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::rtl::Reference<OSQLColumns>& _rSelectColumns);
             virtual ~OAdabasResultSetMetaData();
 
             virtual sal_Int32 SAL_CALL getColumnType( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -54,3 +55,5 @@ namespace connectivity
     }
 }
 #endif // CONNECTIVITY_ADABAS_RESULTSETMETADATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

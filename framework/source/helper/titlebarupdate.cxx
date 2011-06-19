@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,114 +28,42 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-#ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
 #include <helper/titlebarupdate.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
 #include <pattern/window.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPETIES_H_
 #include <properties.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICXEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-
-#ifndef _UTL_CONFIGMGR_HXX
 #include <unotools/configmgr.hxx>
-#endif
-
-#ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
-#endif
-
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-
-#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -246,6 +175,86 @@ void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
     // nothing todo here - because we hold the frame as weak reference only
 }
 
+//http://live.gnome.org/GnomeShell/ApplicationBased
+//See http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx for future
+//Windows 7 equivalent support
+void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame)
+{
+    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
+    if ( ! xWindow.is() )
+        return;
+
+    ::rtl::OUString sApplicationID;
+    try
+    {
+        ::rtl::OUString aProductName;
+        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= aProductName;
+
+        // SYNCHRONIZED ->
+        ReadGuard aReadLock(m_aLock);
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+        aReadLock.unlock();
+        // <- SYNCHRONIZED
+
+        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
+            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
+            css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::container::XNameAccess > xConfig(
+            xModuleManager,
+            css::uno::UNO_QUERY_THROW);
+
+        rtl::OUString aModuleId = xModuleManager->identify(xFrame);
+        rtl::OUString sDesktopName;
+
+        if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.formula.FormulaProperties")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.StartModule")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
+        else
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
+        sApplicationID = aProductName.toAsciiLowerCase();
+        sApplicationID += ::rtl::OUString(sal_Unicode('-'));
+        sApplicationID += sDesktopName;
+    }
+    catch(const css::uno::Exception&)
+    {
+    }
+
+    // VCL SYNCHRONIZED ->
+    SolarMutexGuard aSolarGuard;
+
+    Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
+    if (
+        ( pWindow                                 ) &&
+        ( pWindow->GetType() == WINDOW_WORKWINDOW )
+       )
+    {
+        WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
+        pWorkWindow->SetApplicationID( sApplicationID );
+    }
+    // <- VCL SYNCHRONIZED
+}
+
+
 //*****************************************************************************************************************
 ::sal_Bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                                       TModuleInfo&                               rInfo )
@@ -307,6 +316,9 @@ void TitleBarUpdate::impl_forceUpdate()
 
     impl_updateIcon  (xFrame);
     impl_updateTitle (xFrame);
+#if defined(UNX) && !defined(MACOSX)
+    impl_updateApplicationID (xFrame);
+#endif
 }
 
 //*****************************************************************************************************************
@@ -332,7 +344,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         try
         {
-            xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
+            xSet->getPropertyValue( DECLARE_ASCII("IconId") ) >>= nIcon;
         }
         catch(const css::uno::Exception&)
         {}
@@ -357,7 +369,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     //    Check window pointer for right WorkWindow class too!!!
 
     // VCL SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
@@ -374,8 +386,6 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
             aURL = xModel->getURL();
         pWorkWindow->SetRepresentedURL( aURL );
     }
-
-    aSolarLock.clear();
     // <- VCL SYNCHRONIZED
 }
 
@@ -394,7 +404,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     const ::rtl::OUString sTitle = xTitle->getTitle ();
 
     // VCL SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarLock( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
@@ -405,9 +415,9 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
         pWorkWindow->SetText( sTitle );
     }
-
-    aSolarLock.clear();
     // <- VCL SYNCHRONIZED
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
-
-///////////////////////////////////////////////////////////////////////////
 
 
 class SpellChecker :
@@ -143,9 +140,7 @@ public:
         removeEventListener( const Reference< XEventListener >& rxListener )
             throw(RuntimeException);
 
-    ////////////////////////////////////////////////////////////
     // Service specific part
-    //
 
     // XServiceInfo
     virtual OUString SAL_CALL
@@ -167,11 +162,11 @@ public:
 
 inline OUString SpellChecker::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu.examples.SpellChecker" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.lingu.examples.SpellChecker" ));
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

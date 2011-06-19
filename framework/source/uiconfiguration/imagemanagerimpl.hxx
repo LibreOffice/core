@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -130,7 +131,7 @@ namespace framework
         public:
 
             ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
-                ,const  com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& _xOwner
+                ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
 
@@ -161,7 +162,7 @@ namespace framework
 
             void clear();
 
-            typedef std::hash_map< rtl::OUString,
+            typedef boost::unordered_map< rtl::OUString,
                                    sal_Bool,
                                    OUStringHashCode,
                                    ::std::equal_to< ::rtl::OUString > > ImageNameMap;
@@ -201,7 +202,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xOwner;
+            ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;
             rtl::OUString                                                                   m_aXMLPostfix;
@@ -220,3 +221,5 @@ namespace framework
 }
 
 #endif // __FRAMEWORK_UICONFIGURATION_IMAGEMANAGERIMPL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

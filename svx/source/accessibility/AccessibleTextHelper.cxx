@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <memory>
 #include <algorithm>
 #include <deque>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -177,7 +178,7 @@ namespace accessibility
         // checks all children for visibility, throws away invisible ones
         void UpdateVisibleChildren( bool bBroadcastEvents=true );
 
-        // check all children for changes in positíon and size
+        // check all children for changes in position and size
         void UpdateBoundRect();
 
         // calls SetSelection on the forwarder and updates maLastSelection
@@ -293,7 +294,7 @@ namespace accessibility
     {
         DBG_DTOR( AccessibleTextHelper_Impl, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -450,13 +451,13 @@ namespace accessibility
             // we just received the focus, also send caret event then
             UpdateSelection();
 
-            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
+            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
         }
         else
         {
             maParaManager.SetFocus( -1 );
 
-            DBG_TRACE1("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
+            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
 
             if( mbGroupHasFocus )
                 SetShapeFocus( sal_True );
@@ -473,7 +474,7 @@ namespace accessibility
         mbGroupHasFocus = sal_True;
         maParaManager.SetFocus( nNewChild );
 
-        DBG_TRACE1("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
+        OSL_TRACE("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
     }
 
     void AccessibleTextHelper_Impl::SetShapeFocus( sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -489,12 +490,12 @@ namespace accessibility
             if( bHaveFocus )
             {
                 GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
+                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
             }
             else
             {
                 LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
-                DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
+                OSL_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
             }
         }
     }
@@ -523,7 +524,7 @@ namespace accessibility
             SetShapeFocus( bHaveFocus );
         }
 
-        DBG_TRACE2("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
+        OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %d, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -573,7 +574,7 @@ namespace accessibility
                     // #103998# Not that important, changed from assertion to trace
                     if( mbThisHasFocus )
                     {
-                        DBG_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
+                        OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
                     }
 
                     sal_uInt16 nMaxValidParaIndex( static_cast< sal_uInt16 >( GetTextForwarder().GetParagraphCount() ) - 1 );
@@ -598,7 +599,7 @@ namespace accessibility
 
                             ChangeChildFocus( aSelection.nEndPara );
 
-                            DBG_TRACE3("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
+                            OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %d, Paragraph: %d, Last paragraph: %d",
                                        this, aSelection.nEndPara, maLastSelection.nEndPara);
                         }
                     }
@@ -627,7 +628,7 @@ namespace accessibility
                                                  aOldCursor );
                     }
 
-                    DBG_TRACE5("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
+                    OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %d, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
                                this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent
@@ -640,18 +641,15 @@ namespace accessibility
                         makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
                                        ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
 
-                    // --> OD 2005-12-15 #i27299#
-                    // event TEXT_SELECTION_CHANGED has to be submitted.
+                    // event TEXT_SELECTION_CHANGED has to be submitted. (#i27299#)
                     const sal_Int16 nTextSelChgEventId =
                                     AccessibleEventId::TEXT_SELECTION_CHANGED;
-                    // <--
                     // #107037# notify selection change
                     if( maLastSelection.nStartPara == EE_PARA_NOT_FOUND )
                     {
                         // last selection is undefined
-                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        // use method <ESelection::HasRange()> (#i27299#)
                         if ( aSelection.HasRange() )
-                        // <--
                         {
                             // selection was undefined, now is on
                             maParaManager.FireEvent( sortedSelection.first,
@@ -662,42 +660,29 @@ namespace accessibility
                     else
                     {
                         // last selection is valid
-                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        // use method <ESelection::HasRange()> (#i27299#)
                         if ( maLastSelection.HasRange() &&
                              !aSelection.HasRange() )
-                        // <--
                         {
                             // selection was on, now is empty
                             maParaManager.FireEvent( sortedLastSelection.first,
                                                      sortedLastSelection.second+1,
                                                      nTextSelChgEventId );
                         }
-                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
+                        // use method <ESelection::HasRange()> (#i27299#)
                         else if( !maLastSelection.HasRange() &&
                                  aSelection.HasRange() )
-                        // <--
                         {
                             // selection was empty, now is on
                             maParaManager.FireEvent( sortedSelection.first,
                                                      sortedSelection.second+1,
                                                      nTextSelChgEventId );
                         }
-                        // --> OD 2005-12-15 #i27299#
-                        // - no event TEXT_SELECTION_CHANGED event, if new and
-                        //   last selection are empty.
+                        // no event TEXT_SELECTION_CHANGED event, if new and
+                        // last selection are empty. (#i27299#)
                         else if ( maLastSelection.HasRange() &&
                                   aSelection.HasRange() )
-                        // <--
                         {
-                            // --> OD 2005-12-16 #i27299#
-                            // - send event TEXT_SELECTION_CHANGED for difference
-                            //   between last and new selection.
-//                            // selection was on, now is different: take union of ranges
-//                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
-//                                                           sortedLastSelection.second),
-//                                                     ::std::max(sortedSelection.first,
-//                                                           sortedLastSelection.second)+1,
-//                                                     nTextSelChgEventId );
                             // use sorted last and new selection
                             ESelection aTmpLastSel( maLastSelection );
                             aTmpLastSel.Adjust();
@@ -906,7 +891,7 @@ namespace accessibility
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
+            OSL_FAIL("AccessibleTextHelper_Impl::UpdateVisibleChildren error while determining visible children");
 
             // something failed - currently no children
             mnFirstVisibleChild = -1;
@@ -971,7 +956,7 @@ namespace accessibility
         if( mnFirstVisibleChild >= 0 &&
             mnFirstVisibleChild > mnLastVisibleChild )
         {
-            DBG_ERROR( "AccessibleTextHelper: range invalid" );
+            OSL_FAIL( "AccessibleTextHelper: range invalid" );
         }
     }
 #endif
@@ -1203,7 +1188,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-                    DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
+                    OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue: could not create new paragraph");
                 }
             }
             else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
@@ -1238,7 +1223,7 @@ namespace accessibility
             }
 #ifdef DBG_UTIL
             else
-                DBG_ERROR("AccessibleTextHelper_Impl::ProcessQueue() invalid hint id");
+                OSL_FAIL("AccessibleTextHelper_Impl::ProcessQueue() invalid hint id");
 #endif
         }
         else if( nNewParas != nCurrParas )
@@ -1461,10 +1446,9 @@ namespace accessibility
             if( pEditSourceHint )
             {
                 maEventQueue.Append( *pEditSourceHint );
-                // --> OD 2005-12-19 #i27299#
+                // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
                 if( maEventOpenFrames == 0 )
                     ProcessQueue();
-                // <--
             }
             else if( pTextHint )
             {
@@ -1501,17 +1485,14 @@ namespace accessibility
                     case TEXT_HINT_BLOCKNOTIFICATION_START:
                     case TEXT_HINT_INPUT_START:
                         ++maEventOpenFrames;
-                        // --> OD 2005-12-19 #i27299# - no FALLTROUGH
-                        // reason: event will not be processes, thus appending
-                        // the event isn't necessary.
+                        // no FALLTHROUGH reason: event will not be processed,
+                        // thus appending the event isn't necessary. (#i27299#)
                         break;
-                        // <--
                     default:
                         maEventQueue.Append( *pTextHint );
-                        // --> OD 2005-12-19 #i27299#
+                        // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
                         if( maEventOpenFrames == 0 )
                             ProcessQueue();
-                        // <--
                         break;
                 }
             }
@@ -1742,7 +1723,7 @@ namespace accessibility
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
         mpImpl( new AccessibleTextHelper_Impl() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SetEditSource( pEditSource );
     }
@@ -1963,7 +1944,7 @@ namespace accessibility
         // As Dispose calls ShutdownEditSource, which in turn
         // deregisters as listener on the edit source, have to lock
         // here
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1978,7 +1959,7 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper::IsSelected() const
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -1996,7 +1977,7 @@ namespace accessibility
     // XAccessibleContext
     sal_Int32 AccessibleTextHelper::GetChildCount() SAL_THROW((uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2013,7 +1994,7 @@ namespace accessibility
 
     uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2057,7 +2038,7 @@ namespace accessibility
     // XAccessibleComponent
     uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException))
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -2075,3 +2056,5 @@ namespace accessibility
 } // end of namespace accessibility
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

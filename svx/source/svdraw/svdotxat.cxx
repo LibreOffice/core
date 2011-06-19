@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,33 +62,19 @@
 #include <editeng/editeng.hxx>
 #include <editeng/postitem.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  Attribute, StyleSheets und AutoGrow
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const
+bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bWdt) const
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
     {
-        SdrFitToSizeType eFit=GetFitToSize();
-        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
-        FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
-        FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
+        bool bFitToSize(IsFitToSize());
+        bool bWdtGrow=bWdt && IsAutoGrowWidth();
+        bool bHgtGrow=bHgt && IsAutoGrowHeight();
         SdrTextAniKind eAniKind=GetTextAniKind();
         SdrTextAniDirection eAniDir=GetTextAniDirection();
-        FASTBOOL bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
-        FASTBOOL bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
-        FASTBOOL bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
+        bool bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
+        bool bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
+        bool bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
         if (!bFitToSize && (bWdtGrow || bHgtGrow))
         {
             Rectangle aR0(rR);
@@ -121,7 +108,6 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             if (aSiz.Width()<2) aSiz.Width()=2;   // Mindestgroesse 2
             if (aSiz.Height()<2) aSiz.Height()=2; // Mindestgroesse 2
 
-            // #101684#
             sal_Bool bInEditMode = IsInEditMode();
 
             if(!bInEditMode)
@@ -210,9 +196,9 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
     return sal_False;
 }
 
-FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
-    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
     if (bRet) {
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -225,13 +211,12 @@ FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bW
     return bRet;
 }
 
-FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     Rectangle aNeuRect(aRect);
-    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         aRect=aNeuRect;
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // mal wieder 'nen Hack
@@ -397,9 +382,9 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
     }
 }
 
-/** #103836# iterates over the paragraphs of a given SdrObject and removes all
-             hard set character attributes with the which ids contained in the
-             given vector
+/**  iterates over the paragraphs of a given SdrObject and removes all
+     hard set character attributes with the which ids contained in the
+     given vector
 */
 void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds )
 {
@@ -460,3 +445,5 @@ bool SdrTextObj::HasText() const
 
     return bHasText;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 
-#ifndef _COM_SUN_STAR_DRAWING_BitmapMode_HPP_
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#endif
 #include <com/sun/star/text/WritingMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
@@ -531,7 +530,6 @@ SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
 SvXMLEnumMapEntry  aXML_TexKind_EnumMap[] =
 {
     { XML_LUMINANCE,    drawing::TextureKind_LUMINANCE },
-//    { XML_INTENSITY,  drawing::TextureKind_INTENSITY },
     { XML_COLOR,        drawing::TextureKind_COLOR },
     { XML_TOKEN_INVALID, 0 }
 };
@@ -574,7 +572,7 @@ SvXMLEnumMapEntry aXML_WritingMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Enum[] =
+SvXMLEnumMapEntry const pXML_TextAnimation_Enum[] =
 {
     { XML_NONE,         drawing::TextAnimationKind_NONE },
     { XML_BLINKING,     drawing::TextAnimationKind_BLINK }, // will be filtered
@@ -584,7 +582,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Blinking_Enum[] =
+SvXMLEnumMapEntry const pXML_TextAnimation_Blinking_Enum[] =
 {
     { XML_FALSE,        drawing::TextAnimationKind_NONE },
     { XML_TRUE,         drawing::TextAnimationKind_BLINK },
@@ -594,7 +592,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimation_Blinking_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimationDirection_Enum[] =
+SvXMLEnumMapEntry const pXML_TextAnimationDirection_Enum[] =
 {
     { XML_LEFT,         drawing::TextAnimationDirection_LEFT },
     { XML_RIGHT,        drawing::TextAnimationDirection_RIGHT },    // will be filtered
@@ -603,7 +601,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_TextAnimationDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_TextAlign_Enum[] =
+SvXMLEnumMapEntry const pXML_TextAlign_Enum[] =
 {
     { XML_LEFT,         drawing::TextHorizontalAdjust_LEFT },
     { XML_CENTER,       drawing::TextHorizontalAdjust_CENTER },
@@ -612,7 +610,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_TextAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
+SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
 {
     { XML_TOP,          drawing::TextVerticalAdjust_TOP },
     { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
@@ -621,16 +619,16 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
+SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
     { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
-    { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
-    { XML_TRUE,         drawing::TextFitToSizeType_RESIZEATTR },
+    { XML_ALL,          drawing::TextFitToSizeType_ALLLINES },
+    { XML_SHRINK_TO_FIT,drawing::TextFitToSizeType_AUTOFIT },
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_MeasureUnit_Enum[] =
+SvXMLEnumMapEntry const pXML_MeasureUnit_Enum[] =
 {
     { XML_AUTOMATIC,    0 },
     { XML_UNIT_MM,      1 },
@@ -645,7 +643,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_MeasureUnit_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_HAlign_Enum[] =
+SvXMLEnumMapEntry const pXML_Measure_HAlign_Enum[] =
 {
     { XML_AUTOMATIC,        drawing::MeasureTextHorzPos_AUTO },
     { XML_LEFT_OUTSIDE,     drawing::MeasureTextHorzPos_LEFTOUTSIDE },
@@ -654,7 +652,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_HAlign_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_VAlign_Enum[] =
+SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
 {
     { XML_AUTOMATIC,    drawing::MeasureTextVertPos_AUTO },
     { XML_ABOVE,        drawing::MeasureTextVertPos_EAST },
@@ -664,7 +662,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Measure_VAlign_Enum[] =
 };
 
 // #FontWork#
-SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Style_Enum[] =
+SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
 {
     { XML_ROTATE,       0 }, //XFT_ROTATE,
     { XML_UPRIGHT,      1 }, //XFT_UPRIGHT,
@@ -674,7 +672,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Style_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Adjust_Enum[] =
+SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
 {
     { XML_LEFT,         0 }, //XFT_LEFT,
     { XML_RIGHT,        1 }, //XFT_RIGHT,
@@ -683,7 +681,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Adjust_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Shadow_Enum[] =
+SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
 {
     { XML_NORMAL,       0 }, //XFTSHADOW_NORMAL,
     { XML_SLANT,        1 }, //XFTSHADOW_SLANT,
@@ -691,7 +689,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Shadow_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Form_Enum[] =
+SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
 {
     { XML_NONE,             0 }, //XFTFORM_NONE,
     { XML_TOPCIRCLE,        1 }, //XFTFORM_TOPCIRC,
@@ -709,7 +707,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Form_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Esc_Dir_Enum[] =
+SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
 {
     { XML_HORIZONTAL,       0 }, //SDRCAPT_ESCHORIZONTAL,
     { XML_VERTICAL,         1 }, //SDRCAPT_ESCVERTICAL,
@@ -717,7 +715,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Esc_Dir_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Type_Enum[] =
+SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
 {
     { XML_STRAIGHT_LINE,            0 }, //SDRCAPT_TYPE1,
     { XML_ANGLED_LINE,              1 }, //SDRCAPT_TYPE2,
@@ -1662,10 +1660,6 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 }
                 break;
             case CTF_PAGE_VISIBLE:
-//          case CTF_HEADER_VISIBLE:
-//          case CTF_FOOTER_VISIBLE:
-//          case CTF_PAGE_NUMBER_VISIBLE:
-//          case CTF_DATE_TIME_VISIBLE:
                 {
                     sal_Bool bVisible = false;
                     (*property).maValue >>= bVisible;
@@ -1762,3 +1756,4 @@ void XMLPageExportPropertyMapper::handleElementItem(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

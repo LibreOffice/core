@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: fillattribute.cxx,v $
- *
- *  $Revision: 1.4 $
- *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,3 +212,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

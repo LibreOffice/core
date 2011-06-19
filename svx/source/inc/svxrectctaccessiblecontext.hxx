@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,9 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
-//#ifndef _CPPUHELPER_COMPBASE7_HXX_
-//#include <cppuhelper/compbase7.hxx>
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -564,3 +562,5 @@ inline sal_Bool SvxRectCtlChildAccessibleContext::IsNotAlive( void ) const
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

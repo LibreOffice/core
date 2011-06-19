@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "MutableAttrList.hxx"
 #include "MetaTContext.hxx"
 
@@ -144,3 +143,4 @@ void XMLMetaTransformerContext::Characters( const OUString& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

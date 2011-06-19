@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,12 @@
 #define _SVX_GALLERY1_HXX_
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
-//#include "gallery.hrc"
 
 #include <cstdio>
-#include <list>
+#include <vector>
 
 // ---------------------
 // - GalleryThemeEntry -
@@ -92,7 +91,7 @@ public:
     void                    SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
 };
 
-DECLARE_LIST( GalleryThemeList, GalleryThemeEntry* )
+typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 // ---------------------------
 // - GalleryImportThemeEntry -
@@ -105,7 +104,8 @@ struct GalleryImportThemeEntry
     INetURLObject   aURL;
     String          aImportName;
 };
-DECLARE_LIST( GalleryImportThemeList, GalleryImportThemeEntry* )
+
+typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
 
 // -----------------------------------------------------------------------------
 
@@ -118,6 +118,7 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry );
 
 class SfxListener;
 class GalleryTheme;
+class GalleryThemeCacheEntry;
 
 class Gallery : public SfxBroadcaster
 {
@@ -125,11 +126,13 @@ class Gallery : public SfxBroadcaster
     friend Gallery* createGallery( const rtl::OUString& );
     friend void disposeGallery( Gallery* );
 
+    typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
+
 private:
 
     GalleryThemeList            aThemeList;
     GalleryImportThemeList      aImportList;
-    List                        aThemeCache;
+    GalleryCacheThemeList       aThemeCache;
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
     rtl_TextEncoding            nReadTextEncoding;
@@ -155,8 +158,9 @@ public:
 
     SVX_DLLPUBLIC static Gallery* GetGalleryInstance();
 
-    sal_uIntPtr                 GetThemeCount() const { return aThemeList.Count(); }
-    const GalleryThemeEntry*    GetThemeInfo( sal_uIntPtr nPos ) { return aThemeList.GetObject( nPos ); }
+    size_t                      GetThemeCount() const { return aThemeList.size(); }
+    const GalleryThemeEntry*    GetThemeInfo( size_t nPos )
+                                { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
@@ -181,3 +185,5 @@ public:
 };
 
 #endif // _SVX_GALLERY1_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

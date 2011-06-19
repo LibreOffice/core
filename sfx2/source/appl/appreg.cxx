@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 #include <vcl/toolbox.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
@@ -94,7 +92,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("TbxController registration is not clearly defined!");
         }
     }
 #endif
@@ -119,7 +117,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("StbController registration is not clearly defined!");
         }
     }
 #endif
@@ -144,10 +142,12 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("MenuController register is not clearly defined!");
         }
     }
 #endif
 
     pAppData_Impl->pMenuCtrlFac->C40_INSERT( SfxMenuCtrlFactory, pFact, pAppData_Impl->pMenuCtrlFac->Count() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

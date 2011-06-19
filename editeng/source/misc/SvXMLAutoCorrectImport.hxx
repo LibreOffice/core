@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _SV_XMLAUTOCORRECTIMPORT_HXX
 #define _SV_XMLAUTOCORRECTIMPORT_HXX
 
-#ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
-#endif
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -50,9 +49,7 @@ public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
-    //SvStorageRef            &rStorage;
 
-    // #110680#
     SvXMLAutoCorrectImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvxAutocorrWordList *pNewAutocorr_List,
@@ -106,7 +103,6 @@ protected:
 public:
     SvStringsISortDtor  &rList;
 
-    // #110680#
     SvXMLExceptionListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvStringsISortDtor & rNewList );
@@ -146,3 +142,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,11 +44,7 @@ struct SfxMenuCtrlFactory;
 
 class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 {
-//friend SvStream& operator<<( SvStream& rStream, const SfxMenuControl& rItem );
-//friend SvStream& operator>>( SvStream& rStream, SfxMenuControl& rItem );
-
     String                  aTitle;
-    String                  aHelpText;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
     sal_Bool                    b_ShowStrings;
@@ -65,15 +62,10 @@ public:
 
         using SfxControllerItem::Bind;
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
-                                  const String& rTitle, const String &rHelpText,
-                                  SfxBindings & );
+                                  const String& rTitle, SfxBindings& rBindings );
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
                                   SfxVirtualMenu& rSubMenu,
-                                  const String& rTitle, const String &rHelpText,
-                                  SfxBindings & );
-
-//  SvStream &              Load(SvStream &, SfxBindings*);
-//  SvStream &              Store(SvStream &);
+                                  const String& rTitle, SfxBindings& rBindings );
 
     String                  GetTitle() const;
     SfxVirtualMenu*         GetPopupMenu() const;
@@ -81,15 +73,12 @@ public:
     void                    SetOwnMenu( SfxVirtualMenu* pMenu );
     void                    RemovePopup();
 
-    const String&           GetHelpText() const { return aHelpText; }
-    void                    SetHelpText(const String &rStr) { aHelpText  = rStr; }
-
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
     static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, SfxBindings&, SfxVirtualMenu* );
-    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, const String& sHelpText, SfxBindings&, SfxVirtualMenu* );
+    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
     static sal_Bool             IsSpecialControl( sal_uInt16 nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
@@ -102,13 +91,11 @@ public:
                             SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
-                                               const String&, const String&,
+                                               const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
     void                    Select();
 };
-
-//--------------------------------------------------------------------
 
 typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindings & );
 
@@ -126,44 +113,36 @@ struct SfxMenuCtrlFactory
     {}
 };
 
-//
-
 inline String SfxMenuControl::GetTitle() const
 {
     return aTitle;
 }
-//--------------------------------------------------------------------
-
-//
 
 inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 {
     return pSubMenu;
 }
-//--------------------------------------------------------------------
 
 #define SFX_DECL_MENU_CONTROL() \
         static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_MENU_CONTROL(Class, nItemClass) \
-        SfxMenuControl* __EXPORT Class::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ) \
+        SfxMenuControl* Class::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ) \
                { return new Class(nId, rMenu, rBindings); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
-//#if 0 // _SOLAR__PRIVATE
 
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
     sal_uIntPtr       m_nSymbolsStyle;
-    sal_Bool        m_bWasHiContrastMode;
     sal_Bool        m_bShowMenuImages;
 
 protected:
-    DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+    DECL_LINK( Activate, Menu * );
 
 public:
     SFX_DECL_MENU_CONTROL();
@@ -171,6 +150,6 @@ public:
     ~SfxAppMenuControl_Impl();
 };
 
-//#endif
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

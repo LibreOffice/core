@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +54,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrFillBitmapAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrFillBitmapAttribute
         {
         private:
             ImpSdrFillBitmapAttribute*          mpSdrFillBitmapAttribute;
@@ -99,3 +102,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

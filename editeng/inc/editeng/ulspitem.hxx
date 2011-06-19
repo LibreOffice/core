@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,18 +40,18 @@ namespace rtl
 
 // class SvxULSpaceItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt den oberen und unteren Rand einer Seite oder Absatz.
+/*  [Description]
+
+    This item describes the Upper- and Lower space of a page or paragraph.
 */
 
 #define ULSPACE_16_VERSION  ((sal_uInt16)0x0001)
 
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
-    sal_uInt16 nUpper;  //Oberer Rand
-    sal_uInt16 nLower;  //Unterer Rand
-    sal_uInt16 nPropUpper, nPropLower;      // relativ oder absolut (=100%)
+    sal_uInt16 nUpper;  // Upper space
+    sal_uInt16 nLower;  // Lower space
+    sal_uInt16 nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
     TYPEINFO();
 
@@ -59,11 +60,11 @@ public:
                     const sal_uInt16 nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -74,8 +75,8 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool                 ScaleMetrics( long nMult, long nDiv );
+    virtual bool                 HasMetrics() const;
 
     inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );
     inline void SetLower( const sal_uInt16 nL, const sal_uInt16 nProp = 100 );
@@ -111,3 +112,4 @@ inline void SvxULSpaceItem::SetLower( const sal_uInt16 nL, const sal_uInt16 nPro
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

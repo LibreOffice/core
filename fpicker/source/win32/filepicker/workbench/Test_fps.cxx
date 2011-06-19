@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,16 +43,14 @@
 #include <cppuhelper/servicefactory.hxx>
 
 #ifndef _RTL_USTRING_
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
 #endif
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_FILEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -99,7 +98,7 @@ void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-const OUString BMP_EXTENSION = OUString::createFromAscii( "bmp" );
+const OUString BMP_EXTENSION(RTL_CONSTASCII_USTRINGPARAM( "bmp" ));
 
 //-------------------------------------------------------------------------------------------------------------------------
 // a test client
@@ -197,9 +196,8 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const ::com::sun::star::
             }
         }
     }
-    catch( IllegalArgumentException& ex )
+    catch( IllegalArgumentException&  )
     {
-        ex = ex;
     }
 }
 
@@ -271,10 +269,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -283,19 +281,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     //-------------------------------------------------
 
     Sequence< Any > arguments(1);
-        //arguments[0] = makeAny( FILEOPEN_SIMPLE );
-        //arguments[0] = makeAny( FILESAVE_SIMPLE );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_SELECTION );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_TEMPLATE );
-        //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
-        //arguments[0] = makeAny( FILEOPEN_PLAY );
         arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
-            OUString::createFromAscii( FILE_PICKER_SERVICE_NAME ), arguments ), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_SERVICE_NAME )), arguments ), UNO_QUERY );
 
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(
@@ -305,9 +295,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         if ( xFPNotifier.is( ) )
             xFPNotifier->addFilePickerListener( xFPListener );
 
-        xFilePicker->setTitle( OUString::createFromAscii("FileOpen Simple..."));
+        xFilePicker->setTitle( OUString(RTL_CONSTASCII_USTRINGPARAM("FileOpen Simple...")));
         xFilePicker->setMultiSelectionMode( sal_True );
-        xFilePicker->setDefaultName( OUString::createFromAscii("d:\\test2.sxw"));
+        xFilePicker->setDefaultName( OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\test2.sxw")));
 
         OUString aDirURL;
         OUString aSysPath = OStringToOUString( "d:\\ueaeoe", osl_getThreadTextEncoding( ) );
@@ -370,10 +360,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory
@@ -385,3 +375,5 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

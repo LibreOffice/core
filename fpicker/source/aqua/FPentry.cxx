@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,27 +26,14 @@
  *
  ************************************************************************/
 
-//----------------------------------------------
-//  includes of other projects
-//----------------------------------------------
-
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 
-// #ifndef _OSL_DIAGNOSE_H_
-// #include <osl/diagnose.h>
-// #endif
 #include "SalAquaFilePicker.hxx"
 #include "SalAquaFolderPicker.hxx"
 
-// #ifndef _SV_SVAPP_HXX
-// #include <vcl/svapp.hxx>
-// #endif
 #include "FPServiceInfo.hxx"
 
-//-----------------------------------------------
-// namespace directives
-//-----------------------------------------------
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -56,9 +44,6 @@ using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFolderPicker;
 
-//------------------------------------------------
-//
-//------------------------------------------------
 
 static Reference< XInterface > SAL_CALL createFileInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
@@ -85,7 +70,7 @@ extern "C"
 // component_getImplementationEnvironment
 //------------------------------------------------
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -95,7 +80,7 @@ void SAL_CALL component_getImplementationEnvironment(
 //
 //------------------------------------------------
 
-void* SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
@@ -111,7 +96,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FILE_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -123,7 +108,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FOLDER_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FOLDER_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -143,3 +128,5 @@ void* SAL_CALL component_getFactory(
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

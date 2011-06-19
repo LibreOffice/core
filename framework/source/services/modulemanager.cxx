@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,8 +56,8 @@
 namespace framework
 {
 
-static const ::rtl::OUString CFGPATH_FACTORIES     = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
-static const ::rtl::OUString MODULEPROP_IDENTIFIER = ::rtl::OUString::createFromAscii("ooSetupFactoryModuleIdentifier" );
+static const ::rtl::OUString CFGPATH_FACTORIES    (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
+static const ::rtl::OUString MODULEPROP_IDENTIFIER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryModuleIdentifier"));
 
 /*-----------------------------------------------
     04.12.2003 09:32
@@ -145,7 +146,7 @@ ModuleManager::~ModuleManager()
        )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Given module is not a frame nor a window, controller or model."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Given module is not a frame nor a window, controller or model.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -175,7 +176,7 @@ ModuleManager::~ModuleManager()
 
     if (sModule.getLength() < 1)
         throw css::frame::UnknownModuleException(
-                ::rtl::OUString::createFromAscii("Cant find suitable module for the given component."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find suitable module for the given component.")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;
@@ -195,7 +196,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("No properties given to replace part of module."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No properties given to replace part of module.")),
                 static_cast< css::container::XNameAccess* >(this),
                 2);
     }
@@ -209,7 +210,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // get access to the element
     // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
     // it cache it as a member of this module manager instance. If we change some props there ... but dont
-    // flush changes (because an error occured) we will read them later. If we use a different config access
+    // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         xSMGR,
@@ -222,7 +223,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
@@ -257,7 +258,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Was not able to get write access to the requested module entry inside configuration.")),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
@@ -423,3 +424,5 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

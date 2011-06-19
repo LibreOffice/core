@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,8 @@
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
+#include "helper/mischelper.hxx"
+
 // ______________________________________________
 // interface includes
 #include <com/sun/star/beans/Property.hpp>
@@ -64,10 +67,8 @@
 
 #define CFG_READONLY_DEFAULT    sal_False
 
-const ::rtl::OUString CFGPROP_INTERNALPATHES = ::rtl::OUString::createFromAscii("InternalPaths");
-const ::rtl::OUString CFGPROP_USERPATHES     = ::rtl::OUString::createFromAscii("UserPaths"    );
-const ::rtl::OUString CFGPROP_WRITEPATH      = ::rtl::OUString::createFromAscii("WritePath"    );
-const ::rtl::OUString CFGPROP_ISSINGLEPATH   = ::rtl::OUString::createFromAscii("IsSinglePath" );
+const ::rtl::OUString CFGPROP_USERPATHES(RTL_CONSTASCII_USTRINGPARAM("UserPaths"));
+const ::rtl::OUString CFGPROP_WRITEPATH(RTL_CONSTASCII_USTRINGPARAM("WritePath"));
 
 /*
     0 : old style              "Template"              string using ";" as seperator
@@ -76,9 +77,9 @@ const ::rtl::OUString CFGPROP_ISSINGLEPATH   = ::rtl::OUString::createFromAscii(
     3 : write path             "Template_write"        string
  */
 
-const ::rtl::OUString POSTFIX_INTERNAL_PATHES = ::rtl::OUString::createFromAscii("_internal");
-const ::rtl::OUString POSTFIX_USER_PATHES     = ::rtl::OUString::createFromAscii("_user"    );
-const ::rtl::OUString POSTFIX_WRITE_PATH      = ::rtl::OUString::createFromAscii("_writable");
+const ::rtl::OUString POSTFIX_INTERNAL_PATHES(RTL_CONSTASCII_USTRINGPARAM("_internal"));
+const ::rtl::OUString POSTFIX_USER_PATHES(RTL_CONSTASCII_USTRINGPARAM("_user"));
+const ::rtl::OUString POSTFIX_WRITE_PATH(RTL_CONSTASCII_USTRINGPARAM("_writable"));
 
 const sal_Int32 IDGROUP_OLDSTYLE        = 0;
 const sal_Int32 IDGROUP_INTERNAL_PATHES = 1;
@@ -162,6 +163,9 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
 //-----------------------------------------------------------------------------
 PathSettings::~PathSettings()
 {
+    css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
+    if (xBroadcaster.is())
+        xBroadcaster->removeChangesListener(m_xCfgNewListener);
     if (m_pPropHelp)
        delete m_pPropHelp;
 }
@@ -171,10 +175,6 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
     throw (css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::changesOccurred" );
-    /*
-    if (m_bIgnoreEvents)
-        return;
-    */
 
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
@@ -208,14 +208,12 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::disposing" );
-    // SAFE ->
     WriteGuard aWriteLock(m_aLock);
 
     if (aSource.Source == m_xCfgNew)
         m_xCfgNew.clear();
 
     aWriteLock.unlock();
-    // <- SAFE
 }
 
 //-----------------------------------------------------------------------------
@@ -224,17 +222,21 @@ void PathSettings::impl_readAll()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readAll" );
     RTL_LOGFILE_CONTEXT(aLog, "framework (as96863) ::PathSettings::load config (all)");
 
-    // TODO think about me
-    css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew();
-    css::uno::Sequence< ::rtl::OUString >              lPaths = xCfg->getElementNames();
-
-    sal_Int32 c = lPaths.getLength();
-    sal_Int32 i = 0;
-
-    for (i=0; i<c; ++i)
+    try
     {
-        const ::rtl::OUString& sPath = lPaths[i];
-        impl_updatePath(sPath, sal_False);
+        // TODO think about me
+        css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew();
+        css::uno::Sequence< ::rtl::OUString >              lPaths = xCfg->getElementNames();
+
+        sal_Int32 c = lPaths.getLength();
+        for (sal_Int32 i = 0; i < c; ++i)
+        {
+            const ::rtl::OUString& sPath = lPaths[i];
+            impl_updatePath(sPath, sal_False);
+        }
+    }
+    catch(const css::uno::RuntimeException& )
+    {
     }
 
     impl_rebuildPropertyDescriptor();
@@ -272,6 +274,9 @@ OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& sPath)
 {
+    const static ::rtl::OUString CFGPROP_INTERNALPATHES(RTL_CONSTASCII_USTRINGPARAM("InternalPaths"));
+    const static ::rtl::OUString CFGPROP_ISSINGLEPATH(RTL_CONSTASCII_USTRINGPARAM("IsSinglePath"));
+
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew();
 
     // get access to the "queried" path
@@ -301,7 +306,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
@@ -939,17 +943,6 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
     // TODO check if path has at least one path value set
     // At least it depends from the feature using this path, if an empty path list is allowed.
-    /*
-    if (impl_isPathEmpty(aChangePath))
-    {
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The path '"    );
-        sMsg.append     (aChangePath.sPathName);
-        sMsg.appendAscii("' is empty now ... Not a real good idea.");
-        throw css::uno::Exception(sMsg.makeStringAndClear(),
-                                  static_cast< ::cppu::OWeakObject* >(this));
-    }
-    */
 
     // first we should try to store the changed (copied!) path ...
     // In case an error occure on saving time an exception is thrown ...
@@ -1124,7 +1117,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
-    const static ::rtl::OUString CFG_NODE_OLD = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/Path/Current");
+    const static ::rtl::OUString CFG_NODE_OLD(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Path/Current"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1154,7 +1147,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
-    const static ::rtl::OUString CFG_NODE_NEW = ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths/Paths");
+    const static ::rtl::OUString CFG_NODE_NEW(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths/Paths"));
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1175,13 +1168,16 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);
         m_xCfgNew = xCfg;
+        m_xCfgNewListener = new WeakChangesListener(this);
         aWriteLock.unlock();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        xBroadcaster->addChangesListener(m_xCfgNewListener);
     }
 
     return xCfg;
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

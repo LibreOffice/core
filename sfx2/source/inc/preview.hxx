@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include <sfx2/basedlgs.hxx>
 
 class SfxObjectShell;
-//REMOVE    class SvStorageRef;
 class SfxFrameWindow;
 
 class SfxFrame;
@@ -71,3 +71,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

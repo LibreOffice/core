@@ -28,9 +28,9 @@
 $(eval $(call gb_Library_Library,fwe))
 
 $(eval $(call gb_Library_set_include,fwe,\
-    -I$(SRCDIR)/framework/inc/pch \
-    -I$(SRCDIR)/framework/source/inc \
-    -I$(SRCDIR)/framework/inc \
+    -I$(realpath $(SRCDIR)/framework/inc/pch) \
+    -I$(realpath $(SRCDIR)/framework/source/inc) \
+    -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
@@ -47,13 +47,11 @@ $(eval $(call gb_Library_add_linked_libs,fwe,\
     cppuhelper \
     fwi \
     sal \
-    stl \
     svl \
     svt \
     tl \
     utl \
     vcl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -92,4 +90,5 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/xmlnamespaces \
 ))
 
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 # vim: set noet sw=4 ts=4:

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -218,6 +219,42 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class TypelibraryPackageImpl;
 
+    /** Serves for unregistering packages that were registered on a
+        different platform. This can happen if one has remotely mounted
+        /home, for example.
+     */
+    class OtherPlatformPackageImpl : public ::dp_registry::backend::Package
+    {
+    public:
+        OtherPlatformPackageImpl(
+            ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+            OUString const & url, OUString const & name,
+            Reference<deployment::XPackageTypeInfo> const & xPackageType,
+            bool bRemoved, OUString const & identifier, OUString const& rPlatform);
+
+    private:
+        BackendImpl * getMyBackend() const;
+
+        const Reference<registry::XSimpleRegistry> impl_openRDB() const;
+        const Reference<XInterface> impl_createInstance(OUString const& rService) const;
+
+        // Package
+        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+            ::osl::ResettableMutexGuard & guard,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+        virtual void processPackage_(
+            ::osl::ResettableMutexGuard & guard,
+            bool registerPackage,
+            bool startup,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+
+    private:
+        OUString const m_aPlatform;
+    };
+    friend class OtherPlatformPackageImpl;
+
     t_stringlist m_jar_typelibs;
     t_stringlist m_rdb_typelibs;
     t_stringlist m_components;
@@ -240,7 +277,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     bool m_unorc_modified;
     bool bSwitchedRdbFiles;
 
-    typedef ::std::hash_map< OUString, Reference<XInterface>,
+    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
                              ::rtl::OUStringHash > t_string2object;
     t_string2object m_backendObjects;
 
@@ -411,7 +448,6 @@ BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
 //______________________________________________________________________________
 void BackendImpl::ComponentPackageImpl::disposing()
 {
-//    m_xRemoteContext.clear();
     Package::disposing();
 }
 
@@ -512,7 +548,6 @@ void BackendImpl::initServiceRdbFiles()
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xCommonRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
-//            m_readOnly, !m_readOnly );
             false, true);
     }
     if (m_nativeRDB.getLength() > 0) {
@@ -523,7 +558,6 @@ void BackendImpl::initServiceRdbFiles()
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xNativeRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
-//            m_readOnly, !m_readOnly );
             false, true);
     }
 }
@@ -574,16 +608,14 @@ BackendImpl::BackendImpl(
                                    getPlatformString(),
                                    OUSTR("*" SAL_DLLEXTENSION),
                                    getResourceString(RID_STR_DYN_COMPONENT),
-                                   RID_IMG_COMPONENT,
-                                   RID_IMG_COMPONENT_HC ) ),
+                                   RID_IMG_COMPONENT) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(
                                     OUSTR("application/"
                                           "vnd.sun.star.uno-component;"
                                           "type=Java"),
                                     OUSTR("*.jar"),
                                     getResourceString(RID_STR_JAVA_COMPONENT),
-                                    RID_IMG_JAVA_COMPONENT,
-                                    RID_IMG_JAVA_COMPONENT_HC ) ),
+                                    RID_IMG_JAVA_COMPONENT) ),
       m_xPythonComponentTypeInfo( new Package::TypeInfo(
                                       OUSTR("application/"
                                             "vnd.sun.star.uno-component;"
@@ -591,30 +623,27 @@ BackendImpl::BackendImpl(
                                       OUSTR("*.py"),
                                       getResourceString(
                                           RID_STR_PYTHON_COMPONENT),
-                                      RID_IMG_COMPONENT,
-                                      RID_IMG_COMPONENT_HC ) ),
+                                      RID_IMG_COMPONENT ) ),
       m_xComponentsTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.uno-components"),
                                  OUSTR("*.components"),
                                  getResourceString(RID_STR_COMPONENTS),
-                                 RID_IMG_COMPONENT,
-                                 RID_IMG_COMPONENT_HC ) ),
+                                 RID_IMG_COMPONENT ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.uno-typelibrary;"
                                        "type=RDB"),
                                  OUSTR("*.rdb"),
                                  getResourceString(RID_STR_RDB_TYPELIB),
-                                 RID_IMG_TYPELIB, RID_IMG_TYPELIB_HC ) ),
+                                 RID_IMG_TYPELIB ) ),
       m_xJavaTypelibTypeInfo( new Package::TypeInfo(
                                   OUSTR("application/"
                                         "vnd.sun.star.uno-typelibrary;"
                                         "type=Java"),
                                   OUSTR("*.jar"),
                                   getResourceString(RID_STR_JAVA_TYPELIB),
-                                  RID_IMG_JAVA_TYPELIB,
-                                  RID_IMG_JAVA_TYPELIB_HC ) ),
+                                  RID_IMG_JAVA_TYPELIB ) ),
       m_typeInfos( 6 )
 {
     m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;
@@ -768,16 +797,30 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
                 INetContentTypeParameter const * param = params.find(
                     ByteString("platform") );
-                if (param == 0 || platform_fits( param->m_sValue )) {
+                bool bPlatformFits(param == 0);
+                String aPlatform;
+                if (!bPlatformFits) // platform is specified, we have to check
+                {
+                    aPlatform = param->m_sValue;
+                    bPlatformFits = platform_fits(aPlatform);
+                }
+                // If the package is being removed, do not care whether
+                // platform fits. We won't be using it anyway.
+                if (bPlatformFits || bRemoved) {
                     param = params.find( ByteString("type") );
                     if (param != 0)
                     {
                         String const & value = param->m_sValue;
                         if (value.EqualsIgnoreCaseAscii("native")) {
-                            return new BackendImpl::ComponentPackageImpl(
-                                this, url, name, m_xDynComponentTypeInfo,
-                                OUSTR("com.sun.star.loader.SharedLibrary"),
-                                bRemoved, identifier);
+                            if (bPlatformFits)
+                                return new BackendImpl::ComponentPackageImpl(
+                                    this, url, name, m_xDynComponentTypeInfo,
+                                    OUSTR("com.sun.star.loader.SharedLibrary"),
+                                    bRemoved, identifier);
+                            else
+                                return new BackendImpl::OtherPlatformPackageImpl(
+                                    this, url, name, m_xDynComponentTypeInfo,
+                                    bRemoved, identifier, aPlatform);
                         }
                         if (value.EqualsIgnoreCaseAscii("Java")) {
                             return new BackendImpl::ComponentPackageImpl(
@@ -833,7 +876,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 void BackendImpl::unorc_verify_init(
@@ -1609,7 +1651,6 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     }
 }
 
-//##############################################################################
 BackendImpl::TypelibraryPackageImpl::TypelibraryPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
@@ -1740,6 +1781,110 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
     }
 }
 
+BackendImpl::OtherPlatformPackageImpl::OtherPlatformPackageImpl(
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+    OUString const & url, OUString const & name,
+    Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    bool bRemoved, OUString const & identifier, OUString const& rPlatform)
+    : Package(myBackend, url, name, name, xPackageType, bRemoved, identifier)
+    , m_aPlatform(rPlatform)
+{
+    OSL_PRECOND(bRemoved, "this class can only be used for removing packages!");
+}
+
+BackendImpl *
+BackendImpl::OtherPlatformPackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //Throws a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<OtherPlatformPackageImpl*>(this)));
+    }
+    return pBackend;
+}
+
+Reference<registry::XSimpleRegistry> const
+BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
+{
+    OUString const aRDB(m_aPlatform + OUString(RTL_CONSTASCII_USTRINGPARAM(".rdb")));
+    OUString const aRDBPath(makeURL(getMyBackend()->getCachePath(), aRDB));
+
+    Reference<registry::XSimpleRegistry> xRegistry;
+
+    try
+    {
+        xRegistry.set(
+                impl_createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))),
+                UNO_QUERY)
+            ;
+        if (xRegistry.is())
+            xRegistry->open(expandUnoRcUrl(aRDBPath), false, false);
+    }
+    catch (registry::InvalidRegistryException const&)
+    {
+        // If the registry does not exist, we do not need to bother at all
+        xRegistry.set(0);
+    }
+
+    OSL_POSTCOND(xRegistry.is(), "could not create registry for the package's platform");
+    return xRegistry;
+}
+
+Reference<XInterface> const
+BackendImpl::OtherPlatformPackageImpl::impl_createInstance(OUString const& rService)
+const
+{
+    Reference<XComponentContext> const xContext(getMyBackend()->getComponentContext());
+    OSL_ASSERT(xContext.is());
+    Reference<XInterface> xService;
+    if (xContext.is())
+        xService.set(xContext->getServiceManager()->createInstanceWithContext(rService, xContext));
+    return xService;
+}
+
+beans::Optional<beans::Ambiguous<sal_Bool> >
+BackendImpl::OtherPlatformPackageImpl::isRegistered_(
+    ::osl::ResettableMutexGuard& /* guard */,
+    ::rtl::Reference<AbortChannel> const& /* abortChannel */,
+    Reference<XCommandEnvironment> const& /* xCmdEnv */ )
+{
+    return beans::Optional<beans::Ambiguous<sal_Bool> >(sal_True,
+            beans::Ambiguous<sal_Bool>(sal_True, sal_False));
+}
+
+void
+BackendImpl::OtherPlatformPackageImpl::processPackage_(
+    ::osl::ResettableMutexGuard& /* guard */,
+    bool bRegisterPackage,
+    bool /* bStartup */,
+    ::rtl::Reference<AbortChannel> const& /* abortChannel */,
+    Reference<XCommandEnvironment> const& /* xCmdEnv */)
+{
+    OSL_PRECOND(!bRegisterPackage, "this class can only be used for removing packages!");
+    (void) bRegisterPackage;
+
+    OUString const aURL(getURL());
+
+    Reference<registry::XSimpleRegistry> const xServicesRDB(impl_openRDB());
+    Reference<registry::XImplementationRegistration> const xImplReg(
+            impl_createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
+            UNO_QUERY)
+        ;
+    if (xImplReg.is() && xServicesRDB.is())
+        xImplReg->revokeImplementation(aURL, xServicesRDB);
+    if (xServicesRDB.is())
+        xServicesRDB->close();
+
+    getMyBackend()->revokeEntryFromDb(aURL);
+}
+
 BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
@@ -1851,3 +1996,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 } // namespace dp_registry
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

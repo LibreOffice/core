@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HXX_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -120,8 +119,6 @@ class ConfigurationHelper
                                                                       const ::rtl::OUString&                                        sRelPath  ,
                                                                             sal_Int32                                               nOpenFlags)
         {
-            static ::rtl::OUString PATH_SEPERATOR = ::rtl::OUString::createFromAscii("/");
-
             css::uno::Reference< css::uno::XInterface > xCFG;
 
             try
@@ -131,7 +128,7 @@ class ConfigurationHelper
 
                 ::rtl::OUStringBuffer sPath(1024);
                 sPath.append(sPackage      );
-                sPath.append(PATH_SEPERATOR);
+                sPath.append(static_cast<sal_Unicode>('/'));
                 sPath.append(sRelPath      );
 
                 sal_Bool bReadOnly   = ((nOpenFlags & ConfigurationHelper::E_READONLY   ) == ConfigurationHelper::E_READONLY   );
@@ -144,13 +141,13 @@ class ConfigurationHelper
                 css::uno::Sequence< css::uno::Any > lParams(c);
                 css::beans::PropertyValue           aParam;
 
-                aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+                aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
                 aParam.Value <<= sPath.makeStringAndClear();
                 lParams[0]   <<= aParam;
 
                 if (bAllLocales)
                 {
-                    aParam.Name    = ::rtl::OUString::createFromAscii("*");
+                    aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     aParam.Value <<= sal_True;
                     lParams[1]   <<= aParam;
                 }
@@ -174,3 +171,5 @@ class ConfigurationHelper
 } // namespace framework
 
 #endif // __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

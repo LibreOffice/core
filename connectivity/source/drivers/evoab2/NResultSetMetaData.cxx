@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,10 +51,10 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 {
 }
 // -------------------------------------------------------------------------
-void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
         OSQLColumns::Vector::const_iterator aIter;
-        static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
+        static const ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Name"));
 
         for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
         {
@@ -133,7 +134,7 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnN
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return m_aTableName;//::rtl::OUString::createFromAscii("TABLE");
+    return m_aTableName;//::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
@@ -192,3 +193,5 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isWritable( sal_Int32 /*nColumnNum*/ 
     return sal_False;
 }
 // -------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

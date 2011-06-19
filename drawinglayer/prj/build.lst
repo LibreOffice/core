@@ -1,13 +1,4 @@
 dl	drawinglayer	:	sal vcl basegfx offuh cppuhelper cppu svtools avmedia canvas cppcanvas NULL
 dl	drawinglayer						usr1	-	all	dl_mkout NULL
-dl	drawinglayer\inc					nmake	-	all	dl_inc NULL
-dl	drawinglayer\prj					get		-	all	dl_prj NULL
-dl	drawinglayer\source\primitive2d		nmake	-	all	dl_primitive2d dl_inc NULL
-dl	drawinglayer\source\primitive3d		nmake	-	all	dl_primitive3d dl_inc NULL
-dl	drawinglayer\source\animation		nmake	-	all	dl_animation dl_inc NULL
-dl	drawinglayer\source\geometry		nmake	-	all	dl_geometry dl_inc NULL
-dl	drawinglayer\source\processor2d		nmake	-	all	dl_processor2d dl_inc NULL
-dl	drawinglayer\source\processor3d		nmake	-	all	dl_processor3d dl_inc NULL
-dl	drawinglayer\source\attribute		nmake	-	all	dl_attribute dl_inc NULL
-dl	drawinglayer\source\texture			nmake	-	all	dl_texture dl_inc NULL
-dl	drawinglayer\util					nmake	-	all	dl_util dl_primitive2d dl_primitive3d dl_animation dl_geometry dl_processor2d dl_processor3d dl_attribute dl_texture NULL
+dl	drawinglayer\prj					nmake	-	all	dl_prj NULL
+

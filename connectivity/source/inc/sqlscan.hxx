@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,8 +64,8 @@ namespace connectivity
 
         virtual sal_Int32 SQLyygetc(void);
         virtual void SQLyyerror(char *fmt);
-        virtual void output(sal_Int32) { OSL_ASSERT("Internal error in sdblex.l: output not possible"); }
-        virtual void ECHO(void) { OSL_ASSERT("Internal error in sdblex.l: ECHO not possible"); }
+        virtual void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
+        virtual void ECHO(void) { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
         virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
@@ -88,3 +89,5 @@ namespace connectivity
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

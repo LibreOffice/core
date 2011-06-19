@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _SFXDOCVOR_HXX
 
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <svtools/svtreebx.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -57,11 +56,6 @@ friend class SfxOrganizeDlg_Impl;
     Image                   aClosedFolderBmp;
     Image                   aOpenedDocBmp;
     Image                   aClosedDocBmp;
-
-    Image                   aOpenedFolderBmpHC;
-    Image                   aClosedFolderBmpHC;
-    Image                   aOpenedDocBmpHC;
-    Image                   aClosedDocBmpHC;
 
     SfxOrganizeMgr*         pMgr;
     SfxOrganizeDlg_Impl*    pDlg;
@@ -103,8 +97,8 @@ public:
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
     inline void SetBitmaps(
-                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp,
-                    const Image &rOFolderBmpHC, const Image &rCFolderBmpHC, const Image &rODocBmpHC, const Image &rCDocBmpHC );
+                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp
+                    );
     const Image &GetClosedBmp(sal_uInt16 nLevel) const;
     const Image &GetOpenedBmp(sal_uInt16 nLevel) const;
 
@@ -145,7 +139,6 @@ friend class SfxOrganizeListBox_Impl;
 
     class SfxOrganizeDlg_Impl *pImp;
 
-//  virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     SfxTemplateOrganizeDlg(Window * pParent, SfxDocumentTemplates* = 0);
     ~SfxTemplateOrganizeDlg();
@@ -156,3 +149,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <map>
@@ -66,19 +67,19 @@ namespace connectivity
     {
     private:
         ::com::sun::star::sdbc::SQLException            m_aErrors;          // conatins the error while iterating through the statement
-        const OSQLParseNode*                            m_pParseTree;       // aktueller ParseTree
+        const OSQLParseNode*                            m_pParseTree;       // current ParseTree
         const OSQLParser&                               m_rParser;          // if set used for general error messages from the context
-        OSQLStatementType                               m_eStatementType;   // Art des Statements
-        ::vos::ORef<OSQLColumns>                        m_aSelectColumns;   // alle Spalten aus dem Select-Clause
-        ::vos::ORef<OSQLColumns>                        m_aParameters;      // all parameters
-        ::vos::ORef<OSQLColumns>                        m_aGroupColumns;    // the group by columns
-        ::vos::ORef<OSQLColumns>                        m_aOrderColumns;    // the order by columns
-        ::vos::ORef<OSQLColumns>                        m_aCreateColumns;   // the columns for Create table clause
+        OSQLStatementType                               m_eStatementType;
+        ::rtl::Reference<OSQLColumns>                       m_aSelectColumns;   // all columns from the Select clause
+        ::rtl::Reference<OSQLColumns>                       m_aParameters;      // all parameters
+        ::rtl::Reference<OSQLColumns>                       m_aGroupColumns;    // the group by columns
+        ::rtl::Reference<OSQLColumns>                       m_aOrderColumns;    // the order by columns
+        ::rtl::Reference<OSQLColumns>                       m_aCreateColumns;   // the columns for Create table clause
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
         void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
-        // F"ugt eine Tabelle in die Map ein
+        // inserts a table into the map
         void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
@@ -121,13 +122,12 @@ namespace connectivity
             const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, bool _bLookInSubTables );
 
       protected:
-        void setSelectColumnName(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
-        void appendColumns(::vos::ORef<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
-        // Weitere Member-Variable, die in den "set"-Funktionen zur
-        // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
-        // definiert werden und z. B. in deren Konstruktor initialisiert
-        // bzw. nach Benutzung der "traverse"-Routinen mit Hilfe weiterer
-        // Funktionen abgefragt werden.
+        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
+        void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
+        // Other member variables that should be available in the "set" functions
+        // can be defined in the derived class. They can be initialized
+        // in its constructor and, after the "traverse" routines have been used,
+        // they can be queried using other functions.
 
 
       private:
@@ -153,13 +153,13 @@ namespace connectivity
 
         void dispose();
         bool isCaseSensitive() const;
-        // Der zu analysierende/zu traversierende Parse Tree:
-        // bei "Ubergabe von NULL wird der aktuelle Parsetree gel"oscht und der Fehlerstatus gecleared
+        // The parse tree to be analysed/traversed:
+        // If NULL is passed, the current parse tree will be deleted and the error status cleared.
         void setParseTree(const OSQLParseNode * pNewParseTree);
 //      void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
         const OSQLParseNode * getParseTree() const { return m_pParseTree; };
 
-        // Teilbaueme bei einem select statement
+        // subtrees in case of a select statement
         const OSQLParseNode* getWhereTree() const;
         const OSQLParseNode* getOrderTree() const;
         const OSQLParseNode* getGroupByTree() const;
@@ -170,14 +170,14 @@ namespace connectivity
         const OSQLParseNode* getSimpleGroupByTree() const;
         const OSQLParseNode* getSimpleHavingTree() const;
 
-        /** returns the errors which occured during parsing.
+        /** returns the errors which occurred during parsing.
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
         inline const ::com::sun::star::sdbc::SQLException&   getErrors() const { return m_aErrors; }
         inline bool hasErrors() const { return m_aErrors.Message.getLength() > 0; }
 
-        // Statement-Typ (wird bereits in setParseTree gesetzt):
+        // statement type (already set in setParseTree):
         OSQLStatementType getStatementType() const { return m_eStatementType; }
 
         /** traverses the complete statement tree, and fills all our data with
@@ -211,14 +211,14 @@ namespace connectivity
         */
         void traverseSome( sal_uInt32 _nIncludeMask );
 
-        // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
+        // The TableRangeMap contains all tables associated with the range name found first.
         const OSQLTables& getTables() const;
 
-        ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
-        ::vos::ORef<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
-        ::vos::ORef<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
-        ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
-        ::vos::ORef<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
+        ::rtl::Reference<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
+        ::rtl::Reference<OSQLColumns> getGroupColumns() const { return m_aGroupColumns;}
+        ::rtl::Reference<OSQLColumns> getOrderColumns() const { return m_aOrderColumns;}
+        ::rtl::Reference<OSQLColumns> getParameters()   const { return m_aParameters; }
+        ::rtl::Reference<OSQLColumns> getCreateColumns() const { return m_aCreateColumns;}
 
         /** return the columname and the table range
             @param  _pColumnRef
@@ -273,8 +273,7 @@ namespace connectivity
                                     ::rtl::OUString &_rColumnName,
                                     ::rtl::OUString& _rTableRange);
 
-        // Ermittelt fuer eine Funktion, Spalten den zugehoeren TableRange,
-        // wenn nicht eindeutig, dann leer
+        // empty if ambiguous
         sal_Bool getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const;
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
@@ -337,12 +336,12 @@ namespace connectivity
         /** appends an SQLException corresponding to the given error code to our error collection
 
             @param  _eError
-                the code of the error which occured
+                the code of the error which occurred
             @param  _pReplaceToken1
-                if not <NULL/>, the first occurance of '#' in the error message will be replaced
+                if not <NULL/>, the first occurrence of '#' in the error message will be replaced
                 with the given token
             @param  _pReplaceToken2
-                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurance of '#'
+                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurrence of '#'
                 in the error message will be replaced with _rReplaceToken2
         */
         void impl_appendError( IParseContext::ErrorCode _eError,
@@ -364,3 +363,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

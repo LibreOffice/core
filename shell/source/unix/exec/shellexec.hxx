@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-#endif
 
 //----------------------------------------------------------
 // class declaration
@@ -77,3 +76,5 @@ public:
 void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

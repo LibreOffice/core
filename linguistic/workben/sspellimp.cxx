@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,13 @@
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
-#ifndef _SPELLIMP_HXX
 #include <sspellimp.hxx>
-#endif
 
 #include "linguistic/lngprops.hxx"
 #include "linguistic/spelldta.hxx"
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -54,8 +52,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
 
-///////////////////////////////////////////////////////////////////////////
 
 BOOL operator == ( const Locale &rL1, const Locale &rL2 )
 {
@@ -64,7 +62,6 @@ BOOL operator == ( const Locale &rL1, const Locale &rL2 )
             rL1.Variant  ==  rL2.Variant;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 SpellChecker::SpellChecker() :
@@ -366,7 +363,6 @@ void SAL_CALL
         {
             Reference< XPropertySet >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
-            //rArguments.getConstArray()[1] >>= xDicList;
 
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
@@ -377,7 +373,7 @@ void SAL_CALL
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else
-            DBG_ERROR( "wrong number of arguments in sequence" );
+            OSL_FAIL( "wrong number of arguments in sequence" );
     }
 }
 
@@ -419,9 +415,7 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 OUString SAL_CALL SpellChecker::getImplementationName()
         throw(RuntimeException)
@@ -458,7 +452,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
     return aSNS;
 }
@@ -508,5 +502,5 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

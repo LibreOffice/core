@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,7 @@ class SFX2_DLLPUBLIC SfxDispatcher
     sal_Bool                            bFlushed;
 
 private:
-    // auf temporaer ausgewerteten Todos suchen
+    // Search for temporary evaluated Todos
     SAL_DLLPRIVATE sal_Bool CheckVirtualStack( const SfxShell& rShell, sal_Bool bDeep );
 
 #ifndef _SFX_HXX
@@ -130,8 +131,8 @@ friend class SfxBindings;
 friend class SfxStateCache;
 friend class SfxPopupMenuManager;
 friend class SfxHelp;
-                        // Fuer die Bindings: Finden einer Message; Level fuer
-                        // erneuten Zugriff
+                        // For bindings: Finding the Message;
+                        // level for re-access
     SAL_DLLPRIVATE sal_Bool _TryIntercept_Impl( sal_uInt16 nId, SfxSlotServer &rServer, sal_Bool bModal );
     sal_Bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, sal_Bool bModal );
     sal_Bool                _FillState( const SfxSlotServer &rServer,
@@ -231,7 +232,6 @@ public:
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32              GetDisableFlags() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool HasSlot_Impl( sal_uInt16 );
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE void Update_Impl( sal_Bool bForce = sal_False ); // ObjectBars etc.
@@ -255,18 +255,16 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(sal_Bool);
     SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, String *pStr );
-//#endif
 };
 
 //--------------------------------------------------------------------
 
 inline sal_Bool SfxDispatcher::IsFlushed() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode l"a"st sich erfragen, ob der Stack des
-    SfxDispatchers geflusht ist, oder noch Push- oder Pop-Befehle
-    ausstehen.
+    This method checks if the stack of the SfxDispatchers is flushed, or if
+    push- or pop- commands are pending.
 */
 
 {
@@ -277,13 +275,12 @@ inline sal_Bool SfxDispatcher::IsFlushed() const
 
 inline void SfxDispatcher::Flush()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode f"uhrt ausstehenden Push- und Pop-Befehle aus.
-    F"ur <SfxShell>s, die dabei neu auf den Stack kommen, wird
-    <SfxShell::Activate(sal_Bool)> mit bMDI == sal_True aufgerufen, f"ur
-    SfxShells, die vom Stack entfernt werden, wird <SfxShell::Deactivate(sal_Bool)>
-    mit bMDI == sal_True aufgerufen.
+    This method performs outstanding push- and pop- commands. For <SfxShell>s,
+    which are new on the stack, the <SfxShell::Activate(sal_Bool)> is invoked with
+    bMDI == sal_True, for SfxShells that are removed from the stack, the
+    <SfxShell::Deactivate(sal_Bool)> is invoked with bMDI == sal_True
 */
 
 {
@@ -294,14 +291,15 @@ inline void SfxDispatcher::Flush()
 
 inline void SfxDispatcher::Push( SfxShell& rShell )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode wird eine <SfxShell> auf den SfxDispatcher
-    gepusht. Die SfxShell wird zun"achst zum pushen vermerkt und
-    es wird ein Timer aufgesetzt. Erst bei Ablauf des Timers wird
-    tats"achlich gepusht (<SfxDispatcher::Flush()>) und die <SfxBindings>
-    werden invalidiert. W"ahrend der Timer l"auft gleichen sich
-    entgegengesetzte Push und Pop Befehle mit derselben SfxShell aus.
+    With this method, a <SfxShell> pushed on to the SfxDispatcher.
+    The SfxShell is first marked for push and a timer is set up.
+    First when the timer has couted down to zero the push
+    ( <SfxDispatcher::Flush()> ) is actually performed and the
+    <SfxBindings> is invalidated. While the timer is counting down
+    the opposing push and pop commands on the same SfxShell are
+    leveled out.
 */
 
 {
@@ -312,21 +310,18 @@ inline void SfxDispatcher::Push( SfxShell& rShell )
 
 inline sal_Bool SfxDispatcher::IsActive( const SfxShell& rShell )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode kann abgefragt werden, ob sich eine bestimmte
-    <SfxShell>-Instanz auf dem SfxDispatcher befindet.
+    This method checks whether a particular <SfxShell> instance is
+    on the SfxDispatcher.
 
-    [R"uckgabewert]
+    [Return value]
 
     sal_Bool                sal_True
-                        Die SfxShell-Instanz befindet sich auf dem
-                        SfxDispatcher.
+                        The SfxShell instance is on the SfxDispatcher.
 
                         sal_False
-                        Die SfxShell-Instanz befindet sich nicht auf dem
-                        SfxDispatcher.
-
+                        The SfxShell instance is not on the SfxDispatcher.
 */
 
 {
@@ -336,21 +331,20 @@ inline sal_Bool SfxDispatcher::IsActive( const SfxShell& rShell )
 
 inline sal_Bool SfxDispatcher::IsOnTop( const SfxShell& rShell )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode kann abgefragt werden, ob sich eine bestimmte
-    <SfxShell>-Instanz zuoberst auf dem SfxDispatcher befindet.
+    This method checks whether a particular <SfxShell> instance is on
+    top of the SfxDispatcher.
 
-    [R"uckgabewert]
+    [Return value]
 
     sal_Bool                sal_True
-                        Die SfxShell-Instanz befindet sich als oberste
-                        SfxShell auf dem SfxDispatcher.
+                        The SfxShell instance is on the top of
+                        the SfxDispatcher.
 
                         sal_False
-                        Die SfxShell-Instanz befindet sich nicht als
-                        oberste SfxShell auf dem SfxDispatcher.
-
+                        The SfxShell instance is not on the top of
+                        the SfxDispatcher.
 */
 
 {
@@ -361,3 +355,4 @@ inline sal_Bool SfxDispatcher::IsOnTop( const SfxShell& rShell )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

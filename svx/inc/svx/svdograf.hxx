@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -182,7 +183,8 @@ public:
     // #i25616#
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    virtual void            operator=(const SdrObject& rObj);
+    virtual SdrGrafObj* Clone() const;
+    SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const;
@@ -190,14 +192,14 @@ public:
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void            NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void            NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual void            NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
     virtual void            NbcSetSnapRect(const Rectangle& rRect);
     virtual void            NbcSetLogicRect(const Rectangle& rRect);
     virtual SdrObjGeoData*  NewGeoData() const;
     virtual void            SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void            RestGeoData(const SdrObjGeoData& rGeo);
 
-    FASTBOOL                HasGDIMetaFile() const;
+    bool                    HasGDIMetaFile() const;
     const GDIMetaFile*      GetGDIMetaFile() const;
 
     virtual void            SetPage(SdrPage* pNewPage);
@@ -227,3 +229,5 @@ public:
 };
 
 #endif //_SVDOGRAF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

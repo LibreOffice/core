@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,24 +208,23 @@ namespace connectivity
         /// access to the SQLError instance owned by this parser
         const SQLError& getErrorHelper() const;
 
-        // TokenIDToStr: Token-Name zu einer Token-Nr.
+        // TokenIDToStr: token name belonging to a token number.
         static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
 
-        // StrToTokenID: Token-Nr. zu einem Token-Namen.
+        // StrToTokenID: token number belonging to a token name.
         // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);
 
-        // RuleIDToStr gibt den zu einer RuleID gehoerenden ::rtl::OUString zurueck
-        // (Leerstring, falls nicht gefunden)
+        // (empty string if not found)
         static ::rtl::OUString RuleIDToStr(sal_uInt32 nRuleID);
 
-        // StrToRuleID berechnet zu einem ::rtl::OUString die RuleID (d.h. ::com::sun::star::sdbcx::Index in yytname)
-        // (0, falls nicht gefunden). Die Suche nach der ID aufgrund eines Strings ist
-        // extrem ineffizient (sequentielle Suche nach ::rtl::OUString)!
+        // StrToRuleID calculates the RuleID for a ::rtl::OUString (that is, ::com::sun::star::sdbcx::Index in yytname)
+        // (0 if not found). The search for an ID based on a String is
+        // extremely inefficient (sequential search for ::rtl::OUString)!
         static sal_uInt32 StrToRuleID(const ::rtl::OString & rValue);
 
         static OSQLParseNode::Rule RuleIDToRule( sal_uInt32 _nRule );
 
-        // RuleId mit enum, wesentlich effizienter
+        // RuleId with enum, far more efficient
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
         static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext = NULL);
@@ -232,7 +232,7 @@ namespace connectivity
         // returns the type for a parameter in a given function name
         static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
 
-        void error(sal_Char *fmt);
+        void error(const sal_Char *fmt);
         int SQLlex();
 #ifdef YYBISON
         void setParseTree(OSQLParseNode * pNewParseTree);
@@ -259,3 +259,5 @@ namespace connectivity
 
 
 #endif //_CONNECTIVITY_SQLPARSE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

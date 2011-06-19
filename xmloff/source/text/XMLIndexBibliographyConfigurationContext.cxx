@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,7 +124,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         }
         else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
             {
                 bNumberedEntries = bTmp;
@@ -131,7 +132,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         }
         else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
             {
                 bSortByPosition = bTmp;
@@ -184,7 +185,7 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                 }
                 else if ( IsXMLToken( sLocalName, XML_SORT_ASCENDING ) )
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if (SvXMLUnitConverter::convertBool(
                         bTmp, xAttrList->getValueByIndex(nAttr)))
                     {
@@ -241,7 +242,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
         while (i < nServiceCount && !bFound)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
-            // here we should use a methode which compares in reverse order if available
+            // here we should use a method which compares in reverse order if available
             // #85282#
                 bFound = sal_True;
             else
@@ -295,3 +296,5 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
     }
     // else: can't even get Factory -> ignore
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

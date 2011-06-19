@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ java_io_InputStream::~java_io_InputStream()
 
 jclass java_io_InputStream::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/io/InputStream");
     return theClass;
@@ -91,7 +92,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);
         static const char * cSignature = "([BII)I";
         static const char * cMethodName = "read";
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pByteArray, 0, nBytesToRead );
@@ -108,3 +109,4 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
     return out;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

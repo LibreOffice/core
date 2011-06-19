@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 #define _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -74,7 +77,7 @@ namespace drawinglayer
             A basic implementation of a renderer for com::sun::star::rendering::XCanvas
             as a target
          */
-        class canvasProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC canvasProcessor2D : public BaseProcessor2D
         {
         private:
             // The Pixel renderer resets the original MapMode from the OutputDevice.
@@ -132,3 +135,5 @@ namespace drawinglayer
 #endif //_DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

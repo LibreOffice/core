@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef _XMLOFF_SINGLEPROPERTYSETINFOCACHE_HXX
 #include <xmloff/SinglePropertySetInfoCache.hxx>
-#endif
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::lang::XTypeProvider;
@@ -87,3 +86,5 @@ sal_Bool SinglePropertySetInfoCache::hasProperty(
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

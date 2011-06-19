@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,6 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "sbxres.hxx"
-
-// AB 29.10.99 Unicode
-#ifndef _USE_NO_NAMESPACE
-using namespace rtl;
-#endif
 
 enum SbxBOOL ImpGetBool( const SbxValues* p )
 {
@@ -75,14 +71,10 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             }
             break;
         case SbxSALINT64:
+        case SbxCURRENCY:
             nRes = p->nInt64 ? SbxTRUE : SbxFALSE; break;
         case SbxSALUINT64:
             nRes = p->uInt64 ? SbxTRUE : SbxFALSE; break;
-        case SbxULONG64:
-            nRes = !!p->nULong64 ? SbxTRUE : SbxFALSE; break;
-        case SbxLONG64:
-        case SbxCURRENCY:
-            nRes = !!p->nLong64 ? SbxTRUE : SbxFALSE; break;
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
@@ -143,16 +135,11 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             nRes = ( *p->pDouble != 0 ) ? SbxTRUE : SbxFALSE; break;
+        case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
             nRes = ( *p->pnInt64 ) ? SbxTRUE : SbxFALSE; break;
         case SbxBYREF | SbxSALUINT64:
             nRes = ( *p->puInt64 ) ? SbxTRUE : SbxFALSE; break;
-        case SbxBYREF | SbxULONG64:
-            nRes = !!*p->pULong64 ? SbxTRUE : SbxFALSE; break;
-        case SbxBYREF | SbxLONG64:
-        case SbxBYREF | SbxCURRENCY:
-            nRes = !!*p->pLong64 ? SbxTRUE : SbxFALSE; break;
-
         default:
             SbxBase::SetError( SbxERR_CONVERSION ); nRes = SbxFALSE;
     }
@@ -184,15 +171,11 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
-        case SbxSALINT64:
-            p->nInt64 = n; break;
-        case SbxSALUINT64:
-            p->uInt64 = n; break;
-        case SbxULONG64:
-            p->nULong64.Set( (sal_uInt32)n ); break;
-        case SbxLONG64:
         case SbxCURRENCY:
-            p->nLong64.Set( (sal_Int32)n ); break;
+        case SbxSALINT64:
+            p->nInt64 = (sal_Int64) n; break;
+        case SbxSALUINT64:
+            p->uInt64 = (sal_uInt64) n; break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpCreateDecimal( p )->setInt( (sal_Int16)n );
@@ -235,18 +218,14 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
-        case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = n; break;
-        case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = n; break;
-        case SbxBYREF | SbxULONG64:
-            p->pULong64->Set( (sal_uInt32)n ); break;
-        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
-            p->pLong64->Set( (sal_Int32)n ); break;
-
+        case SbxBYREF | SbxSALINT64:
+            *p->pnInt64 = (sal_Int64) n; break;
+        case SbxBYREF | SbxSALUINT64:
+            *p->puInt64 = (sal_uInt64) n; break;
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

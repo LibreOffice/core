@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::seekRow" );
     // ----------------------------------------------------------
-    // Positionierung vorbereiten:
+    // Prepare positioning:
     OSL_ENSURE(m_pFileStream,"ODbaseTable::seekRow: FileStream is NULL!");
 
     sal_uInt32  nNumberOfRecords = (sal_uInt32)m_aHeader.db_anz;
@@ -117,9 +118,8 @@ Error:
                 m_nFilePos = 0;
             break;
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;   // vorherige Position
+            m_nFilePos = nTempPos;   // last position
     }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
     return sal_False;
 
 End:
@@ -130,19 +130,18 @@ End:
 sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
-    sal_Bool bIsText = sal_True;
-    //  SdbConnection* pConnection = GetConnection();
+    bool bIsText = true;
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
     {
-        case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
+        case MemodBaseIII: // dBase III-Memofeld, ends with Ctrl-Z
         {
             const char cEOF = (char) 0x1a;
             ByteString aBStr;
             static char aBuf[514];
-            aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen
-            sal_Bool bReady = sal_False;
+            aBuf[512] = 0;          // to prevent a random value
+            bool bReady = false;
 
             do
             {
@@ -163,7 +162,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 
         } break;
         case MemoFoxPro:
-        case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
+        case MemodBaseIV: // dBase IV-Memofeld with the length specification
         {
             char sHeader[4];
             m_pMemoStream->Read(sHeader,4);
@@ -172,13 +171,6 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             {
                 if (((sal_uInt8)sHeader[0]) != 0 || ((sal_uInt8)sHeader[1]) != 0 || ((sal_uInt8)sHeader[2]) != 0)
                 {
-//                  String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                          String::CreateFromAscii("01000"),
-//                          aStatus.CreateErrorMessage(aText),
-//                          0, String() );
                     return sal_False;
                 }
 
@@ -186,13 +178,6 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             }
             else if (((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
             {
-//              String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//              aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//              aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
                 return sal_False;
             }
 
@@ -202,7 +187,6 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;
 
-            //  char cChar;
             ::rtl::OUString aStr;
             while ( nLength > STRING_MAXLEN )
             {
@@ -217,7 +201,6 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
                 ByteString aBStr;
                 aBStr.Expand(static_cast<xub_StrLen>(nLength));
                 m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                //  aBStr.ReleaseBufferAccess();
 
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
 
@@ -241,7 +224,7 @@ void ODbaseTable::AllocBuffer()
         m_pBuffer = NULL;
     }
 
-    // Falls noch kein Puffer vorhanden: allozieren:
+    // If no buffer available: allocate
     if (m_pBuffer == NULL && nSize > 0)
     {
         m_nBufferSize = nSize;
@@ -254,7 +237,7 @@ sal_Bool ODbaseTable::WriteBuffer()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteBuffer" );
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
-    // Auf gewuenschten Record positionieren:
+    // Position on the desired record:
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
     return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
@@ -274,7 +257,7 @@ sal_Int32 ODbaseTable::getCurrentLastPos() const
 void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXNode::Read" );
-    rStream >> aKey.nRecord; // schluessel
+    rStream >> aKey.nRecord; // key
 
     if (rIndex.getHeader().db_keytype)
     {
@@ -293,7 +276,6 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.ReleaseBufferAccess();
         aBuf.EraseTrailingChars();
 
-        //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
         aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
@@ -310,9 +292,9 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXNode::Write" );
     const ODbaseIndex& rIndex = rPage.GetIndex();
     if (!rIndex.isUnique() || rPage.IsLeaf())
-        rStream << (sal_uInt32)aKey.nRecord; // schluessel
+        rStream << (sal_uInt32)aKey.nRecord; // key
     else
-        rStream << (sal_uInt32)0;   // schluessel
+        rStream << (sal_uInt32)0;   // key
 
     if (rIndex.getHeader().db_keytype) // double
     {
@@ -364,7 +346,6 @@ sal_Bool ONDXKey::IsText(sal_Int32 eType)
 StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXKey::Compare" );
-    //  DBG_ASSERT(is(), "Falscher Indexzugriff");
     StringCompare eResult;
 
     if (getValue().isNull())
@@ -392,7 +373,7 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
         eResult = (m > n) ? COMPARE_GREATER : (n == m) ? COMPARE_EQUAL : COMPARE_LESS;
     }
 
-    // Record vergleich, wenn Index !Unique
+    // Record comparison, if index !Unique
     if (eResult == COMPARE_EQUAL && nRecord && rKey.nRecord)
         eResult = (nRecord > rKey.nRecord) ? COMPARE_GREATER :
                   (nRecord == rKey.nRecord) ? COMPARE_EQUAL : COMPARE_LESS;
@@ -468,7 +449,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
     rStream >> nValue >> rPage.aChild;
     rPage.nCount = sal_uInt16(nValue);
 
-//  DBG_ASSERT(rPage.nCount && rPage.nCount < rPage.GetIndex().GetMaxNodes(), "Falscher Count");
     for (sal_uInt16 i = 0; i < rPage.nCount; i++)
         rPage[i].Read(rStream, rPage.GetIndex());
     return rStream;
@@ -477,7 +457,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 //------------------------------------------------------------------
 SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& rPage)
 {
-    // Seite existiert noch nicht
+    // Page does not yet exist
     sal_uIntPtr nSize = (rPage.GetPagePos() + 1) * 512;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
@@ -521,7 +501,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, const ONDXPage& r
 void ONDXPage::PrintPage()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXPage::PrintPage" );
-    DBG_TRACE4("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
+    OSL_TRACE("\nSDB: -----------Page: %d  Parent: %d  Count: %d  Child: %d-----",
         nPagePos, HasParent() ? aParent->GetPagePos() : 0 ,nCount, aChild.GetPagePos());
 
     for (sal_uInt16 i = 0; i < nCount; i++)
@@ -533,18 +513,18 @@ void ONDXPage::PrintPage()
 
         if (rKey.getValue().isNull())
         {
-            DBG_TRACE2("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,NULL,%d]",rKey.GetRecord(), rNode.GetChild().GetPagePos());
         }
         else if (rIndex.getHeader().db_keytype)
         {
-            DBG_TRACE3("SDB: [%d,%f,%d]",rKey.GetRecord(), rKey.getValue().getDouble(),rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,%f,%d]",rKey.GetRecord(), rKey.getValue().getDouble(),rNode.GetChild().GetPagePos());
         }
         else
         {
-            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
         }
     }
-    DBG_TRACE("SDB: -----------------------------------------------\n");
+    OSL_TRACE("SDB: -----------------------------------------------\n");
     if (!IsLeaf())
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -556,7 +536,7 @@ void ONDXPage::PrintPage()
         }
 #endif
     }
-    DBG_TRACE("SDB: ===============================================\n");
+    OSL_TRACE("SDB: ===============================================\n");
 }
 #endif
 // -----------------------------------------------------------------------------
@@ -570,7 +550,7 @@ sal_Bool ONDXPage::IsFull() const
 sal_uInt16 ONDXPage::Search(const ONDXKey& rSearch)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ONDXPage::Search" );
-    // binare Suche spaeter
+    // binary search afterwards
     sal_uInt16 i = 0xFFFF;
     while (++i < Count())
         if ((*this)[i].GetKey() == rSearch)
@@ -588,12 +568,11 @@ sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
         if (((*this)[i]).GetChild() == pPage)
             break;
 
-    // wenn nicht gefunden, dann wird davon ausgegangen, dass die Seite selbst
-    // auf die Page zeigt
+    // if not found, then we assume, that the page points to the page (???)
     return (i < Count()) ? i : NODE_NOTFOUND;
 }
 // -----------------------------------------------------------------------------
-// laeuft rekursiv
+// runs recursively
 void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
                                   ONDXKey& rReplace)
 {
@@ -641,13 +620,4 @@ void ONDXPage::Remove(sal_uInt16 nPos)
 }
 // -----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

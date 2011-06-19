@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HDL_
 #include <com/sun/star/awt/Rectangle.hdl>
-#endif
 #include "XMLRectangleMembersHandler.hxx"
 #include <xmloff/xmltypes.hxx>
 
@@ -123,3 +122,4 @@ sal_Bool XMLRectangleMembersHdl::exportXML(
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

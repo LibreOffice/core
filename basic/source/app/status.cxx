@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,10 +82,6 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
     nFirstWinPos += pTTB->GetItemPos( pTTB->GetCurItemId() ) / 2;
 
-    sal_uInt16 x;
-    x = pTTB->GetItemPos( pTTB->GetCurItemId() );
-    x = pWinMenu->GetItemId( nFirstWinPos );
-    x = pWinMenu->GetItemCount();
     AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( L'~' ) );
     if ( pWin )
     {
@@ -112,7 +109,7 @@ void StatusLine::LoadTaskToolBox()
         Window* pWin = pFrame->FindWin( pWinMenu->GetItemId( nFirstWinPos ) );
 
         if ( pWin )
-            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->Last() && !( pFrame->pList->Last()->GetWinState() & TT_WIN_STATE_HIDE ) );
+            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->back() && !( pFrame->pList->back()->GetWinState() & TT_WIN_STATE_HIDE ) );
 
         nFirstWinPos++;
     }
@@ -123,3 +120,4 @@ void StatusLine::LoadTaskToolBox()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

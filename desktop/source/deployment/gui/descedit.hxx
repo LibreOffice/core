@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,3 +56,4 @@ namespace dp_gui
 
 #endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DESCEDIT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

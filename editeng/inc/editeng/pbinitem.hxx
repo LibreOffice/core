@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,9 @@
 
 // class SvxPaperBinItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Auswahl eines Papierschachts des Drucker.
+    This item describes selecting a paper tray of the printer.
 */
 
 class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
@@ -52,7 +53,7 @@ public:
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
     inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 ) const;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const;
@@ -75,3 +76,4 @@ inline SvxPaperBinItem &SvxPaperBinItem::operator=(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

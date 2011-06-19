@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,6 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
-//
 inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
 {
     sal_Int32 nVal;
@@ -261,3 +261,5 @@ public:
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

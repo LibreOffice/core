@@ -27,17 +27,9 @@
 #ifndef __ooo_vba_msforms_XShapeRange_idl__
 #define __ooo_vba_msforms_XShapeRange_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __ooo_vba_msforms_XShape_idl__
 #include <ooo/vba/msforms/XShape.idl>
-#endif
-
-#ifndef  __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
-#endif
 
 module ooo {  module vba { module msforms {
 
@@ -47,6 +39,7 @@ interface XShapeRange
 {
     interface ooo::vba::XCollection;
 
+    [attribute] string Name;
     [attribute] double Height;
     [attribute] double Width;
     [attribute] double Left;
@@ -65,6 +58,7 @@ interface XShapeRange
     void IncrementRotation( [in] double Increment );
     void IncrementLeft( [in] double Increment );
     void IncrementTop( [in] double Increment );
+    void ZOrder( [in] long ZOrderCmd );
 };
 }; }; };
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <limits.h>
 #include <vector>
 #include <algorithm>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/flditem.hxx>
@@ -114,7 +115,7 @@ namespace accessibility
 
     DBG_NAME( AccessibleEditableTextPara )
 
-    // --> OD 2006-01-11 #i27138# - add parameter <_pParaManager>
+    // #i27138# - add parameter <_pParaManager>
     AccessibleEditableTextPara::AccessibleEditableTextPara(
                                 const uno::Reference< XAccessible >& rParent,
                                 const AccessibleParaManager* _pParaManager )
@@ -130,9 +131,8 @@ namespace accessibility
           // exceptions, thus no chance for exceptions once the Id is
           // fetched. Nevertheless, normally should employ RAII here...
           mnNotifierClientId(::comphelper::AccessibleEventNotifier::registerClient()),
-          // --> OD 2006-01-11 #i27138#
+          // #i27138#
           mpParaManager( _pParaManager )
-          // <--
     {
 #ifdef DBG_UTIL
         DBG_CTOR( AccessibleEditableTextPara, NULL );
@@ -845,7 +845,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return HaveChildren() ? 1 : 0;
     }
@@ -854,7 +854,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !HaveChildren() )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No childs available")),
@@ -897,7 +897,7 @@ namespace accessibility
 
 #ifdef DBG_UTIL
         if( !mxParent.is() )
-            DBG_TRACE( "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
+            OSL_TRACE( "AccessibleEditableTextPara::getAccessibleParent: no frontend set, did somebody forgot to call AccessibleTextHelper::SetEventSource()?");
 #endif
 
         return mxParent;
@@ -921,7 +921,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-//        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+//        SolarMutexGuard aGuard;
 
         return ::rtl::OUString();
     }
@@ -930,7 +930,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-//        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+//        SolarMutexGuard aGuard;
 
         return ::rtl::OUString();
     }
@@ -939,7 +939,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        // --> OD 2006-01-11 #i27138# - provide relations CONTENT_FLOWS_FROM
+        // #i27138# - provide relations CONTENT_FLOWS_FROM
         // and CONTENT_FLOWS_TO
         if ( mpParaManager )
         {
@@ -977,14 +977,13 @@ namespace accessibility
             // no relations, therefore empty
             return uno::Reference< XAccessibleRelationSet >();
         }
-        // <--
     }
 
     uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleEditableTextPara::getAccessibleStateSet() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Create a copy of the state set and return it.
         ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
@@ -999,7 +998,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return implGetLocale();
     }
@@ -1025,7 +1024,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::contains: index value overflow");
@@ -1041,7 +1040,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( HaveChildren() )
         {
@@ -1076,7 +1075,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getBounds: index value overflow");
@@ -1102,7 +1101,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         awt::Rectangle aRect = getBounds();
 
@@ -1113,7 +1112,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // relate us to parent
         uno::Reference< XAccessible > xParent = getAccessibleParent();
@@ -1129,7 +1128,7 @@ namespace accessibility
 
                 return aPoint;
             }
-            // --> OD 2009-12-16 #i88070#
+            // #i88070#
             // fallback to parent's <XAccessibleContext> instance
             else
             {
@@ -1148,7 +1147,6 @@ namespace accessibility
                     }
                 }
             }
-            // <--
         }
 
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot access parent")),
@@ -1160,7 +1158,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         awt::Rectangle aRect = getBounds();
 
@@ -1203,7 +1201,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if( !HaveEditView() )
             return -1;
@@ -1231,7 +1229,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacter: index value overflow");
@@ -1242,7 +1240,7 @@ namespace accessibility
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         CheckIndex(nIndex); // may throw IndexOutOfBoundsException
 
@@ -1258,24 +1256,6 @@ namespace accessibility
             const beans::PropertyValue &rRunAttrib = pRunAttrib[k];
             aPropHashMap[ rRunAttrib.Name ] = rRunAttrib.Value; //!! should not only be the value !!
         }
-#ifdef TL_DEBUG
-        {
-            uno::Sequence< rtl::OUString > aNames(1);
-            aNames.getArray()[0] = rtl::OUString::createFromAscii("CharHeight");
-            const rtl::OUString *pNames = aNames.getConstArray();
-            const uno::Sequence< beans::PropertyValue > aAttribs( getRunAttributes( nIndex, aNames ) );
-            const beans::PropertyValue *pAttribs = aAttribs.getConstArray();
-            double d1 = -1.0;
-            float  f1 = -1.0;
-            if (aAttribs.getLength())
-            {
-                uno::Any aAny( pAttribs[0].Value );
-                aAny >>= d1;
-                aAny >>= f1;
-            }
-            int i = 3;
-        }
-#endif
 
         // get resulting sequence
         uno::Sequence< beans::PropertyValue > aRes;
@@ -1306,7 +1286,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterBounds: index value overflow");
@@ -1341,7 +1321,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterCount: index value overflow");
@@ -1353,7 +1333,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_uInt16 nPara, nIndex;
 
@@ -1400,7 +1380,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getSelectedText: index value overflow");
@@ -1415,7 +1395,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getSelectionStart: index value overflow");
@@ -1430,7 +1410,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getSelectionEnd: index value overflow");
@@ -1445,7 +1425,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::setSelection: paragraph index value overflow");
@@ -1467,7 +1447,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getText: paragraph index value overflow");
@@ -1479,7 +1459,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
@@ -1491,7 +1471,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
@@ -1539,7 +1519,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextBeforeIndex: paragraph index value overflow");
@@ -1598,7 +1578,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextBehindIndex: paragraph index value overflow");
@@ -1641,7 +1621,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1681,7 +1661,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1711,7 +1691,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1741,7 +1721,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1774,7 +1754,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1809,7 +1789,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1844,7 +1824,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         try
         {
@@ -1883,7 +1863,7 @@ namespace accessibility
                 }
                 catch( const uno::Exception& )
                 {
-                    DBG_ERROR("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
+                    OSL_FAIL("AccessibleEditableTextPara::setAttributes exception in setPropertyValue");
                 }
 
                 ++pPropArray;
@@ -1904,7 +1884,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return replaceText(0, getCharacterCount(), sText);
     }
@@ -1915,7 +1895,7 @@ namespace accessibility
         throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         #if OSL_DEBUG_LEVEL > 0
         SvxAccessibleTextAdapter& rCacheTF =
@@ -1983,7 +1963,7 @@ namespace accessibility
             PropertyState eState = aPropSet._getPropertyState( pProperties->Name, mnParagraphIndex );
             if ( eState == PropertyState_AMBIGUOUS_VALUE )
             {
-                OSL_ENSURE( false, "ambiguous property value encountered" );
+                OSL_FAIL( "ambiguous property value encountered" );
             }
 
             //if (eState == PropertyState_DIRECT_VALUE)
@@ -2014,7 +1994,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         #if OSL_DEBUG_LEVEL > 0
         SvxAccessibleTextAdapter& rCacheTF =
@@ -2309,3 +2289,5 @@ namespace accessibility
 }  // end of namespace accessibility
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

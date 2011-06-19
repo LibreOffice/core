@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,16 @@
 #include <deque>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _COM_SUN_STAR_UI_XUILEMENT_HPP_
 #include <com/sun/star/ui/XUIElement.hpp>
-#endif
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uInt16S
 #include <svl/svstdarr.hxx>     // SvUShorts
 #include <rtl/ustring.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>
@@ -57,12 +56,12 @@ class SfxSplitWindow;
 class SfxWorkWindow;
 
 //====================================================================
-// Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
+// This struct makes all relevant Informationen available of Toolboxes
 
 struct SfxObjectBar_Impl
 {
-    sal_uInt16        nId;   // Resource - und ConfigId der Toolbox
-    sal_uInt16        nMode; // spezielle Sichtbarkeitsflags
+    sal_uInt16        nId;   // Resource - and ConfigId of Toolbox
+    sal_uInt16        nMode; // special visibility flags
     sal_uInt16        nPos;
     sal_uInt16        nIndex;
     sal_Bool      bDestroy;
@@ -78,7 +77,8 @@ struct SfxObjectBar_Impl
 };
 
 //------------------------------------------------------------------------------
-// Dieser struct h"alt alle relevanten Informationen "uber die Statuszeile bereit.
+// This struct makes all relevant Informationen available of the status bar
+
 struct SfxStatBar_Impl
 {
     sal_uInt16                  nId;
@@ -95,9 +95,9 @@ struct SfxStatBar_Impl
 //------------------------------------------------------------------------------
 
 #define CHILD_NOT_VISIBLE   0
-#define CHILD_ACTIVE        1   // nicht durch HidePopups ausgeschaltet
-#define CHILD_NOT_HIDDEN    2   // nicht durch HideChildWindow ausgeschaltet
-#define CHILD_FITS_IN       4   // nicht zu gro\s f"ur OutputSize des parent
+#define CHILD_ACTIVE       1    // not disabled through HidePopups
+#define CHILD_NOT_HIDDEN   2    // not disabled through HideChildWindow
+#define CHILD_FITS_IN      4    // not too large for output size of the parent
 #define CHILD_VISIBLE       (CHILD_NOT_HIDDEN | CHILD_ACTIVE | CHILD_FITS_IN)
 #define CHILD_ISVISIBLE     (CHILD_NOT_HIDDEN | CHILD_ACTIVE)
 
@@ -133,13 +133,13 @@ class SfxChildWinController_Impl : public SfxControllerItem
 
 struct SfxChildWin_Impl
 {
-    sal_uInt16                          nSaveId;        // die ChildWindow-Id
-    sal_uInt16                          nInterfaceId;   // der aktuelle Context
-    sal_uInt16                          nId;            // aktuelle Id
+    sal_uInt16                         nSaveId;       // the ChildWindow-Id
+    sal_uInt16                         nInterfaceId;  // the current context
+    sal_uInt16                         nId;           // current Id
     SfxChildWindow*                 pWin;
     sal_Bool                            bCreate;
     SfxChildWinInfo                 aInfo;
-    SfxChild_Impl*                  pCli;           // != 0 bei direkten Children
+    SfxChild_Impl*                 pCli;          // != 0 at direct Children
     sal_uInt16                          nVisibility;
     sal_Bool                            bEnable;
     sal_Bool                            bDisabled;
@@ -308,7 +308,7 @@ public:
                             { return pParent; }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          CreateDispatch( const String& );
 
-    // Methoden f"ur alle Child-Fenster
+    // Methods for all Child windows
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
     void                    ReleaseChild_Impl( Window& rWindow );
     SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, sal_Bool bCanGetFocus=sal_False );
@@ -329,7 +329,7 @@ public:
     void                    SetFullScreen_Impl( sal_Bool bSet ) { bIsFullScreen = bSet; }
     sal_Bool                    IsFullScreen_Impl() const { return bIsFullScreen; }
 
-    // Methoden f"ur Objectbars
+    // Methods for Objectbars
     virtual void            UpdateObjectBars_Impl();
     void                    ResetObjectBars_Impl();
     void                    SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
@@ -345,7 +345,7 @@ public:
     sal_uInt16                  HasNextObjectBar_Impl( sal_uInt16 nPos, String* pStr=0 );
     void                    SetObjectBarCustomizeMode_Impl( sal_Bool );
 
-    // Methoden f"ur ChildWindows
+    // Methods for ChildWindows
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
     void                    SetChildWindowVisible_Impl( sal_uInt32, sal_Bool, sal_uInt16 );
@@ -367,7 +367,7 @@ public:
     virtual sal_Bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
-    // Methoden f"ur StatusBar
+    // Methods for StatusBar
     void                    SetTempStatusBar_Impl( sal_Bool bSet );
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(sal_uInt32 nResId, SfxShell *pShell, SfxBindings& );
@@ -389,3 +389,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

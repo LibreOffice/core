@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ enum SvXMLTokenMapAttrs
 };
 
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 {
     { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
     { XML_GRADIENTSTYLE_AXIAL,          awt::GradientStyle_AXIAL },
@@ -111,7 +112,7 @@ sal_Bool XMLGradientStyleImport::importXML(
     aGradient.Border = 0;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
+        static SvXMLTokenMapEntry aGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
@@ -234,8 +235,6 @@ sal_Bool XMLGradientStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLGradientStyleExport::XMLGradientStyleExport(
     SvXMLExport& rExp )
     : rExport(rExp)
@@ -341,4 +340,4 @@ sal_Bool XMLGradientStyleExport::exportXML(
     return bRet;
 }
 
-#endif // #ifndef SVX_LIGHT
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

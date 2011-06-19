@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,28 +49,19 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <tools/mapunit.hxx>
-#ifndef _VCL_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/i18nhelp.hxx>
-#ifndef _VCL_OUTPUTDEVICE_HXX_
 #include <vcl/outdev.hxx>
-#endif
 #include <vcl/print.hxx>
-#ifndef _SVTOOLS_CTRLTOOL_HXX_
 #include <svtools/ctrltool.hxx>
-#endif
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -118,7 +110,7 @@ rtl::OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::
                 Sequence< PropertyValue > aPrinterSeq = xPrintable->getPrinter();
                 for ( int i = 0; i < aPrinterSeq.getLength(); i++ )
                 {
-                    if ( aPrinterSeq[i].Name.equalsAscii( "Name" ))
+                    if ( aPrinterSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" ) ))
                     {
                         aPrinterSeq[i].Value >>= aPrinterName;
                         break;
@@ -173,7 +165,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         Printer*        pInfoPrinter = 0;
         rtl::OUString   aPrinterName;
 
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         // try to retrieve printer name of document
         aPrinterName = retrievePrinterName( m_xFrame );
@@ -312,7 +304,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 
         if ( m_xPopupMenu.is() )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             setCurHeight( long( m_aFontHeight.Height * 10), m_xPopupMenu );
         }
     }
@@ -323,7 +315,7 @@ void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatc
 {
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString::createFromAscii("FontSizeMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontSizeMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"FontSizeMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );
@@ -361,3 +353,5 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
     svt::PopupMenuControllerBase::updatePopupMenu();
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

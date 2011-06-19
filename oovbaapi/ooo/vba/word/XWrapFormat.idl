@@ -27,9 +27,7 @@
 #ifndef __ooo_vba_word_XWrapFormat_idl__
 #define __ooo_vba_word_XWrapFormat_idl__
 
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba {  module word {
 interface XWrapFormat : ooo::vba::XHelperInterface

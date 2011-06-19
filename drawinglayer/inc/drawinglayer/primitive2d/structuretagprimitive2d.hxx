@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_STRUCTURETAGPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_STRUCTURETAGPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <vcl/pdfwriter.hxx>
 
@@ -49,7 +52,7 @@ namespace drawinglayer
             If a renderer ignores this, it just decomposes to it's child
             content.
          */
-        class StructureTagPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC StructureTagPrimitive2D : public GroupPrimitive2D
         {
         private:
             /// the PDF structure element this grouping represents
@@ -76,3 +79,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -39,6 +41,9 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/script/XScriptListener.hpp>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <com/sun/star/form/XChangeListener.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #ifdef VBA_OOBUILD_HACK
 #include <svtools/bindablecontrolhelper.hxx>
@@ -90,7 +95,7 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
     }
     catch( uno::Exception )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "The Control does not exsit" ),
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The Control does not exsit")),
                 uno::Reference< uno::XInterface >() );
     }
     return xWinPeer;
@@ -127,7 +132,7 @@ ScVbaControlListener::disposing( const lang::EventObject& ) throw( uno::RuntimeE
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ),  m_xControl( xControl ), m_xModel( xModel )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ),  bIsDialog(false), m_xControl( xControl ), m_xModel( xModel )
 {
     //add listener
     m_xEventListener.set( new ScVbaControlListener( this ) );
@@ -139,9 +144,18 @@ ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, c
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
     uno::Reference< awt::XControl> xUserFormControl( m_xControl, uno::UNO_QUERY ) ;
     if ( xControlShape.is() ) // form control
+    {
         m_xProps.set( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+        rtl::OUString sDefaultControl;
+        m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sDefaultControl;
+        uno::Reference< lang::XMultiComponentFactory > xMFac( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        m_xEmptyFormControl.set( xMFac->createInstanceWithContext( sDefaultControl, mxContext ), uno::UNO_QUERY_THROW );
+    }
     else if ( xUserFormControl.is() ) // userform control
+    {
         m_xProps.set( xUserFormControl->getModel(), uno::UNO_QUERY_THROW );
+        bIsDialog = true;
+    }
 }
 
 ScVbaControl::~ScVbaControl()
@@ -397,6 +411,86 @@ void SAL_CALL ScVbaControl::setTag( const ::rtl::OUString& aTag )
     m_aControlTag = aTag;
 }
 
+::sal_Int32 SAL_CALL ScVbaControl::getForeColor() throw (::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 nForeColor = -1;
+    m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ) ) >>= nForeColor;
+    return OORGBToXLRGB( nForeColor );
+}
+
+void SAL_CALL ScVbaControl::setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException)
+{
+     m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ), uno::makeAny( XLRGBToOORGB( _forecolor ) ) );
+}
+
+void ScVbaControl::fireEvent( script::ScriptEvent& evt )
+{
+    uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) ), mxContext ), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
+    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), uno::makeAny( m_xModel ) );
+
+    // handling for sheet control
+    uno::Reference< msforms::XControl > xThisControl( this );
+    try
+    {
+        evt.Arguments.realloc( 1 );
+        lang::EventObject aEvt;
+
+        uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY ) ;
+       uno::Reference< awt::XControl > xControl( m_xControl, uno::UNO_QUERY ) ;
+
+        if ( xControlShape.is() )
+        {
+            evt.Source = xControlShape;
+            aEvt.Source = m_xEmptyFormControl;
+            // Set up proper scriptcode
+            uno::Reference< lang::XMultiServiceFactory > xDocFac(  m_xModel, uno::UNO_QUERY_THROW );
+            uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider")) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+            evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
+            evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+            xScriptListener->firing( evt );
+        }
+        else
+        {
+            if ( xControl.is() ) // normal control ( from dialog/userform )
+            {
+                // #FIXME We should probably store a reference to the
+                // parent dialog/userform here ( other wise the name of
+                // dialog could be changed and we won't be aware of it.
+                // ( OTOH this is probably an unlikely scenario )
+                evt.Source = xThisControl;
+                aEvt.Source = xControl;
+                evt.ScriptCode = m_sLibraryAndCodeName;
+                evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+                xScriptListener->firing( evt );
+            }
+        }
+    }
+    catch( uno::Exception& e )
+    {
+    }
+}
+void ScVbaControl::fireChangeEvent()
+{
+    script::ScriptEvent evt;
+    evt.ScriptType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
+    evt.ListenerType = form::XChangeListener::static_type(0);
+    evt.MethodName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("changed") );
+    fireEvent( evt );
+}
+
+void ScVbaControl::fireClickEvent()
+{
+    script::ScriptEvent evt;
+    evt.ScriptType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
+    evt.ListenerType = awt::XActionListener::static_type(0);
+    evt.MethodName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("actionPerformed") );
+    fireEvent( evt );
+}
+
 sal_Int32 SAL_CALL ScVbaControl::getTabIndex() throw (uno::RuntimeException)
 {
     return 1;
@@ -420,7 +514,6 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
     uno::Reference< drawing::XShape > xShape( xControlShape, uno::UNO_QUERY_THROW );
     ::std::auto_ptr< ConcreteXShapeGeometryAttributes > xGeoHelper( new ConcreteXShapeGeometryAttributes( xContext, xShape ) );
-
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
@@ -431,6 +524,8 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
             return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::TEXTFIELD:
             return new ScVbaTextBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+        case form::FormComponentType::CHECKBOX:
+            return new ScVbaCheckbox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::RADIOBUTTON:
             return new ScVbaRadioButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::LISTBOX:
@@ -440,7 +535,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         case form::FormComponentType::IMAGECONTROL:
             return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
     }
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
 
 /*static*/ uno::Reference< msforms::XControl > ScVbaControlFactory::createUserformControl(
@@ -491,10 +586,18 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.awt.UnoControlSystemAXContainerModel") ) ) )
         xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
-
+    // #FIXME implement a page control
+    else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoPageModel") ) ) )
+        xVBAControl.set( new ScVbaControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+    else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoFrameModel") ) ) )
+        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
+    else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ) ) )
+        xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+    else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.awt.UnoControlSystemAXContainerModel") ) ) )
+        xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     if( xVBAControl.is() )
         return xVBAControl;
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control." ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
 
 rtl::OUString&
@@ -515,8 +618,6 @@ ScVbaControl::getServiceNames()
     }
     return aServiceNames;
 }
-
-
 
 typedef cppu::WeakImplHelper1< XControlProvider > ControlProvider_BASE;
 class ControlProviderImpl : public ControlProvider_BASE
@@ -548,3 +649,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

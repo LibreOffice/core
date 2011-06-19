@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <osl/file.hxx>
 #include <osl/socket.h>
 #include <cppuhelper/factory.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include "filglob.hxx"
@@ -52,14 +51,14 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
 
 //=========================================================================
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=========================================================================
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
@@ -210,7 +209,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
+  return ServiceName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
 }
 
 
@@ -322,8 +321,8 @@ FileProvider::compareContentIds(
         if ( error != osl::FileBase::E_None )
             return iComp;
 
-        osl::FileStatus aStatus1( FileStatusMask_FileURL );
-        osl::FileStatus aStatus2( FileStatusMask_FileURL );
+        osl::FileStatus aStatus1( osl_FileStatus_Mask_FileURL );
+        osl::FileStatus aStatus2( osl_FileStatus_Mask_FileURL );
         error = aItem1.getFileStatus( aStatus1 );
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );
@@ -415,17 +414,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
+    m_seq[0] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString::createFromAscii( "HomeDirectory" ),
+    m_seq[1] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
+    m_seq[2] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileSystemNotation")),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );
@@ -515,7 +514,7 @@ void SAL_CALL FileProvider::initProperties( void )
 
 #if defined ( UNX )
         m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
-#elif defined( WNT ) || defined( OS2 )
+#elif defined( WNT )
         m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
 #else
         m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;
@@ -682,3 +681,4 @@ rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUStri
     return aSystemPath;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

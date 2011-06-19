@@ -42,14 +42,13 @@ SRC1FILES =\
 # --- Files -------------------------------------
 
 SLOFILES= \
+	$(EXCEPTIONSFILES)	 \
         $(SLO)$/mediaitem.obj	 \
-        $(SLO)$/mediamisc.obj 	 \
-        $(SLO)$/mediacontrol.obj \
-        $(SLO)$/mediatoolbox.obj \
-        $(SLO)$/mediaplayer.obj  \
-        $(SLO)$/soundhandler.obj  
 
 EXCEPTIONSFILES = \
+        $(SLO)$/mediacontrol.obj \
+        $(SLO)$/mediamisc.obj 	 \
+        $(SLO)$/mediaplayer.obj  \
         $(SLO)$/mediatoolbox.obj \
         $(SLO)$/soundhandler.obj
 

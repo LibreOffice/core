@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-//  using namespace com::sun::star::container;
-//  using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
 ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)
@@ -60,14 +59,14 @@ ODbaseResultSet::ODbaseResultSet( OStatement_Base* pStmt,connectivity::OSQLParse
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODbaseResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.dbase.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.dbase.ResultSet"));
 }
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -197,8 +196,6 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                     nRec = pIter->Next();
                 }
                 m_pFileSet->setFrozen();
-                //  if(!bDistinct)
-                    //  SetRowCount(pFileSet->count());
                 delete pIter;
                 return sal_True;
             }
@@ -247,3 +244,4 @@ sal_Int32 ODbaseResultSet::getCurrentFilePos() const
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

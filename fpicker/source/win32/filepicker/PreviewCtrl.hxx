@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,7 +152,7 @@ public:
     // if the preview is shown and enabled
     // preview of the given file will be shown
     // returns true on success or false if an error
-    // occured (the file in not there or not accessible etc.)
+    // occurred (the file in not there or not accessible etc.)
     virtual sal_Bool SAL_CALL update( const rtl::OUString& aFileName );
 
 protected:
@@ -197,3 +198,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

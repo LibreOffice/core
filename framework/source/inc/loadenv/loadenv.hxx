@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,13 +45,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_IllegalArgumentException_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_IOException_HPP_
 #include <com/sun/star/io/IOException.hpp>
-#endif
 
 //_______________________________________________
 // includes of an other project
@@ -702,3 +699,5 @@ class LoadEnv : private ThreadHelpBase
 } // namespace framework
 
 #endif // __FRAMEWORK_LOADENV_LOADENV_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

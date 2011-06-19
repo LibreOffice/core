@@ -1,10 +1,69 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vbalistcontrolhelper.hxx>
 #include <vector>
+#include <vbahelper/vbapropvalue.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
 const static rtl::OUString ITEMS( RTL_CONSTASCII_USTRINGPARAM("StringItemList") );
+
+class ListPropListener : public PropListener
+{
+private:
+    uno::Reference< beans::XPropertySet > m_xProps;
+    uno::Any m_pvargIndex;
+    uno::Any m_pvarColumn;
+
+public:
+    ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn );
+    virtual void setValueEvent( const css::uno::Any& value );
+    virtual css::uno::Any getValueEvent();
+};
+
+ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn ) : m_xProps( xProps ), m_pvargIndex( pvargIndex ), m_pvarColumn( pvarColumn )
+{
+}
+
+void ListPropListener::setValueEvent( const uno::Any& value )
+{
+    if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Bad argument" )), uno::Reference< uno::XInterface >() );
+
+    m_xProps->setPropertyValue( ITEMS, value );
+}
+
+uno::Any ListPropListener::getValueEvent()
+{
+    uno::Sequence< rtl::OUString > sList;
+    m_xProps->getPropertyValue( ITEMS ) >>= sList;
+    sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
+    uno::Any aRet;
+    if ( m_pvargIndex.hasValue() )
+    {
+        sal_Int16 nIndex = -1;
+        m_pvargIndex >>= nIndex;
+        if( nIndex < 0 || nIndex >= nLength )
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Bad row Index" )), uno::Reference< uno::XInterface >() );
+        aRet <<= sList[ nIndex ];
+    }
+    else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Bad column Index" )), uno::Reference< uno::XInterface >() );
+    else // List() ( e.g. no args )
+    {
+        uno::Sequence< uno::Sequence< rtl::OUString > > sReturnArray( nLength );
+        for ( sal_Int32 i = 0; i < nLength; ++i )
+        {
+            sReturnArray[ i ].realloc( 10 );
+            sReturnArray[ i ][ 0 ] = sList[ i ];
+        }
+        aRet = uno::makeAny( sReturnArray );
+    }
+    return aRet;
+}
 
 void SAL_CALL
 ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
@@ -71,7 +130,7 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
         uno::Sequence< rtl::OUString > sList;
         m_xProps->getPropertyValue( ITEMS ) >>= sList;
         if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid index" ), uno::Reference< uno::XInterface > () );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid index")), uno::Reference< uno::XInterface > () );
         if( sList.hasElements() )
         {
             if( sList.getLength() == 1 )
@@ -116,31 +175,7 @@ ListControlHelper::getListCount() throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > sList;
-    m_xProps->getPropertyValue( ITEMS ) >>= sList;
-    sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
-    uno::Any aRet;
-    if ( pvargIndex.hasValue() )
-    {
-        sal_Int16 nIndex = -1;
-        pvargIndex >>= nIndex;
-        if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Bad row Index" ), uno::Reference< uno::XInterface >() );
-        aRet <<= sList[ nIndex ];
-    }
-    else if ( pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Bad column Index" ), uno::Reference< uno::XInterface >() );
-    else // List() ( e.g. no args )
-    {
-        uno::Sequence< uno::Sequence< rtl::OUString > > sReturnArray( nLength );
-        for ( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            sReturnArray[ i ].realloc( 10 );
-            sReturnArray[ i ][ 0 ] = sList[ i ];
-        }
-        aRet = uno::makeAny( sReturnArray );
-    }
-    return aRet;
+    return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

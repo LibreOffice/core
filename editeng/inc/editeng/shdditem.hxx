@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,9 @@ namespace rtl
 
 // class SvxShadowedItem -------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob und wie schattiert ist.
+/*  [Description]
+
+    This item describes, whether and how it is shaded.
 */
 
 class EDITENG_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
@@ -53,7 +54,7 @@ public:
     SvxShadowedItem( const sal_Bool bShadowed /*= sal_False*/,
                      const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
@@ -72,3 +73,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

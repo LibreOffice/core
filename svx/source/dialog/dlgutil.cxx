@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
 #include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -46,10 +50,42 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {
-        DBG_ERROR("Using fallback for field unit - field unit should be provided in ItemSet");
+        OSL_FAIL("Using fallback for field unit - field unit should be provided in ItemSet");
         return SfxModule::GetCurrentFieldUnit();
     }
 
     return eUnit;
 }
 
+bool GetApplyCharUnit( const SfxItemSet& rSet )
+{
+    bool  bUseCharUnit = false;
+    const SfxPoolItem* pItem = NULL;
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, sal_False, &pItem ) )
+        bUseCharUnit =  ((const SfxBoolItem*)pItem )->GetValue();
+    else
+    {
+        // FIXME - this might be wrong, cf. the DEV300 changes in GetModuleFieldUnit()
+        SfxViewFrame* pFrame = SfxViewFrame::Current();
+        SfxObjectShell* pSh = NULL;
+        if ( pFrame )
+            pSh = pFrame->GetObjectShell();
+        if ( pSh )  // the object shell is not always available during reload
+        {
+            SfxModule* pModule = pSh->GetModule();
+            if ( pModule )
+            {
+                pItem = pModule->GetItem( SID_ATTR_APPLYCHARUNIT );
+                if ( pItem )
+                    bUseCharUnit = ((SfxBoolItem*)pItem )->GetValue();
+            }
+            else
+            {
+                DBG_ERRORFILE( "GetApplyCharUnit(): no module found" );
+            }
+        }
+    }
+    return bUseCharUnit;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

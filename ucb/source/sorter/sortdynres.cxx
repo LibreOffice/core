@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,8 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //=========================================================================
 
@@ -135,10 +137,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                                   OUString::createFromAscii(
-                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
-                                   OUString::createFromAscii(
-                                   DYNAMIC_RESULTSET_SERVICE_NAME ) );
+                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" )),
+                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   DYNAMIC_RESULTSET_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -254,8 +256,8 @@ SortedDynamicResultSet::connectToCache(
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 mxSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -319,8 +321,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
     SortedResultSet *pCurSet = NULL;
 
-    // mxNew und mxOld vertauschen und anschliessend die Tabellen von Old
-    // nach New kopieren
+    // exchange mxNew and mxOld and immediately afterwards copy the tables
+    // from Old to New
     if ( mbGotWelcome )
     {
         if ( mbUseOne )
@@ -340,7 +342,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     Any  aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
+        aRet = pCurSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) );
     }
     catch ( UnknownPropertyException ) {}
     catch ( WrappedTargetException ) {}
@@ -511,10 +513,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                         OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
-                         OUString::createFromAscii(
-                         DYNAMIC_RESULTSET_FACTORY_NAME ) );
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         DYNAMIC_RESULTSET_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.
@@ -626,3 +628,4 @@ SortedDynamicResultSetListener::impl_OwnerDies()
     mpOwner = NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

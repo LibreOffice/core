@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_CONSTANT_CONTAINERQUERY_HXX_
 #include <constant/containerquery.hxx>
-#endif
 
 namespace framework{
     namespace constant{
@@ -40,3 +39,5 @@ const sal_Unicode ContainerQuery::SEPERATOR_VALUE = (sal_Unicode)'=';
 
     } // namespace constant
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

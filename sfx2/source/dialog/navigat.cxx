@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 // includes *******************************************************************
-
-#ifndef GCC
-#endif
 
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
@@ -83,7 +81,7 @@ void SfxNavigator::Resizing( Size &rSize )
     SfxDockingWindow::Resizing( rSize );
 
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "Kein Context!" );
+    DBG_ASSERT( pCon, "No Context!" );
     if ( pCon )
         pCon->Resizing( rSize );
 }
@@ -91,10 +89,11 @@ void SfxNavigator::Resizing( Size &rSize )
 sal_Bool SfxNavigator::Close()
 {
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
-    DBG_ASSERT( pCon, "Kein Context!" );
+    DBG_ASSERT( pCon, "No Context!" );
     if ( !pCon || pCon->Close() )
         return SfxDockingWindow::Close();
     else
         return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

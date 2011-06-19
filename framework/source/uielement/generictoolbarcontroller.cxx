@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include "uielement/generictoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -55,11 +52,9 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
@@ -150,7 +145,7 @@ GenericToolbarController::~GenericToolbarController()
 void SAL_CALL GenericToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
 
@@ -166,7 +161,7 @@ throw ( RuntimeException )
     ::rtl::OUString                     aCommandURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -205,7 +200,7 @@ throw ( RuntimeException )
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("GenericToolbarController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenericToolbarController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
         Application::PostUserEvent( STATIC_LINK(0, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
@@ -213,7 +208,7 @@ throw ( RuntimeException )
 void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -391,3 +386,4 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
 }
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

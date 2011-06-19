@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,9 @@
 #include <tools/vcompat.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
-#ifndef _SFXIPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
 #include <svl/whiter.hxx>
-#ifndef _SFXIPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "svx/xexch.hxx"
@@ -202,3 +199,5 @@ XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData 
 
     return( *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

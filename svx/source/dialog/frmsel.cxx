@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,14 +36,12 @@
 #include "AccessibleFrameSelector.hxx"
 #include <svx/dialmgr.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
-#endif
 
 #include <tools/rcid.h>
+
+using namespace ::editeng;
 
 namespace svx {
 
@@ -87,7 +86,7 @@ const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
 // ----------------------------------------------------------------------------
 
-static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0 );
+static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0, SOLID );
 static const FrameBorder    OBJ_FRAMEBORDER_NONE( FRAMEBORDER_NONE );
 
 // ----------------------------------------------------------------------------
@@ -157,7 +156,7 @@ void FrameBorder::SetCoreStyle( const SvxBorderLine* pStyle )
         maCoreStyle = SvxBorderLine();
 
     // from twips to points
-    maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH, true );
+    maUIStyle.Set( maCoreStyle, 0.05, FRAMESEL_GEOM_WIDTH );
     meState = maUIStyle.Prim() ? FRAMESTATE_SHOW : FRAMESTATE_HIDE;
 }
 
@@ -630,18 +629,46 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Translate core colors to current UI colors (regards current background and HC mode).
     for( FrameBorderIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
     {
-        Color aCoreColor = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColor();
-        (*aIt)->SetUIColor( GetDrawLineColor( aCoreColor ) );
+        Color aCoreColorPrim = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorOut();
+        Color aCoreColorSecn = ((*aIt)->GetState() == FRAMESTATE_DONTCARE) ? maMarkCol : (*aIt)->GetCoreStyle().GetColorIn();
+        (*aIt)->SetUIColorPrim( GetDrawLineColor( aCoreColorPrim ) );
+        (*aIt)->SetUIColorSecn( GetDrawLineColor( aCoreColorSecn ) );
     }
 
     // Copy all frame border styles to the helper array
     maArray.SetColumnStyleLeft( 0, maLeft.GetUIStyle() );
     if( mbVer ) maArray.SetColumnStyleLeft( 1, maVer.GetUIStyle() );
-    maArray.SetColumnStyleRight( mbVer ? 1 : 0, maRight.GetUIStyle() );
+
+    // Invert the style for the right line
+    const frame::Style rRightStyle = maRight.GetUIStyle( );
+    frame::Style rInvertedRight( rRightStyle.GetColorPrim(),
+            rRightStyle.GetColorSecn(), rRightStyle.GetColorGap(),
+            rRightStyle.UseGapColor(),
+            rRightStyle.Secn(), rRightStyle.Dist(), rRightStyle.Prim( ),
+            rRightStyle.Type( ) );
+    maArray.SetColumnStyleRight( mbVer ? 1 : 0, rInvertedRight );
 
     maArray.SetRowStyleTop( 0, maTop.GetUIStyle() );
-    if( mbHor ) maArray.SetRowStyleTop( 1, maHor.GetUIStyle() );
-    maArray.SetRowStyleBottom( mbHor ? 1 : 0, maBottom.GetUIStyle() );
+    if( mbHor )
+    {
+        // Invert the style for the hor line to match the real borders
+        const frame::Style rHorStyle = maHor.GetUIStyle();
+        frame::Style rInvertedHor( rHorStyle.GetColorPrim(),
+            rHorStyle.GetColorSecn(), rHorStyle.GetColorGap(),
+            rHorStyle.UseGapColor(),
+            rHorStyle.Secn(), rHorStyle.Dist(), rHorStyle.Prim( ),
+            rHorStyle.Type() );
+        maArray.SetRowStyleTop( 1, rInvertedHor );
+    }
+
+    // Invert the style for the bottom line
+    const frame::Style rBottomStyle = maBottom.GetUIStyle( );
+    frame::Style rInvertedBottom( rBottomStyle.GetColorPrim(),
+            rBottomStyle.GetColorSecn(), rBottomStyle.GetColorGap(),
+            rBottomStyle.UseGapColor(),
+            rBottomStyle.Secn(), rBottomStyle.Dist(), rBottomStyle.Prim( ),
+            rBottomStyle.Type() );
+    maArray.SetRowStyleBottom( mbHor ? 1 : 0, rInvertedBottom );
 
     for( size_t nCol = 0; nCol < maArray.GetColCount(); ++nCol )
         for( size_t nRow = 0; nRow < maArray.GetRowCount(); ++nRow )
@@ -862,7 +889,7 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FRAMESTATE_HIDE );
 }
 
-bool FrameSelector::GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSecn ) const
+bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -872,15 +899,13 @@ bool FrameSelector::GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal
     bool bFound = true;
     for( ++aIt; bFound && aIt.Is(); ++aIt )
         bFound =
-            (rStyle.GetOutWidth() == (*aIt)->GetCoreStyle().GetOutWidth()) &&
-            (rStyle.GetDistance() == (*aIt)->GetCoreStyle().GetDistance()) &&
-            (rStyle.GetInWidth()  == (*aIt)->GetCoreStyle().GetInWidth());
+            (rStyle.GetWidth() == (*aIt)->GetCoreStyle().GetWidth()) &&
+            (rStyle.GetStyle() == (*aIt)->GetCoreStyle().GetStyle());
 
     if( bFound )
     {
-        rnPrim = rStyle.GetOutWidth();
-        rnDist = rStyle.GetDistance();
-        rnSecn = rStyle.GetInWidth();
+        rnWidth = rStyle.GetWidth();
+        rnStyle = rStyle.GetStyle();
     }
     return bFound;
 }
@@ -941,11 +966,10 @@ void FrameSelector::SelectAllVisibleBorders( bool bSelect )
         mxImpl->SelectBorder( **aIt, bSelect );
 }
 
-void FrameSelector::SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSecn )
+void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderStyle nStyle )
 {
-    mxImpl->maCurrStyle.SetOutWidth( nPrim );
-    mxImpl->maCurrStyle.SetDistance( nDist );
-    mxImpl->maCurrStyle.SetInWidth( nSecn );
+    mxImpl->maCurrStyle.SetStyle( nStyle );
+    mxImpl->maCurrStyle.SetWidth( nWidth );
     for( SelFrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
 }
@@ -1203,3 +1227,4 @@ FrameBorderIterBase< Cont, Iter, Pred >& FrameBorderIterBase< Cont, Iter, Pred >
 
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

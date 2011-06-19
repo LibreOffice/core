@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,13 @@
 #include "svx/gallery1.hxx"
 #include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
-#ifndef _SV_SVAPP_HXX_
+#include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
+#include <svl/itempool.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -64,7 +66,7 @@ GalleryTheme::GalleryTheme( const ::rtl::OUString& rThemeName )
 
 GalleryTheme::~GalleryTheme()
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     DBG_ASSERT( !mpTheme || mpGallery, "Theme is living without Gallery" );
 
@@ -147,21 +149,15 @@ uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGalleryThemeImplementationId : public rtl::Static< UnoTunnelIdInit, theGalleryThemeImplementationId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
     throw(uno::RuntimeException)
 {
-    const vos::OGuard                   aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGalleryThemeImplementationId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
@@ -177,7 +173,7 @@ uno::Type SAL_CALL GalleryTheme::getElementType()
 sal_Bool SAL_CALL GalleryTheme::hasElements()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     return( ( mpTheme != NULL ) && ( mpTheme->GetObjectCount() > 0 ) );
 }
@@ -187,7 +183,7 @@ sal_Bool SAL_CALL GalleryTheme::hasElements()
 sal_Int32 SAL_CALL GalleryTheme::getCount()
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     return( mpTheme ? mpTheme->GetObjectCount() : 0 );
 }
@@ -197,7 +193,7 @@ sal_Int32 SAL_CALL GalleryTheme::getCount()
 uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     uno::Any            aRet;
 
     if( mpTheme )
@@ -223,7 +219,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 ::rtl::OUString SAL_CALL GalleryTheme::getName(  )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ::rtl::OUString     aRet;
 
     if( mpTheme )
@@ -237,7 +233,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 void SAL_CALL GalleryTheme::update(  )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     if( mpTheme )
     {
@@ -252,7 +248,7 @@ void SAL_CALL GalleryTheme::update(  )
     const ::rtl::OUString& rURL, ::sal_Int32 nIndex )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_Int32           nRet = -1;
 
     if( mpTheme )
@@ -285,7 +281,7 @@ void SAL_CALL GalleryTheme::update(  )
     const uno::Reference< graphic::XGraphic >& rxGraphic, sal_Int32 nIndex )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_Int32           nRet = -1;
 
     if( mpTheme )
@@ -313,7 +309,7 @@ void SAL_CALL GalleryTheme::update(  )
     const uno::Reference< lang::XComponent >& Drawing, sal_Int32 nIndex )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_Int32           nRet = -1;
 
     if( mpTheme )
@@ -322,10 +318,42 @@ void SAL_CALL GalleryTheme::update(  )
 
         if( pModel && pModel->GetDoc() && pModel->GetDoc()->ISA( FmFormModel ) )
         {
+            //Here we're inserting something that's already a gallery theme drawing
+
             nIndex = ::std::max( ::std::min( nIndex, getCount() ), sal_Int32( 0 ) );
 
             if( mpTheme->InsertModel( *static_cast< FmFormModel* >( pModel->GetDoc() ), nIndex ) )
                 nRet = nIndex;
+        }
+        else if (!pModel)
+        {
+            //#i80184# Try to do the right thing and make a Gallery drawing out of an ordinary
+            //Drawing if possible.
+            try
+            {
+                uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSupplier( Drawing, uno::UNO_QUERY_THROW );
+                uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+                uno::Reference< drawing::XDrawPage > xPage( xDrawPages->getByIndex( 0 ), uno::UNO_QUERY_THROW );
+                SvxDrawPage* pUnoPage = xPage.is() ? SvxDrawPage::getImplementation( xPage ) : NULL;
+                SdrModel* pOrigModel = pUnoPage ? pUnoPage->GetSdrPage()->GetModel() : NULL;
+                SdrPage* pOrigPage = pUnoPage ? pUnoPage->GetSdrPage() : NULL;
+
+                if (pOrigPage && pOrigModel)
+                {
+                    FmFormModel* pTmpModel = new FmFormModel(&pOrigModel->GetItemPool());
+                    SdrPage* pNewPage = pOrigPage->Clone();
+                    pTmpModel->InsertPage(pNewPage, 0);
+
+                    uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );
+                    pTmpModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );
+
+                    nRet = insertDrawingByIndex( xDrawing, nIndex );
+                    return nRet;
+                }
+            }
+            catch (...)
+            {
+            }
         }
     }
 
@@ -337,7 +365,7 @@ void SAL_CALL GalleryTheme::update(  )
 void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     if( mpTheme )
     {
@@ -352,7 +380,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
 
 void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     const GalleryHint&  rGalleryHint = static_cast< const GalleryHint& >( rHint );
 
     switch( rGalleryHint.GetType() )
@@ -389,7 +417,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     for( GalleryItemList::iterator aIter = maItemList.begin(); aIter != maItemList.end();  )
     {
@@ -414,7 +442,7 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 
 void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
 //  DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
     maItemList.push_back( &rItem );
@@ -424,10 +452,12 @@ void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 
 void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
 //  DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
     maItemList.remove( &rItem );
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

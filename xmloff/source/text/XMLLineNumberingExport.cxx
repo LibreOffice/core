@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp)
 {
 }
 
-SvXMLEnumMapEntry __READONLY_DATA aLineNumberPositionMap[] =
+SvXMLEnumMapEntry const aLineNumberPositionMap[] =
 {
     { XML_LEFT,     style::LineNumberPosition::LEFT },
     { XML_RIGHT,    style::LineNumberPosition::RIGHT },
@@ -210,3 +211,5 @@ void XMLLineNumberingExport::Export()
     }
     // can't even get supplier: don't save -> default
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

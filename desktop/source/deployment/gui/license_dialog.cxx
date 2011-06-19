@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -214,13 +215,6 @@ LicenseDialogImpl::LicenseDialogImpl(
 
 {
 
-    if (GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        // high contrast mode needs other images
-        m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
-        m_fiArrow2.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
-    }
-
     FreeResource();
 
     m_acceptButton.SetUniqueId(UID_BTN_LICENSE_ACCEPT);
@@ -328,3 +322,4 @@ sal_Int16 LicenseDialog::solar_execute()
 
 } // namespace dp_gui
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

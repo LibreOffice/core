@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,15 +34,11 @@
 #include <tools/solar.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/uniref.hxx>
 
 struct XMLPropertyState;
@@ -114,7 +111,7 @@ public:
             sal_Int32 nStartIdx, sal_Int32 nEndIdx ) const;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual sal_Bool handleSpecialItem(
+    virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
             const ::rtl::OUString& rValue,
@@ -209,3 +206,5 @@ inline const UniReference< XMLPropertySetMapper >&
 }
 
 #endif  //  _XMLOFF_XMLIMPPR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

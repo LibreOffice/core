@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_COOKIEDG_HRC
 #include <cookiedg.hrc>
-#endif
 #include <cookiedg.hxx>
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
 
 // CookiesDialog ---------------------------------------------------------
 
@@ -142,3 +139,4 @@ short CookiesDialog::Execute()
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

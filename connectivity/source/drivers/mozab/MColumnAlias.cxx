@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "MColumnAlias.hxx"
 #include "MConnection.hxx"
 #include "MExtConfigAccess.hxx"
@@ -90,7 +92,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
         "Notes",
     };
 
-    for ( size_t i = 0; i < sizeof( s_pProgrammaticNames ) / sizeof( s_pProgrammaticNames[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( s_pProgrammaticNames ); ++i )
         m_aAliasMap[ ::rtl::OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
 
     initialize( _rxORB );
@@ -172,7 +174,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
     if ( pos == m_aAliasMap.end() )
     {
-        OSL_ENSURE( false, "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
+        OSL_FAIL( "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
         return ::rtl::OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
     }
     return pos->second.programmaticAsciiName;
@@ -189,3 +191,5 @@ bool OColumnAlias::isColumnSearchable( const ::rtl::OUString _alias ) const
     // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
     // There might be more ...
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

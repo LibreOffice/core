@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,13 +66,25 @@ ScVbaLabel::setValue( const uno::Any& _value ) throw (::com::sun::star::uno::Run
     setCaption( sCaption );
 }
 
+rtl::OUString SAL_CALL
+ScVbaLabel::getAccelerator() throw (css::uno::RuntimeException)
+{
+    //FIXME: seems not support?
+    return rtl::OUString();
+}
+
+void SAL_CALL
+ScVbaLabel::setAccelerator( const rtl::OUString& /*_accelerator*/ ) throw (::com::sun::star::uno::RuntimeException)
+{
+    //FIXME: seems not support?
+}
+
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::RuntimeException)
 {
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
-ScVbaLabel::getServiceImplName()
+rtl::OUString& ScVbaLabel::getServiceImplName()
 {
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaLabel") );
     return sImplName;
@@ -88,3 +101,5 @@ ScVbaLabel::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

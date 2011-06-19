@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@ friend struct SfxRequest_Impl;
     SfxRequest_Impl*    pImp;
 
     //---------------------------------------------------------------------
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
                                      com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
@@ -69,7 +69,6 @@ public:
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
-//#endif
     //---------------------------------------------------------------------
 
 public:
@@ -105,7 +104,7 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     sal_uInt16              GetCallMode() const;
-    bool            IsRecording() const;
+    bool                IsRecording() const;
     void                AllowRecording( sal_Bool );
     sal_Bool                AllowsRecording() const;
     sal_Bool                IsAPI() const;
@@ -137,3 +136,5 @@ private:
         SfxRequest::GetItem( pArgs, nSlotId, bDeep, TYPE(ItemType) )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,12 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
                                            const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
 
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+
+// for a patch forward declaring these methods below makes sense
+// but, #FIXME lets really just move the methods to the top
+void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType );
+void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled );
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
@@ -59,34 +65,6 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     SbxVariableRef p1 = PopVar();
     TOSMakeTemp();
     SbxVariable* p2 = GetTOS();
-
-
-    // This could & should be moved to the MakeTempTOS() method in runtime.cxx
-    // In the code which this is cut'npaste from there is a check for a ref
-    // count != 1 based on which the copy of the SbxVariable is done.
-    // see orig code in MakeTempTOS ( and I'm not sure what the significance,
-    // of that is )
-    // here we alway seem to have a refcount of 1. Also it seems that
-    // MakeTempTOS is called for other operation, so I hold off for now
-    // until I have a better idea
-    if ( bVBAEnabled
-        && ( p2->GetType() == SbxOBJECT || p2->GetType() == SbxVARIANT )
-    )
-    {
-        SbxVariable* pDflt = getDefaultProp( p2 );
-        if ( pDflt )
-        {
-            pDflt->Broadcast( SBX_HINT_DATAWANTED );
-            // replacing new p2 on stack causes object pointed by
-            // pDft->pParent to be deleted, when p2->Compute() is
-            // called below pParent is accessed ( but its deleted )
-            // so set it to NULL now
-            pDflt->SetParent( NULL );
-            p2 = new SbxVariable( *pDflt );
-            p2->SetFlag( SBX_READWRITE );
-            refExprStk->Put( p2, nExprLvl - 1 );
-        }
-    }
 
     p2->ResetFlag( SBX_FIXED );
     p2->Compute( eOp, *p1 );
@@ -110,19 +88,24 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
     // values ( and type ) set as appropriate
     SbxDataType p1Type = p1->GetType();
     SbxDataType p2Type = p2->GetType();
+    if ( p1Type == SbxEMPTY )
+    {
+        p1->Broadcast( SBX_HINT_DATAWANTED );
+        p1Type = p1->GetType();
+    }
+    if ( p2Type == SbxEMPTY )
+    {
+        p2->Broadcast( SBX_HINT_DATAWANTED );
+        p2Type = p2->GetType();
+    }
     if ( p1Type == p2Type )
     {
-        if ( p1Type == SbxEMPTY )
-        {
-            p1->Broadcast( SBX_HINT_DATAWANTED );
-            p2->Broadcast( SBX_HINT_DATAWANTED );
-        }
         // if both sides are an object and have default props
         // then we need to use the default props
         // we don't need to worry if only one side ( lhs, rhs ) is an
         // object ( object side will get coerced to correct type in
         // Compare )
-        else if ( p1Type ==  SbxOBJECT )
+        if ( p1Type ==  SbxOBJECT )
         {
             SbxVariable* pDflt = getDefaultProp( p1 );
             if ( pDflt )
@@ -141,8 +124,21 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
     }
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
-
-    if( p2->Compare( eOp, *p1 ) )
+    static SbxVariable* pNULL = NULL;
+    // why do this on non-windows ?
+    // why do this at all ?
+    // I dumbly follow the pattern :-/
+    if ( bVBAEnabled && ( p1->IsNull() || p2->IsNull() ) )
+    {
+        if( !pNULL )
+        {
+            pNULL = new SbxVariable;
+            pNULL->PutNull();
+            pNULL->AddRef();
+        }
+        PushVar( pNULL );
+    }
+    else if( p2->Compare( eOp, *p1 ) )
     {
         if( !pTRUE )
         {
@@ -449,7 +445,8 @@ struct SbxVariablePtrHash
         { return (size_t)pVar; }
 };
 
-typedef std::hash_map< SbxVariable*, DimAsNewRecoverItem, SbxVariablePtrHash >  DimAsNewRecoverHash;
+typedef boost::unordered_map< SbxVariable*, DimAsNewRecoverItem,
+                              SbxVariablePtrHash >  DimAsNewRecoverHash;
 
 static DimAsNewRecoverHash      GaDimAsNewRecoverHash;
 
@@ -480,7 +477,6 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
     // Check value, !object is no error for sure if, only if type is fixed
     SbxDataType eValType = refVal->GetType();
-//  bool bGetValObject = false;
     if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
@@ -693,7 +689,6 @@ void SbiRuntime::StepVBASET()
 }
 
 
-// JSM 07.10.95
 void SbiRuntime::StepLSET()
 {
     SbxVariableRef refVal = PopVar();
@@ -729,7 +724,6 @@ void SbiRuntime::StepLSET()
     }
 }
 
-// JSM 07.10.95
 void SbiRuntime::StepRSET()
 {
     SbxVariableRef refVal = PopVar();
@@ -785,6 +779,17 @@ void SbiRuntime::StepDIM()
 // #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
 void SbiRuntime::DimImpl( SbxVariableRef refVar )
 {
+    // If refDim then this DIM statement is terminating a ReDIM and
+    // previous StepERASE_CLEAR for an array, the following actions have
+    // been delayed from ( StepERASE_CLEAR ) 'till here
+    if ( refRedim )
+    {
+        if ( !refRedimpArray ) // only erase the array not ReDim Preserve
+            lcl_eraseImpl( refVar, bVBAEnabled );
+        SbxDataType eType = refVar->GetType();
+        lcl_clearImpl( refVar, eType );
+        refRedim = NULL;
+    }
     SbxArray* pDims = refVar->GetParameters();
     // Muss eine gerade Anzahl Argumente haben
     // Man denke daran, dass Arg[0] nicht zaehlt!
@@ -794,7 +799,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
     {
         SbxDataType eType = refVar->IsFixed() ? refVar->GetType() : SbxVARIANT;
         SbxDimArray* pArray = new SbxDimArray( eType );
-        // AB 2.4.1996, auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
+        // auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
         if( pDims )
         {
             refVar->ResetFlag( SBX_VAR_TO_DIM );
@@ -898,27 +903,11 @@ void SbiRuntime::StepREDIMP()
                     sal_Int32 lBoundOld, uBoundOld;
                     pNewArray->GetDim32( i, lBoundNew, uBoundNew );
                     pOldArray->GetDim32( i, lBoundOld, uBoundOld );
-
-                    /* #69094 Allow all dimensions to be changed
-                       although Visual Basic is not able to do so.
-                    // All bounds but the last have to be the same
-                    if( i < nDims && ( lBoundNew != lBoundOld || uBoundNew != uBoundOld ) )
-                    {
-                        bRangeError = sal_True;
-                        break;
-                    }
-                    else
-                    */
-                    {
-                        // #69094: if( i == nDims )
-                        {
-                            lBoundNew = std::max( lBoundNew, lBoundOld );
-                            uBoundNew = std::min( uBoundNew, uBoundOld );
-                        }
-                        short j = i - 1;
-                        pActualIndices[j] = pLowerBounds[j] = lBoundNew;
-                        pUpperBounds[j] = uBoundNew;
-                    }
+                    lBoundNew = std::max( lBoundNew, lBoundOld );
+                    uBoundNew = std::min( uBoundNew, uBoundOld );
+                    short j = i - 1;
+                    pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                    pUpperBounds[j] = uBoundNew;
                 }
             }
 
@@ -942,7 +931,6 @@ void SbiRuntime::StepREDIMP()
         }
     }
 
-    //StarBASIC::FatalError( SbERR_NOT_IMPLEMENTED );
 }
 
 // REDIM_COPY
@@ -952,6 +940,7 @@ void SbiRuntime::StepREDIMP()
 void SbiRuntime::StepREDIMP_ERASE()
 {
     SbxVariableRef refVar = PopVar();
+    refRedim = refVar;
     SbxDataType eType = refVar->GetType();
     if( eType & SbxARRAY )
     {
@@ -962,12 +951,6 @@ void SbiRuntime::StepREDIMP_ERASE()
             refRedimpArray = pDimArray;
         }
 
-        // As in ERASE
-        sal_uInt16 nSavFlags = refVar->GetFlags();
-        refVar->ResetFlag( SBX_FIXED );
-        refVar->SetType( SbxDataType(eType & 0x0FFF) );
-        refVar->SetFlags( nSavFlags );
-        refVar->Clear();
     }
     else
     if( refVar->IsFixed() )
@@ -1014,7 +997,6 @@ void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
             }
         }
         else
-        // AB 2.4.1996
         // Arrays haben bei Erase nach VB ein recht komplexes Verhalten. Hier
         // werden zunaechst nur die Typ-Probleme bei REDIM (#26295) beseitigt:
         // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
@@ -1040,10 +1022,7 @@ void SbiRuntime::StepERASE()
 
 void SbiRuntime::StepERASE_CLEAR()
 {
-    SbxVariableRef refVar = PopVar();
-    lcl_eraseImpl( refVar, bVBAEnabled );
-    SbxDataType eType = refVar->GetType();
-    lcl_clearImpl( refVar, eType );
+    refRedim = PopVar();
 }
 
 void SbiRuntime::StepARRAYACCESS()
@@ -1090,7 +1069,6 @@ void SbiRuntime::StepARGV()
         SbxVariableRef pVal = PopVar();
 
         // Before fix of #94916:
-        // if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
         if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) )
         {
             // Methoden und Properties evaluieren!
@@ -1186,11 +1164,6 @@ void SbiRuntime::StepINPUT()
             BasResId aId( IDS_SBERR_START + 4 );
             String aMsg( aId );
 
-            //****** DONT CHECK IN, TEST ONLY *******
-            //****** DONT CHECK IN, TEST ONLY *******
-            // ErrorBox( NULL, WB_OK, aMsg ).Execute();
-            //****** DONT CHECK IN, TEST ONLY *******
-            //****** DONT CHECK IN, TEST ONLY *******
 
             pCode = pRestart;
         }
@@ -1199,7 +1172,6 @@ void SbiRuntime::StepINPUT()
     }
     else
     {
-        // pIosys->ResetChannel();
         PopVar();
     }
 }
@@ -1214,7 +1186,6 @@ void SbiRuntime::StepLINPUT()
     Error( pIosys->GetError() );
     SbxVariableRef p = PopVar();
     p->PutString( String( aInput, gsl_getSystemTextEncoding() ) );
-    // pIosys->ResetChannel();
 }
 
 // Programmende
@@ -1372,26 +1343,13 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
     String aDest = pTos1->GetString();
     String aSource = pTos->GetString();
 
-    // <-- UCB
     if( hasUno() )
     {
         implStepRenameUCB( aSource, aDest );
     }
     else
-    // --> UCB
     {
-#ifdef _OLD_FILE_IMPL
-        DirEntry aSourceDirEntry( aSource );
-        if( aSourceDirEntry.Exists() )
-        {
-            if( aSourceDirEntry.MoveTo( DirEntry(aDest) ) != FSYS_ERR_OK )
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-        }
-        else
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
         implStepRenameOSL( aSource, aDest );
-#endif
     }
 }
 
@@ -1422,7 +1380,6 @@ void SbiRuntime::StepEMPTY()
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
     xVar->PutErr( 448 );
     PushVar( xVar );
-    // ALT: PushVar( new SbxVariable( SbxEMPTY ) );
 }
 
 // TOS = Fehlercode
@@ -1438,3 +1395,4 @@ void SbiRuntime::StepERROR()
         Error( error );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

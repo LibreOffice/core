@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ static const XMLTokenEnum aIndexSourceElementMap[] =
     XML_ILLUSTRATION_INDEX_SOURCE
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
+SvXMLEnumMapEntry const aIndexTypeMap[] =
 {
     { XML_TABLE_OF_CONTENT,     TEXT_INDEX_TOC },
     { XML_ALPHABETICAL_INDEX,   TEXT_INDEX_ALPHABETICAL },
@@ -122,9 +123,9 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
             // check for array index:
-            OSL_ENSURE(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
-            OSL_ENSURE(sizeof(aIndexServiceMap) ==
-                       sizeof(aIndexSourceElementMap),
+            OSL_ENSURE(nTmp < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
+            OSL_ENSURE(SAL_N_ELEMENTS(aIndexServiceMap) ==
+                       SAL_N_ELEMENTS(aIndexSourceElementMap),
                        "service and source element maps must be same size");
 
             eIndexType = static_cast<IndexTypeEnum>(nTmp);
@@ -165,7 +166,7 @@ void XMLIndexTOCContext::StartElement(
                 }
                 else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if ( SvXMLUnitConverter::convertBool(
                          bTmp, xAttrList->getValueByIndex(nAttr) ) )
                     {
@@ -361,7 +362,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                         break;
 
                     default:
-                        OSL_ENSURE(false, "index type not implemented");
+                        OSL_FAIL("index type not implemented");
                         break;
                 }
             }
@@ -380,3 +381,5 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

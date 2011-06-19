@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include "linguistic/misc.hxx"
 
 #include "sprophelp.hxx"
@@ -40,9 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -50,10 +50,10 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
 
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -68,7 +68,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (INT32 i = 0;  i < nPropCount;  ++i)
     {
-        pName[i] = A2OU( pPropNames[i] );
+        pName[i] = ::rtl::OUString::createFromAscii( pPropNames[i] );
     }
 }
 
@@ -176,7 +176,6 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aSP[] =
 {
@@ -192,7 +191,7 @@ static const char *aSP[] =
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
-    PropertyChgHelper   ( rxSource, rxPropSet, aSP, sizeof(aSP) / sizeof(aSP[0]) )
+    PropertyChgHelper   ( rxSource, rxPropSet, aSP, SAL_N_ELEMENTS(aSP))
 {
     SetDefault();
     INT32 nLen = GetPropNames().getLength();
@@ -315,7 +314,7 @@ void SAL_CALL
                 break;
             }
             default:
-                DBG_ERROR( "unknown property" );
+                OSL_FAIL( "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -343,7 +342,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellUpperCase            = bIsSpellUpperCase;
     bResIsSpellWithDigits           = bIsSpellWithDigits;
     bResIsSpellCapitalization       = bIsSpellCapitalization;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -360,7 +359,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                 case UPH_IS_SPELL_WITH_DIGITS         : pbResVal = &bResIsSpellWithDigits; break;
                 case UPH_IS_SPELL_CAPITALIZATION      : pbResVal = &bResIsSpellCapitalization; break;
                 default:
-                    DBG_ERROR( "unknown property" );
+                    OSL_FAIL( "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;
@@ -368,5 +367,5 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

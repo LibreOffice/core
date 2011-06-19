@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@ class SfxPickList : public SfxListener
     };
 
     static SfxPickList*             pUniqueInstance;
-    static osl::Mutex*              pMutex;
 
     std::vector< PickListEntry* >   m_aPicklistVector;
     sal_uInt32                      m_nAllowedMenuSize;
@@ -61,17 +61,13 @@ class SfxPickList : public SfxListener
                             SfxPickList( sal_uInt32 nMenuSize );
                             ~SfxPickList();
 
-    static osl::Mutex*      GetOrCreateMutex();
-
     void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
     void                    CreatePickListEntries();
     void                    RemovePickListEntries();
 
     public:
-        static SfxPickList* GetOrCreate( const sal_uInt32 nMenuSize );
-        static SfxPickList* Get();
-        static void         Delete();
+        static SfxPickList& Get();
 
         sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
         sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
@@ -84,3 +80,5 @@ class SfxPickList : public SfxListener
 };
 
 #endif // _SFX_PICKLIST_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

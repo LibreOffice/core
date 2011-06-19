@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,6 @@
 
 namespace linguistic
 {
-
-///////////////////////////////////////////////////////////////////////////
 
 class HyphenatedWord :
     public cppu::WeakImplHelper1
@@ -94,8 +93,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-
 class PossibleHyphens :
     public cppu::WeakImplHelper1
     <
@@ -141,11 +138,8 @@ public:
          const ::rtl::OUString &rHyphWord,
          const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
 };
-
-
-///////////////////////////////////////////////////////////////////////////
-
 } // namespace linguistic
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

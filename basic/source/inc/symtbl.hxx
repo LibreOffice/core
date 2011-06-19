@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@ class SbiParser;
 
 enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 
-///////////////////////////////////////////////////////////////////////////
 
 // Der String-Pool nimmt String-Eintraege auf und sorgt dafuer,
 // dass sie nicht doppelt vorkommen.
@@ -67,7 +67,6 @@ public:
     SbiParser* GetParser() { return pParser; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5,5)
 
@@ -108,7 +107,6 @@ public:
     void   CheckRefs();                 // offene Referenzen suchen
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class SbiSymDef {                   // Allgemeiner Symboleintrag
     friend class SbiSymPool;
@@ -251,3 +249,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

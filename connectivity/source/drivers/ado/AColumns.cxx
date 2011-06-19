@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#ifdef __MINGW32__
 #include <algorithm>
-#endif
 #include "resource/ado_res.hrc"
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity::ado;
 using namespace connectivity;
@@ -100,11 +101,11 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
     // search for typeinfo where the typename is equal sTypeName
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(aCase, sTypeName),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                                 ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                             )
 
                                                 );
@@ -146,3 +147,4 @@ void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

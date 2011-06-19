@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@ using namespace com::sun::star;
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool FileExists( const String &rMainURL )
 {
@@ -72,70 +72,6 @@ sal_Bool FileExists( const String &rMainURL )
 }
 
 
-#ifdef TL_OUTDATED
-
-String GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName )
-{
-    String aURL;
-    if (rFileName.Len())
-    {
-        INetURLObject aURLObj;
-        aURLObj.SetSmartProtocol( INET_PROT_FILE );
-        aURLObj.SetSmartURL( GetModulePath(ePath) );
-        aURLObj.Append( rFileName );
-        if (aURLObj.HasError())
-        {
-            DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-        }
-        aURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    }
-    return aURL;
-}
-
-
-String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim  )
-{
-    String aRes;
-
-    SvtPathOptions  aPathOpt;
-    switch (ePath)
-    {
-        case SvtPathOptions::PATH_MODULE :
-            aRes = aPathOpt.GetModulePath();
-            break;
-        case SvtPathOptions::PATH_LINGUISTIC :
-        {
-            String aTmp( aPathOpt.GetLinguisticPath() );
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-/*
-        case SvtPathOptions::PATH_USERDICTIONARY :
-        {
-            String aTmp( aPathOpt.GetUserDictionaryPath() );
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-*/
-        default:
-            DBG_ASSERT( 0, "unexpected argument (path)" );
-    }
-    if (bAddAccessDelim && aRes.Len())
-    {
-#ifdef WNT
-        aRes += '\\';
-#else
-        aRes += '/';
-#endif
-    }
-
-    return aRes;
-}
-
-#endif
-
-///////////////////////////////////////////////////////////////////////////
-
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
 {
     sal_Int32 nTrailing = 0;
@@ -149,7 +85,6 @@ rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
     return aRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     const rtl::OUString &rPathPrefix,
@@ -301,3 +236,4 @@ String SearchFileInPaths(
 }   // namespace linguistic
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

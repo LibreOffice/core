@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ enum XMLSectionSourceToken
     XML_TOK_SECTION_TEXT_SECTION_NAME
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionSourceTokenMap[] =
+static SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
     { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
@@ -154,3 +155,5 @@ SvXMLImportContext* XMLSectionSourceImportContext::CreateChildContext(
     // ignore -> default context
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

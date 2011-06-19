@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
     protected:
         //added for 33668 by shizhoubo : 2008:04
         DECL_LINK( Command, CommandEvent * );
-        PopupMenu * GetToolBarCustomMeun(ToolBox* pToolBar);
+        PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
         //end
         DECL_LINK( Click, ToolBox * );
         DECL_LINK( DropdownClick, ToolBox * );
@@ -199,7 +200,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
-        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
+        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages );
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
@@ -208,13 +209,12 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         bool RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut );
 
     protected:
-        typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
+        typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
-        typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
+        typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
         sal_Bool                                                                               m_bDisposed : 1,
-                                                                                               m_bIsHiContrast : 1,
                                                                                                m_bSmallSymbols : 1,
                                                                                                m_bModuleIdentified : 1,
                                                                                                m_bAddedToTaskPaneList : 1,
@@ -255,3 +255,5 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 }
 
 #endif // __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

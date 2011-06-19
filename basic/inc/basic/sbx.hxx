@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,16 +33,13 @@
 #include "svl/svarray.hxx"
 #include "svl/smplhint.hxx"
 #include "svl/lstner.hxx"
+
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
-
-#ifndef __SBX_SBXOBJECT_HXX
 #include <basic/sbxobj.hxx>
-#endif
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
 
-class BigInt;
 class String;
 class UniString;
 class SvStream;
@@ -53,15 +51,11 @@ class SbxObject;
 class SbxArray;
 class SbxDimArray;
 class SbxFactory;
-struct SbxINT64;
-struct SbxUINT64;
 
 class SfxBroadcaster;
 class SvDispatch;
 
-///////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////
 
 #ifndef __SBX_SBXPARAMINFO
 #define __SBX_SBXPARAMINFO
@@ -79,11 +73,7 @@ struct SbxParamInfo
     ~SbxParamInfo() {}
 };
 
-//#if 0 // _SOLAR__PRIVATE
 SV_DECL_PTRARR_DEL(SbxParams,SbxParamInfo*,4,4)
-//#else
-//typedef SvPtrarr SbxParams;
-//#endif
 
 #endif
 
@@ -158,9 +148,9 @@ public:
 #ifndef __SBX_SBXARRAY
 #define __SBX_SBXARRAY
 
-// SbxArray ist ein eindimensionales, dynamisches Array
-// von SbxVariablen. Put()/Insert() konvertieren die Variablen in den
-// angegebenen Datentyp, falls er nicht SbxVARIANT ist.
+// SbxArray is an unidimensional, dynamic Array
+// The variables convert from SbxVariablen. Put()/Insert() into the
+// declared datatype, if they are not SbxVARIANT.
 
 class SbxVarRefs;
 class SbxVariableRef;
@@ -367,3 +357,5 @@ SV_IMPL_REF(SbxDimArray)
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

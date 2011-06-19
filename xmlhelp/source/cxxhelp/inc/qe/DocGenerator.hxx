@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _XMLSEARCH_QE_DOCGENERATOR_HXX_
 
 #include <rtl/ref.hxx>
-#ifndef _RTL_USTRING_HXX__
 #include  <rtl/ustring.hxx>
-#endif
 #include <excep/XmlSearchExceptions.hxx>
 #include <util/CompressorIterator.hxx>
 #include <util/Decompressor.hxx>
@@ -102,3 +101,5 @@ namespace xmlsearch {
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

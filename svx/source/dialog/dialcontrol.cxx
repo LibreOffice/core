@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,6 +77,8 @@ private:
 DialControlBmp::DialControlBmp( Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
     mrParent( rParent ),
+    mnCenterX(0),
+    mnCenterY(0),
     mbEnabled( true )
 {
     EnableRTL( sal_False );
@@ -183,7 +186,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor();
     Erase();
 
-    EnableRTL( sal_True ); // #107807# draw 3D effect in correct direction
+    EnableRTL( sal_True ); // draw 3D effect in correct direction
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
@@ -265,6 +268,8 @@ DialControl_Impl::DialControl_Impl( Window& rParent ) :
     maBmpBuffered( rParent ),
     mpLinkField( 0 ),
     mnAngle( 0 ),
+    mnCenterX( 0 ),
+    mnCenterY( 0 ),
     mbNoRot( false )
 {
 }
@@ -451,7 +456,7 @@ const Link& DialControl::GetModifyHdl() const
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
-    EnableRTL( sal_False ); // #107807# don't mirror mouse handling
+    EnableRTL( sal_False ); // don't mirror mouse handling
     SetOutputSizePixel( mpImpl->maWinSize );
     SetBackground();
 }
@@ -570,3 +575,4 @@ void DialControlWrapper::SetControlValue( sal_Int32 nValue )
 
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

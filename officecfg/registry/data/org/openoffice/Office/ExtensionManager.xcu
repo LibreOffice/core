@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************ -->
-
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="ExtensionManager" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" oor:name="ExtensionManager" oor:package="org.openoffice.Office">
   <node oor:name="ExtensionRepositories">
     <prop oor:name="WebsiteLink">
-      <value>http://extensions.services.openoffice.org/getmore?cid=920794</value>
+      <value>http://extensions.libreoffice.org/</value>
     </prop>
   </node>
 </oor:component-data>

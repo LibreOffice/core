@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,11 +34,11 @@
 #include <xmlscript/xml_helper.hxx>
 
 
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
+using ::rtl::ByteSequence;
 
 namespace xmlscript
 {
@@ -171,3 +172,5 @@ Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutD
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

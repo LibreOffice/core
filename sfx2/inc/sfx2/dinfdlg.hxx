@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,8 +163,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -173,6 +174,7 @@ class SfxDocumentPage : public SfxTabPage
 private:
     FixedImage                  aBmp1;
     Edit                        aNameED;
+    PushButton                  aChangePassBtn;
 
     FixedLine                   aLine1FL;
     FixedText                   aTypeFT;
@@ -212,7 +214,9 @@ private:
 
     DECL_LINK(          DeleteHdl, PushButton * );
     DECL_LINK(          SignatureHdl, PushButton * );
+    DECL_LINK( ChangePassHdl, PushButton * );
     void                ImplUpdateSignatures();
+    void                ImplCheckPasswordState();
 
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
@@ -253,7 +257,6 @@ public:
 
 // class SfxInternetPage -------------------------------------------------
 
-class TargetList;
 namespace sfx2
 {
     class FileDialogHelper;
@@ -573,3 +576,4 @@ public:
 
 #endif // #ifndef _SFX_DINFDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

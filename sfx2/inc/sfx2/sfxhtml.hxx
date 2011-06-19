@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,9 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
     String                  aScriptType;
 
     SfxMedium*              pMedium;
-    SfxMedium *pDLMedium;   // Medium fuer Download von Files
+    SfxMedium *pDLMedium;   // Medium for Download Files
 
-    sal_uInt16 nMetaTags;       // Anzahl der bisher gelesenen Meta-Tags
+    sal_uInt16 nMetaTags;       // Number of previously read Meta-Tags
     ScriptType eScriptType;
 
     SAL_DLLPRIVATE void GetScriptType_Impl( SvKeyValueIterator* );
@@ -61,9 +62,9 @@ protected:
     virtual ~SfxHTMLParser();
 
 public:
-    // Lesen der Optionen einer Image-Map
-    // <MAP>: sal_True = Image-Map hat einen Namen
-    // <AREA>: sal_True = Image-Map hat jetzt einen Bereich mehr
+    // Read the options of an image map
+    // <MAP>: sal_True = Image-Map has a name
+    // <AREA>: sal_True = Image-Map has now one Region more
     static sal_Bool ParseMapOptions(ImageMap * pImageMap,
                                 const HTMLOptions * pOptions );
     sal_Bool ParseMapOptions(ImageMap * pImageMap)
@@ -82,41 +83,31 @@ public:
             const String& aNumStr, SvNumberFormatter& rFormatter );
 
 protected:
-
-    // Start eines File-Downloads. Dieser erfolgt synchron oder asynchron.
-    // Im synchronen Fall befindet sich der Parser nach dem Aufruf im
-    // Working-Zustand. Die gelesene Datei kann dann direkt mit
-    // FinishFileDownload abgeholt werden.
-    // Im asynchronen Fall befindet sich der Parser nach dem Aufruf im
-    // Pending-Zustand. Der Parser muss dann ueber das Continue verlassen
-    // werden (ohne Reschedule!). Wenn die Datei geladen ist, wird
-    // ein Continue mit dem uebergebenen Token aufgerufen. Die Datei kann
-    // dann wiederum mit FinishFileDownload abgeholt werden.
-    // Zum Abbrechen des Dwonloads sollte eine Shell uebergeben werden.
-    // Es kann nur ein einziger Download gleichzeitig existieren. Fuer jeden
-    // gestarteten Download muss FinshFileDownload aufgerufen werden.
+    // Start a file download. This is done asynchronously or synchronously.
+    // In the synchronous case, the parser is in the the working state after
+    // it has been called. The read file can then be picked up directly with
+    // FinishFileDownload. In the asynchronous case, the parser is in the
+    // pending state after it hs been called. The parser then has to leave
+    // over the Continue (without Reschedule!). If the file is loaded,
+    // a Continue is called with passed on token. The file can then be picked
+    // up by FinishFileDownload. To cancel the download should a shell be
+    // left. It can only exist a single download at the same time, For every
+    // started download FinshFileDownload must be called.
     void StartFileDownload( const String& rURL, int nToken,
                             SfxObjectShell *pSh=0 );
 
-    // Ermittelnd des MIME-Types eines zuvor downloadeten Files. Kann nur
-    // unmittelbar vor FinishFileDownload aufgerufen werden, nie aber
-    // danach.
-
-    sal_Bool GetFileDownloadMIME( String& rMime );
-
-    // Beenden eines asynchronen File-Downloads. Gibt sal_True zurueck, wenn
-    // der Download geklappt hat. Das gelesene File befindet sich dann in
-    // dem uebergeben String.
+    // End of an asynchronous file download. Returns TRUE if the download
+    // was successful. The read file is then passed into String.
     sal_Bool FinishFileDownload( String& rStr );
 
-    // Gibt sal_True zurueck, wenn ein File downloaded wurde und
-    // FileDownloadFinished noch nicht gerufen wurde.
+    // Returns TRUE if a file was downloaded and if FileDownloadFinished
+    // has not yet been called
     sal_Bool ShouldFinishFileDownload() const { return pDLMedium != 0; }
 
     SfxMedium *GetMedium() { return pMedium; }
     const SfxMedium *GetMedium() const { return pMedium; }
 
-    // Default (auch ohne Iterator) ist JavaScript
+    // Default (without iterator) is JavaScript
     ScriptType GetScriptType( SvKeyValueIterator* ) const;
     const String& GetScriptTypeString( SvKeyValueIterator* ) const;
 };
@@ -131,3 +122,5 @@ inline sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const Stri
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

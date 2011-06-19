@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,12 @@
  *
  ************************************************************************/
 
-#include <tools/prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
@@ -43,7 +44,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postwin.h>
 
 #include "framegrabber.hxx"
 #include "player.hxx"
@@ -245,3 +245,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames
 
 } // namespace win
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

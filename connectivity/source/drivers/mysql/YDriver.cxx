@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,7 +108,7 @@ namespace connectivity
     {
         sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
         {
-            return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
+            return _sUrl.copy(0,16).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:mysql:odbc:"));
         }
         //--------------------------------------------------------------------
         sal_Bool isNativeUrl(const ::rtl::OUString& _sUrl)
@@ -443,14 +444,14 @@ namespace connectivity
     //------------------------------------------------------------------------------
     rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return rtl::OUString::createFromAscii("org.openoffice.comp.drivers.MySQL.Driver");
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.drivers.MySQL.Driver"));
     }
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 2 );
-        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-        aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -479,3 +480,5 @@ namespace connectivity
 //........................................................................
 }   // namespace connectivity
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

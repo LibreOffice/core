@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::PartialWeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
@@ -79,13 +80,12 @@ namespace accessibility
 
     public:
         /// Create accessible object for given parent
-        // --> OD 2006-01-11 #i27138#
+        // #i27138#
         // - add parameter <_pParaManager> (default value NULL)
         //   This has to be the the instance of <AccessibleParaManager>, which
         //   created and manages this accessible paragraph.
         AccessibleEditableTextPara ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rParent,
                                      const AccessibleParaManager* _pParaManager = NULL );
-        // <--
 
         virtual ~AccessibleEditableTextPara ();
 
@@ -405,7 +405,7 @@ namespace accessibility
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
 
-        // --> OD 2006-01-11 #i27138#
+        // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)
         // the paragraph manager, which created this instance - is NULL, if
         // instance isn't created by AccessibleParaManager.
         // Needed for method <getAccessibleRelationSet()> to retrieve predecessor
@@ -417,3 +417,4 @@ namespace accessibility
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

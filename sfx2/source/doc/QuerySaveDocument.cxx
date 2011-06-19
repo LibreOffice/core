@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
 #include <vcl/msgbox.hxx>
-
 // -----------------------------------------------------------------------------
 short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
 {
@@ -47,3 +47,5 @@ short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
     return aQBox.Execute();
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

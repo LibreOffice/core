@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <tools/list.hxx>
 #include <tools/table.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>
@@ -50,14 +50,14 @@
 #define SFX_HTMLFRMSIZE_REL 0x0001
 #define SFX_HTMLFRMSIZE_PERCENT 0x0002
 
-static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
-static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
-static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
+static sal_Char const sHTML_SC_yes[] =  "YES";
+static sal_Char const sHTML_SC_no[] =       "NO";
+static sal_Char const sHTML_SC_auto[] = "AUTO";
 
 #define HTML_O_READONLY "READONLY"
 #define HTML_O_EDIT     "EDIT"
 
-static HTMLOptionEnum __READONLY_DATA aScollingTable[] =
+static HTMLOptionEnum const aScollingTable[] =
 {
     { sHTML_SC_yes,     ScrollingYes    },
     { sHTML_SC_no,      ScrollingNo     },
@@ -67,14 +67,14 @@ static HTMLOptionEnum __READONLY_DATA aScollingTable[] =
 
 void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HTMLOptions *pOptions, const String& rBaseURL )
 {
-    // die Optionen holen und setzen
+    // Get and set the options
     Size aMargin( pFrame->GetMargin() );
 
-    // MIB 15.7.97: Netscape scheint marginwidth auf 0 zu setzen, sobald
-    // marginheight gesetzt wird und umgekehrt. Machen wir jetzt wegen
-    // bug #41665# auch so.
-    // Netscape l"a\st aber ein direktes Setzen auf 0 nicht zu, IE4.0 schon.
-    // Den Bug machen wir nicht mit!
+    // Netscape seems to set marginwidth to 0 as soon as
+    // marginheight is set, and vice versa.
+    // Netscape does however not allow for a direct
+    // seting to 0, while IE4.0 does
+    // We will not mimic that bug !
     sal_Bool bMarginWidth = sal_False, bMarginHeight = sal_False;
 
     sal_uInt16 nArrLen = pOptions->Count();
@@ -102,8 +102,6 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
         case HTML_O_MARGINWIDTH:
             aMargin.Width() = pOption->GetNumber();
 
-//          if( aMargin.Width() < 1 )
-//              aMargin.Width() = 1;
             if( !bMarginHeight )
                 aMargin.Height() = 0;
             bMarginWidth = sal_True;
@@ -111,8 +109,6 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
         case HTML_O_MARGINHEIGHT:
             aMargin.Height() = pOption->GetNumber();
 
-//          if( aMargin.Height() < 1 )
-//              aMargin.Height() = 1;
             if( !bMarginWidth )
                 aMargin.Width() = 0;
             bMarginHeight = sal_True;
@@ -161,3 +157,5 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
 
     pFrame->SetMargin( aMargin );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

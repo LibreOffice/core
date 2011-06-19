@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
 
@@ -103,3 +104,4 @@ namespace connectivity
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

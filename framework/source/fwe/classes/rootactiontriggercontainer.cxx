@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -211,7 +212,7 @@ throw ( RuntimeException )
     {
         if ( m_pMenu )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             return m_pMenu->GetItemCount();
         }
         else
@@ -247,7 +248,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_pMenu )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         return ( m_pMenu->GetItemCount() > 0 );
     }
 
@@ -377,3 +378,4 @@ void RootActionTriggerContainer::setName( const ::rtl::OUString& ) throw ( Runti
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

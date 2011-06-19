@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <macros/debug.hxx>
 
 #include <macros/generic.hxx>
+#include "vcl/solarmutex.hxx"
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -44,7 +46,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -76,7 +78,7 @@ namespace framework{
 
     @onerror    -
 *//*-*************************************************************************************************************/
-LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
+LockHelper::LockHelper( ::osl::SolarMutex* pSolarMutex )
     :   m_pFairRWLock       ( NULL )
     ,   m_pOwnMutex         ( NULL )
     ,   m_pSolarMutex       ( NULL )
@@ -92,17 +94,17 @@ LockHelper::LockHelper( ::vos::IMutex* pSolarMutex )
                                 }
                                 break;
         case E_SOLARMUTEX   :   {
-                                    if( pSolarMutex == NULL )
-                                    {
-                                        m_pSolarMutex      = new ::vos::OMutex;
-                                        m_bDummySolarMutex = sal_True;
-                                    }
-                                    else
-                                    {
-                                        m_pSolarMutex = pSolarMutex;
-                                    }
-                                }
-                                break;
+            if( pSolarMutex == NULL )
+            {
+                m_pSolarMutex      = new ::vcl::SolarMutexObject;
+                m_bDummySolarMutex = sal_True;
+            }
+            else
+            {
+                m_pSolarMutex = pSolarMutex;
+            }
+        }
+            break;
         case E_FAIRRWLOCK   :   {
                                     m_pFairRWLock = new FairRWLock;
                                 }
@@ -147,7 +149,7 @@ LockHelper::~LockHelper()
     {
         if (m_bDummySolarMutex)
         {
-            delete static_cast<vos::OMutex*>(m_pSolarMutex);
+            delete static_cast<vcl::SolarMutexObject*>(m_pSolarMutex);
             m_bDummySolarMutex = sal_False;
         }
         m_pSolarMutex = NULL;
@@ -432,7 +434,7 @@ void LockHelper::downgradeWriteAccess()
 
     @onerror    No error should occure.
 *//*-*************************************************************************************************************/
-LockHelper& LockHelper::getGlobalLock( ::vos::IMutex* pSolarMutex )
+LockHelper& LockHelper::getGlobalLock( ::osl::SolarMutex* pSolarMutex )
 {
     // Initialize static "member" only for one time!
     // Algorithm:
@@ -531,9 +533,9 @@ ELockType& LockHelper::implts_getLockType()
         {
             static ELockType eType = FALLBACK_LOCKTYPE;
 
-            ::vos::OStartupInfo aEnvironment;
+            ::rtl::OUString     aEnvVar( ENVVAR_LOCKTYPE );
             ::rtl::OUString     sValue      ;
-            if( aEnvironment.getEnvironment( ENVVAR_LOCKTYPE, sValue ) == ::vos::OStartupInfo::E_None )
+            if( osl_getEnvironment( aEnvVar.pData, &sValue.pData ) == osl_Process_E_None )
             {
                 eType = (ELockType)(sValue.toInt32());
             }
@@ -547,3 +549,5 @@ ELockType& LockHelper::implts_getLockType()
 }
 
 } //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,15 +54,15 @@ OwnSubFilterService::~OwnSubFilterService()
 uno::Sequence< ::rtl::OUString > SAL_CALL OwnSubFilterService::impl_getStaticSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.OwnSubFilter");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.document.OwnSubFilter");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OwnSubFilter"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.document.OwnSubFilter"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OwnSubFilterService::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.document.OwnSubFilter");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.document.OwnSubFilter"));
 }
 
 //-------------------------------------------------------------------------
@@ -163,3 +164,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OwnSubFilterService::getSupportedServi
 
 } // namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

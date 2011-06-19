@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,9 +110,9 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_B
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    sal_uInt32 nFlags = ( OpenFlag_Read | OpenFlag_Write );
+    sal_uInt32 nFlags = ( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
     if ( !bLock )
-        nFlags |= OpenFlag_NoLock;
+        nFlags |= osl_File_OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
     if(  err != osl::FileBase::E_None )
@@ -135,11 +136,11 @@ XStream_impl::~XStream_impl()
     }
     catch (io::IOException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
 }
 
@@ -188,7 +189,7 @@ void SAL_CALL XStream_impl::truncate(void)
     if (osl::FileBase::E_None != m_aFile.setSize(0))
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
-    if (osl::FileBase::E_None != m_aFile.setPos(Pos_Absolut,sal_uInt64(0)))
+    if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
@@ -302,8 +303,8 @@ XStream_impl::closeStream(
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = rtl::OUString::createFromAscii(
-                "could not close file");
+            ex.Message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "could not close file"));
             throw ex;
         }
 
@@ -350,7 +351,7 @@ XStream_impl::seek(
 {
     if( location < 0 )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
-    if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
@@ -402,3 +403,5 @@ void XStream_impl::waitForCompletion()
             static_cast< OWeakObject * >(this));
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

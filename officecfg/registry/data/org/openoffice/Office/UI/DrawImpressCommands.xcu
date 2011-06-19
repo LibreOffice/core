@@ -342,7 +342,7 @@
       <node oor:name=".uno:HelplinesVisible" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
-          <value xml:lang="en-US">~Display Guides</value>
+          <value xml:lang="en-US">~Display Snap Lines</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -351,7 +351,7 @@
       <node oor:name=".uno:HelplinesFront" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
-          <value xml:lang="en-US">Guides to ~Front</value>
+          <value xml:lang="en-US">Snap Lines to ~Front</value>
         </prop>
       </node>
       <node oor:name=".uno:BeforeObject" oor:op="replace">
@@ -1441,7 +1441,7 @@
       <node oor:name=".uno:HelplinesUse" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
-          <value xml:lang="en-US">~Snap to Guides</value>
+          <value xml:lang="en-US">~Snap to Snap Lines</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1776,7 +1776,7 @@
       <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
-          <value xml:lang="en-US">~Guides</value>
+          <value xml:lang="en-US">~Snap Lines</value>
         </prop>
       </node>
       <node oor:name=".uno:MasterPageMenu" oor:op="replace">

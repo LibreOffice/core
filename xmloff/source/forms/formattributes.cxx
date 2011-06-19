@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ namespace xmloff
             case CCA_ORIENTATION:       return "orientation";
             case CCA_VISUAL_EFFECT:     return "visual-effect";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_FAIL("OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -121,7 +122,7 @@ namespace xmloff
             case faOrder:               return "order";
             case faTabbingCycle:        return "tab-cycle";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getFormAttributeName: invalid id!");
+                OSL_FAIL("OAttributeMetaData::getFormAttributeName: invalid id!");
         }
         return "";
     }
@@ -150,7 +151,7 @@ namespace xmloff
             case DA_LIST_SOURCE_TYPE:   return "list-source-type";
             case DA_INPUT_REQUIRED:     return "input-required";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_FAIL("OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -171,7 +172,7 @@ namespace xmloff
             case BA_LIST_LINKING_TYPE: return "list-linkage-type";
             case BA_LIST_CELL_RANGE:   return "source-cell-range";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_FAIL("OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
@@ -192,6 +193,7 @@ namespace xmloff
             case SCA_MAX_VALUE:             return "max-value";
             case SCA_MIN_VALUE:             return "min-value";
             case SCA_VALIDATION:            return "validation";
+            case SCA_GROUP_NAME:            return "group-name";
             case SCA_MULTI_LINE:            return "multi-line";
             case SCA_AUTOMATIC_COMPLETION:  return "auto-complete";
             case SCA_MULTIPLE:              return "multiple";
@@ -206,15 +208,18 @@ namespace xmloff
             case SCA_TOGGLE:                return "toggle";
             case SCA_FOCUS_ON_CLICK:        return "focus-on-click";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
+                OSL_FAIL("OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
 
     //---------------------------------------------------------------------
-    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 /*_nId*/)
+    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 _nId)
     {
-        // nothing special here
+        switch( _nId )
+        {
+            case SCA_GROUP_NAME:            return XML_NAMESPACE_FORMX;
+        }
         return XML_NAMESPACE_FORM;
     }
 
@@ -226,7 +231,7 @@ namespace xmloff
             case ofaAutomaticFocus:     return "automatic-focus";
             case ofaApplyDesignMode:    return "apply-design-mode";
             default:
-                OSL_ENSURE(sal_False, "OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
+                OSL_FAIL("OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
         }
         return "";
     }
@@ -339,3 +344,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

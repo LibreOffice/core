@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
@@ -39,7 +38,6 @@
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
 
-#endif
 #include <vcl/svapp.hxx>
 
 #include <tools/urlobj.hxx>
@@ -65,7 +63,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define GLOBALOVERFLOW
 
@@ -376,3 +375,5 @@ Bitmap* XDashList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

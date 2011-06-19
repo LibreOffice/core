@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ namespace xmloff
 
         if (aLookupSublist == m_aLists.end())
         {
-            OSL_ENSURE(sal_False, "OAttribListMerger::seekToIndex: invalid index!");
+            OSL_FAIL("OAttribListMerger::seekToIndex: invalid index!");
             return sal_False;
         }
         _rSubList = *aLookupSublist;
@@ -84,7 +85,7 @@ namespace xmloff
                     return sal_True;
                 }
 
-        OSL_ENSURE(sal_False, "OAttribListMerger::seekToName: did not find the name!");
+        OSL_FAIL("OAttribListMerger::seekToName: did not find the name!");
         return sal_False;
     }
 
@@ -168,3 +169,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

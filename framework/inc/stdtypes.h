@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <vector>
 #include <queue>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 // own includes
@@ -161,12 +162,12 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
 //_________________________________________________________________________________________________________________
 
 /**
-    Basic hash based on a std::hash_map() which provides key=[OUString] and value=[template type] pairs
+    Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
     It implements some additional funtionality which can be usefull but
     is missing at the normal hash implementation.
 */
 template< class TType >
-class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
+class BaseHash : public ::boost::unordered_map< ::rtl::OUString                    ,
                                          TType                              ,
                                          OUStringHashCode                   ,
                                          ::std::equal_to< ::rtl::OUString > >
@@ -211,3 +212,5 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         
 }       // namespace framework
 
 #endif  // #ifndef __FRAMEWORK_STDTYPES_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

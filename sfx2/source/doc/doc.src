@@ -28,7 +28,7 @@
 #include "doc.hrc"
 #define __RSC
 #include <svl/inetdef.hxx>
-//#include <so3/so2defs.hxx>
+
 
  // -----------------------------------------------------------------------
 QueryBox MSG_CONFIRM_FILTER
@@ -64,9 +64,6 @@ String STR_QUERY_SAVE_DOCUMENT
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
 
-Bitmap BMP_STYLES_CLOSED_HC { File = "newex_h.bmp" ; };
-Bitmap BMP_STYLES_OPENED_HC { File = "newex_h.bmp" ; };
-
 String STR_STYLES
 {
     Text [ en-US ] = "Styles" ;
@@ -91,11 +88,6 @@ Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
 Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
 Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
-
-Bitmap BMP_STYLES_FAMILY1_HC { File = "styfam1_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY2_HC { File = "styfam2_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY3_HC { File = "styfam3_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY4_HC { File = "styfam4_h.bmp" ; };
 
 ErrorBox MSG_PRINT_ERROR
 {
@@ -191,8 +183,6 @@ InfoBox MSG_DOCINFO_CANTREAD
 };
 String STR_ERROR_NOSTORAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die ausgew�hlte Datei besitzt ein falsches Format. : Die ausgew�hlte Datei besitzt ein falsches Format. */
-    /* ### ACHTUNG: Neuer Text in Resource? Die ausgew�hlte Datei besitzt ein falsches Format. : Die ausgew�hlte Datei besitzt ein falsches Format. */
     Text [ en-US ] = "The selected file has an incorrect format." ;
 };
 String STR_QUERY_MUSTOWNFORMAT
@@ -221,8 +211,6 @@ String STR_CLOSEDOC
 };
 String STR_CLOSEDOC_ANDRETURN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlie�en & zur�ck zu  : S~chlie�en & zur�ck zu  */
-    /* ### ACHTUNG: Neuer Text in Resource? S~chlie�en & zur�ck zu  : S~chlie�en & zur�ck zu  */
     Text [ en-US ] = "~Close & Return to " ;
 };
 String STR_WIZARD
@@ -300,7 +288,7 @@ String STR_FSET_FILTERNAME0
 };
 String STR_FSET_FILTERNAME1
 {
-    // nur 'Dokument' "ubersetzen - only translate 'Document'
+    // only translate 'Document'
     Text [ en-US ] = "%PRODUCTNAME Frame Document" ;
 };
 String STR_TEMPL_MOVED

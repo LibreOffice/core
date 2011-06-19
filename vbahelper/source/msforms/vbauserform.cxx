@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,10 @@
 #include "vbauserform.hxx"
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -80,7 +83,7 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
             uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
             uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
-            xControlWindow->setPosSize( (aPosSize.Width - getWidth()) / 2.0, (aPosSize.Height - getHeight()) / 2.0, 0, 0, awt::PosSize::POS );
+            xControlWindow->setPosSize(static_cast<sal_Int32>((aPosSize.Width - getWidth()) / 2.0), static_cast<sal_Int32>((aPosSize.Height - getHeight()) / 2.0), 0, 0, awt::PosSize::POS );
         }
         catch( uno::Exception& )
         {
@@ -143,6 +146,24 @@ ScVbaUserForm::Hide(  ) throw (uno::RuntimeException)
     mbDispose = false;  // hide not dispose
     if ( m_xDialog.is() )
         m_xDialog->endExecute();
+}
+
+sal_Bool SAL_CALL ScVbaUserForm::getVisible() throw (uno::RuntimeException)
+{
+    uno::Reference< awt::XWindow2 > xWindow2( getWindowPeer(), uno::UNO_QUERY_THROW );
+    return xWindow2->isVisible();
+}
+
+void SAL_CALL ScVbaUserForm::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+{
+    if ( bVisible )
+    {
+        Show();
+    }
+    else
+    {
+        Hide();
+    }
 }
 
 void SAL_CALL
@@ -210,6 +231,30 @@ ScVbaUserForm::setValue( const ::rtl::OUString& aPropertyName, const uno::Any& a
     }
 }
 
+uno::Reference< awt::XControl >
+ScVbaUserForm::nestedSearch( const rtl::OUString& aPropertyName, uno::Reference< awt::XControlContainer >& xContainer )
+{
+    uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
+    if ( !xControl.is() )
+    {
+        uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
+        const uno::Reference< awt::XControl >* pCtrl = aControls.getConstArray();
+        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrl + aControls.getLength();
+
+        for ( ; pCtrl < pCtrlsEnd; ++pCtrl )
+        {
+            uno::Reference< awt::XControlContainer > xC( *pCtrl, uno::UNO_QUERY );
+            if ( xC.is() )
+            {
+                xControl.set( nestedSearch( aPropertyName, xC ) );
+                if ( xControl.is() )
+                    break;
+            }
+        }
+    }
+    return xControl;
+}
+
 uno::Any SAL_CALL
 ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -220,9 +265,16 @@ ScVbaUserForm::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::Un
     {
         uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
         uno::Reference< awt::XControlContainer > xContainer( m_xDialog, uno::UNO_QUERY_THROW );
-        uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
+        uno::Reference< awt::XControl > xControl = nestedSearch( aPropertyName, xContainer );
+        xContainer->getControl( aPropertyName );
         if ( xControl.is() )
-            aResult <<= ScVbaControlFactory::createUserformControl( mxContext, xControl, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() );
+        {
+            uno::Reference< msforms::XControl > xVBAControl = ScVbaControlFactory::createUserformControl( mxContext, xControl, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() );
+            ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
+            if ( m_sLibName.getLength() )
+                pControl->setLibraryAndCodeName( m_sLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( getName() ) );
+            aResult = uno::makeAny( xVBAControl );
+        }
     }
 
     return aResult;
@@ -249,13 +301,18 @@ ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException)
 ScVbaUserForm::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY );
+
     OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d", rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xControl.is() );
     if ( xControl.is() )
     {
-        uno::Reference< container::XNameAccess > xNameAccess( xControl->getModel(), uno::UNO_QUERY_THROW );
-        sal_Bool bRes =  xNameAccess->hasByName( aName );
-    OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d ---> %d", rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xControl.is(), bRes );
-        return bRes;
+        uno::Reference< beans::XPropertySet > xDlgProps( xControl->getModel(), uno::UNO_QUERY );
+        if ( xDlgProps.is() )
+        {
+            uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllDialogChildren")) ), uno::UNO_QUERY_THROW );
+            sal_Bool bRes =  xAllChildren->hasByName( aName );
+            OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d ---> %d", rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xAllChildren.is(), bRes );
+            return bRes;
+        }
     }
     return sal_False;
 }
@@ -270,3 +327,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.msforms.UserForm" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

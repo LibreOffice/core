@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,6 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     sal_Int32 i, j;
     aPropSeq = rVal;
 
-    // hashing property values
-//  beans::PropertyValue* pPropValues = aPropSeq.getArray();
-//  const rtl::OUString* pPtr = NULL;
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
         beans::PropertyValue& rPropVal = aPropSeq[ i ];
@@ -292,7 +290,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_u
 
     }
 }
-int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
+int SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
@@ -300,7 +298,7 @@ int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) c
     return bRet;
 }
 
-SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
+SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
 {
@@ -308,19 +306,18 @@ SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
     {
         XubString aStr;
-//      SdrItemPool::TakeItemName( Which(), aStr );
         aStr += sal_Unicode( ' ' );
         rText.Insert( aStr, 0 );
     }
     return ePresentation;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
 {
     return new SdrCustomShapeGeometryItem( rIn, nItemVersion );
 }
 
-SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
     if ( nItemVersion )
     {
@@ -329,54 +326,32 @@ SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
-//  SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
-
-/*
-    for ( i = 0; i < GetCount(); i++ )
-    {
-        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
-        pItem->SetValue( i, rVal );
-    }
-*/
-    return pItem;
+    return new SdrCustomShapeGeometryItem( GetGeometry() );
 }
 
-#ifdef SDR_ISPOOLABLE
-int __EXPORT SdrCustomShapeGeometryItem::IsPoolable() const
-{
-    sal_uInt16 nId=Which();
-    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
 {
     return 1;
 }
-sal_Bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SdrCustomShapeGeometryItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aPropSeq;
-    return sal_True;
+    return true;
 }
-sal_Bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     if ( ! ( rVal >>= aPropSeq ) )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeometry() const
 {
     return aPropSeq;
 }
-/*
-const uno::Any* GetValueByName( const rtl::OUString& rProperty ) const
-{
 
-}
-*/
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
 {}
@@ -384,3 +359,4 @@ SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem( const String
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, rVal )
 {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

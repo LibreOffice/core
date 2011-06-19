@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,14 +45,10 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-sal_Char __READONLY_DATA sAudio[] = "audio";
-sal_Char __READONLY_DATA sVideo[] = "video";
+sal_Char const sAudio[] = "audio";
+sal_Char const sVideo[] = "video";
 
-/*************************************************************************
-|*
-|* Filedialog to insert Plugin-Fileformats
-|*
-\************************************************************************/
+// Filedialog to insert Plugin-Fileformats
 
 ErrCode SvxPluginFileDlg::Execute()
 {
@@ -87,7 +84,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     if( xMgr.is() )
     {
         uno::Reference< plugin::XPluginManager > rPluginManager( xMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), uno::UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
         if ( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
@@ -195,12 +192,6 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind ) :
     maFileDlg.SetCurrentFilter( aAllFilter );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SvxPluginFileDlg::~SvxPluginFileDlg()
 {
 }
@@ -208,7 +199,7 @@ SvxPluginFileDlg::~SvxPluginFileDlg()
 /*************************************************************************
 |*
 |* Plugins available for the the MIME-Typ in nKind
-|* (whith nKind = SID_INSERT_SOUND for MIME-Type audio
+|* (with nKind = SID_INSERT_SOUND for MIME-Type audio
 |*                SID_INSERT_VIDEO for MIME-Type video
 |*
 \************************************************************************/
@@ -232,7 +223,7 @@ bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
 
     if( xMgr.is() )
     {
-        uno::Reference< plugin::XPluginManager >  rPluginManager = uno::Reference< plugin::XPluginManager > ( xMgr->createInstance( OUString::createFromAscii( "com.sun.star.plugin.PluginManager" ) ), uno::UNO_QUERY );
+        uno::Reference< plugin::XPluginManager >  rPluginManager = uno::Reference< plugin::XPluginManager > ( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
         if( rPluginManager.is() )
         {
             const uno::Sequence<plugin::PluginDescription > aSeq( rPluginManager->getPluginDescriptions() );
@@ -278,3 +269,5 @@ void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext 
 {
     maFileDlg.SetContext( _eNewContext );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

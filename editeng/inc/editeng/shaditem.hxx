@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@ namespace rtl
 
 // class SvxShadowItem ---------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt ein Schattenattribut (Farbe, Breite, Lage).
+    This item describes the shadow attribute (color, width and position).
 */
 
 #define SHADOW_TOP      ((sal_uInt16)0)
@@ -65,10 +66,10 @@ public:
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -78,8 +79,8 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
     const Color& GetColor() const { return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }
@@ -90,7 +91,7 @@ public:
     void SetWidth( sal_uInt16 nNew ) { nWidth = nNew; }
     void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
 
-        //Breite des Schattens auf der jeweiligen Seite berechnen.
+    // Calculate width of the shadow on the page.
     sal_uInt16 CalcShadowSpace( sal_uInt16 nShadow ) const;
 
     virtual sal_uInt16          GetValueCount() const;
@@ -109,3 +110,4 @@ inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow 
 
 #endif // #ifndef _SVX_SHADITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

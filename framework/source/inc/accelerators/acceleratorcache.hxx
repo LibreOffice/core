@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 //__________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
 
 //__________________________________________
 // other includes
@@ -80,7 +79,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
         /** TODO document me
             keys -> commands
         */
-        typedef ::std::hash_map< css::awt::KeyEvent ,
+        typedef ::boost::unordered_map< css::awt::KeyEvent ,
                                  ::rtl::OUString    ,
                                  KeyEventHashCode   ,
                                  KeyEventEqualsFunc > TKey2Commands;
@@ -129,7 +128,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
 
         //---------------------------------------
         /** TODO document me */
-        virtual AcceleratorCache& operator=(const AcceleratorCache& rCopy);
+        AcceleratorCache& operator=(const AcceleratorCache& rCopy);
 
         //---------------------------------------
         /** @short  checks if the specified key exists.
@@ -185,3 +184,5 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_ACCELERATORCACHE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ private:
     AnchorInfo*             pCurAnchor;
 
     sal_Bool                    bInPara;
-    sal_Bool                    bWasInPara; // bInPara vor HeadingStart merken, weil sonst hinterher weg
+    sal_Bool                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
     sal_Bool                    bFieldsInserted;
     sal_uInt8                   nInTable;
     sal_uInt8                   nInCell;
@@ -97,3 +98,5 @@ SV_DECL_REF( EditHTMLParser )
 SV_IMPL_REF( EditHTMLParser );
 
 #endif // _EEHTML_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

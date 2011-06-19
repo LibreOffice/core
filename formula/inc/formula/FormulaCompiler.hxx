@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -76,8 +77,8 @@ struct FORMULA_DLLPUBLIC StringHashCode
     }
 };
 
-typedef ::std::hash_map< String, OpCode, StringHashCode, ::std::equal_to< String > > OpCodeHashMap;
-typedef ::std::hash_map< String, String, StringHashCode, ::std::equal_to< String > > ExternalHashMap;
+typedef ::boost::unordered_map< String, OpCode, StringHashCode, ::std::equal_to< String > > OpCodeHashMap;
+typedef ::boost::unordered_map< String, String, StringHashCode, ::std::equal_to< String > > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler
 {
@@ -122,6 +123,7 @@ public:
         }
         virtual ~OpCodeMap();
 
+        void copyFrom( const OpCodeMap& r );
 
         /// Get the symbol String -> OpCode hash map for finds.
         inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
@@ -219,7 +221,10 @@ public:
     void            SetCompileForFAP( sal_Bool bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
+    static bool IsOpCodeVolatile( OpCode eOp );
+
     static sal_Bool DeQuote( String& rStr );
+
 
     static const String&    GetNativeSymbol( OpCode eOp );
     static  sal_Bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
@@ -242,6 +247,9 @@ public:
         including an address reference convention. */
     inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
+    static void UpdateSeparatorsNative( const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep );
+    static void ResetNativeSymbols();
+    static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
     virtual String FindAddInFunction( const String& rUpperName, sal_Bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
@@ -318,12 +326,13 @@ private:
     void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later
     void InitSymbolsPODF() const;      /// only SymbolsPODF, on demand
     void InitSymbolsODFF() const;      /// only SymbolsODFF, on demand
+    void InitSymbolsEnglishXL() const; /// only SymbolsEnglishXL, on demand
 
     void loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const;
 
     static inline void ForceArrayOperator( FormulaTokenRef& rCurr, const FormulaTokenRef& rPrev )
         {
-            if ( rPrev.Is() && rPrev->HasForceArray() &&
+            if ( rPrev && rPrev->HasForceArray() &&
                     rCurr->GetType() == svByte && rCurr->GetOpCode() != ocPush
                     && !rCurr->HasForceArray() )
                 rCurr->SetForceArray( true);
@@ -371,6 +380,7 @@ private:
     mutable NonConstOpCodeMapPtr  mxSymbolsPODF;                          // ODF 1.1 symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsNative;                        // native symbols
     mutable NonConstOpCodeMapPtr  mxSymbolsEnglish;                       // English symbols
+    mutable NonConstOpCodeMapPtr  mxSymbolsEnglishXL;                     // English Excel symbols (for VBA formula parsing)
 };
 // =============================================================================
 } // formula
@@ -379,3 +389,4 @@ private:
 #endif // FORMULA_COMPILER_HXX_INCLUDED
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

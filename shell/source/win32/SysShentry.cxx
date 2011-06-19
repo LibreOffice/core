@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,8 +58,6 @@ using com::sun::star::system::XSystemShellExecute;
 #define SYSSHEXEC_REGKEY_NAME   "/com.sun.star.system.SystemShellExecute/UNO/SERVICES/com.sun.star.system.SystemShellExecute"
 
 //-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
 
 namespace
 {
@@ -69,7 +68,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 2 important functions which will be exported
 //-----------------------------------------------------------------------
 
 extern "C"
@@ -79,7 +78,7 @@ extern "C"
 // component_getImplementationEnvironment
 //----------------------------------------------------------------------
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";
@@ -90,14 +89,14 @@ void SAL_CALL component_getImplementationEnvironment(
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString::createFromAscii( SYSSHEXEC_SERVICE_NAME );
+        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_SERVICE_NAME ));
 
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -115,3 +114,5 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

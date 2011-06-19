@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +26,7 @@
  *
  ************************************************************************/
 #include "vbahelper/vbaglobalbase.hxx"
+#include <sal/macros.h>
 
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
@@ -59,7 +61,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& s
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
-    mxContext = ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ), NULL );
+    mxContext = ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), NULL );
 }
 
 VbaGlobalsBase::~VbaGlobalsBase()
@@ -136,7 +138,7 @@ VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException)
     // common
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.msforms.UserForm" ) ),
       };
-    static uno::Sequence< rtl::OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );
+    static uno::Sequence< rtl::OUString > serviceNames( names, SAL_N_ELEMENTS( names ) );
     return serviceNames;
 }
 
@@ -154,3 +156,4 @@ VbaGlobalsBase::hasServiceName( const rtl::OUString& serviceName )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

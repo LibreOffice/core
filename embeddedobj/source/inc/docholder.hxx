@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XBORDERWIDTHS_HPP_
 #include <com/sun/star/frame/BorderWidths.hpp>
-#endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -140,7 +139,7 @@ public:
 
     rtl::OUString GetTitle() const
     {
-        return m_aContainerName + ::rtl::OUString::createFromAscii( " - " ) + m_aDocumentNamePart;
+        return m_aContainerName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " - " )) + m_aDocumentNamePart;
     }
 
     rtl::OUString GetContainerName() const { return m_aContainerName; }
@@ -166,8 +165,6 @@ public:
 
     void Show();
 
-    // sal_Bool SetVisArea( sal_Int64 nAspect, const ::com::sun::star::awt::Rectangle& aRect );
-    // sal_Bool GetVisArea( sal_Int64 nAspect, ::com::sun::star::awt::Rectangle *pRect );
     sal_Bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
     sal_Bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
 
@@ -211,3 +208,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

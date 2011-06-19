@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -172,8 +171,6 @@ void BmkMenu::Initialize()
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
-    sal_Bool bIsHiContrastMode = rSettings.GetHighContrastMode();
-
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -193,7 +190,7 @@ void BmkMenu::Initialize()
             {
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aImageId, sal_False, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, false );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -203,7 +200,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aURL, sal_False, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, false );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else
@@ -213,8 +210,6 @@ void BmkMenu::Initialize()
             else
                 InsertItem( nId, aTitle );
 
-            // Store values from configuration to the New and Wizard menu entries to enable
-            // sfx2 based code to support high contrast mode correctly!
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
             SetUserValue( nId, (sal_uIntPtr)pUserAttributes );
 
@@ -252,3 +247,4 @@ void GetMenuEntry
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

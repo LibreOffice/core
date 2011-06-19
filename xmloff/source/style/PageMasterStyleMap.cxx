@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_xmloff.hxx"
 
 #include <xmloff/PageMasterStyleMap.hxx>
-
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -111,6 +111,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 
     //text grid enhancement for better CJK support
     PLMAP( "GridBaseWidth", XML_NAMESPACE_STYLE, XML_LAYOUT_GRID_BASE_WIDTH, XML_TYPE_MEASURE, CTP_PM_GRID_BASE_WIDTH ),
+    PLMAP( "GridSnapToChars", XML_NAMESPACE_STYLE, XML_LAYOUT_GRID_SNAP_TO, XML_TYPE_BOOL, CTP_PM_GRID_SNAP_TO_CHARS ),
     PLMAP( "GridSnapToChars", XML_NAMESPACE_STYLE, XML_LAYOUT_GRID_SNAP_TO_CHARS, XML_TYPE_BOOL, CTP_PM_GRID_SNAP_TO_CHARS ),
       //export as a default attribute
     PLMAP( "StandardPageMode", XML_NAMESPACE_STYLE, XML_LAYOUT_GRID_STANDARD_MODE, XML_TYPE_BOOL|MID_FLAG_DEFAULT_ITEM_EXPORT, CTF_PM_STANDARD_MODE ),
@@ -125,6 +126,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FootnoteLineRelativeWidth", XML_NAMESPACE_STYLE,    XML__EMPTY,     XML_TYPE_PERCENT8|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_WIDTH ),
     PLMAP( "FootnoteLineTextDistance", XML_NAMESPACE_STYLE, XML__EMPTY,     XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM, CTF_PM_FTN_LINE_DISTANCE ),
     PLMAP( "FootnoteLineWeight",        XML_NAMESPACE_STYLE,    XML_FOOTNOTE_SEP,   XML_TYPE_MEASURE16|MID_FLAG_ELEMENT_ITEM,   CTF_PM_FTN_LINE_WEIGTH ),
+    PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
 
 // header
     HFMAP( "HeaderHeight",              XML_NAMESPACE_SVG,      XML_HEIGHT,                     XML_TYPE_MEASURE,       CTF_PM_HEADERHEIGHT ),
@@ -191,3 +193,4 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010 }
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

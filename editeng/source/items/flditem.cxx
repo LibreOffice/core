@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 
 #include <editeng/measfld.hxx>
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 #define FRAME_MARKER    (sal_uInt32)0x21981357
@@ -73,9 +73,9 @@ SvxFieldData* SvxFieldData::Clone() const
 
 int SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
-    DBG_ASSERT( Type() == rFld.Type(), "==: Verschiedene Typen" );
+    DBG_ASSERT( Type() == rFld.Type(), "==: Different Types" );
     (void)rFld;
-    return sal_True;    // Basicklasse immer gleich.
+    return sal_True;    // Basic class is always the same.
 }
 
 // -----------------------------------------------------------------------
@@ -106,7 +106,7 @@ MetaAction* SvxFieldData::createEndComment() const
 SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
-    pField = pFld;  // gehoert direkt dem Item
+    pField = pFld;  // belongs directly to the item
 }
 
 // -----------------------------------------------------------------------
@@ -151,7 +151,7 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
         aPStrm.SetError( SVSTREAM_GENERALERROR );
 
     if ( aPStrm.GetError() == ERRCODE_IO_NOFACTORY )
-        aPStrm.ResetError();    // Eigentlich einen Code, dass nicht alle Attr gelesen wurden...
+        aPStrm.ResetError();    // Actually a code for that not all were read Attr ...
 
     return new SvxFieldItem( pData, Which() );
 }
@@ -160,14 +160,14 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    DBG_ASSERT( pField, "SvxFieldItem::Store: Feld?!" );
+    DBG_ASSERT( pField, "SvxFieldItem::Store: Field?!" );
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
-    // Das ResetError in der obigen Create-Methode gab es in 3.1 noch nicht,
-    // deshalb duerfen beim 3.x-Export neuere Items nicht gespeichert werden!
+    // The reset error in the above Create method did not exist in 3.1,
+    // therefore newer items can not be saved for 3.x-exports!
     if ( ( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_31 ) && pField &&
             pField->GetClassId() == 50 /* SdrMeasureField */ )
     {
-        // SvxFieldData reicht nicht, weil auch nicht am ClassMgr angemeldet
+        // SvxFieldData not enough, because not registered on ClassMgr.
         SvxURLField aDummyData;
         aPStrm << &aDummyData;
     }
@@ -195,7 +195,7 @@ int SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 // =================================================================
-// Es folgen die Ableitungen von SvxFieldData...
+// The following are the derivatives of SvxFieldData ...
 // =================================================================
 
 SV_IMPL_PERSIST1( SvxDateField, SvxFieldData );
@@ -276,12 +276,12 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
 {
     if ( eFormat == SVXDATEFORMAT_SYSTEM )
     {
-        DBG_ERROR( "SVXDATEFORMAT_SYSTEM nicht implementiert!" );
+        OSL_FAIL( "SVXDATEFORMAT_SYSTEM not implemented!" );
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
     else if ( eFormat == SVXDATEFORMAT_APPDEFAULT )
     {
-        DBG_ERROR( "SVXDATEFORMAT_APPDEFAULT: Woher nehmen?" );
+        OSL_FAIL( "SVXDATEFORMAT_APPDEFAULT: take them from where? ");
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
 
@@ -310,15 +310,15 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMYYYY, eLang );
         break;
         case SVXDATEFORMAT_D:
-            // 13. Februar 1996
+            // 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMMYYYY, eLang );
         break;
         case SVXDATEFORMAT_E:
-            // Die, 13. Februar 1996
+            // The, 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, eLang );
         break;
         case SVXDATEFORMAT_F:
-            // Dienstag, 13. Februar 1996
+            // Tuesday, 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, eLang );
         break;
         default:
@@ -429,26 +429,26 @@ MetaAction* SvxURLField::createBeginComment() const
 }
 
 // =================================================================
-// Die Felder, die aus Calc ausgebaut wurden:
+// The fields that were removed from Calc:
 // =================================================================
 
 SV_IMPL_PERSIST1( SvxPageField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxPageField::Clone() const
+SvxFieldData* SvxPageField::Clone() const
 {
-    return new SvxPageField;        // leer
+    return new SvxPageField;        // empty
 }
 
-int __EXPORT SvxPageField::operator==( const SvxFieldData& rCmp ) const
+int SvxPageField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxPageField) );
 }
 
-void __EXPORT SvxPageField::Load( SvPersistStream & /*rStm*/ )
+void SvxPageField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxPageField::Save( SvPersistStream & /*rStm*/ )
+void SvxPageField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -460,41 +460,41 @@ MetaAction* SvxPageField::createBeginComment() const
 
 SV_IMPL_PERSIST1( SvxPagesField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxPagesField::Clone() const
+SvxFieldData* SvxPagesField::Clone() const
 {
-    return new SvxPagesField;   // leer
+    return new SvxPagesField;   // empty
 }
 
-int __EXPORT SvxPagesField::operator==( const SvxFieldData& rCmp ) const
+int SvxPagesField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxPagesField) );
 }
 
-void __EXPORT SvxPagesField::Load( SvPersistStream & /*rStm*/ )
+void SvxPagesField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxPagesField::Save( SvPersistStream & /*rStm*/ )
+void SvxPagesField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
 SV_IMPL_PERSIST1( SvxTimeField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxTimeField::Clone() const
+SvxFieldData* SvxTimeField::Clone() const
 {
-    return new SvxTimeField;    // leer
+    return new SvxTimeField;    // empty
 }
 
-int __EXPORT SvxTimeField::operator==( const SvxFieldData& rCmp ) const
+int SvxTimeField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxTimeField) );
 }
 
-void __EXPORT SvxTimeField::Load( SvPersistStream & /*rStm*/ )
+void SvxTimeField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxTimeField::Save( SvPersistStream & /*rStm*/ )
+void SvxTimeField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -505,41 +505,41 @@ MetaAction* SvxTimeField::createBeginComment() const
 
 SV_IMPL_PERSIST1( SvxFileField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxFileField::Clone() const
+SvxFieldData* SvxFileField::Clone() const
 {
-    return new SvxFileField;    // leer
+    return new SvxFileField;    // empty
 }
 
-int __EXPORT SvxFileField::operator==( const SvxFieldData& rCmp ) const
+int SvxFileField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxFileField) );
 }
 
-void __EXPORT SvxFileField::Load( SvPersistStream & /*rStm*/ )
+void SvxFileField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxFileField::Save( SvPersistStream & /*rStm*/ )
+void SvxFileField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
 SV_IMPL_PERSIST1( SvxTableField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxTableField::Clone() const
+SvxFieldData* SvxTableField::Clone() const
 {
-    return new SvxTableField;   // leer
+    return new SvxTableField;   // empty
 }
 
-int __EXPORT SvxTableField::operator==( const SvxFieldData& rCmp ) const
+int SvxTableField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxTableField) );
 }
 
-void __EXPORT SvxTableField::Load( SvPersistStream & /*rStm*/ )
+void SvxTableField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxTableField::Save( SvPersistStream & /*rStm*/ )
+void SvxTableField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -625,11 +625,11 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
     switch( eFormat )
     {
         case SVXTIMEFORMAT_SYSTEM :
-            DBG_ERROR( "SVXTIMEFORMAT_SYSTEM: not implemented" );
+            OSL_FAIL( "SVXTIMEFORMAT_SYSTEM: not implemented" );
             eFormat = SVXTIMEFORMAT_STANDARD;
         break;
         case SVXTIMEFORMAT_APPDEFAULT :
-            DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
+            OSL_FAIL( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
             eFormat = SVXTIMEFORMAT_STANDARD;
         break;
         default: ;//prevent warning
@@ -963,21 +963,21 @@ SvClassManager& SvxFieldItem::GetClassManager()
 
 SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxHeaderField::Clone() const
+SvxFieldData* SvxHeaderField::Clone() const
 {
-    return new SvxHeaderField;      // leer
+    return new SvxHeaderField;      // empty
 }
 
-int __EXPORT SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
+int SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxHeaderField) );
 }
 
-void __EXPORT SvxHeaderField::Load( SvPersistStream & /*rStm*/ )
+void SvxHeaderField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
+void SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -985,21 +985,21 @@ void __EXPORT SvxHeaderField::Save( SvPersistStream & /*rStm*/ )
 
 SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxFooterField::Clone() const
+SvxFieldData* SvxFooterField::Clone() const
 {
-    return new SvxFooterField;      // leer
+    return new SvxFooterField;      // empty
 }
 
-int __EXPORT SvxFooterField::operator==( const SvxFieldData& rCmp ) const
+int SvxFooterField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxFooterField) );
 }
 
-void __EXPORT SvxFooterField::Load( SvPersistStream & /*rStm*/ )
+void SvxFooterField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxFooterField::Save( SvPersistStream & /*rStm*/ )
+void SvxFooterField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -1007,21 +1007,21 @@ void __EXPORT SvxFooterField::Save( SvPersistStream & /*rStm*/ )
 
 SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );
 
-SvxFieldData* __EXPORT SvxDateTimeField::Clone() const
+SvxFieldData* SvxDateTimeField::Clone() const
 {
-    return new SvxDateTimeField;        // leer
+    return new SvxDateTimeField;        // empty
 }
 
-int __EXPORT SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
+int SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 {
     return ( rCmp.Type() == TYPE(SvxDateTimeField) );
 }
 
-void __EXPORT SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )
+void SvxDateTimeField::Load( SvPersistStream & /*rStm*/ )
 {
 }
 
-void __EXPORT SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
+void SvxDateTimeField::Save( SvPersistStream & /*rStm*/ )
 {
 }
 
@@ -1049,3 +1049,4 @@ String SvxDateTimeField::GetFormatted( Date& rDate, Time& rTime, int eFormat, Sv
     return aRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

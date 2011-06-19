@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -108,12 +109,12 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateFileMap;
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;
@@ -129,3 +130,5 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
 } // namespace framework
 
 #endif // __FRAMEWORK_UIELEMENT_WINDOWSTATECONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

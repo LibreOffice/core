@@ -156,7 +156,6 @@ class LinuxSystemEnvironment extends SystemEnvironment {
 
     // reads from dmidecode with the given type and target
     // returns an empty string if nothing was found or an error occurred
-    //
     // Sample output segment:
     // Handle 0x0001
     //         DMI type 1, 25 bytes.

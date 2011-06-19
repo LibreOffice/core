@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +30,11 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>
@@ -53,9 +49,7 @@
 #include "dialog.hrc"
 #include "mgetempl.hrc"
 
-#ifndef _SFX_STYLE_HRC
 #include <svl/style.hrc>
-#endif
 
 // SfxManageStyleSheetPage -----------------------------------------------
 
@@ -90,10 +84,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     aParent     ( pStyle->GetParent() ),
     nFlags      ( pStyle->GetMask() )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor; initialisiert die ListBoxen mit den Vorlagen
-
+    Constructor, initializes the list box with the templates
 */
 
 {
@@ -108,11 +101,11 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     aDescED.Hide();
     aDescFt.Show();
 
-    // diese Page braucht ExchangeSupport
+    // this Page needs ExchangeSupport
     SetExchangeSupport();
 
     ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
-    DBG_ASSERT( pResMgr, "kein ResMgr am Modul" );
+    OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 
     SfxStyleSheetBasePool* pPool = 0;
@@ -120,17 +113,17 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     if ( pDocShell )
         pPool = pDocShell->GetStyleSheetPool();
-    DBG_ASSERT( pPool, "kein Pool oder keine DocShell" );
+    OSL_ENSURE( pPool, "no Pool or no DocShell" );
 
     if ( pPool )
     {
         pPool->SetSearchMask( pStyle->GetFamily() );
-        pPool->First();     // fuer SW - interne Liste updaten
+        pPool->First();     // for SW - update internal list
     }
 
     if ( !pStyle->GetName().Len() && pPool )
     {
-        // NullString als Name -> Name generieren
+        // NullString as Name -> generate Name
         String aNoName( SfxResId( STR_NONAME ) );
         sal_uInt16 nNo = 1;
         String aNo( aNoName );
@@ -170,7 +163,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
             pPoolStyle = pPool->Next();
         }
 
-        // eine neue Vorlage ist noch nicht im Pool
+        // A new Template is not jet in the Pool
         if ( LISTBOX_ENTRY_NOTFOUND == aFollowLb.GetEntryPos( pStyle->GetName() ) )
             aFollowLb.InsertEntry( pStyle->GetName() );
     }
@@ -189,7 +182,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     if ( pStyle->HasParentSupport() && pPool )
     {
         if ( pStyle->HasClearParentSupport() )
-            // die Basisvorlage darf auf NULL gesetzt werden
+            // the base template can be set to NULL
             aBaseLb.InsertEntry( String( SfxResId( STR_NONE ) ) );
 
         SfxStyleSheetBase* pPoolStyle = pPool->First();
@@ -197,7 +190,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         while ( pPoolStyle )
         {
             const String aStr( pPoolStyle->GetName() );
-            // eigener Namen nicht als Basisvorlage
+            // own name as base template
             if ( aStr != aName )
                 aBaseLb.InsertEntry( aStr );
             pPoolStyle = pPool->Next();
@@ -208,37 +201,35 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         aBaseFt.Disable();
         aBaseLb.Disable();
     }
-    sal_uInt16 nCount = pFamilies->Count();
 
-    sal_uInt16 i;
+    size_t nCount = pFamilies->size();
+    size_t i;
     for ( i = 0; i < nCount; ++i )
     {
-        pItem = pFamilies->GetObject(i);
+        pItem = pFamilies->at( i );
 
         if ( pItem->GetFamily() == pStyle->GetFamily() )
             break;
     }
 
-    sal_uInt16 nStyleFilterIdx = 0xffff;
-
     if ( i < nCount )
     {
-        // Filterflags
+        sal_uInt16 nStyleFilterIdx = 0xffff;
+        // Filter flags
         const SfxStyleFilter& rList = pItem->GetFilterList();
-        nCount = (sal_uInt16)rList.Count();
+        nCount = rList.size();
         sal_uInt16 nIdx = 0;
         sal_uInt16 nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
 
-        if ( !nMask )   // Benutzervorlage?
+        if ( !nMask )   // User Template?
             nMask = pStyle->GetMask();
 
         for ( i = 0; i < nCount; ++i )
         {
-            SfxFilterTupel* pTupel = rList.GetObject(i);
+            SfxFilterTupel* pTupel = rList[ i ];
 
             if ( pTupel->nFlags != SFXSTYLEBIT_AUTO     &&
                  pTupel->nFlags != SFXSTYLEBIT_USED     &&
-//               pTupel->nFlags != SFXSTYLEBIT_USERDEF  &&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 aFilterLb.InsertEntry( pTupel->aName, nIdx );
@@ -271,7 +262,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         aNameEd.SetLoseFocusHdl(
             LINK( this, SfxManageStyleSheetPage, LoseFocusHdl ) );
     }
-    // ist es ein Style mit automatischem Update? (nur SW)
+    // It is a style with auto update? (SW only)
     if(SFX_ITEM_SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
     {
         Size aSize = aNameEd.GetSizePixel();
@@ -285,10 +276,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Destruktor; Freigabe der Daten
-
+    Destructor, release of the data
 */
 
 {
@@ -305,23 +295,20 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
                                                const String& rNew )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Nach der "Anderung eines Vorlagennamens die ListBox pBox
-    aktualisieren
+    After the change of a template name update the ListBox pBox
 
     [Parameter]
 
-    ListBox* pBox           ListBox, deren Eintr"age aktualisiert
-                            werden sollen
-    const String& rNew      der neue Name
-
+    ListBox* pBox         ListBox, whose entries are to be updated
+    const String& rNew    the new Name
 */
 
 {
     if ( pBox->IsEnabled() )
     {
-        // ist der aktuelle Eintrag, dessen Namen modifizieren wurde
+        // it is the current entry, which name was modified
         const sal_Bool bSelect = pBox->GetSelectEntry() == aBuf;
         pBox->RemoveEntry( aBuf );
         pBox->InsertEntry( rNew );
@@ -335,14 +322,13 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
 
 void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Attributbeschreibung setzen. daf"ur die eingestellte Metrik besorgen.
+    Set attribute description. Get the set metric for this.
 */
 
 {
     SfxMapUnit eUnit = SFX_MAPUNIT_CM;
-//    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
     FieldUnit eFieldUnit( FUNIT_CM );
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( pModule )
@@ -355,20 +341,17 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     switch ( eFieldUnit )
     {
         case FUNIT_MM:      eUnit = SFX_MAPUNIT_MM; break;
-
         case FUNIT_CM:
         case FUNIT_M:
         case FUNIT_KM:      eUnit = SFX_MAPUNIT_CM; break;
-
         case FUNIT_POINT:
         case FUNIT_PICA:    eUnit = SFX_MAPUNIT_POINT; break;
-
         case FUNIT_INCH:
         case FUNIT_FOOT:
         case FUNIT_MILE:    eUnit = SFX_MAPUNIT_INCH; break;
 
         default:
-            DBG_ERRORFILE( "not supported fieldunit" );
+            OSL_FAIL( "non supported field unit" );
     }
     aDescFt.SetText( pStyle->GetDescription( eUnit ) );
 }
@@ -377,10 +360,9 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    StarView Handler; GetFocus-Handler des Edits mit dem Vorlagennamen.
-
+    StarView Handler; GetFocus-Handler of the Edits with the template name.
 */
 
 {
@@ -393,19 +375,17 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    StarView Handler; LoseFocus-Handler des Edits mit dem Vorlagennamen.
-    Dieser aktualisiert ggf. die Listbox mit den Folgevorlagen.
-    In der Listbox mit den Basisvorlagen ist die aktuelle Vorlage
-    selbst nicht enthalten.
-
+    StarView Handler; loose-focus-handler of the edits of the template name.
+    This will update the listbox with the subsequent templates. The current
+    template itself is not returned in the listbox of the base templates.
 */
 
 {
     const String aStr( pEdit->GetText().EraseLeadingChars() );
     pEdit->SetText( aStr );
-    // ggf. Listbox der Basisvorlagen aktualisieren
+    // Update the Listbox of the base template if possible
     if ( aStr != aBuf )
         UpdateName_Impl( &aFollowLb, aStr );
     return 0;
@@ -416,50 +396,38 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
-/*  [Beschreibung]
+/*  [Description]
 
-
-    Handler f"ur das Setzen der (modifizierten) Daten. Wird aus
-    dem Ok des SfxTabDialog gerufen.
+    Handler for setting the (modified) data. I called from the OK of the
+    SfxTabDialog.
 
     [Parameter]
 
-    SfxItemSet &rAttrSet        das Set, das die Daten entgegennimmt.
+    SfxItemSet &rAttrSet    The set, which receives the data.
 
+    [Return value]
 
-    [R"uckgabewert]
+    sal_Bool                sal_True:  The data had been changed
+                            sal_False: The data had not been changed
 
-    sal_Bool                        sal_True:  es hat eine "Anderung der Daten
-                                       stattgefunden
-                                    sal_False: es hat keine "Anderung der Daten
-                                       stattgefunden
-
-    [Querverweise]
+    [Cross-reference]
 
     <class SfxTabDialog>
-
 */
 
 {
     const sal_uInt16 nFilterIdx = aFilterLb.GetSelectEntryPos();
 
-    // Filter setzen
+    // Set Filter
 
     if ( LISTBOX_ENTRY_NOTFOUND  != nFilterIdx      &&
          nFilterIdx != aFilterLb.GetSavedValue()    &&
          aFilterLb.IsEnabled() )
     {
         bModified = sal_True;
-        DBG_ASSERT( pItem, "kein Item" );
-        // geht nur bei Benutzervorlagen
-#if OSL_DEBUG_LEVEL > 1
-        sal_uInt16 nIdx = (sal_uInt16)(long)aFilterLb.GetEntryData( nFilterIdx );
-        SfxFilterTupel* p;
-        p = pItem->GetFilterList().GetObject( nIdx );
-#endif
-        sal_uInt16 nMask = pItem->GetFilterList().GetObject(
-            (sal_uInt16)(long)aFilterLb.GetEntryData( nFilterIdx ) )->nFlags |
-            SFXSTYLEBIT_USERDEF;
+        OSL_ENSURE( pItem, "No Item" );
+        // is only possibly for user templates
+        sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
     if(aAutoCB.IsVisible() &&
@@ -475,20 +443,17 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
 void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
-/*  [Beschreibung]
+/*  [Description]
 
-
-    Handler f"ur das Initialisieren der Seite mit den initialen Daten.
+    Handler to initialize the page with the initial data.
 
     [Parameter]
 
-    const SfxItemSet &rAttrSet      das Set mit den Daten
+    const SfxItemSet &rAttrSet          The data set
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <class SfxTabDialog>
-
 */
 
 {
@@ -526,7 +491,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
         if ( String( SfxResId( STR_STANDARD ) ) == aName )
         {
-            // die Standardvorlage kann nicht verkn"upft werden
+            // the default template can not be linked
             aBaseFt.Disable();
             aBaseLb.Disable();
         }
@@ -547,15 +512,13 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
                                              const SfxItemSet &rAttrSet )
 
-/*  [Beschreibung]
+/*  [Description]
 
+    Factory for the creation of the page.
 
-    Factory f"ur das Erzeugen der Seite
-
-    [Querverweise]
+    [Cross-reference]
 
     <class SfxTabDialog>
-
 */
 
 {
@@ -566,27 +529,25 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    ActivatePage- Handler des SfxTabDialog; wird f"ur die Aktualisierung
-    des beschreibenden Textes verwendet, da sich dieser durch "Anderungen
-    der Daten anderer Seiten ge"andert haben kann.
+    ActivatePage handler of SfxTabDialog, is used for the the update of the
+    descriptive text, since this might have changed through changes of data on
+    other pages.
 
     [Parameter]
 
-    const SfxItemSet&       das Set f"ur den Datenaustausch; wird
-                            hier nicht verwendet.
+    const SfxItemSet&    the set for the exchange of data; is not used here.
 
-    [Querverweise]
+    [Cross-reference]
 
     <SfxTabDialog::ActivatePage(const SfxItemSet &)>
-
 */
 
 {
     SetDescriptionText_Impl();
 
-    // ist es ein Style mit automatischem Update? (nur SW)
+    // It is a style with auto update? (SW only)
     const SfxPoolItem* pPoolItem;
 
     if ( SFX_ITEM_SET ==
@@ -599,21 +560,18 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
 int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    DeactivatePage- Handler des SfxTabDialog; die Daten werden
-    an der Vorlage eingestellt, damit die richtige Vererbung
-    f"ur die anderen Seiten des Dialoges vorliegt.
-    Im Fehlerfall wird das Verlassen der Seite unterbunden.
-
+    DeactivatePage-handler of SfxTabDialog; data is set on the template, so
+    that the correct inheritance on the other pages of the dialog is made.
+    If an error occurs, leaving the page is prevented.
     [Parameter]
 
-    SfxItemSet*         das Set f"ur den Datenaustausch; wird hier nicht verwendet.
+    SfxItemSet*    the set for the exchange of data; is not used here.
 
-    [Querverweise]
+    [Cross-reference]
 
     <SfxTabDialog::DeactivatePage(SfxItemSet*)>
-
 */
 
 {
@@ -621,7 +579,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( aNameEd.IsModified() )
     {
-        // bei <Enter> wird kein LoseFocus() durch StarView ausgel"ost
+        // By pressing <Enter> LoseFocus() is not trigged through StarView
         if ( aNameEd.HasFocus() )
             LoseFocusHdl( &aNameEd );
 
@@ -680,3 +638,4 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

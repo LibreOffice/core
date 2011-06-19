@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
-    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True) // _pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()
+    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
     ,m_pFileStream(NULL)
     ,m_aHeader(_rHeader)
     ,m_nCurNode(NODE_NOTFOUND)
@@ -188,8 +189,8 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
 sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Sucht ein bestimmten Wert im Index
-    // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
+    // Search a specific value in Index
+    // If the Index is unique, the key doesn't matter
     try
     {
         if (m_aHeader.db_keytype == 0)
@@ -217,8 +218,8 @@ sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Sucht ein bestimmten Wert im Index
-    // Wenn der Index Unique ist, interssiert der Key nicht, sonst ja
+    // Search a specific value in Index
+    // If the Index is unique, the key doesn't matter
     ONDXKey aKey;
     return ConvertToKey(&aKey, nRec, rValue) && getRoot()->Find(aKey);
 }
@@ -230,14 +231,14 @@ sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
 
-    // Existiert der Wert bereits
-    // Find immer verwenden um das aktuelle Blatt zu bestimmen
+    // Does the value already exist
+    // Use Find() always to determine the actual leaf
     if (!ConvertToKey(&aKey, nRec, rValue) || (getRoot()->Find(aKey) && isUnique()))
         return sal_False;
 
     ONDXNode aNewNode(aKey);
 
-    // einfuegen in das aktuelle Blatt
+    // insert in the current leaf
     if (!m_aCurLeaf.Is())
         return sal_False;
 
@@ -265,15 +266,15 @@ sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
-    // Existiert der Wert bereits
-    // Find immer verwenden um das aktuelle Blatt zu bestimmen
+    // Does the value already exist
+    // Always use Find() to determine the actual leaf
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rValue) || !getRoot()->Find(aKey))
         return sal_False;
 
     ONDXNode aNewNode(aKey);
 
-    // einfuegen in das aktuelle Blatt
+    // insert in the current leaf
     if (!m_aCurLeaf.Is())
         return sal_False;
 #if OSL_DEBUG_LEVEL > 1
@@ -291,7 +292,7 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
 //------------------------------------------------------------------
 void ODbaseIndex::Release(sal_Bool bSave)
 {
-    // Freigeben der Indexressourcen
+    // Release the Index-recources
     m_bUseCollector = sal_False;
 
     if (m_aCurLeaf.Is())
@@ -300,19 +301,19 @@ void ODbaseIndex::Release(sal_Bool bSave)
         m_aCurLeaf.Clear();
     }
 
-    // Wurzel freigeben
+    // Release the root
     if (m_aRoot.Is())
     {
         m_aRoot->Release(bSave);
         m_aRoot.Clear();
     }
-    // alle Referenzen freigeben, bevor der FileStream geschlossen wird
+    // Release all references, before the FileStream will be closed
     for (sal_uIntPtr i = 0; i < m_aCollector.size(); i++)
         m_aCollector[i]->QueryDelete();
 
     m_aCollector.clear();
 
-    // Header modifiziert ?
+    // Header modified?
     if (bSave && (m_aHeader.db_rootpage != m_nRootPage ||
         m_aHeader.db_pagecount != m_nPageCount))
     {
@@ -362,13 +363,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
     rStream.Seek(0);
     rStream.Read(&rIndex.m_aHeader,PAGE_SIZE);
 
-/* OJ: no longer needed
-    // Text convertierung
-    ByteString aText(rIndex.m_aHeader.db_name);
-    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
-    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
-    strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
-*/
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
     rIndex.m_nPageCount = rIndex.m_aHeader.db_pagecount;
     return rStream;
@@ -377,11 +371,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-/* OJ: no longer needed
-    ByteString aText(rIndex.m_aHeader.db_name);
-    //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
-    strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
-*/
     OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,PAGE_SIZE), PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
     return rStream;
 }
@@ -391,20 +380,20 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
     sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sDir += m_Name;
-    sDir += ::rtl::OUString::createFromAscii(".ndx");
+    sDir += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ndx"));
     return sDir;
 }
 //------------------------------------------------------------------
 void ODbaseIndex::createINFEntry()
 {
-    // inf Datei abgleichen
+    // synchronize inf-file
     String sEntry = m_Name;
     sEntry += String::CreateFromAscii(".ndx");
 
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
+    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
@@ -443,12 +432,11 @@ sal_Bool ODbaseIndex::DropImpl()
             m_pTable->getConnection()->throwGenericSQLException(STR_COULD_NOT_DELETE_INDEX,*m_pTable);
     }
 
-    // InfDatei abgleichen
-
+    // synchronize inf-file
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
+    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
     String sPhysicalPath;
     String sNDX(sCfgFile);
@@ -464,7 +452,7 @@ sal_Bool ODbaseIndex::DropImpl()
     // delete entries from the inf file
     for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
     {
-        // Verweist der Key auf ein Indexfile?...
+        // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
         if (aKeyName.Copy(0,3) == "NDX")
         {
@@ -488,7 +476,7 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::
 //------------------------------------------------------------------
 sal_Bool ODbaseIndex::CreateImpl()
 {
-    // Anlegen des Index
+    // Create the Index
     const ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
     {
@@ -498,25 +486,15 @@ sal_Bool ODbaseIndex::CreateImpl()
          ) );
         ::dbtools::throwGenericSQLException( sError, *this );
     }
-    // Index ist nur einstufig
+    // Index comprises only one column
     if (m_pColumns->getCount() > 1)
         m_pTable->getConnection()->throwGenericSQLException(STR_ONL_ONE_COLUMN_PER_INDEX,*this);
 
     Reference<XFastPropertySet> xCol(m_pColumns->getByIndex(0),UNO_QUERY);
 
-    // ist die Spalte schon indiziert ?
+    // Is the column already indexed?
     if ( !xCol.is() )
         ::dbtools::throwFunctionSequenceException(*this);
-//  else if (pColumn && pColumn->IsIndexed())
-//  {
-//      String aText = String(OResId(STR_STAT_INDEX_COLUMN_ALREADY_INDEXED));
-//      aText.SearchAndReplace(String::CreateFromAscii("#"),pColumn->GetName());
-//      aStatus.Set(SDB_STAT_ERROR,
-//              String::CreateFromAscii("01000"),
-//              aStatus.CreateErrorMessage(aText),
-//              0, String() );
-//      return sal_False;
-//  }
 
     // create the index file
     m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
@@ -531,9 +509,8 @@ sal_Bool ODbaseIndex::CreateImpl()
 
     m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pFileStream->SetBufferSize(PAGE_SIZE);
-    m_pFileStream->SetFiller('\0');
 
-    // Zunaechst muss das Ergebnis sortiert sein
+    // firstly the result must be sorted
     utl::SharedUNOComponent<XStatement> xStmt;
     utl::SharedUNOComponent<XResultSet> xSet;
     String aName;
@@ -558,14 +535,6 @@ sal_Bool ODbaseIndex::CreateImpl()
         aStatement += aName;
         aStatement += aQuote;
 
-//      if (!m_IsUnique) // zusaetzlich sortierung mit der bookmarkspalte
-//      {
-//          aStatement.AppendAscii(" ,");
-//          aStatement += aQuote;
-//          aStatement.AppendAscii("[BOOKMARK]"); // this is a special column
-//          aStatement += aQuote;
-//      }
-
         xSet.set( xStmt->executeQuery(aStatement),UNO_SET_THROW );
     }
     catch(const Exception& )
@@ -577,10 +546,10 @@ sal_Bool ODbaseIndex::CreateImpl()
         impl_killFileAndthrowError_throw(STR_COULD_NOT_CREATE_INDEX,sFile);
     }
 
-    // Setzen der Headerinfo
+    // Set the header info
     memset(&m_aHeader,0,sizeof(m_aHeader));
     sal_Int32 nType = 0;
-    ::vos::ORef<OSQLColumns> aCols = m_pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
     const Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
@@ -601,19 +570,16 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 
-    // modifizierung am Header werden ueber Unterschiede zw. HeaderInfo und nRootPage
-    // bzw. nPageCout erkannt
-
+    // modifications of the header are detected by differences between
+    // the HeaderInfo and nRootPage or nPageCount respectively
     m_nRootPage = 1;
     m_nPageCount = 2;
 
-    //  ODatabaseType eType = m_aHeader.db_keytype == 0 ? DataType::VARCHAR : DataType::DOUBLE;
     m_aCurLeaf = m_aRoot = CreatePage(m_nRootPage);
     m_aRoot->SetModified(sal_True);
 
     m_bUseCollector = sal_True;
 
-    //  sal_uIntPtr nRowsLeft = pCursor->RowCount();
     sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);
 
@@ -631,12 +597,11 @@ sal_Bool ODbaseIndex::CreateImpl()
         ORowSetValue    atmpValue=ORowSetValue();
         ONDXKey aKey(atmpValue, nType, 0);
         ONDXKey aInsertKey(atmpValue, nType, 0);
-        // Erzeugen der Indexstruktur
+        // Create the index structure
         while (xSet->next())
         {
-            //  ODbRow& rRow = *pCursor->GetRow();
             ORowSetValue aValue(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)));
-            // ueberpruefen auf doppelten eintrag
+            // checking for duplicate entries
             if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
             {
                 aKey.setValue(aValue);
@@ -677,3 +642,4 @@ void SAL_CALL ODbaseIndex::release() throw()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

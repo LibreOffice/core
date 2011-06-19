@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -59,9 +58,7 @@
 #include "XMLTextNumRuleInfo.hxx"
 #include "XMLSectionExport.hxx"
 #include "XMLRedlineExport.hxx"
-#ifndef _XMLOFF_MULTIPROPERTYSETHELPER_HXX
 #include "MultiPropertySetHelper.hxx"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -256,3 +253,4 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     rPrevSection.set(rNextSection);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include "internal/utilities.hxx"
 #include "internal/i_xml_parser_event_handler.hxx"
 
-#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
-#endif
 #include "internal/zipfile.hxx"
 
 class CBaseReader : public i_xml_parser_event_handler
@@ -78,3 +77,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

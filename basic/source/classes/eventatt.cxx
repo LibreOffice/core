@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-//#include <stl_queue.h>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -108,18 +108,18 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
                 Reference< XComponentContext > xContext;
                 Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
                 OSL_ASSERT( xProps.is() );
-                OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ) >>= xContext );
+                OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
                 if ( xContext.is() )
                 {
                     Reference< provider::XScriptProviderFactory > xFactory(
                         xContext->getValueByName(
-                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")) ),
                         UNO_QUERY );
                     OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
                     if ( xFactory.is() )
                     {
                         Any aCtx;
-                        aCtx <<= ::rtl::OUString::createFromAscii( "user" );
+                        aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
                         xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                     }
                 }
@@ -207,15 +207,13 @@ Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
 void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException )
 {
     // TODO: ???
-    //vos::OGuard guard( Application::GetSolarMutex() );
+    //SolarMutexGuard aGuard;
     //xSbxObj.Clear();
 }
 
 
 void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
 {
-    //Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-    //{
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
         // Full qualified name?
@@ -438,15 +436,8 @@ Any implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, Star
     return aDlgLibAny;
 }
 
-static ::rtl::OUString aDecorationPropName =
-    ::rtl::OUString::createFromAscii( "Decoration" );
-static ::rtl::OUString aTitlePropName =
-    ::rtl::OUString::createFromAscii( "Title" );
-
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {
-    static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
-
     (void)pBasic;
     (void)bWrite;
 
@@ -505,11 +496,14 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         bool bDecoration = true;
         try
         {
+            ::rtl::OUString aDecorationPropName(RTL_CONSTASCII_USTRINGPARAM("Decoration"));
             Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
             aDecorationAny >>= bDecoration;
             if( !bDecoration )
             {
                 xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
+
+                ::rtl::OUString aTitlePropName(RTL_CONSTASCII_USTRINGPARAM("Title"));
                 xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
             }
         }
@@ -522,43 +516,43 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( pINST->GetBasic() ) ;
-        aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
-        // If we found the dialog then it belongs to the Search basic
-        if ( !pFoundBasic )
+    aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
+    // If we found the dialog then it belongs to the Search basic
+    if ( !pFoundBasic )
     {
-            Reference< frame::XDesktop > xDesktop( xMSF->createInstance
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
-            UNO_QUERY );
-            Reference< container::XEnumeration > xModels;
-            if ( xDesktop.is() )
-    {
-                Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
-                if ( xComponents.is() )
-                    xModels.set( xComponents->createEnumeration(), UNO_QUERY );
-                if ( xModels.is() )
+        Reference< frame::XDesktop > xDesktop( xMSF->createInstance
+    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+        UNO_QUERY );
+        Reference< container::XEnumeration > xModels;
+        if ( xDesktop.is() )
+        {
+            Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
+            if ( xComponents.is() )
+                xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+            if ( xModels.is() )
+            {
+                while ( xModels->hasMoreElements() )
                 {
-                    while ( xModels->hasMoreElements() )
+                    Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
+                    if ( xNextModel.is() )
                     {
-                        Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
-                        if ( xNextModel.is() )
+                        BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
+                        if ( pMgr )
+                            aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                        if ( aDlgLibAny.hasValue() )
                         {
-                            BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
-                            if ( pMgr )
-                                aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
-                            if ( aDlgLibAny.hasValue() )
-    {
-                                bDocDialog = true;
-                                xModel = xNextModel;
-                                break;
-    }
+                            bDocDialog = true;
+                            xModel = xNextModel;
+                            break;
                         }
                     }
                 }
             }
         }
+    }
     if ( pFoundBasic )
         bDocDialog = pFoundBasic->IsDocBasic();
-       Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
     if( bDocDialog )
@@ -569,23 +563,23 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     aArgs[ 2 ] = aDlgLibAny;
     aArgs[ 3 ] <<= xScriptListener;
     // Create a "living" Dialog
-        Reference< XControl > xCntrl;
-        try
-        {
+    Reference< XControl > xCntrl;
+    try
+    {
         Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.DialogProvider" ) ), aArgs ), UNO_QUERY );
-            xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
-           // Add dialog model to dispose vector
-           Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
-           pINST->getComponentVector().push_back( xDlgComponent );
-           // need ThisCompoent from calling script
-        }
-        // preserve existing bad behaviour, it's possible... but probably
-        // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
-        // create dialog fails.  So, in this case let's not throw, just leave basic
-        // detect the unset object.
-        catch( uno::Exception& )
-        {
-        }
+        xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
+       // Add dialog model to dispose vector
+       Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
+       pINST->getComponentVector().push_back( xDlgComponent );
+       // need ThisCompoent from calling script
+    }
+    // preserve existing bad behaviour, it's possible... but probably
+    // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
+    // create dialog fails.  So, in this case let's not throw, just leave basic
+    // detect the unset object.
+    catch( uno::Exception& )
+    {
+    }
 
     // Return dialog
     Any aRetVal;
@@ -597,3 +591,4 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
 
 //===================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

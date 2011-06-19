@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,9 +64,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
-#include <vos/security.hxx>
+#include <osl/mutex.hxx>
+#include <osl/security.hxx>
+#include <osl/thread.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
@@ -154,35 +155,35 @@ String DecodeSpaces_Impl( const String& rSource );
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->FileSelectionChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DirectoryChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mpAntiImpl->HelpRequested( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->ControlStateChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DialogSizeChanged();
 }
 
@@ -191,7 +192,7 @@ void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeExceptio
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEvent ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     mpAntiImpl->DialogClosed( _rEvent );
     postExecute( _rEvent.DialogResult );
 }
@@ -314,13 +315,12 @@ void FileDialogHelper_Impl::handleDialogSizeChanged()
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::disposing( const EventObject& ) throw ( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     dispose();
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::dispose()
 {
     if ( mxFileDlg.is() )
@@ -407,7 +407,7 @@ sal_Bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedContr
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
         }
     }
     return bIsEnabled;
@@ -438,7 +438,7 @@ sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _
                 }
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }
@@ -530,7 +530,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         Sequence< ::rtl::OUString > aCtrlList = xCtrlInfo->getSupportedControls();
         sal_uInt32 nCount = aCtrlList.getLength();
         for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
-            if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
+            if ( aCtrlList[ nCtrl ].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SelectionBox")) )
             {
                 bSelectionBoxFound = sal_False;
                 break;
@@ -608,7 +608,6 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                 {
                     mbShowPreview = bShowPreview;
 
-                    // #97633
                     // setShowState has currently no effect for the
                     // OpenOffice FilePicker (see svtools/source/filepicker/iodlg.cxx)
                     uno::Reference< XFilePreview > xFilePreview( mxFileDlg, UNO_QUERY );
@@ -619,7 +618,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
                         TimeOutHdl_Impl( NULL );
                 }
             }
-            catch( Exception )
+            catch( const Exception& )
             {
                 DBG_ERRORFILE( "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
             }
@@ -657,20 +656,8 @@ void FileDialogHelper_Impl::updateVersions()
 
                 for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
                     aEntries[ i + 1 ] = xVersions[i].Identifier;
-
-                // TODO/LATER: not sure that this information must be shown in future ( binfilter? )
-//REMOVE                    else
-//REMOVE                    {
-//REMOVE                        SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN;
-//REMOVE                        SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
-//REMOVE                        if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( pStor->GetFormat(), nMust, nDont ) )
-//REMOVE                        {
-//REMOVE                            aEntries.realloc( 1 );
-//REMOVE                            aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
-//REMOVE                        }
-//REMOVE                    }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -684,7 +671,7 @@ void FileDialogHelper_Impl::updateVersions()
         xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                         ControlActions::DELETE_ITEMS, aValue );
     }
-    catch( IllegalArgumentException ){}
+    catch( const IllegalArgumentException& ){}
 
     sal_Int32 nCount = aEntries.getLength();
 
@@ -701,25 +688,9 @@ void FileDialogHelper_Impl::updateVersions()
             xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                             ControlActions::SET_SELECT_ITEM, aPos );
         }
-        catch( IllegalArgumentException ){}
+        catch( const IllegalArgumentException& ){}
     }
 }
-
-// -----------------------------------------------------------------------
-class OReleaseSolarMutex
-{
-private:
-    const sal_Int32 m_nAquireCount;
-public:
-    OReleaseSolarMutex( )
-        :m_nAquireCount( Application::ReleaseSolarMutex() )
-    {
-    }
-    ~OReleaseSolarMutex( )
-    {
-        Application::AcquireSolarMutex( m_nAquireCount );
-    }
-};
 
 // -----------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
@@ -743,7 +714,6 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
         if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
-            // #89491
             // changed the code slightly;
             // before: the bitmap was scaled and
             // surrounded a white frame
@@ -768,7 +738,7 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
             else
                 aBmp.Scale( nYRatio, nYRatio );
 
-            // #94505# Convert to true color, to allow CopyPixel
+            // Convert to true color, to allow CopyPixel
             aBmp.Convert( BMP_CONVERSION_24BIT );
 
             // and copy it into the Any
@@ -786,11 +756,11 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
     try
     {
-        OReleaseSolarMutex aReleaseForCallback;
+        SolarMutexReleaser aReleaseForCallback;
         // clear the preview window
         xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
     }
-    catch( IllegalArgumentException )
+    catch( const IllegalArgumentException& )
     {
     }
 
@@ -1059,9 +1029,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 break;
         }
 
-
-
-        //Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 3 );
         Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );
 
         // This is a hack. We currently know that the internal file picker implementation
@@ -1098,8 +1065,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
-
-
         }
 
         try
@@ -1108,7 +1073,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
+            OSL_FAIL( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
         }
     }
 
@@ -1143,7 +1108,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
                                    OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) ) ) );
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
     }
 
@@ -1171,10 +1136,10 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 
 #define nMagic -1
 
-class PickerThread_Impl : public ::vos::OThread
+class PickerThread_Impl : public ::osl::Thread
 {
     uno::Reference < XFilePicker > mxPicker;
-    ::vos::OMutex           maMutex;
+    ::osl::Mutex            maMutex;
     virtual void SAL_CALL   run();
     sal_Int16               mnRet;
 public:
@@ -1182,10 +1147,10 @@ public:
                             : mxPicker( rPicker ), mnRet(nMagic) {}
 
     sal_Int16               GetReturnValue()
-                            { ::vos::OGuard aGuard( maMutex ); return mnRet; }
+                            { ::osl::MutexGuard aGuard( maMutex ); return mnRet; }
 
     void                    SetReturnValue( sal_Int16 aRetValue )
-                            { ::vos::OGuard aGuard( maMutex ); mnRet = aRetValue; }
+                            { ::osl::MutexGuard aGuard( maMutex ); mnRet = aRetValue; }
 };
 
 void SAL_CALL PickerThread_Impl::run()
@@ -1195,7 +1160,7 @@ void SAL_CALL PickerThread_Impl::run()
         sal_Int16 n = mxPicker->execute();
         SetReturnValue( n );
     }
-    catch( RuntimeException& )
+    catch( const RuntimeException& )
     {
         SetReturnValue( ExecutableDialogResults::CANCEL );
         DBG_ERRORFILE( "RuntimeException caught" );
@@ -1230,7 +1195,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
+        OSL_FAIL( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
     }
 }
 
@@ -1254,7 +1219,6 @@ void FileDialogHelper_Impl::preExecute()
     updatePreviewState( sal_False );
 
     implInitializeFileName( );
-    // #106079# / 2002-12-09 / fs@openoffice.org
 
 #if !(defined(MACOSX) && defined(QUARTZ)) && !defined(WNT)
     // allow for dialog implementations which need to be executed before they return valid values for
@@ -1289,7 +1253,6 @@ void FileDialogHelper_Impl::implInitializeFileName( )
 
         // in case we're operating as save dialog, and "auto extension" is checked,
         // cut the extension from the name
-        // #106079# / 2002-12-09 / fs@openoffice.org
         if ( mbIsSaveDlg && mbHasAutoExt )
         {
             try
@@ -1312,7 +1275,7 @@ void FileDialogHelper_Impl::implInitializeFileName( )
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "FileDialogHelper_Impl::implInitializeFileName: could not ask for the auto-extension current-value!" );
+                OSL_FAIL( "FileDialogHelper_Impl::implInitializeFileName: could not ask for the auto-extension current-value!" );
             }
         }
     }
@@ -1328,28 +1291,14 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
 //On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
 //primordial thread as the ucb gnome-vfs2 provider was initialized in.
-/*
-#ifdef WNT
-    if ( mbSystemPicker )
-    {
-        PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
-        pThread->create();
-        while ( pThread->GetReturnValue() == nMagic )
-            Application::Yield();
-        pThread->join();
-        nRet = pThread->GetReturnValue();
-        delete pThread;
-    }
-    else
-#endif
-*/
+
     {
         try
         {
 #ifdef WNT
             if ( mbSystemPicker )
             {
-                OReleaseSolarMutex aSolarMutex;
+                SolarMutexReleaser aSolarMutex;
                 nRet = mxFileDlg->execute();
             }
             else
@@ -1397,35 +1346,7 @@ String FileDialogHelper_Impl::implEnsureURLExtension(const String& sURL,
                                                      const String& /*sExtension*/)
 {
     return sURL;
-    /*
-    // This feature must be active for file save/export only !
-    if (
-        (! mbIsSaveDlg) &&
-        (! mbExport   )
-        )
-        return sURL;
 
-    // no extension available (because "ALL *.*" was selected) ?
-    // Nod idea what else should happen here .-)
-    if (sExtension.Len() < 1)
-        return sURL;
-
-    // Some FilePicker implementations already add the right extension ...
-    // or might be the user used the right one already ...
-    // Dont create duplicate extension.
-    INetURLObject aURL(sURL);
-    if (aURL.getExtension().equals(sExtension))
-        return sURL;
-
-    // Ignore any other extension set by the user.
-    // Make sure suitable extension is used always.
-    // e.g. "test.bla.odt" for "ODT"
-    ::rtl::OUStringBuffer sNewURL(256);
-    sNewURL.append     (sURL      );
-    sNewURL.appendAscii("."       );
-    sNewURL.append     (sExtension);
-    return sNewURL.makeStringAndClear();
-    */
 }
 
 // ------------------------------------------------------------------------
@@ -1575,9 +1496,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 if ( aValue >>= bSelection )
                     rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
             }
-            catch( IllegalArgumentException )
+            catch( const IllegalArgumentException& )
             {
-                DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
             }
         }
 
@@ -1596,9 +1517,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
-                    DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                    OSL_FAIL( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
                 }
             }
         }
@@ -1613,7 +1534,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     // open a special version; 0 == current version
                     rpSet->Put( SfxInt16Item( SID_VERSION, (short)nVersion ) );
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         // set the filter
@@ -1636,7 +1557,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for a password
-                    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
+                    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))), UNO_QUERY );
 
                     if( xInteractionHandler.is() )
                     {
@@ -1701,7 +1622,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     }
                 }
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         SaveLastUsedFilter();
@@ -1777,12 +1698,6 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         // nothing to do
         return;
 
-    /*
-    if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
-        // only valid folders accepted here
-        return;
-    */
-
     maPath = _rPath;
     if ( mxFileDlg.is() )
     {
@@ -1792,7 +1707,7 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::displayFolder: caught an exception!" );
         }
     }
 }
@@ -1809,7 +1724,7 @@ void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::setFileName: caught an exception!" );
+            OSL_FAIL( "FileDialogHelper_Impl::setFileName: caught an exception!" );
         }
     }
 }
@@ -1837,7 +1752,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
         {
             xFltMgr->setCurrentFilter( maCurFilter );
         }
-        catch( IllegalArgumentException ){}
+        catch( const IllegalArgumentException& ){}
     }
 }
 
@@ -1874,7 +1789,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
 
     uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< XContainerQuery > xFilterCont(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")),
+        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))),
         UNO_QUERY);
     if ( ! xFilterCont.is() )
         return;
@@ -1897,7 +1812,7 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
     {
         xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         DBG_ERRORFILE( "Could not get filters from the configuration!" );
     }
@@ -1937,7 +1852,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
         if ( !maSelectFilter.getLength() )
             maSelectFilter = rFilterName;
     }
-    catch( IllegalArgumentException )
+    catch( const IllegalArgumentException& )
     {
 #ifdef DBG_UTIL
         ByteString aMsg( "Could not append Filter" );
@@ -1994,7 +1909,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         xFltMgr->appendFilter( aAllFilterName, aExtensions );
         maSelectFilter = aAllFilterName;
     }
-    catch( IllegalArgumentException )
+    catch( const IllegalArgumentException& )
     {
         DBG_ERRORFILE( "Could not append Filter" );
     }
@@ -2023,7 +1938,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         {
             xFltMgr->appendFilter( aName, aExt );
         }
-        catch( IllegalArgumentException )
+        catch( const IllegalArgumentException& )
         {
             DBG_ERRORFILE( "Could not append Filter" );
         }
@@ -2049,11 +1964,7 @@ void FileDialogHelper_Impl::saveConfig()
 
         try
         {
-            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             sal_Bool bValue = sal_False;
-            aValue >>= bValue;
-            aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
-
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bValue = sal_False;
             aValue >>= bValue;
@@ -2070,7 +1981,7 @@ void FileDialogHelper_Impl::saveConfig()
 
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
         }
-        catch( IllegalArgumentException ){}
+        catch( const IllegalArgumentException& ){}
     }
     else
     {
@@ -2096,7 +2007,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bAutoExt ) );
                 bWriteConfig = sal_True;
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if ( ! mbIsSaveDlg )
@@ -2122,7 +2033,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aUserData.SetToken( 2, ' ', String::CreateFromInt32( (sal_Int32) bSelection ) );
                 bWriteConfig = sal_True;
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if ( bWriteConfig )
@@ -2157,7 +2068,7 @@ namespace
                 ::ucbhelper::Content aContent( sPathCheck, uno::Reference< ucb::XCommandEnvironment >() );
                 bValid = aContent.isFolder();
             }
-            catch( Exception& ) {}
+            catch( const Exception& ) {}
         }
 
         if ( !bValid )
@@ -2193,14 +2104,6 @@ void FileDialogHelper_Impl::loadConfig()
         {
             try
             {
-                // respect the last "insert as link" state
-                sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
-                if ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 ).hasValue() )
-                {
-                    aValue <<= bLink;
-                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
-                }
-
                 // respect the last "show preview" state
                 sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
                 if  ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 ).hasValue() )
@@ -2222,7 +2125,7 @@ void FileDialogHelper_Impl::loadConfig()
                 // set the member so we know that we have to show the preview
                 mbShowPreview = bShowPreview;
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if ( !maPath.getLength() )
@@ -2255,7 +2158,7 @@ void FileDialogHelper_Impl::loadConfig()
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if( mbHasSelectionBox )
@@ -2266,7 +2169,7 @@ void FileDialogHelper_Impl::loadConfig()
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );
             }
-            catch( IllegalArgumentException ){}
+            catch( const IllegalArgumentException& ){}
         }
 
         if ( !maPath.getLength() )
@@ -2285,7 +2188,7 @@ void FileDialogHelper_Impl::setDefaultValues()
         {
             xFltMgr->setCurrentFilter( maSelectFilter );
         }
-        catch( IllegalArgumentException )
+        catch( const IllegalArgumentException& )
         {}
     }
 
@@ -2299,11 +2202,8 @@ void FileDialogHelper_Impl::setDefaultValues()
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
+            OSL_FAIL( "FileDialogHelper_Impl::setDefaultValues: caught an exception while setting the display directory!" );
         }
-
-        // INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
-        //SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 }
 
@@ -2350,24 +2250,6 @@ OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter 
 void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
-
-    sal_Int32       nNewHelpId = 0;
-    OUString        aConfigId;
-
-    switch( _eNewContext )
-    {
-// #104952# dependency to SVX not allowed! When used again, another solution has to be found
-//      case FileDialogHelper::SW_INSERT_GRAPHIC:
-//      case FileDialogHelper::SC_INSERT_GRAPHIC:
-//      case FileDialogHelper::SD_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
-        case FileDialogHelper::SW_INSERT_SOUND:
-        case FileDialogHelper::SC_INSERT_SOUND:
-        case FileDialogHelper::SD_INSERT_SOUND:         nNewHelpId = SID_INSERT_SOUND;          break;
-        case FileDialogHelper::SW_INSERT_VIDEO:
-        case FileDialogHelper::SC_INSERT_VIDEO:
-        case FileDialogHelper::SD_INSERT_VIDEO:         nNewHelpId = SID_INSERT_VIDEO;          break;
-              default: break;
-    }
 
     const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
@@ -2714,7 +2596,7 @@ static int impl_isFolder( const OUString& rPath )
         xHandler.set( xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.task.InteractionHandler" ) ),
                       uno::UNO_QUERY_THROW );
     }
-    catch ( Exception const & )
+    catch ( const Exception & )
     {
     }
 
@@ -2729,7 +2611,7 @@ static int impl_isFolder( const OUString& rPath )
 
         return 0;
     }
-    catch ( Exception const & )
+    catch ( const Exception & )
     {
     }
 
@@ -2765,7 +2647,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
         if ( sFolder.getLength() == 0 )
         {
             // _rPath is not a valid path -> fallback to home directory
-            vos:: OSecurity  aSecurity;
+            osl::Security aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
         mpImp->displayFolder( sFolder );
@@ -2872,8 +2754,6 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 }
 
 // ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
 
 ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              const String& rFact,
@@ -2919,3 +2799,4 @@ String DecodeSpaces_Impl( const String& rSource )
 
 }   // end of namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -328,7 +329,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
+        const ::rtl::OUString sFormsCollectionServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms") );
         m_xForms = Reference< XNameContainer > (
             ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
             UNO_QUERY
@@ -621,7 +622,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     catch(const Exception& e)
     {
         (void)e;
-        OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
+        OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)
@@ -751,3 +752,5 @@ void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "ProcAttrTContext.hxx"
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "ActionMapTypesOASIS.hxx"
 #include "MutableAttrList.hxx"
@@ -496,7 +495,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
+                        // Adapts attribute values (#i49139#)
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
@@ -504,7 +503,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( aNewAttrValue.getLength() > 0 )
                             {
-                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
+                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
@@ -521,7 +520,6 @@ void XMLPropertiesTContext_Impl::StartElement(
                             }
                         }
                         pAttrList->AddAttribute( rAttrName, aNewAttrValue );
-                        // <--
 
                         // create old draw:mirror for drawing graphic objects
                         OUString aAttrValue( GetXMLToken( IsXMLToken( rAttrValue, XML_HORIZONTAL ) ? XML_TRUE : XML_FALSE ) );
@@ -708,7 +706,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_BOLD_WAVE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }
@@ -723,7 +721,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_NONE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }
@@ -1011,3 +1009,5 @@ XMLTransformerActions *XMLStyleOASISTContext::CreateTransformerActions(
 
     return pActions;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

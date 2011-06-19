@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,8 +104,8 @@ getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
         xContext->getServiceManager(), uno::UNO_SET_THROW);
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
         xServiceFactory->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory"), xContext),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory")), xContext),
         uno::UNO_QUERY_THROW);
 
     uno::Reference< uri::XUriReference > const xBaseURI(
@@ -214,7 +215,7 @@ RDFaExportHelper::AddRDFa(
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             ::comphelper::OUStringBufferAppender(property),
-            ::rtl::OUString::createFromAscii(" "));
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
 
         m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_PROPERTY,
             property.makeStringAndClear());
@@ -223,9 +224,10 @@ RDFaExportHelper::AddRDFa(
     }
     catch (uno::Exception &)
     {
-        OSL_ENSURE(false, "AddRDFa: exception");
+        OSL_FAIL("AddRDFa: exception");
     }
 }
 
 } // namespace xmloff
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

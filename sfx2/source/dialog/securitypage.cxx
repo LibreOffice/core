@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,29 +54,12 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////
 
 
 namespace
 {
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
     enum RedlineFunc    { RF_ON, RF_PROTECT };
-
-/*
-    bool QueryIsEnabled( sal_uInt16 _nSlot )
-    {
-        bool bRes = false;
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if (pViewSh)
-        {
-            const SfxPoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            SfxItemState eState = pDisp->QueryState( _nSlot, pItem );
-            bRes = (eState & SFX_ITEM_DISABLED) == 0;
-        }
-        return bRes;
-    }
-*/
 
     bool QueryState( sal_uInt16 _nSlot, bool& _rValue )
     {
@@ -119,9 +103,6 @@ namespace
 }
 
 
-//////////////////////////////////////////////////////////////////////
-
-
 static short lcl_GetPassword(
     Window *pParent,
     bool bProtect,
@@ -129,8 +110,6 @@ static short lcl_GetPassword(
 {
     bool bRes = false;
     SfxPasswordDialog aPasswdDlg( pParent );
-    const String aTitle( SfxResId( bProtect ? RID_SFX_PROTECT_RECORDS : RID_SFX_UNPROTECT_RECORDS ) );
-    aPasswdDlg.SetText( aTitle );
     aPasswdDlg.SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
@@ -161,9 +140,6 @@ static bool lcl_IsPasswordCorrect( const String &rPassword )
 
     return bRes;
 }
-
-
-//////////////////////////////////////////////////////////////////////
 
 
 struct SfxSecurityPage_Impl
@@ -497,17 +473,12 @@ IMPL_LINK( SfxSecurityPage_Impl, ChangeProtectionPBHdl, void*, EMPTYARG )
     m_bNewPasswordIsValid = true;
     m_aNewPassword = bNewProtection? aPasswordText : String();
 
-//    // RecordChangesCB is enabled if protection is off
-//    m_aRecordChangesCB.Enable( !bNewProtection );
     m_aRecordChangesCB.Check( bNewProtection );
     // toggle text of button "Protect" <-> "Unprotect"
     m_aChangeProtectionPB.SetText( bNewProtection ? m_aUnProtectSTR : m_aProtectSTR );
 
     return 0;
 }
-
-
-//////////////////////////////////////////////////////////////////////
 
 
 SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemSet )
@@ -548,6 +519,4 @@ void SfxSecurityPage::Reset( const SfxItemSet & rItemSet )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

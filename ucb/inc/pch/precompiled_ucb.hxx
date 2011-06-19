@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,6 +162,7 @@
 
 #include "rtl/alloc.h"
 #include "rtl/memory.h"
+#include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
@@ -174,11 +176,8 @@
 #include "ucbhelper/macros.hxx"
 #include "ucbhelper/proxydecider.hxx"
 
-#include "vos/diagnose.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

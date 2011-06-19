@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -216,11 +215,11 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
 {
     // first we create the digest we want to have
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtlDigestError aError = rtl_digest_update(aDigest,_rURL.getStr(),_rURL.getLength()*sizeof(sal_Unicode));
+    rtl_digest_update(aDigest,_rURL.getStr(),_rURL.getLength()*sizeof(sal_Unicode));
     if ( _rUserName.getLength() )
-        aError = rtl_digest_update(aDigest,_rUserName.getStr(),_rUserName.getLength()*sizeof(sal_Unicode));
+        rtl_digest_update(aDigest,_rUserName.getStr(),_rUserName.getLength()*sizeof(sal_Unicode));
     if ( _rPassword.getLength() )
-        aError = rtl_digest_update(aDigest,_rPassword.getStr(),_rPassword.getLength()*sizeof(sal_Unicode));
+        rtl_digest_update(aDigest,_rPassword.getStr(),_rPassword.getLength()*sizeof(sal_Unicode));
     // now we need to sort the properties
     PropertyValue* pBegin = _rInfo.getArray();
     PropertyValue* pEnd   = pBegin + _rInfo.getLength();
@@ -247,21 +246,22 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
                     const ::rtl::OUString* pSBegin = aSeq.getConstArray();
                     const ::rtl::OUString* pSEnd   = pSBegin + aSeq.getLength();
                     for(;pSBegin != pSEnd;++pSBegin)
-                        aError = rtl_digest_update(aDigest,pSBegin->getStr(),pSBegin->getLength()*sizeof(sal_Unicode));
+                        rtl_digest_update(aDigest,pSBegin->getStr(),pSBegin->getLength()*sizeof(sal_Unicode));
                 }
             }
         }
         if ( sValue.getLength() > 0 )
         {
             // we don't have to convert this into UTF8 because we don't store on a file system
-            aError = rtl_digest_update(aDigest,sValue.getStr(),sValue.getLength()*sizeof(sal_Unicode));
+            rtl_digest_update(aDigest,sValue.getStr(),sValue.getLength()*sizeof(sal_Unicode));
         }
     }
 
-    aError = rtl_digest_get(aDigest,_pBuffer,RTL_DIGEST_LENGTH_SHA1);
+    rtl_digest_get(aDigest,_pBuffer,RTL_DIGEST_LENGTH_SHA1);
     // we have to destroy the digest
     rtl_digest_destroy(aDigest);
 }
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

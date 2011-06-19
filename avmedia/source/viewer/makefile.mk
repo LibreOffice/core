@@ -42,15 +42,13 @@ SRC1FILES =\
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/mediaevent_impl.obj     	\
-        $(SLO)$/mediawindowbase_impl.obj 	\
-        $(SLO)$/mediawindow_impl.obj 		\
-        $(SLO)$/mediawindow.obj         	
+	$(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES= \
+        $(SLO)$/mediaevent_impl.obj     	\
         $(SLO)$/mediawindow.obj         	\
+        $(SLO)$/mediawindow_impl.obj		\
         $(SLO)$/mediawindowbase_impl.obj 	\
-        $(SLO)$/mediawindow_impl.obj
         
 # --- Targets ----------------------------------
 

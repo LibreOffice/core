@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,11 +62,8 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include <rtl/logfile.hxx>
-#include "svtools/miscopt.hxx"
-
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
+#include <rtl/instance.hxx>
+#include <svtools/miscopt.hxx>
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
@@ -88,54 +86,46 @@ using namespace ::cppu;
 // Image sizes for our toolbars/menus
 const sal_Int32 IMAGE_SIZE_NORMAL         = 16;
 const sal_Int32 IMAGE_SIZE_LARGE          = 26;
-const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                                            ::com::sun::star::ui::ImageType::SIZE_LARGE;
+const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::SIZE_LARGE;
 
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
 static const char   IMAGE_EXTENSION[]     = ".png";
 
+static const char   ModuleImageList[]     = "private:resource/images/moduleimages";
+
 static const char*  IMAGELIST_XML_FILE[]  =
 {
     "sc_imagelist.xml",
-    "lc_imagelist.xml",
-    "sch_imagelist.xml",
-    "lch_imagelist.xml"
+    "lc_imagelist.xml"
 };
 
 static const char*  BITMAP_FILE_NAMES[]   =
 {
     "sc_userimages.png",
-    "lc_userimages.png",
-    "sch_userimages.png",
-    "lch_userimages.png"
+    "lc_userimages.png"
 };
 
 namespace framework
 {
-    static char ModuleImageList[] = "private:resource/images/moduleimages";
-    static osl::Mutex*          pImageListWrapperMutex = 0;
     static GlobalImageList*     pGlobalImageList = 0;
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
-        "res/commandimagelist/sc_",
-        "res/commandimagelist/lc_",
-        "res/commandimagelist/sch_",
-        "res/commandimagelist/lch_"
+        "cmd/sc_",
+        "cmd/lc_"
     };
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
 
+namespace
+{
+    class theGlobalImageListMutex
+        : public rtl::Static<osl::Mutex, theGlobalImageListMutex> {};
+}
+
 static osl::Mutex& getGlobalImageListMutex()
 {
-    if ( pImageListWrapperMutex == 0 )
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        if ( pImageListWrapperMutex == 0 )
-            pImageListWrapperMutex = new osl::Mutex;
-    }
-
-    return *pImageListWrapperMutex;
+    return theGlobalImageListMutex::get();
 }
 
 static GlobalImageList* getGlobalImageList( const uno::Reference< XMultiServiceFactory >& rServiceManager )
@@ -217,7 +207,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
                 if ( xCmdDesc.is() )
                     xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
                 // Module unknown we will work with an empty command image list!
                 return;
@@ -230,10 +220,10 @@ void CmdImageList::impl_fillCommandToImageNameMap()
             {
                 xCmdDesc->getByName( aCommandImageList ) >>= aCmdImageSeq;
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
-            catch ( WrappedTargetException& )
+            catch ( const WrappedTargetException& )
             {
             }
         }
@@ -427,8 +417,7 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
     Size   aSize = aImage.GetSizePixel();
     bool   bMustScale( false );
 
-    if (( nImageType == ImageType_Color_Large ) ||
-        ( nImageType == ImageType_HC_Large ))
+    if ( nImageType == ImageType_Color_Large )
         bMustScale = ( aSize != aLargeSize );
     else
         bMustScale = ( aSize != aNormSize );
@@ -450,8 +439,6 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
     sal_Int16 nIndex( 0 );
     if ( nImageType & ::com::sun::star::ui::ImageType::SIZE_LARGE )
         nIndex += 1;
-    if ( nImageType & ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
-        nIndex += 2;
     return nIndex;
 }
 
@@ -473,27 +460,27 @@ void ImageManagerImpl::implts_initialize()
 
         try
         {
-            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                             nModes );
             if ( m_xUserImageStorage.is() )
             {
-                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                  nModes );
             }
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -555,19 +542,19 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                 }
             }
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -654,7 +641,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             {
                 xUserImageStorage->removeElement( rtl::OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
             }
-            catch ( ::com::sun::star::container::NoSuchElementException& )
+            catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
             }
 
@@ -662,7 +649,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             {
                 xUserBitmapsStorage->removeElement( rtl::OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
             }
-            catch ( ::com::sun::star::container::NoSuchElementException& )
+            catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
             }
 
@@ -703,10 +690,10 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList;
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,const uno::Reference< XInterface >& _xOwner,bool _bUseGlobal ) :
+ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
-    , m_xOwner(_xOwner)
+    , m_pOwner(pOwner)
     , m_pDefaultImageList( 0 )
     , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
     , m_aResourceString( RTL_CONSTASCII_USTRINGPARAM( ModuleImageList ))
@@ -732,7 +719,8 @@ ImageManagerImpl::~ImageManagerImpl()
 
 void ImageManagerImpl::dispose()
 {
-    css::lang::EventObject aEvent( m_xOwner );
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+    css::lang::EventObject aEvent( xOwner );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
@@ -786,15 +774,15 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "UserConfigStorage" ))
+                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserConfigStorage")) )
                 {
                     aPropValue.Value >>= m_xUserConfigStorage;
                 }
-                else if ( aPropValue.Name.equalsAscii( "ModuleIdentifier" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ModuleIdentifier")) )
                 {
                     aPropValue.Value >>= m_aModuleIdentifier;
                 }
-                else if ( aPropValue.Name.equalsAscii( "UserRootCommit" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserRootCommit")) )
                 {
                     aPropValue.Value >>= m_xUserRootCommit;
                 }
@@ -888,7 +876,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Sequence< OUString > aImageNameSeq( aImageCmdNameMap.size() );
     ImageNameMap::const_iterator pIter;
     i = 0;
-    for ( pIter = aImageCmdNameMap.begin(); pIter != aImageCmdNameMap.end(); pIter++ )
+    for ( pIter = aImageCmdNameMap.begin(); pIter != aImageCmdNameMap.end(); ++pIter )
         aImageNameSeq[i++] = pIter->first;
 
     return aImageNameSeq;
@@ -1032,13 +1020,14 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         }
     }
 
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     // Notify listeners
     if ( pInsertedImages != 0 )
     {
         ConfigurationEvent aInsertEvent;
         aInsertEvent.aInfo           <<= nImageType;
-        aInsertEvent.Accessor        <<= m_xOwner;
-        aInsertEvent.Source          = m_xOwner;
+        aInsertEvent.Accessor        <<= xOwner;
+        aInsertEvent.Source          = xOwner;
         aInsertEvent.ResourceURL     = m_aResourceString;
         aInsertEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                         static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
@@ -1048,8 +1037,8 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           <<= nImageType;
-        aReplaceEvent.Accessor        <<= m_xOwner;
-        aReplaceEvent.Source          = m_xOwner;
+        aReplaceEvent.Accessor        <<= xOwner;
+        aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1136,12 +1125,13 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 
     // Notify listeners
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     if ( pRemovedImages != 0 )
     {
         ConfigurationEvent aRemoveEvent;
         aRemoveEvent.aInfo           = uno::makeAny( nImageType );
-        aRemoveEvent.Accessor        = uno::makeAny( m_xOwner );
-        aRemoveEvent.Source          = m_xOwner;
+        aRemoveEvent.Accessor        = uno::makeAny( xOwner );
+        aRemoveEvent.Source          = xOwner;
         aRemoveEvent.ResourceURL     = m_aResourceString;
         aRemoveEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                             static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY ));
@@ -1151,8 +1141,8 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           = uno::makeAny( nImageType );
-        aReplaceEvent.Accessor        = uno::makeAny( m_xOwner );
-        aReplaceEvent.Source          = m_xOwner;
+        aReplaceEvent.Accessor        = uno::makeAny( xOwner );
+        aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1281,12 +1271,13 @@ throw ( ::com::sun::star::uno::Exception,
                 aGuard.unlock();
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
+                uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
                 if ( pInsertedImages != 0 )
                 {
                     ConfigurationEvent aInsertEvent;
                     aInsertEvent.aInfo           = uno::makeAny( i );
-                    aInsertEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aInsertEvent.Source          = m_xOwner;
+                    aInsertEvent.Accessor        = uno::makeAny( xOwner );
+                    aInsertEvent.Source          = xOwner;
                     aInsertEvent.ResourceURL     = m_aResourceString;
                     aInsertEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                                     static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
@@ -1296,8 +1287,8 @@ throw ( ::com::sun::star::uno::Exception,
                 {
                     ConfigurationEvent aReplaceEvent;
                     aReplaceEvent.aInfo           = uno::makeAny( i );
-                    aReplaceEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aReplaceEvent.Source          = m_xOwner;
+                    aReplaceEvent.Accessor        = uno::makeAny( xOwner );
+                    aReplaceEvent.Source          = xOwner;
                     aReplaceEvent.ResourceURL     = m_aResourceString;
                     aReplaceEvent.ReplacedElement = Any();
                     aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1308,8 +1299,8 @@ throw ( ::com::sun::star::uno::Exception,
                 {
                     ConfigurationEvent aRemoveEvent;
                     aRemoveEvent.aInfo           = uno::makeAny( i );
-                    aRemoveEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aRemoveEvent.Source          = m_xOwner;
+                    aRemoveEvent.Accessor        = uno::makeAny( xOwner );
+                    aRemoveEvent.Source          = xOwner;
                     aRemoveEvent.ResourceURL     = m_aResourceString;
                     aRemoveEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                                         static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY ));
@@ -1367,11 +1358,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     {
         long nModes = ElementModes::READWRITE;
 
-        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                                     nModes );
         if ( xUserImageStorage.is() )
         {
-            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                                     nModes );
             for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
             {
@@ -1445,7 +1436,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -1455,6 +1446,10 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 void ImageManagerImpl::clear()
 {
     ResetableGuard aGuard( m_aLock );
+
+    if (!m_pUserImageList)
+        return;
+
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {
         delete m_pUserImageList[n];
@@ -1462,3 +1457,5 @@ void ImageManagerImpl::clear()
     }
 }
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

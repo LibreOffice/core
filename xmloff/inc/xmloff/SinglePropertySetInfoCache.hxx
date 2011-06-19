@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <xmloff/PropertySetInfoHash.hxx>
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     PropertySetInfoKey,
     sal_Bool,
@@ -77,3 +78,5 @@ inline sal_Bool SinglePropertySetInfoCache::hasProperty(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

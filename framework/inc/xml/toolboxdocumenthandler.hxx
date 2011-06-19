@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::std::hash_map<  ::rtl::OUString                 ,
+        class ToolBoxHashMap : public ::boost::unordered_map<   ::rtl::OUString                 ,
                                                         ToolBox_XML_Entry               ,
                                                         OUStringHashCode                ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -212,3 +213,5 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
 } // namespace framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

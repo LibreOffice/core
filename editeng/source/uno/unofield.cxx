@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
-
-#include <rtl/uuid.h>
-#include <rtl/memory.h>
+#include <osl/mutex.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -43,9 +41,9 @@
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
 #include <comphelper/serviceinfohelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
@@ -572,16 +570,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSvxUnoTextFieldImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoTextFieldImplementationId::get().getSeq();
 }
 
 uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
@@ -604,7 +601,7 @@ void SAL_CALL SvxUnoTextField::release() throw( )
 OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if(bShowCommand)
     {
@@ -662,14 +659,14 @@ void SAL_CALL SvxUnoTextField::removeEventListener( const uno::Reference< lang::
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextField::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return mpPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpImpl == NULL )
         throw uno::RuntimeException();
@@ -839,7 +836,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
 uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Any aValue;
 
@@ -1104,8 +1101,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     OUString* pServices = aSeq.getArray();
     pServices[0] = OUString::createFromAscii( pNewServiceNames[mnServiceId] );
     pServices[1] = OUString::createFromAscii( pOldServiceNames[mnServiceId] );
-    pServices[2] = OUString::createFromAscii( "com.sun.star.text.TextContent" ),
-    pServices[3] = OUString::createFromAscii( "com.sun.star.text.TextField" );
+    pServices[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextContent" )),
+    pServices[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextField" ));
 
     return aSeq;
 }
@@ -1178,3 +1175,5 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
 
     return xRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,14 +171,14 @@ namespace dbtools
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( aDefault.getLength() )
     {
-        aSql.append(::rtl::OUString::createFromAscii(" DEFAULT "));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT ")));
         aSql.append(sPreFix);
         aSql.append(aDefault);
         aSql.append(sPostFix);
     } // if ( aDefault.getLength() )
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-        aSql.append(::rtl::OUString::createFromAscii(" NOT NULL"));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL")));
 
     if ( bIsAutoIncrement && sAutoIncrementValue.getLength())
     {
@@ -194,7 +195,7 @@ namespace dbtools
 
 ::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUStringBuffer aSql  = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE TABLE ")));
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -209,7 +210,7 @@ namespace dbtools
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
     aSql.append(sComposedName);
-    aSql.append(::rtl::OUString::createFromAscii(" ("));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -239,7 +240,7 @@ namespace
         static const ::rtl::OUString sComma(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
 
         const ::rtl::OUString sQuote(_xMetaData->getIdentifierQuoteString());
-        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii(" (");
+        ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( " (" ));
         Reference< XPropertySet > xColProp;
 
         sal_Int32 nColCount  = _xColumns->getCount();
@@ -291,7 +292,7 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql.append(::rtl::OUString::createFromAscii(" PRIMARY KEY "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
@@ -302,7 +303,7 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql.append(::rtl::OUString::createFromAscii(" UNIQUE "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" UNIQUE ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
@@ -314,7 +315,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(::rtl::OUString::createFromAscii(" FOREIGN KEY "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ")));
                     ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     ::dbtools::qualifiedNameComponents(xMetaData,
                                                         sRefTable,
@@ -333,16 +334,16 @@ namespace
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE CASCADE "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE CASCADE ")));
                             break;
                         case KeyRule::RESTRICT:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE RESTRICT "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE RESTRICT ")));
                             break;
                         case KeyRule::SET_NULL:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET NULL "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET NULL ")));
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET DEFAULT ")));
                             break;
                         default:
                             ;
@@ -376,9 +377,9 @@ namespace
     else
     {
         if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
         else
-            aSql += ::rtl::OUString::createFromAscii(")");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
     }
     return aSql;
 }
@@ -468,7 +469,7 @@ namespace
                         }
                         catch(SQLException&)
                         {
-                            OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
+                            OSL_FAIL( "lcl_createSDBCXColumn: caught an exception!" );
                         }
                     }
 
@@ -643,7 +644,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
     try
     {
         Reference< XDriverAccess> xManager(
-            _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ),
+            _rxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),
             UNO_QUERY_THROW );
         Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
 
@@ -679,15 +680,15 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         if ( xCurrentRow.is() )
         {
             ::rtl::OUString sUserWorkingFor = _xMetaData->getUserName();
-            static const ::rtl::OUString sSELECT    = ::rtl::OUString::createFromAscii("SELECT");
-            static const ::rtl::OUString sINSERT    = ::rtl::OUString::createFromAscii("INSERT");
-            static const ::rtl::OUString sUPDATE    = ::rtl::OUString::createFromAscii("UPDATE");
-            static const ::rtl::OUString sDELETE    = ::rtl::OUString::createFromAscii("DELETE");
-            static const ::rtl::OUString sREAD      = ::rtl::OUString::createFromAscii("READ");
-            static const ::rtl::OUString sCREATE    = ::rtl::OUString::createFromAscii("CREATE");
-            static const ::rtl::OUString sALTER     = ::rtl::OUString::createFromAscii("ALTER");
-            static const ::rtl::OUString sREFERENCE = ::rtl::OUString::createFromAscii("REFERENCE");
-            static const ::rtl::OUString sDROP      = ::rtl::OUString::createFromAscii("DROP");
+            static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
+            static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
+            static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
+            static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
+            static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
+            static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
+            static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
+            static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
+            static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
             // after creation the set is positioned before the first record, per definitionem
 #ifdef DBG_UTIL
             Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
@@ -748,7 +749,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     catch(const SQLException& e)
     {
-        static ::rtl::OUString sNotSupportedState = ::rtl::OUString::createFromAscii("IM001");
+        static ::rtl::OUString sNotSupportedState( RTL_CONSTASCII_USTRINGPARAM( "IM001" ));
         // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
         if(e.SQLState == sNotSupportedState)
             nPrivileges |=  Privilege::DROP         |
@@ -761,7 +762,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
                             Privilege::INSERT       |
                             Privilege::SELECT;
         else
-            OSL_ENSURE(0,"Could not collect the privileges !");
+            OSL_FAIL("Could not collect the privileges !");
     }
     return nPrivileges;
 }
@@ -819,7 +820,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
             const PropertyValue* pEnd  = pIter + aArgs.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                if ( pIter->Name.equalsAscii("ComponentData") )
+                if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ComponentData")) )
                 {
                     Sequence<PropertyValue> aDocumentContext;
                     pIter->Value >>= aDocumentContext;
@@ -827,7 +828,7 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
                     const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
                     for(;pContextIter != pContextEnd;++pContextIter)
                     {
-                        if (  pContextIter->Name.equalsAscii( "ActiveConnection" )
+                        if (  pContextIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ActiveConnection" ) )
                         && ( pContextIter->Value >>= _rxActualConnection )
                         )
                         {
@@ -971,3 +972,4 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
 }   // namespace dbtools
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

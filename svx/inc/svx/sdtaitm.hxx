@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,11 @@
 // class SdrTextVertAdjustItem
 //------------------------------
 
-// Implementiert werden zunaechst nur TOP und CENTER, neustens auch BOTTOM
-enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // Kopfbuendig (so wie man es normalerweise kennt)
-                        SDRTEXTVERTADJUST_CENTER,   // Zentriert (z.B. fuer die Titeltexte im Draw)
-                        SDRTEXTVERTADJUST_BOTTOM,   // Fussbuendig
-                        SDRTEXTVERTADJUST_BLOCK    // #103516# support vertical full with supported now
-                        /*,SDRTEXTVERTADJUST_STRETCH*/}; // Auch die Buchstaben in der Hoehe verzerren (ni)
+enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally used)
+                        SDRTEXTVERTADJUST_CENTER,   // centered (for example for the title texts in Draw)
+                        SDRTEXTVERTADJUST_BOTTOM,   // aligned to bottom
+                        SDRTEXTVERTADJUST_BLOCK    // support vertical full with supported now
+                        /*,SDRTEXTVERTADJUST_STRETCH*/}; // also stretch letters in their height (ni)
 
 class SVX_DLLPUBLIC SdrTextVertAdjustItem: public SfxEnumItem {
 public:
@@ -52,8 +52,8 @@ public:
     virtual sal_uInt16            GetValueCount() const; // { return 5; }
             SdrTextVertAdjust GetValue() const      { return (SdrTextVertAdjust)SfxEnumItem::GetValue(); }
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
@@ -63,11 +63,11 @@ public:
 // class SdrTextHorzAdjustItem
 //------------------------------
 
-enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // Linksbuendig verankert
-                        SDRTEXTHORZADJUST_CENTER,   // Zentriert (z.B. fuer die Titeltexte im Draw)
-                        SDRTEXTHORZADJUST_RIGHT,    // Rechtsbuendig verankert
-                        SDRTEXTHORZADJUST_BLOCK    // So wie es frueher war: Gesamte Textrahmenbreite verwenden, Absatzformatierung macht wieder Sinn
-                        /*,SDRTEXTHORZADJUST_STRETCH*/}; // FitToSize in X-Richtung (ni).
+enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
+                        SDRTEXTHORZADJUST_CENTER,   // centered (for example for title texts in Draw)
+                        SDRTEXTHORZADJUST_RIGHT,    // right adjusted
+                        SDRTEXTHORZADJUST_BLOCK    // use the whole text frame width
+                        /*,SDRTEXTHORZADJUST_STRETCH*/}; // FitToSize in X direction (ni).
 
 class SVX_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem {
 public:
@@ -76,14 +76,16 @@ public:
     SdrTextHorzAdjustItem(SvStream& rIn)                                 : SfxEnumItem(SDRATTR_TEXT_HORZADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16            GetValueCount() const; // { return 5; }
+    virtual sal_uInt16        GetValueCount() const;
             SdrTextHorzAdjust GetValue() const      { return (SdrTextHorzAdjust)SfxEnumItem::GetValue(); }
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

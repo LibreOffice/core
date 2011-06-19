@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -394,14 +395,14 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
     // method the caller should use XFilterManager
     if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
     {
-        OSL_ENSURE( sal_False, "invalid control id" );
+        OSL_FAIL( "invalid control id" );
         return;
     }
 
     CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
     if ( UNKNOWN == aCtrlClass )
     {
-        OSL_ENSURE( sal_False, "unsupported control class" );
+        OSL_FAIL( "unsupported control class" );
         return;
     }
 
@@ -410,7 +411,7 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
 
     if ( !lpfnSetValue )
     {
-        OSL_ENSURE( sal_False, "unsupported control action" );
+        OSL_FAIL( "unsupported control action" );
         return;
     }
 
@@ -436,14 +437,14 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
     // method the caller should use XFilterManager
     if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
     {
-        OSL_ENSURE( sal_False, "invalid control id" );
+        OSL_FAIL( "invalid control id" );
         return Any( );
     }
 
     CTRL_CLASS aCtrlClass = GetCtrlClass( hwndCtrl );
     if ( UNKNOWN == aCtrlClass )
     {
-        OSL_ENSURE( sal_False, "unsupported control class" );
+        OSL_FAIL( "unsupported control class" );
         return Any( );
     }
 
@@ -452,7 +453,7 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
 
     if ( !lpfnGetValue )
     {
-        OSL_ENSURE( sal_False, "unsupported control action" );
+        OSL_FAIL( "unsupported control action" );
         return Any( );
     }
 
@@ -715,3 +716,5 @@ HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal
 
     return hwndCtrl;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

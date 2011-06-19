@@ -781,6 +781,7 @@ public class UndoManager
         m_currentTestCase.doSingleModification();
         assertEquals( "when the Undo manager is locked, no implicit additions should happen",
             0, m_undoListener.getUndoActionsAdded() );
+        assertTrue( "Undo manager gets unlocked as a side effect of performing a simple operation", i_undoManager.isLocked() );
         i_undoManager.unlock();
         assertEquals( "unlock is not expected to add collected actions - they should be discarded",
             0, m_undoListener.getUndoActionsAdded() );

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,77 +40,6 @@ class SvStream;
 
 //------------------------------------------------------------------------
 
-
-
-class SVX_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
-{
-public:
-    TYPEINFO();
-
-    SvxHorJustifyItem( const sal_uInt16 nId );
-
-    SvxHorJustifyItem(
-        const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
-        const sal_uInt16 nId );
-
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
-
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-
-    virtual sal_uInt16          GetValueCount() const;
-    virtual String          GetValueText( sal_uInt16 nVal ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
-
-    inline  SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
-            {
-                SetValue( rHorJustify.GetValue() );
-                return *this;
-            }
-};
-
-
-//------------------------------------------------------------------------
-
-
-class SVX_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
-{
-public:
-    TYPEINFO();
-
-    SvxVerJustifyItem( const sal_uInt16 nId  );
-
-    SvxVerJustifyItem(
-        const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
-        const sal_uInt16 nId  );
-
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    String &rText, const IntlWrapper * = 0 ) const;
-
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-
-    virtual sal_uInt16          GetValueCount() const;
-    virtual String          GetValueText( sal_uInt16 nVal ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
-
-    inline  SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
-            {
-                SetValue( rVerJustify.GetValue() );
-                return *this;
-            }
-};
-
-
-//------------------------------------------------------------------------
-
 class SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
 {
 public:
@@ -128,8 +58,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual sal_uInt16          GetValueCount() const;
     virtual String          GetValueText( sal_uInt16 nVal ) const;
@@ -176,8 +106,8 @@ public:
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const;
     virtual SvStream&        Store( SvStream&, sal_uInt16 nItemVersion ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
             sal_Int16           GetLeftMargin() const {return nLeftMargin; }
             sal_Bool            SetLeftMargin(sal_Int16 nLeft);
@@ -200,3 +130,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

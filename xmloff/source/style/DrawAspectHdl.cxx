@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ using namespace ::xmloff::token;
 // class XMLMeasurePropHdl
 //
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_DrawAspect_Enum[] =
+SvXMLEnumMapEntry const pXML_DrawAspect_Enum[] =
 {
     { XML_CONTENT,          1   },
     { XML_THUMBNAIL,        2   },
@@ -87,3 +88,4 @@ sal_Bool DrawAspectHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

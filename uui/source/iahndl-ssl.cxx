@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,8 +37,8 @@
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 #include <com/sun/star/uno/Reference.hxx>
 
+#include "osl/mutex.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
-#include "vos/mutex.hxx"
 #include "tools/datetime.hxx"
 #include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"
@@ -64,8 +65,7 @@ String
 getContentPart( const String& _rRawString )
 {
     // search over some parts to find a string
-    //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };
     String sPart;
     int i = 0;
     while ( aIDs[i] )
@@ -97,7 +97,7 @@ isDomainMatch(
        if (hostName.equalsIgnoreAsciiCase( element ))
            return true;
 
-       if ( 0 == element.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+       if ( 0 == element.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "*" )) ) &&
                  hostName.getLength() >= element.getLength()  )
        {
            rtl::OUString cmpStr = element.copy( 1 );
@@ -152,7 +152,7 @@ executeUnknownAuthDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -162,7 +162,7 @@ executeUnknownAuthDialog(
                                    xServiceFactory,
                                    xManager.get()));
 
-        // Get correct ressource string
+        // Get correct resource string
         rtl::OUString aMessage;
 
         std::vector< rtl::OUString > aArguments;
@@ -201,7 +201,7 @@ executeSSLWarnDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -211,7 +211,7 @@ executeSSLWarnDialog(
                               xServiceFactory,
                               xManager.get()));
 
-        // Get correct ressource string
+        // Get correct resource string
         rtl::OUString aMessage_1;
         std::vector< rtl::OUString > aArguments_1;
 
@@ -394,3 +394,4 @@ UUIInteractionHelper::handleCertificateValidationRequest(
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrGluePoint::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
+void SdrGluePoint::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
     if ( bReallyAbsolute != bOn )
     {
@@ -245,7 +246,7 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, co
     if (pObj!=NULL) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
-void SdrGluePoint::Shear(const Point& rRef, long /*nWink*/, double tn, FASTBOOL bVShear, const SdrObject* pObj)
+void SdrGluePoint::Shear(const Point& rRef, long /*nWink*/, double tn, bool bVShear, const SdrObject* pObj)
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     ShearPoint(aPt,rRef,tn,bVShear);
@@ -305,7 +306,7 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     rWin.EnableMapMode(bMapMerk);
 }
 
-FASTBOOL SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
+bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const
 {
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     Size aSiz=rOut.PixelToLogic(Size(3,3));
@@ -344,22 +345,22 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
     sal_uInt16 nInsPos=nAnz;
     sal_uInt16 nLastId=nAnz!=0 ? GetObject(nAnz-1)->GetId() : 0;
     DBG_ASSERT(nLastId>=nAnz,"SdrGluePointList::Insert(): nLastId<nAnz");
-    FASTBOOL bHole=nLastId>nAnz;
+    bool bHole = nLastId>nAnz;
     if (nId<=nLastId) {
         if (!bHole || nId==0) {
             nId=nLastId+1;
         } else {
-            FASTBOOL bBrk=sal_False;
+            bool bBrk = false;
             for (sal_uInt16 nNum=0; nNum<nAnz && !bBrk; nNum++) {
                 const SdrGluePoint* pGP2=GetObject(nNum);
                 sal_uInt16 nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
                     nId=nLastId+1; // bereits vorhanden
-                    bBrk=sal_True;
+                    bBrk = true;
                 }
                 if (nTmpId>nId) {
                     nInsPos=nNum; // Hier einfuegen (einsortieren)
-                    bBrk=sal_True;
+                    bBrk = true;
                 }
             }
         }
@@ -390,7 +391,7 @@ sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
     return nRet;
 }
 
-sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack, FASTBOOL bNext, sal_uInt16 nId0) const
+sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack, bool bNext, sal_uInt16 nId0) const
 {
     sal_uInt16 nAnz=GetCount();
     sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
@@ -408,7 +409,7 @@ sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut
     return nRet;
 }
 
-void SdrGluePointList::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
+void SdrGluePointList::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
     sal_uInt16 nAnz=GetCount();
     for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
@@ -439,7 +440,7 @@ void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nWink
     }
 }
 
-void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj)
+void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj)
 {
     sal_uInt16 nAnz=GetCount();
     for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
@@ -448,3 +449,5 @@ void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, FASTBOOL 
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

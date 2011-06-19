@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,6 +98,8 @@ TableColumn& TableColumn::operator=( const TableColumn& r )
     mbOptimalWidth = r.mbOptimalWidth;
     mbIsVisible = r.mbIsVisible;
     mbIsStartOfNewPage = r.mbIsStartOfNewPage;
+    maName = r.maName;
+    mnColumn = r.mnColumn;
 
     return *this;
 }
@@ -303,3 +306,5 @@ rtl::Reference< ::comphelper::FastPropertySetInfo > TableColumn::getStaticProper
 // -----------------------------------------------------------------------------
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

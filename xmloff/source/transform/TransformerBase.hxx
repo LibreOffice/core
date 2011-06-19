@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <xmloff/xmltoken.hxx>
 
-#ifndef _XMLOFF_TRANSFORMER_HXX_
 #include "Transformer.hxx"
-#endif
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -206,3 +205,5 @@ public:
 };
 
 #endif  //  _XMLOFF_TRANSFORMER_BASE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

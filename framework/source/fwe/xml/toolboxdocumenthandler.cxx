@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,28 +31,18 @@
 
 #include <stdio.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <macros/debug.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -134,7 +125,7 @@ ToolboxStyleItem Styles[ ] = {
     { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
 };
 
-sal_Int32 nStyleItemEntries = sizeof( Styles ) / sizeof( Styles[ 0 ] );
+sal_Int32 nStyleItemEntries = SAL_N_ELEMENTS( Styles );
 
 struct ToolBarEntryProperty
 {
@@ -197,15 +188,15 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     }
 
     // pre-calculate a hash code for all style strings to speed up xml read process
-    m_nHashCode_Style_Radio         = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Auto          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
-    m_nHashCode_Style_Left          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
-    m_nHashCode_Style_AutoSize      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
-    m_nHashCode_Style_DropDown      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
-    m_nHashCode_Style_Repeat        = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
-    m_nHashCode_Style_DropDownOnly  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
-    m_nHashCode_Style_Text  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
-    m_nHashCode_Style_Image  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
+    m_nHashCode_Style_Radio         = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO )).hashCode();
+    m_nHashCode_Style_Auto          = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_AUTO )).hashCode();
+    m_nHashCode_Style_Left          = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_LEFT )).hashCode();
+    m_nHashCode_Style_AutoSize      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_AUTOSIZE )).hashCode();
+    m_nHashCode_Style_DropDown      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_DROPDOWN )).hashCode();
+    m_nHashCode_Style_Repeat        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_REPEAT )).hashCode();
+    m_nHashCode_Style_DropDownOnly  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY )).hashCode();
+    m_nHashCode_Style_Text  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT )).hashCode();
+    m_nHashCode_Style_Image  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE )).hashCode();
 
     m_bToolBarStartFound            = sal_False;
     m_bToolBarEndFound              = sal_False;
@@ -328,8 +319,6 @@ throw(  SAXException, RuntimeException )
                 ::rtl::OUString        aTooltip;
                 ::rtl::OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
-                sal_uInt16      nWidth( 0 );
-                sal_uInt16      nUserDef( 0 );
                 sal_Bool        bVisible( sal_True );
 
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
@@ -376,18 +365,6 @@ throw(  SAXException, RuntimeException )
                                     aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute toolbar:visible must have value 'true' or 'false'!" ));
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_WIDTH:
-                            {
-                                nWidth = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_USER:
-                            {
-                                nUserDef = (sal_uInt16)(xAttribs->getValueByIndex( n ).toInt32());
                             }
                             break;
 
@@ -438,9 +415,10 @@ throw(  SAXException, RuntimeException )
                                 while ( nIndex >= 0 );
                             }
                             break;
-
-                                          default:
-                                              break;
+                            case TB_ATTRIBUTE_USER:
+                            case TB_ATTRIBUTE_WIDTH:
+                            default:
+                            break;
                         }
                     }
                 } // for
@@ -899,3 +877,4 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxSeparator() throw
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

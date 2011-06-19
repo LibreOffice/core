@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
@@ -287,7 +288,7 @@ Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( Inde
 //------------------------------------------------------------------------
 void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Reference< XWindow >  xWindow( _Control, UNO_QUERY );
     if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
@@ -699,7 +700,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 
     if ( !m_pView )
     {
-        DBG_ERROR( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
+        OSL_FAIL( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
         return 0;
     }
 
@@ -1153,7 +1154,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             )
         )
     {
-        DBG_ERROR( "FmXFormView::implCreateFieldControl: nonsense!" );
+        OSL_FAIL( "FmXFormView::implCreateFieldControl: nonsense!" );
     }
 
     Reference< XDataSource > xDataSource;
@@ -1194,7 +1195,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     // need a data source and a connection here
     if (!xDataSource.is() || !xConnection.is())
     {
-        DBG_ERROR("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
+        OSL_FAIL("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
         return NULL;
     }
 
@@ -1479,7 +1480,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     }
     catch(const Exception&)
     {
-        DBG_ERROR("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
+        OSL_FAIL("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
     }
 
 
@@ -1637,7 +1638,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
             if ( xControlPropInfo->hasPropertyByName( FM_PROP_LABEL ) )
                 xControlSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
             else
-                OSL_ENSURE( false, "FmXFormView::createControlLabelPair: can't set a label for the control!" );
+                OSL_FAIL( "FmXFormView::createControlLabelPair: can't set a label for the control!" );
         }
     }
 
@@ -1728,7 +1729,7 @@ void FmXFormView::startMarkListWatching()
     }
     else
     {
-        DBG_ERROR( "FmXFormView::startMarkListWatching: already listening!" );
+        OSL_FAIL( "FmXFormView::startMarkListWatching: already listening!" );
     }
 }
 
@@ -1774,7 +1775,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
     }
     else
     {
-        DBG_ERROR( "FmXFormView::saveMarkList: invalid view!" );
+        OSL_FAIL( "FmXFormView::saveMarkList: invalid view!" );
         m_aMark = SdrMarkList();
     }
 }
@@ -1916,3 +1917,5 @@ DocumentType FmXFormView::impl_getDocumentType() const
         return GetFormShell()->GetImpl()->getDocumentType();
     return eUnknownDocumentType;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,6 @@ AutoScrollEdit::AutoScrollEdit( Window* pParent, const ResId& rResId )
     ScrollBar*  pScroll = GetVScrollBar();
     if (pScroll)
         pScroll->Hide();
-//    SetLeftMargin( 0 );
     StartListening( *GetTextEngine() );
 }
 
@@ -72,3 +72,4 @@ void AutoScrollEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 } // namespace dp_gui
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,11 +51,11 @@ friend class ImpItemEdit;
     sal_uInt16 nLastWhich;
     sal_uInt16 nLastWhichOben;
     sal_uInt16 nLastWhichUnten;
-    FASTBOOL bWhichesButNames;
-    FASTBOOL bDontHideIneffectiveItems;
-    FASTBOOL bDontSortItems;
-    FASTBOOL bShowWhichIds;
-    FASTBOOL bShowRealValues;
+    bool bWhichesButNames;
+    bool bDontHideIneffectiveItems;
+    bool bDontSortItems;
+    bool bShowWhichIds;
+    bool bShowRealValues;
 private:
 #if _SOLAR__PRIVATE
     void ImpCtor();
@@ -70,7 +71,7 @@ protected:
     virtual void DoubleClick(const BrowserMouseEvent&);
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void Select();
-    virtual void SetDirty(); // wird z.B. bei Modusumschaltungen gerufen
+    virtual void SetDirty(); // is called for example in mode switches
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
 public:
@@ -80,8 +81,8 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uIntPtr GetCurrentPos() const;
     sal_uInt16 GetCurrentWhich() const;
-    virtual FASTBOOL BegChangeEntry(sal_uIntPtr nPos);
-    virtual FASTBOOL EndChangeEntry();
+    virtual bool BegChangeEntry(sal_uIntPtr nPos);
+    virtual bool EndChangeEntry();
     virtual void     BrkChangeEntry();
 
     /** GetCellText returns the text at the given position
@@ -114,7 +115,7 @@ public:
     virtual void GetFocus();
     void Clear()                                            { aBrowse.Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse.SetAttributes(pAttr,p2ndSet); }
-    void SetFloatingMode(FASTBOOL /*bOn*/) {}
+    void SetFloatingMode(bool /*bOn*/) {}
     const _SdrItemBrowserControl& GetBrowserControl() const { return aBrowse; }
     _SdrItemBrowserControl& GetBrowserControl()             { return aBrowse; }
 };
@@ -124,7 +125,7 @@ class SdrView;
 class SdrItemBrowser: public _SdrItemBrowserWindow {
     Timer aIdleTimer;
     SdrView* pView;
-    FASTBOOL bDirty;
+    bool bDirty;
 private:
     static Window* ImpGetViewWin(SdrView& rView);
     DECL_LINK(IdleHdl,Timer*);
@@ -142,3 +143,4 @@ public:
 #endif //_SVDIBROW_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

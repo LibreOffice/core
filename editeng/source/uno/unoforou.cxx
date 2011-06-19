@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,8 +76,8 @@ sal_uInt16 SvxOutlinerForwarder::GetTextLen( sal_uInt16 nParagraph ) const
 
 String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
-    //! GetText(ESelection) sollte es wohl auch mal am Outliner geben
-    //  solange den Hack fuer die EditEngine uebernehmen:
+    //! GetText (ESelection) should probably also be in the Outliner
+    // in the time beeing use as the hack for the EditEngine:
     EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
@@ -99,7 +100,7 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, sal_B
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+            OSL_FAIL("unknown flags for SvxOutlinerForwarder::GetAttribs");
         }
         return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
     }
@@ -127,8 +128,8 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, sal_Bool bO
         }
     }
 
-    //! gibt's das nicht am Outliner ???
-    //! und warum ist GetAttribs an der EditEngine nicht const?
+    //! Does it not exist on the Outliner?
+    //! and why is the GetAttribs on the EditEngine not a const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
@@ -304,7 +305,6 @@ EBulletInfo SvxOutlinerForwarder::GetBulletInfo( sal_uInt16 nPara ) const
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
-    // #101701#
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
@@ -357,7 +357,6 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( sal_uInt16 nPara ) const
 
     if( rOutliner.IsVertical() )
     {
-        // #101701#
         // Hargl. Outliner's 'external' methods return the rotated
         // dimensions, 'internal' methods like GetTextHeight( n )
         // don't rotate.
@@ -385,7 +384,6 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_uInt16& nPara, sal_uInt16& nIndex ) const
 {
-    // #101701#
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
@@ -510,7 +508,7 @@ sal_Int16 SvxOutlinerForwarder::GetNumberingStartValue( sal_uInt16 nPara )
     }
     else
     {
-        DBG_ERROR( "SvxOutlinerForwarder::GetNumberingStartValue)(), Invalid paragraph index");
+        OSL_FAIL( "SvxOutlinerForwarder::GetNumberingStartValue)(), Invalid paragraph index");
         return -1;
     }
 }
@@ -523,7 +521,7 @@ void SvxOutlinerForwarder::SetNumberingStartValue(  sal_uInt16 nPara, sal_Int16 
     }
     else
     {
-        DBG_ERROR( "SvxOutlinerForwarder::SetNumberingStartValue)(), Invalid paragraph index");
+        OSL_FAIL( "SvxOutlinerForwarder::SetNumberingStartValue)(), Invalid paragraph index");
     }
 }
 
@@ -535,7 +533,7 @@ sal_Bool SvxOutlinerForwarder::IsParaIsNumberingRestart( sal_uInt16 nPara )
     }
     else
     {
-        DBG_ERROR( "SvxOutlinerForwarder::IsParaIsNumberingRestart)(), Invalid paragraph index");
+        OSL_FAIL( "SvxOutlinerForwarder::IsParaIsNumberingRestart)(), Invalid paragraph index");
         return sal_False;
     }
 }
@@ -548,7 +546,7 @@ void SvxOutlinerForwarder::SetParaIsNumberingRestart(  sal_uInt16 nPara, sal_Boo
     }
     else
     {
-        DBG_ERROR( "SvxOutlinerForwarder::SetParaIsNumberingRestart)(), Invalid paragraph index");
+        OSL_FAIL( "SvxOutlinerForwarder::SetParaIsNumberingRestart)(), Invalid paragraph index");
     }
 }
 
@@ -613,3 +611,4 @@ void SvxTextForwarder::SetParaIsNumberingRestart( sal_uInt16, sal_Bool )
 
 //------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

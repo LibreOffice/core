@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("UIName") );
+    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")) );
     rtl::OUString sName;
     aName >>= sName;
     if( sName.getLength() < 1 )
@@ -55,9 +56,9 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
         {
             if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
             {
-                if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.sheet.SpreadsheetDocument") )
+                if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Worksheet Menu Bar") );
-                else if( pCBarHelper->getModuleId().equalsAscii("com.sun.star.text.TextDocument") )
+                else if( pCBarHelper->getModuleId().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) )
                     sName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Menu Bar") );
                 return sName;
             }
@@ -77,7 +78,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("UIName"), uno::makeAny( _name ) );
+    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")), uno::makeAny( _name ) );
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -121,7 +122,7 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
             xLayoutManager->destroyElement( m_sResourceUrl );
         }
     }
-    catch( uno::Exception e )
+    catch( uno::Exception& )
     {
         OSL_TRACE( "SetVisible get an exception\n" );
     }
@@ -277,3 +278,5 @@ uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

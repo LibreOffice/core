@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -222,7 +223,6 @@ public:
     virtual short   Execute();
     virtual void    Resize();
     virtual sal_Bool    Close();
-//    virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,
@@ -279,3 +279,5 @@ public:
 } // namespace dp_gui
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

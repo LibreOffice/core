@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/stritem.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
@@ -162,7 +159,7 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
 IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    // pruefen, ob eine Vorlage diesen Namens existiert
+    // Test whether a template with this name exists
     if(LISTBOX_ENTRY_NOTFOUND != aTemplateLb.GetEntryPos(
         GetTemplateName())) {
         QueryBox aQuery(this, SfxResId(MSG_CONFIRM_OVERWRITE_TEMPLATE));
@@ -236,3 +233,4 @@ void SfxDocumentTemplateDlg::NewTemplate(const String &rPath)
         aRegionLb.GetSelectEntryPos(), GetTemplateName(), rPath);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

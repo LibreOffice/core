@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _SFXSPLITWIN_HXX
 #define _SFXSPLITWIN_HXX
 
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 
 class SfxWorkWindow;
@@ -131,3 +130,4 @@ public:
 #endif // #ifndef _SFXSPLITWIN_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

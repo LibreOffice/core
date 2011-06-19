@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gueltigen Satz ist
+    while (bDataFound && !bDone)            // Iterate until we are at the valid set
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
         if (_eCursorPosition != IResultSetHelper::RELATIVE)
@@ -251,7 +252,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
     /*TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
     OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::getMappedPosition() invalid bookmark!");
     return aFind->second;*/
-    OSL_ENSURE(0,"Why!");
+    OSL_FAIL("Why!");
     return -1;
 }
 // -----------------------------------------------------------------------------
@@ -281,3 +282,5 @@ void OSkipDeletedSet::deletePosition(sal_Int32 _nBookmark)
     //m_aBookmarks.erase(_nPos);
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

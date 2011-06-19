@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,8 @@ enum XMLPropOOOTransformerAction
     XML_ATACTION_MOVE_PROTECT,
     XML_ATACTION_SIZE_PROTECT,
     XML_ATACTION_PROTECT,
-    // --> OD 2005-06-10 #i50322#
+    // No image transparancy info in lable document (#i50322#)
     XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY,
-    // <--
     XML_PTACTION_END=XML_TACTION_END
 };
 
@@ -77,3 +77,5 @@ extern XMLTransformerActionInit aChartPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit aChartPropertyOOoElemActionTable[];
 
 #endif  //  _XMLOFF_PROPERTYACTIONSOOO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

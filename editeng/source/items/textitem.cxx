@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,6 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 #define STORE_UNICODE_MAGIC_MARKER  0xFE331188
@@ -118,7 +118,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
-// Konvertierung fuer UNO
+// Conversion for UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
@@ -209,10 +209,10 @@ int SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
     return( pFontList == ((SvxFontListItem&)rAttr).pFontList );
 }
 
-sal_Bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aFontNameSeq;
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -267,9 +267,8 @@ SvxFontItem& SvxFontItem::operator=(const SvxFontItem& rFont)
 }
 // -----------------------------------------------------------------------
 
-sal_Bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -294,12 +293,11 @@ sal_Bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_FONT_CHAR_SET  : rVal <<= (sal_Int16)(eTextEncoding);  break;
         case MID_FONT_PITCH     : rVal <<= (sal_Int16)(ePitch); break;
     }
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -357,7 +355,7 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -377,7 +375,7 @@ int SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
         if ( ePitch != rItem.ePitch || eTextEncoding != rItem.eTextEncoding )
         {
             bRet = sal_False;
-            DBG_WARNING( "FontItem::operator==(): nur Pitch oder rtl_TextEncoding unterschiedlich" );
+            DBG_WARNING( "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
     return bRet;
@@ -398,9 +396,6 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
         GetFamilyName().EqualsAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
         GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
 
-    // #90477# rStrm << (sal_uInt8) GetFamily()
-    //    << (sal_uInt8) GetPitch()
-    //    << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetStoreCharSet( GetCharSet(), (sal_uInt16)rStrm.GetVersion() ) );
     rStrm << (sal_uInt8) GetFamily() << (sal_uInt8) GetPitch()
           << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion()));
 
@@ -410,7 +405,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     rStrm.WriteByteString(aStoreFamilyName);
     rStrm.WriteByteString(GetStyleName());
 
-    // #96441# Kach for EditEngine, only set while creating clipboard stream.
+    // cach for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
         sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
@@ -438,10 +433,10 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     // UNICODE: rStrm >> aStyle;
     rStrm.ReadByteString(aStyle);
 
-    // Task 91008/90471: set the "correct" textencoding
+    // Set the "correct" textencoding
     eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding, (sal_uInt16)rStrm.GetVersion() );
 
-    // irgendwann wandelte sich der StarBats vom ANSI- zum SYMBOL-Font
+    // at some point, the StarBats changes from  ANSI font to SYMBOL font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
@@ -514,7 +509,7 @@ SfxPoolItem* SvxPostureItem::Clone( SfxItemPool * ) const
 
 sal_uInt16 SvxPostureItem::GetValueCount() const
 {
-    return ITALIC_NORMAL + 1;   // auch ITALIC_NONE geh"ort dazu
+    return ITALIC_NORMAL + 1;   // ITALIC_NONE also belongs here
 }
 
 // -----------------------------------------------------------------------
@@ -581,13 +576,8 @@ XubString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return sTxt;
 }
 
-
-/*-----------------13.03.98 14:28-------------------
-
---------------------------------------------------*/
-sal_Bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -595,17 +585,14 @@ sal_Bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal = Bool2Any(GetBoolValue());
             break;
         case MID_POSTURE:
-            rVal <<= (awt::FontSlant)GetValue();    // Werte von awt::FontSlant und FontItalic sind gleich
+            rVal <<= (awt::FontSlant)GetValue();    // values from awt::FontSlant and FontItalic are equal
             break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 14:28-------------------
 
---------------------------------------------------*/
-sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -626,7 +613,7 @@ sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetValue((sal_uInt16)eSlant);
         }
     }
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
 
@@ -683,7 +670,7 @@ void SvxWeightItem::SetBoolValue( sal_Bool bVal )
 
 sal_uInt16 SvxWeightItem::GetValueCount() const
 {
-    return WEIGHT_BLACK;    // WEIGHT_DONTKNOW geh"ort nicht dazu
+    return WEIGHT_BLACK;    // WEIGHT_DONTKNOW does not belong
 }
 
 // -----------------------------------------------------------------------
@@ -742,12 +729,8 @@ XubString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EE_RESSTR( RID_SVXITEMS_WEIGHT_BEGIN + nPos );
 }
 
-/*-----------------13.03.98 14:18-------------------
-
---------------------------------------------------*/
-sal_Bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -760,14 +743,11 @@ sal_Bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 14:18-------------------
 
---------------------------------------------------*/
-sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -788,7 +768,7 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // class SvxFontHeightItem -----------------------------------------------
@@ -798,7 +778,7 @@ SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
                                       const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
-    SetHeight( nSz,nPrp );  // mit den Prozenten rechnen
+    SetHeight( nSz,nPrp );  // calculate in percentage
 }
 
 // -----------------------------------------------------------------------
@@ -818,8 +798,8 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
         rStrm << GetProp() << (sal_uInt16)GetPropUnit();
     else
     {
-        // JP 30.06.98: beim Export in alte Versionen geht die relative
-        // Angabe verloren, wenn es keine Prozentuale ist
+        // When exporting to the old versions the relative information is lost
+        // when there is no percentage
         sal_uInt16 _nProp = GetProp();
         if( SFX_MAPUNIT_RELATIVE != GetPropUnit() )
             _nProp = 100;
@@ -864,13 +844,10 @@ int SvxFontHeightItem::operator==( const SfxPoolItem& rItem ) const
             GetPropUnit() == ((SvxFontHeightItem&)rItem).GetPropUnit();
 }
 
-/*-----------------13.03.98 14:53-------------------
-
---------------------------------------------------*/
-sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    //  In StarOne sind im uno::Any immer 1/100mm. Ueber die MemberId wird
-    //  gesteuert, ob der Wert im Item 1/100mm oder Twips sind.
+    //  In StarOne is the uno::Any always 1/100mm. Through the MemberId it is
+    //  controlled if the value in the Item should be 1/100mm or Twips.
 
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -880,8 +857,8 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) co
         {
             ::com::sun::star::frame::status::FontHeight aFontHeight;
 
-            //  Point (also Twips) sind gefragt,
-            //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
+            // Point (i.e. Twips) is asked for, thus re-calculate if
+            // CONVERT_TWIPS is not set.
             if( bConvert )
             {
                 long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
@@ -921,8 +898,8 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) co
         break;
         case MID_FONTHEIGHT:
         {
-            //  Point (also Twips) sind gefragt,
-            //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
+            // Point (i.e. Twips) is asked for, thus re-calculate if
+            // CONVERT_TWIPS is not set.
             if( bConvert )
             {
                 long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
@@ -966,9 +943,8 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) co
     }
     return sal_True;
 }
-/* -----------------01.07.98 13:43-------------------
- *  Relative Abweichung aus der Hoehe herausrechnen
- * --------------------------------------------------*/
+
+// Calculate the relative deviation from the expected height.
 sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, sal_Bool bCoreInTwip)
 {
     sal_uInt32 nRet = nHeight;
@@ -988,11 +964,11 @@ sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUn
         }
         break;
         case SFX_MAPUNIT_100TH_MM:
-            //dann ist die Core doch wohl auch in 1/100 mm
+            //then the core is surely also in 1/100 mm
             nDiff = (short)nProp;
         break;
         case SFX_MAPUNIT_TWIP:
-            // hier doch sicher TWIP
+            // Here surely TWIP
             nDiff = ((short)nProp);
         break;
         default: ;//prevent warning
@@ -1002,10 +978,7 @@ sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUn
     return nRet;
 }
 
-/*-----------------13.03.98 14:53-------------------
-
---------------------------------------------------*/
-sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1025,7 +998,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId 
 
                 nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
-                    nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // umrechnen, wenn das Item 1/100mm enthaelt
+                    nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
 
                 nProp = aFontHeight.Prop;
             }
@@ -1050,7 +1023,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId 
 
             nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
-                nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // umrechnen, wenn das Item 1/100mm enthaelt
+                nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
         }
         break;
         case MID_FONTHEIGHT_PROP:
@@ -1098,7 +1071,6 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1126,7 +1098,6 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1141,17 +1112,17 @@ sal_uInt16 SvxFontHeightItem::GetVersion(sal_uInt16 nFileVersion) const
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
 {
     nHeight = (sal_uInt32)Scale( nHeight, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontHeightItem::HasMetrics() const
+bool SvxFontHeightItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp,
@@ -1159,12 +1130,10 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-#ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eUnit )
         nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
                                                 SFX_FUNIT_TWIP );
     else
-#endif // !SVX_LIGHT
     if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
     else
@@ -1179,14 +1148,12 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-#ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
                                         SFX_FUNIT_TWIP ), SFX_FUNIT_TWIP,
                                         eCoreMetric );
     else
-#endif // !SVX_LIGHT
     if( 100 != nNewProp )
         nHeight = sal_uInt32(( nNewHeight * nNewProp ) / 100 );
     else
@@ -1222,17 +1189,17 @@ SvStream& SvxFontWidthItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxFontWidthItem::ScaleMetrics( long nMult, long nDiv )
 {
     nWidth = (sal_uInt16)Scale( nWidth, nMult, nDiv );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxFontWidthItem::HasMetrics() const
+bool SvxFontWidthItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1259,10 +1226,7 @@ int SvxFontWidthItem::operator==( const SfxPoolItem& rItem ) const
             GetProp() == ((SvxFontWidthItem&)rItem).GetProp();
 }
 
-/*-----------------13.03.98 16:03-------------------
-
---------------------------------------------------*/
-sal_Bool SvxFontWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxFontWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1275,12 +1239,10 @@ sal_Bool SvxFontWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
             rVal <<= (sal_Int16)(nProp);
         break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 16:03-------------------
 
---------------------------------------------------*/
-sal_Bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1297,7 +1259,7 @@ sal_Bool SvxFontWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             nWidth = nVal;
         break;
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -1310,7 +1272,6 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1331,7 +1292,6 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1376,7 +1336,7 @@ SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 
 sal_uInt16 SvxTextLineItem::GetValueCount() const
 {
-    return UNDERLINE_DOTTED + 1;    // auch UNDERLINE_NONE geh"ort dazu
+    return UNDERLINE_DOTTED + 1;    // UNDERLINE_NONE also belongs here
 }
 
 // -----------------------------------------------------------------------
@@ -1406,7 +1366,6 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1420,7 +1379,6 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
             return ePres;
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1428,16 +1386,12 @@ SfxItemPresentation SvxTextLineItem::GetPresentation
 
 XubString SvxTextLineItem::GetValueTextByPos( sal_uInt16 /*nPos*/ ) const
 {
-    DBG_ERROR("SvxTextLineItem::GetValueTextByPos: Pure virtual method");
+    OSL_FAIL("SvxTextLineItem::GetValueTextByPos: Pure virtual method");
     return XubString();
 }
 
-/*-----------------13.03.98 16:25-------------------
-
---------------------------------------------------*/
-sal_Bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -1454,15 +1408,12 @@ sal_Bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
         rVal = Bool2Any( !mColor.GetTransparency() );
         break;
     }
-    return sal_True;
+    return true;
 
 }
-/*-----------------13.03.98 16:28-------------------
 
---------------------------------------------------*/
-sal_Bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;
     switch(nMemberId)
@@ -1606,7 +1557,7 @@ void SvxCrossedOutItem::SetBoolValue( sal_Bool bVal )
 
 sal_uInt16 SvxCrossedOutItem::GetValueCount() const
 {
-    return STRIKEOUT_DOUBLE + 1;    // auch STRIKEOUT_NONE geh"ort dazu
+    return STRIKEOUT_DOUBLE + 1;    // STRIKEOUT_NONE belongs also here
 }
 
 // -----------------------------------------------------------------------
@@ -1665,12 +1616,8 @@ XubString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EE_RESSTR( RID_SVXITEMS_STRIKEOUT_BEGIN + nPos );
 }
 
-/*-----------------13.03.98 16:28-------------------
-
---------------------------------------------------*/
-sal_Bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -1681,14 +1628,11 @@ sal_Bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) co
             rVal <<= (sal_Int16)(GetValue());
         break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 16:29-------------------
 
---------------------------------------------------*/
-sal_Bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2042,7 +1986,7 @@ sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxColorItem: Gibt es ein neues Fileformat?" );
+            "SvxColorItem: Is there a new file format? ");
     return  SOFFICE_FILEFORMAT_50 >= nFFVer ? VERSION_USEAUTOCOLOR : 0;
 }
 
@@ -2057,22 +2001,22 @@ int SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int32)(mColor.GetColor());
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int32 nColor = 0;
     if(!(rVal >>= nColor))
         return sal_False;
 
     mColor.SetColor( nColor );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2111,7 +2055,6 @@ SfxItemPresentation SvxColorItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2123,7 +2066,6 @@ SfxItemPresentation SvxColorItem::GetPresentation
             return ePres;
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2166,8 +2108,6 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    // #90477# rStrm << (sal_uInt8) GetStoreCharSet( GetCharSet(), (sal_uInt16)rStrm.GetVersion() )
-    //    << GetValue();
     rStrm << (sal_uInt8)GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion())
           << GetValue();
     return rStrm;
@@ -2221,17 +2161,17 @@ SvStream& SvxKerningItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
+bool SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
 {
     SetValue( (sal_Int16)Scale( GetValue(), nMult, nDiv ) );
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-int SvxKerningItem::HasMetrics() const
+bool SvxKerningItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2253,7 +2193,6 @@ SfxItemPresentation SvxKerningItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2281,30 +2220,27 @@ SfxItemPresentation SvxKerningItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
-/* -----------------------------19.02.01 12:21--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxKerningItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Int16 nVal = GetValue();
     if(nMemberId & CONVERT_TWIPS)
         nVal = (sal_Int16)TWIP_TO_MM100(nVal);
     rVal <<= nVal;
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
+bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int16 nVal = sal_Int16();
     if(!(rVal >>= nVal))
-        return sal_False;
+        return false;
     if(nMemberId & CONVERT_TWIPS)
         nVal = (sal_Int16)MM100_TO_TWIP(nVal);
     SetValue(nVal);
-    return sal_True;
+    return true;
 }
 
 // class SvxCaseMapItem --------------------------------------------------
@@ -2377,27 +2313,21 @@ XubString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EE_RESSTR( RID_SVXITEMS_CASEMAP_BEGIN + nPos );
 }
 
-/*-----------------13.03.98 16:29-------------------
-
---------------------------------------------------*/
-sal_Bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int16 nRet = style::CaseMap::NONE;
     switch( GetValue() )
     {
-//      case SVX_CASEMAP_NOT_MAPPED  :      nRet = style::CaseMap::NONE     ; break;
         case SVX_CASEMAP_VERSALIEN   :      nRet = style::CaseMap::UPPERCASE; break;
         case SVX_CASEMAP_GEMEINE     :      nRet = style::CaseMap::LOWERCASE; break;
         case SVX_CASEMAP_TITEL       :      nRet = style::CaseMap::TITLE    ; break;
         case SVX_CASEMAP_KAPITAELCHEN:      nRet = style::CaseMap::SMALLCAPS; break;
     }
     rVal <<= (sal_Int16)(nRet);
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 16:29-------------------
 
---------------------------------------------------*/
-sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_uInt16 nVal = sal_uInt16();
     if(!(rVal >>= nVal))
@@ -2412,7 +2342,7 @@ sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     case style::CaseMap::SMALLCAPS:  nVal = SVX_CASEMAP_KAPITAELCHEN; break;
     }
     SetValue(nVal);
-    return sal_True;
+    return true;
 }
 
 // class SvxEscapementItem -----------------------------------------------
@@ -2559,12 +2489,8 @@ void SvxEscapementItem::SetEnumValue( sal_uInt16 nVal )
     SetEscapement( (const SvxEscapement)nVal );
 }
 
-/*-----------------13.03.98 17:05-------------------
-
---------------------------------------------------*/
-sal_Bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2578,14 +2504,11 @@ sal_Bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) co
             rVal = Bool2Any(DFLT_ESC_AUTO_SUB == nEsc || DFLT_ESC_AUTO_SUPER == nEsc);
         break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------13.03.98 17:05-------------------
 
---------------------------------------------------*/
-sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2625,7 +2548,7 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId 
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // class SvxLanguageItem -------------------------------------------------
@@ -2681,7 +2604,6 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
     XubString&          rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2696,16 +2618,11 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
         }
         default: ; //prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-/*-----------------14.03.98 14:13-------------------
-
---------------------------------------------------*/
-sal_Bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2717,14 +2634,11 @@ sal_Bool SvxLanguageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
             rVal <<= aRet;
         break;
     }
-    return sal_True;
+    return true;
 }
-/*-----------------14.03.98 14:13-------------------
 
---------------------------------------------------*/
-sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2732,7 +2646,7 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
-                return sal_False;
+                return false;
 
             SetValue((sal_Int16)nValue);
         }
@@ -2750,7 +2664,7 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // class SvxNoLinebreakItem ----------------------------------------------
@@ -2843,7 +2757,7 @@ SfxItemPresentation SvxNoHyphenItem::GetPresentation
 }
 
 /*
- * Dummy-Item fuer ToolBox-Controls:
+ * Dummy item for ToolBox controls:
  *
  */
 
@@ -3031,9 +2945,8 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -3055,14 +2968,13 @@ sal_Bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) 
     }
     break;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    sal_Bool bRet = true;
     switch( nMemberId )
     {
     case MID_EMPHASIS:
@@ -3080,7 +2992,7 @@ sal_Bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberI
             case FontEmphasis::CIRCLE_BELOW: nValue = EMPHASISMARK_CIRCLE|EMPHASISMARK_POS_BELOW; break;
             case FontEmphasis::DISK_BELOW  : nValue = EMPHASISMARK_DISC|EMPHASISMARK_POS_BELOW;   break;
             case FontEmphasis::ACCENT_BELOW: nValue = EMPHASISMARK_ACCENT|EMPHASISMARK_POS_BELOW; break;
-            default: return sal_False;
+            default: return false;
         }
         SetValue( (sal_Int16)nValue );
     }
@@ -3094,7 +3006,7 @@ sal_uInt16 SvxEmphasisMarkItem::GetVersion( sal_uInt16 nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxEmphasisMarkItem: Gibt es ein neues Fileformat?" );
+            "SvxEmphasisMarkItem: Is there a new file format? ");
 
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
@@ -3136,12 +3048,11 @@ SfxPoolItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
     return new SvxTwoLinesItem( *this );
 }
 
-sal_Bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    sal_Bool bRet = true;
     switch( nMemberId )
     {
     case MID_TWOLINES:
@@ -3164,16 +3075,15 @@ sal_Bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
         }
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
         break;
     }
     return bRet;
 }
 
-sal_Bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_False;
     OUString s;
@@ -3322,12 +3232,11 @@ SfxItemPresentation SvxCharRotateItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_ROTATE:
@@ -3337,18 +3246,17 @@ sal_Bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
         rVal = Bool2Any( IsFitToLine() );
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
         break;
     }
     return bRet;
 }
 
-sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_ROTATE:
@@ -3365,7 +3273,7 @@ sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
         SetFitToLine( Any2Bool( rVal ) );
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
@@ -3401,8 +3309,8 @@ SfxPoolItem* SvxCharScaleWidthItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
     if ( Which() == EE_CHAR_FONTWIDTH )
     {
-        // #87271#: Was a SvxFontWidthItem in 5.2
-        // sal_uInt16 nFixWidth, sal_uInt16 nPropWidth.
+        // Was a SvxFontWidthItem in 5.2
+        // USHORT nFixWidth, USHORT nPropWidth.
         // nFixWidth has never been used...
         rStrm >> nVal;
         sal_uInt16 nTest;
@@ -3465,7 +3373,7 @@ SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -3473,19 +3381,19 @@ sal_Bool SvxCharScaleWidthItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMem
     if (rVal >>= nValue)
     {
         SetValue( (sal_uInt16) nValue );
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_TRACE( "SvxCharScaleWidthItem::PutValue - Wrong type!" );
+    return false;
 }
 
-sal_Bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     rVal <<= (sal_Int16)GetValue();
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -3560,12 +3468,11 @@ SfxItemPresentation SvxCharReliefItem::GetPresentation
     return eRet;
 }
 
-sal_Bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_RELIEF:
@@ -3575,29 +3482,28 @@ sal_Bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
             if(nVal >= 0 && nVal <= RELIEF_ENGRAVED)
                 SetValue( (sal_uInt16)nVal );
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
         break;
     }
     return bRet;
 }
 
-sal_Bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nMemberId )
     {
     case MID_RELIEF:
         rVal <<= (sal_Int16)GetValue();
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
         break;
     }
     return bRet;
@@ -3851,3 +3757,5 @@ short GetI18NScriptType( sal_uInt16 nItemType )
     }
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

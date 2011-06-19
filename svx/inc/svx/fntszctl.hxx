@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,7 @@ private:
     Menu&           rParent;
     SfxStatusForwarder  aFontNameForwarder;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( MenuSelect, FontSizeMenu * );
-//#endif
 
 protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -67,3 +66,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

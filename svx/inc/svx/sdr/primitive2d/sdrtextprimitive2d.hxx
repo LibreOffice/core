@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -300,6 +301,49 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SdrAutoFitTextPrimitive2D : public SdrTextPrimitive2D
+        {
+        private:
+            ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+
+            // bitfield
+            unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+
+        public:
+            SdrAutoFitTextPrimitive2D(
+                const SdrText* pSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
+                const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+                bool bWordWrap);
+
+            // get data
+            const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            bool getWordWrap() const { return mbWordWrap; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // transformed clone operator
+            virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
 #endif //INCLUDED_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

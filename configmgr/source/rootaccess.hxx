@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "com/sun/star/util/XChangesNotifier.hpp"
+#include "boost/shared_ptr.hpp"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -83,6 +85,11 @@ public:
     rtl::OUString getLocale() const;
 
     bool isUpdate() const;
+
+protected:
+
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (com::sun::star::uno::RuntimeException);
 
 private:
     virtual ~RootAccess();
@@ -150,8 +157,12 @@ private:
     rtl::OUString name_;
     bool finalized_;
     ChangesListeners changesListeners_;
+
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

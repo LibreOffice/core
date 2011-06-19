@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,27 +42,8 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-
-// #90477#
 #include <tools/tenccvt.hxx>
 
-#ifndef SVX_LIGHT
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@  @@@@@  @@@@@@  @@@@@@ @@@@@@ @@  @@ @@@@@@  @@    @@ @@  @@ @@  @@
-// @@  @@ @@  @@     @@    @@   @@      @@@@    @@    @@    @@ @@@ @@ @@ @@
-// @@  @@ @@@@@      @@    @@   @@@@@    @@     @@    @@    @@ @@@@@@ @@@@
-// @@  @@ @@  @@ @@  @@    @@   @@      @@@@    @@    @@    @@ @@ @@@ @@ @@
-//  @@@@  @@@@@   @@@@     @@   @@@@@@ @@  @@   @@    @@@@@ @@ @@  @@ @@  @@
-//
-// ImpSdrObjTextLink zur Verbindung von SdrTextObj und LinkManager
-//
-// Einem solchen Link merke ich mir als SdrObjUserData am Objekt. Im Gegensatz
-// zum Grafik-Link werden die ObjektDaten jedoch kopiert (fuer Paint, etc.).
-// Die Information ob das Objekt ein Link ist besteht genau darin, dass dem
-// Objekt ein entsprechender UserData-Record angehaengt ist oder nicht.
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
@@ -75,8 +57,8 @@ public:
     virtual ~ImpSdrObjTextLink();
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
@@ -98,10 +80,10 @@ void ImpSdrObjTextLink::Closed()
 }
 
 
-void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
-                                const ::com::sun::star::uno::Any & /*rValue */)
+::sfx2::SvBaseLink::UpdateResult ImpSdrObjTextLink::DataChanged(
+    const String& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue */)
 {
-    FASTBOOL bForceReload=sal_False;
+    bool bForceReload = false;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
     if( pLinkManager )
@@ -119,24 +101,16 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                 pData->aFileName = aFile;
                 pData->aFilterName = aFilter;
                 pSdrObj->SetChanged();
-                bForceReload = sal_True;
+                bForceReload = true;
             }
         }
     }
     if (pSdrObj )
         pSdrObj->ReloadLinkedText( bForceReload );
-}
-#endif // SVX_LIGHT
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// @@    @@ @@  @@ @@  @@  @@  @@  @@@@@ @@@@@@ @@@@@   @@@@@   @@@@  @@@@@@  @@@@
-// @@    @@ @@@ @@ @@ @@   @@  @@ @@     @@     @@  @@  @@  @@ @@  @@   @@   @@  @@
-// @@    @@ @@@@@@ @@@@    @@  @@  @@@@  @@@@@  @@@@@   @@  @@ @@@@@@   @@   @@@@@@
-// @@    @@ @@ @@@ @@@@@   @@  @@     @@ @@     @@  @@  @@  @@ @@  @@   @@   @@  @@
-// @@@@@ @@ @@  @@ @@  @@   @@@@  @@@@@  @@@@@@ @@  @@  @@@@@  @@  @@   @@   @@  @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+    return SUCCESS;
+}
+
 
 TYPEINIT1(ImpSdrObjTextLinkUserData,SdrObjUserData);
 
@@ -150,9 +124,7 @@ ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
 
 ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 {
-#ifndef SVX_LIGHT
     delete pLink;
-#endif
 }
 
 SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
@@ -166,17 +138,6 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
     return pData;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
 {
@@ -208,10 +169,10 @@ void SdrTextObj::ReleaseTextLink()
     }
 }
 
-FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
+bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 {
     ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
-    FASTBOOL                    bRet = sal_True;
+    bool                        bRet = true;
 
     if( pData )
     {
@@ -260,7 +221,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
     return bRet;
 }
 
-FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
+bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     sal_Bool            bRet = sal_False;
@@ -281,7 +242,6 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterNa
 
     if( pIStm )
     {
-        // #90477# pIStm->SetStreamCharSet( eCharSet );
         pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet, (sal_uInt16)pIStm->GetVersion()));
 
         char cRTF[5];
@@ -348,3 +308,4 @@ void SdrTextObj::ImpLinkAbmeldung()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

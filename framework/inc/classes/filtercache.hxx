@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <classes/filtercachedata.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <general.h>
 #include <queries.h>
 
@@ -445,3 +444,5 @@ class FilterCache   :   private ThreadHelpBase
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

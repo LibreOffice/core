@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 
-/* -----------------------------27.04.01 15:38--------------------------------
-    control to remove/insert cjk settings dependent vertical text toolbox item
- ---------------------------------------------------------------------------*/
+/*
+  control to remove/insert cjk settings dependent vertical text toolbox item
+ */
 class SvxVertCTLTextTbxCtrl : public SfxToolBoxControl
 {
     sal_Bool bCheckVertical; //determines whether vertical mode or CTL mode has to be checked
@@ -45,18 +46,14 @@ public:
     void    SetVert(sal_Bool bSet) {bCheckVertical = bSet;}
 
 };
-/* -----------------------------12.09.2002 11:50------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVX_DLLPUBLIC SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
-/* -----------------------------12.09.2002 11:50------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVX_DLLPUBLIC SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
@@ -65,3 +62,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

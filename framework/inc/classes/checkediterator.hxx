@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 //_________________________________________________________________________________________________________________
 #include <sal/types.h>
 
-#ifndef __SGI_STL_ITERATOR
 #include <iterator>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -343,3 +342,5 @@ class CheckedIterator
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_CLASSES_CHECKEDITERATOR_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -535,7 +536,7 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
     case com::sun::star::xsd::DataTypeClass::QName:
     case com::sun::star::xsd::DataTypeClass::NOTATION:
     default:
-        DBG_ERROR( "unknown data type" );
+        OSL_FAIL( "unknown data type" );
     }
 
     return rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_XSD,
@@ -679,7 +680,7 @@ OUString lcl_bool( const Any& rAny )
     bool bResult = bool();
     if( rAny >>= bResult )
         return GetXMLToken( bResult ? XML_TRUE : XML_FALSE );
-    DBG_ERROR( "expected boolean value" );
+    OSL_FAIL( "expected boolean value" );
     return OUString();
 }
 
@@ -833,3 +834,5 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

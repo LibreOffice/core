@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -330,7 +331,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     @param      xListener
                     reference to a valid listener for state events
     @param      aURL
-                    URL about listener will be informed, if something occured
+                    URL about listener will be informed, if something occurred
 
     @modified   30.04.2002 14:49, as96863
 */
@@ -349,3 +350,5 @@ void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< c
 }
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

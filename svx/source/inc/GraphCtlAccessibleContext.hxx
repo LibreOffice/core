@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,13 @@
 #ifndef _SVXGRAPHACCESSIBLECONTEXT_HXX
 #define _SVXGRAPHACCESSIBLECONTEXT_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/compbase7.hxx>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_IllegalAccessibleComponentStateException_HPP_
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#endif
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <cppuhelper/weak.hxx>
@@ -47,7 +44,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <svl/lstner.hxx>
 
@@ -279,3 +276,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

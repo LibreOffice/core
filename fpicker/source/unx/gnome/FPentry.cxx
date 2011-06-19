@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 //----------------------------------------------
 //  includes of other projects
 //----------------------------------------------
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 #include "SalGtkFilePicker.hxx"
 #include "SalGtkFolderPicker.hxx"
-#include <vcl/svapp.hxx>
 #include "FPServiceInfo.hxx"
 
 #include <glib-object.h>
@@ -50,11 +55,9 @@ extern      const guint gtk_minor_version;
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
-using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
 using ::com::sun::star::ui::dialogs::XFolderPicker;
 
@@ -89,7 +92,7 @@ extern "C"
 // component_getImplementationEnvironment
 //------------------------------------------------
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -99,7 +102,7 @@ void SAL_CALL component_getImplementationEnvironment(
 //
 //------------------------------------------------
 
-void* SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
@@ -120,7 +123,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FILE_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -132,7 +135,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FOLDER_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FOLDER_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -153,3 +156,4 @@ void* SAL_CALL component_getFactory(
 
 } // extern "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

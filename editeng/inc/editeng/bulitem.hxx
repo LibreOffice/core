@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #define BJ_VCENTER          0x20
 
 // Valid-Bits
-// Erstmal nur die Werte, die vom Dialog geaendert werden...
+// First, only the values that are changed by the dialogue ...
 #define VALID_FONTCOLOR     0x0001
 #define VALID_FONTNAME      0x0002
 #define VALID_SYMBOL        0x0004
@@ -80,8 +81,9 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     long            nWidth;
     sal_uInt16          nScale;
     sal_Unicode     cSymbol;
-    sal_uInt8            nJustify;
-    sal_uInt16          nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
+    sal_uInt8       nJustify;
+    sal_uInt16      nValidMask; // Only temporary for GetAttribs / setAttribs,
+                                // because of the large Bullets
 
 #ifdef _SVX_BULITEM_CXX
     void    SetDefaultFont_Impl();
@@ -158,3 +160,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

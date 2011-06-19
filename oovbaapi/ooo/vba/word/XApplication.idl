@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_word_XApplication_idl__
 #define __ooo_vba_word_XApplication_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba {  module word {
 
@@ -57,6 +52,7 @@ interface XApplication : com::sun::star::uno::XInterface
     any Documents( [in] any Index );
     any Addins( [in] any Index );
     any Dialogs( [in] any Index );
+    any ListGalleries( [in] any aIndex );
     float CentimetersToPoints([in] float Centimeters );
 };
 

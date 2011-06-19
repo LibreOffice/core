@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
-
 #include <sfx2/objsh.hxx>
-//#include "objshimp.hxx"
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
@@ -64,7 +61,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -76,12 +73,12 @@ sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     {
         rVal <<= ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >();
     }
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -100,16 +97,16 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                 if ( nHandle )
                 {
                     pObjSh = reinterpret_cast< SfxObjectShell* >(sal::static_int_cast<sal_IntPtr>( nHandle ));
-                    return sal_True;
+                    return true;
                 }
             }
         }
 
         pObjSh = 0;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return true;
 }
 
 //=========================================================================
@@ -133,3 +130,5 @@ SfxPoolItem* SfxObjectItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectItem( Which(), _pSh );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

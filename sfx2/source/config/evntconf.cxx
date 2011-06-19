@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
 #include <vcl/msgbox.hxx>
 #include <tools/resary.hxx>
 #include <svl/lstner.hxx>
@@ -66,24 +70,20 @@ using namespace com::sun::star;
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
     DelDtor();
-    for (sal_uInt16 n=0; n<rTbl.Count(); n++ )
+    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
     {
-        SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).GetObject(n);
-        SfxEventName *pNew = new SfxEventName( *pTmp );
-        Insert( pNew, n );
+        SfxEventName* pTmp = rTbl.at( i );
+        SfxEventName* pNew = new SfxEventName( *pTmp );
+        aEventNamesList.push_back( pNew );
     }
     return *this;
 }
 
 void SfxEventNamesList::DelDtor()
 {
-    SfxEventName* pTmp = First();
-    while( pTmp )
-    {
-        delete pTmp;
-        pTmp = Next();
-    }
-    Clear();
+    for ( size_t i = 0, n = aEventNamesList.size(); i < n; ++i )
+        delete aEventNamesList[ i ];
+    aEventNamesList.clear();
 }
 
 int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
@@ -93,13 +93,13 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOwn = aEventsList;
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
-    if ( rOwn.Count() != rOther.Count() )
+    if ( rOwn.size() != rOther.size() )
         return sal_False;
 
-    for ( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
-        const SfxEventName *pOwn = rOwn.GetObject(nNo);
-        const SfxEventName *pOther = rOther.GetObject(nNo);
+        const SfxEventName *pOwn = rOwn.at( nNo );
+        const SfxEventName *pOther = rOther.at( nNo );
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
@@ -127,25 +127,25 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
 
 SfxPoolItem* SfxEventNamesItem::Create(SvStream &, sal_uInt16) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return new SfxEventNamesItem(Which());
 }
 
 SvStream& SfxEventNamesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return rStream;
 }
 
 sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return 0;
 }
 
 void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, sal_uInt16 nID )
 {
-    aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
+    aEventsList.push_back( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
 
@@ -173,17 +173,17 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aType = ::rtl::OUString::createFromAscii( STAR_BASIC );;
+            ::rtl::OUString aType(RTL_CONSTASCII_USTRINGPARAM( STAR_BASIC ));
             ::rtl::OUString aLib  = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
             pValues[ 0 ].Value <<= aType;
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_LIBRARY );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
             pValues[ 1 ].Value <<= aLib;
 
-            pValues[ 2 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 2 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
             pValues[ 2 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -196,10 +196,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             ::rtl::OUString aLib   = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
             pValues[ 0 ].Value <<= aLib;
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_SCRIPT );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -211,10 +211,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 
             ::rtl::OUString aMacro  = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= ::rtl::OUString::createFromAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
+            pValues[ 0 ].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -245,7 +245,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
                 ( ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), uno::UNO_QUERY );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))), uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )
@@ -259,9 +259,9 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
             {
                 xEvents->replaceByName( aEventName, aEventData );
             }
-            catch( ::com::sun::star::lang::IllegalArgumentException )
+            catch( const ::com::sun::star::lang::IllegalArgumentException& )
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ); }
-            catch( ::com::sun::star::container::NoSuchElementException )
+            catch( const ::com::sun::star::container::NoSuchElementException& )
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ); }
         }
         else {
@@ -273,17 +273,10 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
 //--------------------------------------------------------------------------------------------------------
 void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
-    SvxMacro *pMacro = NULL;
+    boost::scoped_ptr<SvxMacro> pMacro;
     if ( rMacro.GetMacName().Len() )
-        pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
-    if ( pDoc )
-    {
-        PropagateEvent_Impl( pDoc, aName, pMacro );
-    }
-    else
-    {
-        PropagateEvent_Impl( NULL, aName, pMacro );
-    }
+        pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
+    PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
 }
 
 // -------------------------------------------------------------------------------------------------------
@@ -291,3 +284,5 @@ SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any&
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

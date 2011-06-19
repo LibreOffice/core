@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#include <sal/macros.h>
 #include "OfficeControlAccess.hxx"
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -116,7 +118,7 @@ namespace svt
         };
 
         // ................................................................
-        static const sal_Int32 s_nControlCount = sizeof( aDescriptions ) / sizeof( aDescriptions[0] );
+        static const sal_Int32 s_nControlCount = SAL_N_ELEMENTS( aDescriptions );
 
         static ControlDescIterator s_pControls = aDescriptions;
         static ControlDescIterator s_pControlsEnd = aDescriptions + s_nControlCount;
@@ -166,7 +168,7 @@ namespace svt
         };
 
         // ................................................................
-        static const int s_nPropertyCount = sizeof( aProperties ) / sizeof( aProperties[0] );
+        static const int s_nPropertyCount = SAL_N_ELEMENTS( aProperties );
 
         static ControlPropertyIterator s_pProperties = aProperties;
         static ControlPropertyIterator s_pPropertiesEnd = aProperties + s_nPropertyCount;
@@ -702,7 +704,7 @@ namespace svt
             break;
 
             default:
-                DBG_ERROR( "OControlAccess::implSetControlProperty: invalid property id!" );
+                OSL_FAIL( "OControlAccess::implSetControlProperty: invalid property id!" );
         }
     }
 
@@ -778,7 +780,7 @@ namespace svt
                 break;
 
             default:
-                DBG_ERROR( "OControlAccess::implGetControlProperty: invalid property id!" );
+                OSL_FAIL( "OControlAccess::implGetControlProperty: invalid property id!" );
         }
         return aReturn;
     }
@@ -787,3 +789,4 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

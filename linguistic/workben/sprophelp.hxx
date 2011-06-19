@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-///////////////////////////////////////////////////////////////////////////
 // PropertyChgHelper
 // virtual base class for all XPropertyChangeListener members of the
 // various lingu services.
@@ -116,7 +116,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class PropertyHelper_Spell :
@@ -166,7 +165,7 @@ public:
     BOOL    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

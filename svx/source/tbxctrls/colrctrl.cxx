@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #include <svx/dialogs.hrc>
 
-
-#include <tools/list.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -661,3 +660,5 @@ long SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
 
     return nRet ? nRet : SfxDockingWindow::Notify( rNEvt );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

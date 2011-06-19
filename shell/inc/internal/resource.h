@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef RESOURCE_H_INCLUDED
 #define RESOURCE_H_INCLUDED
 
@@ -55,3 +56,5 @@
 #define IDP_SIGNET                      2000
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

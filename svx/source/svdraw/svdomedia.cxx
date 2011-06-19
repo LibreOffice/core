@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,9 +64,9 @@ SdrMediaObj::~SdrMediaObj()
 
 // ------------------------------------------------------------------------------
 
-FASTBOOL SdrMediaObj::HasTextEdit() const
+bool SdrMediaObj::HasTextEdit() const
 {
-    return sal_False;
+    return false;
 }
 
 // ------------------------------------------------------------------------------
@@ -134,17 +135,20 @@ void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::operator=(const SdrObject& rObj)
+SdrMediaObj* SdrMediaObj::Clone() const
 {
+    return CloneHelper< SdrMediaObj >();
+}
+
+SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrRectObj::operator=( rObj );
 
-    if( rObj.ISA( SdrMediaObj ) )
-    {
-        const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
-
-        setMediaProperties( rMediaObj.getMediaProperties() );
-        setGraphic( rMediaObj.mapGraphic.get() );
-    }
+    setMediaProperties( rObj.getMediaProperties() );
+    setGraphic( rObj.mapGraphic.get() );
+    return *this;
 }
 
 // ------------------------------------------------------------------------------
@@ -283,3 +287,5 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
         maMediaProperties.setZoom( rNewProperties.getZoom() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

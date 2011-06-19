@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -100,7 +103,7 @@ namespace drawinglayer
             @param rFontColor
             The font color to use
          */
-        class TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// text transformation (FontCoordinateSystem)
@@ -129,6 +132,8 @@ namespace drawinglayer
 
             /// #i96669# internal: add simple range buffering for this primitive
             basegfx::B2DRange                       maB2DRange;
+            bool                                    mbFilled;           // Whether to fill a given width with the text
+            long                                    mnWidthToFill;      // the width to fill
 
         protected:
             /// local decomposition.
@@ -144,7 +149,9 @@ namespace drawinglayer
                 const ::std::vector< double >& rDXArray,
                 const attribute::FontAttribute& rFontAttribute,
                 const ::com::sun::star::lang::Locale& rLocale,
-                const basegfx::BColor& rFontColor);
+                const basegfx::BColor& rFontColor,
+                bool bFilled = false,
+                long nWidthToFill = 0);
 
             /// helpers
             /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -161,6 +168,8 @@ namespace drawinglayer
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
+            bool isFilled() const { return mbFilled; }
+            long getWidthToFill() const { return mnWidthToFill; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
@@ -173,7 +182,7 @@ namespace drawinglayer
         };
 
         /// small helper to have a compare operator for Locale
-        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB);
+        bool DRAWINGLAYER_DLLPUBLIC LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -184,3 +193,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

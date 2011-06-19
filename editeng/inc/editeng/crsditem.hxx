@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,8 @@ namespace rtl
 
 // class SvxCrossedOutItem -----------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob und wie durchstrichen ist.
+/*  [Description]
+    This item describes, whether and how it is striked out.
 */
 
 class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
@@ -54,7 +54,7 @@ public:
     SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
                        const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -64,11 +64,11 @@ public:
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
     virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
-    virtual sal_uInt16          GetValueCount() const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual sal_uInt16      GetValueCount() const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 
@@ -91,3 +91,4 @@ public:
 
 #endif // #ifndef _SVX_CRSDITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

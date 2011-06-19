@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
 
 #include "svx/zoomctrl.hxx"
-//CHINA001 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
@@ -83,7 +79,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
         SVX_ZOOM_ENABLE_PAGEWIDTH,  ZOOM_PAGE_WIDTH
     };
 
-    for ( sal_uInt16 nPos = 0; nPos < sizeof(aTable) / sizeof(sal_uInt16); nPos += 2 )
+    for ( sal_uInt16 nPos = 0; nPos < SAL_N_ELEMENTS(aTable); nPos += 2 )
         if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
             EnableItem( aTable[nPos+1], sal_False );
 }
@@ -221,3 +217,4 @@ sal_uIntPtr SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

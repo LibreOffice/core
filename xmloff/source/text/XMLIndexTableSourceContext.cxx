@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELD_PART_HPP
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -87,7 +86,7 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
 {
 
     { XML_TEXT,                 ReferenceFieldPart::TEXT },
@@ -105,7 +104,7 @@ void XMLIndexTableSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    sal_Bool bTmp;
+    bool bTmp;
 
     switch (eParam)
     {
@@ -186,3 +185,5 @@ SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

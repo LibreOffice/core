@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include <svx/stddlg.hxx>
 
@@ -59,9 +58,10 @@ SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId ) :
 
 // -----------------------------------------------------------------------
 
-__EXPORT SvxStandardDialog::~SvxStandardDialog()
+SvxStandardDialog::~SvxStandardDialog()
 {
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

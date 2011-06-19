@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,14 +39,10 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
-#ifndef SVX_LIGHT
-#ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <sfx2/frmdescr.hxx>
-#endif
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -73,7 +70,6 @@ extern sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rT
 ///////////////////////////////////////////////////////////////////////
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -84,7 +80,7 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2), getSvxMapProvider().GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
 }
 
@@ -125,7 +121,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                     {
                         SfxObjectShell* pPersist = mpModel->GetPersist();
                         ::rtl::OUString aPersistName;
-                        Any aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
+                        Any aAny( getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )) ) );
                         aAny >>= aPersistName;
 
                         //TODO/LATER: how to cope with creation failure?!
@@ -133,7 +129,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                         if( xObj.is() )
                         {
                             aAny <<= aPersistName;
-                            setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+                            setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), aAny );
                             pOle2->SetObjRef( xObj );
 
                             Rectangle aRect = pOle2->GetLogicRect();
@@ -171,7 +167,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
+                    OSL_FAIL( "Couldn't set the visual area for the object!\n" );
                 }
             }
 
@@ -368,7 +364,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                 // usage. Removed it, former fallback is used now
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
                 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                     const sal_Bool bSuccess(pObj->AddOwnLightClient());
                     OSL_ENSURE( bSuccess, "An object without client is provided!" );
 #else
@@ -471,7 +467,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
     ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
-    if( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) >>= aTmpStr )
+    if( getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )) ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
     //TODO/LATER: how to cope with creation failure?!
@@ -502,7 +498,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), Any( aTmpStr = aPersistName ) );
+        setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), Any( aTmpStr = aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if( pOle2Obj->IsEmpty() )
@@ -525,7 +521,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
     ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+    aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
     aMediaDescr[0].Value <<= aLinkURL;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
@@ -565,7 +561,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
         }
 
         // connect the object after the visual area is set
-        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
+        setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_OLE2_PERSISTNAME )), uno::makeAny( aPersistName ) );
 
         // the object is inserted during setting of PersistName property usually
         if ( pOle2Obj->IsEmpty() )
@@ -633,7 +629,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 ///////////////////////////////////////////////////////////////////////
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
 }
@@ -706,7 +702,7 @@ bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
+: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
 }
@@ -779,7 +775,7 @@ bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
 }
@@ -854,7 +850,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 ***********************************************************************/
 
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
+:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
 }
@@ -936,7 +932,7 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
         break;
 
         default:
-            DBG_ERROR("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
+            OSL_FAIL("SvxMediaShape::setPropertyValueImpl(), unknown argument!");
         }
 
         if( bOk )
@@ -985,7 +981,7 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
                 break;
 
             default:
-                DBG_ERROR("SvxMediaShape::getPropertyValueImpl(), unknown property!");
+                OSL_FAIL("SvxMediaShape::getPropertyValueImpl(), unknown property!");
         }
         return true;
     }
@@ -994,3 +990,5 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
         return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

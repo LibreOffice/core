@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ namespace // private
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SimpleSystemMail");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SimpleSystemMail"));
         return aRet;
     }
 
@@ -84,7 +85,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(COMP_IMPL_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(COMP_IMPL_NAME));
 }
 
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
@@ -105,3 +106,4 @@ Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
     return Component_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

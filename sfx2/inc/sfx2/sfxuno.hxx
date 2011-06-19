@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,9 +57,7 @@
 //________________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 //________________________________________________________________________________________________________________________
 //  defines for namespaces !
@@ -609,3 +608,5 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
     }
 
 #endif // _SFX_SFXUNO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

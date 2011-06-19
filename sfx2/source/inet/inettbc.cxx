@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,27 +31,17 @@
 
 #include "inettbc.hxx"
 
-#ifndef GCC
-#endif
 #include <com/sun/star/uno/Any.h>
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPLLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX //autogen
-#include <vos/thread.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX //autogen
-#include <vos/mutex.hxx>
-#endif
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <svl/itemset.hxx>
@@ -123,7 +114,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
-        ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+        ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
 
         aTargetURL.Complete = aName;
 
@@ -132,17 +123,17 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
-            aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+            aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
             aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
             aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
 
             if ( aFilter.Len() )
             {
                 aArgs.realloc( 4 );
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "FilterOptions" );
+                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
                 aArgs[2].Value = makeAny( ::rtl::OUString( aOptions ));
-                aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                 aArgs[3].Value = makeAny( ::rtl::OUString( aFilter ));
             }
 
@@ -203,7 +194,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
     if ( m_xServiceManager.is() )
     {
         Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
-                                                ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
                                              UNO_QUERY );
         Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
         if ( xFrame.is() )
@@ -247,7 +238,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
 {
     if ( nSID == SID_OPENURL )
     {
-        // Disable URL box if command is disabled #111014#
+        // Disable URL box if command is disabled
         GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
     }
 
@@ -301,3 +292,4 @@ void SfxURLToolBoxControl_Impl::StateChanged
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

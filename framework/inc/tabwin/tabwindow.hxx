@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,12 +49,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _COM_SUN_STAR_LANG_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/awt/XTabListener.hpp>
@@ -198,3 +195,5 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
 }
 
 #endif // __FRAMEWORK_TABWIN_TABWINDOW_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

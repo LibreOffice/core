@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,9 @@ using ::com::sun::star::uno::Sequence;
 //
 //------------------------------------------------------------
 
-const rtl::OUString TILDE = OUString::createFromAscii( "~" );
+const rtl::OUString TILDE(RTL_CONSTASCII_USTRINGPARAM( "~" ));
 const sal_Unicode   TILDE_SIGN = L'~';
-const rtl::OUString AMPERSAND = OUString::createFromAscii( "&" );
+const rtl::OUString AMPERSAND(RTL_CONSTASCII_USTRINGPARAM( "&" ));
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------
@@ -247,7 +248,7 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
     if ( !aItem.hasValue( ) ||
          aItem.getValueType( ) != getCppuType((OUString*)0) )
          throw IllegalArgumentException(
-            OUString::createFromAscii( "invalid value type or any has no value" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid value type or any has no value" )),
             rXInterface,
             aArgPos );
 
@@ -269,7 +270,7 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     if ( !aItemList.hasValue( ) ||
          aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
          throw IllegalArgumentException(
-            OUString::createFromAscii( "invalid value type or any has no value" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid value type or any has no value" )),
             rXInterface,
             aArgPos );
 
@@ -297,7 +298,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
          throw IllegalArgumentException(
-            OUString::createFromAscii( "invalid value type or any has no value" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid value type or any has no value" )),
             rXInterface,
             aArgPos );
 
@@ -310,7 +311,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
     // index was not correct
     if ( CB_ERR == lRet )
         throw IllegalArgumentException(
-            OUString::createFromAscii( "inavlid item position" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid item position" )),
             rXInterface,
             aArgPos );
 }
@@ -349,7 +350,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
            (aPosition.getValueType( ) != getCppuType((sal_Int16*)0)) &&
            (aPosition.getValueType( ) != getCppuType((sal_Int8*)0)) ) )
          throw IllegalArgumentException(
-            OUString::createFromAscii( "invalid value type or any has no value" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid value type or any has no value" )),
             rXInterface,
             aArgPos );
 
@@ -358,7 +359,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 
     if ( nPos < -1 )
         throw IllegalArgumentException(
-            OUString::createFromAscii("invalid index"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid index")),
             rXInterface,
             aArgPos );
 
@@ -366,7 +367,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 
     if ( (CB_ERR == lRet) && (-1 != nPos) )
         throw IllegalArgumentException(
-            OUString::createFromAscii("invalid index"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid index")),
             rXInterface,
             aArgPos );
 }
@@ -459,7 +460,7 @@ void SAL_CALL CheckboxSetState(
     if ( !aState.hasValue( ) ||
          aState.getValueType( ) != getCppuType((sal_Bool*)0) )
          throw IllegalArgumentException(
-            OUString::createFromAscii( "invalid value type or any has no value" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid value type or any has no value" )),
             rXInterface,
             aArgPos );
 
@@ -608,3 +609,4 @@ OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel )
     return aSOLabel;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

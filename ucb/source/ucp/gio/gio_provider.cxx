@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,22 +94,22 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                       "com.sun.star.comp.GIOContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                       "com.sun.star.ucb.GIOContentProvider" ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                       "com.sun.star.comp.GIOContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                       "com.sun.star.ucb.GIOContentProvider" )) );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char  **ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" void * SAL_CALL component_getFactory( const sal_Char *pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char *pImplName,
     void *pServiceManager, void * )
 {
     void * pRet = 0;
@@ -130,3 +131,5 @@ extern "C" void * SAL_CALL component_getFactory( const sal_Char *pImplName,
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

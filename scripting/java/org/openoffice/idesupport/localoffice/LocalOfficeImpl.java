@@ -51,8 +51,6 @@ import org.openoffice.idesupport.LocalOffice;
  * get access to some scripting framework releated functionality
  * of the locally running office. The office has to be started
  * with options appropriate for establishing local connection.
- *
- * @author misha <misha@openoffice.org>
  */
 public final class LocalOfficeImpl
     extends LocalOffice

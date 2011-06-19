@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <memory>
 
 
-//////////////////////////////////////////////////////////////////////
 
 struct SfxSecurityPage_Impl;
 
@@ -52,7 +52,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
-//////////////////////////////////////////////////////////////////////
 
 #endif // #ifndef _SECURITYPAGE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

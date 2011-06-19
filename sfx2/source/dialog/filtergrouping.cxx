@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,7 +224,7 @@ namespace sfx2
             if ( m_aClassReferrer.end() == aClassRef )
             {
                 // we do not know this global class
-                DBG_ERROR( "ReadGlobalFilter::operator(): unknown filter name!" );
+                OSL_FAIL( "ReadGlobalFilter::operator(): unknown filter name!" );
                 // TODO: perhaps we should be more tolerant - at the moment, the filter is dropped
                 // We could silently push_back it to the container ....
             }
@@ -692,12 +693,6 @@ namespace sfx2
             FilterGroupEntryReferrer::iterator aBelongsToLocal = aLocalClassesRef.find( sFilterName );
             if ( aLocalClassesRef.end() != aBelongsToLocal )
             {
-/*
-#ifdef DBG_UTIL
-                const ::rtl::OUString& rLocalClassDisplayName = aBelongsToLocal->second->First;
-                const ::rtl::OUString& rLocalClassExtension = aBelongsToLocal->second->Second;
-#endif
-*/
                 // okay, there is a local class which the filter belongs to
                 // -> append the wildcard
                 aExtendWildcard( *aBelongsToLocal );
@@ -831,7 +826,7 @@ namespace sfx2
 #ifdef DBG_UTIL
                 ByteString aMsg( "sfx2::lcl_EnsureAllFilesEntry: could not append Filter" );
                 aMsg += ByteString( String( sAllFilterName ), RTL_TEXTENCODING_UTF8 );
-                DBG_ERROR( aMsg.GetBuffer() );
+                OSL_FAIL( aMsg.GetBuffer() );
 #endif
             }
         }
@@ -919,7 +914,7 @@ namespace sfx2
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
             ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             ::rtl::OUString::createFromAscii("Name"),
+                                                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                                              ::rtl::OUString());
             if (sFilterName.getLength())
                 m_lFilters.push_back(sFilterName);
@@ -967,10 +962,9 @@ namespace sfx2
         // retrieve the default filter for this application module.
         // It must be set as first of the generated filter list.
         const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
-        // --> PB 2004-11-01 #i32434# only use one extension
+        // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
         sExtension = pDefaultFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
-        // <--
         sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
         try
         {
@@ -978,7 +972,7 @@ namespace sfx2
             if ( !_rFirstNonEmpty.getLength() )
                 _rFirstNonEmpty = sUIName;
         }
-        catch( IllegalArgumentException )
+        catch( const IllegalArgumentException& )
         {
 #ifdef DBG_UTIL
             ByteString aMsg( "Could not append DefaultFilter" );
@@ -992,10 +986,9 @@ namespace sfx2
             if (pFilter->GetName() == pDefaultFilter->GetName())
                 continue;
 
-            // --> PB 2004-09-21 #i32434# only use one extension
+            // Only use one extension (#i32434#)
             // (and always the first if there are more than one)
             sExtension = pFilter->GetWildcard().GetWildCard().GetToken( 0, ';' );
-            // <--
             sUIName = addExtension( pFilter->GetUIName(), sExtension, sal_False, _rFileDlgImpl );
             try
             {
@@ -1003,7 +996,7 @@ namespace sfx2
                 if ( !_rFirstNonEmpty.getLength() )
                     _rFirstNonEmpty = sUIName;
             }
-            catch( IllegalArgumentException )
+            catch( const IllegalArgumentException& )
             {
     #ifdef DBG_UTIL
                 ByteString aMsg( "Could not append Filter" );
@@ -1075,9 +1068,9 @@ namespace sfx2
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nXHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nPDFIndex = 0;
             }
@@ -1085,11 +1078,11 @@ namespace sfx2
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nXHTMLIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 if ( nPDFIndex != -1 )
-                    aIter++;
+                    ++aIter;
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nFlashIndex = 0;
             }
@@ -1100,7 +1093,7 @@ namespace sfx2
         if ( xFilterGroupManager.is() )
         {
             // Add both html/pdf filter as a filter group to get a separator between both groups
-            if ( aImportantFilterGroup.size() > 0 )
+            if ( !aImportantFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aImportantFilterGroup.size(); i++ )
@@ -1115,12 +1108,12 @@ namespace sfx2
                 {
                     xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
                 }
             }
 
-            if ( aFilterGroup.size() > 0 )
+            if ( !aFilterGroup.empty() )
             {
                 Sequence< StringPair > aFilters( aFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aFilterGroup.size(); i++ )
@@ -1135,7 +1128,7 @@ namespace sfx2
                 {
                     xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
                 }
             }
@@ -1157,7 +1150,7 @@ namespace sfx2
                         _rFirstNonEmpty = sUIName;
 
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
                     ByteString aMsg( "Could not append Filter" );
@@ -1179,7 +1172,7 @@ namespace sfx2
                         _rFirstNonEmpty = sUIName;
 
                 }
-                catch( IllegalArgumentException )
+                catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
                     ByteString aMsg( "Could not append Filter" );
@@ -1272,3 +1265,4 @@ namespace sfx2
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

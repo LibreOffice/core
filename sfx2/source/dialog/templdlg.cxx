@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _MENU_HXX //autogen
+#include <boost/scoped_ptr.hpp>
+
 #include <vcl/menu.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
@@ -79,6 +78,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -86,8 +86,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 
 //=========================================================================
-
-// Fenster wird ab jetzt dynamisch erstellt. Daher hier R"ander usw.
+// Window is now created dynamically. So here margins, etc.
 
 #define SFX_TEMPLDLG_HFRAME         3
 #define SFX_TEMPLDLG_VTOPFRAME      3
@@ -102,6 +101,13 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 // filter box has maximum 12 entries visible
 #define MAX_FILTER_ENTRIES          12
 
+// Special constant to save hierarchical mode
+// We've to use this hack since this is not the
+// index in the filter listbox that is saved but the
+// index in the filters list and hierarchical is not
+// in it
+#define HIERARCHICAL_FILTER_INDEX   0xfffe  // 0xffff is reserved
+
 //=========================================================================
 
 TYPEINIT0(SfxCommonTemplateDialog_Impl);
@@ -112,7 +118,7 @@ SFX_IMPL_DOCKINGWINDOW(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
 
 //-------------------------------------------------------------------------
 
-// Redirektionsfunktionen
+// Re-direct functions
 
 SfxTemplateDialog::SfxTemplateDialog
 (
@@ -121,8 +127,8 @@ SfxTemplateDialog::SfxTemplateDialog
     Window *pParent
 )
 
-/*  [Beschreibung]
-    Gestalterklasse.
+/*  [Description]
+    Designer class.
 */
     : SfxDockingWindow( pBind, pCW, pParent, SfxResId(DLG_STYLE_DESIGNER) ),
 
@@ -263,9 +269,6 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 
 sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-//  rEvt.maDropEvent.Context->acceptDrop( DND_ACTION_NONE );
-//  rEvt.maDropEvent.Context->dropComplete( sal_True );
-
     sal_Int8 nRet = DND_ACTION_NONE;
     SfxObjectShell* pDocShell = pDialog->GetObjectShell();
     TransferableDataHelper aHelper( rEvt.maDropEvent.Transferable );
@@ -351,11 +354,10 @@ SfxActionListBox::SfxActionListBox
     WinBits nWinBits
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    ListBox- Klasse, die im Command-Handler ein PopupMenu (Gestalter
-    spezifisch) startet.
-
+    ListBox class that starts a PopupMenu (designer specific) in the
+    command handler.
 */
 
 :       DropListBox_Impl(pParent->GetWindow(), nWinBits, pParent)
@@ -377,7 +379,7 @@ SfxActionListBox::SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent,
 
 PopupMenu* SfxActionListBox::CreateContextMenu( void )
 {
-    //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
+
     if( !( GetSelectionCount() > 0 ) )
     {
         pDialog->EnableEdit( sal_False );
@@ -410,11 +412,9 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
 SV_DECL_PTRARR_DEL(ExpandedEntries, StringPtr,16,8)
 SV_IMPL_PTRARR(ExpandedEntries, StringPtr)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    TreeListBox- Klasse f"ur die Anzeige der hierarchischen View
-    der Vorlagen
-
+    TreeListBox class for displaying the hierarchical view of the templates
 */
 
 class StyleTreeListBox_Impl : public DropListBox_Impl
@@ -474,12 +474,10 @@ PopupMenu* StyleTreeListBox_Impl::CreateContextMenu()
 
 sal_Bool StyleTreeListBox_Impl::DoubleClickHdl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-
-    DoubleClick-Handler; ruft entsprechenden Link.
-    Virtuelle Methode aus SV.
-
+    DoubleClick-Handler; calls the link.
+    SV virtual method.
 */
 {
     aDoubleClickLink.Call(this);
@@ -490,12 +488,10 @@ sal_Bool StyleTreeListBox_Impl::DoubleClickHdl()
 
 void StyleTreeListBox_Impl::Command( const CommandEvent& rCEvt )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Command Handler; dieser executed ein PopupMenu (Gestalter
-    spezifisch).
-    Virtuelle Methode aus SV.
-
+    Command Handler; this executes a PopupMenu (designer-specific)
+    SV virtual method.
 */
 {
     SvTreeListBox::Command(rCEvt);
@@ -530,12 +526,10 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
                                          SvLBoxEntry*  pEntry,
                                          SvLBoxEntry*& rpNewParent,
                                          sal_uIntPtr& lPos)
-/*  [Beschreibung]
+/*  [Description]
 
-    NotifyMoving Handler; dieser leitet per Link das Event an den Dialog
-    weiter.
-    Virtuelle Methode aus SV.
-
+    NotifyMoving Handler; This leads via a link on the event to the dialog.
+    SV virtual method.
 */
 {
     if(!pTarget || !pEntry)
@@ -559,14 +553,13 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
 
 long  StyleTreeListBox_Impl::ExpandingHdl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    ExpandingHdl Handler; der aktuelle Eintrag wird gemerkt.
-    Virtuelle Methode aus SV.
+    ExpandingHdl Handler; the current entry is noticed.
+    SV virtual method.
 
-    [Querverweise]
+    [Cross-reference]
     <StyleTreeListBox_Impl::ExpandedHdl()>
-
 */
 {
     pCurEntry = GetCurEntry();
@@ -577,14 +570,13 @@ long  StyleTreeListBox_Impl::ExpandingHdl()
 
 void  StyleTreeListBox_Impl::ExpandedHdl()
 
-/*  [Beschreibung]
+/*  [Description]
 
     ExpandedHdl Handler;
-    Virtuelle Methode aus SV.
+    SV virtual method.
 
-    [Querverweise]
+    [Cross-reference]
     <StyleTreeListBox_Impl::ExpandingHdl()>
-
 */
 
 {
@@ -602,25 +594,22 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(
     pCurEntry(0),
     pCommon(pParent)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor StyleTreeListBox_Impl
-
+    Constructor StyleTreeListBox_Impl
 */
 {
     EnableContextMenuHandling();
 }
 
 //-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 
 class StyleTreeArr_Impl;
 
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Struktur f"ur den Aufbau der hierarchischen View
-
+    Internal structure for the establishment of the hierarchical view
 */
 
 struct StyleTree_Impl
@@ -672,7 +661,12 @@ void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
 StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 {
     const sal_uInt16 nCount = rArr.Count();
-    // Alle unter ihren Parents einordnen
+
+    comphelper::string::NaturalStringSorter aSorter(
+        ::comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetLocale());
+
+    // Arrange all under their Parents
     sal_uInt16 i;
     for(i = 0; i < nCount; ++i)
     {
@@ -684,22 +678,18 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                 StyleTree_ImplPtr pCmp = rArr[j];
                 if(pCmp->aName == pEntry->aParent)
                 {
-                    // initial sortiert einfuegen
-                    sal_uInt16 ii;
-                    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-                    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
-                    for ( ii = 0;
-                         ii < pCmp->Count() && COMPARE_LESS ==
-                         pCollator->compareString( (*pCmp->pChilds)[ii]->aName,
-                                        pEntry->aName);++ii) ;
-                    pCmp->Put(pEntry,ii);
+                    // Paste initial filter
+                    sal_uInt16 nPos;
+                    for( nPos = 0 ; nPos < pCmp->Count() &&
+                             aSorter.compare((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
+                    {};
+                    pCmp->Put(pEntry,nPos);
                     break;
                 }
             }
         }
     }
-    // alle, die schon unter ihrem Parent eingeordnet wurden
-    // entfernen
+
     for(i = 0; i < rArr.Count(); )
     {
         if(rArr[i]->HasParent())
@@ -738,8 +728,7 @@ SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
 }
 
 //-------------------------------------------------------------------------
-
-// Konstruktor
+// Constructor
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, SfxDockingWindow* pW ) :
 
@@ -831,7 +820,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
-    const SfxStyleFamilyItem *pItem=pStyleFamilies->GetObject(nId);
+    const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
     return SfxFamilyIdToNId(pItem->GetFamily())-1;
 }
 
@@ -849,21 +838,19 @@ void SfxTemplateDialog_Impl::EnableEdit(sal_Bool bEnable)
 
 sal_uInt16 SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(sal_uInt16 nId)
 {
-    for ( sal_uInt16 i=0;i<pStyleFamilies->Count();i++ )
-        if ( SfxFamilyIdToNId(pStyleFamilies->GetObject(i)->GetFamily()) == nId+1 )
+    for ( size_t i = 0; i < pStyleFamilies->size(); i++ )
+        if ( SfxFamilyIdToNId(pStyleFamilies->at( i )->GetFamily()) == nId+1 )
             return i;
-    DBG_ERROR("Style Nummer nicht gefunden");
+    OSL_FAIL("Style Nummer not found");
     return 0;
 }
-
 
 //-------------------------------------------------------------------------
 
 void SfxCommonTemplateDialog_Impl::ReadResource()
 {
-    // globale Benutzer-Resource auslesen
-    sal_uInt16 i;
-    for(i = 0; i < MAX_FAMILIES; ++i)
+    // Read global user resource
+    for(sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
         pFamilyState[i] = 0;
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
@@ -882,23 +869,24 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     if ( pCurObjShell && 0xFFFF == nActFilter )
         nActFilter = pCurObjShell->GetAutoStyleFilterIndex();
 
-        // Einfuegen in die Toolbox
-        // umgekehrte Reihenfolge, da immer vorne eingefuegt wird.
-    sal_uInt16 nCount = pStyleFamilies->Count();
+    // Paste in the toolbox
+    // reverse order, since always inserted at the head
+    size_t nCount = pStyleFamilies->size();
 
     pBindings->ENTERREGISTRATIONS();
 
+    size_t i;
     for(i = 0; i < nCount; ++i)
     {
         sal_uInt16 nSlot = 0;
-        switch((sal_uInt16)pStyleFamilies->GetObject(i)->GetFamily())
+        switch( (sal_uInt16)pStyleFamilies->at( i )->GetFamily() )
         {
             case SFX_STYLE_FAMILY_CHAR: nSlot = SID_STYLE_FAMILY1; break;
             case SFX_STYLE_FAMILY_PARA: nSlot = SID_STYLE_FAMILY2; break;
             case SFX_STYLE_FAMILY_FRAME:nSlot = SID_STYLE_FAMILY3; break;
             case SFX_STYLE_FAMILY_PAGE: nSlot = SID_STYLE_FAMILY4; break;
             case SFX_STYLE_FAMILY_PSEUDO: nSlot = SID_STYLE_FAMILY5; break;
-            default: DBG_ERROR("unbekannte StyleFamily"); break;
+            default: OSL_FAIL("unknown StyleFamily"); break;
         }
         pBoundItems[i] =
             new SfxTemplateControllerItem(nSlot, *this, *pBindings);
@@ -926,14 +914,13 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     StartListening(*pBindings);
 
-//In umgekehrter Reihenfolge des Auftretens in den Stylefamilies einfuegen.
-//Das ist fuer den Toolbar des Gestalters. Die Listbox des Kataloges achtet
-//selbst auf korrekte Reihenfolge.
+// Insert in the reverse order of occurrence in the Style Families. This is for
+// the toolbar of the designer. The list box of the catalog respects the
+// correct order by itself.
 
-//Reihenfolgen: Reihenfolge in der Resource = Reihenfolge in Toolbar bzw.
-//Listbox.
-//Reihenfolge aufsteigender SIDs: Niedrige SIDs werden als erstes angezeigt,
-//wenn Vorlagen mehrerer Familien aktiv sind.
+// Sequences: the order of Resource = the order of Toolbar for example list box.
+// Order of ascending SIDs: Low SIDs are displayed first when templates of
+// several families are active.
 
     // in the Writer the UpdateStyleByExample Toolbox button is removed and
     // the NewStyle button gets a PopupMenu
@@ -942,7 +929,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     for( ; nCount--; )
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nCount );
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nCount );
         sal_uInt16 nId = SfxFamilyIdToNId( pItem->GetFamily() );
         InsertFamilyItem( nId, pItem );
     }
@@ -978,7 +965,7 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
 
 void SfxCommonTemplateDialog_Impl::Initialize()
 {
-    // globale Benutzer-Resource auslesen
+    // Read global user resource
     ReadResource();
     pBindings->Invalidate( SID_STYLE_FAMILY );
     pBindings->Update( SID_STYLE_FAMILY );
@@ -1052,20 +1039,27 @@ void SfxCommonTemplateDialog_Impl::SetAutomaticFilter()
 }
 
 //-------------------------------------------------------------------------
-
-// Hilfsfunktion: Zugriff auf aktuelles Family-Item
+// Helper function: Access to the current family item
 const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() const
 {
-    const sal_uInt16 nCount = pStyleFamilies->Count();
-    for(sal_uInt16 i = 0; i < nCount; ++i)
+    const size_t nCount = pStyleFamilies->size();
+    for(size_t i = 0; i < nCount; ++i)
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject(i);
-//        if(!pItem)continue;
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( i );
         sal_uInt16 nId = SfxFamilyIdToNId(pItem->GetFamily());
         if(nId == nActFamily)
             return pItem;
     }
     return 0;
+}
+
+SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
+{
+    if (!IsInitialized() || !pStyleSheetPool || !HasSelectedStyle())
+        return NULL;
+    const String aTemplName( GetSelectedEntry() );
+    const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    return pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
 }
 
 //-------------------------------------------------------------------------
@@ -1115,7 +1109,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
             {
                 aFmtLb.MakeVisible( pEntry );
                 aFmtLb.Select( pEntry );
-                bWaterDisabled = !HasSelectedStyle(); //added by BerryJia for fixing Bug76391 2003-1-22
+                bWaterDisabled = !HasSelectedStyle();
                 FmtSelectHdl( NULL );
             }
         }
@@ -1170,7 +1164,7 @@ void SfxCommonTemplateDialog_Impl::EnableTreeDrag( sal_Bool bEnable )
 
 void SfxCommonTemplateDialog_Impl::FillTreeBox()
 {
-    DBG_ASSERT( pTreeBox, "FillTreeBox() without treebox");
+    OSL_ENSURE( pTreeBox, "FillTreeBox() without treebox");
     if(pStyleSheetPool && nActFamily != 0xffff)
     {
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
@@ -1198,8 +1192,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         const sal_uInt16 nCount = aArr.Count();
         for(sal_uInt16 i = 0; i < nCount; ++i)
             FillBox_Impl(pTreeBox, aArr[i], aEntries);
-
-//      EnableEdit(sal_False);
+;
         EnableItem(SID_STYLE_WATERCAN,sal_False);
 
         SfxTemplateItem* pState = pFamilyState[nActFamily-1];
@@ -1216,7 +1209,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         pTreeBox->SetUpdateMode( sal_True );
 
         String aStyle;
-        if(pState)  //Aktuellen Eintrag selektieren
+        if(pState)  // Select current entry
             aStyle = pState->GetStyleName();
         SelectStyle(aStyle);
         EnableDelete();
@@ -1233,23 +1226,24 @@ sal_Bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 
 //-------------------------------------------------------------------------
 
-// intern: Aktualisierung der Anzeige
-void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // Flags, was aktualisiert werden soll (s.o.)
+// internal: Refresh the display
+// nFlags: what we should update.
+void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 {
-    DBG_ASSERT(nFlags, "nichts zu tun");
+    OSL_ENSURE(nFlags, "nothing to do");
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     if (!pItem)
     {
-        // Ist beim Vorlagenkatalog der Fall
+        // Is the case for the template catalog
         SfxTemplateItem **ppItem = pFamilyState;
-        const sal_uInt16 nFamilyCount = pStyleFamilies->Count();
-        sal_uInt16 n;
-        for(n=0;n<nFamilyCount;n++)
-            if(ppItem[StyleNrToInfoOffset(n)])break;
+        const size_t nFamilyCount = pStyleFamilies->size();
+        size_t n;
+        for( n = 0; n < nFamilyCount; n++ )
+            if( ppItem[ StyleNrToInfoOffset(n) ] ) break;
         if ( n == nFamilyCount )
-            // passiert gelegentlich bei Beichten, Formularen etc.; weiss der Teufel warum
+            // It happens sometimes, God knows why
             return;
-        ppItem+=StyleNrToInfoOffset(n);
+        ppItem += StyleNrToInfoOffset(n);
         nAppFilter = (*ppItem)->GetValue();
         FamilySelect(  StyleNrToInfoOffset(n)+1 );
         pItem = GetFamilyItem_Impl();
@@ -1257,29 +1251,29 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // F
 
     const SfxStyleFamily eFam = pItem->GetFamily();
 
-    SfxFilterTupel *pT = pItem->GetFilterList().GetObject(nActFilter);
-    sal_uInt16 nFilter = pT ? pItem->GetFilterList().GetObject(nActFilter)->nFlags : 0;
-    if(!nFilter)    // automatisch
+    SfxFilterTupel* pT = ( nActFilter < pItem->GetFilterList().size() ? pItem->GetFilterList()[nActFilter] : NULL );
+    sal_uInt16 nFilter     = pT ? pT->nFlags : 0;
+    if(!nFilter)   // automatic
         nFilter = nAppFilter;
 
-    DBG_ASSERT(pStyleSheetPool, "kein StyleSheetPool");
+    OSL_ENSURE(pStyleSheetPool, "no StyleSheetPool");
     if(pStyleSheetPool)
     {
         pStyleSheetPool->SetSearchMask(eFam, nFilter);
         pItem = GetFamilyItem_Impl();
-        if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)
+        if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)   // Update view type list (Hierarchical, All, etc.
         {
-            CheckItem(nActFamily, sal_True);    // Button in Toolbox checken
+            CheckItem(nActFamily, sal_True);    // check Button in Toolbox
             aFilterLb.SetUpdateMode(sal_False);
             aFilterLb.Clear();
             //insert hierarchical at the beginning
             sal_uInt16 nPos = aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
             aFilterLb.SetEntryData( nPos, (void*)(sal_uIntPtr)SFXSTYLEBIT_ALL );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
-            for(sal_uInt16 i = 0; i < rFilter.Count(); ++i)
+            for( size_t i = 0; i < rFilter.size(); ++i)
             {
-                sal_uIntPtr nFilterFlags = rFilter.GetObject(i)->nFlags;
-                nPos = aFilterLb.InsertEntry( rFilter.GetObject(i)->aName );
+                sal_uIntPtr nFilterFlags = rFilter[ i ]->nFlags;
+                nPos = aFilterLb.InsertEntry( rFilter[ i ]->aName );
                 aFilterLb.SetEntryData( nPos, (void*)nFilterFlags );
             }
             if(nActFilter < aFilterLb.GetEntryCount() - 1)
@@ -1288,12 +1282,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // F
             {
                 nActFilter = 0;
                 aFilterLb.SelectEntryPos(1);
-                SfxFilterTupel *pActT = rFilter.GetObject(nActFilter);
-                sal_uInt16 nFilterFlags = pActT ? rFilter.GetObject(nActFilter)->nFlags : 0;
+                SfxFilterTupel* pActT = ( nActFilter < rFilter.size() ) ? rFilter[ nActFilter ] : NULL;
+                sal_uInt16 nFilterFlags = pActT ? pActT->nFlags : 0;
                 pStyleSheetPool->SetSearchMask(eFam, nFilterFlags);
             }
 
-            //Falls in Treedarstellung wieder Family Hierarchie selektieren
+            // if the tree view again, select family hierarchy
             if(pTreeBox)
                 aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
 
@@ -1314,27 +1308,24 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // F
 
         if(nFlags & UPDATE_FAMILY_LIST)
         {
-//          EnableEdit(sal_False);
             EnableItem(SID_STYLE_WATERCAN,sal_False);
 
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
             SvLBoxEntry* pEntry = aFmtLb.First();
             SvStringsDtor aStrings;
 
+            comphelper::string::NaturalStringSorter aSorter(
+                ::comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetLocale());
+
             while( pStyle )
             {
                 //Bubblesort
-                for( sal_uInt16 nPos = aStrings.Count() + 1 ; nPos-- ;)
-                {
-                    if( !nPos || *aStrings[nPos-1] < pStyle->GetName() )
-                    {
-                        // Die Namen stehen in den Styles, also nicht kopieren
-                        // Reingefallen!: Writer hat insgesamt nur 1 Style
-                        aStrings.Insert(
-                            new String( pStyle->GetName() ), nPos );
-                        break;
-                    }
-                }
+                sal_uInt16 nPos;
+                for( nPos = aStrings.Count() ; nPos &&
+                    aSorter.compare(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--)
+                {};
+                aStrings.Insert( new String( pStyle->GetName() ), nPos );
                 pStyle = pStyleSheetPool->Next();
             }
 
@@ -1350,19 +1341,19 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // F
 
             if( nPos < nCount || pEntry )
             {
-                // Box mit den Vorlagen fuellen
+                // Fills the display box
                 aFmtLb.SetUpdateMode(sal_False);
                 aFmtLb.Clear();
 
-                nPos = 0;
-                while( nPos < nCount )
-                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos++ ));
-                aFmtLb.SetUpdateMode(sal_True);
+                for(nPos = 0 ;  nPos < nCount ; ++nPos )
+                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, sal_False, nPos);
+
+                aFmtLb.SetUpdateMode(true);
             }
-                // aktuelle Vorlage anzeigen
+            // Selects the current style if any
             SfxTemplateItem *pState = pFamilyState[nActFamily-1];
             String aStyle;
-            if(pState)  //Aktuellen Eintrag selektieren
+            if(pState)
                 aStyle = pState->GetStyleName();
             SelectStyle(aStyle);
             EnableDelete();
@@ -1372,12 +1363,11 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)     // F
 
 //-------------------------------------------------------------------------
 
-// Aktualisierung Anzeige: Gie\skanne an/aus
+// Updated display: Watering the house
 void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
-//  EnableItem(SID_STYLE_WATERCAN, pItem != 0);
     bWaterDisabled =  pItem == 0;
-//added by BerryJia for fixing Bug76391 2003-1-7
+
     if(!bWaterDisabled)
         bWaterDisabled = !HasSelectedStyle();
 
@@ -1392,11 +1382,11 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
         else
             EnableItem(SID_STYLE_WATERCAN, sal_False);
 
-//Waehrend Giesskannenmodus Statusupdates ignorieren.
+// Ignore while in watercan mode statusupdates
 
-    sal_uInt16 nCount=pStyleFamilies->Count();
+    size_t nCount = pStyleFamilies->size();
     pBindings->EnterRegistrations();
-    for(sal_uInt16 n=0; n<nCount; n++)
+    for(size_t n = 0; n < nCount; n++)
     {
         SfxControllerItem *pCItem=pBoundItems[n];
         sal_Bool bChecked = pItem && pItem->GetValue();
@@ -1413,9 +1403,9 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
 //-------------------------------------------------------------------------
 
-// Item mit dem Status einer Family wird kopiert und gemerkt
-// (Aktualisierung erfolgt, wenn alle Stati aktualisiert worden sind.
-// Siehe auch: <SfxBindings::AddDoneHdl(const Link &)>
+// Item with the status of a Family is copied and noted
+// (is updated when all states have also been updated.)
+// See also: <SfxBindings::AddDoneHdl(const Link &)>
 
 void SfxCommonTemplateDialog_Impl::SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* pItem )
 {
@@ -1425,14 +1415,13 @@ void SfxCommonTemplateDialog_Impl::SetFamilyState( sal_uInt16 nSlotId, const Sfx
         pFamilyState[nIdx] = new SfxTemplateItem(*pItem);
     bUpdate = sal_True;
 
-    // Wenn verwendete Vorlagen ( wie zum Teufel findet man das heraus ?? )
+    // If used templates (how the hell you find this out??)
     bUpdateFamily = sal_True;
 }
 
 //-------------------------------------------------------------------------
-
-// Benachrichtigung durch SfxBindings, da"s die Aktualisierung
-// beendet ist. St"o\st die Aktualisierung der Anzeige an.
+// Notice from SfxBindings that the update is completed. Pushes out the update
+// of the display.
 
 void SfxCommonTemplateDialog_Impl::Update_Impl()
 {
@@ -1463,7 +1452,6 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
             pStyleSheetPool = pNewPool;
             bDocChanged=sal_True;
         }
-//      InvalidateBindings();
     }
 
     if (bUpdateFamily)
@@ -1474,20 +1462,19 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
         if(pFamilyState[i])
             break;
     if(i == MAX_FAMILIES || !pNewPool)
-        // nichts erlaubt
+        // nothing is allowed
         return;
 
      SfxTemplateItem *pItem = 0;
-     // aktueller Bereich nicht innerhalb der erlaubten Bereiche
-     // oder Default
+     // current region not within the allowed region or default
      if(nActFamily == 0xffff || 0 == (pItem = pFamilyState[nActFamily-1] ) )
      {
          CheckItem(nActFamily, sal_False);
          SfxTemplateItem **ppItem = pFamilyState;
-         const sal_uInt16 nFamilyCount = pStyleFamilies->Count();
-         sal_uInt16 n;
-         for(n=0;n<nFamilyCount;n++)
-             if(ppItem[StyleNrToInfoOffset(n)])break;
+         const size_t nFamilyCount = pStyleFamilies->size();
+         size_t n;
+         for( n = 0; n < nFamilyCount; n++ )
+             if( ppItem[ StyleNrToInfoOffset(n) ] ) break;
          ppItem+=StyleNrToInfoOffset(n);
 
          nAppFilter = (*ppItem)->GetValue();
@@ -1497,7 +1484,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      }
      else if( bDocChanged )
      {
-         // andere DocShell -> alles neu
+         // other DocShell -> all new
          CheckItem( nActFamily, sal_True );
          nActFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pDocShell ) );
          if ( 0xFFFF == nActFilter )
@@ -1513,14 +1500,10 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      }
      else
      {
-         // anderer Filter fuer automatisch
+         // other filters for automatic
          CheckItem( nActFamily, sal_True );
          const SfxStyleFamilyItem *pStyleItem =  GetFamilyItem_Impl();
-#if OSL_DEBUG_LEVEL > 1
-         SfxFilterTupel *pT;
-         pT = pStyleItem->GetFilterList().GetObject(nActFilter);
-#endif
-         if(0 == pStyleItem->GetFilterList().GetObject(nActFilter)->nFlags
+         if (  0 == pStyleItem->GetFilterList()[ nActFilter ]->nFlags
             && nAppFilter != pItem->GetValue())
          {
              nAppFilter = pItem->GetValue();
@@ -1571,7 +1554,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
 //-------------------------------------------------------------------------
 void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    // Aktualisierung anstossen
+    // tap update
     if(rHint.Type() == TYPE(SfxSimpleHint))
     {
         switch(((SfxSimpleHint&) rHint ).GetId())
@@ -1616,10 +1599,10 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
                 }
                 break;
             }
-        // noetig, wenn zwichen Dokumenten umgeschaltet wird,
-        // aber in beiden Dokumenten die gleiche Vorlage gilt.
-        // Nicht sofort Update_Impl rufen, fuer den Fall da\s eines
-        // der Dokumente ein internes InPlaceObjekt ist!
+
+        // Necessary if switching between documents and in both documents
+        // the same template is used. Do not immediately call Update_Impl,
+        // for the case that one of the documents is an internal InPlaceObjekt!
           case SFX_HINT_DOCCHANGED:
             bUpdate = sal_True;
             break;
@@ -1632,9 +1615,9 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
         }
     }
 
-    // Timer nicht aufsetzen, wenn der StyleSheetPool in die Kiste geht, denn
-    // es kann sein, da\s sich ein neuer erst anmeldet, nachdem der Timer
-    // abgelaufen ist - macht sich schlecht in UpdateStyles_Impl() !
+    // Do not set timer when the stylesheet pool is in the box, because it is
+    // possible that a new one is registered after the timer is up -
+    // works bad in UpdateStyles_Impl ()!
 
     sal_uIntPtr nId = rHint.ISA(SfxSimpleHint) ? ( (SfxSimpleHint&)rHint ).GetId() : 0;
 
@@ -1657,12 +1640,12 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
 
 //-------------------------------------------------------------------------
 
-// Anderer Filter; kann durch den Benutzer umgeschaltet werden
-// oder als Folge von Neu oder Bearbeiten, wenn die aktuelle
-// Vorlage einem anderen Filter zugewiesen wurde.
+// Other filters; can be switched by the users or as a result of new or
+// editing, if the current document has been assigned a different filter.
 void SfxCommonTemplateDialog_Impl::FilterSelect(
-                sal_uInt16 nEntry,                  // Idx des neuen Filters
-                sal_Bool bForce )                   // Aktualisierung erzwingen, auch wenn der neue Filter gleich dem aktuellen ist
+                sal_uInt16 nEntry,  // Idx of the new Filters
+                sal_Bool bForce )   // Force update, even if the new filter is
+                                // equal to the current
 {
     if( nEntry != nActFilter || bForce )
     {
@@ -1691,7 +1674,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
 
 //-------------------------------------------------------------------------
 
-// Intern: Ausf"uhren von Funktionen "uber den Dispatcher
+// Internal: Perform functions through the Dispatcher
 sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     sal_uInt16 nId, const String &rStr, const String& rRefStr, sal_uInt16 nFamily,
     sal_uInt16 nMask, sal_uInt16 *pIdx, const sal_uInt16* pModifier)
@@ -1711,7 +1694,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
         pItems[ nCount++ ] = &aMask;
     if(SID_STYLE_UPDATE_BY_EXAMPLE == nId)
     {
-        //Sonderloesung fuer Numerierungsupdate im Writer
+        // Special solution for Numbering update in Writer
         const String aTemplName(GetSelectedEntry());
         aUpdName.SetValue(aTemplName);
         pItems[ nCount++ ] = &aUpdName;
@@ -1735,17 +1718,16 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )
     {
         SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
-        DBG_ASSERT(pFilterItem, "SfxUINT16Item erwartet");
+        OSL_ENSURE(pFilterItem, "SfxUINT16Item expected");
         sal_uInt16 nFilterFlags = pFilterItem->GetValue() & ~SFXSTYLEBIT_USERDEF;
-        if(!nFilterFlags)       // Benutzervorlage?
+        if(!nFilterFlags)       // User Template?
             nFilterFlags = pFilterItem->GetValue();
         const SfxStyleFamilyItem *pFamilyItem = GetFamilyItem_Impl();
-        const sal_uInt16 nFilterCount = (sal_uInt16) pFamilyItem->GetFilterList().Count();
+        const size_t nFilterCount = pFamilyItem->GetFilterList().size();
 
-        for ( sal_uInt16 i = 0; i < nFilterCount; ++i )
+        for ( size_t i = 0; i < nFilterCount; ++i )
         {
-            const SfxFilterTupel *pTupel =
-                pFamilyItem->GetFilterList().GetObject(i);
+            const SfxFilterTupel *pTupel = pFamilyItem->GetFilterList()[ i ];
 
             if ( ( pTupel->nFlags & nFilterFlags ) == nFilterFlags && pIdx )
                 *pIdx = i;
@@ -1768,11 +1750,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
     {
         if ( !bHierarchical )
         {
-            // TreeView einschalten
+            // Turn on treeView
             bHierarchical=sal_True;
             const String aSelectEntry( GetSelectedEntry());
             aFmtLb.Hide();
-            // aFilterLb.Disable();
 
             pTreeBox = new StyleTreeListBox_Impl(
                     this, WB_HASBUTTONS | WB_HASLINES |
@@ -1790,7 +1771,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             ((StyleTreeListBox_Impl*)pTreeBox)->
                 SetDropHdl(LINK(this, SfxCommonTemplateDialog_Impl,  DropHdl));
             pTreeBox->SetIndent(10);
-
+            SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+            SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
+            if (pDocShell)
+                SaveFactoryStyleFilter( pDocShell, HIERARCHICAL_FILTER_INDEX );
             FillTreeBox();
             SelectStyle(aSelectEntry);
             pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
@@ -1802,12 +1786,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
     {
         DELETEZ(pTreeBox);
         aFmtLb.Show();
-        //                              aFilterLb.Enable();
-        // Falls bHierarchical, kann sich die Familie geaendert haben
+        // If bHierarchical, then the family can have changed
         // minus one since hierarchical is inserted at the start
         FilterSelect(pBox->GetSelectEntryPos() - 1, bHierarchical );
         bHierarchical=sal_False;
-//      UpdateStyles_Impl(UPDATE_FAMILY_LIST);  // Anzeige aktualisieren
     }
 
     return 0;
@@ -1815,7 +1797,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
 
 //-------------------------------------------------------------------------
 
-// Select-Handler der Toolbox
+// Select-Handler for the Toolbox
 void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
 {
     if( nEntry != nActFamily )
@@ -1843,7 +1825,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
             const sal_Bool bState = IsCheckedItem(nEntry);
             sal_Bool bCheck;
             SfxBoolItem aBool;
-            // wenn eine Vorlage ausgewaehlt ist.
+            // when a template is chosen.
             if(!bState && aFmtLb.GetSelectionCount())
             {
                 const String aTemplName(
@@ -1868,13 +1850,11 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
             if(pStyleSheetPool && nActFamily != 0xffff)
             {
                 const SfxStyleFamily eFam=GetFamilyItem_Impl()->GetFamily();
-//pStyleSheetPool->GetSearchFamily();
                 const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
                 sal_uInt16 nFilter;
-                if(pItem&&nActFilter!=0xffff)
+                if( pItem && nActFilter != 0xffff )
                 {
-                    nFilter = pItem->GetFilterList().GetObject(
-                        nActFilter)->nFlags;
+                    nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
                     if(!nFilter)    // automatisch
                         nFilter = nAppFilter;
                 }
@@ -1882,9 +1862,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                SfxNewStyleDlg *pDlg =
+                SfxNewStyleDlg *pDlg = new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
                     // why? : FloatingWindow must not be parent of a modal dialog
-                    new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
                 if(RET_OK == pDlg->Execute())
                 {
                     pStyleSheetPool->SetSearchMask(eFam, nFilter);
@@ -1909,7 +1888,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
         case SID_TEMPLATE_LOAD:
             SFX_APP()->GetDispatcher_Impl()->Execute(nEntry);
         break;
-        default: DBG_ERROR("not implemented"); break;
+        default: OSL_FAIL("not implemented"); break;
     }
 }
 
@@ -1917,8 +1896,8 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
 
 static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_xModMgr, SfxObjectShell* i_pObjSh )
 {
-    DBG_ASSERT( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
-    DBG_ASSERT( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
+    OSL_ENSURE( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
+    OSL_ENSURE( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
 
     ::rtl::OUString sIdentifier;
 
@@ -1928,11 +1907,11 @@ static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_x
     }
     catch ( ::com::sun::star::frame::UnknownModuleException& )
     {
-        DBG_WARNING( "getModuleIdentifier(): unknown module" );
+        OSL_TRACE( "getModuleIdentifier(): unknown module" );
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "getModuleIdentifier(): exception of XModuleManager::identify()" );
+        OSL_FAIL( "getModuleIdentifier(): exception of XModuleManager::identify()" );
     }
 
     return sIdentifier;
@@ -1942,7 +1921,7 @@ static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_x
 
 sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh )
 {
-    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     sal_Int32 nFilter = -1;
 
     Sequence< PropertyValue > lProps;
@@ -1962,7 +1941,7 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
 
 void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter )
 {
-    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Reference< ::com::sun::star::container::XNameReplace > xContainer( xModuleManager, UNO_QUERY );
     if ( xContainer.is() )
     {
@@ -1987,7 +1966,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl *, pBox 
 
 //-------------------------------------------------------------------------
 
-// Handler des Neu-Buttons
+// Handler for the New-Buttons
 void SfxCommonTemplateDialog_Impl::NewHdl(void *)
 {
     String aEmpty;
@@ -2003,11 +1982,10 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         sal_uInt16 nMask;
-        if(pItem&&nActFilter!=0xffff)
+        if( pItem && nActFilter != 0xffff )
         {
-            nMask = pItem->GetFilterList().GetObject(
-                nActFilter)->nFlags;
-            if(!nMask)    // automatisch
+            nMask = pItem->GetFilterList()[ nActFilter ]->nFlags;
+            if(!nMask)    // automatic
                 nMask = nAppFilter;
         }
         else
@@ -2021,46 +1999,21 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
                      nMask);
 
         Application::SetDefDialogParent( pTmp );
-
-/*              {
-            DBG_ASSERT(nFilter < aFilterLb.GetEntryCount(),
-                       "Filter ueberindiziert");
-
-            if(!pTreeBox)
-            {
-//                              aFilterLb.SelectEntryPos(nFilter);
-                FilterSelect(nActFilter, sal_True);
-            }
-            else
-            {
-                FillTreeBox();
-                SfxTemplateItem *pState = pFamilyState[nActFamily-1];
-                if(pState)
-                {
-                    const String aStyle(pState->GetStyleName());
-                    SelectStyle(aStyle);
-                }
-                EnableDelete();
-            }*/
-//              }
     }
 }
 
 //-------------------------------------------------------------------------
 
-// Handler des Bearbeiten-Buttons
+// Handler for the edit-Buttons
 void SfxCommonTemplateDialog_Impl::EditHdl(void *)
 {
     if(IsInitialized() && HasSelectedStyle())
     {
         sal_uInt16 nFilter = nActFilter;
         String aTemplName(GetSelectedEntry());
-        const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-        const SfxStyleFamily eFam = pItem->GetFamily();
-        pStyleSheetPool->Find(aTemplName,eFam,SFXSTYLEBIT_ALL);  // -Wall required??
+        GetSelectedStyle(); // -Wall required??
         Window* pTmp;
-        //DefModalDialogParent setzen fuer
-        //Modalitaet der nachfolgenden Dialoge
+        //DefModalDialogParent set for modality of the following dialogs
         pTmp = Application::GetDefDialogParent();
         if ( ISA(SfxTemplateDialog_Impl) )
             Application::SetDefDialogParent( pWindow->GetParent() );
@@ -2069,16 +2022,6 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
         if ( Execute_Impl( SID_STYLE_EDIT, aTemplName, String(),
                           (sal_uInt16)GetFamilyItem_Impl()->GetFamily(), 0, &nFilter ) )
         {
-//          DBG_ASSERT(nFilter < aFilterLb.GetEntryCount(), "Filter ueberindiziert");
-//          aTemplName = pStyle->GetName();
-// kann durch Bearbeiten umbenannt worden sein
-/*                      if(!pTreeBox)
-            {
-                //                              aFilterLb.SelectEntryPos(nFilter);
-                //                              FilterSelect(nFilter, sal_True);
-            }
-            else
-                FillTreeBox();*/
         }
         Application::SetDefDialogParent( pTmp );
     }
@@ -2086,15 +2029,13 @@ void SfxCommonTemplateDialog_Impl::EditHdl(void *)
 
 //-------------------------------------------------------------------------
 
-// Handler des L"oschen-Buttons
+// Handler for the Delete-Buttons
 void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
         const String aTemplName( GetSelectedEntry() );
-        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-        SfxStyleSheetBase* pStyle =
-            pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+        SfxStyleSheetBase* pStyle = GetSelectedStyle();
         if ( pStyle )
         {
             String aMsg;
@@ -2111,7 +2052,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             {
                 PrepareDeleteAction();
 
-                if ( pTreeBox ) // Damit die Treelistbox beim L"oschen nicht zuklappt
+                if ( pTreeBox ) // To prevent the Treelistbox to shut down while
+                                // deleting.
                 {
                     bDontUpdate = sal_True;
                 }
@@ -2134,19 +2076,19 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
 {
     if(IsInitialized() && HasSelectedStyle())
     {
-        DBG_ASSERT(pStyleSheetPool, "Kein StyleSheetPool");
+        OSL_ENSURE(pStyleSheetPool, "No StyleSheetPool");
         const String aTemplName(GetSelectedEntry());
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam = pItem->GetFamily();
         sal_uInt16 nFilter = 0;
-        if(pItem->GetFilterList().Count() > nActFilter)
-            nFilter = pItem->GetFilterList().GetObject(nActFilter)->nFlags;
-        if(!nFilter)    // automatisch
+        if(pItem->GetFilterList().size() > nActFilter)
+            nFilter = pItem->GetFilterList()[ nActFilter ]->nFlags;
+        if(!nFilter)    // automatic
             nFilter = nAppFilter;
         const SfxStyleSheetBase *pStyle =
-            pStyleSheetPool->Find(aTemplName,eFam,
-                                  pTreeBox? SFXSTYLEBIT_ALL: nFilter);
-        DBG_ASSERT(pStyle, "Style nicht gefunden");
+            pStyleSheetPool->Find(aTemplName,eFam, pTreeBox? SFXSTYLEBIT_ALL: nFilter);
+
+        OSL_ENSURE(pStyle, "Style ot found");
         if(pStyle && pStyle->IsUserDefined())
         {
             EnableDel(sal_True);
@@ -2160,14 +2102,10 @@ void    SfxCommonTemplateDialog_Impl::EnableDelete()
     {
         EnableDel(sal_False);
     }
-//  rBindings.Invalidate( SID_STYLE_DELETE );
-//  rBindings.Update( SID_STYLE_DELETE );
 }
 
 //-------------------------------------------------------------------------
-
-// nach Selektion eines Eintrags den Focus gfs. wieder auf das App-Fenster
-// setzen
+// After selecting a focused item if possible again on the app window
 void    SfxCommonTemplateDialog_Impl::ResetFocus()
 {
     if(ISA(SfxTemplateDialog_Impl))
@@ -2182,11 +2120,11 @@ void    SfxCommonTemplateDialog_Impl::ResetFocus()
 
 //-------------------------------------------------------------------------
 
-// Doppelclick auf ein StyleSheet in der ListBox, wird angewendet.
+// Doppelclick on a style sheet in the ListBox is applied.
 IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    // nur, wenn dieser Bereich erlaubt ist
+    // only if that region is allowed
     if ( IsInitialized() && 0 != pFamilyState[nActFamily-1] &&
          GetSelectedEntry().Len() )
     {
@@ -2204,16 +2142,16 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
 
 //-------------------------------------------------------------------------
 
-// Selektion einer Vorlage w"ahrend des Watercan-Status
+// Selection of a template during the Watercan-Status
 IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox )
 {
-    // HilfePI antriggern, wenn von Call als Handler und Bereich erlaubt ist
+    // Trigger Help PI, if this is permitted of call handlers and field
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
     {
-        // nur, wenn Giesskanne an ist
+        // Only when the watercan is on
         if ( IsInitialized() &&
              IsCheckedItem(SID_STYLE_WATERCAN) &&
-             // nur, wenn dieser Bereich erlaubt ist
+             // only if that region is allowed
              0 != pFamilyState[nActFamily-1] )
         {
             String aEmpty;
@@ -2223,7 +2161,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
                          GetSelectedEntry(), aEmpty,
                          ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily());
         }
-//      EnableEdit(sal_True);
         EnableItem(SID_STYLE_WATERCAN, !bWaterDisabled);
         EnableDelete();
     }
@@ -2259,7 +2196,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, Window* pWin )
 {
     // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
-    DBG_ASSERT( sal_False, "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
+    OSL_FAIL( "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
 
     PopupMenu* pMenu = CreateContextMenu();
     pMenu->Execute( pWin, rPos );
@@ -2325,6 +2262,9 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
 {
     pDlgWindow->FreeResource();
+    SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+    pCurObjShell = pViewFrame->GetObjectShell();
+    sal_uInt16 nSavedFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) );
     Initialize();
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
@@ -2336,6 +2276,12 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
+    if( nSavedFilter == HIERARCHICAL_FILTER_INDEX )
+    {
+        bHierarchical = sal_False; // Force content refresh
+        aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
+        FilterSelectHdl(&aFilterLb);
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -2346,6 +2292,7 @@ void SfxTemplateDialog_Impl::EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnable 
 }
 
 //-------------------------------------------------------------------------
+// Insert element into dropdown filter "Frame Styles", "List Styles", etc.
 
 void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamilyItem *pItem)
 {
@@ -2357,7 +2304,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamil
         case SFX_STYLE_FAMILY_FRAME:    sHelpId = ".uno:FrameStyle"; break;
         case SFX_STYLE_FAMILY_PAGE:     sHelpId = ".uno:PageStyle"; break;
         case SFX_STYLE_FAMILY_PSEUDO:   sHelpId = ".uno:ListStyle"; break;
-        default: DBG_ERROR("unknown StyleFamily"); break;
+        default: OSL_FAIL("unknown StyleFamily"); break;
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
     m_aActionTbL.SetHelpId( nId, sHelpId );
@@ -2380,14 +2327,13 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
-    pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
+    pStyleFamilies->updateImages( *m_pStyleFamiliesId );
 
     // and set the new images on our toolbox
-    sal_uInt16 nLoop = pStyleFamilies->Count();
+    size_t nLoop = pStyleFamilies->size();
     for( ; nLoop--; )
     {
-        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nLoop );
         sal_uInt16 nId = SfxFamilyIdToNId( pItem->GetFamily() );
         m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }
@@ -2396,9 +2342,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 // ------------------------------------------------------------------------
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
-    m_aActionTbR.SetImageList( ImageList( SfxResId(
-        m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
-                                                             : DLG_STYLE_DESIGNER ) ) );
+    m_aActionTbR.SetImageList( ImageList( SfxResId( DLG_STYLE_DESIGNER ) ) );
 }
 
 // ------------------------------------------------------------------------
@@ -2428,14 +2372,6 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
-/*
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
-    if ( pImgMgr )
-    {
-        pImgMgr->ReleaseToolBox( &m_aActionTbL );
-        pImgMgr->ReleaseToolBox( &m_aActionTbR );
-    }
-*/
 }
 
 //-------------------------------------------------------------------------
@@ -2448,17 +2384,13 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 
 //-------------------------------------------------------------------------
 
-// "Uberladener Resize-Handler ( StarView )
-// Die Groesse der Listboxen wird angepasst
+// Overloaded Resize-Handler ( StarView )
+// The size of the Listboxen is adjusted
 void SfxTemplateDialog_Impl::Resize()
 {
     FloatingWindow *pF = m_pFloat->GetFloatingWindow();
     if ( pF )
     {
-//      if(pF->IsZoomedIn() && m_bZoomIn==sal_False)
-//          pF->SetText(String(SfxResId( DLG_STYLE_DESIGNER )));
-//      if(!pF->IsZoomedIn() && m_bZoomIn==sal_True && GetFamilyItem_Impl())
-//          UpdateStyles_Impl(UPDATE_FAMILY); //Bereich wieder in Titel schreiben
         m_bZoomIn = pF->IsRollUp();
         if ( m_bZoomIn )
             return;
@@ -2475,8 +2407,8 @@ void SfxTemplateDialog_Impl::Resize()
     m_aActionTbL.SetPosSizePixel(m_pFloat->LogicToPixel(Point(SFX_TEMPLDLG_HFRAME,SFX_TEMPLDLG_VTOPFRAME)),
                                  m_pFloat->LogicToPixel(aSizeATL));
 
-    // Die Position der rechten Toolbox nur ver"andern, wenn das Fenster
-    // breit genug ist
+    // only change the position of the right toolbox, when the window is wide
+    // enough
     Point aPosATR(aDlgSize.Width()-SFX_TEMPLDLG_HFRAME-aSizeATR.Width(),SFX_TEMPLDLG_VTOPFRAME);
     if(aDlgSize.Width() >= aMinSize.Width())
         m_aActionTbR.SetPosPixel(m_pFloat->LogicToPixel(aPosATR));
@@ -2503,8 +2435,7 @@ void SfxTemplateDialog_Impl::Resize()
                     SFX_TEMPLDLG_VTOPFRAME - 2*SFX_TEMPLDLG_MIDVSPACE-
                     nListHeight-aSizeATL.Height())) );
 
-    // Die Position der Listboxen nur ver"andern, wenn das Fenster
-    // hoch genug ist
+    // only change the position of the listbox, when the window is high enough
     if(aDlgSize.Height() >= aMinSize.Height())
     {
         aFilterLb.SetPosPixel(aFilterPos);
@@ -2609,7 +2540,7 @@ IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
     {
         for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
         {
-            if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+            if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
             {
                 aPropSeq[i].Value >>= sRet;
                 break;
@@ -2636,15 +2567,15 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             TIB_DROPDOWN == (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
     {
         //create a popup menu in Writer
-        PopupMenu *pMenu = new PopupMenu;
+        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString::createFromAscii(
-                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                    createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {
-            rtl::OUString sTextDoc = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+            rtl::OUString sTextDoc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
             if(xNameAccess->hasByName(sTextDoc))
             {
                 uno::Any a = xNameAccess->getByName( sTextDoc );
@@ -2656,18 +2587,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleNewByExample"));
+            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleNewByExample")));
             ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleUpdateByExample"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleUpdateByExample")));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LoadStyles")));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
@@ -2681,7 +2612,6 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         catch(uno::Exception&)
         {
         }
-        delete pMenu;
         pBox->Invalidate();
     }
     return 0;
@@ -2848,13 +2778,6 @@ void SfxTemplateCatalog_Impl::EnableItem( sal_uInt16 nMesId, sal_Bool bCheck )
         aOkBtn.Enable( bCheck );
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return;
-
-/*      for(sal_uInt16 i=0;i<aFamIds.Count&&aFamIds[i]!=nMesId;i++);
-    if(i!=aFamIds.Count())
-        aFamList.SelectEntry(aFamIds[i]);
-    else
-        DBG_ERROR("Entry nicht gefunden");*/
-
 }
 
 //-------------------------------------------------------------------------
@@ -2881,9 +2804,8 @@ sal_Bool SfxTemplateCatalog_Impl::IsCheckedItem(sal_uInt16 nMesId)
 }
 
 //-------------------------------------------------------------------------
-
-// Der Katalog muss nur das Disablen beherrschen, da waehrend seiner
-// Lebenszeit keine Selektionsaenderungen vorgenommen werden koennen
+// The list has only to master the disabling, since during his life time no
+// changes in selection can be made,
 void SfxTemplateCatalog_Impl::EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnable )
 {
     if ( !bEnable )
@@ -2965,7 +2887,7 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     InvalidateBindings();
 
     if ( IsCheckedItem( SID_STYLE_WATERCAN ) &&
-         // nur, wenn dieser Bereich erlaubt ist
+         // only if that area is allowed
          0 != pFamilyState[ nActFamily - 1 ] )
         Execute_Impl( SID_STYLE_APPLY, GetSelectedEntry(),
                       String(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
@@ -2994,24 +2916,17 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
-/*-- 10.12.2003 11:44:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
     ToolBox(pParent),
     DropTargetHelper(this),
     rParent(*pTemplateDialog)
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::~DropToolBox_Impl()
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nReturn = DND_ACTION_NONE;
@@ -3031,11 +2946,10 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     return nReturn;
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
      return rParent.aFmtLb.ExecuteDrop(rEvt);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

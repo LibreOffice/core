@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,6 @@
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
 #include <vector>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/printer.hxx>
 #include <sfx2/printopt.hxx>
@@ -75,23 +73,23 @@ struct SfxPrintOptDlg_Impl
 
 SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Erzeugt einen <SfxPrinter> aus dem Stream. Geladen wird genaugenommen
-    nur ein JobSetup. Falls ein solcher Drucker auf dem System nicht
-    verf"augbar ist, wird das Original als Orig-JobSetup gemerkt und
-    ein "anhlicher exisitierender Drucker genommen.
+    Creates a <SfxPrinter> from the stream. Loading is really only a jobsetup.
+    If such a printer is not available on the system, then the original is
+    marked as the original Job-setup and a comparable printer is selected from
+    existing ones.
 
-    Die 'pOptions' werden in den erzeugten SfxPrinter "ubernommen,
-    der Returnwert geh"ort dem Caller.
+    The 'pOptions' are taken over in the generated SfxPrinter, the return
+    value belongs to the caller.
 */
 
 {
-    // JobSetup laden
+    // Load JobSetup
     JobSetup aFileJobSetup;
     rStream >> aFileJobSetup;
 
-    // Drucker erzeugen
+    // Get printers
     SfxPrinter *pPrinter = new SfxPrinter( pOptions, aFileJobSetup );
     return pPrinter;
 }
@@ -100,9 +98,9 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
 SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Speichert das verwendete JobSetup des <SfxPrinter>s.
+    Saves the used JobSetup of <SfxPrinter>s.
 */
 
 {
@@ -113,9 +111,9 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieser Ctor erzeugt einen Standard-Drucker.
+    This constructor creates a default printer.
 */
 
     pOptions( pTheOptions ),
@@ -228,7 +226,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
 {
     SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
 
-    // TabPage einh"angen
+    // Insert TabPage
     pPage = pViewSh->CreatePrintOptionsPage( this, *pOptions );
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
@@ -238,7 +236,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
         pPage->Show();
     }
 
-    // Dialoggr"o\se bestimmen
+    // Set dialog size
     Size a6Sz = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     Size aBtnSz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
     Size aOutSz( pPage ? pPage->GetSizePixel() : Size() );
@@ -247,7 +245,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     nWidth += a6Sz.Width();
     aOutSz.Width() += nWidth;
     if ( aOutSz.Height() < 90 )
-        // mindestens die H"ohe der 3 Buttons
+        // at least the height of the 3 buttons
         aOutSz.Height() = 90;
     SetOutputSizePixel( aOutSz );
 
@@ -310,3 +308,4 @@ void SfxPrintOptionsDialog::DisableHelp()
     aHelpBtn.Disable();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

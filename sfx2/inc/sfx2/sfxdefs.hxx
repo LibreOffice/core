@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,13 @@
 #ifndef _SFXDEFS_HXX
 #define _SFXDEFS_HXX
 
-#define MESSAGEFILE_SDM_EXT "sdm"   // Extension des neuen Formats
-#define MESSAGEFILE_EXT     "smd"   // Extension der Single-Mail/News-Files
-#define MESSAGETEMPFILE_EXT "sd~"   // Extension f"ur Mail/News-TempFiles
+#define MESSAGEFILE_SDM_EXT "sdm"   // Extension for the new Formats
+#define MESSAGEFILE_EXT     "smd"   // Extension for Single-Mail/News-Files
+#define MESSAGETEMPFILE_EXT "sd~"   // Extension for Mail/News-TempFiles
 
 #define SfxFilterFlags sal_uLong
 #define PRODUCT_VERSION     "5.0"
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

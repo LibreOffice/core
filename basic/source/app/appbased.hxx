@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #define _APPBASED_HXX
 
 #include <basic/sbmod.hxx>
-#ifndef _SB_APPEDIT_HXX
 #include "appedit.hxx"
-#endif
-#ifndef _SB_TEXTEDIT_HXX
 #include "textedit.hxx"
-#endif
 
 class BasicFrame;
 class BreakpointWindow;
@@ -72,3 +69,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,3 +92,5 @@ void SAL_CALL EnhancedCustomShapeHandle::initialize( const com::sun::star::uno::
     throw ( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

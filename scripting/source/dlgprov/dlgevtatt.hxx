@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,14 +36,12 @@
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace dlgprov
@@ -52,7 +51,7 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
         ::rtl::OUStringHash,
         ::std::equal_to< ::rtl::OUString > > ListenerHash;
@@ -70,6 +69,7 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacher > m_xEventAttacher;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > getScriptListenerForKey( const rtl::OUString& sScriptName ) throw ( ::com::sun::star::uno::RuntimeException );
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, rtl::OUString& sCodeName );
+        void nestedAttachEvents( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects, const ::com::sun::star::uno::Any& Helper, rtl::OUString& sDialogCodeName );
         void  SAL_CALL attachEventsToControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier >& events, const ::com::sun::star::uno::Any& Helper  );
     public:
         DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
@@ -78,7 +78,7 @@ namespace dlgprov
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener );
+             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener ,const rtl::OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher
@@ -162,3 +162,5 @@ namespace dlgprov
 //.........................................................................
 
 #endif // SCRIPTING_DLGEVT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

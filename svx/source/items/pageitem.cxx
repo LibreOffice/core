@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,7 +165,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
 }
 
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -190,7 +191,7 @@ sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 case SVX_PAGE_ALL   : eRet = style::PageStyleLayout_ALL;       break;
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
-                    DBG_ERROR("was fuer ein Layout ist das?");
+                    OSL_FAIL("was fuer ein Layout ist das?");
                     return sal_False;
             }
             rVal <<= eRet;
@@ -198,10 +199,10 @@ sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
     }
 
-    return sal_True;
+    return true;
 }
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch( nMemberId )
     {
@@ -209,7 +210,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
-                return sal_False;
+                return false;
 
             eNumType = (SvxNumType)nValue;
         }
@@ -239,7 +240,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -336,3 +337,4 @@ SvStream& SvxSetItem::Store(SvStream &rStrm, sal_uInt16 nItemVersion) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

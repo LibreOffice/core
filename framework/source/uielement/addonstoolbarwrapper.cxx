@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/addonstoolbarmanager.hxx>
 
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBARW_HXX_
 #include <uielement/toolbar.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -60,9 +59,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -127,7 +124,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "ConfigurationData" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
                     aPropValue.Value >>= m_aConfigData;
             }
         }
@@ -139,7 +136,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
             ToolBar* pToolBar = 0;
             AddonsToolBarManager* pToolBarManager = 0;
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
@@ -194,3 +191,4 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

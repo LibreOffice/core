@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <sal/macros.h>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#ifndef _COM_SUN_STAR_EMBED_ElementModes_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -74,7 +74,7 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
     static ByteString aComment( (const sal_Char*)"EPSReplacementGraphic" );
     const MetaCommentAction* pComment = NULL;
 
-    if ( ( rMtf.GetActionCount() >= 2 )
+    if ( ( rMtf.GetActionSize() >= 2 )
             && ( rMtf.FirstAction()->GetType() == META_EPS_ACTION )
             && ( ((const MetaAction*)rMtf.GetAction( 1 ))->GetType() == META_COMMENT_ACTION )
             && ( ((const MetaCommentAction*)rMtf.GetAction( 1 ))->GetComment() == aComment ) )
@@ -139,7 +139,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -147,7 +147,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
                     else
                         aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
 
-                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *pStm, pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
@@ -331,7 +331,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -374,7 +374,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
-                            GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
                         }
                     }
                     delete pDest;
@@ -455,7 +455,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
         }
         else
         {
-            DBG_ERROR( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
+            OSL_FAIL( "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme" );
         }
     }
 
@@ -518,7 +518,6 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rt
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
         if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
-//REMOVE                ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
             ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
             xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );
@@ -553,7 +552,7 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
     {
         const ByteString aExt( rFileName.Copy( rFileName.Len() - 3 ), RTL_TEXTENCODING_ASCII_US );
 
-        for( long i = 0, nCount = sizeof( aMapper ) / sizeof( aMapper[ 0 ] ); ( i < nCount ) && !aMimeType.Len(); i++ )
+        for( long i = 0, nCount = SAL_N_ELEMENTS( aMapper ); ( i < nCount ) && !aMimeType.Len(); i++ )
             if( aExt == aMapper[ i ].pExt )
                 aMimeType = String( aMapper[ i ].pMimeType, RTL_TEXTENCODING_ASCII_US );
     }
@@ -571,7 +570,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pStream );
         delete pStream;
     }
 
@@ -606,7 +605,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
 
-            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString::createFromAscii( "image/tiff" ) ) );
+            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) );
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
@@ -617,7 +616,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
+                    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -625,8 +624,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     else
                         aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
 
-                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *pStream,
-                                                     pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStream,
+                                                     rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
@@ -957,7 +956,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
                 if( aId.getLength() )
                 {
-                    aRet = ::rtl::OUString::createFromAscii( XML_GRAPHICOBJECT_URL_BASE );
+                    aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
                     aRet += aId;
                 }
             }
@@ -1162,3 +1161,5 @@ Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServic
 }
 
 } // namespace svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

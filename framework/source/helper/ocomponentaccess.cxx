@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <helper/ocomponentaccess.hxx>
 #include <helper/ocomponentenumeration.hxx>
 
-#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -260,3 +259,5 @@ sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   
 #endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

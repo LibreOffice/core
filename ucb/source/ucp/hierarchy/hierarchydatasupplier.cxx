@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 }
 
@@ -162,7 +163,7 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
 
@@ -369,9 +370,9 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         static rtl::OUString aFolderType(
-            rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE ) );
+            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) );
         static rtl::OUString aLinkType(
-            rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) );
+            RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) );
 
         HierarchyContentProperties aData(
             m_pImpl->m_aResults[ nIndex ]->aData );
@@ -444,3 +445,4 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

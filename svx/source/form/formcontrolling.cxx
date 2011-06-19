@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "formcontrolling.hxx"
 #include "fmurl.hxx"
 #include "svx/svxids.hrc"
@@ -120,7 +122,7 @@ namespace svx
                         { FMURL_FORM_APPLY_FILTER,    SID_FM_FORM_FILTERED,       FormFeature::ToggleApplyFilter },
                         { FMURL_FORM_REMOVE_FILTER,   SID_FM_REMOVE_FILTER_SORT,  FormFeature::RemoveFilterAndSort }
                     };
-                    for ( size_t i=0; i<sizeof(aDescriptions)/sizeof(aDescriptions[0]); ++i )
+                    for ( size_t i=0; i < SAL_N_ELEMENTS(aDescriptions); ++i )
                         s_aFeatureDescriptions.push_back( aDescriptions[i] );
                 }
             };
@@ -461,13 +463,13 @@ namespace svx
         if ( bSuccess )
             return true;
 
-        // display the error. Prefer the one reported in errorOccured over the one caught.
+        // display the error. Prefer the one reported in errorOccurred over the one caught.
         if ( m_aOperationError.hasValue() )
             displayException( m_aOperationError );
         else if ( aError.hasValue() )
             displayException( aError );
         else
-            OSL_ENSURE( false, "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
+            OSL_FAIL( "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
 
         return false;
     }
@@ -533,7 +535,7 @@ namespace svx
             SID_FM_FILTER_START,
             SID_FM_VIEW_AS_GRID
         };
-        sal_Int32 nFeatureCount = sizeof( pSupportedFeatures ) / sizeof( pSupportedFeatures[ 0 ] );
+        sal_Int32 nFeatureCount = SAL_N_ELEMENTS( pSupportedFeatures );
         aSupportedFeatures.resize( nFeatureCount );
         ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
 
@@ -543,7 +545,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& _Event ) throw (RuntimeException)
     {
-        OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccured: two errors during one operation?" );
+        OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccurred: two errors during one operation?" );
         m_aOperationError = _Event.Reason;
     }
 
@@ -602,3 +604,5 @@ namespace svx
 //........................................................................
 }   // namespace svx
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

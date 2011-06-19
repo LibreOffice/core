@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+#include <sal/macros.h>
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <svx/fmpage.hxx>
@@ -36,48 +38,26 @@
 
 #include <svx/fmmodel.hxx>
 
-#ifndef SVX_LIGHT
-#ifndef _SVX_FMOBJ_HXX
 #include "fmobj.hxx"
-#endif
-#endif
 
-#ifndef SVX_LIGHT
-#ifndef _SVX_FMRESIDS_HRC
-#include "svx/fmresids.hrc"
-#endif
-#endif
+#include <svx/fmresids.hrc>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
-#ifndef SVX_LIGHT
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
-#endif
 
-#ifndef SVX_LIGHT
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#endif
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 
 
-#ifndef SVX_LIGHT
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
 using namespace ::svxform;
-#endif
 #include <comphelper/property.hxx>
 #include <rtl/logfile.hxx>
 
@@ -89,13 +69,9 @@ using com::sun::star::container::XNameContainer;
 TYPEINIT1(FmFormPage, SdrPage);
 
 //------------------------------------------------------------------
-FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMasterPage)
+FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
-#ifndef SVX_LIGHT
            ,m_pImpl( new FmFormPageImpl( *this ) )
-#else
-           ,m_pImpl(NULL)
-#endif
            ,m_pBasic(_pBasic)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
@@ -104,16 +80,10 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMaster
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
-#ifndef SVX_LIGHT
            ,m_pImpl(new FmFormPageImpl( *this ) )
-#else
-           ,m_pImpl(NULL)
-#endif
            ,m_pBasic(0)
 {
-#ifndef SVX_LIGHT
     m_pImpl->initFrom( rPage.GetImpl() );
-#endif
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
     m_sPageName = rPage.m_sPageName;
 }
@@ -121,9 +91,7 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
 //------------------------------------------------------------------
 FmFormPage::~FmFormPage()
 {
-#ifndef SVX_LIGHT
     delete m_pImpl;
-#endif
 }
 
 //------------------------------------------------------------------
@@ -158,9 +126,9 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception ex )
+        catch( ::com::sun::star::uno::Exception const& )
         {
-            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+            OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
         }
     }
 }
@@ -179,17 +147,14 @@ void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
     SdrPage::InsertObject( pObj, nPos, pReason );
-#ifndef SVX_LIGHT
     if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
         ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
-#endif
 }
 
 //------------------------------------------------------------------
 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::GetForms" );
-#ifndef SVX_LIGHT
     const SdrPage& rMasterPage( *this );
     const FmFormPage* pFormPage = dynamic_cast< const FmFormPage* >( &rMasterPage );
     OSL_ENSURE( pFormPage, "FmFormPage::GetForms: referenced page is no FmFormPage - is this allowed?!" );
@@ -197,10 +162,6 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContai
         pFormPage = this;
 
     return pFormPage->m_pImpl->getForms( _bForceCreate );
-#else
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
-    return aRef;
-#endif
 }
 
 //------------------------------------------------------------------
@@ -208,7 +169,6 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RequestHelp" );
-#ifndef SVX_LIGHT
     if( pView->IsAction() )
         return sal_False;
 
@@ -244,7 +204,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                     INET_PROT_HTTPS, INET_PROT_JAVASCRIPT, INET_PROT_IMAP, INET_PROT_POP3,
                     INET_PROT_VIM, INET_PROT_LDAP
                 };
-            for (sal_uInt16 i=0; i<sizeof(s_aQuickHelpSupported)/sizeof(s_aQuickHelpSupported[0]); ++i)
+            for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(s_aQuickHelpSupported); ++i)
                 if (s_aQuickHelpSupported[i] == aProtocol)
                 {
                     aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
@@ -268,7 +228,6 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
         else
             Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
     }
-#endif
     return sal_True;
 }
 
@@ -277,9 +236,9 @@ SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
-#ifndef SVX_LIGHT
     if (pObj && GetModel())
         ((FmFormModel*)GetModel())->GetUndoEnv().Removed(pObj);
-#endif
     return pObj;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

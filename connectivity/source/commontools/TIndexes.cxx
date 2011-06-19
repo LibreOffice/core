@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,7 +107,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
                         bPrimarKeyIndex = xRow->getString(6) == aName;
                     }
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                 }
                 OIndexHelper* pRet = new OIndexHelper(m_pTable,aName,aQualifier,bUnique,
@@ -149,7 +150,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         ::rtl::OUStringBuffer aSql( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE ")));
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+        ::rtl::OUString aDot( RTL_CONSTASCII_USTRINGPARAM( "." ));
 
         if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql.appendAscii("UNIQUE ");
@@ -237,7 +238,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
                 aSchema = _sElementName.copy(0,nLen);
             aName   = _sElementName.copy(nLen+1);
 
-            ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
+            ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP INDEX " ));
 
             ::rtl::OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::eInIndexDefinitions, false, false, true );
             ::rtl::OUString sIndexName,sTemp;
@@ -260,3 +261,4 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

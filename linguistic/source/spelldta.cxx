@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,17 +44,17 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
+using ::rtl::OUString;
+
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 
 #define MAX_PROPOSALS   40
@@ -234,14 +235,12 @@ Sequence< OUString > MergeProposalSeqs(
                     pMerged[ nIndex++ ] = pAlt[ i ];
             }
         }
-        //DBG_ASSERT(nIndex == nCountNew, "wrong number of proposals");
         aMerged.realloc( nIndex );
     }
 
     return aMerged;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 SpellAlternatives::SpellAlternatives()
@@ -370,7 +369,7 @@ com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives
     return Reference < XSpellAlternatives >(pAlt);
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

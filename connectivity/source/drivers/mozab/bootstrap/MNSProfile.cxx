@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 // Interfaces Needed
 
@@ -629,3 +631,5 @@ nsProfile::RegisterProfileManager(nsIProfile* aProfileService)
                              NS_PROFILE_CONTRACTID,
                              factory);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

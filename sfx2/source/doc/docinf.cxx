@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <rtl/ustring.hxx>
@@ -43,7 +45,6 @@
 #include <vcl/gdimtf.hxx>
 
 #include "oleprops.hxx"
-
 // ============================================================================
 
 // stream names
@@ -172,6 +173,28 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         }
     }
 
+    uno::Reference< document::XCompatWriterDocProperties > xWriterProps( i_xDocProps, uno::UNO_QUERY );
+    if ( xWriterProps.is() )
+    {
+        SfxOleSectionRef xBuiltin = aDocSet.GetSection( SECTION_BUILTIN );
+        if ( xBuiltin.get() )
+        {
+            try
+            {
+                String aStrValue;
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_MANAGER ) )
+                    xWriterProps->setManager( aStrValue );
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_CATEGORY ) )
+                    xWriterProps->setCategory( aStrValue );
+                if ( xBuiltin->GetStringValue( aStrValue, PROPID_COMPANY ) )
+                    xWriterProps->setCompany( aStrValue );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
+
     // return code
     return (nGlobError != ERRCODE_NONE) ? nGlobError : nDocError;
 }
@@ -239,7 +262,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString::createFromAscii("_PID_GUID") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_GUID")) );
     }
 
     // write hyperlinks
@@ -247,7 +270,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString::createFromAscii("_PID_HLINKS") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS")) );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(
@@ -291,7 +314,6 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
 // magic value 160 taken from GraphicHelper::getThumbnailFormatFromGDI_Impl()
         if( i_pThumb->CreateThumbnail( 160, aBitmap ) ) {
             aBitmap.GetBitmap().Write( aStream, sal_False, sal_False );
-//            uno::Sequence<sal_uInt8> aSeq(aStream.GetSize()); // WRONG
             aStream.Seek(STREAM_SEEK_TO_END);
             uno::Sequence<sal_uInt8> aSeq(aStream.Tell());
             const sal_uInt8* pBlob(
@@ -307,3 +329,4 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
 
 } // namespace sfx2
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

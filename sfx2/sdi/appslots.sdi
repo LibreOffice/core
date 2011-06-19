@@ -167,7 +167,11 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_HELP_SUPPORTPAGE
+    SID_SHOW_LICENSE
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
+    SID_SHOW_CREDITS
     [
         ExecMethod = MiscExec_Impl ;
     ]
@@ -177,6 +181,7 @@ interface Application
     SID_AVAILABLE_TOOLBARS
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_HELP_TUTORIALS
     [

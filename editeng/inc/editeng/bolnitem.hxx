@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,11 +41,13 @@
 
 
 /*
-[Beschreibung]
-Dieses Item transportiert eine SvxBorderLine.
+[Description]
+This Item transports a editeng::SvxBorderLine.
 */
 
-class SvxBorderLine;
+namespace editeng {
+    class SvxBorderLine;
+}
 
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
@@ -56,8 +59,8 @@ public:
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -67,17 +70,19 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
-    const   SvxBorderLine*  GetLine     () const { return pLine; }
-    void                    SetLine     ( const SvxBorderLine *pNew );
+    const   editeng::SvxBorderLine*  GetLine     () const { return pLine; }
+    void                    SetLine     ( const editeng::SvxBorderLine *pNew );
 
 private:
-    SvxBorderLine*  pLine;
+    editeng::SvxBorderLine*  pLine;
 };
 
 
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

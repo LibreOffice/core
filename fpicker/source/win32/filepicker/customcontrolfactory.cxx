@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
     if (GetClassName(aControlHandle,aClsName,sizeof(aClsName)) == 0) {
-        OSL_ENSURE(false,"Invalid window handle");
+        OSL_FAIL("Invalid window handle");
     }
 
     if (0 == _tcsicmp(aClsName,TEXT("button")))
@@ -84,3 +85,5 @@ CCustomControl* CCustomControlFactory::CreateCustomControlContainer()
 {
     return new CCustomControlContainer();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

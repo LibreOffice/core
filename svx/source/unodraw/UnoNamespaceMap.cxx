@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
@@ -312,3 +311,5 @@ Sequence< ::rtl::OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )
 {
     return NamespaceMap_getSupportedServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

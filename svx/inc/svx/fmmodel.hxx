@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,13 +61,13 @@ public:
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
                 SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable);
+    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, bool bUseExtColorTable);
     FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                FASTBOOL bUseExtColorTable);
+                bool bUseExtColorTable);
 
     virtual ~FmFormModel();
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage* AllocPage(bool bMasterPage);
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
     virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
@@ -100,3 +101,4 @@ private:
 
 #endif          // _FM_FMMODEL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

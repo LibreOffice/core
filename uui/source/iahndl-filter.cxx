@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "vcl/svapp.hxx"
 
@@ -62,7 +63,7 @@ executeFilterDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -100,7 +101,7 @@ handleNoSuchFilterRequest_(
     uno::Reference< document::XInteractionFilterSelect > xFilterTransport;
     getContinuations(rContinuations, &xAbort, &xFilterTransport);
 
-    // check neccessary ressources - if they don't exist - abort or
+    // check neccessary resources - if they don't exist - abort or
     // break this operation
     if (!xAbort.is())
         return;
@@ -115,8 +116,8 @@ handleNoSuchFilterRequest_(
     try
     {
         xFilterContainer.set( xServiceFactory->createInstance(
-                                  ::rtl::OUString::createFromAscii(
-                                      "com.sun.star.document.FilterFactory") ),
+                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.document.FilterFactory")) ),
                               uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -134,20 +135,20 @@ handleNoSuchFilterRequest_(
     // Note: We look for all filters here which match the following criteria:
     //          - they are import filters as minimum (of course they can
     //            support export too)
-    //          - we don't show any filter which are flaged as "don't show it
+    //          - we don't show any filter which are flagged as "don't show it
     //            at the UI" or "they are not installed"
     //          - we ignore filters, which have not set any valid
     //            DocumentService (e.g. our pure graphic filters)
     //          - we show it sorted by her UIName's
     //          - We don't use the order flag or prefer default filters.
     //            (Because this list shows all filters and the user should
-    //            find his filter vry easy by his UIName ...)
+    //            find his filter very easy by his UIName ...)
     //          - We use "_query_all" here ... but we filter graphic filters
     //            out by using DocumentService property later!
     uno::Reference< container::XEnumeration > xFilters
         = xFilterContainer->createSubSetEnumerationByQuery(
-            ::rtl::OUString::createFromAscii(
-                "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "_query_all:sort_prop=uiname:iflags=1:eflags=143360")));
     while (xFilters->hasMoreElements())
     {
         try
@@ -156,9 +157,9 @@ handleNoSuchFilterRequest_(
             uui::FilterNamePair             aPair;
 
             aPair.sInternal = lProps.getUnpackedValueOrDefault(
-                rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), ::rtl::OUString());
             aPair.sUI       = lProps.getUnpackedValueOrDefault(
-                 rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")), ::rtl::OUString());
             if ( (!aPair.sInternal.Len()) || (!aPair.sUI.Len() ) )
             {
                continue;
@@ -198,7 +199,7 @@ handleNoSuchFilterRequest_(
         return;
     }
 
-    // otherwhise set it for return
+    // otherwise set it for return
     xFilterTransport->setFilter( sSelectedFilter );
     xFilterTransport->select();
 }
@@ -223,8 +224,8 @@ handleAmbigousFilterRequest_(
     try
     {
         xFilterContainer.set( xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii(
-                "com.sun.star.document.FilterFactory") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.document.FilterFactory")) ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception & )
@@ -324,8 +325,8 @@ handleFilterOptionsRequest_(
     try
     {
         xFilterCFG.set( xServiceFactory->createInstance(
-                            ::rtl::OUString::createFromAscii(
-                                "com.sun.star.document.FilterFactory" ) ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.document.FilterFactory" )) ),
                         uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -342,7 +343,7 @@ handleFilterOptionsRequest_(
             {
                 rtl::OUString tmp = rRequest.rProperties[ind].Name;
                 if( rRequest.rProperties[ind].Name.equals(
-                        ::rtl::OUString::createFromAscii("FilterName")) )
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"))) )
                 {
                     rRequest.rProperties[ind].Value >>= aFilterName;
                     break;
@@ -357,7 +358,7 @@ handleFilterOptionsRequest_(
                      nProperty < nPropertyCount;
                      ++nProperty )
                     if( aProps[nProperty].Name.equals(
-                            ::rtl::OUString::createFromAscii("UIComponent")) )
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent"))) )
                     {
                         ::rtl::OUString aServiceName;
                         aProps[nProperty].Value >>= aServiceName;
@@ -469,3 +470,4 @@ UUIInteractionHelper::handleFilterOptionsRequest(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

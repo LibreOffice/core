@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,6 +51,7 @@
 #include <systools/win32/uwinapi.h>
 
 #include "rtl/string.h"
+#include <sal/macros.h>
 
 #include "../../../source/inc/exithelper.hxx"
 #include "../extendloaderenvironment.hxx"
@@ -113,7 +115,6 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
     }
 
     // Add SID subauthorities to the string.
-    //
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(*StringSid + dwSidSize, TEXT("-%lu"),
@@ -200,7 +201,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     {
         size_t len = lpLastSlash - szModuleFileName + 1;
         _tcsncpy( szPerfTuneIniFile, szModuleFileName, len );
-        _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), sizeof(szPerfTuneIniFile)/sizeof(szPerfTuneIniFile[0]) - len );
+        _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), SAL_N_ELEMENTS(szPerfTuneIniFile) - len );
     }
 
     // Create process with same command line, environment and stdio handles which
@@ -228,7 +229,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             TEXT("FastPipeCommunication"),
             TEXT("0"),
             szKey,
-            elementsof(szKey),
+            SAL_N_ELEMENTS(szKey),
             szPerfTuneIniFile
             );
 
@@ -256,10 +257,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 fSuccess = ConvertSidToStringSid( pSid, &szUserIdent );
 
-                _tcsncpy( szPipeName, PIPE_PREFIX, elementsof(szPipeName) );
-                _tcsncat( szPipeName, szUserIdent, elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, PIPE_POSTFIX, elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, _ultot( SUPD, szSUPD, 10), elementsof(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncpy( szPipeName, PIPE_PREFIX, SAL_N_ELEMENTS(szPipeName) );
+                _tcsncat( szPipeName, szUserIdent, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncat( szPipeName, PIPE_POSTFIX, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncat( szPipeName, _ultot( SUPD, szSUPD, 10), SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
 
                 LocalFree( szUserIdent );
 
@@ -355,7 +356,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         BOOL    bHeadlessMode( FALSE );
 
         {
-            // Check command line arguments for "-headless" parameter. We only
+            // Check command line arguments for "--headless" parameter. We only
             // set the environment variable "ATTACHED_PARENT_PROCESSID" for the headless
             // mode as self-destruction of the soffice.bin process can lead to
             // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
@@ -369,8 +370,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
                 for ( n = 1; n < argc; n++ )
                 {
-                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) )
+                    if ( 0 == _tcsnicmp( argv[n], _T("-headless"), 9 ) ||
+                         0 == _tcsnicmp( argv[n], _T("--headless"), 9 ) )
+                    {
                         bHeadlessMode = TRUE;
+                    }
                 }
             }
         }
@@ -417,9 +421,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             CloseHandle( aProcessInfo.hProcess );
             CloseHandle( aProcessInfo.hThread );
         }
-    } while ( fSuccess
-              && ( ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode || ::desktop::ExitHelper::E_NORMAL_RESTART == dwExitCode ));
+    } while ( false );
     delete[] lpCommandLine;
 
     return fSuccess ? dwExitCode : -1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

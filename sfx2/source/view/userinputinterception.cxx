@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -266,7 +267,7 @@ namespace sfx2
             break;
 
             default:
-                OSL_ENSURE( false, "UserInputInterception::handleNotifyEvent: illegal event type!" );
+                OSL_FAIL( "UserInputInterception::handleNotifyEvent: illegal event type!" );
                 break;
         }
 
@@ -276,3 +277,5 @@ namespace sfx2
 //........................................................................
 } // namespace sfx2
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,10 @@
 #define _SFX_APPDATA_HXX
 
 #include <tools/link.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
+#include <svtools/ehdl.hxx>
 #include "rtl/ref.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -112,6 +113,12 @@ public:
     SfxFilterMatcher*                   pMatcher;
     ResMgr*                             pBasicResMgr;
     ResMgr*                             pSvtResMgr;
+#ifdef DBG_UTIL
+    SimpleErrorHandler *m_pSimpleErrorHdl;
+#endif
+    SfxErrorHandler *m_pToolsErrorHdl;
+    SfxErrorHandler *m_pSoErrorHdl;
+    SfxErrorHandler *m_pSbxErrorHdl;
     SfxStatusDispatcher*                pAppDispatch;
     SfxDocumentTemplates*               pTemplates;
 
@@ -150,14 +157,14 @@ public:
     SfxViewFrame*               pViewFrame;
     SfxSlotPool*                pSlotPool;
     SfxResourceManager*         pResMgr;
-    SfxDispatcher*              pAppDispat;     // Dispatcher falls kein Doc
+    SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
 
-    sal_uInt16                      nDocNo;             // Laufende Doc-Nummer (AutoName)
+    sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
     sal_uInt16                      nInterfaces;
 
-    sal_Bool                        bDispatcherLocked:1;    // nichts ausf"uhren
-    sal_Bool                        bDowning:1;   // sal_True ab Exit und danach
+    sal_Bool                        bDispatcherLocked:1;    // do nothing
+    sal_Bool                        bDowning:1;   // sal_True on Exit and afterwards
     sal_Bool                        bInQuit : 1;
     sal_Bool                        bInvalidateOnUnlock : 1;
     sal_Bool                        bODFVersionWarningLater : 1;
@@ -165,7 +172,6 @@ public:
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
 
-    void                        UpdateApplicationSettings( sal_Bool bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
 
@@ -179,3 +185,4 @@ public:
 #endif // #ifndef _SFX_APPDATA_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

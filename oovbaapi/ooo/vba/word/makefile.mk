@@ -79,6 +79,31 @@ IDLFILES= XGlobals.idl\
     XPageSetup.idl \
     XSection.idl \
     XSections.idl \
+    XRow.idl \
+    XRows.idl \
+    XColumn.idl \
+    XColumns.idl \
+    XCell.idl \
+    XCells.idl \
+    XTabStop.idl \
+    XTabStops.idl \
+    XTableOfContents.idl \
+    XTablesOfContents.idl \
+    XListFormat.idl \
+    XListGalleries.idl \
+    XListGallery.idl \
+    XListTemplate.idl \
+    XListTemplates.idl \
+    XListLevel.idl \
+    XListLevels.idl \
+    XFormField.idl \
+    XFormFields.idl \
+    XRevision.idl \
+    XRevisions.idl \
+    XFrame.idl \
+    XFrames.idl \
+    XCheckBox.idl \
+    XHeadersFooters.idl \
 
 # ------------------------------------------------------------------
 

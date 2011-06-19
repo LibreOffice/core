@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,8 @@
 #include "precompiled_connectivity.hxx"
 #include "TSortIndex.hxx"
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity;
 //------------------------------------------------------------------
@@ -85,16 +87,16 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 };
 
 // -----------------------------------------------------------------------------
-::vos::ORef<OKeySet> OSortIndex::CreateKeySet()
+::rtl::Reference<OKeySet> OSortIndex::CreateKeySet()
 {
     Freeze();
 
-    ::vos::ORef<OKeySet> pKeySet = new OKeySet();
+    ::rtl::Reference<OKeySet> pKeySet = new OKeySet();
     pKeySet->get().reserve(m_aKeyValues.size());
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
                     ,::std::back_inserter(pKeySet->get())
-                    ,::std::select1st<TIntValuePairVector::value_type>());
+                    ,::o3tl::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;
 }
@@ -151,7 +153,7 @@ sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
 
     if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
     {
-        OSL_ASSERT("OSortIndex::GetValue: Invalid use of index!");
+        OSL_FAIL("OSortIndex::GetValue: Invalid use of index!");
         return 0;
     }
     return m_aKeyValues[nPos-1].first;
@@ -176,3 +178,4 @@ OKeyValue* OKeyValue::createKeyValue(sal_Int32 _nVal)
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

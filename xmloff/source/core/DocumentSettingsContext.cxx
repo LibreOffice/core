@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -104,8 +103,8 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
         while (aItr != aProps.end())
         {
             *pProps = *aItr;
-            pProps++;
-            aItr++;
+            ++pProps;
+            ++aItr;
         }
     }
     return aSeq;
@@ -116,8 +115,6 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
     uno::Reference<container::XNameContainer> xNameContainer;
 
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -129,7 +126,7 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
             while (aItr != aProps.end())
             {
                 xNameContainer->insertByName(aItr->Name, aItr->Value);
-                aItr++;
+                ++aItr;
             }
         }
     }
@@ -140,8 +137,6 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer;
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -154,8 +149,8 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
             while (aItr != aProps.end())
             {
                 xIndexContainer->insertByIndex(i, aItr->Value);
-                aItr++;
-                i++;
+                ++aItr;
+                ++i;
             }
         }
     }
@@ -456,10 +451,18 @@ void XMLDocumentSettingsContext::EndElement()
     }
 
     sal_Bool bLoadDocPrinter( sal_True );
-    ::comphelper::ConfigurationHelper::readDirectKey(
-        ::comphelper::getProcessServiceFactory(),
-        C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
-        ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
+            ::comphelper::getProcessServiceFactory(),
+            C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
+            ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
@@ -604,7 +607,7 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
         if( sTrimmedChars.getLength() )
         {
             rtl::OUString sChars;
-            if( msValue )
+            if( msValue.getLength() )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;
@@ -689,7 +692,7 @@ void XMLConfigItemContext::EndElement()
             mrAny <<= maDecoded;
         }
         else {
-            DBG_ERROR("wrong type");
+            OSL_FAIL("wrong type");
         }
 
         ManipulateConfigItem();
@@ -697,7 +700,7 @@ void XMLConfigItemContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -786,7 +789,7 @@ void XMLConfigItemMapNamedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
@@ -895,7 +898,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             }
                             catch( uno::Exception& )
                             {
-                                DBG_ERROR( "Exception while importing forbidden characters" );
+                                OSL_FAIL( "Exception while importing forbidden characters" );
                             }
                         }
                     }
@@ -903,7 +906,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
             }
             else
             {
-                DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
+                OSL_FAIL( "could not get the XForbiddenCharacters from document!" );
                 mrAny <<= maProps.GetIndexContainer();
             }
         }
@@ -1008,7 +1011,8 @@ void XMLConfigItemMapIndexedContext::EndElement()
         mpBaseContext->AddPropertyValue();
     }
     else {
-        DBG_ERROR("no BaseContext");
+        OSL_FAIL("no BaseContext");
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

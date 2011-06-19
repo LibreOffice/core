@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <classes/protocolhandlercache.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/debug.hxx>
@@ -126,9 +125,6 @@ class DispatchProvider  :   // interfaces
         /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
         css::uno::Reference< css::frame::XDispatch > m_xMenuDispatcher     ;
         css::uno::Reference< css::frame::XDispatch > m_xHelpAgentDispatcher;
-/*      css::uno::Reference< css::frame::XDispatch > m_xBlankDispatcher    ;
-        css::uno::Reference< css::frame::XDispatch > m_xSelfDispatcher     ;
-        css::uno::Reference< css::frame::XDispatch > m_xDefaultDispatcher  ;*/
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
 
@@ -171,3 +167,5 @@ class DispatchProvider  :   // interfaces
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

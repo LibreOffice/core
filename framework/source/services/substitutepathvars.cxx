@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,14 +49,12 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
 
-#ifndef _UTL_BOOTSTRAP_HXX_
 #include <unotools/bootstrap.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include <i18npool/mslangid.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>
@@ -71,7 +70,6 @@
 //_________________________________________________________________________________________________________________
 //      Defines
 //_________________________________________________________________________________________________________________
-//
 
 #define STRPOS_NOTFOUND                  (sal_Int32)-1
 
@@ -102,10 +100,9 @@
 #define REPLACELENGTH_LANGID             9
 #define REPLACELENGTH_VLANG              8
 #define REPLACELENGTH_WORKDIRURL        13
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// New variable of hierachy service (#i32656#)
 #define REPLACELENGTH_BASEINSTURL       14
 #define REPLACELENGTH_USERDATAURL       14
-// <--
 
 // Name of the pre defined path variables
 #define VARIABLE_INST                                   "$(inst)"
@@ -125,10 +122,9 @@
 #define VARIABLE_PROGURL                                "$(progurl)"
 #define VARIABLE_USERURL                                "$(userurl)"
 #define VARIABLE_WORKDIRURL                             "$(workdirurl)"
-// --> PB 2004-10-27 #i32656# - new variable of hierachy service
+// New variable of hierachy service (#i32656#)
 #define VARIABLE_BASEINSTURL                            "$(baseinsturl)"
 #define VARIABLE_USERDATAURL                            "$(userdataurl)"
-// <--
 #define VARIABLE_BRANDBASEURL                           "$(brandbaseurl)"
 
 using namespace com::sun::star::uno;
@@ -140,7 +136,6 @@ using namespace com::sun::star::container;
 //_________________________________________________________________________________________________________________
 //      Namespace
 //_________________________________________________________________________________________________________________
-//
 
 namespace framework
 {
@@ -217,17 +212,15 @@ static FixedVariable aFixedVarTable[] =
     { VARIABLE_PROGURL,     PREDEFVAR_PROGURL,      REPLACELENGTH_PROGURL,  true                       },
     { VARIABLE_USERURL,     PREDEFVAR_USERURL,      REPLACELENGTH_USERURL,  true                       },
     { VARIABLE_WORKDIRURL,  PREDEFVAR_WORKDIRURL,   REPLACELENGTH_WORKDIRURL,true                      },  // Special variable (transient) and don't use for resubstitution!
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL,true                     },
     { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL,true                     },
-    // <--
     { VARIABLE_BRANDBASEURL,PREDEFVAR_BRANDBASEURL, RTL_CONSTASCII_LENGTH(VARIABLE_BRANDBASEURL), true }
 };
 
 //_________________________________________________________________________________________________________________
 //      Implementation helper classes
 //_________________________________________________________________________________________________________________
-//
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const rtl::OUString& aOSString )
 {
@@ -288,7 +281,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
         while ( nSharePoints < aSharePointNames.getLength() )
         {
             rtl::OUString aSharePointNodeName( m_aSharePointsNodeName );
-            aSharePointNodeName += rtl::OUString::createFromAscii( "/" );
+            aSharePointNodeName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             aSharePointNodeName += aSharePointNames[ nSharePoints ];
 
             SubstituteRuleVector aRuleSet;
@@ -324,7 +317,6 @@ void SubstitutePathVariables_Impl::Commit()
 //_________________________________________________________________________________________________________________
 //      private methods
 //_________________________________________________________________________________________________________________
-//
 
 OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
 {
@@ -642,7 +634,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
 
     // Sort user variables to path length
     SubstituteVariables::const_iterator pIter;
-    for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); pIter++ )
+    for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
     {
         ReSubstUserVarOrder aUserOrderVar;
         rtl::OUStringBuffer aStrBuffer( pIter->second.aSubstVariable.getLength() );
@@ -688,7 +680,6 @@ throw ( NoSuchElementException, RuntimeException )
 //_________________________________________________________________________________________________________________
 //      protected methods
 //_________________________________________________________________________________________________________________
-//
 
 IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNotify*, EMPTYARG )
 {
@@ -718,12 +709,24 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
         rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Paths/Work"),
-                            ::rtl::OUString::createFromAscii("WritePath"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paths/Work")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
+
+    // fallback in case config layer does not return an useable work dir value.
+    if (aWorkPath.getLength() < 1)
+        aWorkPath = GetWorkVariableValue();
+
     return aWorkPath;
 }
 
@@ -731,12 +734,19 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
     ::rtl::OUString aWorkPath;
-    ::comphelper::ConfigurationHelper::readDirectKey(
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
-                            ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
-                            ::rtl::OUString::createFromAscii("Variables"),
-                            ::rtl::OUString::createFromAscii("Work"),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Variables")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
+    }
+    catch(RuntimeException &)
+    {
+    }
 
     // fallback to $HOME in case platform dependend config layer does not return
     // an usuable work dir value.
@@ -1032,7 +1042,7 @@ throw ( RuntimeException )
     while ( !bResubstitutionCompleted )
     {
         ReSubstFixedVarOrderVector::const_iterator pIterFixed;
-        for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); pIterFixed++ )
+        for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); ++pIterFixed )
         {
             rtl::OUString aValue = m_aPreDefVars.m_FixedVar[ (sal_Int32)pIterFixed->eVariable ];
             sal_Int32 nPos = aURL.indexOf( aValue );
@@ -1072,7 +1082,7 @@ throw ( RuntimeException )
 
         // This part can be iteratered more than one time as variables can contain variables again!
         ReSubstUserVarOrderVector::const_iterator pIterUser;
-        for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); pIterUser++ )
+        for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); ++pIterUser )
         {
             rtl::OUString aVarValue = pIterUser->aVarName;
             sal_Int32 nPos = aURL.indexOf( aVarValue );
@@ -1186,16 +1196,14 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(inst), $(instpath), $(insturl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // <--
 
     // Set $(user), $(userpath), $(userurl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // --> PB 2004-11-11 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERDATAURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // <--
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
@@ -1211,12 +1219,13 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Detect the language type of the current office
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
     rtl::OUString aLocaleStr;
-    if ( utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
+    if ( utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
         aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
-    else
-    {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Wrong Any type for language!" );
-    }
+    // We used to have an else branch here with a LOG_ERROR, but that
+    // always fired in some unit tests when this code was built with
+    // debug=t, so it seems fairly pointless, especially as
+    // aPreDefPathVariables.m_eLanguageType has been initialized to a
+    // default value above anyway.
 
     // Set $(lang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANG ] = ConvertOSLtoUCBURL(
@@ -1252,3 +1261,5 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

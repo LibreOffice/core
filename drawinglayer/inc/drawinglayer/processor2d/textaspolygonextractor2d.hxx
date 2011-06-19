@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -72,7 +75,7 @@ namespace drawinglayer
 
             This processor extracts text in the feeded primitives to filled polygons
          */
-        class TextAsPolygonExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D : public BaseProcessor2D
         {
         private:
             // extraction target
@@ -102,3 +105,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

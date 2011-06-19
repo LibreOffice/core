@@ -404,12 +404,12 @@
 #define ITEM_EDIT_UNDO \
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \
-    Text [ en-US ] = "Can't Undo" ; \
+    Text [ en-US ] = "Undo" ;   \
 
 #define ITEM_EDIT_REDO \
     Identifier = SID_REDO ; \
     Command = ".uno:Redo" ; \
-    Text [ en-US ] = "Can't Restore" ; \
+    Text [ en-US ] = "Redo" ; \
 
 #define ITEM_EDIT_REPEAT \
     Identifier = SID_REPEAT ; \
@@ -518,12 +518,6 @@
     Identifier = SID_BROWSER ; \
     Command = ".uno:Beamer" ; \
     Text [ en-US ] = "~Beamer" ; \
-
-
-#define ITEM_INSERT_HYPERLINK_INSERT \
-    Identifier = SID_HYPERLINK_INSERT ; \
-    Command = ".uno:InsertHyperlink" ; \
-    Text [ en-US ] = "~Hyperlink Bar" ; \
 
 #define ITEM_INSERT_INSERT_GRAPHIC \
     Identifier = SID_INSERT_GRAPHIC ; \
@@ -660,7 +654,7 @@
     MenuItem\
     {\
         Identifier = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
-        Text [ en-US ] = "~Numbering/Bullets..." ; \
+        Text [ en-US ] = "~Bullets and Numbering..." ; \
             };
 
 
@@ -904,10 +898,16 @@
     Command = ".uno:ActiveHelp" ; \
     Text [ en-US ] = "~Extended Tips" ; \
 
-#define ITEM_HELP_SUPPORTPAGE \
-    Identifier = SID_HELP_SUPPORTPAGE ; \
-    Command = ".uno:HelpSupport" ; \
-    Text [ en-US ] = "~Support" ;   \
+#define ITEM_SHOW_LICENSE \
+    Identifier = SID_SHOW_LICENSE ; \
+    Command = ".uno:ShowLicense" ; \
+    Text [ en-US ] = "License information..." ; \
+
+#define ITEM_SHOW_CREDITS \
+    Identifier = SID_SHOW_CREDITS ; \
+    Command = ".uno:ShowCredits" ; \
+    HelpID = SID_SHOW_CREDITS ; \
+    Text [ en-US ] = "%PRODUCTNAME Credits..." ;
 
 #define ITEM_HELP_ONLINE_REGISTRATION \
     Identifier = SID_ONLINE_REGISTRATION ; \
@@ -958,15 +958,15 @@
                 };\
                 MenuItem\
                 {\
-                    ITEM_HELP_SUPPORTPAGE\
-                };\
-                MenuItem\
-                {\
-                    ITEM_HELP_ONLINE_REGISTRATION\
+                    ITEM_SHOW_LICENSE\
                 };\
                 MenuItem\
                 {\
                     Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_SHOW_CREDITS\
                 };\
                 MenuItem\
                 {\
@@ -1209,7 +1209,7 @@
                 };\
             };\
         };\
-        Text [ en-US ] = "Case/Characters";\
+        Text [ en-US ] = "~Change Case";\
             };
 
 #define ITEM_OPEN_HYPERLINK \

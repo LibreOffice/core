@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@
 #include "boost/bind.hpp"
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 namespace deploy = com::sun::star::deployment;
@@ -77,9 +78,6 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 namespace css = com::sun::star;
 
-
-//#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -90,7 +88,6 @@ struct CompIdentifiers
     bool operator() (::std::vector<Reference<deploy::XPackage> > const & a,
                      ::std::vector<Reference<deploy::XPackage> > const & b)
         {
-
             if (getName(a).compareTo(getName(b)) < 0)
                 return true;
             return false;
@@ -105,7 +102,7 @@ OUString CompIdentifiers::getName(::std::vector<Reference<deploy::XPackage> > co
     //get the first non-null reference
     Reference<deploy::XPackage>  extension;
     ::std::vector<Reference<deploy::XPackage> >::const_iterator it = a.begin();
-    for (; it != a.end(); it++)
+    for (; it != a.end(); ++it)
     {
         if (it->is())
         {
@@ -170,11 +167,9 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
     }
 }
 
-} //end namespace
+}
 
 namespace dp_manager {
-
-
 
 //------------------------------------------------------------------------------
 
@@ -238,12 +233,11 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
     return xPackageManager;
 }
 
-
 /*
   Enters the XPackage objects into a map. They must be all from the
   same repository. The value type of the map is a vector, where each vector
   represents an extension with a particular identifier. The first member
-  is represents the user extension, the second the shared extension and the
+  represents the user extension, the second the shared extension and the
   third the bundled extension.
  */
 void ExtensionManager::addExtensionsToMap(
@@ -256,13 +250,13 @@ void ExtensionManager::addExtensionsToMap(
     ::std::list<OUString>::const_iterator citNames =
         m_repositoryNames.begin();
     int index = 0;
-    for (;citNames != m_repositoryNames.end(); citNames++, index++)
+    for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
     {
         if (citNames->equals(repository))
             break;
     }
 
-    for (int i = 0; i < seqExt.getLength(); i++)
+    for (int i = 0; i < seqExt.getLength(); ++i)
     {
         Reference<deploy::XPackage> const & xExtension = seqExt[i];
         OUString id = dp_misc::getIdentifier(xExtension);
@@ -282,8 +276,8 @@ void ExtensionManager::addExtensionsToMap(
 
 /*
    returns a list containing extensions with the same identifier from
-   all repositories (user, shared, bundled) If one repository does not
-   have this extension, then the list contains an empty Referenc. The list
+   all repositories (user, shared, bundled). If one repository does not
+   have this extension, then the list contains an empty Reference. The list
    is ordered according to the priority of the repostories:
    1. user
    2. shared
@@ -299,29 +293,21 @@ void ExtensionManager::addExtensionsToMap(
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
-    try
-    {   //will throw an exception if the extension does not exist
-        extensionList.push_back(getUserRepository()->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch(lang::IllegalArgumentException &)
+    Reference<deploy::XPackageManager> lRepos[] = {
+          getUserRepository(), getSharedRepository(), getBundledRepository() };
+    for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
     {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-        extensionList.push_back(getSharedRepository()->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-       extensionList.push_back(getBundledRepository()->getDeployedPackage(
-           identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
+        Reference<deploy::XPackage> xPackage;
+        try
+        {
+            xPackage = lRepos[i]->getDeployedPackage(
+                identifier, fileName, Reference<ucb::XCommandEnvironment>());
+        }
+        catch(lang::IllegalArgumentException &)
+        {
+            // thrown if the extension does not exist in this repository
+        }
+        extensionList.push_back(xPackage);
     }
     OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
@@ -347,7 +333,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 
         //throw an IllegalArgumentException if there is no extension at all.
         typedef  ::std::list<Reference<deploy::XPackage> >::const_iterator CIT;
-        for (CIT i = listExtensions.begin(); i != listExtensions.end(); i++)
+        for (CIT i = listExtensions.begin(); i != listExtensions.end(); ++i)
             bHasExtension |= i->is();
         if (!bHasExtension)
             throw lang::IllegalArgumentException(
@@ -379,8 +365,6 @@ ExtensionManager::getExtensionsWithSameIdentifier(
             static_cast<OWeakObject*>(this), exc);
     }
 }
-
-
 
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
@@ -738,7 +722,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                 }
                 //check again dependencies but prevent user interaction,
                 //We can disregard the license, because the user must have already
-                //accepted it, whe we called checkPrerequisites the first time
+                //accepted it, when we called checkPrerequisites the first time
                 SilentCheckPrerequisitesCommandEnv * pSilentCommandEnv =
                     new SilentCheckPrerequisitesCommandEnv();
                 Reference<ucb::XCommandEnvironment> silentCommandEnv(pSilentCommandEnv);
@@ -758,10 +742,13 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     if (repository.equals(OUSTR("user")))
                         bUserDisabled2 = false;
 
-                    ::rtl::OUString const name(xNewExtension->getName());
+                    // pass the two values via variables to workaround gcc-4.3.4 specific bug (bnc#655912)
+                    OUString sNewExtensionIdentifier = dp_misc::getIdentifier(xNewExtension);
+                    OUString sNewExtensionFileName = xNewExtension->getName();
+
                     activateExtension(
-                        dp_misc::getIdentifier(xNewExtension),
-                        name, bUserDisabled2, false, xAbortChannel,
+                        sNewExtensionIdentifier, sNewExtensionFileName,
+                        bUserDisabled2, false, xAbortChannel,
                         Reference<ucb::XCommandEnvironment>());
                 }
                 else
@@ -1066,7 +1053,6 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     }
 }
 
-
 void ExtensionManager::disableExtension(
     Reference<deploy::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -1187,7 +1173,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >
               vecExtensions;
         id2extensions::const_iterator mapIt = mapExt.begin();
-        for (;mapIt != mapExt.end(); mapIt++)
+        for (;mapIt != mapExt.end(); ++mapIt)
             vecExtensions.push_back(mapIt->second);
 
         //sort the element according to the identifier
@@ -1382,7 +1368,7 @@ sal_Bool ExtensionManager::synchronize(
         {
             //We catch the exception, so we can write the lastmodified file
             //so we will no repeat this everytime OOo starts.
-            OSL_ENSURE(0, "Extensions Manager: synchronize");
+            OSL_FAIL("Extensions Manager: synchronize");
         }
         OUString lastSyncBundled(RTL_CONSTASCII_USTRINGPARAM(
                                      "$BUNDLED_EXTENSIONS_USER/lastsynchronized"));
@@ -1513,8 +1499,6 @@ sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & reposito
     return getPackageManager(repository)->isReadOnly();
 }
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<ExtensionManager> servicePIP;
@@ -1540,7 +1524,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }
@@ -1588,4 +1572,4 @@ void ExtensionManager::fireModified()
 
 } // namespace dp_manager
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

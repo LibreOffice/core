@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/configuration/XUpdate.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -75,6 +77,7 @@ public:
         context_(context)
     {
         OSL_ASSERT(context.is());
+        lock_ = lock();
     }
 
 private:
@@ -97,6 +100,7 @@ private:
         css::uno::Sequence< rtl::OUString > const & excludedPaths)
         throw (css::uno::RuntimeException);
 
+    boost::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
@@ -104,7 +108,7 @@ void Service::insertExtensionXcsFile(
     sal_Bool shared, rtl::OUString const & fileUri)
     throw (css::uno::RuntimeException)
 {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     Components::getSingleton(context_).insertExtensionXcsFile(shared, fileUri);
 }
 
@@ -114,7 +118,7 @@ void Service::insertExtensionXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertExtensionXcuFile(shared, fileUri, &mods);
@@ -129,7 +133,7 @@ void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.removeExtensionXcuFile(fileUri, &mods);
@@ -147,7 +151,7 @@ void Service::insertModificationXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Components & components = Components::getSingleton(context_);
         Modifications mods;
         components.insertModificationXcuFile(
@@ -179,3 +183,5 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

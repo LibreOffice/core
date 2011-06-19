@@ -236,7 +236,7 @@ Resource RID_SVXSW_FRAMEPOSITIONS
     {
         Text [ en-US ] = "Row" ;
     };
-    // OD 05.01.2004 #i22341#
+    // #i22341#
     String STR_REL_LINE
     {
         Text [ en-US ] = "Line of text" ;

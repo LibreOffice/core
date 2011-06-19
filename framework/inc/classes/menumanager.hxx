@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #define REFERENCE                                       ::com::sun::star::uno::Reference
@@ -75,21 +75,12 @@ class MenuManager : public ThreadHelpBase           ,
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
     public:
-        // #110897#
         MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
-#if 0
-        MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            REFERENCE< XFRAME >& rFrame,
-            AddonMenu*          pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-#endif
 
         virtual ~MenuManager();
 
@@ -105,11 +96,14 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
-        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages);
+        static void FillMenuImages(
+            ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
+            Menu* _pMenu,
+            sal_Bool bShowMenuImages
+        );
 
     protected:
         DECL_LINK( Highlight, Menu * );
@@ -151,14 +145,12 @@ class MenuManager : public ThreadHelpBase           ,
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
-        sal_Bool                            m_bWasHiContrast;
         sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
 };
@@ -166,3 +158,5 @@ class MenuManager : public ThreadHelpBase           ,
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

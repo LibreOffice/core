@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "connectivity/sdbcx/VTable.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 #include "file/filedllapi.hxx"
 #include <tools/stream.hxx>
 #include "connectivity/FValue.hxx"
@@ -50,7 +49,7 @@ namespace connectivity
         protected:
             OConnection*                                        m_pConnection;
             SvStream*                                           m_pFileStream;
-            ::vos::ORef<OSQLColumns>                            m_aColumns;
+            ::rtl::Reference<OSQLColumns>                           m_aColumns;
             sal_Int32                                           m_nFilePos;                 // aktuelle IResultSetHelper::Movement
             sal_uInt8*                                          m_pBuffer;
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
@@ -86,7 +85,7 @@ namespace connectivity
             virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) = 0;
             virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData) = 0;
 
-            ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
+            ::rtl::Reference<OSQLColumns> getTableColumns() const {return m_aColumns;}
             virtual sal_Bool InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual sal_Bool DeleteRow(const OSQLColumns& _rCols);
             virtual sal_Bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
@@ -118,3 +117,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_FILE_TABLE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

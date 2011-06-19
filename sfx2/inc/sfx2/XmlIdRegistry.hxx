@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,8 @@ isValidXmlId(::rtl::OUString const & i_rStreamName,
     ::rtl::OUString const & i_rIdref)
 {
     return isValidNCName(i_rIdref) &&
-        (i_rStreamName.equalsAscii("content.xml") ||
-         i_rStreamName.equalsAscii("styles.xml"));
+        (i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("content.xml")) ||
+         i_rStreamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("styles.xml")));
 }
 
 
@@ -96,3 +97,4 @@ public:
 
 #endif // _SFX_XMLIDREGISTRY_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

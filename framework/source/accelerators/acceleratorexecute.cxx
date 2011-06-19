@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,33 +33,19 @@
 //===============================================
 // includes
 
-#ifndef __COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
-#ifndef __COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 //===============================================
 // namespace
@@ -371,7 +358,7 @@ IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         {
             Sequence<css::beans::PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(OUString::createFromAscii("AcceleratorExecute"));
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(OUString(RTL_CONSTASCII_USTRINGPARAM("AcceleratorExecute")));
             ::comphelper::UiEventsLogger::logDispatch(aURL, source);
         }
         xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
@@ -380,3 +367,5 @@ IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
 }
 
 } // namespace svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

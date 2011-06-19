@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,10 +93,10 @@ int SAL_CALL main(int , char*, char* )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -108,11 +109,11 @@ int SAL_CALL main(int , char*, char* )
     try
     {
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
-            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SimpleSystemMail" ) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SimpleSystemMail")) ), UNO_QUERY );
 
         if ( !xSmplMailClientSuppl.is() )
         {
-            OSL_ENSURE( sal_False, "Error creating SimpleSystemMail Service" );
+            OSL_FAIL( "Error creating SimpleSystemMail Service" );
             return(-1);
         }
 
@@ -126,30 +127,30 @@ int SAL_CALL main(int , char*, char* )
 
             if ( xSmplMailMsg.is( ) )
             {
-                xSmplMailMsg->setRecipient( OUString::createFromAscii("tino.rachui@germany.sun.com") );
-                xSmplMailMsg->setOriginator( OUString::createFromAscii( "tino.rachui@germany.sun.com" ) );
+                xSmplMailMsg->setRecipient( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
+                xSmplMailMsg->setOriginator( OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com")) );
 
                 Sequence< OUString > ccRecips( 1 );
-                ccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
+                ccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
 
                 xSmplMailMsg->setCcRecipient( ccRecips );
 
                 Sequence< OUString > bccRecips( 1 );
-                bccRecips[0] = OUString::createFromAscii( "tino.rachui@germany.sun.com" );
+                bccRecips[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("tino.rachui@germany.sun.com"));
 
                 xSmplMailMsg->setBccRecipient( bccRecips );
 
-                xSmplMailMsg->setSubject( OUString::createFromAscii( "Mapi Test" ) );
+                xSmplMailMsg->setSubject( OUString(RTL_CONSTASCII_USTRINGPARAM("Mapi Test")) );
 
                 Sequence< OUString > attachements( 2 );
 
-                OUString aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe" );
+                OUString aFile(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe"));
                 OUString aFileURL;
 
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
                 attachements[0] = aFileURL;
 
-                aFile = OUString::createFromAscii( "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe" );
+                aFile = OUString(RTL_CONSTASCII_USTRINGPARAM("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe"));
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
                 attachements[1] = aFile;
@@ -171,10 +172,10 @@ int SAL_CALL main(int , char*, char* )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory
@@ -186,3 +187,5 @@ int SAL_CALL main(int , char*, char* )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

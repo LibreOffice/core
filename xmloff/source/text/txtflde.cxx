@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,77 +94,77 @@ using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 
 
-static sal_Char __READONLY_DATA FIELD_SERVICE_SENDER[] = "ExtendedUser";
-static sal_Char __READONLY_DATA FIELD_SERVICE_AUTHOR[] = "Author";
-static sal_Char __READONLY_DATA FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GETEXP[] = "GetExpression";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SETEXP[] = "SetExpression";
-static sal_Char __READONLY_DATA FIELD_SERVICE_USER[] = "User";
-static sal_Char __READONLY_DATA FIELD_SERVICE_INPUT[] = "Input";
-static sal_Char __READONLY_DATA FIELD_SERVICE_USERINPUT[] = "InputUser";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DATETIME[] = "DateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_DISPLAY[] = "Database";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NAME[] = "DatabaseName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
-static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
-static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
-static sal_Char __READONLY_DATA FIELD_SERVICE_FILE_NAME[] = "FileName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CHAPTER[] = "Chapter";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_WORD_COUNT[] = "WordCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SHEET_NAME[] = "SheetName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
-static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
-static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
-static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
-static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
-static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetadataField";
-static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
+static sal_Char const FIELD_SERVICE_SENDER[] = "ExtendedUser";
+static sal_Char const FIELD_SERVICE_AUTHOR[] = "Author";
+static sal_Char const FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
+static sal_Char const FIELD_SERVICE_GETEXP[] = "GetExpression";
+static sal_Char const FIELD_SERVICE_SETEXP[] = "SetExpression";
+static sal_Char const FIELD_SERVICE_USER[] = "User";
+static sal_Char const FIELD_SERVICE_INPUT[] = "Input";
+static sal_Char const FIELD_SERVICE_USERINPUT[] = "InputUser";
+static sal_Char const FIELD_SERVICE_DATETIME[] = "DateTime";
+static sal_Char const FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
+static sal_Char const FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
+static sal_Char const FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
+static sal_Char const FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
+static sal_Char const FIELD_SERVICE_DB_DISPLAY[] = "Database";
+static sal_Char const FIELD_SERVICE_DB_NAME[] = "DatabaseName";
+static sal_Char const FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
+static sal_Char const FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
+static sal_Char const FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
+static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
+static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
+static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
+static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
+static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
+static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
+static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
+static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
+static sal_Char const FIELD_SERVICE_FILE_NAME[] = "FileName";
+static sal_Char const FIELD_SERVICE_CHAPTER[] = "Chapter";
+static sal_Char const FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
+static sal_Char const FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
+static sal_Char const FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
+static sal_Char const FIELD_SERVICE_WORD_COUNT[] = "WordCount";
+static sal_Char const FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
+static sal_Char const FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
+static sal_Char const FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
+static sal_Char const FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
+static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
+static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
+static sal_Char const FIELD_SERVICE_SHEET_NAME[] = "SheetName";
+static sal_Char const FIELD_SERVICE_MACRO[] = "Macro";
+static sal_Char const FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
+static sal_Char const FIELD_SERVICE_DDE[] = "DDE";
+static sal_Char const FIELD_SERVICE_URL[] = "URL";
+static sal_Char const FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
+static sal_Char const FIELD_SERVICE_SCRIPT[] = "Script";
+static sal_Char const FIELD_SERVICE_ANNOTATION[] = "Annotation";
+static sal_Char const FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
+static sal_Char const FIELD_SERVICE_META[] = "MetadataField";
+static sal_Char const FIELD_SERVICE_MEASURE[] = "Measure";
+static sal_Char const FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
+static sal_Char const FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
-SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
+SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_AUTHOR, FIELD_ID_AUTHOR ),
@@ -755,7 +756,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DRAW_FOOTER:
     case FIELD_ID_DRAW_DATE_TIME:
     default:
-        DBG_ERROR("unkown field type/field has no content");
+        OSL_FAIL("unkown field type/field has no content");
         return sal_True; // invalid info; string in case of doubt
     }
 }
@@ -974,7 +975,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type!");
+        OSL_FAIL("unkown field type!");
         // ignore -> no format for unkowns
         break;
     }
@@ -1851,7 +1852,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_UNKNOWN:
     default:
-        DBG_ERROR("unkown field type encountered!");
+        OSL_FAIL("unkown field type encountered!");
         // always export content
         GetExport().Characters(sPresentation);
     }
@@ -1908,7 +1909,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 sal_Int32 i = 0;
                 for( set<OUString>::iterator aSetIter = rOurMasters.begin();
                      aSetIter != rOurMasters.end();
-                     aSetIter++, i++ )
+                     ++aSetIter, ++i )
                 {
                     aFieldMasters[i] = *aSetIter;
                 }
@@ -1989,7 +1990,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aVarIter = aVarName.begin();
              aVarIter != aVarName.end();
-             aVarIter++) {
+             ++aVarIter) {
 
             OUString sName = *aVarIter;
 
@@ -2048,7 +2049,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aSeqIter = aSeqName.begin();
              aSeqIter != aSeqName.end();
-             aSeqIter++) {
+             ++aSeqIter) {
 
             OUString sName = *aSeqIter;
 
@@ -2090,7 +2091,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aUserIter = aUserName.begin();
              aUserIter != aUserName.end();
-             aUserIter++) {
+             ++aUserIter) {
 
             OUString sName = *aUserIter;
 
@@ -2141,7 +2142,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
 
         for (vector<OUString>::iterator aDdeIter = aDdeName.begin();
              aDdeIter != aDdeName.end();
-             aDdeIter++)
+             ++aDdeIter)
         {
             OUString sName = *aDdeIter;
 
@@ -2689,7 +2690,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 }
 
 
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },
@@ -2956,7 +2957,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
 
         default:
             // unkown placeholder: XML_TEXT
-            DBG_ERROR("unkown placeholder type");
+            OSL_FAIL("unkown placeholder type");
     }
 
     return eType;
@@ -2995,7 +2996,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
             nOffset -= 1;
             break;
         default:
-            DBG_ERROR("unknown page number type");
+            OSL_FAIL("unknown page number type");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3029,7 +3030,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapTemplateDisplayFormat(sal_Int16 nFormat
             eName = XML_TITLE;
             break;
         default:
-            DBG_ERROR("unknown template display format");
+            OSL_FAIL("unknown template display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3066,7 +3067,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(FieldIdEnum nToken)
             eElement = XML_OBJECT_COUNT;
             break;
         default:
-            DBG_ERROR("no count field token");
+            OSL_FAIL("no count field token");
             eElement = XML_TOKEN_INVALID;
             break;
     }
@@ -3097,7 +3098,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapChapterDisplayFormat(sal_Int16 nFormat)
             eName = XML_PLAIN_NUMBER;
             break;
         default:
-            DBG_ERROR("unkown chapter display format");
+            OSL_FAIL("unkown chapter display format");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3126,7 +3127,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapFilenameDisplayFormat(sal_Int16 nFormat
             eName = XML_NAME_AND_EXTENSION;
             break;
         default:
-            DBG_ERROR("unknown filename display format");
+            OSL_FAIL("unknown filename display format");
     }
 
     return eName;
@@ -3166,7 +3167,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
             // XML_TEMPLATE is default
             eElement = XML_TEMPLATE;
             break;
-        // --> OD 2007-09-14 #i81002#
+        // Core implementation for direct cross-references (#i81002#)
         case ReferenceFieldPart::NUMBER:
             eElement = XML_NUMBER;
             break;
@@ -3176,9 +3177,8 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
         case ReferenceFieldPart::NUMBER_FULL_CONTEXT:
             eElement = XML_NUMBER_ALL_SUPERIOR;
             break;
-        // <--
         default:
-            DBG_ERROR("unknown reference type");
+            OSL_FAIL("unknown reference type");
             eElement = XML_TEMPLATE;
             break;
     }
@@ -3207,7 +3207,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_NOTE_REF;
             break;
         default:
-            DBG_ERROR("unkown reference source");
+            OSL_FAIL("unkown reference source");
             break;
     }
 
@@ -3470,7 +3470,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
     }
     else
     {
-        DBG_ERROR("Unknown bibliography info data");
+        OSL_FAIL("Unknown bibliography info data");
         eName = XML_TOKEN_INVALID;
     }
 
@@ -3617,3 +3617,5 @@ inline Sequence<OUString> const GetStringSequenceProperty(
     aAny >>= aSequence;
     return aSequence;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,13 +45,13 @@
 
 const sal_uInt16 START_ITEMID = 1000;
 
-using namespace rtl;
-using namespace vos;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 namespace framework
 {
@@ -115,9 +116,6 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
     if ( xIndexAccess.is() )
     {
         AddonsOptions aAddonOptions;
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bHiContrast = rSettings.GetHighContrastMode();
-
         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 
         for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
@@ -130,7 +128,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                     if ( IsSeparator( xPropSet ))
                     {
                         // Separator
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         pSubMenu->InsertSeparator();
                     }
                     else
@@ -141,12 +139,11 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                         OUString aHelpURL;
                         Reference< XBitmap > xBitmap;
                         Reference< XIndexContainer > xSubContainer;
-                        sal_Bool bSpecialItemId = sal_False;
 
                         sal_uInt16 nNewItemId = nItemId++;
                         GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                        OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         {
                             // insert new menu item
                             sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
@@ -156,7 +153,6 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                 // command url but uses the item id as a unqiue identifier. These entries
                                 // got a special url during conversion from menu=>actiontriggercontainer.
                                 // Now we have to extract this special url and set the correct item id!!!
-                                bSpecialItemId = sal_True;
                                 nNewItemId = (sal_uInt16)aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32();
                                 pSubMenu->InsertItem( nNewItemId, aLabel );
                             }
@@ -221,7 +217,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                             else
                             {
                                 // Support add-on images for context menu interceptors
-                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, bHiContrast, sal_True );
+                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, sal_True );
                                 if ( !!aImage )
                                     pSubMenu->SetItemImage( nNewItemId, aImage );
                             }
@@ -335,7 +331,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
 
 void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer >& rActionTriggerContainer )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
@@ -397,7 +393,6 @@ void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
 }
 
 Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Menu* pMenu,
     const ::rtl::OUString* pMenuIdentifier )
@@ -406,3 +401,5 @@ Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFr
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

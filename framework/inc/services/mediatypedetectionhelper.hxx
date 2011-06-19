@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,3 +150,5 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 }       // namespace framework
 
 #endif  // #ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

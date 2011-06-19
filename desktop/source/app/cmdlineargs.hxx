@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ class CommandLineArgs
     public:
         enum BoolParam // must be zero based!
         {
-            CMD_BOOLPARAM_MINIMIZED,
+            CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
             CMD_BOOLPARAM_BEAN,
@@ -71,12 +72,14 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPIMPRESS,
             CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_PSN,
-            CMD_BOOLPARAM_COUNT // must be last element!
+            CMD_BOOLPARAM_VERSION,
+            CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
         enum StringParam // must be zero based!
         {
-            CMD_STRINGPARAM_PORTAL,
+            CMD_STRINGPARAM_PORTAL = 0,
+            CMD_STRINGPARAM_SPLASHPIPE,
             CMD_STRINGPARAM_ACCEPT,
             CMD_STRINGPARAM_UNACCEPT,
             CMD_STRINGPARAM_USERDIR,
@@ -90,6 +93,10 @@ class CommandLineArgs
             CMD_STRINGPARAM_VERSION,
             CMD_STRINGPARAM_PRINTTOLIST,
             CMD_STRINGPARAM_PRINTERNAME,
+            CMD_STRINGPARAM_CONVERSIONLIST,
+            CMD_STRINGPARAM_CONVERSIONPARAMS,
+            CMD_STRINGPARAM_CONVERSIONOUT,
+            CMD_STRINGPARAM_INFILTER,
             CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_LANGUAGE,
             CMD_STRINGPARAM_COUNT // must be last element!
@@ -97,7 +104,7 @@ class CommandLineArgs
 
         enum GroupParamId
         {
-            CMD_GRPID_MODULE,
+            CMD_GRPID_MODULE = 0,
             CMD_GRPID_COUNT
         };
 
@@ -125,52 +132,58 @@ class CommandLineArgs
         // generic methods to access parameter
         void     SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
 
+        const rtl::OUString&    GetStringParam( StringParam eParam ) const;
+
         // Access to bool parameters
-        sal_Bool IsMinimized() const;
-        sal_Bool IsInvisible() const;
-        sal_Bool IsNoRestore() const;
-        sal_Bool IsNoDefault() const;
-        sal_Bool IsBean() const;
-        sal_Bool IsServer() const;
-        sal_Bool IsHeadless() const;
-        sal_Bool IsQuickstart() const;
-        sal_Bool IsNoQuickstart() const;
-        sal_Bool IsTerminateAfterInit() const;
-        sal_Bool IsNoFirstStartWizard() const;
-        sal_Bool IsNoLogo() const;
-        sal_Bool IsNoLockcheck() const;
-        sal_Bool IsHelp() const;
-        sal_Bool IsHelpWriter() const;
-        sal_Bool IsHelpCalc() const;
-        sal_Bool IsHelpDraw() const;
-        sal_Bool IsHelpImpress() const;
-        sal_Bool IsHelpBase() const;
-        sal_Bool IsHelpMath() const;
-        sal_Bool IsHelpBasic() const;
-        sal_Bool IsWriter() const;
-        sal_Bool IsCalc() const;
-        sal_Bool IsDraw() const;
-        sal_Bool IsImpress() const;
-        sal_Bool IsBase() const;
-        sal_Bool IsGlobal() const;
-        sal_Bool IsMath() const;
-        sal_Bool IsWeb() const;
-        sal_Bool HasModuleParam() const;
-        sal_Bool WantsToLoadDocument() const;
+        sal_Bool                IsMinimized() const;
+        sal_Bool                IsInvisible() const;
+        sal_Bool                IsNoRestore() const;
+        sal_Bool                IsNoDefault() const;
+        sal_Bool                IsBean() const;
+        sal_Bool                IsServer() const;
+        sal_Bool                IsHeadless() const;
+        sal_Bool                IsQuickstart() const;
+        sal_Bool                IsNoQuickstart() const;
+        sal_Bool                IsTerminateAfterInit() const;
+        sal_Bool                IsNoLogo() const;
+        sal_Bool                IsNoLockcheck() const;
+        sal_Bool                IsHelp() const;
+        sal_Bool                IsHelpWriter() const;
+        sal_Bool                IsHelpCalc() const;
+        sal_Bool                IsHelpDraw() const;
+        sal_Bool                IsHelpImpress() const;
+        sal_Bool                IsHelpBase() const;
+        sal_Bool                IsHelpMath() const;
+        sal_Bool                IsHelpBasic() const;
+        sal_Bool                IsWriter() const;
+        sal_Bool                IsCalc() const;
+        sal_Bool                IsDraw() const;
+        sal_Bool                IsImpress() const;
+        sal_Bool                IsBase() const;
+        sal_Bool                IsGlobal() const;
+        sal_Bool                IsMath() const;
+        sal_Bool                IsWeb() const;
+        sal_Bool                IsVersion() const;
+        sal_Bool                HasModuleParam() const;
+        sal_Bool                WantsToLoadDocument() const;
 
         // Access to string parameters
-        sal_Bool GetPortalConnectString( ::rtl::OUString& rPara) const;
-        sal_Bool GetAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool GetUnAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool GetOpenList( ::rtl::OUString& rPara) const;
-        sal_Bool GetViewList( ::rtl::OUString& rPara) const;
-        sal_Bool GetStartList( ::rtl::OUString& rPara) const;
-        sal_Bool GetForceOpenList( ::rtl::OUString& rPara) const;
-        sal_Bool GetForceNewList( ::rtl::OUString& rPara) const;
-        sal_Bool GetPrintList( ::rtl::OUString& rPara) const;
-        sal_Bool GetPrintToList( ::rtl::OUString& rPara ) const;
-        sal_Bool GetPrinterName( ::rtl::OUString& rPara ) const;
-        sal_Bool GetLanguage( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetUnAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetStartList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetInFilter( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionList( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionParams( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetConversionOut( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool IsPrinting() const;
@@ -190,10 +203,10 @@ class CommandLineArgs
         CommandLineArgs( const CommandLineArgs& );
         CommandLineArgs operator=( const CommandLineArgs& );
 
-        sal_Bool InterpretCommandLineParameter( const ::rtl::OUString& );
-        void     ParseCommandLine_Impl( Supplier& supplier );
-        void     ResetParamValues();
-        sal_Bool CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
+        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString&, ::rtl::OUString& );
+        void                    ParseCommandLine_Impl( Supplier& supplier );
+        void                    ResetParamValues();
+        sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
         void     AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
         void     SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
@@ -213,3 +226,5 @@ class CommandLineArgs
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

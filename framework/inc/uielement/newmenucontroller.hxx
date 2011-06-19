@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,10 +59,8 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/accel.hxx>
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace framework
 {
@@ -106,7 +105,7 @@ namespace framework
                 rtl::OUString aImageId;
             };
 
-            typedef ::std::hash_map< int, AddInfo > AddInfoForId;
+            typedef ::boost::unordered_map< int, AddInfo > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
@@ -114,12 +113,11 @@ namespace framework
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
-            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast );
+            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages );
 
         private:
             // members
             sal_Bool            m_bShowImages : 1,
-                                m_bHiContrast : 1,
                                 m_bNewMenu    : 1,
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;
@@ -134,3 +132,5 @@ namespace framework
 }
 
 #endif // __FRAMEWORK_UIELEMENT_NEWMENUCONTROLLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-
-#ifndef GCC
-#endif
 
 #include <sfx2/styfitem.hxx>
 #include <svtools/localresaccess.hxx>
@@ -65,7 +63,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
             pTupel->aName = ReadStringRes();
             long lFlags = ReadLongRes();
             pTupel->nFlags = (sal_uInt16)lFlags;
-            aFilterList.Insert(pTupel, LIST_APPEND);
+            aFilterList.push_back( pTupel );
         }
     }
     if(nMask & RSC_SFX_STYLE_ITEM_BITMAP)
@@ -98,26 +96,21 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
 
 // -----------------------------------------------------------------------
 
-// Destruktor; gibt interne Daten frei
+// Destructor; releases the internal data
 
 SfxStyleFamilyItem::~SfxStyleFamilyItem()
 {
-    SfxFilterTupel *pTupel = aFilterList.First();
-    while(pTupel)
-    {
-        delete pTupel;
-        pTupel = aFilterList.Next();
-    }
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i )
+        delete aFilterList[ i ];
+    aFilterList.clear();
 }
 
 // -----------------------------------------------------------------------
 
-// Implementierung des Resource-Konstruktors
+// Implementation of the resource constructor
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
-
-    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( sal_False ) ),
-    aEntryList( 4, 1 )
+    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( false ) )
 {
     sal_uIntPtr nCount = ReadLongRes();
     for( sal_uIntPtr i = 0; i < nCount; i++ )
@@ -125,33 +118,29 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
         const ResId aResId((RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        aEntryList.Insert(pItem, LIST_APPEND);
+        aEntryList.push_back( pItem );
     }
 
     FreeResource();
 
-    updateImages( rResId, BMP_COLOR_NORMAL );
+    updateImages( rResId );
 }
 
 // -----------------------------------------------------------------------
 
-// Destruktor; gibt interne Daten frei
+// Destructor; releases the internal data
 
 SfxStyleFamilies::~SfxStyleFamilies()
 {
-    SfxStyleFamilyItem *pItem = aEntryList.First();
-
-    while(pItem)
-    {
-        delete pItem;
-        pItem = aEntryList.Next();
-    }
+    for ( size_t i = 0, n = aEntryList.size(); i < n; ++i )
+        delete aEntryList[ i ];
+    aEntryList.clear();
 }
 
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _eMode )
+sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
 {
     sal_Bool bSuccess = sal_False;
 
@@ -159,7 +148,7 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
         ::svt::OLocalResourceAccess aLocalRes( _rId );
 
         // check if the image list is present
-        ResId aImageListId( (sal_uInt16)_eMode + 1, *_rId.GetResMgr() );
+        ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
         aImageListId.SetRT( RSC_IMAGELIST );
 
         if ( aLocalRes.IsAvailableRes( aImageListId ) )
@@ -168,14 +157,14 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
 
             // number of styles items/images
             sal_uInt16 nCount = aImages.GetImageCount( );
-            DBG_ASSERT( Count() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
-            if ( nCount > Count() )
-                nCount = Count();
+            DBG_ASSERT( aEntryList.size() == nCount, "SfxStyleFamilies::updateImages: found the image list, but missing some bitmaps!" );
+            if ( nCount > aEntryList.size() )
+                nCount = aEntryList.size();
 
             // set the images on the items
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            for ( size_t i = 0; i < nCount; ++i )
             {
-                SfxStyleFamilyItem* pItem = static_cast< SfxStyleFamilyItem* >( aEntryList.GetObject( i ) );
+                SfxStyleFamilyItem* pItem = aEntryList[ i ];
                 pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
             }
 
@@ -185,3 +174,5 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
 
     return bSuccess;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,3 +81,5 @@
     aStr.SearchAndReplaceAscii("%1", aName);
     return rtl::OUString(aStr);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

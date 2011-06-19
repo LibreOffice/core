@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
-#ifndef CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
 #include "MExtConfigAccess.hxx"
-#endif
 #include "MConnection.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -61,7 +58,7 @@ namespace connectivity
 
                 if ( xConfigProvider.is() )
                 {
-                    ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
+                    ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/" ));
                     sCompleteNodePath += OConnection::getDriverImplementationName();
 
                     //=========================================================
@@ -95,7 +92,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
+                OSL_FAIL( "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
             }
 
             // outta here
@@ -152,7 +149,7 @@ namespace connectivity
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "getDescription: caught an exception!" );
+                    OSL_FAIL( "getDescription: caught an exception!" );
                 }
             }
             if (sDescription.getLength() == 0)
@@ -180,7 +177,7 @@ namespace connectivity
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "getPreferredProfileName: caught an exception!" );
+                    OSL_FAIL( "getPreferredProfileName: caught an exception!" );
                 }
             }
             return sPreferredName;
@@ -271,3 +268,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL setMozabServiceFactory(
     xFactory->release();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

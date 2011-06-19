@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <xmloff/xmlexp.hxx>
 #include "xmloff/XMLTextListAutoStylePool.hxx"
 
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include "PageMasterExportPropMapper.hxx"
 #include "XMLBackgroundImageExport.hxx"
 
@@ -122,8 +121,8 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
                         if (bFoundControlShapeDataStyle)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
-                            // already added the attribute for the first occurence
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
+                            // already added the attribute for the first occurrence
                             break;
                         }
 
@@ -137,8 +136,8 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         if (bFoundNumberingRulesName)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
-                            // already added the attribute for the first occurence
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
+                            // already added the attribute for the first occurrence
                             break;
                         }
 
@@ -161,7 +160,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
-        for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
+        for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); ++pProp )
         {
             if (pProp->mnIndex > -1)
             {
@@ -280,7 +279,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 {
-    DBG_ERROR("This constuctor is obsoleted and should not be used!");
+    OSL_FAIL("This constuctor is obsoleted and should not be used!");
     pImpl = NULL;
 }
 
@@ -446,3 +445,5 @@ void SvXMLAutoStylePoolP::ClearEntries()
 {
     pImpl->ClearEntries();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

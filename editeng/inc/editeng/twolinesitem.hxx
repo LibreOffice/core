@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ public:
     SvxTwoLinesItem( const SvxTwoLinesItem& rAttr );
     virtual ~SvxTwoLinesItem();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVer) const;
@@ -61,10 +62,8 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual sal_uInt16          GetVersion( sal_uInt16 nFFVer ) const;
 
@@ -88,3 +87,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

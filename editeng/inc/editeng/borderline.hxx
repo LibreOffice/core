@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
+#include <svtools/ctrlbox.hxx>
 
 // Line defaults in twips (former Writer defaults):
 
@@ -41,94 +43,138 @@
 #define DEF_LINE_WIDTH_4        100
 #define DEF_LINE_WIDTH_5        10
 
-#define DEF_MAX_LINE_WIDHT      DEF_LINE_WIDTH_4
-#define DEF_MAX_LINE_DIST       DEF_LINE_WIDTH_2
+// ============================================================================
 
-#define DEF_DOUBLE_LINE0_OUT    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE0_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE0_DIST   DEF_LINE_WIDTH_1
+namespace editeng {
 
-#define DEF_DOUBLE_LINE1_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE1_IN     DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE1_DIST   DEF_LINE_WIDTH_1
+    enum SvxBorderStyle
+    {
+        SOLID,
+        DOTTED,
+        DASHED,
+        DOUBLE,
+        THINTHICK_SMALLGAP,
+        THINTHICK_MEDIUMGAP,
+        THINTHICK_LARGEGAP,
+        THICKTHIN_SMALLGAP,
+        THICKTHIN_MEDIUMGAP,
+        THICKTHIN_LARGEGAP,
+        EMBOSSED,
+        ENGRAVED,
+        OUTSET,
+        INSET,
+        NO_STYLE = -1
+    };
 
-#define DEF_DOUBLE_LINE2_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE2_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE2_DIST   DEF_LINE_WIDTH_2
+    class EDITENG_DLLPUBLIC SvxBorderLine
+    {
+    protected:
+        Color  aColor;
 
-#define DEF_DOUBLE_LINE3_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE3_IN     DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE3_DIST   DEF_LINE_WIDTH_2
+        long m_nWidth;
+        bool m_bMirrorWidths;
+        BorderWidthImpl m_aWidthImpl;
+        long m_nMult;
+        long m_nDiv;
 
-#define DEF_DOUBLE_LINE4_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE4_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE4_DIST   DEF_LINE_WIDTH_1
+        SvxBorderStyle   m_nStyle;
+        sal_uInt16 nOutWidth;
+        sal_uInt16 nInWidth;
+        sal_uInt16 nDistance;
 
-#define DEF_DOUBLE_LINE5_OUT    DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE5_IN     DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE5_DIST   DEF_LINE_WIDTH_2
+        bool             m_bUseLeftTop;
+        Color            (*m_pColorOutFn)( Color );
+        Color            (*m_pColorInFn)( Color );
+        Color            (*m_pColorGapFn)( Color );
 
-#define DEF_DOUBLE_LINE6_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE6_IN     DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE6_DIST   DEF_LINE_WIDTH_2
+    public:
+        SvxBorderLine( const Color *pCol = 0,
+                long nWidth = 0, SvxBorderStyle nStyle = SOLID,
+                bool bUseLeftTop = false,
+                Color (*pColorOutFn)( Color ) = &darkColor,
+                Color (*pColorInFn)( Color ) = &darkColor,
+                Color (*pColorGapFn)( Color ) = NULL );
+        SvxBorderLine( const SvxBorderLine& r );
 
-#define DEF_DOUBLE_LINE7_OUT    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE7_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE7_DIST   DEF_LINE_WIDTH_2
+        SvxBorderLine& operator=( const SvxBorderLine& r );
 
-#define DEF_DOUBLE_LINE8_OUT    DEF_LINE_WIDTH_1
-#define DEF_DOUBLE_LINE8_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE8_DIST   DEF_LINE_WIDTH_2
+        const Color&    GetColor() const { return aColor; }
+        Color           GetColorOut( bool bLeftOrTop = true ) const;
+        Color           GetColorIn( bool bLeftOrTop = true ) const;
+        bool            HasGapColor() const { return m_pColorGapFn != NULL; }
+        Color           GetColorGap() const;
 
-#define DEF_DOUBLE_LINE9_OUT    DEF_LINE_WIDTH_2
-#define DEF_DOUBLE_LINE9_IN     DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE9_DIST   DEF_LINE_WIDTH_2
+        void            SetWidth( long nWidth = 0 ) { m_nWidth = nWidth; }
+        /** Guess the style and width from the three lines widths values.
 
-#define DEF_DOUBLE_LINE10_OUT   DEF_LINE_WIDTH_3
-#define DEF_DOUBLE_LINE10_IN    DEF_LINE_WIDTH_0
-#define DEF_DOUBLE_LINE10_DIST  DEF_LINE_WIDTH_2
+            When the value of nStyle is SvxBorderLine::DOUBLE, the style set will be guessed
+            using the three values to match the best possible style among the following:
+                - SvxBorderLine::DOUBLE
+                - SvxBorderLine::THINTHICK_SMALLGAP
+                - SvxBorderLine::THINTHICK_MEDIUMGAP
+                - SvxBorderLine::THINTHICK_LARGEGAP
+                - SvxBorderLine::THICKTHIN_SMALLGAP
+                - SvxBorderLine::THICKTHIN_MEDIUMGAP
+                - SvxBorderLine::THICKTHIN_LARGEGAP
+
+            If no styles matches the width, then the width is set to 0.
+
+            There is one known case that could fit several styles: \a nIn = \a nDist = 0.75 pt,
+            \a nOut = 1.5 pt. This case fits SvxBorderLine::THINTHICK_SMALLGAP and
+            SvxBorderLine::THINTHICK_MEDIUMGAP with a 1.5 pt width and
+            SvxBorderLine::THINTHICK_LARGEGAP with a 0.75 pt width. The same case happens
+            also for thick-thin styles.
+
+            \param nStyle the border style used to guess the width.
+            \param nIn the width of the inner line in 1th pt
+            \param nOut the width of the outer line in 1th pt
+            \param nDist the width of the gap between the lines in 1th pt
+         */
+        void            GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0 );
+
+        // TODO Hacky method to mirror lines in only a few cases
+        void            SetMirrorWidths( bool bMirror = true ) { m_bMirrorWidths = bMirror; }
+        long            GetWidth( ) const { return m_nWidth; }
+        sal_uInt16      GetOutWidth() const;
+        sal_uInt16      GetInWidth() const;
+        sal_uInt16      GetDistance() const;
+
+        SvxBorderStyle  GetStyle() const { return m_nStyle; }
+
+        void            SetColor( const Color &rColor ) { aColor = rColor; }
+        void            SetColorOutFn( Color (*pColorOutFn)( Color ) ) { m_pColorOutFn = pColorOutFn; }
+        void            SetColorInFn( Color (*pColorInFn)( Color ) ) { m_pColorInFn = pColorInFn; }
+        void            SetColorGapFn( Color (*pColorGapFn)( Color ) ) { m_pColorGapFn = pColorGapFn; }
+        void            SetUseLeftTop( bool bUseLeftTop ) { m_bUseLeftTop = bUseLeftTop; }
+        void            SetStyle( SvxBorderStyle nNew );
+        void            ScaleMetrics( long nMult, long nDiv );
+
+        sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
+
+        String          GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
+                                        const IntlWrapper* pIntl,
+                                        sal_Bool bMetricStr = sal_False ) const;
+
+        bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
+
+        bool isEmpty() const { return m_aWidthImpl.IsEmpty( ) || m_nStyle == NO_STYLE || m_nWidth == 0; }
+        bool isDouble() const { return m_aWidthImpl.IsDouble(); }
+        sal_uInt16 GetScaledWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
+
+        static Color darkColor( Color aMain );
+        static Color lightColor( Color aMain );
+
+        static Color threeDLightColor( Color aMain );
+        static Color threeDMediumColor( Color aMain );
+        static Color threeDDarkColor( Color aMain );
+
+        static BorderWidthImpl getWidthImpl( SvxBorderStyle nStyle );
+    };
 
 // ============================================================================
 
-class EDITENG_DLLPUBLIC SvxBorderLine
-{
-protected:
-    Color  aColor;
-    sal_uInt16 nOutWidth;
-    sal_uInt16 nInWidth;
-    sal_uInt16 nDistance;
-
-public:
-    SvxBorderLine( const Color *pCol = 0, sal_uInt16 nOut = 0, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0 );
-    SvxBorderLine( const SvxBorderLine& r );
-
-    SvxBorderLine& operator=( const SvxBorderLine& r );
-
-    const Color&    GetColor() const { return aColor; }
-    sal_uInt16          GetOutWidth() const { return nOutWidth; }
-    sal_uInt16          GetInWidth() const { return nInWidth; }
-    sal_uInt16          GetDistance() const { return nDistance; }
-
-    void            SetColor( const Color &rColor ) { aColor = rColor; }
-    void            SetOutWidth( sal_uInt16 nNew ) { nOutWidth = nNew; }
-    void            SetInWidth( sal_uInt16 nNew ) { nInWidth = nNew;  }
-    void            SetDistance( sal_uInt16 nNew ) { nDistance = nNew; }
-    void            ScaleMetrics( long nMult, long nDiv );
-
-    sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
-
-    String          GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
-                                    const IntlWrapper* pIntl,
-                                    sal_Bool bMetricStr = sal_False ) const;
-
-    bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
-
-    bool isEmpty() const { return (0 == nOutWidth && 0 == nInWidth && 0 == nDistance); }
-    bool isDouble() const { return (0 != nOutWidth && 0 != nInWidth); }
-    sal_uInt16 getWidth() const { return nOutWidth + nInWidth + nDistance; }
-};
-
-// ============================================================================
+} // namespace editeng
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

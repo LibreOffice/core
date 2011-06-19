@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class ExecutablePackageImpl;
 
-    typedef ::std::hash_map< OUString, Reference<XInterface>,
+    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
                              ::rtl::OUStringHash > t_string2object;
 
     // PackageRegistryBackend
@@ -121,8 +122,7 @@ BackendImpl::BackendImpl(
                                 OUSTR("application/vnd.sun.star.executable"),
                                 OUSTR(""),
                                 OUSTR("Executable"),
-                                RID_IMG_COMPONENT,
-                                RID_IMG_COMPONENT_HC ) )
+                                RID_IMG_COMPONENT ) )
 {
     if (!transientMode())
     {
@@ -204,7 +204,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     return Reference<deployment::XPackage>();
 }
 
-//##############################################################################
 
 
 // Package
@@ -326,7 +325,6 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
     return bSuccess;
 }
 
-//##############################################################################
 
 
 } // anon namespace
@@ -343,3 +341,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 } // namespace dp_registry
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

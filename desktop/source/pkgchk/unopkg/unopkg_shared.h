@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ namespace unopkg {
 
 
     struct OfficeLocale :
-        public rtl::StaticWithInit<const css::lang::Locale, OfficeLocale> {
+        public rtl::StaticWithInit<css::lang::Locale, OfficeLocale> {
             const css::lang::Locale operator () () {
                 ::rtl::OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
@@ -168,7 +169,8 @@ css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     ::rtl::OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose);
+    bool option_verbose,
+    bool option_suppressLicense);
 //==============================================================================
 void printf_packages(
     ::std::vector<
@@ -192,3 +194,4 @@ void removeFolder(::rtl::OUString const & folderUrl);
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

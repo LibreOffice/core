@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,9 +86,7 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -121,3 +120,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     return pRet;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

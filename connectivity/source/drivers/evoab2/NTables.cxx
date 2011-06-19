@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <connectivity/sdbcx/VTable.hxx>
 #include "NCatalog.hxx"
-#ifndef _CONNECTIVITY_EVOAB_BCONNECTION_HXX_
 #include "NConnection.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"
@@ -61,10 +60,10 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
 {
-    ::rtl::OUString aSchema = ::rtl::OUString::createFromAscii("%");
+    ::rtl::OUString aSchema( RTL_CONSTASCII_USTRINGPARAM( "%" ));
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
+    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
@@ -103,3 +102,4 @@ m_xMetaData.clear();
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

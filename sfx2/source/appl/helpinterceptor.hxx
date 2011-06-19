@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
 #define INCLUDED_SFX_HELPINTERCEPTOR_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -38,8 +37,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <vector>
 
 struct HelpHistoryEntry_Impl
 {
@@ -50,7 +49,7 @@ struct HelpHistoryEntry_Impl
         aURL( rURL ), aViewData(rViewData) {}
 };
 
-DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*)
+typedef ::std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
 
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
@@ -171,3 +170,4 @@ public:
 
 #endif // #ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

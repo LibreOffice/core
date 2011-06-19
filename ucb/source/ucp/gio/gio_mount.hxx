@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,6 @@ G_BEGIN_DECLS
 #define OOO_IS_MOUNT_OPERATION_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), OOO_TYPE_MOUNT_OPERATION))
 #define OOO_MOUNT_OPERATION_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), OOO_TYPE_MOUNT_OPERATION, OOoMountOperationClass))
 
-typedef struct OOoMountOperation         OOoMountOperation;
-typedef struct OOoMountOperationClass    OOoMountOperationClass;
-typedef struct OOoMountOperationPrivate  OOoMountOperationPrivate;
-
 struct OOoMountOperation
 {
     GMountOperation parent_instance;
@@ -70,3 +67,5 @@ GMountOperation *ooo_mount_operation_new(const com::sun::star::uno::Reference< c
 
 G_END_DECLS
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,12 +40,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
-
-// --> OD 2008-04-25 #refactorlists#
-class XMLTextListsHelper;
 #include <vector>
-// <--
 
+class XMLTextListsHelper;
 class SvXMLExport;
 class SvXMLAutoStylePoolP;
 class XMLTextFieldExport;
@@ -52,7 +50,6 @@ class OUStrings_Impl;
 class OUStringsSort_Impl;
 class XMLTextNumRuleInfo;
 class XMLTextListAutoStylePool;
-class SvLongs;
 class XMLSectionExport;
 class XMLIndexMarkExport;
 class XMLRedlineExport;
@@ -91,9 +88,6 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     OUStrings_Impl              *pListElements;
-    // --> OD 2008-05-07 #refactorlists# - no longer needed
-//    OUStringsSort_Impl          *pExportedLists;
-    // <--
     XMLTextListAutoStylePool    *pListAutoPool;
     XMLSectionExport            *pSectionExport;
     XMLIndexMarkExport          *pIndexMarkExport;
@@ -111,21 +105,17 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     ::rtl::OUString             sOpenRubyCharStyle;
     sal_Bool                    bOpenRuby;
 
-    // --> OD 2008-05-07 #refactorlists#
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
-    // <--
 
     enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
 
 protected:
 
     const ::rtl::OUString sActualSize;
-    // --> OD 2009-07-22 #i73249#
-//    const ::rtl::OUString sAlternativeText;
+    // Implement Title/Description Elements UI (#i73249#)
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sDescription;
-    // <--
     const ::rtl::OUString sAnchorCharStyleName;
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sAnchorType;
@@ -424,7 +414,7 @@ protected:
     void exportTextMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet,
-        const ::rtl::OUString sProperty,
+        const ::rtl::OUString& rProperty,
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         sal_Bool bAutoStyles);
 
@@ -613,12 +603,10 @@ public:
     virtual void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
-    // --> OD 2009-07-22 #i73249#
-//    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
-//                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+
+    // Implement Title/Description Elements UI (#i73249#)
     void exportTitleAndDescription( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
-    // <--
 
     // This method exports the given XText
     void exportText(
@@ -684,11 +672,11 @@ public:
 
     sal_Int32 GetHeadingLevel( const ::rtl::OUString& rStyleName );
 
-    // --> OD 2008-05-08 #refactorlists#
     void PushNewTextListsHelper();
+
     void PopTextListsHelper();
-    // <--
-    private:
+
+private:
         XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of auto_ptr
 };
 
@@ -743,3 +731,5 @@ inline void XMLTextParagraphExport::exportShape(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

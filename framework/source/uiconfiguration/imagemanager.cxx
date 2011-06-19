@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,7 @@ DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(xServiceManager,static_cast< OWeakObject* >(this),false) )
+    , m_pImpl( new ImageManagerImpl(xServiceManager,this,false) )
 {
 }
 
@@ -253,3 +254,5 @@ sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::Runti
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

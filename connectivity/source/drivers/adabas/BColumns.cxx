@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,14 +43,11 @@
 #include <comphelper/property.hxx>
 
 using namespace ::comphelper;
-
-
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -73,7 +71,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                 sal_Int32 nPrec             = xRow->getInt(7);
                 OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
                 sal_Bool bAutoIncrement = sal_False;
-                if ( !_rName.equalsAscii("DEFAULT") && !m_pTable->getSchema().equalsAscii("DOMAIN") && !m_pTable->getTableName().equalsAscii("COLUMNS") )
+                if ( !_rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DEFAULT")) && !m_pTable->getSchema().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DOMAIN")) && !m_pTable->getTableName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("COLUMNS")) )
                 {
                     Reference< XStatement > xStmt = m_pTable->getMetaData()->getConnection()->createStatement(  );
                     ::rtl::OUString sQuery(RTL_CONSTASCII_USTRINGPARAM("SELECT \"DEFAULT\" FROM DOMAIN.COLUMNS WHERE OWNER = '"));
@@ -182,3 +180,4 @@ void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svxids.hrc,v $
- * $Revision: 1.10.132.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -129,6 +126,10 @@
 
 // this ID didn't exist prior to the svx split
 #define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
+#define SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD               ( SID_EDIT_START + 69 )
+#define SID_ATTR_ALIGN_VER_JUSTIFY_METHOD               ( SID_EDIT_START + 70 )
+#define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_EDIT_START + 71 )
+#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_EDIT_START + 72 )
 
 /*
 // planned, but not doable: changing value of SIDs will break code that uses them for WhichRanges

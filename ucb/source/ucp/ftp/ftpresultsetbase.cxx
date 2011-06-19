@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/uno/Reference.h>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
@@ -513,12 +512,12 @@ ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
 {
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = rtl::OUString::createFromAscii( "RowCount" );
+    seq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[1].Name = rtl::OUString::createFromAscii( "IsRowCountFinal" );
+    seq[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
     seq[1].Handle = -1;
     seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
@@ -538,8 +537,8 @@ void SAL_CALL ResultSetBase::setPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) ||
-        aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
+    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ||
+        aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
         return;
 
     throw beans::UnknownPropertyException();
@@ -552,13 +551,13 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( PropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
+    if( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
     {
         uno::Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
-    else if ( PropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
+    else if ( PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
     {
         uno::Any aAny;
         sal_Int32 count = m_aItems.size();
@@ -577,7 +576,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
+    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
@@ -586,7 +585,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
 
         m_pIsFinalListeners->addInterface( xListener );
     }
-    else if ( aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
+    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
@@ -606,13 +605,13 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) &&
+    if( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) &&
         m_pIsFinalListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
         m_pIsFinalListeners->removeInterface( aListener );
     }
-    else if ( aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) &&
+    else if ( aPropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) &&
               m_pRowCountListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -660,3 +659,4 @@ ResultSetBase::getMetaData(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

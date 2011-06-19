@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define ENTER_MOD_METHOD()  \
@@ -91,8 +90,7 @@ ResMgr* OModuleImpl::getResManager()
     if (!m_pRessources)
     {
         // create a manager with a fixed prefix
-        rtl::OString sName = rtl::OString( "forui" );
-        m_pRessources = ResMgr::CreateResMgr(sName);
+        m_pRessources = ResMgr::CreateResMgr("forui");
     }
     return m_pRessources;
 }
@@ -140,3 +138,4 @@ void OModule::ensureImpl()
 }   // namespace formula
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

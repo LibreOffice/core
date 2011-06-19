@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 // Include ---------------------------------------------------------------
 #include <vcl/msgbox.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/passwd.hxx>
 #include "sfxtypes.hxx"
@@ -111,6 +110,8 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
     maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
     maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
+
+    maMinLengthFT   ( this, SfxResId( FT_PASSWD_MINLEN ) ),
     maPassword2Box  ( this, 0 ),
     maPassword2FT   ( this, SfxResId( FT_PASSWD_PASSWORD2 ) ),
     maPassword2ED   ( this, SfxResId( ED_PASSWD_PASSWORD2 ) ),
@@ -120,7 +121,9 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
     maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
 
-    mnMinLen        ( 1 ),
+    maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ) ),
+    maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ) ),
+    maMainPwdStr    ( ),
     mnExtras        ( 0 ),
     mbAsciiOnly     ( false )
 
@@ -162,6 +165,9 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     // add second confirm line
     xEdits->addRow( &maConfirm2FT, &maConfirm2ED, -2, aEditSize );
 
+    // add password length warning line
+    xEdits->addWindow( &maMinLengthFT );
+
     // add a FixedLine
     FixedLine* pLine = new FixedLine( this, 0 );
     pLine->Show();
@@ -174,10 +180,10 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     nChildIndex = xLayout->addChild( xButtons );
     xLayout->setBorders( nChildIndex, -2, 0, -2, -2 );
 
-    size_t nBtnIndex = xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
+    xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
     xButtons->addChild( new vcl::Spacer( xButtons.get() ) );
-    nBtnIndex = xButtons->addWindow( &maOKBtn, 0, aBtnSize );
-    nBtnIndex = xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
+    xButtons->addWindow( &maOKBtn, 0, aBtnSize );
+    xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
 
     Link aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     maPasswordED.SetModifyHdl( aLink );
@@ -187,6 +193,25 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     if ( pGroupText )
           maPasswordBox.SetText( *pGroupText );
+
+//set the text to the pasword length
+    SetPasswdText();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxPasswordDialog::SetPasswdText( )
+{
+//set the new string to the minimum password length
+    if( mnMinLen == 0 )
+        maMinLengthFT.SetText( maEmptyPwdStr );
+    else
+    {
+        maMainPwdStr = maMinLenPwdStr;
+        maMainPwdStr.SearchAndReplace( String::CreateFromAscii( "$(MINLEN)" ), String::CreateFromInt32((sal_Int32) mnMinLen ), 0);
+        maMinLengthFT.SetText( maMainPwdStr );
+        maMinLengthFT.Show();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -194,6 +219,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
     mnMinLen = nLen;
+    SetPasswdText();
     EditModifyHdl( NULL );
 }
 
@@ -226,6 +252,66 @@ short SfxPasswordDialog::Execute()
         maPasswordFT.Show();
     if( (mnExtras & SHOWEXTRAS_USER ) )
     {
+        //TODO: Inevitably this layout logic will be wrong post merge until we can see the dialog to test it.
+        Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+        long nMinHeight = maHelpBtn.GetPosPixel().Y() +
+                          maHelpBtn.GetSizePixel().Height() + a6Size.Height();
+        sal_uInt16 nRowHided = 1;
+
+        if ( SHOWEXTRAS_NONE == mnExtras )
+        {
+            maUserFT.Hide();
+            maUserED.Hide();
+            maConfirmFT.Hide();
+            maConfirmED.Hide();
+            maPasswordFT.Hide();
+
+            Point aPos = maUserFT.GetPosPixel();
+            long nEnd = maUserED.GetPosPixel().X() + maUserED.GetSizePixel().Width();
+            maPasswordED.SetPosPixel( aPos );
+            Size aSize = maPasswordED.GetSizePixel();
+            aSize.Width() = nEnd - aPos.X();
+            maPasswordED.SetSizePixel( aSize );
+
+            nRowHided = 2;
+        }
+        else if ( SHOWEXTRAS_USER == mnExtras )
+        {
+            maConfirmFT.Hide();
+            maConfirmED.Hide();
+        }
+        else if ( SHOWEXTRAS_CONFIRM == mnExtras )
+        {
+            maUserFT.Hide();
+            maUserED.Hide();
+
+            Point aPwdPos1 = maPasswordFT.GetPosPixel();
+            Point aPwdPos2 = maPasswordED.GetPosPixel();
+
+            Point aPos = maUserFT.GetPosPixel();
+            maPasswordFT.SetPosPixel( aPos );
+            aPos = maUserED.GetPosPixel();
+            maPasswordED.SetPosPixel( aPos );
+
+            aPos = maConfirmFT.GetPosPixel();
+            maConfirmFT.SetPosPixel( aPwdPos1 );
+            maConfirmED.SetPosPixel( aPwdPos2 );
+            maMinLengthFT.SetPosPixel(aPos);
+        }
+
+        Size aBoxSize = maPasswordBox.GetSizePixel();
+        aBoxSize.Height() -= ( nRowHided * maUserED.GetSizePixel().Height() );
+        aBoxSize.Height() -= ( nRowHided * a3Size.Height() );
+        maPasswordBox.SetSizePixel( aBoxSize );
+
+        long nDlgHeight = maPasswordBox.GetPosPixel().Y() + aBoxSize.Height() + a6Size.Height();
+        if ( nDlgHeight < nMinHeight )
+            nDlgHeight = nMinHeight;
+        Size aDlgSize = GetOutputSizePixel();
+        aDlgSize.Height() = nDlgHeight;
+        SetOutputSizePixel( aDlgSize );
+
         maUserFT.Show();
         maUserED.Show();
     }
@@ -254,3 +340,4 @@ short SfxPasswordDialog::Execute()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

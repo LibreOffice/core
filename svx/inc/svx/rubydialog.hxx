@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,8 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -202,3 +199,4 @@ public:
 #endif // _SVX_RUBYDLG_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

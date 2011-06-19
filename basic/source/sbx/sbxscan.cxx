@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <stdlib.h>
 #endif
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
@@ -263,7 +262,6 @@ SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSin
     return nRetError;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 static double roundArray[] = {
     5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6, 0.5e-7,
@@ -290,7 +288,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     short nExp = 0;                     // Exponent
     short nDig = nPrec + 1;             // Anzahl Digits in Zahl
     short nDec;                         // Anzahl Vorkommastellen
-    register int i, digit;
+    register int i;
 
     // Komma besorgen
     sal_Unicode cDecimalSep, cThousandSep;
@@ -340,6 +338,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     // Zahl ausgeben:
     if( nDig > 0 )
     {
+        register int digit;
         for( i = 0 ; ; ++i )
         {
             if( i < 16 )
@@ -406,7 +405,7 @@ void ImpCvtNum( double nNum, short nPrec, ::rtl::OUString& rRes, sal_Bool bCoreS
         *p++ = '-';
     }
     double dMaxNumWithoutExp = (nPrec == 6) ? 1E6 : 1E14;
-    myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum > dMaxNumWithoutExp ) ) ? 4:0,
+    myftoa( nNum, p, nPrec,( nNum &&( nNum < 1E-1 || nNum >= dMaxNumWithoutExp ) ) ? 4:0,
         sal_False, sal_True, cDecimalSep );
     // Trailing Zeroes weg:
     for( p = cBuf; *p &&( *p != 'E' ); p++ ) {}
@@ -428,7 +427,7 @@ sal_Bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
     sal_Bool bChanged = sal_False;
     ::rtl::OUString aNewString;
 
-    // Nur Spezial-Fälle behandeln, als Default tun wir nichts
+    // Nur Spezial-Fï¿½lle behandeln, als Default tun wir nichts
     switch( eTargetType )
     {
         // Bei Fliesskomma International beruecksichtigen
@@ -606,7 +605,6 @@ static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const Xub
     return (sal_uInt16) ( pFmt - pFmtStart );
 }
 
-/////////////////////////////////////////////////////////////////////////
 
 sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
 {
@@ -748,8 +746,6 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         SvNumberFormatter aFormatter( xFactory, eLangType );
 
         sal_uInt32 nIndex;
-        xub_StrLen nCheckPos = 0;
-        short nType;
         double nNumber;
         Color* pCol;
 
@@ -758,6 +754,8 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
         {
+            xub_StrLen nCheckPos = 0;
+            short nType;
             String aFmtStr = *pFmt;
             VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
             if( pInfo && pInfo->meType != VBA_FORMAT_TYPE_NULL )
@@ -932,8 +930,6 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     rRes = pData->pBasicFormater->BasicFormatNull( *pFmt );
                 }
 
-                // Die alte Implementierung:
-                //old: printfmtnum( GetDouble(), rRes, *pFmt );
             }
             else
             {
@@ -966,3 +962,4 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

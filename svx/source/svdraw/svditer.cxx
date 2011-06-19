@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,46 +37,42 @@
 // #99190#
 #include <svx/scene3d.hxx>
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, bool bReverse)
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(rObjList, eMode, sal_True);
+    ImpProcessObjectList(rObjList, eMode, true);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, sal_Bool bUseZOrder, SdrIterMode eMode, sal_Bool bReverse)
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode, bool bReverse)
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     ImpProcessObjectList(rObjList, eMode, bUseZOrder);
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, sal_Bool bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, bool bReverse )
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     if ( rObj.ISA( SdrObjGroup ) )
-        ImpProcessObjectList(*rObj.GetSubList(), eMode, sal_True);
+        ImpProcessObjectList(*rObj.GetSubList(), eMode, true);
     else
-        maObjList.Insert( (void*)&rObj, LIST_APPEND );
+        maObjList.push_back(const_cast<SdrObject*>(&rObj));
     Reset();
 }
 
-SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, sal_Bool bReverse )
-:   maObjList(1024, 64, 64),
-    mnIndex(0L),
+SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, bool bReverse )
+:   mnIndex(0L),
     mbReverse(bReverse)
 {
     ImpProcessMarkList(rMarkList, eMode);
     Reset();
 }
 
-void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bUseZOrder)
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder)
 {
     for( sal_uIntPtr nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
     {
@@ -91,10 +88,10 @@ void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMo
 {
     for( sal_uIntPtr nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
         if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
-            ImpProcessObj( pObj, eMode, sal_False );
+            ImpProcessObj( pObj, eMode, false );
 }
 
-void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool bUseZOrder)
+void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder)
 {
     bool bIsGroup = pObj->IsGroupObject();
     // #99190# 3D objects are no group objects, IsGroupObject()
@@ -103,8 +100,10 @@ void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool 
         bIsGroup = false;
 
     if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )
-        maObjList.Insert( pObj, LIST_APPEND );
+        maObjList.push_back(pObj);
 
     if( bIsGroup && (eMode != IM_FLAT) )
         ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

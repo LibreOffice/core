@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+#include <sal/macros.h>
 #include <xmloff/xmltoken.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
@@ -76,7 +78,6 @@ namespace xmloff { namespace token {
         TOKEN( " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">",      XML_XML_DOCTYPE_SUFFIX ),
 
         // namespace prefixes and names
-//        TOKEN( "xml",                   XML_NP_XML ),
         TOKEN( "http://www.w3.org/XML/1998/namespace",      XML_N_XML ),
         TOKEN( "office",                XML_NP_OFFICE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:office:1.0",      XML_N_OFFICE ),
@@ -153,11 +154,17 @@ namespace xmloff { namespace token {
         TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
         TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
 
+        // jonp: 2008-09-24 Excel Interop
+        TOKEN( "formx",                           XML_NP_FORMX ),
+        TOKEN( "urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0", XML_N_FORMX ),
         TOKEN( "tableooo", XML_NP_TABLE_EXT ),
         TOKEN( "http://openoffice.org/2009/table", XML_N_TABLE_EXT ),
 
         TOKEN( "drawooo", XML_NP_DRAW_EXT ),
         TOKEN( "http://openoffice.org/2010/draw", XML_N_DRAW_EXT ),
+
+        TOKEN( "css3t",                        XML_NP_CSS3TEXT ),
+        TOKEN( "http://www.w3.org/TR/css3-text/", XML_N_CSS3TEXT ),
 
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
@@ -614,6 +621,7 @@ namespace xmloff { namespace token {
         TOKEN( "distance",                        XML_DISTANCE ),
         TOKEN( "distance-after-sep",              XML_DISTANCE_AFTER_SEP ),
         TOKEN( "distance-before-sep",             XML_DISTANCE_BEFORE_SEP ),
+        TOKEN( "distribute",                      XML_DISTRIBUTE ),
         TOKEN( "distribute-letter",               XML_DISTRIBUTE_LETTER ),
         TOKEN( "distribute-space",                XML_DISTRIBUTE_SPACE ),
         TOKEN( "divide",                          XML_DIVIDE ),
@@ -927,14 +935,13 @@ namespace xmloff { namespace token {
         TOKEN( "hint",                            XML_HINT),
         TOKEN( "horizontal",                      XML_HORIZONTAL ),
         TOKEN( "horizontal-lines",                XML_HORIZONTAL_LINES ),
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
-        // Usage is deprecated, but the old token are needed for the
-        // OpenOffice.org file format import/export filter for the renaming
+        /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+           are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+           Usage is deprecated, but the old token are needed for the
+           OpenOffice.org file format import/export filter for the renaming (#i49139#)
+        */
         TOKEN( "horizontal-on-left-pages",        XML_HORIZONTAL_ON_LEFT_PAGES ),
         TOKEN( "horizontal-on-right-pages",       XML_HORIZONTAL_ON_RIGHT_PAGES ),
-        // <--
         TOKEN( "horizontal-pos",                  XML_HORIZONTAL_POS ),
         TOKEN( "horizontal-rel",                  XML_HORIZONTAL_REL ),
         TOKEN( "horizontal-scrollbar-width",      XML_HORIZONTAL_SCROLLBAR_WIDTH ),
@@ -1075,6 +1082,7 @@ namespace xmloff { namespace token {
         TOKEN( "line-number",                     XML_LINE_NUMBER ),
         TOKEN( "line-skew",                       XML_LINE_SKEW ),
         TOKEN( "line-spacing",                    XML_LINE_SPACING ),
+        TOKEN( "line-style",                      XML_LINE_STYLE ),
         TOKEN( "linear",                          XML_LINEAR ),
         TOKEN( "linenumbering-configuration",     XML_LINENUMBERING_CONFIGURATION ),
         TOKEN( "linenumbering-separator",         XML_LINENUMBERING_SEPARATOR ),
@@ -1419,6 +1427,8 @@ namespace xmloff { namespace token {
         TOKEN( "size",                            XML_PROTECT_SIZE ),
         TOKEN( "protected",                       XML_PROTECTED ),
         TOKEN( "protection-key",                  XML_PROTECTION_KEY ),
+        TOKEN( "protection-key-digest-algorithm",   XML_PROTECTION_KEY_DIGEST_ALGORITHM ),
+        TOKEN( "protection-key-digest-algorithm-2", XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ),
         TOKEN( "prsubset",                        XML_PRSUBSET ),
         TOKEN( "publisher",                       XML_PUBLISHER ),
         TOKEN( "punctuation-wrap",                XML_PUNCTUATION_WRAP ),
@@ -1528,6 +1538,8 @@ namespace xmloff { namespace token {
         TOKEN( "section-name",                    XML_SECTION_NAME ),
         TOKEN( "section-source",                  XML_SECTION_SOURCE ),
         TOKEN( "select-page",                     XML_SELECT_PAGE ),
+        TOKEN( "select-protected-cells",          XML_SELECT_PROTECTED_CELLS ),
+        TOKEN( "select-unprotected-cells",        XML_SELECT_UNPROTECTED_CELLS ),
         TOKEN( "selector",                        XML_SELECTOR ),
         TOKEN( "semantics",                       XML_SEMANTICS ),
         TOKEN( "semi-automatic",                  XML_SEMI_AUTOMATIC ),
@@ -1740,6 +1752,7 @@ namespace xmloff { namespace token {
         TOKEN( "table-of-content-entry-template",     XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE ),
         TOKEN( "table-of-content-source",         XML_TABLE_OF_CONTENT_SOURCE ),
         TOKEN( "table-page",                      XML_TABLE_PAGE ),
+        TOKEN( "table-protection",                XML_TABLE_PROTECTION ),
         TOKEN( "table-row",                       XML_TABLE_ROW ),
         TOKEN( "table-row-group",                 XML_TABLE_ROW_GROUP ),
         TOKEN( "table-rows",                      XML_TABLE_ROWS ),
@@ -1779,6 +1792,7 @@ namespace xmloff { namespace token {
         TOKEN( "text-global",                     XML_TEXT_GLOBAL ),
         TOKEN( "text-indent",                     XML_TEXT_INDENT ),
         TOKEN( "text-input",                      XML_TEXT_INPUT ),
+        TOKEN( "text-justify",                    XML_TEXT_JUSTIFY ),
         TOKEN( "text-outline",                    XML_TEXT_OUTLINE ),
         TOKEN( "text-position",                   XML_TEXT_POSITION ),
         TOKEN( "text-rotation-angle",             XML_TEXT_ROTATION_ANGLE ),
@@ -1912,6 +1926,7 @@ namespace xmloff { namespace token {
         TOKEN( "version-list",                    XML_VERSION_LIST ),
         TOKEN( "vertical",                        XML_VERTICAL ),
         TOKEN( "vertical-align",                  XML_VERTICAL_ALIGN ),
+        TOKEN( "vertical-justify",                XML_VERTICAL_JUSTIFY ),
         TOKEN( "vertical-lines",                  XML_VERTICAL_LINES ),
         TOKEN( "vertical-pos",                    XML_VERTICAL_POS ),
         TOKEN( "vertical-rel",                    XML_VERTICAL_REL ),
@@ -2098,7 +2113,8 @@ namespace xmloff { namespace token {
         TOKEN( "default-page-layout",             XML_DEFAULT_PAGE_LAYOUT ),
         TOKEN( "layout-grid-standard-mode",       XML_LAYOUT_GRID_STANDARD_MODE ),
         TOKEN( "layout-grid-base-width",          XML_LAYOUT_GRID_BASE_WIDTH ),
-        TOKEN( "layout-grid-snap-to-characters",       XML_LAYOUT_GRID_SNAP_TO_CHARS ),
+        TOKEN( "layout-grid-snap-to-characters",  XML_LAYOUT_GRID_SNAP_TO_CHARS ),
+        TOKEN( "layout-grid-snap-to",             XML_LAYOUT_GRID_SNAP_TO ),
 
         TOKEN( "snap-to-layout-grid",             XML_SNAP_TO_LAYOUT_GRID ),
 
@@ -2363,8 +2379,7 @@ namespace xmloff { namespace token {
 
         // OD 2004-05-05 #i28701#
         TOKEN( "wrap-influence-on-position",           XML_WRAP_INFLUENCE_ON_POSITION ),
-        // --> OD 2004-10-18 #i35017# - tokens have been renamed and
-        // <XML_ITERATIVE> has been added
+        // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
         TOKEN( "once-successive",                       XML_ONCE_SUCCESSIVE ),
         TOKEN( "once-concurrent",                       XML_ONCE_CONCURRENT ),
 
@@ -2516,6 +2531,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),
         TOKEN( "drill-down-on-double-click",           XML_DRILL_DOWN_ON_DOUBLE_CLICK ),
+        TOKEN( "header-grid-layout",                   XML_HEADER_GRID_LAYOUT ),
         TOKEN( "grouped-by",                           XML_GROUPED_BY ),
         TOKEN( "days",                                 XML_DAYS ),
         TOKEN( "months",                               XML_MONTHS ),
@@ -2876,12 +2892,10 @@ namespace xmloff { namespace token {
 
         TOKEN( "http://www.w3.org/",    XML_URI_W3_PREFIX ),
         TOKEN( "/xforms",               XML_URI_XFORMS_SUFFIX ),
-        // --> OD 2005-05-12 #i49139#
-        // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+        /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
+           are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD. (#i49139#)
+        */
         TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
-        // <--
-        // --> OJ 2005-09-01
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:report:1.0",        XML_N_RPT_OASIS ),
         TOKEN( "http://openoffice.org/2005/report",       XML_N_RPT ),
         TOKEN( "group",       XML_GROUP ),
@@ -2957,15 +2971,11 @@ namespace xmloff { namespace token {
         TOKEN( "odd-rows",              XML_ODD_ROWS        ),
         TOKEN( "even-columns",          XML_EVEN_COLUMNS    ),
         TOKEN( "odd-columns",           XML_ODD_COLUMNS     ),
-
-        // <--
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
-        // --> OD 2005-10-10 #i45874#
+        // Password error from 1.4 to 2.0 Beta (#i45874#)
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
-        // <--
-        // -> FLR #i52127#
+        // OpenDocument <text:numbered-paragraph> element not supported on OpenDocument import (#i52127#)
         TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
-        // <--
         TOKEN( "master-detail-fields",  XML_MASTER_DETAIL_FIELDS),
         TOKEN( "master-detail-field",   XML_MASTER_DETAIL_FIELD),
         TOKEN( "sub-document",          XML_SUB_DOCUMENT),
@@ -3023,11 +3033,9 @@ namespace xmloff { namespace token {
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
         TOKEN( "default-row-style-name", XML_DEFAULT_ROW_STYLE_NAME),
         TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
-        // --> OD 2007-09-14 #i81002#
+        // Core implementation for direct cross-references (#i81002#)
         TOKEN( "number-no-superior", XML_NUMBER_NO_SUPERIOR ),
         TOKEN( "number-all-superior", XML_NUMBER_ALL_SUPERIOR ),
-        // <--
-        // --> OD 2008-01-15 #newlistlevelattrs#
         TOKEN( "list-level-position-and-space-mode", XML_LIST_LEVEL_POSITION_AND_SPACE_MODE ),
         TOKEN( "label-width-and-position",           XML_LABEL_WIDTH_AND_POSITION ),
         TOKEN( "label-alignment",                    XML_LABEL_ALIGNMENT ),
@@ -3037,7 +3045,6 @@ namespace xmloff { namespace token {
         TOKEN( "space",                              XML_SPACE ),
         TOKEN( "nothing",                            XML_NOTHING ),
         TOKEN( "list-tab-stop-position",             XML_LIST_TAB_STOP_POSITION ),
-        // <--
 
         // bm: chart error bar extensions (ODF 1.2)
         TOKEN( "standard-error",        XML_STANDARD_ERROR ),
@@ -3045,12 +3052,10 @@ namespace xmloff { namespace token {
         TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
         TOKEN( "error-upper-range",     XML_ERROR_UPPER_RANGE ),
 
-        // --> OD 2008-04-22 #refactorlists#
         TOKEN( "continue-list",         XML_CONTINUE_LIST ),
         TOKEN( "style-override",        XML_STYLE_OVERRIDE ),
-        // <--
-        //
-        // fs: #i90243#
+
+        // XForms: Changes to model should optionally set document's modified state. (#i90243#)
         TOKEN( "xforms-settings",       XML_XFORM_MODEL_SETTINGS ),
 
         // ODF 1.2 metadata
@@ -3160,7 +3165,7 @@ namespace xmloff { namespace token {
 #endif
         DBG_ASSERT( eToken > XML_TOKEN_INVALID, "token value too low!" );
         DBG_ASSERT( eToken < XML_TOKEN_END, "token value too high!" );
-        DBG_ASSERT(sal_uInt16(eToken) < sizeof(aTokenList)/sizeof(aTokenList[0]),"Illegal position!");
+        DBG_ASSERT(sal_uInt16(eToken) < SAL_N_ELEMENTS(aTokenList),"Illegal position!");
 
         XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         if (!pToken->pOUString)
@@ -3206,10 +3211,11 @@ namespace xmloff { namespace token {
         if (nRescheduleCount > 0)
             --nRescheduleCount;
         else {
-            DBG_ERROR("RescheduleCount not increased");
+            OSL_FAIL("RescheduleCount not increased");
         }
     }
 
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

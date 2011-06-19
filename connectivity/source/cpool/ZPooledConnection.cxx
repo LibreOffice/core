@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include "ZPooledConnection.hxx"
 #include "ZConnectionWrapper.hxx"
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
@@ -86,3 +85,4 @@ Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException,
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

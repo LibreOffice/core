@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,8 +97,7 @@ static ContentType lcl_getContentType( const rtl::OUString & rType )
         return STREAM;
     else
     {
-        OSL_ENSURE( sal_False,
-                    "Content::Content - unsupported content type string" );
+        OSL_FAIL( "Content::Content - unsupported content type string" );
         return STREAM;
     }
 }
@@ -142,16 +142,9 @@ Content* Content::create(
          !Info.Type.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
     {
-        OSL_ENSURE( sal_False, "Content::create - unsupported content type!" );
+        OSL_FAIL( "Content::create - unsupported content type!" );
         return 0;
     }
-
-#if 0
-    // Fail, if content does exist.
-    if ( Content::hasData( pProvider,
-                           Uri( Identifier->getContentIdentifier() ) ) )
-        return 0;
-#endif
 
     return new Content( rxSMgr, pProvider, Identifier, Info );
 }
@@ -325,8 +318,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii(
-                "com.sun.star.comp.ucb.TransientDocumentsContent" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.comp.ucb.TransientDocumentsContent" ));
 }
 
 //=========================================================================
@@ -339,17 +332,17 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     uno::Sequence< rtl::OUString > aSNS( 1 );
 
     if ( m_aProps.getType() == STREAM )
-        aSNS.getArray()[ 0 ] = rtl::OUString::createFromAscii(
-                                TDOC_STREAM_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                TDOC_STREAM_CONTENT_SERVICE_NAME ));
     else if ( m_aProps.getType() == FOLDER )
-        aSNS.getArray()[ 0 ] = rtl::OUString::createFromAscii(
-                                TDOC_FOLDER_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                TDOC_FOLDER_CONTENT_SERVICE_NAME ));
     else if ( m_aProps.getType() == DOCUMENT )
-        aSNS.getArray()[ 0 ] = rtl::OUString::createFromAscii(
-                                TDOC_DOCUMENT_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                TDOC_DOCUMENT_CONTENT_SERVICE_NAME ));
     else
-        aSNS.getArray()[ 0 ] = rtl::OUString::createFromAscii(
-                                TDOC_ROOT_CONTENT_SERVICE_NAME );
+        aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                TDOC_ROOT_CONTENT_SERVICE_NAME ));
 
     return aSNS;
 }
@@ -416,8 +409,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -438,8 +431,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -450,8 +443,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "No properties!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "No properties!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -490,8 +483,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -547,8 +540,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -606,8 +599,8 @@ uno::Any SAL_CALL Content::execute(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
-                rtl::OUString::createFromAscii(
-                    "Cannot remove persistent data!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Cannot remove persistent data!" )),
                 this );
             // Unreachable
         }
@@ -644,11 +637,11 @@ uno::Any SAL_CALL Content::execute(
         ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -687,11 +680,11 @@ uno::Any SAL_CALL Content::execute(
         ucb::ContentInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -759,8 +752,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         // streams cannot be created as direct children of document root
         if ( !bCreateFolder && ( m_aProps.getType() == DOCUMENT ) )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::createNewContent - streams cannot be "
+            OSL_FAIL( "Content::createNewContent - streams cannot be "
                         "created as direct children of document root!" );
             return uno::Reference< ucb::XContent >();
         }
@@ -769,8 +761,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
              !Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::createNewContent - unsupported type!" );
+            OSL_FAIL( "Content::createNewContent - unsupported type!" );
             return uno::Reference< ucb::XContent >();
         }
 
@@ -780,12 +771,12 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                     "Content::createNewContent - empty identifier!" );
 
         if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         if ( bCreateFolder )
-            aURL += rtl::OUString::createFromAscii( "New_Folder" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Folder"));
         else
-            aURL += rtl::OUString::createFromAscii( "New_Stream" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Stream"));
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
@@ -794,8 +785,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "createNewContent called on non-contentcreator object!" );
+        OSL_FAIL( "createNewContent called on non-contentcreator object!" );
         return uno::Reference< ucb::XContent >();
     }
 }
@@ -848,7 +838,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -896,8 +886,7 @@ sal_Bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_eState != PERSISTENT )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -905,7 +894,7 @@ sal_Bool Content::exchangeIdentity(
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( sal_False, "Content::exchangeIdentity - "
+        OSL_FAIL( "Content::exchangeIdentity - "
                                "Not supported by root or document!" );
         return sal_False;
     }
@@ -958,8 +947,7 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "Content::exchangeIdentity - "
+    OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }
@@ -1110,7 +1098,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "ContentType" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
@@ -1120,7 +1108,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         ContentType eType = rData.getType();
 
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "Title" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       // Title is read-only for root and documents.
@@ -1130,14 +1118,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         : 0 ),
             rData.getTitle() );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsDocument() );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
@@ -1145,7 +1133,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.getIsFolder() );
         xRow->appendObject(
             beans::Property(
-                rtl::OUString::createFromAscii( "CreatableContentsInfo" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo")),
                 -1,
                 getCppuType( static_cast<
                         const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
@@ -1156,7 +1144,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Storage is only supported by folders.
         if ( eType == FOLDER )
             xRow->appendObject(
-                beans::Property( rtl::OUString::createFromAscii( "Storage" ),
+                beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage")),
                           -1,
                           getCppuType(
                             static_cast<
@@ -1168,7 +1156,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // DocumentModel is only supported by documents.
         if ( eType == DOCUMENT )
             xRow->appendObject(
-                beans::Property( rtl::OUString::createFromAscii( "DocumentModel" ),
+                beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentModel")),
                           -1,
                           getCppuType(
                             static_cast<
@@ -1240,8 +1228,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1249,8 +1237,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1258,8 +1246,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1267,8 +1255,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -1279,8 +1267,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
             {
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
@@ -1310,8 +1298,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     else
                     {
                         aRet[ n ] <<= lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Empty Title not allowed!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Empty Title not allowed!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 );
                     }
@@ -1319,8 +1307,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Title Property value has wrong type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Title Property value has wrong type!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1332,16 +1320,16 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( eType == FOLDER )
             {
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
             {
                 // Storage is only supported by folders.
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
-                                "Storage property only supported by folders" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Storage property only supported by folders" )),
                             static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1352,17 +1340,17 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( eType == DOCUMENT )
             {
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
             {
                 // Storage is only supported by folders.
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "DocumentModel property only supported by "
-                                "documents" ),
+                                "documents" )),
                             static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1415,8 +1403,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                rtl::OUString::createFromAscii(
-                                    "No property set for storing the value!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "No property set for storing the value!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1448,14 +1436,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
-                    rtl::OUString::createFromAscii( "Exchange failed!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
                     static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
     if ( aOldTitle.getLength() )
     {
-        aEvent.PropertyName = rtl::OUString::createFromAscii( "Title" );
+        aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
 
@@ -1483,8 +1471,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     ucb::IOErrorCode_CANT_WRITE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
-                    rtl::OUString::createFromAscii(
-                        "Cannot store persistent data!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Cannot store persistent data!" )),
                     this );
                 // Unreachable
             }
@@ -1564,8 +1552,8 @@ uno::Any Content::open(
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< ucb::XCommandEnvironment >(),
-                    rtl::OUString::createFromAscii(
-                        "Got no data stream!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Got no data stream!" )),
                     this );
                 // Unreachable
             }
@@ -1600,7 +1588,7 @@ uno::Any Content::open(
                         m_eState == PERSISTENT
                             ? xEnv
                             : uno::Reference< ucb::XCommandEnvironment >(),
-                        rtl::OUString::createFromAscii( "Got no data stream!" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Got no data stream!")),
                         this );
                     // Unreachable
                 }
@@ -1662,8 +1650,8 @@ uno::Any Content::open(
                                 ? xEnv
                                 : uno::Reference<
                                       ucb::XCommandEnvironment >(),
-                            rtl::OUString::createFromAscii(
-                                "Got no data stream!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Got no data stream!" )),
                             this );
                         // Unreachable
                     }
@@ -1791,8 +1779,8 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                rtl::OUString::createFromAscii(
-                                    "Unable to resolve name clash!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Unable to resolve name clash!" )),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 nNameClashResolve ) ),
                         xEnv );
@@ -1848,7 +1836,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot store persistent data!")),
             this );
         // Unreachable
     }
@@ -1886,8 +1874,8 @@ void Content::destroy( sal_Bool bDeletePhysical,
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                rtl::OUString::createFromAscii(
-                                    "Not persistent!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Not persistent!" )),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -2028,8 +2016,8 @@ void Content::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                rtl::OUString::createFromAscii(
-                                    "Not persistent!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Not persistent!" )),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -2069,8 +2057,8 @@ void Content::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( lang::IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Invalid source URI! Syntax!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Invalid source URI! Syntax!" )),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
             xEnv );
@@ -2081,9 +2069,9 @@ void Content::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( lang::IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                     "Invalid source URI! "
-                                    "Must describe a folder or stream!" ),
+                                    "Must describe a folder or stream!" )),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
             xEnv );
@@ -2096,7 +2084,7 @@ void Content::transfer(
     if ( nPos != ( aId.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aId += rtl::OUString::createFromAscii( "/" );
+        aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
@@ -2115,8 +2103,8 @@ void Content::transfer(
                 ucb::IOErrorCode_RECURSIVE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString::createFromAscii(
-                    "Target is equal to or is a child of source!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Target is equal to or is a child of source!" )),
                 this );
             // Unreachable
         }
@@ -2138,10 +2126,10 @@ void Content::transfer(
                 {
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny( lang::IllegalArgumentException(
-                                        rtl::OUString::createFromAscii(
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                             "Invalid source URI! "
                                             "Streams cannot be created as "
-                                            "children of document root!" ),
+                                            "children of document root!" )),
                                         static_cast< cppu::OWeakObject * >(
                                             this ),
                                         -1 ) ),
@@ -2168,9 +2156,9 @@ void Content::transfer(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                         "Invalid source URI! "
-                                        "Unabale to determine source type!" ),
+                                        "Unabale to determine source type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 xEnv );
@@ -2213,7 +2201,7 @@ void Content::transfer(
 
     rtl::OUString aTargetUri = m_xIdentifier->getContentIdentifier();
     if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
-        aTargetUri += rtl::OUString::createFromAscii( "/" );
+        aTargetUri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     if ( rInfo.NewTitle.getLength() > 0 )
         aTargetUri += ::ucb_impl::urihelper::encodeSegment( rInfo.NewTitle );
@@ -2276,8 +2264,8 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString::createFromAscii(
-                "Cannot instanciate target object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Cannot instanciate target object!" )),
             this );
         // Unreachable
     }
@@ -2321,8 +2309,8 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString::createFromAscii(
-                    "Cannot instanciate target object!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Cannot instanciate target object!" )),
                 this );
             // Unreachable
         }
@@ -2345,8 +2333,8 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString::createFromAscii(
-                    "Cannot remove persistent data of source object!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Cannot remove persistent data of source object!" )),
                 this );
             // Unreachable
         }
@@ -2366,8 +2354,8 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_WRITE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString::createFromAscii(
-                    "Cannot remove additional properties of source object!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Cannot remove additional properties of source object!" )),
                 this );
             // Unreachable
         }
@@ -2466,13 +2454,13 @@ bool Content::loadData( ContentProvider* pProvider,
         catch ( lang::IllegalArgumentException const & )
         {
             // an illegal argument is provided
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
             return false;
         }
         catch ( embed::InvalidStorageException const & )
         {
             // this storage is in invalid state for any reason
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
             return false;
         }
     }
@@ -2491,7 +2479,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "storeData not supported by root and documents!" );
+        OSL_FAIL( "storeData not supported by root and documents!" );
         return false;
     }
 
@@ -2525,22 +2513,22 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
         }
         catch ( beans::UnknownPropertyException const & )
         {
-            OSL_ENSURE( false, "Property MediaType not supported!" );
+            OSL_FAIL( "Property MediaType not supported!" );
             return false;
         }
         catch ( beans::PropertyVetoException const & )
         {
-            OSL_ENSURE( false, "Caught PropertyVetoException!" );
+            OSL_FAIL( "Caught PropertyVetoException!" );
             return false;
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
             return false;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught WrappedTargetException!" );
+            OSL_FAIL( "Caught WrappedTargetException!" );
             return false;
         }
 
@@ -2586,21 +2574,21 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
             catch ( io::NotConnectedException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught NotConnectedException!" );
+                OSL_FAIL( "Caught NotConnectedException!" );
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::BufferSizeExceededException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught BufferSizeExceededException!" );
+                OSL_FAIL( "Caught BufferSizeExceededException!" );
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::IOException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_ENSURE( false, "Caught IOException!" );
+                OSL_FAIL( "Caught IOException!" );
                 closeOutputStream( xOut );
                 return false;
             }
@@ -2617,7 +2605,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
     }
     else
     {
-        OSL_ENSURE( false, "Unknown content type!" );
+        OSL_FAIL( "Unknown content type!" );
         return false;
     }
     return true;
@@ -2633,7 +2621,7 @@ bool Content::renameData(
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "renameData not supported by root and documents!" );
+        OSL_FAIL( "renameData not supported by root and documents!" );
         return false;
     }
 
@@ -2654,37 +2642,37 @@ bool Content::renameData(
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with old name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // an element with new name already exists in this storage
-        OSL_ENSURE( false, "Caught ElementExistException!" );
+        OSL_FAIL( "Caught ElementExistException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2699,7 +2687,7 @@ bool Content::removeData()
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( false, "removeData not supported by root and documents!" );
+        OSL_FAIL( "removeData not supported by root and documents!" );
         return false;
     }
 
@@ -2718,31 +2706,31 @@ bool Content::removeData()
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2757,7 +2745,7 @@ bool Content::copyData( const Uri & rSourceUri, const rtl::OUString & rNewName )
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == STREAM ) )
     {
-        OSL_ENSURE( false, "copyData not supported by root and streams!" );
+        OSL_FAIL( "copyData not supported by root and streams!" );
         return false;
     }
 
@@ -2783,37 +2771,37 @@ bool Content::copyData( const Uri & rSourceUri, const rtl::OUString & rNewName )
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for eny reason
-        OSL_ENSURE( false, "Caught InvalidStorageException!" );
+        OSL_FAIL( "Caught InvalidStorageException!" );
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+        OSL_FAIL( "Caught IllegalArgumentException!" );
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught NoSuchElementException!" );
+        OSL_FAIL( "Caught NoSuchElementException!" );
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // there is no element with this name in this storage
-        OSL_ENSURE( false, "Caught ElementExistException!" );
+        OSL_FAIL( "Caught ElementExistException!" );
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
+        OSL_FAIL( "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2835,12 +2823,12 @@ bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage 
     }
     catch ( io::IOException const & )
     {
-        OSL_ENSURE( false, "Caught IOException!" );
+        OSL_FAIL( "Caught IOException!" );
         return false;
     }
     catch ( lang::WrappedTargetException const & )
     {
-        OSL_ENSURE( false, "Caught WrappedTargetException!" );
+        OSL_FAIL( "Caught WrappedTargetException!" );
         return false;
     }
 
@@ -2861,15 +2849,15 @@ bool Content::closeOutputStream(
         }
         catch ( io::NotConnectedException const & )
         {
-            OSL_ENSURE( false, "Caught NotConnectedException!" );
+            OSL_FAIL( "Caught NotConnectedException!" );
         }
         catch ( io::BufferSizeExceededException const & )
         {
-            OSL_ENSURE( false, "Caught BufferSizeExceededException!" );
+            OSL_FAIL( "Caught BufferSizeExceededException!" );
         }
         catch ( io::IOException const & )
         {
-            OSL_ENSURE( false, "Caught IOException!" );
+            OSL_FAIL( "Caught IOException!" );
         }
     }
     return false;
@@ -3073,7 +3061,7 @@ ContentProperties::getCreatableContentsInfo() const
     {
         uno::Sequence< beans::Property > aProps( 1 );
         aProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "Title" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND );
@@ -3086,7 +3074,7 @@ ContentProperties::getCreatableContentsInfo() const
 
             // Folder.
             aSeq.getArray()[ 0 ].Type
-                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+                = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ));
             aSeq.getArray()[ 0 ].Attributes
                 = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
@@ -3100,14 +3088,14 @@ ContentProperties::getCreatableContentsInfo() const
 
             // Folder.
             aSeq.getArray()[ 0 ].Type
-                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+                = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ));
             aSeq.getArray()[ 0 ].Attributes
                 = ucb::ContentInfoAttribute::KIND_FOLDER;
             aSeq.getArray()[ 0 ].Properties = aProps;
 
             // Stream.
             aSeq.getArray()[ 1 ].Type
-                = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
+                = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_STREAM_CONTENT_TYPE ));
             aSeq.getArray()[ 1 ].Attributes
                 = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
                   | ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -3120,8 +3108,7 @@ ContentProperties::getCreatableContentsInfo() const
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "getCreatableContentsInfo called on non-contentcreator "
+        OSL_FAIL( "getCreatableContentsInfo called on non-contentcreator "
                     "object!" );
 
         return uno::Sequence< ucb::ContentInfo >( 0 );
@@ -3133,3 +3120,5 @@ bool ContentProperties::isContentCreator() const
 {
     return ( getType() == FOLDER ) || ( getType() == DOCUMENT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

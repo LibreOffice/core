@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,6 +65,7 @@ namespace odma
         {}
 
         inline ::rtl::OUString getTitle()       const { return m_sTitle;        }
+        inline ::rtl::OUString getDocumentId()  const { return ::rtl::OStringToOUString( m_sDocumentId, RTL_TEXTENCODING_ASCII_US ); }
         inline ::rtl::OUString getSavedAsName() const { return m_sSavedAsName;  }
     };
     typedef ::std::binary_function< ::rtl::Reference<ContentProperties>, ::rtl::OUString,bool> TContentPropertiesFunctorBase;
@@ -83,3 +85,4 @@ namespace odma
 }
 #endif // ODMA_CONTENTPROPS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

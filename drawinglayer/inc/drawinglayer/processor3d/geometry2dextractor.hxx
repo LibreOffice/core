@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -46,7 +49,7 @@ namespace drawinglayer
             It is e.g. used as sub-processor for contour extraction where 3D geometry is only
             useful as 2D projected geometry.
          */
-        class Geometry2DExtractingProcessor : public BaseProcessor3D
+        class DRAWINGLAYER_DLLPUBLIC Geometry2DExtractingProcessor : public BaseProcessor3D
         {
         private:
             /// result holding vector (2D)
@@ -79,3 +82,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

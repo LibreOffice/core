@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@ class CContentReader : public CBaseReader
 public:
     virtual ~CContentReader();
 
-    //CContentReader( const std::string& DocumentName );
     CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale );
 
     CContentReader( void* stream, LocaleSet_t const & DocumentLocale, zlib_filefunc_def* fa );
@@ -124,3 +124,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 //-----------------------------------------------
 // includes of external modules
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 
 //-----------------------------------------------
@@ -71,7 +70,7 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::lang::XMu
 {
     if (!m_xParentWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Cant work without a parent window!"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant work without a parent window!")),
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 
@@ -92,24 +91,24 @@ void SAL_CALL VCLStatusIndicator::start(const ::rtl::OUString& sText ,
     // <- SAFE ----------------------------------
 
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+    {
+        SolarMutexGuard aSolarGuard;
 
-    Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if (!m_pStatusBar)
-        m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
+        Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+        if (!m_pStatusBar)
+            m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
 
-    VCLStatusIndicator::impl_recalcLayout(m_pStatusBar, pParentWindow);
+        VCLStatusIndicator::impl_recalcLayout(m_pStatusBar, pParentWindow);
 
-    m_pStatusBar->Show();
-    m_pStatusBar->StartProgressMode(sText);
-    m_pStatusBar->SetProgressValue(0);
+        m_pStatusBar->Show();
+        m_pStatusBar->StartProgressMode(sText);
+        m_pStatusBar->SetProgressValue(0);
 
-    // force repaint!
-    pParentWindow->Show();
-    pParentWindow->Invalidate(INVALIDATE_CHILDREN);
-    pParentWindow->Flush();
-
-    aSolarLock.clear();
+        // force repaint!
+        pParentWindow->Show();
+        pParentWindow->Invalidate(INVALIDATE_CHILDREN);
+        pParentWindow->Flush();
+    }
     // <- SOLAR SAFE ----------------------------
 
     // SAFE -> ----------------------------------
@@ -126,13 +125,12 @@ void SAL_CALL VCLStatusIndicator::reset()
     throw(css::uno::RuntimeException)
 {
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     if (m_pStatusBar)
     {
         m_pStatusBar->SetProgressValue(0);
         m_pStatusBar->SetText(String());
     }
-    aSolarLock.clear();
     // <- SOLAR SAFE ----------------------------
 }
 
@@ -149,16 +147,17 @@ void SAL_CALL VCLStatusIndicator::end()
     // <- SAFE ----------------------------------
 
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-    if (m_pStatusBar)
     {
-        m_pStatusBar->EndProgressMode();
-        m_pStatusBar->Show(sal_False);
+        SolarMutexGuard aSolarGuard;
+        if (m_pStatusBar)
+        {
+            m_pStatusBar->EndProgressMode();
+            m_pStatusBar->Show(sal_False);
 
-        delete m_pStatusBar;
-        m_pStatusBar = 0;
+            delete m_pStatusBar;
+            m_pStatusBar = 0;
+        }
     }
-    aSolarLock.clear();
     // <- SOLAR SAFE ----------------------------
 }
 
@@ -173,10 +172,11 @@ void SAL_CALL VCLStatusIndicator::setText(const ::rtl::OUString& sText)
     // <- SAFE ----------------------------------
 
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-    if (m_pStatusBar)
-        m_pStatusBar->SetText(sText);
-    aSolarLock.clear();
+    {
+        SolarMutexGuard aSolarGuard;
+        if (m_pStatusBar)
+            m_pStatusBar->SetText(sText);
+    }
     // <- SOLAR SAFE ----------------------------
 }
 
@@ -204,10 +204,11 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
             ((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100));
 
     // SOLAR SAFE -> ----------------------------
-    ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-    if (m_pStatusBar)
-        m_pStatusBar->SetProgressValue(nPercent);
-    aSolarLock.clear();
+    {
+        SolarMutexGuard aSolarGuard;
+        if (m_pStatusBar)
+            m_pStatusBar->SetProgressValue(nPercent);
+    }
     // <- SOLAR SAFE ----------------------------
 }
 
@@ -229,3 +230,5 @@ void VCLStatusIndicator::impl_recalcLayout(Window* pStatusBar   ,
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

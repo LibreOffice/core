@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include <svx/svdedxv.hxx>
 #include <svl/solar.hrc>
 
-//#include <tools/string.h>
 #include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/hatch.hxx>
@@ -73,9 +73,8 @@
 #include <editeng/outliner.hxx>
 #include <editeng/adjitem.hxx>
 
-// #98988#
 #include <svtools/colorcfg.hxx>
-#include <vcl/svapp.hxx> //add CHINA001
+#include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +154,7 @@ void SdrObjEditView::TakeActionRect(Rectangle& rRect) const
     }
 }
 
-void __EXPORT SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrGlueEditView::Notify(rBC,rHint);
     // Printerwechsel waerend des Editierens
@@ -316,7 +315,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     {
         const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
         bool bTextFrame(pText && pText->IsTextFrame());
-        bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+        bool bFitToSize(pText && pText->IsFitToSize());
         bool bModifyMerk(pTextEditOutliner->IsModified()); // #43095#
         Rectangle aBlankRect(rOutlView.GetOutputArea());
         aBlankRect.Union(aMinTextEditArea);
@@ -385,7 +384,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     {
         const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
         bool bTextFrame(pText && pText->IsTextFrame());
-        bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+        bool bFitToSize(pText && pText->IsFitToSize());
 
         if(bTextFrame && !bFitToSize)
         {
@@ -455,8 +454,9 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, sal_Bool /*bNoPa
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
         pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
-    pOutlView->SetOutputArea(aTextEditArea);
+    // do update before setting output area so that aTextEditArea can be recalculated
     pTextEditOutliner->SetUpdateMode(sal_True);
+    pOutlView->SetOutputArea(aTextEditArea);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
 }
@@ -587,7 +587,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
     if(pTextEditOutliner)
     {
-        DBG_ERROR("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
+        OSL_FAIL("SdrObjEditView::SdrBeginTextEdit() da stand noch ein alter Outliner rum");
         delete pTextEditOutliner;
         pTextEditOutliner = 0L;
     }
@@ -632,7 +632,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             // alten Cursor merken
             if (pTextEditOutliner->GetViewCount()!=0)
             {
-                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(sal_uIntPtr(0));
+                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(static_cast<size_t>(0));
                 if(pTmpOLV!=NULL && pTmpOLV!=pGivenOutlinerView)
                     delete pTmpOLV;
             }
@@ -650,8 +650,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if ( !pTextObj->IsContourTextFrame() )
             {
                 // FitToSize erstmal nicht mit ContourFrame
-                SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+                if (pTextObj->IsFitToSize())
                     aTextRect = aAnchorRect;
             }
 
@@ -719,8 +718,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
                 // #71519#
                 if(!bExtraInvalidate)
                 {
-                    SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                    if(eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES)
+                    if(pTextObj->IsFitToSize())
                         bExtraInvalidate = sal_True;
                 }
 
@@ -1162,7 +1160,7 @@ sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                 ShowItemBrowser();
         }
 #endif
-        if (pTextEditOutlinerView->PostKeyEvent(rKEvt))
+        if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod /* && !pMod->IsChanged() */ )
             {
@@ -2144,3 +2142,5 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

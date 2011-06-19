@@ -80,7 +80,7 @@
 #define RB_CALC_COLUMNS                 58
 #define CB_ALL_SHEETS                   59
 
-#define CB_NOTES                        60
+#define CB_COMMENTS                        60
 
 #define IMG_MOREBTN_DOWN                100
 #define IMG_MOREBTN_UP                  101

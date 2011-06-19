@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,10 @@
 #include <vcl/font.hxx>
 #include "editeng/editengdllapi.h"
 
+// Percentage of height of lower case small capital letters compared to upper case letters
+// See i#1526# for full explanation
+#define SMALL_CAPS_PERCENTAGE 80
+
 class SvxDoCapitals;
 class OutputDevice;
 class Printer;
@@ -40,9 +45,9 @@ class Printer;
 class EDITENG_DLLPUBLIC SvxFont : public Font
 {
     LanguageType eLang;         // Language
-    SvxCaseMap   eCaseMap;      // Textauszeichnung
-    short nEsc;                 // Grad der Hoch-/Tiefstellung
-    sal_uInt8  nPropr;               // Grad der Verkleinerung der Fonthoehe
+    SvxCaseMap   eCaseMap;      // Text Markup
+    short nEsc;                 // Degree of Superscript/Subscript
+    sal_uInt8  nPropr;          // Degree of reduction of the font height
     short nKern;                // Kerning in Pt
 
 public:
@@ -50,7 +55,7 @@ public:
     SvxFont( const Font &rFont );
     SvxFont( const SvxFont &rFont );
 
-    // Methoden fuer die Hoch-/Tiefstellung
+    // Methods for Superscript/Subscript
     inline short GetEscapement() const { return nEsc; }
     inline void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
 
@@ -70,19 +75,18 @@ public:
     inline void SetLanguage( const LanguageType eNewLan )
         { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
-    // Is-Methoden:
+    // Is-Methods:
     inline sal_Bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
     inline sal_Bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
     inline sal_Bool IsKern() const { return 0 != nKern; }
     inline sal_Bool IsEsc() const { return 0 != nEsc; }
 
-    // Versalien, Gemeine etc. beruecksichtigen
+    // Consider Upper case, Lower case letters etc.
     String CalcCaseMap( const String &rTxt ) const;
 
-// Der folgende Bereich wird nicht von jedem benoetigt, er kann deshalb
-// ausgeklammert werden.
+// The following section is not needed by anyone, so it can be excluded.
 #ifndef REDUCEDSVXFONT
-    // Kapitaelchenbearbeitung
+    // Handle upper case letters
     void DoOnCapitals( SvxDoCapitals &rDo,
                        const sal_uInt16 nPartLen = USHRT_MAX ) const;
 
@@ -124,3 +128,4 @@ public:
 
 #endif // #ifndef   _SVX_SVXFONT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

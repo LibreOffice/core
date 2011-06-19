@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 //------------------------------------------------------------------------
 
 #include <tchar.h>
+#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
 #include "..\misc\WinImplHelper.hxx"
@@ -62,14 +64,14 @@ namespace // private
         CheckboxSetState
     };
     const size_t SIZE_CHECKBOX_SETVALUE_FUNCTION_TABLE =
-        sizeof( CheckboxSetValueFunctionTable ) / sizeof( CTRL_SETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( CheckboxSetValueFunctionTable );
 
     CTRL_GETVALUE_FUNCTION_T CheckboxGetValueFunctionTable[] =
     {
         CheckboxGetState
     };
     const size_t SIZE_CHECKBOX_GETVALUE_FUNCTION_TABLE =
-        sizeof( CheckboxGetValueFunctionTable ) / sizeof( CTRL_GETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( CheckboxGetValueFunctionTable );
 
     CTRL_SETVALUE_FUNCTION_T ListboxSetValueFunctionTable[] =
     {
@@ -81,7 +83,7 @@ namespace // private
         ListboxSetSelectedItem
     };
     const size_t SIZE_LISTBOX_SETVALUE_FUNCTION_TABLE =
-        sizeof( ListboxSetValueFunctionTable ) / sizeof( CTRL_SETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( ListboxSetValueFunctionTable );
 
     CTRL_GETVALUE_FUNCTION_T ListboxGetValueFunctionTable[] =
     {
@@ -96,7 +98,7 @@ namespace // private
         ListboxGetSelectedItemIndex
     };
     const size_t SIZE_LISTBOX_GETVALUE_ACTION_TABLE =
-        sizeof( ListboxGetValueFunctionTable ) / sizeof( CTRL_GETVALUE_FUNCTION_T );
+        SAL_N_ELEMENTS( ListboxGetValueFunctionTable );
 
     struct _ENTRY
     {
@@ -183,8 +185,7 @@ namespace // private
         stc2,       //  LISTBOX_FILTER_LABEL
         stc3        //  LISTBOX_FILE_NAME_LABEL
     };
-    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
-        sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
+    const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS = SAL_N_ELEMENTS(WindowsFileOpenCtrlIds);
 
 }; // end namespace
 
@@ -225,9 +226,10 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
     CTRL_CLASS aCtrlClass = UNKNOWN;
-    TCHAR aClassName[256];
+    const size_t nClassNameSize = 256;
+    TCHAR aClassName[nClassNameSize];
 
-    int nRet = GetClassName(hwndCtrl,aClassName,(sizeof(aClassName)/sizeof(TCHAR)));
+    int nRet = GetClassName(hwndCtrl,aClassName,nClassNameSize);
     if (nRet)
     {
         if (0 == _tcsicmp(aClassName,TEXT("button")))
@@ -259,3 +261,5 @@ int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )
 
     return WindowsFileOpenCtrlIds[aControlId];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef _IODLGIMPL_HXX
 #define _IODLGIMPL_HXX
 
-#ifndef _VCL_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
@@ -69,10 +66,10 @@ class SvtFileDialogFilter_Impl;
 #define SFXWB_READONLY          WB_READONLY
 #define SFXWB_PATHDIALOG        WB_PATH
 #define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_SHOWALLFOLDER     0x10000000L     // alle Ordner auch Mail/News/...
-#define SFXWB_MULTISELECTION    0x20000000L     // Multiselection an
+#define SFXWB_SHOWALLFOLDER     0x10000000L     // all directories including Mail/News/...
+#define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
 #define SFXWB_NOREMOTE          0x40000000L
-#define SFXWB_SHOWVERSIONS      0x80000000L     // Versionsauswahl anzeigen
+#define SFXWB_SHOWVERSIONS      0x80000000L     // show version selection
 
 #define SFX_EXTRA_AUTOEXTENSION     0x00000001L
 #define SFX_EXTRA_FILTEROPTIONS     0x00000002L
@@ -162,7 +159,7 @@ private:
     DECL_LINK( ClickHdl_Impl, CheckBox* );
     DECL_LINK( PlayButtonHdl_Impl, PushButton* );
 
-    // entfernt einen Filter mit Wildcards aus dem Path und gibt in zurueck
+    // removes a filter with wildcards from the path and returns it
     sal_Bool IsolateFilterFromPath_Impl( String& rPath, String& rFilter );
 
     void    implArrangeControls();
@@ -217,7 +214,7 @@ public:
     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const;
     void                        SetStandardDir( const String& rStdDir );
     const String&               GetStandardDir() const;
-    SvStringsDtor*              GetPathList() const;        // bei MultiSelektion
+    SvStringsDtor*              GetPathList() const;        // for MultiSelection
 
             void                AddFilter( const String& rFilter,
                                            const String& rType );
@@ -473,3 +470,5 @@ class SvtFilePicker;
 
 
 #endif // #ifndef _IODLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

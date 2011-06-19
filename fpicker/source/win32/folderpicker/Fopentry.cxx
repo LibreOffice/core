@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,13 +36,9 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-#ifndef _FILEPICKER_HXX_
 #include "folderpicker.hxx"
-#endif
 
-#ifndef _FPSERVICEINFO_HXX_
 #include "FOPServiceInfo.hxx"
-#endif
 #include "WinFOPImpl.hxx"
 
 //-----------------------------------------------------------------------
@@ -81,7 +78,7 @@ extern "C"
 // component_getImplementationEnvironment
 //----------------------------------------------------------------------
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -92,7 +89,7 @@ void SAL_CALL component_getImplementationEnvironment(
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
 {
     void* pRet = 0;
 
@@ -117,3 +114,5 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

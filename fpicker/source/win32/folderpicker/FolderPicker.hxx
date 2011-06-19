@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,16 +37,12 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <memory>
 
-#ifndef _FPIMPLBASE_HXX_
 #include "WinFOPImpl.hxx"
-#endif
 
 //----------------------------------------------------------
 // class declaration
@@ -127,3 +124,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

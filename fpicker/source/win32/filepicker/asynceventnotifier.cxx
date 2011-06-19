@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,12 +94,12 @@ void SAL_CALL CAsyncEventNotifier::addListener(const uno::Type&                 
 {
     if ( m_rBroadcastHelper.bDisposed )
         throw lang::DisposedException(
-            ::rtl::OUString::createFromAscii( "FilePicker is already disposed" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilePicker is already disposed" )),
             uno::Reference< uno::XInterface >() );
 
     if ( m_rBroadcastHelper.bInDispose )
         throw lang::DisposedException(
-            ::rtl::OUString::createFromAscii( "FilePicker will be disposed now." ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilePicker will be disposed now." )),
             uno::Reference< uno::XInterface >() );
 
     m_rBroadcastHelper.aLC.addInterface( aType, xListener );
@@ -113,7 +114,7 @@ void SAL_CALL CAsyncEventNotifier::removeListener(const uno::Type&              
 {
     if ( m_rBroadcastHelper.bDisposed )
         throw lang::DisposedException(
-            ::rtl::OUString::createFromAscii( "FilePicker is already disposed." ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilePicker is already disposed." )),
             uno::Reference< uno::XInterface >() );
 
     m_rBroadcastHelper.aLC.removeInterface( aType, xListener );
@@ -179,7 +180,7 @@ void SAL_CALL CAsyncEventNotifier::shutdown()
     // we are waiting infinite, so error will
     // be better detected in form of deadlocks
     if (WaitForSingleObject(m_hThread, INFINITE) == WAIT_FAILED) {
-        OSL_ENSURE(false, "Waiting for thread termination failed!");
+        OSL_FAIL("Waiting for thread termination failed!");
     }
 
     // lock mutex again to reset m_hThread
@@ -298,7 +299,7 @@ void SAL_CALL CAsyncEventNotifier::run()
                         }
                         catch(uno::RuntimeException&)
                         {
-                            OSL_ENSURE(sal_False,"RuntimeException during event dispatching");
+                            OSL_FAIL("RuntimeException during event dispatching");
                         }
                     }
                 }
@@ -325,3 +326,5 @@ unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

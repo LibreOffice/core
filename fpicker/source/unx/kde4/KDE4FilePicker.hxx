@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-//#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <osl/conditn.hxx>
@@ -78,9 +78,6 @@ protected:
 
     //running filter string to add to dialog
     QString _filter;
-
-    //filter for reverse lookup of filter text
-    QHash<QString, QString> _filters;
 
     //mapping of SAL control ID's to created custom controls
     QHash<sal_Int16, QWidget*> _customWidgets;
@@ -153,6 +150,7 @@ public:
     // XEventListener
 
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject &rEvent ) throw( ::com::sun::star::uno::RuntimeException );
+    using cppu::WeakComponentImplHelperBase::disposing;
 
     // XServiceInfo
 
@@ -169,3 +167,5 @@ private:
     void addCustomControl(sal_Int16 controlId);
 
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

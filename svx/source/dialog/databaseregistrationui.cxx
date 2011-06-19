@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,22 +32,15 @@
 // === includes (declaration) ============================================
 #include "svx/databaseregistrationui.hxx"
 
-// === includes (UNO) ====================================================
-// === /includes (UNO) ===================================================
-
 // === includes (project) ================================================
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-//#include "connpooloptions.hxx"
-// === /includes (project) ===============================================
 
 // === includes (global) =================================================
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
-// === /includes (global) ================================================
+
 
 namespace svx
 {
@@ -67,3 +61,5 @@ namespace svx
     }
 
 }   // namespace svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

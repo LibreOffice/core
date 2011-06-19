@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,14 @@
 #include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
 #include "svx/svxdllapi.h"
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 // forward ---------------------------------------------------------------
 
+class SfxItemSet;
 class FontPrevWin_Impl;
 
 // class SvxFontPrevWindow -----------------------------------------------
@@ -49,16 +51,21 @@ class SVX_DLLPUBLIC SvxFontPrevWindow : public Window
 private:
     FontPrevWin_Impl*   pImpl;
 
-    SVX_DLLPRIVATE void             InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    SVX_DLLPRIVATE void InitSettings( sal_Bool bForeground, sal_Bool bBackground );
+    SVX_DLLPRIVATE void Init ();
+    SVX_DLLPRIVATE void SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
 
 public:
+                        SvxFontPrevWindow( Window* pParent );
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
     virtual             ~SvxFontPrevWindow();
 
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    // Aus Effizienz-gr"unden nicht const
+    void                Init( const SfxItemSet& rSet );
+
+    // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
     void                SetFont( const SvxFont& rFont );
@@ -71,10 +78,13 @@ public:
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
     void                UseResourceText( sal_Bool bUse = sal_True );
+    void                SetDrawBaseLine( sal_Bool bSet = sal_True );
+    void                SetPreviewBackgroundToCharacter( sal_Bool bSet = sal_True );
     void                Paint( const Rectangle& );
 
-    sal_Bool                IsTwoLines() const;
+    sal_Bool            IsTwoLines() const;
     void                SetTwoLines(sal_Bool bSet);
+    void                SetNoLines(sal_Bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 
@@ -84,7 +94,16 @@ public:
 
     void                SetPreviewText( const ::rtl::OUString& rString );
     void                SetFontNameAsPreviewText();
+
+    void                SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    void                SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
+    void                SetFontWidthScale( const SfxItemSet& rSet );
+    void                SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+
+    void                SetFromItemSet( const SfxItemSet &rSet,
+                                        bool bPreviewBackgroundToCharacter = false );
 };
 
 #endif // #ifndef _SVX_FNTCTRL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,13 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#ifndef __FRAMEWORK_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX
 #include "uielement/spinfieldtoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -58,11 +55,9 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #ifdef WINNT
 #include <systools/win32/snprintf.h>
@@ -240,7 +235,7 @@ SpinfieldToolbarController::~SpinfieldToolbarController()
 void SAL_CALL SpinfieldToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     delete m_pSpinfieldControl;
@@ -575,3 +570,4 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlscript.hxx"
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -122,3 +121,5 @@ extern "C"
             pImplName, pServiceManager, pRegistryKey, ::xmlscript::s_entries );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

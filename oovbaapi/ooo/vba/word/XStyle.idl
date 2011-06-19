@@ -27,25 +27,32 @@
 #ifndef __ooo_vba_word_XStyle_idl__
 #define __ooo_vba_word_XStyle_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
+#include <com/sun/star/script/XDefaultProperty.idl>
 
 module ooo {  module vba {  module word {
 
 interface XFont;
+interface XListTemplate;
+interface XParagraphFormat;
 interface XStyle
 {
     interface ooo::vba::XHelperInterface;
+    interface com::sun::star::script::XDefaultProperty;
 
     [attribute] string Name;
     [attribute] long LanguageID;
     [attribute, readonly] long Type;
     [attribute, readonly] XFont Font;
+    [attribute] string NameLocal;
+    [attribute, readonly] XParagraphFormat ParagraphFormat;
+    [attribute] boolean AutomaticallyUpdate;
+    [attribute] any BaseStyle;
+    [attribute] any NextParagraphStyle;
+    [attribute, readonly] long ListLevelNumber;
+
+    void LinkToListTemplate( [in] XListTemplate ListTemplate, [in] any ListLevelNumber );
 };
 
 }; }; };

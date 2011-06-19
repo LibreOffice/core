@@ -30,7 +30,6 @@ PRJ=..$/..$/..
 PRJNAME=desktop
 TARGET=officeloader
 LIBTARGET=NO
-#TARGETTYPE=GUI
 
 # --- Settings -----------------------------------------------------
 
@@ -41,23 +40,6 @@ LIBTARGET=NO
 OBJFILES = \
         $(OBJ)$/officeloader.obj
 
-#APP1TARGET=so$/officeloader
-#APP1NOSAL=TRUE
-#APP1LINKRES=$(MISC)$/$(TARGET).res
-#APP1ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
-#APP1OBJS = \
-#		$(OBJ)$/officeloader.obj
-
-#APP2TARGET=officeloader
-#APP2NOSAL=TRUE
-#APP2LINKRES=$(MISC)$/$(TARGET).res
-#APP2ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
-#APP2OBJS = \
-#		$(OBJ)$/officeloader.obj
-
-
 # --- Targets ------------------------------------------------------
 
-
 .INCLUDE :  target.mk
-

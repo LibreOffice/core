@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _XMLOFF_TEXTHEADERFOOTERCONTEXT_HXX_
 
 
-#ifndef _XMLOFF_XMLICTXT_HXX_
 #include <xmloff/xmlictxt.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
@@ -75,3 +74,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

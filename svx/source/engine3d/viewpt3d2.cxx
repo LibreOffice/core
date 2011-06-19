@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,6 @@
 #include <svx/viewpt3d.hxx>
 #include <svx/volume3d.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 Viewport3D::Viewport3D() :
     aVRP(0, 0, 5),
     aVPN(0, 0, 1),
@@ -56,11 +51,7 @@ Viewport3D::Viewport3D() :
     aViewWin.W =  2; aViewWin.H = 2;
 }
 
-/*************************************************************************
-|*
-|* ViewWindow (in View-Koordinaten) setzen
-|*
-\************************************************************************/
+// Set ViewWindow (in View coordinates)
 
 void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
@@ -75,12 +66,6 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
     fHRatio = aDeviceRect.GetHeight() / aViewWin.H;
 }
 
-/*************************************************************************
-|*
-|* ViewWindow zurueckgeben
-|*
-\************************************************************************/
-
 void Viewport3D::GetViewWindow(double& rX, double& rY,
                                double& rW, double& rH) const
 {
@@ -90,11 +75,7 @@ void Viewport3D::GetViewWindow(double& rX, double& rY,
     rH = aViewWin.H;
 }
 
-/*************************************************************************
-|*
-|* Beobachterposition (PRP) in Weltkoordinaten zurueckgeben
-|*
-\************************************************************************/
+// Returns observer position (PRP) in world coordinates
 
 const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 {
@@ -103,11 +84,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
     return aViewPoint;
 }
 
-/*************************************************************************
-|*
-|* Transformationsmatrix zurueckgeben
-|*
-\************************************************************************/
+// Returns transformations matrix
 
 const basegfx::B3DHomMatrix& Viewport3D::GetViewTransform()
 {
@@ -116,17 +93,7 @@ const basegfx::B3DHomMatrix& Viewport3D::GetViewTransform()
     return aViewTf;
 }
 
-
-
-
-
-
-
-/*************************************************************************
-|*
-|* View-Transformationsmatrix berechnen
-|*
-\************************************************************************/
+// Calculate View transformations matrix
 
 void Viewport3D::MakeTransform(void)
 {
@@ -135,13 +102,13 @@ void Viewport3D::MakeTransform(void)
         double fV, fXupVp, fYupVp;
         aViewPoint = aVRP + aVPN * aPRP.getZ();
 
-        // auf Einheitsmatrix zuruecksetzen
+        // Reset to Identity matrix
         aViewTf.identity();
 
-        // in den Ursprung verschieben
+        // shift in the origin
         aViewTf.translate(-aVRP.getX(), -aVRP.getY(), -aVRP.getZ());
 
-        // fV = Laenge der Projektion von aVPN auf die yz-Ebene:
+        // fV = Length of the projection of aVPN on the yz plane:
         fV = aVPN.getYZLength();
 
         if ( fV != 0 )
@@ -167,8 +134,8 @@ void Viewport3D::MakeTransform(void)
             aViewTf *= aTemp;
         }
 
-        // X- und Y-Koordinaten des View Up Vektors in das (vorlaeufige)
-        // View-Koordinatensytem umrechnen
+        // Convert X- and Y- coordinates of the view up vector to the
+        // (preliminary) view coordinate system.
         fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
         fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
         fV = sqrt(fXupVp * fXupVp + fYupVp * fYupVp);
@@ -189,12 +156,6 @@ void Viewport3D::MakeTransform(void)
     }
 }
 
-/*************************************************************************
-|*
-|* DeviceWindow des Ausgabegeraetes setzen
-|*
-\************************************************************************/
-
 void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
 {
     long nNewW = rRect.GetWidth();
@@ -206,11 +167,11 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
     {
         double  fRatio, fTmp;
 
-        // Mapping, ohne die reale Groesse der Objekte im Device-Window
-        // zu aendern
+        // Mapping, without changing the real size of the objects in the
+        // Device Window
         case AS_HOLD_SIZE:
-            // Wenn Device ungueltig (w, h = -1), zunaechst
-            // View mit AsHoldX anpassen
+            // When the Device is invalid (w, h = -1), adapt the  View
+            // with AsHoldX
             if ( nOldW > 0 && nOldH > 0 )
             {
                 fRatio = (double) nNewW / nOldW;
@@ -222,7 +183,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
                 break;
             }
         case AS_HOLD_X:
-            // View-Hoehe an -Breite anpassen
+            // Adapt view height to view width
             fRatio = (double) nNewH / nNewW;
             fTmp = aViewWin.H;
             aViewWin.H = aViewWin.W * fRatio;
@@ -230,7 +191,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
             break;
 
         case AS_HOLD_Y:
-            // View-Breite an -Hoehe anpassen
+            // Adapt view width to view height
             fRatio = (double) nNewW / nNewH;
             fTmp = aViewWin.W;
             aViewWin.W = aViewWin.H * fRatio;
@@ -244,20 +205,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
     aDeviceRect = rRect;
 }
 
-
-
-
-
-
-
-
-
-
-/*************************************************************************
-|*
-|* 3D-Punkt auf Viewplane projizieren
-|*
-\************************************************************************/
+// Project the  3D pointon the View plane
 
 basegfx::B3DPoint Viewport3D::DoProjection(const basegfx::B3DPoint& rVec) const
 {
@@ -274,8 +222,8 @@ basegfx::B3DPoint Viewport3D::DoProjection(const basegfx::B3DPoint& rVec) const
         }
         else
         {
-            // Das ist die Version fuer beliebigen PRP, wird aber
-            // aus Performancegruenden nicht verwendet
+            // This is the version for any PRP, but not used due to
+            // performance reasons
             fPrDist /= aVec.getZ() - aPRP.getZ();
             aVec.setX(aVec.getX() * fPrDist);
             aVec.setY(aVec.getY() * fPrDist);
@@ -285,18 +233,13 @@ basegfx::B3DPoint Viewport3D::DoProjection(const basegfx::B3DPoint& rVec) const
     return aVec;
 }
 
-/*************************************************************************
-|*
-|* 3D-Punkt auf Geraetekoordinaten mappen
-|*
-\************************************************************************/
+// Mapp 3D point to device coordinates
 
 basegfx::B3DPoint Viewport3D::MapToDevice(const basegfx::B3DPoint& rVec) const
 {
     basegfx::B3DPoint aRetval;
 
-    // Y-Koordinate subtrahieren, da die Device-Y-Achse von oben
-    // nach unten verlaeuft
+    // Subtract Y-coordinate, since the device Y-Axis runs from top to bottom
     aRetval.setX((double)aDeviceRect.Left() + ((rVec.getX() - aViewWin.X) * fWRatio));
     aRetval.setY((double)aDeviceRect.Bottom() - ((rVec.getY() - aViewWin.Y) * fHRatio));
     aRetval.setZ(rVec.getZ());
@@ -304,11 +247,7 @@ basegfx::B3DPoint Viewport3D::MapToDevice(const basegfx::B3DPoint& rVec) const
     return aRetval;
 }
 
-/*************************************************************************
-|*
-|* View Reference Point setzen
-|*
-\************************************************************************/
+// Set View Reference Point
 
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
 {
@@ -316,11 +255,7 @@ void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* View Plane Normal setzen
-|*
-\************************************************************************/
+// Set View Plane Normal
 
 void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 {
@@ -329,11 +264,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* View Up Vector setzen
-|*
-\************************************************************************/
+// Set View Up Vector
 
 void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
@@ -341,11 +272,7 @@ void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* Center Of Projection setzen
-|*
-\************************************************************************/
+// Set Center Of Projection
 
 void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
 {
@@ -355,11 +282,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* View Plane Distance setzen
-|*
-\************************************************************************/
+// Set View Plane Distance
 
 void Viewport3D::SetVPD(double fNewVPD)
 {
@@ -367,11 +290,7 @@ void Viewport3D::SetVPD(double fNewVPD)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* Abstand der vorderen Clippingebene setzen
-|*
-\************************************************************************/
+// Set distance of the front Clipping plane
 
 void Viewport3D::SetNearClipDist(double fNewNCD)
 {
@@ -379,11 +298,7 @@ void Viewport3D::SetNearClipDist(double fNewNCD)
     bTfValid = sal_False;
 }
 
-/*************************************************************************
-|*
-|* Abstand der hinteren Clippingebene setzen
-|*
-\************************************************************************/
+// Set distance of the rear Clipping plane
 
 void Viewport3D::SetFarClipDist(double fNewFCD)
 {
@@ -392,3 +307,5 @@ void Viewport3D::SetFarClipDist(double fNewFCD)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

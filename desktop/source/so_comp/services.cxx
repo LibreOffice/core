@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,12 +42,13 @@
 
 #include <string.h>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::desktop;
+
+using ::rtl::OUString;
 
 static const char* pServices[] =
 {
@@ -71,7 +73,6 @@ static const fProvider pInstanceProviders[] =
     NULL
 };
 
-
 static const char** pSupportedServices[] =
 {
     SOEvaluation::interfaces,
@@ -92,16 +93,14 @@ getSupportedServiceNames(int p) {
 
 extern "C"
 {
-void SAL_CALL
-component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char** ppEnvironmentTypeName,
     uno_Environment**)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-void* SAL_CALL
-component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName,
     void* pServiceManager,
     void*)
@@ -132,3 +131,5 @@ component_getFactory(
     return NULL;
 }
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

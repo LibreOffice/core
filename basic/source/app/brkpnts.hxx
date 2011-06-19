@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,69 +27,52 @@
  ************************************************************************/
 
 #include <vcl/window.hxx>
+#include <vector>
 
 #define MARKER_NOMARKER 0xFFFF
 
-
 class SbModule;
-class BreakpointListe;
 struct Breakpoint;
 class ImageList;
 
-DECLARE_LIST( BreakpointList, Breakpoint* )
-
-class BreakpointWindow : public Window, public BreakpointList
+class BreakpointWindow : public Window
 {
 using Window::Scroll;
 
 public:
     BreakpointWindow( Window *pParent );
-//  ~BreakpointWindow();
 
     void        Reset();
 
     void        SetModule( SbModule *pMod );
     void        SetBPsInModule();
 
-    void        InsertBreakpoint( sal_uInt16 nLine );
-    void        ToggleBreakpoint( sal_uInt16 nLine );
-    void        AdjustBreakpoints( sal_uIntPtr nLine, sal_Bool bInserted );
+    void        InsertBreakpoint( sal_uInt32 nLine );
+    void        ToggleBreakpoint( sal_uInt32 nLine );
+    void        AdjustBreakpoints( sal_uInt32 nLine, bool bInserted );
 
     void        LoadBreakpoints( String aFilename );
     void        SaveBreakpoints( String aFilename );
 
-protected:
-    Breakpoint* FindBreakpoint( sal_uIntPtr nLine );
-
 private:
-    long            nCurYOffset;
-    sal_uInt16          nMarkerPos;
-    SbModule*       pModule;
-    sal_Bool            bErrorMarker;
-    static ImageList *pImages;
+    ::std::vector< Breakpoint* > BreakpointList;
+    long                nCurYOffset;
+    sal_uInt32          nMarkerPos;
+    SbModule*           pModule;
+    bool                bErrorMarker;
+    static ImageList*   pImages;
 
 protected:
     virtual void    Paint( const Rectangle& );
     Breakpoint*     FindBreakpoint( const Point& rMousePos );
-    void            ShowMarker( sal_Bool bShow );
+    Breakpoint*     FindBreakpoint( sal_uInt32 nLine );
+    void            ShowMarker( bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
-
-//  void            SetModulWindow( ModulWindow* pWin )
-//                      { pModulWindow = pWin; }
-
-    void            SetMarkerPos( sal_uInt16 nLine, sal_Bool bErrorMarker = sal_False );
-
-    virtual void        Scroll( long nHorzScroll, long nVertScroll,
-                                sal_uInt16 nFlags = 0 );
+    void            SetMarkerPos( sal_uInt32 nLine, bool bErrorMarker = false );
+    virtual void    Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags = 0 );
     long&           GetCurYOffset()         { return nCurYOffset; }
 };
 
-
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

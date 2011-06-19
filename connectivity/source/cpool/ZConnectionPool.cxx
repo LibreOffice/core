@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include "ZPooledConnection.hxx"
 #include "ZPoolCollection.hxx"
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno;
@@ -68,7 +65,7 @@ namespace
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
+        static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "Timeout" ));
         return s_sNodeName;
     }
 
@@ -98,7 +95,7 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
     calculateTimeOuts();
 
-    m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
+    m_xInvalidator = new OPoolTimer(this,::salhelper::TTimeValue(m_nTimeOut,0));
     m_xInvalidator->start();
 }
 // -----------------------------------------------------------------------------
@@ -334,3 +331,5 @@ void OConnectionPool::calculateTimeOuts()
     m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

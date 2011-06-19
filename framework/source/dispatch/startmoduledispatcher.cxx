@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
 //_______________________________________________
@@ -119,7 +120,7 @@ void SAL_CALL StartModuleDispatcher::dispatchWithNotification(const css::util::U
     throw(css::uno::RuntimeException)
 {
     ::sal_Int16 nResult = css::frame::DispatchResultState::DONTKNOW;
-    if (aURL.Complete.equals (CMD_UNO_SHOWSTARTMODULE))
+    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)))
     {
         nResult = css::frame::DispatchResultState::FAILURE;
         if (implts_isBackingModePossible ())
@@ -239,3 +240,5 @@ void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Referenc
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,16 +34,24 @@
 #include <tools/string.hxx>
 #include <svl/svarray.hxx>
 
+#include <vector>
+
 class SfxObjectShell;
 class Graphic;
 class Size;
 
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XComponent;
+    }
+}}}
+
 namespace sfx2
 {
-    // Damit der Link ueber den Status der zu ladenen Grafik informierten werden
-    // verschickt das FileObject ein SvData, mit der FormatId
-    // "RegisterStatusInfoId" und ein einem String als Datentraeger. Dieser
-    // enthaelt den folgenden enum.
+    // For the link to receive information about the status of graphics that
+    // will be loaded the FileObject sends a SvData, which contains the
+    // FormatID "RegisterStatusInfoId" and a string as the data container.
+    // This contains the following enum.
 
 class SvBaseLink;
 class SvBaseLinkRef;
@@ -55,10 +64,14 @@ SV_DECL_PTRARR( SvLinkSources, SvLinkSourcePtr, 1, 1 )
 
 class SFX2_DLLPUBLIC LinkManager
 {
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > >
+        CompVector;
+    CompVector maCachedComps;
+
     SvBaseLinks     aLinkTbl;
     SvLinkSources aServerTbl;
 
-    SfxObjectShell *pPersist; // LinkMgr muss vor SfxObjectShell freigegeben werden
+    SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
     sal_Bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
                             const String* pName = 0 );
@@ -74,6 +87,16 @@ public:
                 LinkManager( SfxObjectShell * pCacheCont );
                 ~LinkManager();
 
+    /**
+     * Insert a component loaded during link update, which needs to be closed
+     * when the update is complete.
+     *
+     * @param xComp component loaded during link update.
+     */
+    void        InsertCachedComp(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp);
+
+    void        CloseCachedComps();
+
     SfxObjectShell*    GetPersist() const              { return pPersist; }
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
 
@@ -81,26 +104,37 @@ public:
     void        Remove( sal_uInt16 nPos, sal_uInt16 nCnt = 1 );
     sal_Bool        Insert( SvBaseLink* pLink );
 
-                // den Link mit einem SvLinkSource verbinden und in die Liste eintragen
+    // the links connect to a SvLinkSource and adds to the list
     sal_Bool        InsertDDELink( SvBaseLink*,
                         const String& rServer,
                         const String& rTopic,
                         const String& rItem );
 
-                // falls am Link schon alles eingestellt ist !
+    // if everything is already set at the link!
     sal_Bool        InsertDDELink( SvBaseLink* );
 
-    // den Link mit einem PseudoObject verbinden und in die Liste eintragen
+    // Connect the links to a pseudo-object and add to the list
     sal_Bool InsertFileLink( sfx2::SvBaseLink&,
                         sal_uInt16 nFileType,
                         const String& rTxt,
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
 
-            // falls am Link schon alles eingestellt ist !
+    // if everything is already set for the link!
     sal_Bool InsertFileLink( sfx2::SvBaseLink& );
 
-                // erfrage die Strings fuer den Dialog
+    void ReconnectDdeLink(SfxObjectShell& rServer);
+
+    /**
+     * Reconnect the server document shell to a DDE link object.
+     *
+     * @param rPath path to the server document
+     * @param rServer server document shell instance
+     * @param rLink link object of the client document
+     */
+    void LinkServerShell(const ::rtl::OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
+
+    // Obtain the string for the dialog
     sal_Bool GetDisplayNames( const SvBaseLink *,
                                     String* pType,
                                     String* pFile = 0,
@@ -114,29 +148,29 @@ public:
                                 sal_Bool bUpdateGrfLinks = sal_False,
                                 Window* pParentWin = 0 );
 
-                // Liste aller Links erfragen (z.B. fuer Verknuepfungs-Dialog)
+    // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }
 
-    // ----------------- Serverseitige Verwaltung --------------------
+    // ----------------- Server-side management --------------------
 
-                // Liste der zu serviereden Links erfragen
+    // Call with list of links to server
     const SvLinkSources& GetServers() const { return aServerTbl; }
-                // einen zu servierenden Link eintragen/loeschen
+    // Link register/delete
     sal_Bool        InsertServer( SvLinkSource* rObj );
     void        RemoveServer( SvLinkSource* rObj );
     void        RemoveServer( sal_uInt16 nPos, sal_uInt16 nCnt = 1 )
                 {   aServerTbl.Remove( nPos, nCnt ); }
 
-    // eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
-    // (ist zur Zeit nur fuer die FileLinks interressant!)
+    // A transfer is aborted, so cancel all download media
+    // (for the time beeing this is only of interest for the FileLinks!)
     void CancelTransfers();
 
-    // um Status Informationen aus dem FileObject an den BaseLink zu
-    // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
-    // dann die entsprechenden Informationen als String.
-    // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
-    // - das braucht Informationen ueber Load/Abort/Error
-    static sal_uIntPtr  RegisterStatusInfoId();
+    // To send status information from the FileObject to the Baselink,
+    // for this there exist a separate ClipBoardId. The SvData-object has
+    // got the appropriate information as a string.
+    // Is now required for FileObject in conjunction with JavaScript
+    // this needs information about Load/Abort/Error
+    static sal_uIntPtr RegisterStatusInfoId();
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
@@ -149,15 +183,15 @@ private:
                 LinkManager& operator=( const LinkManager& );
 };
 
-// Trenner im LinkName fuer die DDE-/File-/Grafik- Links
-// (nur wer es braucht, um einen SvLinkName zusammenzubasteln)
+// Separator in the link name for the DDE-/File-/Graphics- links
+// (only those who need to construct a SvLinkName)
 const sal_Unicode cTokenSeperator = 0xFFFF;
 
-// erzeuge einen String fuer den SvLinkName. Fuer
-// - DDE die ersten 3 Strings, (Server, Topic, Item)
-// - File-/Grf-LinkNms die letzen 3 Strings (FileName, Bereich, Filter)
+// create a string for the SvLinkName. For:
+// - DDE the first 3 Strings, (Server, Topic, Item)
+// - File-/Graphics-LinkNames the last 3 Strings (FileName, Region, Filter)
 SFX2_DLLPUBLIC void MakeLnkName( String& rName,
-                 const String* pType,       // kann auch 0 sein !!
+                 const String* pType,       // Can also be null!!
                  const String& rFile,
                  const String& rLink,
                  const String* pFilter = 0 );
@@ -166,3 +200,4 @@ SFX2_DLLPUBLIC void MakeLnkName( String& rName,
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

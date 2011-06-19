@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,24 +77,19 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 
 // -----------------------------------------------------------------------
 
-#define _INIT \
-    pFormatter      ( pNumFormatter ),  \
-    pCurFmtTable    ( NULL ),           \
-    eValType        ( eNumValType ),    \
-    bUndoAddList    ( sal_True ),       \
-    nInitFormatKey  ( nFormatKey ),     \
-    nCurFormatKey   ( nFormatKey ),     \
-    pCurCurrencyEntry(NULL),            \
-    bBankingSymbol  (sal_False),            \
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
-
-// -----------------------------------------------------------------------
-
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32              nFormatKey,
                                             SvxNumberValueType  eNumValType,
-                                            const String&       rNumStr )
-    :   _INIT
+                                            const String&       rNumStr ) :
+    pFormatter      ( pNumFormatter ),
+    pCurFmtTable    ( NULL ),
+    eValType        ( eNumValType ),
+    bUndoAddList    ( sal_True ),
+    nInitFormatKey  ( nFormatKey ),
+    nCurFormatKey   ( nFormatKey ),
+    pCurCurrencyEntry(NULL),
+    bBankingSymbol  (sal_False),
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     nValNum = DEFAULT_NUMVALUE;
 
@@ -115,8 +111,16 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32              nFormatKey,
                                             SvxNumberValueType  eNumValType,
                                             double              nNumVal,
-                                            const String*       pNumStr )
-    :   _INIT
+                                            const String*       pNumStr ) :
+    pFormatter      ( pNumFormatter ),
+    pCurFmtTable    ( NULL ),
+    eValType        ( eNumValType ),
+    bUndoAddList    ( sal_True ),
+    nInitFormatKey  ( nFormatKey ),
+    nCurFormatKey   ( nFormatKey ),
+    pCurCurrencyEntry(NULL),
+    bBankingSymbol  (sal_False),
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
     //  original string in addition to the value
@@ -277,7 +281,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
         }
         else
         {
-            DBG_ERROR( "Doppeltes Format!" );
+            OSL_FAIL( "Doppeltes Format!" );
         }
     }
     else // neues Format
@@ -307,7 +311,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
     }
     else // Doppelt einfuegen nicht moeglich
     {
-        DBG_ERROR( "Doppeltes Format!" ); // oder doch?
+        OSL_FAIL( "Doppeltes Format!" ); // oder doch?
     }
 
     return bInserted;
@@ -372,14 +376,14 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
     if(aCurrencyFormatList.Count()>nCurrencyPos)
     {
         xub_StrLen rErrPos=0;
-        sal_uInt16 rCatLbSelPos=0;
-        short  rFmtSelPos=0;
         SvStrings aFmtEList;
 
         sal_uInt32 nFound = pFormatter->TestNewString( *aCurrencyFormatList[nCurrencyPos], eCurLanguage );
 
         if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
+            sal_uInt16 rCatLbSelPos=0;
+            short  rFmtSelPos=0;
             AddFormat( *aCurrencyFormatList[nCurrencyPos],rErrPos,rCatLbSelPos,
                     rFmtSelPos,aFmtEList);
         }
@@ -1483,7 +1487,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     }
     else
     {
-        DBG_ERROR("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
+        OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
     }
     return nSelP;
 }
@@ -1604,9 +1608,6 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bF
         aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i]->GetLanguage()));
 
         pStr = new XubString(aStr);
-#if 0
-        fprintf( stderr, "currency entry: %s\n", ByteString( *pStr, RTL_TEXTENCODING_UTF8).GetBuffer());
-#endif
         for(j=nStart;j<rList.Count();j++)
         {
             const StringPtr pTestStr=rList[j];
@@ -1731,10 +1732,9 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
 
     sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString, bTestBanking);
 
-    sal_uInt16 nStart=0;
-
     if(nPos!=(sal_uInt16)-1)
     {
+        sal_uInt16 nStart=0;
         if(bTestBanking && aCurCurrencyList.Count()>nPos)
         {
             nStart=nCount;
@@ -1843,13 +1843,12 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
         if(nPos<nCount)
         {
             NfWSStringsDtor aWSStringsDtor;
-            sal_uInt16 nDefault;
 
             const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[nPos];
 
             if ( pTmpCurrencyEntry!=NULL)
             {
-                nDefault = pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );
 
                 for(sal_uInt16 i=0;i<aWSStringsDtor.Count();i++)
@@ -1867,3 +1866,4 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
     return bFlag;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,13 @@
 #if ! defined INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 #define INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 
-
 #include "cppuhelper/compbase3.hxx"
-//#include "cppuhelper/implbase2.hxx"
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/Type.hxx"
-
 
 namespace css = ::com::sun::star;
 
 namespace dp_manager {
-
-
 
 /**
    This command environment is to be used when an extension is temporarily
@@ -104,7 +100,7 @@ private:
     ::rtl::OUString m_repository;
     bool m_bSuppressLicense;
 public:
-    LicenseCommandEnv(){};
+    LicenseCommandEnv() : m_bSuppressLicense(false) {};
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
@@ -158,26 +154,8 @@ public:
     css::uno::Any m_UnknownException;
 };
 
-// class NoExceptionCommandEnv : public BaseCommandEnv
-// {
-//     css::uno::Type m_type;
-// public:
-//     NoExceptionCommandEnv::NoExceptionCommandEnv(){};
-//     NoExceptionCommandEnv::NoExceptionCommandEnv(
-//         css::uno::Reference< css::task::XInteractionHandler> const & handler,
-//         css::uno::Type const & type);
-
-// // XInteractionHandler
-//     virtual void SAL_CALL handle(
-//         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-//         throw (css::uno::RuntimeException);
-
-// };
-
 }
-
-
-
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

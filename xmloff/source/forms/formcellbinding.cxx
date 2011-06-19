@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -227,7 +228,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormCellBindingHelper::getStringAddressFromCellBinding: caught an exception!" );
+        OSL_FAIL( "FormCellBindingHelper::getStringAddressFromCellBinding: caught an exception!" );
     }
 
     return sAddress;
@@ -256,7 +257,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormCellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
+        OSL_FAIL( "FormCellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
     }
 
     return sAddress;
@@ -292,7 +293,7 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies: caught an exception!" );
+        OSL_FAIL( "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies: caught an exception!" );
     }
 
     return bYesItIs;
@@ -447,7 +448,7 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
         }
         catch ( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormCellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
+            OSL_FAIL( "FormCellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
         }
     }
     return xReturn;
@@ -478,7 +479,7 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const ::rtl::OUStri
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormCellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
+            OSL_FAIL( "FormCellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
         }
     }
 
@@ -488,3 +489,5 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const ::rtl::OUStri
 //............................................................................
 }   // namespace xmloff
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

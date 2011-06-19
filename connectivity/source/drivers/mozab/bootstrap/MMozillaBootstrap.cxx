@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,7 @@ void MozillaBootstrap::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii(MOZAB_MozillaBootstrap_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_MozillaBootstrap_IMPL_NAME));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -241,8 +242,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -287,3 +287,5 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

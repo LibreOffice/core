@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
 #include <svl/srchitem.hxx>
-#include <vos/socket.hxx>
+#include <osl/socket.hxx>
 
 #define SFX_TYPEMAP
 #define Selection
@@ -99,17 +100,15 @@ using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;
 
-//========================================================================
-
 //------------------------------------------------------------------------
-String lcl_GetVersionString(ResMgr* /*pAppData_ImplResMgr*/)
+String lcl_GetVersionString()
 {
     ::rtl::OUString aDefault;
     String aVersion( utl::Bootstrap::getBuildIdData( aDefault ));
 
     if ( aVersion.Len() == 0 )
     {
-        DBG_ERROR( "No BUILDID in bootstrap file found" );
+        OSL_FAIL( "No BUILDID in bootstrap file found" );
     }
 
     aVersion.Erase( 0, aVersion.Search( ':' ) + 1 );
@@ -129,46 +128,6 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
     if ( pAppData_Impl->pBasicManager->isValid() )
         pAppData_Impl->pBasicManager->storeAllLibraries();
     return 0;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::RegisterBasicConstants
-(
-    const char*,        // Prefix vor Konstanten-Namen
-    const SfxConstant*, // Array von <SfxConstant> Instanzen
-    sal_uInt16          // Anahl der Kontanten in pConsts
-)
-
-/*  [Beschreibung]
-
-    Diese Methode meldet Konstanten beim BASIC an. Sie sollte on-demand
-    (in GetSbxObject() der Applikation) gerufen werden. Das Array mu\s
-    alphabetisch nach den Namen sortiert sein!
-
-    Durch den Prefix kann Speicher gespart und das Suchen beschleunigt
-    werden. Im StarOffice soll der Prefix "so" verwendet werden.
-
-
-    [Beispiel]
-
-    const SfxConstant __FAR_DATA aConstants[] =
-    {
-        SFX_BOOL_CONSTANT( "False", sal_False ),
-        SFX_BOOL_CONSTANT( "True",  sal_True ),
-    };
-
-    ...
-    SFX_APP()->RegisterBasicConstants( 0, aConstants, 2 );
-    ...
-
-*/
-
-{
-//  DBG_ASSERT( pAppData_Impl->pBasicMgr, "no basic available" );
-
-//  pAppData_Impl->pBasicMgr->GetLib(0)->Insert(
-//              new SfxConstants_Impl( pPrefix, pConsts, nCount ) );
 }
 
 //--------------------------------------------------------------------
@@ -229,7 +188,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             {
                 SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
                 pObject->AddRef();
-//(mba)                rReq.SetReturnValue( SfxObjectItem( 0, pObject ) );
                 rReq.Done();
             }
             break;
@@ -237,12 +195,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_DELETE_BASICOBJECT:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxObjectItem, nSID, sal_False);
-            if ( pItem )
-            {
-//(mba)                SbxObject* pObject = pItem->GetObject();
-//(mba)                pObject->ReleaseRef();
-            }
             break;
         }
 
@@ -290,7 +242,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
-//  SfxViewFrame *pFrame = SfxViewFrame::Current();
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -329,3 +280,4 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

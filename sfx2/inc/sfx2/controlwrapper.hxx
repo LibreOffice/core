@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
 #include <memory>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
@@ -669,3 +668,4 @@ void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

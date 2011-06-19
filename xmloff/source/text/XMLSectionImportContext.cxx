@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ enum XMLSectionToken
     XML_TOK_SECTION_IS_HIDDEN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
+static SvXMLTokenMapEntry aSectionTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },
@@ -312,7 +313,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_IS_HIDDEN:
                 {
-                    sal_Bool bTmp;
+                    bool bTmp;
                     if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
                     {
                         bIsCurrentlyVisible = !bTmp;
@@ -326,7 +327,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_PROTECT:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
                 {
                     bProtect = bTmp;
@@ -404,3 +405,4 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
     return pContext;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

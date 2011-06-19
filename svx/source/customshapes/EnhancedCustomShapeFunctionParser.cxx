@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
     sal_Int32 nValue = 0;
     if ( rSource.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-        double fValue;
+        double fValue(0.0);
         if ( rSource.Value >>= fValue )
             nValue = (sal_Int32)fValue;
     }
@@ -1210,3 +1211,4 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rF
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

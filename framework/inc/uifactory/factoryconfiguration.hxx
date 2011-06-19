@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,6 @@
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 namespace framework
 {
@@ -94,7 +94,7 @@ private:
         ControllerInfo(const ::rtl::OUString& _aImplementationName,const ::rtl::OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
         ControllerInfo(){}
     };
-    class MenuControllerMap : public std::hash_map< rtl::OUString,
+    class MenuControllerMap : public boost::unordered_map< rtl::OUString,
                                                          ControllerInfo,
                                                          OUStringHashCode,
                                                          ::std::equal_to< ::rtl::OUString > >
@@ -116,9 +116,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;
     sal_Bool                          m_bConfigAccessInitialized;
     bool                              m_bAskValue;
 };
 
 } // namespace framework
 #endif // __FRAMEWORK_UIFACTORY_FACTORYCONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

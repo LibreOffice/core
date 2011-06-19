@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_editeng.hxx"
 #include <SvXMLAutoCorrectImport.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
@@ -44,7 +43,6 @@ using namespace ::rtl;
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 
-// #110680#
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvxAutocorrWordList *pNewAutocorr_List,
@@ -142,8 +140,6 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-//  const International& rInter = Application::GetAppInternational();
-//  sal_Bool bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     sal_Bool bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {
@@ -165,7 +161,6 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 {
 }
 
-// #110680#
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStringsISortDtor & rNewList )
@@ -264,3 +259,5 @@ SvXMLExceptionContext::SvXMLExceptionContext(
 SvXMLExceptionContext::~SvXMLExceptionContext ( void )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

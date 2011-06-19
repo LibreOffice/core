@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX
 #include "uielement/complextoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,11 +53,9 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
@@ -105,7 +100,7 @@ ComplexToolbarController::~ComplexToolbarController()
 void SAL_CALL ComplexToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
     svt::ToolboxController::dispose();
@@ -136,7 +131,7 @@ throw ( RuntimeException )
     Sequence<PropertyValue> aArgs;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -162,7 +157,7 @@ throw ( RuntimeException )
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("ComplexToolbarController")).log(
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComplexToolbarController"))).log(
                 m_xServiceManager,
                 m_xFrame,
                 aTargetURL,
@@ -176,7 +171,7 @@ throw ( RuntimeException )
 void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -388,3 +383,4 @@ void ComplexToolbarController::notifyTextChanged( const ::rtl::OUString& aText )
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

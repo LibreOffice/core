@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,8 +45,10 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
-#include "sbtrace.hxx"
+
 #include "comenumwrapper.hxx"
+
+SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 using namespace ::com::sun::star;
 
@@ -220,9 +223,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
 };
 
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiRTLData                              //
-//////////////////////////////////////////////////////////////////////////
 
 SbiRTLData::SbiRTLData()
 {
@@ -239,9 +240,7 @@ SbiRTLData::~SbiRTLData()
     delete pWildCard;
 }
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiInstance                             //
-//////////////////////////////////////////////////////////////////////////
 
 // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
 // Die Entscheidung, ob StepPoint aufgerufen werden soll, wird anhand des
@@ -323,7 +322,7 @@ SbiInstance::~SbiInstance()
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
+        OSL_FAIL( "SbiInstance::~SbiInstance: caught an exception while disposing the components!" );
     }
 
     ComponentVector.clear();
@@ -537,15 +536,13 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
         return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiInstance                             //
-//////////////////////////////////////////////////////////////////////////
 
 // Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
-           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), m_nLastTime(0)
+           pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
     nFlags    = pe ? pe->GetDebugFlags() : 0;
     pIosys    = pInst->pIosys;
@@ -602,6 +599,13 @@ SbiRuntime::~SbiRuntime()
 void SbiRuntime::SetVBAEnabled(bool bEnabled )
 {
     bVBAEnabled = bEnabled;
+    if ( bVBAEnabled )
+    {
+        if ( pMeth )
+            mpExtCaller = pMeth->mCaller;
+    }
+    else
+        mpExtCaller = 0;
 }
 
 // Aufbau der Parameterliste. Alle ByRef-Parameter werden direkt
@@ -728,11 +732,6 @@ sal_Bool SbiRuntime::Step()
                 Application::Reschedule();
         }
 
-#ifdef DBG_TRACE_BASIC
-        sal_uInt32 nPC = ( pCode - (const sal_uInt8* )pImg->GetCode() );
-        dbg_traceStep( pMod, nPC, pINST->nCallLvl );
-#endif
-
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         sal_uInt32 nOp1, nOp2;
         if( eOp <= SbOP0_END )
@@ -769,11 +768,6 @@ sal_Bool SbiRuntime::Step()
         // (insbesondere nicht nach Compiler-Fehlern zur Laufzeit)
         if( nError && bRun )
         {
-#ifdef DBG_TRACE_BASIC
-            SbError nTraceErr = nError;
-            String aTraceErrMsg = GetSbData()->aErrMsg;
-            bool bTraceErrHandled = true;
-#endif
             SbError err = nError;
             ClearExprStack();
             nError = 0;
@@ -781,7 +775,7 @@ sal_Bool SbiRuntime::Step()
             pInst->nErl = nLine;
             pErrCode    = pCode;
             pErrStmnt   = pStmnt;
-            // An error occured in an error handler
+            // An error occurred in an error handler
             // force parent handler ( if there is one )
             // to handle the error
             bool bLetParentHandleThis = false;
@@ -854,19 +848,10 @@ sal_Bool SbiRuntime::Step()
                 // Kein Error-Hdl gefunden -> altes Vorgehen
                 else
                 {
-#ifdef DBG_TRACE_BASIC
-                    bTraceErrHandled = false;
-#endif
                     pInst->Abort();
                 }
 
-                // ALT: Nur
-                // pInst->Abort();
             }
-
-#ifdef DBG_TRACE_BASIC
-            dbg_traceNotifyError( nTraceErr, aTraceErrMsg, bTraceErrHandled, pINST->nCallLvl );
-#endif
         }
     }
     return bRun;
@@ -948,11 +933,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
     return nVBAErrorNumber;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  Parameter, Locals, Caller
-//
-//////////////////////////////////////////////////////////////////////////
 
 SbMethod* SbiRuntime::GetCaller()
 {
@@ -969,11 +950,7 @@ SbxArray* SbiRuntime::GetParams()
     return refParams;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  Stacks
-//
-//////////////////////////////////////////////////////////////////////////
 
 // Der Expression-Stack steht fuer die laufende Auswertung von Expressions
 // zur Verfuegung.
@@ -996,7 +973,7 @@ SbxVariableRef SbiRuntime::PopVar()
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
     if ( xVar->GetName().EqualsAscii( "Cells" ) )
-        DBG_TRACE( "" );
+        OSL_TRACE( "" );
 #endif
     // Methods halten im 0.Parameter sich selbst, also weghauen
     if( xVar->IsA( TYPE(SbxMethod) ) )
@@ -1036,7 +1013,24 @@ SbxVariable* SbiRuntime::GetTOS( short n )
 void SbiRuntime::TOSMakeTemp()
 {
     SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
-    if( p->GetRefCount() != 1 )
+    if ( p->GetType() == SbxEMPTY )
+        p->Broadcast( SBX_HINT_DATAWANTED );
+
+    SbxVariable* pDflt = NULL;
+    if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ((pDflt = getDefaultProp(p)) != NULL) )
+    {
+        pDflt->Broadcast( SBX_HINT_DATAWANTED );
+        // replacing new p on stack causes object pointed by
+        // pDft->pParent to be deleted, when p2->Compute() is
+        // called below pParent is accessed ( but its deleted )
+        // so set it to NULL now
+        pDflt->SetParent( NULL );
+        p = new SbxVariable( *pDflt );
+        p->SetFlag( SBX_READWRITE );
+        refExprStk->Put( p, nExprLvl - 1 );
+    }
+
+    else if( p->GetRefCount() != 1 )
     {
         SbxVariable* pNew = new SbxVariable( *p );
         pNew->SetFlag( SBX_READWRITE );
@@ -1045,7 +1039,6 @@ void SbiRuntime::TOSMakeTemp()
 }
 
 // Der GOSUB-Stack nimmt Returnadressen fuer GOSUBs auf
-
 void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
@@ -1244,29 +1237,23 @@ void SbiRuntime::ClearForStack()
 
 SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* pCollection )
 {
-    SbiForStack* pRet = NULL;
-
-    SbiForStack* p = pForStk;
-    while( p )
+    for (SbiForStack *p = pForStk; p; p = p->pNext)
     {
         SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
-            (pCollection = PTR_CAST(BasicCollection,pVar)) == pCollection )
+            PTR_CAST(BasicCollection,pVar) == pCollection )
         {
-            pRet = p;
-            break;
+            return p;
         }
     }
 
-    return pRet;
+    return NULL;
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 //
 //  DLL-Aufrufe
-//
-//////////////////////////////////////////////////////////////////////////
 
 void SbiRuntime::DllCall
     ( const String& aFuncName,  // Funktionsname
@@ -1283,15 +1270,6 @@ void SbiRuntime::DllCall
     }
 
     // MUSS NOCH IMPLEMENTIERT WERDEN
-    /*
-    String aMsg;
-    aMsg = "FUNC=";
-    aMsg += pFunc;
-    aMsg += " DLL=";
-    aMsg += pDLL;
-    MessBox( NULL, WB_OK, String( "DLL-CALL" ), aMsg ).Execute();
-    Error( SbERR_NOT_IMPLEMENTED );
-    */
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
@@ -1310,3 +1288,5 @@ sal_uInt16 SbiRuntime::GetBase()
 {
     return pImg->GetBase();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

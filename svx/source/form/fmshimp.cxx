@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
@@ -110,10 +112,11 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 sal_uInt16 DatabaseSlotMap[] =
@@ -388,8 +391,8 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
+        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
 
         if (xModelIntrospection.is() && xModel.is())
         {
@@ -524,8 +527,8 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
         {
             switch ( (TriState)xCheckBox->getState() )
             {
-                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "0" ); break;
-                case STATE_CHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "1" ); break;
+                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0" )); break;
+                case STATE_CHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "1" )); break;
                 default: *_pCurrentText = ::rtl::OUString(); break;
             }
         }
@@ -652,7 +655,7 @@ DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
+        ,FmXFormShell_CFGBASE(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Misc")), CONFIG_MODE_DELAYED_UPDATE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
@@ -690,7 +693,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     implAdjustConfigCache();
     // and register for changes on this settings
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     EnableNotification(aNames);
 }
 
@@ -733,7 +736,7 @@ bool FmXFormShell::impl_checkDisposed() const
 {
     if ( !m_pShell )
     {
-        OSL_ENSURE( false, "FmXFormShell::impl_checkDisposed: already disposed!" );
+        OSL_FAIL( "FmXFormShell::impl_checkDisposed: already disposed!" );
         return true;
     }
     return false;
@@ -751,7 +754,7 @@ bool FmXFormShell::impl_checkDisposed() const
         m_eDocumentType = DocumentClassification::classifyDocument( xModel );
     else
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::getDocumentType: can't determine the document type!" );
+        OSL_FAIL( "FmXFormShell::getDocumentType: can't determine the document type!" );
         m_eDocumentType = eTextDocument;
             // fallback, just to have a defined state
     }
@@ -850,7 +853,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         // (Solche Paints passieren zum Beispiel, wenn man einfach nur eine andere Applikation ueber das Office legt und wieder
         // zurueckschaltet).
         // Deshalb die Benutzung des SolarMutex, der sichert das ab.
-        ::vos::IMutex& rSolarSafety = Application::GetSolarMutex();
+        ::osl::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);
@@ -935,7 +938,6 @@ void FmXFormShell::disposing()
         // if we're here, then we expect that PrepareClose has been called, and thus the user
         // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
-        // 2002-11-11 - 104702 - fs@openoffice.org
 
     m_pTextShell->dispose();
 
@@ -1009,7 +1011,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 
     if ( m_nLockSlotInvalidation )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
+        OSL_FAIL( "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
         InvalidateSlot( _nId, sal_False );
     }
     else
@@ -1029,9 +1031,8 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
-        m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
         sal_uInt8 nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots_Flags.push_back(nFlags);
+        m_arrInvalidSlots.push_back( InvalidSlotInfo(nId, nFlags) );
     }
     else
         if (nId)
@@ -1068,21 +1069,14 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
-    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.size(),
-        "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
-    sal_uInt8 nFlags;
-    for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
+    for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
     {
-        nFlags = m_arrInvalidSlots_Flags[i];
-
-        if (m_arrInvalidSlots[i])
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], sal_True, (nFlags & 0x01));
+        if (i->id)
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, sal_True, (i->flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
-
-    m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
-    m_arrInvalidSlots_Flags.clear();
+    m_arrInvalidSlots.clear();
     return 0L;
 }
 
@@ -1110,13 +1104,11 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 //------------------------------------------------------------------------------
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    sal_Bool bIsHiContrastMode  = rSettings.GetHighContrastMode();
 
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
-    ImageList aImageList( SVX_RES( bIsHiContrastMode ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL) );
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    ImageList aImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL) );
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
     {
         // das entsprechende Image dran
         pNewMenu->SetItemImage(nConvertSlots[i], aImageList.GetImage(nCreateSlots[i]));
@@ -1128,7 +1120,7 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 //------------------------------------------------------------------------------
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
         if (nConvertSlots[i] == nSlotId)
             return true;
     return false;
@@ -1164,7 +1156,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
     OSL_ENSURE( isSolelySelected( _rxObject ),
         "FmXFormShell::executeControlConversionSlot: hmm ... shouldn't this parameter be redundant?" );
 
-    for ( size_t lookupSlot = 0; lookupSlot < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++lookupSlot )
+    for ( size_t lookupSlot = 0; lookupSlot < SAL_N_ELEMENTS( nConvertSlots ); ++lookupSlot )
     {
         if (nConvertSlots[lookupSlot] == _nSlotId)
         {
@@ -1221,7 +1213,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                 }
 
                 // replace the mdoel within the parent container
-                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);
                 if (xIndexParent.is())
                 {
                     // the form container works with FormComponents
@@ -1230,13 +1222,13 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     Any aNewModel(makeAny(xComponent));
                     try
                     {
-                        //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+
                         sal_Int32 nIndex = getElementPos(xParent, xOldModel);
                         if (nIndex>=0 && nIndex<xParent->getCount())
                             xIndexParent->replaceByIndex(nIndex, aNewModel);
                         else
                         {
-                            DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                            OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                             Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                             if (xNewComponent.is())
                                 xNewComponent->dispose();
@@ -1245,7 +1237,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                        OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                         Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                         if (xNewComponent.is())
                             xNewComponent->dispose();
@@ -1379,10 +1371,10 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
        )
         return false;   // those types cannot be converted
 
-    DBG_ASSERT(sizeof(nConvertSlots)/sizeof(nConvertSlots[0]) == sizeof(nObjectTypes)/sizeof(nObjectTypes[0]),
+    DBG_ASSERT(SAL_N_ELEMENTS(nConvertSlots) == SAL_N_ELEMENTS(nObjectTypes),
         "FmXFormShell::canConvertCurrentSelectionToControl: nConvertSlots & nObjectTypes must have the same size !");
 
-    for ( size_t i = 0; i < sizeof( nConvertSlots ) / sizeof( nConvertSlots[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
         if (nConvertSlots[i] == nConversionSlot)
             return nObjectTypes[i] != nObjectType;
 
@@ -1527,7 +1519,7 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
+        OSL_FAIL( "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
     }
 }
 
@@ -1703,7 +1695,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart")) );
+                Any aVal( xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart"))) );
                 aVal >>= n;
                 return sal_True;
             }
@@ -1736,11 +1728,11 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1777,11 +1769,11 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -2123,7 +2115,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         impl_updateCurrentForm( xNewCurrentForm );
 
     // ensure some slots are updated
-    for ( size_t i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( SelObjectSlotMap ); ++i )
         InvalidateSlot( SelObjectSlotMap[i], sal_False);
 
     return true;
@@ -2163,7 +2155,7 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
         pPage->GetImpl().setCurForm( m_xCurrentForm );
 
     // ensure the UI which depends on the current form is up-to-date
-    for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( DlgSlotMap ); ++i )
         InvalidateSlot( DlgSlotMap[i], sal_False );
 }
 
@@ -2310,7 +2302,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
     LoopGrids(GA_FORCE_SYNC);
@@ -2342,7 +2334,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
 
     // wenn das Feld sich in einem GridControl befindet, muss ich dort noch in die entsprechende Spalte gehen
-    sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
+    sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
         Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
@@ -2393,7 +2385,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
 
@@ -2418,7 +2410,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // die Liste der zu involvierenden Felder zusammenstellen (sind die ControlSources aller Felder, die eine solche Eigenschaft habe)
     UniString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
-    m_arrRelativeGridColumn.Remove(0, m_arrRelativeGridColumn.Count());
+    m_arrRelativeGridColumn.clear();
 
     // folgendes kleines Problem : Ich brauche, um gefundene Felder zu markieren, SdrObjekte. Um hier festzustellen, welche Controls
     // ich in die Suche einbeziehen soll, brauche ich Controls (also XControl-Interfaces). Ich muss also ueber eines von beiden
@@ -2527,7 +2519,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             // und das SdrObjekt zum Feld
                             m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
                             // die Nummer der Spalte
-                            m_arrRelativeGridColumn.Insert(nViewPos, m_arrRelativeGridColumn.Count());
+                            m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
                 } while (sal_False);
@@ -2556,7 +2548,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
 
                         // die Nummer der Spalte (hier ein Dummy, nur fuer GridControls interesant)
-                        m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
+                        m_arrRelativeGridColumn.push_back(-1);
 
                         // und fuer die formatierte Suche ...
                         pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
@@ -3138,7 +3130,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::stopFiltering : could not get the original filter !");
+                        OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
                         // put dummies into the arrays so the they have the right size
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
@@ -3175,7 +3167,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
+                    OSL_FAIL("FmXFormShell::stopFiltering: Exception occurred!");
                 }
 
                 if (!isRowSetAlive(xFormSet))
@@ -3277,7 +3269,7 @@ void FmXFormShell::CreateExternalView()
     // the frame the external view is displayed in
     sal_Bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
-    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+    ::rtl::OUString sFrameName(RTL_CONSTASCII_USTRINGPARAM("_beamer"));
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
@@ -3361,7 +3353,7 @@ void FmXFormShell::CreateExternalView()
         URL aClearURL;
         aClearURL.Complete = FMURL_GRIDVIEW_CLEARVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString(), 0));
         if (xClear.is())
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
@@ -3378,10 +3370,10 @@ void FmXFormShell::CreateExternalView()
         // collect the dispatchers we will need
         URL aAddColumnURL;
         aAddColumnURL.Complete = FMURL_GRIDVIEW_ADDCOLUMN;
-        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString(), 0));
         URL aAttachURL;
         aAttachURL.Complete = FMURL_GRIDVIEW_ATTACHTOFORM;
-        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString(), 0));
 
         if (xAddColumnDispatch.is() && xAttachDispatch.is())
         {
@@ -3547,7 +3539,7 @@ void FmXFormShell::CreateExternalView()
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
 
                 // columns props are a dispatch argument
-                pDispatchArgs->Name = ::rtl::OUString::createFromAscii("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnProperties")); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aColumnProps);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3634,7 +3626,7 @@ void FmXFormShell::CreateExternalView()
                 ++pDispatchArgs;
 
                 // the
-                pDispatchArgs->Name = ::rtl::OUString::createFromAscii("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnProperties")); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aListBoxDescription);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3674,7 +3666,7 @@ void FmXFormShell::CreateExternalView()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("FmXFormShell::CreateExternalView : could not create the external form view !");
+        OSL_FAIL("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
     InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
@@ -3685,7 +3677,7 @@ void FmXFormShell::implAdjustConfigCache()
 {
     // get (cache) the wizard usage flag
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3717,7 +3709,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     m_bUseWizards = _bUseThem;
 
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);
@@ -3734,7 +3726,6 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
 
     // if we have an async load operation pending for the 0-th page for this view,
     // we need to cancel this
-    // 103727 - 2002-09-26 - fs@openoffice.org
     FmFormPage* pPage = _rCurrentView.GetCurPage();
     if ( pPage )
     {
@@ -3877,7 +3868,7 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
 {
     if (!_rxModels.is())
     {
-        DBG_ERROR("FmXFormShell::smartControlReset: invalid container!");
+        OSL_FAIL("FmXFormShell::smartControlReset: invalid container!");
         return;
     }
 
@@ -4252,8 +4243,10 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     }
     else
     {
-        DBG_ERROR("ControlConversionMenuController::StateChanged : unknown id !");
+        OSL_FAIL("ControlConversionMenuController::StateChanged : unknown id !");
     }
 }
 
 //==============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

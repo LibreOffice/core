@@ -48,8 +48,3 @@
 #define BT_FLIST 8
 #define BT_VLIST 9
 #define BT_TOOL 10
-
-//IAccessibility2 Implementation 2009-----
-#define STR_STYLE_ELEMTLIST 18
-//-----IAccessibility2 Implementation 2009
-

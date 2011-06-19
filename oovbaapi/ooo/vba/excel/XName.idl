@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_excel_XName_idl__
 #define __ooo_vba_excel_XName_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -50,12 +45,12 @@ interface XName
     [attribute] string Name;
     [attribute] string NameLocal;
     [attribute] boolean Visible;
-        [attribute, readonly] string Value;
-        [attribute, readonly] string RefersTo;
-        [attribute, readonly] string RefersToLocal;
-        [attribute, readonly] string RefersToR1C1;
-        [attribute, readonly] string RefersToR1C1Local;
-        [attribute, readonly] XRange RefersToRange;
+    [attribute] string Value;
+    [attribute, readonly] string RefersTo;
+    [attribute, readonly] string RefersToLocal;
+    [attribute, readonly] string RefersToR1C1;
+    [attribute, readonly] string RefersToR1C1Local;
+    [attribute, readonly] XRange RefersToRange;
 
     void Delete( );
 };

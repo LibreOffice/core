@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
             nRet = 1;
             break;
         default:
-            OSL_ENSURE(0,"Error in enum values for date");
+            OSL_FAIL("Error in enum values for date");
     }
     return nRet;
 }
@@ -135,7 +136,7 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
             sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sunday"));
             break;
         default:
-            OSL_ENSURE(0,"Error in enum values for date");
+            OSL_FAIL("Error in enum values for date");
     }
     return sRet;
 }
@@ -287,3 +288,5 @@ ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
                                             aCurTime.GetDay(),aCurTime.GetMonth(),aCurTime.GetYear());
 }
 //------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

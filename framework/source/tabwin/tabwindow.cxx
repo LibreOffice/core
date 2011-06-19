@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,17 +52,14 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/sequenceashashmap.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 
 namespace framework
@@ -421,7 +419,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
                     xWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
                         pWindow->Show( sal_True );
@@ -949,14 +947,14 @@ throw ( css::uno::RuntimeException )
 
 const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticPropertyDescriptor()
 {
-    // Create a new static property array to initialize sequence!
+    // Create property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
     // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    static const com::sun::star::beans::Property pProperties[] =
+    const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( TABWINDOW_PROPNAME_PARENTWINDOW,
                                          TABWINDOW_PROPHANDLE_PARENTWINDOW,
@@ -967,10 +965,12 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
                                          ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
                                          com::sun::star::beans::PropertyAttribute::READONLY  )
     };  // Use it to initialize sequence!
-    static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
+    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
 
-    // Return static "PropertyDescriptor"
+    // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

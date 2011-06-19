@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,19 +32,15 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#ifndef _SVTOOLS_SVTOOLS_HRC_
 #include <svtools/svtools.hrc>
-#endif
 
-#ifndef _SVTOOLS_FILEDLG2_HRC_
 #include <svtools/filedlg2.hrc>
-#endif
 #include "NSString_OOoAdditions.hxx"
 
 #include "resourceprovider.hxx"
@@ -98,8 +95,8 @@ _Entry OtherCtrlIdToResIdTable[] = {
 };
 
 
-const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
-const sal_Int32 OTHER_SIZE_TABLE = sizeof( OtherCtrlIdToResIdTable ) / sizeof( _Entry );
+const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
+const sal_Int32 OTHER_SIZE_TABLE = SAL_N_ELEMENTS( OtherCtrlIdToResIdTable );
 
 //------------------------------------------------------------
 //
@@ -174,7 +171,7 @@ public:
         String   aResString;
         OUString aResOUString;
 
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         try
         {
@@ -238,3 +235,5 @@ NSString* CResourceProvider::getResString( sal_Int32 aId )
 
     return result;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

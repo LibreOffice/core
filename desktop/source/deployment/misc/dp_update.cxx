@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,7 @@ void getOwnUpdateInfos(
         bool & out_allFound)
 {
     bool allHaveOwnUpdateInformation = true;
-    for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); i++)
+    for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); ++i)
     {
         OSL_ASSERT(i->second.extension.is());
         Sequence<OUString> urls(i->second.extension->getUpdateInformationURLs());
@@ -186,11 +187,9 @@ void getDefaultUpdateInfos(
 bool containsBundledOnly(Sequence<Reference<deployment::XPackage> > const & sameIdExtensions)
 {
     OSL_ASSERT(sameIdExtensions.getLength() == 3);
-    if (!sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is())
-        return true;
-    else
-        return false;
+    return !sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is();
 }
+
 /** Returns true if the list of extensions are bundled extensions and there are no
     other extensions with the same identifier in the shared or user repository.
     If extensionList is NULL, then it is checked if there are only bundled extensions.
@@ -204,17 +203,12 @@ bool onlyBundledExtensions(
     if (extensionList)
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
+        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); onlyBundled && i != aEnd; ++i)
         {
             Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
 
-            if (!containsBundledOnly(seqExt))
-            {
-                onlyBundled = false;
-                break;
-            }
-
+            onlyBundled = containsBundledOnly(seqExt);
         }
     }
     else
@@ -222,13 +216,9 @@ bool onlyBundledExtensions(
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =
             xExtMgr->getAllExtensions(Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
 
-        for (int pos = seqAllExt.getLength(); pos --; )
+        for (int pos(0), nLen(seqAllExt.getLength()); onlyBundled && pos != nLen; ++pos)
         {
-            if (!containsBundledOnly(seqAllExt[pos]))
-            {
-                onlyBundled = false;
-                break;
-            }
+            onlyBundled = containsBundledOnly(seqAllExt[pos]);
         }
     }
     return onlyBundled;
@@ -281,14 +271,6 @@ UPDATE_SOURCE isUpdateUserExtension(
                 retVal = UPDATE_SOURCE_ONLINE;
 
         }
-        //No update for bundled extensions, they are updated only by the setup
-        //else if (bundledVersion.getLength())
-        //{
-        //    int index = determineHighestVersion(
-        //        OUString(), OUString(), bundledVersion, onlineVersion);
-        //    if (index == 3)
-        //        retVal = UPDATE_SOURCE_ONLINE;
-        //}
     }
     else
     {
@@ -327,14 +309,6 @@ UPDATE_SOURCE isUpdateSharedExtension(
         else if (index == 3)
             retVal = UPDATE_SOURCE_ONLINE;
     }
-    //No update for bundled extensions, they are updated only by the setup
-    //else if (bundledVersion.getLength())
-    //{
-    //    int index = determineHighestVersion(
-    //        OUString(), OUString(), bundledVersion, onlineVersion);
-    //    if (index == 3)
-    //        retVal = UPDATE_SOURCE_ONLINE;
-    //}
     return retVal;
 }
 
@@ -402,18 +376,20 @@ UpdateInfoMap getOnlineUpdateInfos(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(extension), UpdateInfo(extension)));
             OSL_ASSERT(insertRet.second == true);
+            (void)insertRet;
         }
     }
     else
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
+        for (CIT i = extensionList->begin(); i != extensionList->end(); ++i)
         {
             OSL_ASSERT(i->is());
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(*i), UpdateInfo(*i)));
             OSL_ASSERT(insertRet.second == true);
+            (void)insertRet;
         }
     }
 
@@ -445,3 +421,5 @@ OUString getHighestVersion(
     return OUString();
 }
 } //namespace dp_misc
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

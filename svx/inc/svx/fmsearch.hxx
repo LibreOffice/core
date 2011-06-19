@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,21 +34,13 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <tools/link.hxx>
@@ -71,25 +64,27 @@ SVX_DLLPUBLIC sal_Bool IsSearchableControl( const ::com::sun::star::uno::Referen
 
 struct FmFoundRecordInformation
 {
-    ::com::sun::star::uno::Any      aPosition;  // Bookmark des Datensatzes, in dem der Text gefunden wurde
-    sal_Int16       nFieldPos;  // dito : die relative Position der Spalte (im Stringnamen in Feldliste im Constructor)
-    sal_Int16       nContext;   // Kontext, in dem gesucht und gefunden wurde (falls die aktuelle Suche verschiedene solche kennt)
+    ::com::sun::star::uno::Any      aPosition;  // bookmark of the record in which the text was found
+    sal_Int16       nFieldPos;  // ditto : the relative position of the column (in the string name of the field list in the constructor)
+    sal_Int16       nContext;   // the context in which was searched and found (if the current search knows several contexts)
 };
 
 // ===================================================================================================
-// = struct FmSearchContext - Informationen fuer Suche in verschiedenen Kontexten
+// = struct FmSearchContext - informations for the search in different contexts
 // ===================================================================================================
 
 struct FmSearchContext
 {
     // [in]
-    sal_Int16                   nContext;       // die Nummer des Kontextes
+    sal_Int16                   nContext;       // the number of the context
     // [out]
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xCursor;        // der Iterator fuer diesen Kontext
-    String                  strUsedFields;  // eine Liste von durch ';' getrennten Feldnamen
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xCursor;        // the iterator for the context
+    String                  strUsedFields;  // a list of field names separeted by ';'
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
-                            arrFields;      // die korrespondierenden Text-Interfaces fuer die Felder in strUsedFields
+                            arrFields;      // the corresponding text interfaces for the fields in strUsedFields
     String                  sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
 };
 
 #endif // _FMSEARCH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

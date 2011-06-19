@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 
@@ -164,3 +163,4 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

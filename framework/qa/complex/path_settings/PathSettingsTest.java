@@ -126,7 +126,6 @@ public class PathSettingsTest
         try
         {
             xMSF = getMSF();
-//            aPathSettings = xMSF.createInstance("com.sun.star.util.PathSettings");
             aPathSettings = xMSF.createInstance("com.sun.star.comp.framework.PathSettings");
             assertNotNull("Can't instantiate com.sun.star.util.PathSettings.", aPathSettings);
 //            System.out.println("Implementation: " + util.utils.getImplName(aPathSettings));

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,15 +49,11 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     osl_incrementInterlockedCount( &m_refCount );
     {
         ::rtl::OUString sUserWorkingFor;
-        static Sequence< ::rtl::OUString > sTableTypes;
-        if ( sTableTypes.getLength() == 0 )
-        {
-            // we want all catalogues, all schemas, all tables
-            sTableTypes.realloc(3);
-            sTableTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-            sTableTypes[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-            sTableTypes[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")); // just to be sure to include anything else ....
-        }
+        Sequence< ::rtl::OUString > sTableTypes(3);
+        // we want all catalogues, all schemas, all tables
+        sTableTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+        sTableTypes[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+        sTableTypes[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")); // just to be sure to include anything else ....
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);
@@ -153,3 +150,5 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
     return bReturn;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

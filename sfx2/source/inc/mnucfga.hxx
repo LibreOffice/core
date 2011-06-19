@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _SFXMNUCFGA_HXX
 
 #include <tools/string.hxx>
-#ifndef _SFXMINARRAY_HXX
 #include <sfx2/minarray.hxx>
-#endif
 
 //==================================================================
 
@@ -40,7 +39,7 @@ struct SfxMenuCfgItem
 {
     sal_uInt16             nId;        // id of the binding or 0 if none
     String             aTitle;     // title of the item
-    String             aHelpText;  // Hilfetext
+    String             aHelpText;
     String              aCommand;
     SfxMenuCfgItemArr* pPopup;     // pointer to a popup menu (if any)
 };
@@ -50,3 +49,4 @@ DECL_PTRARRAY(SfxMenuCfgItemArr, SfxMenuCfgItem*, 4, 4 )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ XubString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
     aBuf(1024,32,32),
-    eFunction(SDRREPFUNC_OBJ_NONE)      /*#72642#*/
+    eFunction(SDRREPFUNC_OBJ_NONE)
 {}
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod,const String& rStr)
@@ -159,8 +160,8 @@ void SdrUndoGroup::Redo()
 XubString SdrUndoGroup::GetComment() const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     aRet.SearchAndReplace(aSearchString, aObjDescription);
 
@@ -217,27 +218,13 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 XubString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     aRet.SearchAndReplace(aSearchString, ImpGetResStr(STR_ObjNameSingulPlural));
 
     return aRet;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@   @@@@@   @@@@@@  @@@@@   @@@@   @@@@@@   @@@@
-//  @@  @@  @@  @@      @@  @@     @@  @@    @@    @@  @@
-//  @@  @@  @@  @@      @@  @@     @@        @@    @@
-//  @@  @@  @@@@@       @@  @@@@   @@        @@     @@@@
-//  @@  @@  @@  @@      @@  @@     @@        @@        @@
-//  @@  @@  @@  @@  @@  @@  @@     @@  @@    @@    @@  @@
-//   @@@@   @@@@@    @@@@   @@@@@   @@@@     @@     @@@@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
     SdrUndoAction(*rNewObj.GetModel()),
@@ -245,11 +232,11 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 {
 }
 
-void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, FASTBOOL bRepeat )
+void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, bool bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     xub_StrLen nPos = rStr.Search(aSearchString);
 
@@ -271,14 +258,13 @@ void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sa
     }
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, FASTBOOL bRepeat) const
+void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, bool bRepeat) const
 {
     if ( pObj )
         GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
 }
 
-// #94278# common call method for evtl. page change when UNDO/REDO
-// is triggered
+// common call method for evtl. page change when UNDO/REDO is triggered
 void SdrUndoObj::ImpShowPageOfThisObject()
 {
     if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
@@ -294,7 +280,7 @@ void SdrUndoObj::ImpShowPageOfThisObject()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBOOL bSaveText)
+SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSaveText)
 :   SdrUndoObj(rNewObj),
     pUndoSet(NULL),
     pRedoSet(NULL),
@@ -381,7 +367,7 @@ void SdrUndoAttrObj::Undo()
     E3DModifySceneSnapRectUpdater aUpdater(pObj);
     sal_Bool bIs3DScene(pObj && pObj->ISA(E3dScene));
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     if(!pUndoGroup || bIs3DScene)
@@ -418,7 +404,7 @@ void SdrUndoAttrObj::Undo()
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
-        // #105122# Since ClearItem sets back everything to normal
+        // Since ClearItem sets back everything to normal
         // it also sets fit-to-size text to non-fit-to-size text and
         // switches on autogrowheight (the default). That may lead to
         // loosing the geometry size info for the object when it is
@@ -428,7 +414,6 @@ void SdrUndoAttrObj::Undo()
 
         if(pUndoSet)
         {
-            // #109587#
             if(pObj->ISA(SdrCaptionObj))
             {
                 // do a more smooth item deletion here, else the text
@@ -457,7 +442,7 @@ void SdrUndoAttrObj::Undo()
             pObj->SetMergedItemSet(*pUndoSet);
         }
 
-        // #105122# Restore prev size here when it was changed.
+        // Restore prev size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
             pObj->NbcSetSnapRect(aSnapRect);
@@ -492,12 +477,10 @@ void SdrUndoAttrObj::Redo()
 
         sdr::properties::ItemChangeBroadcaster aItemChange(*pObj);
 
-        // #105122#
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
         if(pRedoSet)
         {
-            // #109587#
             if(pObj->ISA(SdrCaptionObj))
             {
                 // do a more smooth item deletion here, else the text
@@ -526,7 +509,7 @@ void SdrUndoAttrObj::Redo()
             pObj->SetMergedItemSet(*pRedoSet);
         }
 
-        // #105122# Restore prev size here when it was changed.
+        // Restore prev size here when it was changed.
         if(aSnapRect != pObj->GetSnapRect())
         {
             pObj->NbcSetSnapRect(aSnapRect);
@@ -546,7 +529,7 @@ void SdrUndoAttrObj::Redo()
         pUndoGroup->Redo();
     }
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -599,7 +582,7 @@ XubString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 
 void SdrUndoMoveObj::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     pObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
@@ -609,7 +592,7 @@ void SdrUndoMoveObj::Redo()
 {
     pObj->Move(Size(aDistance.Width(),aDistance.Height()));
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -649,7 +632,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
     if (pOL!=NULL && pOL->GetObjCount() && !rNewObj.ISA(E3dScene))
     {
         // Aha, Gruppenobjekt
-        // AW: Aber keine 3D-Szene, dann nur fuer die Szene selbst den Undo anlegen
+        // Aber keine 3D-Szene, dann nur fuer die Szene selbst den Undo anlegen
         pUndoGroup=new SdrUndoGroup(*pObj->GetModel());
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
@@ -669,14 +652,13 @@ SdrUndoGeoObj::~SdrUndoGeoObj()
 
 void SdrUndoGeoObj::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     if(pUndoGroup)
     {
         pUndoGroup->Undo();
 
-        // #97172#
         // only repaint, no objectchange
         pObj->ActionChanged();
     }
@@ -694,7 +676,6 @@ void SdrUndoGeoObj::Redo()
     {
         pUndoGroup->Redo();
 
-        // #97172#
         // only repaint, no objectchange
         pObj->ActionChanged();
     }
@@ -705,7 +686,7 @@ void SdrUndoGeoObj::Redo()
         pObj->SetGeoData(*pRedoGeo);
     }
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -753,7 +734,7 @@ void SdrUndoObjList::SetOwner(bool bNew)
 
 void SdrUndoRemoveObj::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj ist bereits Inserted");
@@ -793,7 +774,7 @@ void SdrUndoRemoveObj::Redo()
         pObjList->RemoveObject(nOrdNum);
     }
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -801,7 +782,7 @@ void SdrUndoRemoveObj::Redo()
 
 void SdrUndoInsertObj::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj ist nicht Inserted");
@@ -822,9 +803,9 @@ void SdrUndoInsertObj::Redo()
     DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj ist bereits Inserted");
     if (!pObj->IsInserted())
     {
-        // --> OD 2005-05-10 #i45952# - restore anchor position of an object,
+        // Restore anchor position of an object,
         // which becomes a member of a group, because its cleared in method
-        // <InsertObject(..)>. Needed for correct ReDo in Writer.
+        // <InsertObject(..)>. Needed for correct ReDo in Writer. (#i45952#)
         Point aAnchorPos( 0, 0 );
         if ( pObjList &&
              pObjList->GetOwnerObj() &&
@@ -832,20 +813,18 @@ void SdrUndoInsertObj::Redo()
         {
             aAnchorPos = pObj->GetAnchorPos();
         }
-        // <--
 
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
 
-        // --> OD 2005-05-10 #i45952#
+        // Arcs lose position when grouped (#i45952#)
         if ( aAnchorPos.X() || aAnchorPos.Y() )
         {
             pObj->NbcSetAnchorPos( aAnchorPos );
         }
-        // <--
     }
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -957,7 +936,7 @@ SdrUndoReplaceObj::~SdrUndoReplaceObj()
 
 void SdrUndoReplaceObj::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     if (IsOldOwner() && !IsNewOwner())
@@ -972,7 +951,7 @@ void SdrUndoReplaceObj::Undo()
     }
     else
     {
-        DBG_ERROR("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Undo(): IsMine-Flags stehen verkehrt. Doppelter Undo-Aufruf?");
     }
 }
 
@@ -991,10 +970,10 @@ void SdrUndoReplaceObj::Redo()
     }
     else
     {
-        DBG_ERROR("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
+        OSL_FAIL("SdrUndoReplaceObj::Redo(): IsMine-Flags stehen verkehrt. Doppelter Redo-Aufruf?");
     }
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -1050,12 +1029,12 @@ SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, s
 
 void SdrUndoObjOrdNum::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        DBG_ERROR("UndoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("UndoObjOrdNum: pObj hat keine ObjList");
         return;
     }
     pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
@@ -1065,12 +1044,12 @@ void SdrUndoObjOrdNum::Redo()
 {
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
-        DBG_ERROR("RedoObjOrdNum: pObj hat keine ObjList");
+        OSL_FAIL("RedoObjOrdNum: pObj hat keine ObjList");
         return;
     }
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -1119,7 +1098,7 @@ void SdrUndoObjSetText::AfterSetText()
 
 void SdrUndoObjSetText::Undo()
 {
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 
     // alten Text sichern fuer Redo
@@ -1153,7 +1132,7 @@ void SdrUndoObjSetText::Redo()
 
     pObj->ActionChanged();
 
-    // #94278# Trigger PageChangeCall
+    // Trigger PageChangeCall
     ImpShowPageOfThisObject();
 }
 
@@ -1209,14 +1188,14 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
 
 bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 {
-    bool bOk=sal_False;
+    bool bOk = false;
     if (bNewTextAvailable && rView.AreObjectsMarked()) {
         bOk=sal_True;
     }
     return bOk;
 }
 
-// --> OD 2009-07-09 #i73249#
+// Undo/Redo for setting object's name (#i73249#)
 SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
                                       const ObjStrAttrType eObjStrAttr,
                                       const String& sOldStr,
@@ -1305,19 +1284,6 @@ String SdrUndoObjStrAttr::GetComment() const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@      @@@@   @@  @@  @@@@@  @@@@@
-//  @@     @@  @@  @@  @@  @@     @@  @@
-//  @@     @@  @@  @@  @@  @@     @@  @@
-//  @@     @@@@@@   @@@@   @@@@   @@@@@
-//  @@     @@  @@    @@    @@     @@  @@
-//  @@     @@  @@    @@    @@     @@  @@
-//  @@@@@  @@  @@    @@    @@@@@  @@  @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoLayer::SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel):
     SdrUndoAction(rNewModel),
@@ -1412,19 +1378,6 @@ XubString SdrUndoMoveLayer::GetComment() const
     return ImpGetResStr(STR_UndoMovLayer);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@    @@@@    @@@@   @@@@@   @@@@
-//  @@  @@  @@  @@  @@  @@  @@     @@  @@
-//  @@  @@  @@  @@  @@      @@     @@
-//  @@@@@   @@@@@@  @@ @@@  @@@@    @@@@
-//  @@      @@  @@  @@  @@  @@         @@
-//  @@      @@  @@  @@  @@  @@     @@  @@
-//  @@      @@  @@   @@@@@  @@@@@   @@@@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
 :   SdrUndoAction(*rNewPg.GetModel()),
@@ -1455,6 +1408,7 @@ void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
             pChkPg=rMod.RemovePage(nNum);
         }
         DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
+        (void)pChkPg;
     }
 }
 
@@ -1470,7 +1424,7 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 /*n*/, FASTBOOL /*bRepeat*/) const
+void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 /*n*/, bool /*bRepeat*/) const
 {
     rStr=ImpGetResStr(nStrCacheID);
 }
@@ -1572,7 +1526,7 @@ void SdrUndoDelPage::SdrRepeat(SdrView& /*rView*/)
 
 bool SdrUndoDelPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
-    return sal_False;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1621,7 +1575,7 @@ void SdrUndoCopyPage::SdrRepeat(SdrView& /*rView*/)
 
 bool SdrUndoCopyPage::CanSdrRepeat(SdrView& /*rView*/) const
 {
-    return sal_False;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1642,18 +1596,6 @@ XubString SdrUndoSetPageNum::GetComment() const
     ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0,sal_False);
     return aStr;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@   @@  @@@@   @@@@  @@@@@@ @@@@@ @@@@@   @@@@@   @@@@   @@@@  @@@@@  @@@@
-//  @@@ @@@ @@  @@ @@  @@   @@   @@    @@  @@  @@  @@ @@  @@ @@  @@ @@    @@  @@
-//  @@@@@@@ @@  @@ @@       @@   @@    @@  @@  @@  @@ @@  @@ @@     @@    @@
-//  @@@@@@@ @@@@@@  @@@@    @@   @@@@  @@@@@   @@@@@  @@@@@@ @@ @@@ @@@@   @@@@
-//  @@ @ @@ @@  @@     @@   @@   @@    @@  @@  @@     @@  @@ @@  @@ @@        @@
-//  @@   @@ @@  @@ @@  @@   @@   @@    @@  @@  @@     @@  @@ @@  @@ @@    @@  @@
-//  @@   @@ @@  @@  @@@@    @@   @@@@@ @@  @@  @@     @@  @@  @@@@@ @@@@@  @@@@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPage(rChangedPage),
@@ -1868,4 +1810,5 @@ SdrUndoAction* SdrUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChangedP
     return new SdrUndoPageChangeMasterPage(rChangedPage);
 }
 
-// eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

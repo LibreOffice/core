@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,6 @@ public:
     SvLBoxEntry*    InsertStaticEntry(
                         const XubString& rText,
                         const Image& rEntryImg,
-                        const Image& rEntryImgHC,
                         SvLBoxEntry* pParent = NULL,
                         sal_uLong nPos = LIST_APPEND,
                         IFormulaToken* pToken = NULL );
@@ -86,8 +86,6 @@ private:
     StructListBox   aTlbStruct;
     Image           maImgEnd;
     Image           maImgError;
-    Image           maImgEndHC;
-    Image           maImgErrorHC;
 
     IFormulaToken*  pSelectedToken;
 
@@ -121,3 +119,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

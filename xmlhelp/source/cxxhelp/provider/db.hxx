@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,15 @@
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #define BERKELEYDBPROXY_DB_HXX_
 
-#ifdef SYSTEM_DB
-#include <db.h>
+#ifdef SYSTEM_DB_HEADER
+#include SYSTEM_DB_HEADER
 #else
 #include <berkeleydb/db.h>
 #endif
 
 #include "com/sun/star/ucb/XSimpleFileAccess.hpp"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/string.hxx>
 
 extern "C" {
@@ -88,8 +89,6 @@ namespace berkeleydbproxy {
     };
 
 
-//#define TEST_DBHELP
-
     class DBData
     {
         friend class        DBHelp;
@@ -113,8 +112,8 @@ namespace berkeleydbproxy {
             { return m_pBuffer; }
     };
 
-    typedef std::hash_map< rtl::OString,std::pair<int,int>,ha,eq >  StringToValPosMap;
-    typedef std::hash_map< rtl::OString,rtl::OString,ha,eq >        StringToDataMap;
+    typedef boost::unordered_map< rtl::OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
+    typedef boost::unordered_map< rtl::OString,rtl::OString,ha,eq >     StringToDataMap;
 
     class DBHelp
     {
@@ -153,10 +152,6 @@ namespace berkeleydbproxy {
 
         void createHashMap( bool bOptimizeForPerformance = false );
         void releaseHashMap( void );
-
-#ifdef TEST_DBHELP
-        bool testAgainstDb( const rtl::OUString& fileURL, bool bOldDbAccess );
-#endif
 
         bool getValueForKey( const rtl::OString& rKey, DBData& rValue );
 
@@ -227,8 +222,6 @@ namespace berkeleydbproxy {
         Dbt(void *data_arg, u_int32_t size_arg);
 
         Dbt();
-        //Dbt(const Dbt & other);
-        //Dbt & operator=(const Dbt & other);
 
         ~Dbt();
 
@@ -244,18 +237,4 @@ namespace berkeleydbproxy {
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

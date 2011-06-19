@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@ namespace formula
     class FormEditData;
     class FormulaTokenArray;
 
-    // ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     class SAL_NO_VTABLE IFunctionManager
     {
     public:
@@ -105,10 +105,6 @@ namespace formula
     {
     public:
         virtual bool isFunction() const = 0;
-        /*
-        OpCode eOp = pToken->GetOpCode();
-        if(!(pToken->IsFunction()|| ocArcTan2<=eOp))
-        */
         virtual sal_uInt32 getArgumentCount() const = 0;
     };
 
@@ -161,3 +157,5 @@ namespace formula
 
 }
 #endif //INCLUDE_FUNCTION_DESCRIPTION
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
+
+#include <osl/diagnose.h>
+
 #include "internal/global.hxx"
 #include "internal/PropertyHdl.hxx"
 #include "internal/fileextensions.hxx"
@@ -36,6 +40,7 @@
 
 #include <propkey.h>
 #include <propvarutil.h>
+#include <sal/macros.h>
 
 #include <malloc.h>
 #include <strsafe.h>
@@ -48,9 +53,7 @@
 long g_DllRefCnt = 0;
 HINSTANCE g_hModule = NULL;
 
-//
 // Map of property keys to the locations of their value(s) in the .??? XML schema
-//
 struct PROPERTYMAP
 {
     PROPERTYKEY key;
@@ -67,10 +70,8 @@ PROPERTYMAP g_rgPROPERTYMAP[] =
     { PKEY_Comment,        L"OpenOffice.org",          L"Comments" },
 };
 
-size_t gPropertyMapTableSize = sizeof(g_rgPROPERTYMAP)/sizeof(g_rgPROPERTYMAP[0]);
+size_t gPropertyMapTableSize = SAL_N_ELEMENTS(g_rgPROPERTYMAP);
 
-//----------------------------
-//
 //----------------------------
 
 CPropertyHdl::CPropertyHdl( long nRefCnt ) :
@@ -81,8 +82,6 @@ CPropertyHdl::CPropertyHdl( long nRefCnt ) :
     InterlockedIncrement( &g_DllRefCnt );
 }
 
-//----------------------------
-//
 //----------------------------
 
 CPropertyHdl::~CPropertyHdl()
@@ -245,11 +244,6 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
             OutputDebugStringFormat( "CPropertyHdl::Initialize: Caught exception [%s]", e.what() );
             return E_FAIL;
         }
-/*
-    // load extended properties and search content
-    _LoadExtendedProperties();
-    _LoadSearchContent();
-*/
     }
 
     return S_OK;
@@ -394,7 +388,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     if ( CLSID_PROPERTY_HANDLER == m_Clsid )
         pUnk = static_cast<IPropertyStore*>( new CPropertyHdl() );
 
-    POST_CONDITION(pUnk != 0, "Could not create COM object");
+    OSL_POSTCOND(pUnk != 0, "Could not create COM object");
 
     if (0 == pUnk)
         return E_OUTOFMEMORY;
@@ -461,3 +455,5 @@ BOOL WINAPI DllMain( HINSTANCE hInst, ULONG /*ul_reason_for_call*/, LPVOID /*lpR
     g_hModule = hInst;
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

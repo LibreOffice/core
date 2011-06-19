@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SOURCE_FORM_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
-#endif
 #include "svx/dbtoolsclient.hxx"
 
 /** === begin UNO includes === **/
@@ -152,7 +151,7 @@ namespace svxform
             }
 
             // last: uhm, there is no last resort
-            OSL_ENSURE( false, "DocumentClassification::classifyDocument: unknown document!" );
+            OSL_FAIL( "DocumentClassification::classifyDocument: unknown document!" );
         }
         catch( const Exception& )
         {
@@ -176,7 +175,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "DocumentClassification::classifyHostDocument: caught an exception!" );
+            OSL_FAIL( "DocumentClassification::classifyHostDocument: caught an exception!" );
         }
 
         return eType;
@@ -212,3 +211,4 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

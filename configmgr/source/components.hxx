@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
@@ -92,6 +94,8 @@ public:
 
     void writeModifications();
 
+    bool hasModifications() const;
+
     void flushModifications();
         // must be called with configmgr::lock unaquired; must be called before
         // shutdown if writeModifications has ever been called (probably
@@ -119,12 +123,13 @@ private:
     typedef void FileParser(
         rtl::OUString const &, int, Data &, Partial const *, Modifications *,
         Additions *);
-
+public:
     Components(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
 
     ~Components();
+private:
 
     void parseFileLeniently(
         FileParser * parseFile, rtl::OUString const & url, int layer,
@@ -171,8 +176,11 @@ private:
     WeakRootSet roots_;
     ExternalServices externalServices_;
     rtl::Reference< WriteThread > writeThread_;
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

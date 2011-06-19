@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,8 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
-//#include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <osl/mutex.hxx>
 
 #include <utility>
 
@@ -56,7 +56,7 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 // Define a shortcut for the somewhot longish base class name.
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::PartialWeakComponentImplHelper4<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -244,7 +244,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no child with index ") + nIndex),
         NULL);
 }
 
@@ -545,26 +545,17 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return BaseClass::getTypes();
 }
 
-
-
+namespace
+{
+    class theAccessibleContextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleContextBaseImplementationId > {};
+}
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ThrowIfDisposed ();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        ::osl::MutexGuard aGuard (maMutex);
-        aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
-    }
-    return aId;
+    return theAccessibleContextBaseImplementationId::get().getSeq();
 }
-
-
-
 
 //=====  internal  ============================================================
 
@@ -638,7 +629,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Empty Description");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Description"));
 }
 
 
@@ -647,7 +638,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Empty Name");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Name"));
 }
 
 
@@ -713,3 +704,5 @@ void AccessibleContextBase::SetAccessibleRole( sal_Int16 _nRole )
 
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

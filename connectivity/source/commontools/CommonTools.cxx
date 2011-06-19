@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,8 +83,8 @@ namespace connectivity
                         else
                             pWild += pos;
                     else
-                        break;          // ACHTUNG laeuft unter bestimmten
-                                        // Umstaenden in den nachsten case rein!!
+                        break;          // WARNING in certain circumstances
+                // it will run into the next 'case'!!
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;
@@ -235,7 +236,7 @@ namespace connectivity
         try
         {
             Reference< starjava::XJavaVM > xVM(_rxFactory->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
 
             OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
             if (!xVM.is() || !_rxFactory.is())
@@ -284,11 +285,14 @@ namespace connectivity
             {
                 ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
-                jobject out = pEnv->FindClass(sClassName);
+                jobject out = pEnv->FindClass(sClassName.getStr());
                 bRet = out != NULL;
                 pEnv->DeleteLocalRef( out );
             }
         }
+#else
+        (void)_pJVM;
+        (void)_sClassName;
 #endif
         return bRet;
     }
@@ -309,8 +313,8 @@ sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
 //------------------------------------------------------------------------------
 sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
-    // Ueberpruefung auf korrekte Namensgebung im SQL Sinne
-    // Dieses ist wichtig fuer Tabellennamen beispielsweise
+    // Test for correct naming (in SQL sense)
+    // This is important for table names for example
     const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
@@ -335,7 +339,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
     return sal_True;
 }
 //------------------------------------------------------------------
-// Erzeugt einen neuen Namen falls noetig
+// Creates a new name if necessary
 ::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))
@@ -367,3 +371,5 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

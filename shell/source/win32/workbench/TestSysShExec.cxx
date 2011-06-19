@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-#endif
 #include <cppuhelper/servicefactory.hxx>
 
 
@@ -104,10 +103,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -118,11 +117,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     //-------------------------------------------------
 
     Reference< XSystemShellExecute > xSysShExec(
-        g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ), UNO_QUERY );
+        g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute")) ), UNO_QUERY );
 
     if ( !xSysShExec.is() )
     {
-        OSL_ENSURE( sal_False, "Error creating SystemShellExecute Service" );
+        OSL_FAIL( "Error creating SystemShellExecute Service" );
         return(-1);
     }
 
@@ -136,11 +135,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     }
     catch( SystemShellExecuteException&  )
     {
-        OSL_ENSURE( sal_False, "Error executing system command" );
+        OSL_FAIL( "Error executing system command" );
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid parameter" );
+        OSL_FAIL( "Invalid parameter" );
     }
 
     //--------------------------------------------------
@@ -150,10 +149,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory
@@ -165,3 +164,5 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

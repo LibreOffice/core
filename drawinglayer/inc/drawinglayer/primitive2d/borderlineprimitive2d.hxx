@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,12 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BORDERLINEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BORDERLINEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +50,7 @@ namespace drawinglayer
             The LineStart/End overlap is defined by the Extend(Inner|Outer)(Start|End)
             definitions.
          */
-        class BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line definition
@@ -59,13 +63,18 @@ namespace drawinglayer
             double                                          mfRightWidth;
 
             /// edge overlap sizes
-            double                                          mfExtendInnerStart;
-            double                                          mfExtendInnerEnd;
-            double                                          mfExtendOuterStart;
-            double                                          mfExtendOuterEnd;
+            double                                          mfExtendLeftStart;
+            double                                          mfExtendLeftEnd;
+            double                                          mfExtendRightStart;
+            double                                          mfExtendRightEnd;
 
-            /// the line color
-            basegfx::BColor                                 maRGBColor;
+            /// the line colors
+            basegfx::BColor                                 maRGBColorRight;
+            basegfx::BColor                                 maRGBColorLeft;
+            basegfx::BColor                                 maRGBColorGap;
+            bool                                            mbHasGapColor;
+
+            short                                           mnStyle;
 
             /// bitfield
             /// flags to influence inside/outside creation
@@ -114,6 +123,8 @@ namespace drawinglayer
             }
 
         protected:
+            virtual basegfx::B2DPolyPolygon getClipPolygon( ) const;
+
             /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -125,13 +136,15 @@ namespace drawinglayer
                 double fLeftWidth,
                 double fDistance,
                 double fRightWidth,
-                double fExtendInnerStart,
-                double fExtendInnerEnd,
-                double fExtendOuterStart,
-                double fExtendOuterEnd,
-                bool bCreateInside,
-                bool bCreateOutside,
-                const basegfx::BColor& rRGBColor);
+                double fExtendLeftStart,
+                double fExtendLeftEnd,
+                double fExtendRightStart,
+                double fExtendRightEnd,
+                const basegfx::BColor& rRGBColorRight,
+                const basegfx::BColor& rRGBColorLeft,
+                const basegfx::BColor& rRGBColorGap,
+                bool bHasGapColor,
+                const short nStyle );
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
@@ -139,13 +152,15 @@ namespace drawinglayer
             double getLeftWidth() const { return mfLeftWidth; }
             double getDistance() const { return mfDistance; }
             double getRightWidth() const { return mfRightWidth; }
-            double getExtendInnerStart() const { return mfExtendInnerStart; }
-            double getExtendInnerEnd() const { return mfExtendInnerEnd; }
-            double getExtendOuterStart() const { return mfExtendOuterStart; }
-            double getExtendOuterEnd() const { return mfExtendOuterEnd; }
-            bool getCreateInside() const { return mbCreateInside; }
-            bool getCreateOutside() const { return mbCreateOutside; }
-            const basegfx::BColor& getRGBColor() const { return maRGBColor; }
+            double getExtendLeftStart() const { return mfExtendLeftStart; }
+            double getExtendLeftEnd() const { return mfExtendLeftEnd; }
+            double getExtendRightStart() const { return mfExtendRightStart; }
+            double getExtendRightEnd() const { return mfExtendRightEnd; }
+            const basegfx::BColor& getRGBColorRight () const { return maRGBColorRight; }
+            const basegfx::BColor& getRGBColorLeft () const { return maRGBColorLeft; }
+            const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
+            bool hasGapColor( ) const { return mbHasGapColor; }
+            short getStyle () const { return mnStyle; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -162,3 +177,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

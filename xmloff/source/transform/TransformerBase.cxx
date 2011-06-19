@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,17 +44,11 @@
 #include "MutableAttrList.hxx"
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
-// --> OD 2005-06-29 #i50322#
 #include "PropertyActionsOOo.hxx"
-// <--
-#ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TContextVector.hxx"
 
 using ::rtl::OUString;
@@ -65,8 +60,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::xml::sax;
-
-// -----------------------------------------------------------------------------
 
 namespace
 {
@@ -86,8 +79,6 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
     return bResult;
 }
 } // anonymous namespace
-
-// -----------------------------------------------------------------------------
 
 XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     const OUString& rLocalName, const OUString& rQName )
@@ -334,7 +325,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 }
 
 void SAL_CALL XMLTransformerBase::endElement( const OUString&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 rName
 #endif
 )
@@ -345,7 +336,7 @@ rName
         // Get topmost context
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( xContext->GetQName() == rName,
                 "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif
@@ -442,7 +433,7 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
-        // #b6236750# use isAssignableFrom instead of comparing the types to
+        // use isAssignableFrom instead of comparing the types to
         // allow XExtendedDocumentHandler instead of XDocumentHandler (used in
         // writeOasis2OOoLibraryElement in sfx2).
         // The Any shift operator can't be used to query the type because it
@@ -613,12 +604,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
                             {
 
-                                // --> OD 2004-10-29 #i13778#,#i36248#
-                                // apply correct twip-to-1/100mm
+                                // #i13778#,#i36248# apply correct twip-to-1/100mm
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*127+36)/72)
                                                         : ((nMeasure*127-36)/72) );
-                                // <--
 
                                 rtl::OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -775,12 +764,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
                             {
 
-                                // --> OD 2004-10-29 #i13778#,#i36248#
-                                // apply correct 1/100mm-to-twip conversion
+                                // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
                                 nMeasure = (sal_Int32)( nMeasure >= 0
                                                         ? ((nMeasure*72+63)/127)
                                                         : ((nMeasure*72-63)/127) );
-                                // <--
 
                                 OUStringBuffer aBuffer;
                                 SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
@@ -861,7 +848,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );
                     }
                     break;
-                // --> OD 2005-06-10 #i50322# - special handling for the
+                // #i50322# - special handling for the
                 // transparency of writer background graphics.
                 case XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY:
                     {
@@ -887,7 +874,6 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         bRename = sal_True;
                     }
                     break;
-                // <--
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -1069,8 +1055,8 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
                                 ->xCharClass =
                                     Reference < XCharacterClassification >(
                                 xFactory->createInstance(
-                                    OUString::createFromAscii(
-                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( xCharClass.is(),
@@ -1487,3 +1473,5 @@ bool XMLTransformerBase::isWriter() const
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) ||
             xSI->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

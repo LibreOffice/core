@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ public:
     const String&   GetUserName() const                 { return m_aUserName; }
     const String&   GetPassword() const                 { return m_aPassword; }
     const String&   GetPasswordToModify() const         { return m_aPasswordToModify; }
-    bool      IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
+    bool            IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
     const String&   GetPath() const                     { return m_aPath; }
     const String&   GetErrorText() const                { return m_aErrorText; }
     sal_Bool            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
@@ -176,3 +177,4 @@ inline void LoginErrorInfo::SetModifyUserName( sal_Bool bSet )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

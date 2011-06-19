@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,16 +91,18 @@ class ElementDescriptor
 {
     css::uno::Reference< css::beans::XPropertySet > _xProps;
     css::uno::Reference< css::beans::XPropertyState > _xPropState;
+    css::uno::Reference< css::frame::XModel > _xDocument;
 
 public:
     inline ElementDescriptor(
         css::uno::Reference< css::beans::XPropertySet > const & xProps,
         css::uno::Reference< css::beans::XPropertyState > const & xPropState,
-        ::rtl::OUString const & name )
+        ::rtl::OUString const & name, css::uno::Reference< css::frame::XModel > const & xDocument )
         SAL_THROW( () )
         : XMLElement( name )
         , _xProps( xProps )
         , _xPropState( xPropState )
+        , _xDocument( xDocument )
         {}
     inline ElementDescriptor(
         ::rtl::OUString const & name )
@@ -112,13 +115,10 @@ public:
         ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
         bool forceAttribute = false );
 
-    //
     template<typename T>
     inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
     css::uno::Any readProp( ::rtl::OUString const & rPropName );
-    //
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
-    //
     void readStringAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     inline void readDoubleAttr(
@@ -141,6 +141,8 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readVerticalAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readImageURLAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readImageAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readImagePositionAttr(
@@ -157,7 +159,8 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readSelectionTypeAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
-    //
+    void readDataAwareAttr(
+        ::rtl::OUString const & rAttrName );
     inline void addBoolAttr(
         ::rtl::OUString const & rAttrName, sal_Bool bValue )
         { addAttribute( rAttrName, ::rtl::OUString::valueOf(bValue) ); }
@@ -166,10 +169,16 @@ public:
         const & xFormatProperties,
         ::rtl::OUString const & rAttrName );
 
-    //
     void readEvents() SAL_THROW( (css::uno::Exception) );
-    //
     void readDialogModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readBullitinBoard( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readMultiPageModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFrameModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readPageModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readButtonModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
@@ -211,6 +220,8 @@ public:
         SAL_THROW( (css::uno::Exception) );
     void readScrollBarModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
+    void readSpinButtonModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
     void readFixedHyperLinkModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
 };
@@ -229,7 +240,7 @@ inline void ElementDescriptor::read(
         if (a >>= v)
             addAttribute( attrName, ::rtl::OUString::valueOf(v) );
         else
-            OSL_ENSURE( 0, "### unexpected property type!" );
+            OSL_FAIL( "### unexpected property type!" );
     }
 }
 
@@ -243,3 +254,5 @@ inline bool ElementDescriptor::readProp(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,7 +116,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseOutline = bTmp;
@@ -126,7 +127,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseMarks = bTmp;
@@ -136,7 +137,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bUseParagraphStyles = bTmp;
@@ -194,3 +195,5 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
                                                              xAttrList);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

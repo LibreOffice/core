@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
     if ( sName.getLength() )
         sName += OAdabasCatalog::getDot();
     sName += _xRow->getString(3);
-
 
     return sName;
 }
@@ -157,7 +157,7 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 /*_nPrec*/, sal_Int32& _r
         }
 //      else if(_nPrec > 15)
 //      {
-//          static const ::rtl::OUString sReal = ::rtl::OUString::createFromAscii("REAL");
+//          static const ::rtl::OUString sReal( RTL_CONSTASCII_USTRINGPARAM( "REAL" ));
 //          _rsTypeName = sReal;
 //          _rnType = DataType::REAL;
 //      }
@@ -166,3 +166,4 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 /*_nPrec*/, sal_Int32& _r
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

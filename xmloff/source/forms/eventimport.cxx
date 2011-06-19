@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -136,7 +137,7 @@ namespace xmloff
         Reference< XEventAttacherManager > xEventManager(_rxContainer, UNO_QUERY);
         if (!xEventManager.is())
         {
-            OSL_ENSURE(sal_False, "ODefaultEventAttacherManager::setEvents: invalid argument!");
+            OSL_FAIL("ODefaultEventAttacherManager::setEvents: invalid argument!");
             return;
         }
 
@@ -161,3 +162,4 @@ namespace xmloff
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

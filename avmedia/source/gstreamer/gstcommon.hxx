@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -28,14 +29,15 @@
 #ifndef _GSTCOMMON_HXX
 #define _GSTCOMMON_HXX
 
+#include <gst/gst.h>
+
 #include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 
@@ -51,18 +53,8 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/media/XManager.hpp>
 
-#include <memory>
-
-#define AVMEDIA_GSTREAMER_MANAGER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Manager_GStreamer"
-#define AVMEDIA_GSTREAMER_MANAGER_SERVICENAME "com.sun.star.media.Manager_GStreamer"
-
-#define AVMEDIA_GSTREAMER_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
-#define AVMEDIA_GSTREAMER_PLAYER_SERVICENAME "com.sun.star.media.Player_GStreamer"
-
-#define AVMEDIA_GSTREAMER_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_GStreamer"
-#define AVMEDIA_GSTREAMER_WINDOW_SERVICENAME "com.sun.star.media.Window_GStreamer"
-
-#define AVMEDIA_GSTREAMER_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
-#define AVMEDIA_GSTREAMER_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
+#define WM_GRAPHNOTIFY (WM_USER + 567)
 
 #endif // _GSTCOMMOM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

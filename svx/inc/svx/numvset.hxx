@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,9 +59,6 @@ struct SvxBmpItemInfo
     sal_uInt16          nItemId;
 };
 
-/*-----------------09/09/97 01:05pm-----------------
-
---------------------------------------------------*/
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     Color           aLineColor;
@@ -101,10 +99,6 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
             const com::sun::star::lang::Locale& rLocale);
 };
 
-/*-----------------13.02.97 09.32-------------------
-
---------------------------------------------------*/
-
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
     String      sBullets;
@@ -120,15 +114,12 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
     public:
-        SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/);
+        SvxBmpNumValueSet( Window* pParent, const ResId& rResId);
         ~SvxBmpNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
 };
-/*-----------------02.12.97 10:31-------------------
-
---------------------------------------------------*/
 
 class SvxNumberingPreview : public Window
 {
@@ -163,3 +154,4 @@ class SvxNumberingPreview : public Window
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

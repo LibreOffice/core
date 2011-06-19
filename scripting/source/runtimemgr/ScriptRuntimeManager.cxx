@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
 
-#ifndef _VCL_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 
 #include "ScriptExecDialog.hrc"
 
@@ -57,10 +56,10 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_runtimemgr
 {
 
-static OUString s_implName = ::rtl::OUString::createFromAscii(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
-static OUString s_serviceName = ::rtl::OUString::createFromAscii(
- "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
+static OUString s_implName(RTL_CONSTASCII_USTRINGPARAM(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
+static OUString s_serviceName(RTL_CONSTASCII_USTRINGPARAM(
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" ));
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
@@ -132,7 +131,8 @@ throw( RuntimeException )
     {
         Reference< XInterface > xInterface(
             m_xMgr->createInstanceWithContext(
-                OUString::createFromAscii("drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" )),
                 m_xContext
             ),
             UNO_SET_THROW
@@ -213,8 +213,8 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                              aOutParamIndex, aOutParam );
 
         // need to dispose of filesystem storage
-        OUString filesysString = OUString::createFromAscii(
-                                        "location=filesystem" );
+        OUString filesysString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "location=filesystem" ));
         if ( scriptURI.indexOf( filesysString ) != -1 )
         {
             Any a = m_xContext->getValueByName(
@@ -460,7 +460,7 @@ static struct cppu::ImplementationEntry s_entries [] =
  */
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName,
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName,
         uno_Environment ** ppEnv )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -475,7 +475,7 @@ extern "C"
      *                        data
      * @return a component factory
      */
-    void * SAL_CALL component_getFactory( const sal_Char * pImplName,
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName,
         lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
@@ -483,3 +483,5 @@ extern "C"
             pRegistryKey, ::scripting_runtimemgr::s_entries );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

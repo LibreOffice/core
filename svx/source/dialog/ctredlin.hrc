@@ -50,7 +50,6 @@
 #define LB_ACTION       18
 #define CB_COMMENT      19
 #define ED_COMMENT      20
-#define IMG_TIME_H      30
 
 #define HG_VIEW         1
 #define DG_VIEW         2
@@ -66,7 +65,6 @@
 #define STR_TITLE3      3
 #define STR_TITLE4      4
 #define STR_TITLE5      5
-
 //IAccessibility2 Implementation 2009-----
 #define STR_DATE_COMBOX 6
 #define STR_DATE_SPIN   7

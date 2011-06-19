@@ -592,7 +592,7 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
         case IParseContext::KEY_FUSION:     nTokenID = SQL_TOKEN_FUSION;    break;
         case IParseContext::KEY_INTERSECTION: nTokenID = SQL_TOKEN_INTERSECTION; break;
                 default:
-            OSL_ENSURE( false, "mapEnumToToken: unsupported key!" );
+            OSL_FAIL( "mapEnumToToken: unsupported key!" );
 	}
 	return nTokenID;
 }
@@ -736,7 +736,7 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 	if (m_nCurrentPos < m_sStatement.getLength())
 	{
-		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
+		m_sErrorMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": "));
 		
 		::rtl::OUString aError;
 		static sal_Int32 BUFFERSIZE = 256;

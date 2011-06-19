@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_basic.hxx"
 #include <tools/config.hxx>
 #include <svtools/ctrltool.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include "basic.hrc"
 #include "apperror.hxx"
 
@@ -45,9 +44,6 @@ AppError::AppError( BasicFrame* pParent, String aFileName )
     bHasFile = pDataEdit->Load( aFileName );
     DirEntry aEntry( aFileName );
     UpdateFileInfo( HAS_BEEN_LOADED );
-    // Define icon
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->Show();
     GrabFocus();
@@ -103,13 +99,11 @@ void AppError::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
     sal_uIntPtr nFontSize = aFontSize.ToInt32();
-//    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
     aFont.SetTransparent( sal_False );
-//    aFont.SetAlign( ALIGN_BOTTOM );
-//    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

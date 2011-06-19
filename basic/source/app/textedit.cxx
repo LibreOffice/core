@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svtools/textview.hxx>
 #include <svtools/txtattr.hxx>
 #include <basic/sbxmeth.hxx>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "textedit.hxx"
@@ -199,10 +198,10 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
         return;
 
     SbTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoben
+    if ( rLast.nStart > rLast.nEnd )    // Only up to the bug of MD repaired
     {
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ERROR( "MD-Bug nicht beseitigt!" );
+        OSL_FAIL( "MD-Bug is not repaired!" );
 #endif
         nCount--;
         aPortionList.Remove( nCount);
@@ -216,8 +215,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
         SbTextType eType = r.eType;
@@ -247,7 +245,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
         }
     }
 
-        // Es muessen nur die Blanks und Tabs mit attributiert werden.
+        // Only the blanks and tabs had to be attributed.
         // If there are two equal attributes one after another,
         // they are optimized by the EditEngine.
         xub_StrLen nLastEnd = 0;
@@ -264,8 +262,8 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
 
             if ( r.nStart > nLastEnd )
             {
-                // Kann ich mich drauf verlassen, dass alle ausser
-                // Blank und Tab gehighlightet wird ?!
+                // can I trust that all of them except
+                // blank und tab will be highlighted?!
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;
@@ -277,8 +275,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
-        if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
+        if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
         SbTextType eCol = r.eType;
@@ -327,7 +324,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
             default:
                 {
                     aColor = Color( RGB_COLORDATA( 0xff, 0x80, 0x80 ) );
-                    DBG_ERROR( "Unknown syntax color" );
+                    OSL_FAIL( "Unknown syntax color" );
                 }
         }
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
@@ -338,13 +335,11 @@ void TextEditImp::ImpDoHighlight( const String& rSource, sal_uIntPtr nLineOff )
 
 void TextEditImp::DoSyntaxHighlight( sal_uIntPtr nPara )
 {
-    // Due to delayed syntax highlight it can happend that the
-        // paragraph does no longer exist
+    // Due to delayed syntax highlight it can happen that the
+    // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
-        // leider weis ich nicht, ob genau diese Zeile Modified() ...
-//      if ( pProgress )
-//          pProgress->StepProgress();
+        // unfortunatly I don't know if exact this line Modified() ...
         pTextEngine->RemoveAttribs( nPara );
         String aSource( pTextEngine->GetText( nPara ) );
         ImpDoHighlight( aSource, nPara );
@@ -355,8 +350,6 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 {
     // Paragraph is added to 'List', processed in TimerHdl.
     // => Do not manipulate paragraphs while EditEngine is formatting
-//  if ( pProgress )
-//      pProgress->StepProgress();
 
     if ( !bHighlightning && bDoSyntaxHighlight )
     {
@@ -382,16 +375,6 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
         nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
         aSyntaxLineTable.Remove( nLine );
-/*      if ( Application::AnyInput() )
-        {
-            aSyntaxIdleTimer.Start();       // Starten, falls wir in einem Dialog landen
-            pTextView->ShowCursor( sal_True, sal_True );
-            pTextEngine->SetUpdateMode( sal_True );
-            bHighlightning = sal_False;
-            GetpApp()->Reschedule();
-            bHighlightning = sal_True;
-            pTextEngine->SetUpdateMode( sal_False );
-        }*/
     }
 
     sal_Bool bWasModified = pTextEngine->IsModified();
@@ -402,24 +385,16 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
     }
     else
         pTextEngine->SetUpdateMode( sal_True );             // ! With VDev
-//  pTextView->ForceUpdate();
 
     // SetUpdateMode( sal_True ) soll kein Modify setzen
     pTextEngine->SetModified( bWasModified );
 
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
-//  long nPrevTextWidth = nCurTextWidth;
-//  nCurTextWidth = pTextEngine->CalcTextWidth();
-//  if ( nCurTextWidth != nPrevTextWidth )
-//      SetScrollBarRanges();
     bHighlightning = sal_False;
 
     if ( aSyntaxLineTable.First() )
         aImplSyntaxIdleTimer.Start();
-
-//  while ( Application::AnyInput() )
-//      Application::Reschedule();  // Reschedule, da der UserEvent keine Paints etc. durchlässt
 
     return 0;
 }
@@ -451,7 +426,6 @@ void TextEditImp::SyntaxHighlight( sal_Bool bNew )
         for ( sal_uIntPtr i = 0; i < pTextEngine->GetParagraphCount(); i++ )
             pTextEngine->RemoveAttribs( i );
 
-//      pTextEngine->QuickFormatDoc();
         pTextEngine->SetUpdateMode( sal_True );
         pTextView->ShowCursor(sal_True, sal_True );
     }
@@ -482,13 +456,15 @@ void TextEditImp::KeyInput( const KeyEvent& rKeyEvent )
         pTextView->GetTextEngine()->SetModified( bWasModified );
 }
 
-void TextEditImp::Paint( const Rectangle& rRect ){ pTextView->Paint( rRect );}
-void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonUp( rMouseEvent );}
-//void TextEditImp::MouseButtonDown( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonDown( rMouseEvent );}
-//void TextEditImp::MouseMove( const MouseEvent& rMouseEvent ){ pTextView->MouseMove( rMouseEvent );}
-//void TextEditImp::Command( const CommandEvent& rCEvt ){ pTextView->Command( rCEvt );}
-//sal_Bool TextEditImp::Drop( const DropEvent& rEvt ){ return sal_False /*pTextView->Drop( rEvt )*/;}
-//sal_Bool TextEditImp::QueryDrop( DropEvent& rEvt ){ return sal_False /*pTextView->QueryDrop( rEvt )*/;}
+void TextEditImp::Paint( const Rectangle& rRect )
+{
+    pTextView->Paint( rRect );
+}
+
+void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent )
+{
+    pTextView->MouseButtonUp( rMouseEvent );
+}
 
 
 void TextEditImp::Command( const CommandEvent& rCEvt )
@@ -543,7 +519,7 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
     Point aDocPos = pTextView->GetDocPos( aPos );
     aWord = pTextEngine->GetWord( pTextEngine->GetPaM( aDocPos ) );
 
-    if ( aWord.Len() /*&& !Application::GetAppInternational().IsNumeric( aWord )*/ )
+    if ( aWord.Len() )
     {
         xub_StrLen nLastChar = aWord.Len()-1;
         String aSuffixes = CUniString( cSuffixes );
@@ -644,12 +620,9 @@ Variant(Empty)
             switch ( eType )
             {
                 case SbxBOOL:
-//              case SbxCURRENCY:
-//              case SbxDATE:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxLONG:
-//              case SbxOBJECT:     // cannot be edited
                 case SbxSINGLE:
                 case SbxSTRING:
 
@@ -731,7 +704,7 @@ void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 
     aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     if ( aEdit.ViewMoved() )
     {
-        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );   // fix #105169#
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );
         aEdit.pTextView->SetSelection( TextSelection(TextPaM((nLine>=2?nLine-2:0),nCol2+1)) );
         aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     }
@@ -864,3 +837,4 @@ void TextEdit::BuildKontextMenu( PopupMenu *&pMenu )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#ifndef _COM_SUN_STAR_ACCESSIBLE_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/uno3.hxx>
@@ -134,8 +133,8 @@ uno::Reference<XAccessible>
     // Check wether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii(
-                "no accessible child with index ") + nIndex,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "no accessible child with index ")) + ::rtl::OUString::valueOf(nIndex),
             mxParent);
 
     return GetChild (maVisibleChildren[nIndex],nIndex);
@@ -1096,3 +1095,4 @@ void ChildDescriptor::disposeAccessibleObject (AccessibleContextBase& rParent)
 
 } // end of namespace accessibility
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

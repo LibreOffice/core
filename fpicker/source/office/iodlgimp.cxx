@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-// defines f"ur den Style der BrowseBox
+// defines for the style of the BrowseBox
 
 #define STYLE_MULTI_SELECTION   \
     CNTVIEWSTYLE_NODE_BUTTONS | \
@@ -218,15 +219,14 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     delete _pURLs;
     _pURLs = new SvStringsDtor;
 
-    // "Ubergeordnete Ebenen bestimmen.
+    // determine parent levels
     INetURLObject aObject( pBox->GetViewURL() );
     sal_Int32 nCount = aObject.getSegmentCount();
 
     ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
                                     sal_False /* removable */, sal_False /* floppy */,
                                     sal_False /* compact disk */ );
-    sal_Bool bIsHighContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
-    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo, bIsHighContrast ) );
+    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
 
     while ( nCount >= 1 )
     {
@@ -241,8 +241,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-                ? SvFileInformationManager::GetImage( aObject, bIsHighContrast )
-                : aVolumeImage;
+                ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
 
             _pMenu->InsertItem( nItemId++, aTitle, aImage );
             _pURLs->Insert( pParentURL, _pURLs->Count() );
@@ -313,8 +312,6 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
-    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
-
     sal_uInt16 nItemId = 1;
     String sDisplayName;
 
@@ -323,8 +320,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     {
         if ( GetDialogParent()->isUrlAllowed( *aLoop ) )
         {
-            Image aImage = SvFileInformationManager::GetImage(
-                INetURLObject(*aLoop), bIsHighContrast );
+            Image aImage = SvFileInformationManager::GetImage( INetURLObject(*aLoop) );
             if ( LocalFileHelper::ConvertURLToSystemPath(*aLoop, sDisplayName) )
                 _pMenu->InsertItem( nItemId, sDisplayName, aImage );
             else
@@ -505,3 +501,5 @@ void SvtExpFileDlg_Impl::CreateFilterListControl( Window* _pParent, const ResId&
         _pLbFilter->SetDropDownLineCount( 10 );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
@@ -71,14 +71,9 @@
 #include <framework/menuconfiguration.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/taskpanelist.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnumgr.hxx>
@@ -111,7 +106,6 @@
 #include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
@@ -152,11 +146,11 @@ static Window* GetTopMostParentSystemWindow( Window* pWindow )
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
     if ( aTargetURL.Arguments.getLength() )
         return NULL;
@@ -296,7 +290,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     svt::ToolboxController::dispose();
 
     // Remove and destroy our item window at our toolbox
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
     delete pWindow;
@@ -305,7 +299,7 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     // sub toolbar while we get disposed. Therefore we have to dispose
     // it now! Not doing so would result in a crash. The sub toolbar
     // gets destroyed asynchronously and would access a non-existing
-    // parent toolbar! See #126569#
+    // parent toolbar!
     if ( pImpl->mxUIElement.is() )
     {
         Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
@@ -329,7 +323,7 @@ void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, SfxTbxCtrlFacto
 
 SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule* pMod  )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxToolBoxControl *pCtrl;
     SfxApplication *pApp = SFX_APP();
@@ -404,33 +398,31 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
 
 SfxItemState SfxToolBoxControl::GetItemState(
     const SfxPoolItem* pState )
-/*  [Beschreibung]
+/*  [Description]
 
-    Statische Methode zum Ermitteln des Status des SfxPoolItem-Pointers,
-    in der Methode <SfxControllerItem::StateChanged(const SfxPoolItem*)>
-    zu verwenden.
+    Static method for determining the status of the SfxPoolItem-pointer,
+    used in the method <SfxControllerItem::StateChanged(const SfxPoolItem*)>.
 
-    [R"uckgabewert]
+    [Return value]
 
     SfxItemState        SFX_ITEM_UNKNOWN
-                        Enabled, aber keine weitere Statusinformation
-                        verf"ugbar. Typisch f"ur <Slot>s, die allenfalls
-                        zeitweise disabled sind, aber ihre Darstellung sonst
-                        nicht "andern.
+                        Enabled, however no further status information is available.
+                        Typical for <Slot>s, which are temporarily disabled a
+                        anyway but other than that do not change their appearance.
 
                         SFX_ITEM_DISABLED
-                        Disabled und keine weiter Statusinformation
-                        verf"ugbar. Alle anderen ggf. angezeigten Werte sollten
-                        auf den Default zur"uckgesetzt werden.
+                        Disabled, no further status information is available.
+                        All other displayed values should be reset to the default
+                        if possible.
 
                         SFX_ITEM_DONTCARE
-                        Enabled aber es waren nur uneindeutige Werte
-                        verf"ugbar (also keine, die abgefragt werden k"onnen).
+                        Enabled but there were only ambiguous values available
+                        (i.e. none that could be queried).
 
                         SFX_ITEM_AVAILABLE
-                        Enabled und mit verf"ugbarem Wert, der von 'pState'
-                        erfragbar ist. Der Typ ist dabei im gesamten
-                        Programm eindeutig und durch den Slot festgelegt.
+                        Enabled and with available values which can be queried
+                        through'pState'. The type is thus by the Slot clearly
+                        defined in the entire Program.
 */
 
 {
@@ -453,7 +445,7 @@ void SfxToolBoxControl::Dispatch(
         ::com::sun::star::util::URL aTargetURL;
         aTargetURL.Complete = rCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                                           UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
@@ -467,7 +459,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
 {
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getFrameInterface().is() )
         xController = getFrameInterface()->getController();
 
@@ -486,7 +478,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
                 ::rtl::OUString sAppName;
                 try
                 {
-                    static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                    static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                         ::comphelper::getProcessServiceFactory();
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
@@ -497,7 +489,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
                     sAppName = xModuleManager->identify(xFrame);
                 } catch(::com::sun::star::uno::Exception&) {}
                 Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
                 ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
             }
             xDispatch->dispatch( aTargetURL, aArgs );
@@ -538,7 +530,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getFrameInterface().is() )
         xController = getFrameInterface()->getController();
 
@@ -668,24 +660,24 @@ void SAL_CALL SfxToolBoxControl::updateImage() throw (::com::sun::star::uno::Run
 // XToolbarController
 void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Select( (sal_uInt16)KeyModifier );
 }
 void SAL_CALL SfxToolBoxControl::click() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Click();
 }
 
 void SAL_CALL SfxToolBoxControl::doubleClick() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DoubleClick();
 }
 
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = CreatePopupWindow();
     if ( pWindow )
         return VCLUnoHelper::GetInterface( pWindow );
@@ -695,7 +687,7 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createPo
 
 Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< ::com::sun::star::awt::XWindow >& rParent ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
 }
 
@@ -734,7 +726,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& aEvent )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aSubToolBarResName;
     if ( pImpl->mxUIElement.is() )
@@ -782,11 +774,8 @@ throw (::com::sun::star::uno::RuntimeException)
                 try
                 {
                     Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                    ToolBox* pToolBar( 0 );
                     if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     {
-                        pToolBar = (ToolBox *)pTbxWindow;
-
                         Any a;
                         a = xProp->getPropertyValue( aPersistentString );
                         xProp->setPropertyValue( aPersistentString, makeAny( sal_False ));
@@ -820,7 +809,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSubToolBarResName )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( pImpl->pBox )
     {
@@ -972,7 +961,7 @@ void SfxToolBoxControl::StateChanged
     if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )
         return;
 
-    // enabled/disabled-Flag pauschal korrigieren
+    // enabled/disabled-Flag correcting the lump sum
     pImpl->pBox->EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 
     sal_uInt16 nItemBits = pImpl->pBox->GetItemBits( GetId() );
@@ -984,7 +973,7 @@ void SfxToolBoxControl::StateChanged
         {
             if ( pState->ISA(SfxBoolItem) )
             {
-                // BoolItem fuer checken
+                // BoolItem for checking
                 if ( ((const SfxBoolItem*)pState)->GetValue() )
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
@@ -992,7 +981,7 @@ void SfxToolBoxControl::StateChanged
             else if ( pState->ISA(SfxEnumItemInterface) &&
                 ((SfxEnumItemInterface *)pState)->HasBoolValue())
             {
-                // EnumItem wie Bool behandeln
+                // EnumItem is handled as Bool
                 if ( ((const SfxEnumItemInterface *)pState)->GetBoolValue() )
                     eTri = STATE_CHECK;
                 nItemBits |= TIB_CHECKABLE;
@@ -1030,7 +1019,7 @@ void SfxToolBoxControl::Select( sal_Bool /*bMod1*/ )
         ::rtl::OUString sAppName;
         try
         {
-            static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+            static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                 ::comphelper::getProcessServiceFactory();
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
@@ -1039,7 +1028,7 @@ void SfxToolBoxControl::Select( sal_Bool /*bMod1*/ )
             sAppName = xModuleManager->identify(m_xFrame);
         } catch(::com::sun::star::uno::Exception&) {}
         Sequence<PropertyValue> vSource;
-        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
         URL aURL;
         aURL.Complete = m_aCommandURL;
         ::comphelper::UiEventsLogger::logDispatch(aURL, vSource);
@@ -1111,7 +1100,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     Reference < XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_xFrame.is() )
         xController = m_xFrame->getController();
 
@@ -1398,7 +1387,7 @@ void SfxPopupWindow::PopupModeEnd()
 
     if ( IsVisible() )
     {
-        // wurde abgerissen
+        // was teared-off
         DeleteFloatingWindow();
         m_bFloating = sal_True;
     }
@@ -1425,7 +1414,7 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
         FloatingWindow::MouseMove( rMEvt );
     else
     {
-        // MouseMove-Event an die Children forwarden
+        // Forward MouseMove-Event to Children
         ::Point       aPos = rMEvt.GetPosPixel();
         ::Point       aScrPos = OutputToScreenPixel( aPos );
         sal_uInt16 i = 0;
@@ -1459,14 +1448,14 @@ void SfxPopupWindow::EndCascading()
 
 SfxPopupWindow* SfxPopupWindow::Clone() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode mu\s "uberladen werden, um dieses Popup auch im
-    Presentations-Modus anzuzeigen. Sie wird gerufen, wenn ein Show()
-    sinnlos w"are, da der Parent nicht das Presentations-Window ist.
-    Beim neu erzeugen wird automatisch das neue Top-Window verwendet, so
-    da\s der Parent das Presentations-Window ist und das neue Popup somit
-    sichtbar ist.
+    This method must be overloaded to show this Popup also in the
+    Presentation-mode. It is called when a Show() would be meaningless
+    since the parent is no presentation window.
+    When create a new window the bew Top-Window will be used automatically,
+    so that the Parent becomes the presentation window and and that the new
+    Popup therefore becomes visible.
 */
 
 {
@@ -1479,16 +1468,14 @@ void SfxPopupWindow::StateChanged(
     sal_uInt16 /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
-/*  [Bescheibung]
+/*  [Description]
 
-    Siehe auch <SfxControllerItem::StateChanged()>. Au\serdem wird
-    bei eState==SFX_ITEM_DISABLED das Popup gehided und in allen anderen
-    F"allen, falls es floating ist, wieder angezeigt. Daher mu\s die
-    Basisklasse i.d.R. gerufen werden.
+    See also <SfxControllerItem::StateChanged()>. In addition the Popup
+    will become hidden when eState==SFX_ITEM_DISABLED and in all other
+    cases it will be shown again if it is floating. In general this requires
+    to call the Base class.
 
-    Es findet wegen des Parents eine Sonderbehandlung f"ur den
-    Presentationsmodus statt.
-
+    Due to the parent the presentation mode is handled in a special way.
 */
 
 {
@@ -1525,7 +1512,6 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uI
     // Determine the current background color of the menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     SetImage( String() );
@@ -1614,7 +1600,7 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
     if ( !pMenu )
     {
         ::framework::MenuConfiguration aConf( m_xServiceManager );
-        if ( m_aCommandURL.equalsAscii( ".uno:AddDirect" ))
+        if ( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:AddDirect" ) ))
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU );
         else
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU );
@@ -1650,11 +1636,10 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL = sFallback;
 
     sal_Bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
-    sal_Bool bHC = GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode();
-    Image aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( aURL ), bBig, bHC );
+    Image aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( aURL ), bBig );
     if ( !aImage )
         aImage = !!aMenuImage ? aMenuImage :
-            SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig, bHC );
+            SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig );
     Size aBigSize( GetToolBox().GetDefaultImageSize() );
     if ( bBig && aImage.GetSizePixel() != aBigSize )
     {
@@ -1712,7 +1697,7 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             aTargetURL.Complete = aLastURL;
             getURLTransformer()->parseStrict( aTargetURL );
 
-            ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+            ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
             if ( pMenu )
             {
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -1728,8 +1713,8 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             {
                 Sequence< PropertyValue > aArgs( 1 );
 
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
-                aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+                aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )) );
 
                 ExecuteInfo* pExecuteInfo = new ExecuteInfo;
                 pExecuteInfo->xDispatch     = xDispatch;
@@ -1760,7 +1745,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     URL aTargetURL;
     aTargetURL.Complete = aURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                                           UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
@@ -1772,7 +1757,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
             xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         else
         {
-            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii( "_blank" ) );
+            ::rtl::OUString aTargetFrame( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")) );
             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                 (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 
@@ -1801,15 +1786,12 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_uIntPtr nSymbolsStyle     = rSettings.GetSymbolsStyle();
-        sal_Bool bIsHiContrastMode  = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
-            ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
             m_nSymbolsStyle      = nSymbolsStyle;
-            m_bWasHiContrastMode = bIsHiContrastMode;
             m_bShowMenuImages    = bShowMenuImages;
 
             sal_uInt16 nCount = pActMenu->GetItemCount();
@@ -1831,7 +1813,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, sal_False, bIsHiContrastMode );
+                            Image aImage = GetImage( xFrame, aImageId, false );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
@@ -1843,7 +1825,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), sal_False, bIsHiContrastMode );
+                                INetURLObject(aCmd), false );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nId, aImage );
                         }
@@ -1873,16 +1855,6 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, Execute
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
-/*
-}
-    catch (const ::com::sun::star::document::CorruptedFilterConfigurationException& exFilters)
-    {
-        throw exFilters;
-    }
-    catch (const Exception& )
-    {
-    }
-*/
     delete pExecuteInfo;
     return 0;
 }
@@ -1892,3 +1864,5 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, Execute
 void SfxAppToolBoxControl_Impl::Click( )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

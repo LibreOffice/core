@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 //_________________________________________________________________________________________________________________
 #include <helper/oframes.hxx>
 
-#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -60,9 +59,9 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 using namespace ::std                           ;
-using namespace ::vos                           ;
+
+using rtl::OUString;
 
 //_________________________________________________________________________________________________________________
 //  non exported const
@@ -303,7 +302,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 
       sal_uInt32 nCount = m_pFrameContainer->getCount();
       if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
-          throw IndexOutOfBoundsException( OUString::createFromAscii( "OFrames::getByIndex - Index out of bounds" ),
+          throw IndexOutOfBoundsException( OUString(RTL_CONSTASCII_USTRINGPARAM("OFrames::getByIndex - Index out of bounds")),
                                            (OWeakObject *)this );
 
     // Set default return value.
@@ -522,3 +521,5 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
 #endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP VIEW" ));
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
@@ -135,13 +136,13 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE VIEW " ));
     ::rtl::OUString aQuote  = xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sSchema,sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
-    aSql += ::rtl::OUString::createFromAscii(" AS ");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS "));
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 
@@ -160,3 +161,5 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
         pTables->appendNew(sName);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

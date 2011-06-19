@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,8 +85,6 @@ start:
             break;
         case SbxDATE:
         case SbxDOUBLE:
-        case SbxLONG64:
-        case SbxULONG64:
         case SbxSALINT64:
         case SbxSALUINT64:
         case SbxCURRENCY:
@@ -94,11 +93,7 @@ start:
             {
             double dVal;
             if( p->eType == SbxCURRENCY )
-                dVal = ImpCurrencyToDouble( p->nLong64 );
-            else if( p->eType == SbxLONG64 )
-                dVal = ImpINT64ToDouble( p->nLong64 );
-            else if( p->eType == SbxULONG64 )
-                dVal = ImpUINT64ToDouble( p->nULong64 );
+                dVal = ImpCurrencyToDouble( p->nInt64 );
             else if( p->eType == SbxSALINT64 )
                 dVal = static_cast< double >(p->nInt64);
             else if( p->eType == SbxSALUINT64 )
@@ -167,7 +162,7 @@ start:
         case SbxBYREF | SbxULONG:
             nRes = *p->pULong; break;
 
-        // Tests ab hier
+        // from here on tests
         case SbxBYREF | SbxCHAR:
             aTmp.nChar = *p->pChar; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -180,15 +175,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
             aTmp.uInt64 = *p->puInt64; goto ref;
-        case SbxBYREF | SbxULONG64:
-            aTmp.nULong64 = *p->pULong64; goto ref;
-        case SbxBYREF | SbxLONG64:
-        case SbxBYREF | SbxCURRENCY:
-            aTmp.nLong64 = *p->pLong64; goto ref;
         ref:
             aTmp.eType = SbxDataType( p->eType & 0x0FFF );
             p = &aTmp; goto start;
@@ -212,8 +203,9 @@ start:
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
+        case SbxCURRENCY:
         case SbxSALINT64:
-            p->nInt64 = n; break;
+            aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
             p->uInt64 = n; break;
         case SbxDECIMAL:
@@ -221,7 +213,7 @@ start:
             ImpCreateDecimal( p )->setULong( n );
             break;
 
-        // Tests ab hier
+        // from here on tests
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxUINT:
@@ -234,11 +226,6 @@ start:
         case SbxERROR:
         case SbxUSHORT:
             aTmp.pUShort = &p->nUShort; goto direct;
-        case SbxULONG64:
-            aTmp.pULong64 = &p->nULong64; goto direct;
-        case SbxLONG64:
-        case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
         direct:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
@@ -298,24 +285,16 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
+        case SbxBYREF | SbxCURRENCY:
+            *p->pnInt64 = n * CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
-        case SbxBYREF | SbxCURRENCY:
-            double d;
-            if( n > SbxMAXCURR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); d = SbxMAXCURR;
-            }
-            else
-            {
-                d = n;
-            }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

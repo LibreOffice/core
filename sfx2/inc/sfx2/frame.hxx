@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,9 +67,9 @@ namespace com
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
 #include <svl/brdcst.hxx>
-#include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vector>
 
 class SvBorder;
 class SfxWorkWindow;
@@ -93,21 +94,20 @@ class SystemWindow;
 typedef SfxFrame* SfxFramePtr;
 class SfxFrameArr_Impl;
 
-DECLARE_LIST( TargetList, String* )
+typedef ::std::vector< String* > TargetList;
 
 #define SFXFRAME_HASTITLE     0x0001
 
 //==========================================================================
-// Ein SfxFrame ist eine Verwaltungsklasse f"ur Fenster und deren Inhalte.
-// Eine SfxApplication pr"asentiert sich als Hierarchie von SfxFrames, wobei
-// die konkreten Inhalte in den abgeleiteten Klassen festgelegt werden.
-// Die Basisklasse SfxFrame implementiert 2 Aspekte der Frames: Benennung und
-// Kontrolle der Lebensdauer.
-// Innerhalb einer Frames-Hierarchie kontrolliert immer der ParentFrame die
-// Lebensdauer seiner ChildFrames, auch wenn sie in der Regel gar nicht von
-// ihm selbst erzeugt wurden. Durch Aufruf vonn DoClose() an irgendeinem
-// Frame in der Hierarchie kann ein Teil des "Frameworks" entfernt werden,
-// wobei sich Frames an ihren ParentFrames selbst abmelden.
+// SfxFrame is a management class for windows and their content.
+// A SfxApplication represent a hierarchy of SfxFrames, with which the actual
+// content in the derived classes is defined. The base class SfxFrame
+// implements two aspects of frames: naming and control of its lifespan.
+// Inside a frame hierarchy the parent frame always controls the lifespan of
+// its child frames, even though they usually are not even produced by the
+// parent. By calling DoCloser() on any frame in the hierarchy,
+// a part of the "framework" can be removed, where frames unsubscribe
+// from their parent frames.
 //==========================================================================
 
 class SfxFrameArr_Impl;
@@ -183,7 +183,6 @@ public:
 
     sal_Bool            IsInPlace() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool DoClose_Impl();
     SAL_DLLPRIVATE void SetFrameInterface_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl( sal_Bool bSet );
@@ -195,7 +194,7 @@ public:
     SAL_DLLPRIVATE sal_Bool IsClosing_Impl() const;
     SAL_DLLPRIVATE void SetIsClosing_Impl();
 
-                        // Methoden f"ur den Zugriff auf das aktuelle Set
+    // Methods for accessing the current set
     SAL_DLLPRIVATE void SetDescriptor( SfxFrameDescriptor* );
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
@@ -225,7 +224,6 @@ public:
     SAL_DLLPRIVATE SystemWindow* GetTopWindow_Impl() const;
     SAL_DLLPRIVATE void PositionWindow_Impl( const Rectangle& rWinArea ) const;
     SAL_DLLPRIVATE bool IsMarkedHidden_Impl() const;
-//#endif
 private:
     SAL_DLLPRIVATE void Construct_Impl();
 };
@@ -237,9 +235,7 @@ class SfxFrameIterator
     const SfxFrame*         pFrame;
     sal_Bool                bRecursive;
 
-//#if 0 // _SOLAR__PRIVATE
     SfxFrame*               NextSibling_Impl( SfxFrame& rPrev );
-//#endif
 
 public:
                             SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecursive=sal_True );
@@ -267,8 +263,8 @@ public:
     virtual String          GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_Bool                FrameKilled() const { return &wFrame != pFrame; }
 
@@ -286,8 +282,8 @@ public:
                                 { return aValue; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem : public SfxPoolItem
@@ -304,10 +300,12 @@ public:
                                 { return m_xFrame; }
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 typedef SfxUsrAnyItem SfxUnoAnyItem;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
@@ -38,8 +37,6 @@
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -51,19 +48,14 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 sal_Unicode const pszExtColor[]  = {'s','o','c'};
 
 static char const aChckColor[]  = { 0x04, 0x00, 'S','O','C','L'};   // < 5.2
 static char const aChckColor0[] = { 0x04, 0x00, 'S','O','C','0'};   // = 5.2
 static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
-
-// ------------------
-// class XColorTable
-// ------------------
-
-static XColorTable* pTable=0;
 
 /*************************************************************************
 |*
@@ -86,11 +78,10 @@ XColorTable::~XColorTable()
 {
 }
 
-XColorTable* XColorTable::GetStdColorTable()
+XColorTable& XColorTable::GetStdColorTable()
 {
-    if ( !pTable )
-        pTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-    return pTable;
+    static XColorTable aTable(SvtPathOptions().GetPalettePath());
+    return aTable;
 }
 
 /************************************************************************/
@@ -170,7 +161,7 @@ sal_Bool XColorTable::Create()
     xub_StrLen nLen;
     ResMgr& rRes = DIALOG_MGR();
 
-    static sal_uInt16 __READONLY_DATA aResId[] =
+    static sal_uInt16 aResId[] =
     {
         RID_SVXSTR_BLACK,
         RID_SVXSTR_BLUE,
@@ -199,7 +190,7 @@ sal_Bool XColorTable::Create()
 
     // BM: ifndef VCL part removed (deprecated)
 
-    static ColorData __READONLY_DATA aColTab[] =
+    static ColorData const aColTab[] =
     {
         COL_BLACK,
         COL_BLUE,
@@ -546,3 +537,5 @@ Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

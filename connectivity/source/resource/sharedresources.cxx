@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,17 +157,17 @@ namespace connectivity
         size_t lcl_substitute( ::rtl::OUString& _inout_rString,
             const sal_Char* _pAsciiPattern, const ::rtl::OUString& _rReplace )
         {
-            size_t nOccurences = 0;
+            size_t nOccurrences = 0;
 
             ::rtl::OUString sPattern( ::rtl::OUString::createFromAscii( _pAsciiPattern ) );
             sal_Int32 nIndex = 0;
             while ( ( nIndex = _inout_rString.indexOf( sPattern ) ) > -1 )
             {
-                ++nOccurences;
+                ++nOccurrences;
                 _inout_rString = _inout_rString.replaceAt( nIndex, sPattern.getLength(), _rReplace );
             }
 
-            return nOccurences;
+            return nOccurrences;
         }
     }
 
@@ -240,3 +241,4 @@ namespace connectivity
 } // namespace connectivity
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

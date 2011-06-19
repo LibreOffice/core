@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,20 +92,20 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dExtrudeObj* Clone() const;
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    // Lokale Parameter setzen/lesen mit Geometrieneuerzeugung
+    // set/get local parameters with geometry regeneration
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
-    // Aufbrechen
     virtual sal_Bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
 #endif          // _E3D_EXTRUD3D_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

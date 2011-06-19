@@ -30,12 +30,6 @@ PRJ=..
 PRJNAME=SV
 TARGET=svdem
 LIBTARGET=NO
-#TARGETTYPE=GUI
-
-
-.IF "$(GUI)" == "OS2"
-TARGETTYPE=GUI
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -50,15 +44,12 @@ APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
 APP1OBJS=		$(OBJFILES)
 
-#				$(OBJ)$/salmain.obj
-
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(SVLIB)  -l$(LB)/fps_office.uno.lib
 

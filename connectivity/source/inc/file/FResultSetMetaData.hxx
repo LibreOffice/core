@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include "connectivity/CommonTools.hxx"
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "file/filedllapi.hxx"
 
 namespace connectivity
@@ -48,15 +49,15 @@ namespace connectivity
             public  OResultSetMetaData_BASE
         {
             ::rtl::OUString     m_aTableName;
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns;
+            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns;
             OFileTable*         m_pTable;
 
             void checkColumnIndex(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);
+            // a Constructor, that is needed for when Returning the Object is needed:
+            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable* _pTable);
 
             /// Avoid ambigous cast error from the compiler.
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()
@@ -89,3 +90,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_FILE_ORESULTSETMETADATA_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

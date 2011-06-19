@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <svl/svarray.hxx>
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -58,6 +58,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/namecontainer.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/string.hxx> // used in StartElement for logging
 #include <cppuhelper/implbase1.hxx>
@@ -88,45 +89,47 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "_office";
-sal_Char __READONLY_DATA sXML_np__office_ext[] = "_office_ooo";
-sal_Char __READONLY_DATA sXML_np__ooo[] = "_ooo";
-sal_Char __READONLY_DATA sXML_np__ooow[] = "_ooow";
-sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
-sal_Char __READONLY_DATA sXML_np__of[] = "_of";
-sal_Char __READONLY_DATA sXML_np__style[] = "_style";
-sal_Char __READONLY_DATA sXML_np__text[] = "_text";
-sal_Char __READONLY_DATA sXML_np__table[] = "_table";
-sal_Char __READONLY_DATA sXML_np__table_ext[] = "_table_ooo";
-sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
-sal_Char __READONLY_DATA sXML_np__draw_ext[] = "_draw_ooo";
-sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
-sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
-sal_Char __READONLY_DATA sXML_np__xlink[] = "_xlink";
-sal_Char __READONLY_DATA sXML_np__dc[] = "_dc";
-sal_Char __READONLY_DATA sXML_np__dom[] = "_dom";
-sal_Char __READONLY_DATA sXML_np__meta[] = "_meta";
-sal_Char __READONLY_DATA sXML_np__number[] = "_number";
-sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
-sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
-sal_Char __READONLY_DATA sXML_np__math[] = "_math";
-sal_Char __READONLY_DATA sXML_np__form[] = "_form";
-sal_Char __READONLY_DATA sXML_np__script[] = "_script";
-sal_Char __READONLY_DATA sXML_np__config[] = "_config";
-sal_Char __READONLY_DATA sXML_np__db[] = "_db";
-sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
-sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
-sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
-sal_Char __READONLY_DATA sXML_np__field[] = "_field";
-sal_Char __READONLY_DATA sXML_np__xhtml[] = "_xhtml";
+sal_Char const sXML_np__office[] = "_office";
+sal_Char const sXML_np__office_ext[] = "_office_ooo";
+sal_Char const sXML_np__ooo[] = "_ooo";
+sal_Char const sXML_np__ooow[] = "_ooow";
+sal_Char const sXML_np__oooc[] = "_oooc";
+sal_Char const sXML_np__of[] = "_of";
+sal_Char const sXML_np__style[] = "_style";
+sal_Char const sXML_np__text[] = "_text";
+sal_Char const sXML_np__table[] = "_table";
+sal_Char const sXML_np__table_ext[] = "_table_ooo";
+sal_Char const sXML_np__draw[] = "_draw";
+sal_Char const sXML_np__draw_ext[] = "_draw_ooo";
+sal_Char const sXML_np__dr3d[] = "_dr3d";
+sal_Char const sXML_np__fo[] = "_fo";
+sal_Char const sXML_np__xlink[] = "_xlink";
+sal_Char const sXML_np__dc[] = "_dc";
+sal_Char const sXML_np__dom[] = "_dom";
+sal_Char const sXML_np__meta[] = "_meta";
+sal_Char const sXML_np__number[] = "_number";
+sal_Char const sXML_np__svg[] = "_svg";
+sal_Char const sXML_np__chart[] = "_chart";
+sal_Char const sXML_np__math[] = "_math";
+sal_Char const sXML_np__form[] = "_form";
+sal_Char const sXML_np__script[] = "_script";
+sal_Char const sXML_np__config[] = "_config";
+sal_Char const sXML_np__db[] = "_db";
+sal_Char const sXML_np__xforms[] = "_xforms";
+sal_Char const sXML_np__formx[] = "_formx";
+sal_Char const sXML_np__xsd[] = "_xsd";
+sal_Char const sXML_np__xsi[] = "_xsi";
+sal_Char const sXML_np__field[] = "_field";
+sal_Char const sXML_np__xhtml[] = "_xhtml";
+sal_Char const sXML_np__css3text[] = "_css3text";
 
-sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
-sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
-sal_Char __READONLY_DATA sXML_np__office_old[] = "__office";
-sal_Char __READONLY_DATA sXML_np__style_old[] = "__style";
-sal_Char __READONLY_DATA sXML_np__text_old[] = "__text";
-sal_Char __READONLY_DATA sXML_np__table_old[] = "__table";
-sal_Char __READONLY_DATA sXML_np__meta_old[] = "__meta";
+sal_Char const sXML_np__fo_old[] = "__fo";
+sal_Char const sXML_np__xlink_old[] = "__xlink";
+sal_Char const sXML_np__office_old[] = "__office";
+sal_Char const sXML_np__style_old[] = "__style";
+sal_Char const sXML_np__text_old[] = "__text";
+sal_Char const sXML_np__table_old[] = "__table";
+sal_Char const sXML_np__meta_old[] = "__meta";
 
 
 
@@ -182,14 +185,11 @@ public:
 
     ::rtl::OUString aODFVersion;
 
-    // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
+    // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
-    // for the OpenOffice.org file format.
+    // for the OpenOffice.org file format. (#i28749#)
     sal_Bool mbShapePositionInHoriL2R;
-    // <--
-    // --> OD 2007-12-19 #152540#
     sal_Bool mbTextDocInOOoFileFormat;
-    // <--
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
 
@@ -200,12 +200,9 @@ public:
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
         mStreamName(),
-        // --> OD 2004-08-11 #i28749#
+        // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         mbShapePositionInHoriL2R( sal_False ),
-        // <--
-        // --> OD 2007-12-19 #152540#
         mbTextDocInOOoFileFormat( sal_False ),
-        // <--
         mxComponentContext( ::comphelper::getProcessComponentContext() ),
         mpRDFaHelper() // lazy
     {
@@ -309,6 +306,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xforms) ),
                             GetXMLToken(XML_N_XFORMS_1_0),
                             XML_NAMESPACE_XFORMS );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__formx) ),
+                            GetXMLToken( XML_N_FORMX ),
+                            XML_NAMESPACE_FORMX );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsd) ),
                             GetXMLToken(XML_N_XSD),
                             XML_NAMESPACE_XSD );
@@ -323,6 +323,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add(
             OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xhtml ) ),
             GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mpNamespaceMap->Add(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_np__css3text ) ),
+            GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
 
     msPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
@@ -348,7 +351,6 @@ SvXMLImport::SvXMLImport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
@@ -378,7 +380,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -409,7 +410,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -447,8 +447,6 @@ SvXMLImport::~SvXMLImport() throw ()
         delete mpContexts;
     }
 
-    //  delete pImageMapImportHelper;
-
     //  #i9518# the import component might not be deleted until after the document has been closed,
     //  so the stuff that accesses the document has been moved to endDocument.
 
@@ -466,21 +464,15 @@ SvXMLImport::~SvXMLImport() throw ()
         mxModel->removeEventListener(mxEventListener);
 }
 
+namespace
+{
+    class theSvXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLImportUnoTunnelId> {};
+}
+
 // XUnoTunnel & co
 const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvXMLImportUnoTunnelId::get().getSeq();
 }
 
 SvXMLImport* SvXMLImport::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
@@ -659,7 +651,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if ( rAttrName.equalsAscii("office:version") )
+        if ( rAttrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:version")) )
         {
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 
@@ -990,22 +982,19 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     mpImpl->aBaseURL.insertName( sName );
                 }
                 mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
-                // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
+                // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbShapePositionInHoriL2R);
                 }
-                // <--
-                // --> OD 2007-12-19 #152540#
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
-                // <--
             }
         }
     }
@@ -1054,19 +1043,15 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
     return new XMLShapeImportHelper( *this, mxModel );
 }
 
-#ifndef SVX_LIGHT
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
     return new SchXMLImportHelper();
 }
-#endif
 
-#ifndef SVX_LIGHT
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
 {
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
-#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1487,17 +1472,16 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Numberformat could not be inserted");
+            OSL_FAIL("Numberformat could not be inserted");
         }
     }
     else {
-        DBG_ERROR("not possible to create NameContainer");
+        OSL_FAIL("not possible to create NameContainer");
     }
 }
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
-#ifndef SVX_LIGHT
     if (!mpEventImportHelper)
     {
         // construct event helper and register StarBasic handler and standard
@@ -1516,7 +1500,6 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->RegisterFactory(sStarBasicCap,
                                             new XMLStarBasicContextFactory());
     }
-#endif
 
     return *mpEventImportHelper;
 }
@@ -1563,10 +1546,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
-#ifndef SVX_LIGHT
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
     GetFormImport()->setAutoStyleContext( pAutoStyles );
-#endif
 }
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
@@ -1754,9 +1735,9 @@ void SvXMLImport::SetError(
 {
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURED;
+        mnErrorFlags |= ERROR_ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURED;
+        mnErrorFlags |= ERROR_WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 
@@ -1889,20 +1870,16 @@ String SvXMLImport::GetDocumentBase() const
     return mpImpl->mStreamName;
 }
 
-// --> OD 2004-08-10 #i28749#
+// Convert drawing object positions from OOo file format to OASIS (#i28749#)
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
 }
-// <--
 
-// --> OD 2007-12-19 #152540#
 sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
 {
     return mpImpl->mbTextDocInOOoFileFormat;
 }
-
-// <--
 
 void SvXMLImport::initXForms()
 {
@@ -1973,7 +1950,6 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
             const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
                 uno::UNO_QUERY);
 //FIXME: not yet
-//            OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
             if (xMeta.is()) {
                 const beans::StringPair mdref( GetStreamName(), i_rXmlId );
                 try {
@@ -1984,7 +1960,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 }
             }
         } catch (uno::Exception &) {
-            OSL_ENSURE(false, "SvXMLImport::SetXmlId: exception?");
+            OSL_FAIL("SvXMLImport::SetXmlId: exception?");
         }
     }
 }
@@ -2013,3 +1989,4 @@ SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
         i_rAbout, i_rProperty, i_rContent, i_rDatatype);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

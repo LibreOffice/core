@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -133,7 +134,7 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
@@ -143,21 +144,21 @@ sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     aDirection.DirectionZ = aVal.getZ();
 
     rVal <<= aDirection;
-    return( sal_True );
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
-        return sal_False;
+        return false;
 
     aVal.setX(aDirection.DirectionX);
     aVal.setY(aDirection.DirectionY);
     aVal.setZ(aDirection.DirectionZ);
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -168,3 +169,5 @@ sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -762,7 +763,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
             throw Exception();
             break;
         default:
-            OSL_ENSURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
+            OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
 // -------------------------------------------------------------------------
@@ -907,13 +908,12 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     aMap[adFileTime]        = ADOS::MapADOType2Jdbc(adFileTime);
     aMap[adPropVariant]     = ADOS::MapADOType2Jdbc(adPropVariant);
     aMap[adVarNumeric]      = ADOS::MapADOType2Jdbc(adVarNumeric);
-//  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[12] = aMap;
 
     ::std::map< sal_Int32,::rtl::OUString> aMap2;
-    aMap2[0] = ::rtl::OUString::createFromAscii("YES");
-    aMap2[1] = ::rtl::OUString::createFromAscii("NO");
+    aMap2[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES"));
+    aMap2[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO"));
     m_aIntValueRange[18] = aMap2;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -1046,8 +1046,8 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
 
     ::std::map< sal_Int32,::rtl::OUString> aMap3;
     aMap3[0]                    = ::rtl::OUString();
-    aMap3[DB_COLLATION_ASC]     = ::rtl::OUString::createFromAscii("A");
-    aMap3[DB_COLLATION_DESC]    = ::rtl::OUString::createFromAscii("D");
+    aMap3[DB_COLLATION_ASC]     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A"));
+    aMap3[DB_COLLATION_DESC]    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D"));
 
     m_aIntValueRange[21] = aMap3;
 
@@ -1068,8 +1068,8 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aColMapping.push_back(7);
 
     ::std::map< sal_Int32,::rtl::OUString> aMap;
-    aMap[0] = ::rtl::OUString::createFromAscii("YES");
-    aMap[1] = ::rtl::OUString::createFromAscii("NO");
+    aMap[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES"));
+    aMap[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO"));
     m_aIntValueRange[7] = aMap;
 
 
@@ -1095,11 +1095,11 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_aColMapping.push_back(18);
 
     ::std::map< ::rtl::OUString,sal_Int32> aMap;
-    aMap[ ::rtl::OUString::createFromAscii("CASCADE")] = KeyRule::CASCADE;
-    aMap[ ::rtl::OUString::createFromAscii("RESTRICT")] = KeyRule::RESTRICT;
-    aMap[ ::rtl::OUString::createFromAscii("SET NULL")] = KeyRule::SET_NULL;
-    aMap[ ::rtl::OUString::createFromAscii("SET DEFAULT")] = KeyRule::SET_DEFAULT;
-    aMap[ ::rtl::OUString::createFromAscii("NO ACTION")] = KeyRule::NO_ACTION;
+    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CASCADE"))] = KeyRule::CASCADE;
+    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESTRICT"))] = KeyRule::RESTRICT;
+    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET NULL"))] = KeyRule::SET_NULL;
+    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET DEFAULT"))] = KeyRule::SET_DEFAULT;
+    aMap[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO ACTION"))] = KeyRule::NO_ACTION;
 
     m_aStrValueRange[14] = aMap;
     m_aStrValueRange[15] = aMap;
@@ -1216,3 +1216,4 @@ OLEVariant ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex ) throw(SQ
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,20 +46,16 @@ DLLPRE=
 
 SLOFILES=$(SLO)$/shellexec.obj\
     $(SLO)$/shellexecentry.obj
-    
+
 SHL1OBJS=$(SLOFILES) 
-    
+
 SHL1TARGET=syssh.uno
-.IF "$(GUI)" == "OS2"
-SHL1IMPLIB=i$(TARGET)
-.ELSE
 SHL1IMPLIB=
-.ENDIF
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-                    
+
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)

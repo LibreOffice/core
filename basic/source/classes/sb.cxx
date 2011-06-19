@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,8 @@
 #include <tools/rcid.h>
 #include <tools/config.hxx>
 #include <tools/stream.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <basic/sbx.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
@@ -55,20 +53,17 @@
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include "errobject.hxx"
-#include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 using namespace ::com::sun::star::script;
-
-// #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
 SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
 
@@ -81,9 +76,6 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
-
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 
 // ============================================================================
 
@@ -173,7 +165,9 @@ void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ ) thr
 namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
-typedef std::map< const StarBASIC*, DocBasicItemRef > DocBasicItemMap;
+typedef boost::unordered_map< const StarBASIC *, DocBasicItemRef > DocBasicItemMap;
+    //    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
+
 static DocBasicItemMap GaDocBasicItems;
 
 const DocBasicItem* lclFindDocBasicItem( const StarBASIC* pDocBasic )
@@ -243,6 +237,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
+        const String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
     }
     return pVBAGlobals;
@@ -251,6 +246,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
 //  i#i68894#
 SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
 {
+    const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
     if( rName == aThisComponent )
         return NULL;
     // rename to init globals
@@ -266,7 +262,7 @@ struct SFX_VB_ErrorItem
     SbError nErrorSFX;
 };
 
-const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
+const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 {
     { 1, SbERR_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
     { 2, SbERR_SYNTAX },
@@ -470,7 +466,7 @@ SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const String& aType );   // sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType );  // sbunoobj.cxx
 
 SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 {
@@ -547,12 +543,12 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 SbxBase* pParObj = pVar->GetObject();
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
                 SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
-                sal_Int32 lb = 0;
-                sal_Int32 ub = 0;
 
                 pDest->setHasFixedSize( pSource->hasFixedSize() );
                 if ( pSource->GetDims() && pSource->hasFixedSize() )
                 {
+                    sal_Int32 lb = 0;
+                    sal_Int32 ub = 0;
                     for ( sal_Int32 j = 1 ; j <= pSource->GetDims(); ++j )
                     {
                         pSource->GetDim32( (sal_Int32)j, lb, ub );
@@ -675,7 +671,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethod = pIfaceMethod->getImplMethod();
             if( !pImplMethod )
             {
-                DBG_ERROR( "No ImplMethod" );
+                OSL_FAIL( "No ImplMethod" );
                 continue;
             }
 
@@ -685,7 +681,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
             if( !pImplMethodCopy )
             {
-                DBG_ERROR( "Found no ImplMethod copy" );
+                OSL_FAIL( "Found no ImplMethod copy" );
                 continue;
             }
             SbIfaceMapperMethod* pNewIfaceMethod =
@@ -707,7 +703,6 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             pProcedureProp->SetFlag( SBX_NO_BROADCAST );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
-                // ( pProcedureProp->GetName(), pProcedureProp->GetType(), this );
             pNewProp->SetFlags( nFlags_ ); // Copy flags
             pNewProp->ResetFlag( SBX_NO_BROADCAST ); // except the Broadcast if it was set
             pProcedureProp->SetFlags( nFlags_ );
@@ -1019,7 +1014,6 @@ void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
     {
-//      DBG_ASSERT( sal_False, "Warnung: inkompatibler BASIC-Stand!" );
         n = sizeof( StarBASIC );
     }
     return ::operator new( n );
@@ -1166,7 +1160,6 @@ struct ClassModuleRunInitItem
     SbModule*       m_pModule;
     bool            m_bProcessing;
     bool            m_bRunInitDone;
-    //ModuleVector  m_vModulesDependingOnThisModule;
 
     ClassModuleRunInitItem( void )
         : m_pModule( NULL )
@@ -1180,18 +1173,17 @@ struct ClassModuleRunInitItem
     {}
 };
 
-// Derive from has_map type instead of typedef
+// Derive from unordered_map type instead of typedef
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
-    std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
-        ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+    boost::unordered_map< ::rtl::OUString, ClassModuleRunInitItem,
+                          ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 {};
 
 void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )
 {
     rItem.m_bProcessing = true;
 
-    //bool bAnyDependencies = true;
     SbModule* pModule = rItem.m_pModule;
     if( pModule->pClassData != NULL )
     {
@@ -1210,7 +1202,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
                     if( rParentItem.m_bProcessing )
                     {
                         // TODO: raise error?
-                        DBG_ERROR( "Cyclic module dependency detected" );
+                        OSL_FAIL( "Cyclic module dependency detected" );
                         continue;
                     }
 
@@ -1229,7 +1221,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
+    SolarMutexGuard guard;
 
     // Init own modules
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
@@ -1361,7 +1353,6 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
             sal_Int32 nType = p->GetModuleType();
             if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 continue;
-
             // otherwise check if the element is available
             // unset GBLSEARCH-Flag (due to Rekursion)
             sal_uInt16 nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
@@ -1517,7 +1508,7 @@ sal_uInt16 StarBASIC::StepPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
         return BreakHdl();
 }
 
-sal_uInt16 __EXPORT StarBASIC::BreakHdl()
+sal_uInt16 StarBASIC::BreakHdl()
 {
     return (sal_uInt16) ( aBreakHdl.IsSet()
         ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE );
@@ -1550,14 +1541,14 @@ SbLanguageMode StarBASIC::GetLanguageMode()
         return eLanguageMode;
 }
 
-// AB: 29.3.96
-// Das Mapping zwischen alten und neuen Fehlercodes erfolgt, indem die Tabelle
-// SFX_VB_ErrorTab[] durchsucht wird. Dies ist zwar nicht besonders performant,
-// verbraucht aber viel weniger Speicher als entsprechende switch-Bloecke.
-// Die Umrechnung von Fehlercodes muss nicht schnell sein, daher auch keine
-// binaere Suche bei VB-Error -> SFX-Error.
+// From 1996-03-29:
+// The mapping between the old and the new error codes take place by searching
+// through the table SFX_VB_ErrorTab[]. This is indeed not with good performance,
+// but it consumes much less memory than corresponding switch blocs.
+// Because the conversion of error codes has not to be fast. there is no
+// binaere search by VB-Error -> SFX-Error.
 
-// Neue Fehler-Codes auf alte, Sbx-Kompatible zurueckmappen
+// Map back new error codes to old, Sbx-compatible
 sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
 {
     sal_uInt16 nRet = 0;
@@ -1583,7 +1574,7 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
         }
     }
 
-    // Suchschleife
+    // search loop
     const SFX_VB_ErrorItem* pErrItem;
     sal_uInt16 nIndex = 0;
     do
@@ -1596,7 +1587,7 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
@@ -1642,15 +1633,15 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
             break;
         }
         else if( pErrItem->nErrorVB > nError )
-            break;              // kann nicht mehr gefunden werden
+            break;              // couldn't found anymore
 
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // bis End-Marke
+    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
     return nRet;
 }
 
-// Error- / Break-Daten setzen
+// set Error- / Break-data
 void StarBASIC::SetErrorData
 ( SbError nCode, sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 )
 {
@@ -1662,8 +1653,8 @@ void StarBASIC::SetErrorData
 }
 
 //----------------------------------------------------------------
-// Hilfsklasse zum Zugriff auf String SubResourcen einer Resource.
-// Quelle: sfx2\source\doc\docfile.cxx (TLX)
+// help class for access to string SubResource of a Resource.
+// Source: sfx2\source\doc\docfile.cxx (TLX)
 struct BasicStringList_Impl : private Resource
 {
     ResId aResId;
@@ -1678,7 +1669,7 @@ struct BasicStringList_Impl : private Resource
 };
 //----------------------------------------------------------------
 
-// #60175 Flag, das bei Basic-Fehlern das Anziehen der SFX-Resourcen verhindert
+// Flag, that prevent the activation of the SFX-Resources at a Basic error
 static sal_Bool bStaticSuppressSfxResource = sal_False;
 
 void StarBASIC::StaticSuppressSfxResource( sal_Bool bSuppress )
@@ -1695,7 +1686,7 @@ sal_Bool runsInSetup( void )
 
 void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     if( bStaticSuppressSfxResource )
     {
@@ -1705,15 +1696,15 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
-    // Hilfsklasse instanzieren
+    // intantiate the help class
     BasResId aId( RID_BASIC_START );
     BasicStringList_Impl aMyStringList( aId, sal_uInt16(nId & ERRCODE_RES_MASK) );
 
     if( aMyStringList.IsErrorTextAvailable() )
     {
-        // Merge Message mit Zusatztext
+        // merge message with additional text
         String aMsg1 = aMyStringList.GetString();
-        // Argument-Platzhalter durch %s ersetzen
+        // replace argument placeholder with %s
         String aSrgStr( RTL_CONSTASCII_USTRINGPARAM("$(ARG1)") );
         sal_uInt16 nResult = aMsg1.Search( aSrgStr );
 
@@ -1739,9 +1730,9 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
 sal_Bool StarBASIC::CError
     ( SbError code, const String& rMsg, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
-    // Compiler-Fehler waehrend der Laufzeit -> Programm anhalten
+    // compiler error during runtime -> stop programm
     if( IsRunning() )
     {
         // #109018 Check if running Basic is affected
@@ -1752,13 +1743,13 @@ sal_Bool StarBASIC::CError
         Stop();
     }
 
-    // Flag setzen, damit GlobalRunInit den Fehler mitbekommt
+    // set flag, so that GlobalRunInit notice the error
     GetSbData()->bGlobalInitErr = sal_True;
 
-    // Fehlertext basteln
+    // tinker the error message
     MakeErrorText( code, rMsg );
 
-    // Umsetzung des Codes fuer String-Transport in SFX-Error
+    // Implementation of the code for the string transport to SFX-Error
     if( rMsg.Len() )
         code = (sal_uIntPtr)*new StringErrorInfo( code, String(rMsg) );
 
@@ -1769,7 +1760,7 @@ sal_Bool StarBASIC::CError
         bRet = (sal_Bool) GetSbData()->aErrHdl.Call( this );
     else
         bRet = ErrorHdl();
-    GetSbData()->bCompiler = sal_False;     // nur sal_True fuer Error-Handler
+    GetSbData()->bCompiler = sal_False;     // only true for error handler
     return bRet;
 }
 
@@ -1781,14 +1772,14 @@ sal_Bool StarBASIC::RTError
 
 sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     SbError c = code;
     if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )
         c = 0;
     MakeErrorText( c, rMsg );
 
-    // Umsetzung des Codes fuer String-Transport in SFX-Error
+    // Implementation of the code for the string transport to SFX-Error
     if( rMsg.Len() )
     {
         // very confusing, even though MakeErrorText sets up the error text
@@ -1845,7 +1836,7 @@ SbError StarBASIC::GetErrBasic()
         return 0;
 }
 
-// #66536 Zusatz-Message fuer RTL-Funktion Error zugreifbar machen
+// make the additional message for the RTL function error accessible
 String StarBASIC::GetErrorMsg()
 {
     if( pINST )
@@ -1862,7 +1853,7 @@ sal_uInt16 StarBASIC::GetErl()
         return 0;
 }
 
-sal_Bool __EXPORT StarBASIC::ErrorHdl()
+sal_Bool StarBASIC::ErrorHdl()
 {
     return (sal_Bool) ( aErrorHdl.IsSet()
         ? aErrorHdl.Call( this ) : sal_False );
@@ -1938,7 +1929,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
             return sal_False;
         else if( pMod->ISA(SbJScriptModule) )
         {
-            // Ref zuweisen, damit pMod deleted wird
+            // assign Ref, so that pMod will be deleted
             SbModuleRef xRef = pMod;
         }
         else
@@ -1947,15 +1938,15 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
             pModules->Put( pMod, i );
         }
     }
-    // HACK fuer SFX-Mist!
+    // HACK for SFX-Bullshit!
     SbxVariable* p = Find( String( RTL_CONSTASCII_USTRINGPARAM("FALSE") ), SbxCLASS_PROPERTY );
     if( p )
         Remove( p );
     p = Find( String( RTL_CONSTASCII_USTRINGPARAM("TRUE") ), SbxCLASS_PROPERTY );
     if( p )
         Remove( p );
-    // Ende des Hacks!
-    // Suche ueber StarBASIC ist immer global
+    // End of the hacks!
+    // Search via StarBASIC is at all times global
     DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic ohne GBLSEARCH geladen" );
     SetFlag( SBX_GBLSEARCH );
     return sal_True;
@@ -2314,3 +2305,4 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
         SetError( SbERR_BAD_ARGUMENT );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

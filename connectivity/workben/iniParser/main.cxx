@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,14 @@
 #include <stdio.h>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
-using namespace rtl;
 
 #include <map>
 #include <list>
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 struct ini_NameValue
 {
@@ -96,7 +101,7 @@ public:
             sal_uInt64 nSize = 0;
 
             osl_getFileSize(handle, &nSize);
-            OUString sectionName = OUString::createFromAscii("no name section");
+            OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
             while (true)
             {
                 sal_uInt64 nPos;
@@ -127,7 +132,7 @@ public:
                         sectionName =  OStringToOUString(
                             line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                         if (!sectionName.getLength())
-                            sectionName = OUString::createFromAscii("no name section");
+                            sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
 
                         ini_Section *aSection = &mAllSection[sectionName];
                         aSection->sName = sectionName;
@@ -175,7 +180,7 @@ public:
 
 };
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -183,7 +188,9 @@ int _cdecl main( int argc, char * argv[] )
 
 {
 
-    IniParser parser(OUString::createFromAscii("test.ini"));
+    IniParser parser(OUString(RTL_CONSTASCII_USTRINGPARAM("test.ini")));
     parser.Dump();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

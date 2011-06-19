@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/families.hxx>
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 
 using namespace ::std;
 using ::rtl::OUString;
@@ -176,10 +175,6 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
 // if not added, yet.
 //
 
-/*OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
-                                         const OUString& rParent,
-                                        const vector< XMLPropertyState >& rProperties,
-                                        sal_Bool bCache )*/
 sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
@@ -222,10 +217,9 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
         if( bCache )
         {
             if( !pFamily->pCache )
-                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
-            if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
-                pFamily->pCache->Insert( new OUString( rName ),
-                                         pFamily->pCache->Count() );
+                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
+            if( pFamily->pCache->size() < MAX_CACHE_SIZE )
+                pFamily->pCache->push_back( new OUString( rName ) );
         }
     }
 
@@ -289,10 +283,9 @@ OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
     if( pFamily )
     {
         if( !pFamily->pCache )
-            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
-        if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
-            pFamily->pCache->Insert( new OUString( rParent ),
-                                     pFamily->pCache->Count() );
+            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
+        if( pFamily->pCache->size() < MAX_CACHE_SIZE )
+            pFamily->pCache->push_back( new OUString( rParent ) );
     }
 
     return rParent;
@@ -351,9 +344,10 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
         // The cache may be empty already. This happens if it was filled
         // completly.
-        if( pFamily->pCache && pFamily->pCache->Count() )
+        if( pFamily->pCache && !pFamily->pCache->empty() )
         {
-            OUString *pName = pFamily->pCache->Remove( 0UL );
+            OUString *pName = (*pFamily->pCache)[ 0 ];
+            pFamily->pCache->erase( pFamily->pCache->begin() );
             sName = *pName;
             delete pName;
         }
@@ -412,11 +406,11 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         {
             const SvXMLAutoStylePoolParentP_Impl* pParent =
                 pParents->GetObject( i );
-            sal_uInt32 nProperties = pParent->GetPropertiesList().Count();
-            for( sal_uInt32 j=0; j < nProperties; j++ )
+            size_t nProperties = pParent->GetPropertiesList().size();
+            for( size_t j = 0; j < nProperties; j++ )
             {
-                const SvXMLAutoStylePoolPropertiesP_Impl *pProperties =
-                    pParent->GetPropertiesList().GetObject( j );
+                const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
+                    pParent->GetPropertiesList()[ j ];
                 nPos = pProperties->GetPos();
                 DBG_ASSERT( nPos < nCount,
                         "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
@@ -525,3 +519,5 @@ void SvXMLAutoStylePoolP_Impl::ClearEntries()
     for(sal_uInt32 a = 0L; a < maFamilyList.Count(); a++)
         maFamilyList[a]->ClearEntries();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,10 +37,11 @@
 #include "requeststringresolver.hxx"
 #include "passwordcontainer.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 //============================================================================
 //
@@ -47,8 +49,7 @@ using namespace com::sun::star::registry;
 //
 //============================================================================
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -60,7 +61,7 @@ component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
 //
 //============================================================================
 
-extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                         void * pServiceManager,
                         void *)
 {
@@ -128,3 +129,5 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

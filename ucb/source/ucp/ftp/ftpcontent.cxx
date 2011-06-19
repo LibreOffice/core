@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,6 @@
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
-//#include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 
@@ -177,10 +177,10 @@ XTYPEPROVIDER_IMPL_6( FTPContent,
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
 
 XSERVICEINFO_IMPL_1( FTPContent,
-                     rtl::OUString::createFromAscii(
-                         "com.sun.star.comp.FTPContent"),
-                     rtl::OUString::createFromAscii(
-                         "com.sun.star.ucb.FTPContent"));
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.FTPContent")),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.ucb.FTPContent")));
 
 
 
@@ -194,7 +194,7 @@ XSERVICEINFO_IMPL_1( FTPContent,
 rtl::OUString SAL_CALL FTPContent::getContentType()
     throw( RuntimeException )
 {
-    return rtl::OUString::createFromAscii(FTP_CONTENT_TYPE);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FTP_CONTENT_TYPE));
 }
 
 
@@ -375,7 +375,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = rtl::OUString::createFromAscii("Uri");
+                    value.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri"));
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -410,7 +410,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = rtl::OUString::createFromAscii("Uri");
+                    value.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri"));
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -435,8 +435,8 @@ Any SAL_CALL FTPContent::execute(
                 if(!(aCommand.Argument >>= Properties))
                 {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Wrong argument type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -450,8 +450,8 @@ Any SAL_CALL FTPContent::execute(
 
                 if( ! ( aCommand.Argument >>= propertyValues ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Wrong argument type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -472,8 +472,8 @@ Any SAL_CALL FTPContent::execute(
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Wrong argument type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -488,8 +488,8 @@ Any SAL_CALL FTPContent::execute(
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Wrong argument type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
 
@@ -533,7 +533,7 @@ Any SAL_CALL FTPContent::execute(
                             Sequence<Any> seq(1);
                             PropertyValue value;
                             value.Name =
-                                rtl::OUString::createFromAscii("Uri");
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri"));
                             value.Handle = -1;
                             value.Value <<= m_aFTPURL.ident(false,false);
                             value.State = PropertyState_DIRECT_VALUE;
@@ -584,8 +584,8 @@ Any SAL_CALL FTPContent::execute(
                 }
                 else {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Unexpected OpenMode!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Unexpected OpenMode!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
 
@@ -597,8 +597,8 @@ Any SAL_CALL FTPContent::execute(
                     ucbhelper::cancelCommandExecution(
                         makeAny(
                             IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                    "Wrong argument type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1)),
                         Environment);
@@ -635,13 +635,13 @@ Any SAL_CALL FTPContent::execute(
         }
 }
 
-#define FTP_FILE rtl::OUString::createFromAscii(     \
+#define FTP_FILE rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(     \
                                    "application/"    \
-                                   "vnd.sun.staroffice.ftp-file")
+                                   "vnd.sun.staroffice.ftp-file"))
 
-#define FTP_FOLDER rtl::OUString::createFromAscii(     \
+#define FTP_FOLDER rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(     \
                                    "application/"    \
-                                   "vnd.sun.staroffice.ftp-folder")
+                                   "vnd.sun.staroffice.ftp-folder"))
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
@@ -662,7 +662,7 @@ FTPContent::queryCreatableContentsInfo_Static(  )
         | ContentInfoAttribute::KIND_DOCUMENT;
     Sequence< Property > props( 1 );
     props[0] = Property(
-        rtl::OUString::createFromAscii( "Title" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
         -1,
         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
         PropertyAttribute::MAYBEVOID
@@ -681,10 +681,10 @@ Reference<XContent > SAL_CALL
 FTPContent::createNewContent( const ContentInfo& Info )
     throw (RuntimeException)
 {
-    if(Info.Type.equalsAscii("application/"
-                             "vnd.sun.staroffice.ftp-file") ||
-       Info.Type.equalsAscii("application/"
-                             "vnd.sun.staroffice.ftp-folder"))
+    if(Info.Type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/"
+                             "vnd.sun.staroffice.ftp-file")) ||
+       Info.Type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/"
+                             "vnd.sun.staroffice.ftp-folder")))
         return new FTPContent(m_xSMgr,
                               m_pFCP,
                               m_xIdentifier,Info);
@@ -762,7 +762,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
     if(m_bInserted && !m_bTitleSet) {
         MissingPropertiesException excep;
         excep.Properties.realloc(1);
-        excep.Properties[0] = rtl::OUString::createFromAscii("Title");
+        excep.Properties[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         Any aAny; aAny <<= excep;
         ucbhelper::cancelCommandExecution(aAny,Env);
     }
@@ -895,7 +895,7 @@ Sequence<Any> FTPContent::setPropertyValues(
 
     osl::MutexGuard aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
-        if(seqPropVal[i].Name.equalsAscii("Title")) {
+        if(seqPropVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title"))) {
             rtl::OUString Title;
             if(!(seqPropVal[i].Value >>= Title)) {
                 ret[i] <<= IllegalTypeException();
@@ -915,7 +915,7 @@ Sequence<Any> FTPContent::setPropertyValues(
                     rtl::OUString OldTitle = m_aFTPURL.ren(Title);
                     evt.realloc(1);
                     evt[0].PropertyName =
-                        rtl::OUString::createFromAscii("Title");
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
                     evt[0].Further = false;
                     evt[0].PropertyHandle = -1;
                     evt[0].OldValue <<= OldTitle;
@@ -936,8 +936,8 @@ Sequence<Any> FTPContent::setPropertyValues(
             for(sal_Int32 j = 0; j < props.getLength(); ++j)
                 if(props[j].Name == seqPropVal[i].Name) {
                     ret[i] <<= IllegalAccessException(
-                        rtl::OUString::createFromAscii(
-                            "Property is read-only!"),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "Property is read-only!")),
                             //props[j].Attributes & PropertyAttribute::READONLY
                             //    ? "Property is read-only!"
                             //    : "Access denied!"),
@@ -955,3 +955,5 @@ Sequence<Any> FTPContent::setPropertyValues(
 
     return ret;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

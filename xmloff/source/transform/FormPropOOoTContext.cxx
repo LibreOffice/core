@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,10 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "IgnoreTContext.hxx"
-#ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
-#endif
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "FormPropOOoTContext.hxx"
 
 using ::rtl::OUString;
@@ -312,3 +309,5 @@ void XMLFormPropOOoTransformerContext::EndElement()
                                                     m_xAttrList );
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

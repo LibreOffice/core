@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,10 +102,10 @@ public:
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
 
     /// set configuration at document; calls ProcessSettings
-    // --> OD 2005-01-31 #i40579# - move code from <CreateAndInsertLate(..)>
-    // to <Finish(..)>, because at this time all styles it references have been set.
+    /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
+       at this time all styles it references have been set. (#i40579#)
+    */
     virtual void Finish( sal_Bool bOverwrite);
-    // <--
 
     /// set configuration at document
     void ProcessSettings(
@@ -119,3 +120,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

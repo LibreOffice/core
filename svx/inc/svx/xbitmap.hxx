@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _SVX_XBITMAP_HXX
 
 #include <tools/color.hxx>
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 #include <svtools/grfmgr.hxx>
 #include <svx/xenum.hxx>
 #include "svx/svxdllapi.h"
@@ -39,10 +38,6 @@
 //---------------
 // class XOBitmap
 //---------------
-
-#if defined HP9000 || defined SINIX
-static Size aXOBitmapDefaultSize( 8, 8 );
-#endif
 
 class SVX_DLLPUBLIC XOBitmap
 {
@@ -60,15 +55,9 @@ public:
     XOBitmap();
     XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eStyle = XBITMAP_TILE );
     XOBitmap( const Bitmap& rBitmap, XBitmapStyle eStyle = XBITMAP_TILE );
-#if defined HP9000 || defined SINIX
-    XOBitmap( const sal_uInt16* pArray, const Color& aPixelColor,
-             const Color& aBckgrColor, const Size& rSize = aXOBitmapDefaultSize,
-             XBitmapStyle eStyle = XBITMAP_TILE );
-#else
     XOBitmap( const sal_uInt16* pArray, const Color& aPixelColor,
              const Color& aBckgrColor, const Size& rSize = Size( 8, 8 ),
              XBitmapStyle eStyle = XBITMAP_TILE );
-#endif
     XOBitmap( const XOBitmap& rXBmp );
     ~XOBitmap();
 
@@ -98,3 +87,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

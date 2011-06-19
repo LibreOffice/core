@@ -59,6 +59,7 @@ SHL1STDLIBS=                     \
     $(COMPHELPERLIB)         \
     $(SALLIB)                \
     $(EXPATASCII3RDLIB)      \
+    $(UNOTOOLSLIB)           \
     $(UCBHELPERLIB)          \
         $(BERKELEYLIB)           \
         $(XSLTLIB)
@@ -76,7 +77,6 @@ DEF1NAME=$(SHL1TARGET)
 
 ZIP1TARGET=helpxsl
 ZIP1FLAGS= -u -r
-#ZIP1DIR=$(PRJ)$/source$/auxiliary
 ZIP1LIST=main_transform*.xsl idxcaption.xsl idxcontent.xsl
 
 

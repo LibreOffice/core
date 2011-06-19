@@ -104,7 +104,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_1
     {
@@ -147,7 +147,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_2
     {
@@ -190,7 +190,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_3
     {
@@ -233,7 +233,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        CustomUnitText = "%" ;
     };
     ListBox LB_4
     {
@@ -308,11 +308,6 @@ DockingWindow RID_SVXDLG_BMPMASK
         MASKCOLOR
     };
 
-    Image IMG_PIPETTE_H
-    {
-        ImageBitmap = Bitmap { File = "sc10350_h.bmp" ; };
-        MASKCOLOR
-    };
 };
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP

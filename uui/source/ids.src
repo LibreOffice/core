@@ -403,6 +403,11 @@ Resource RID_UUI_ERRHDL
         Text [ en-US ] = "Security Warning: Server Certificate Invalid";
     };
 
+    String (ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "Component cannot be loaded, possibly broken or incomplete installation.\nFull error message:\n\n $(ARG1).";
+    };
+
 
 };
 

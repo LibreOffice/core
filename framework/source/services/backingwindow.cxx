@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,8 @@
 #include "classes/fwkresid.hxx"
 #include <services.h>
 
+#include <sal/macros.h>
+
 #include "vcl/metric.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/menu.hxx"
@@ -45,6 +48,7 @@
 #include "unotools/historyoptions.hxx"
 #include "svtools/imagemgr.hxx"
 #include "svtools/svtools.hrc"
+#include "svtools/langhelp.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
@@ -186,7 +190,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     }
 
     String aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
-    String aRegHelpText( FwkResId( STR_BACKING_REGHELP ) );
     String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
     String aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
 
@@ -214,12 +217,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.SetItemText( nItemId_Extensions, aExtHelpText );
     maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
     maToolbox.ShowItem( nItemId_Extensions );
-
-    maToolbox.InsertItem( nItemId_Reg, Image() );
-    maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemCommand( nItemId_Reg, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Register" ) ) );
-    maToolbox.ShowItem( nItemId_Reg );
 
     maToolbox.InsertItem( nItemId_Info, Image() );
     maToolbox.SetItemText( nItemId_Info, aInfoHelpText );
@@ -413,14 +410,16 @@ void BackingWindow::initBackground()
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
-    ImageContainerRes aRes( FwkResId( bDark ? RES_BACKING_IMAGES_HC : RES_BACKING_IMAGES ) );
+    ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
 
     // scale middle segment
     Size aMiddleSize;
     if( !! maBackgroundMiddle )
         aMiddleSize = maBackgroundMiddle.GetSizePixel();
     // load middle segment
-    maBackgroundMiddle = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) );
+
+    Application::LoadBrandBitmap ("shell/backing_space", maBackgroundMiddle);
+
     // and scale it to previous size
     if( aMiddleSize.Width() && aMiddleSize.Height() )
         maBackgroundMiddle.Scale( aMiddleSize );
@@ -428,16 +427,15 @@ void BackingWindow::initBackground()
     if( GetSettings().GetLayoutRTL() )
     {
         // replace images by RTL versions
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_RIGHT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_LEFT) );
+        Application::LoadBrandBitmap ("shell/backing_rtl_right", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_rtl_left", maBackgroundRight);
     }
     else
     {
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
+        Application::LoadBrandBitmap ("shell/backing_left", maBackgroundLeft);
+        Application::LoadBrandBitmap ("shell/backing_right", maBackgroundRight);
     }
     maToolbox.SetItemImage( nItemId_Extensions, BitmapEx( FwkResId( BMP_BACKING_EXT ) ) );
-    maToolbox.SetItemImage( nItemId_Reg, BitmapEx( FwkResId( BMP_BACKING_REG ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
     maToolbox.SetItemImage( nItemId_TplRep, BitmapEx( FwkResId( BMP_BACKING_TPLREP ) ) );
 
@@ -675,7 +673,7 @@ void BackingWindow::layoutButton(
                           const String& i_rStr
                           )
 {
-    rtl::OUString aURL( rtl::OUString::createFromAscii( i_pURL ? i_pURL : "" ) );
+    rtl::OUString aURL( i_pURL ? rtl::OUString::createFromAscii( i_pURL ) : rtl::OUString() );
     // setup button
     i_rBtn.SetPaintTransparent( sal_True );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
@@ -694,7 +692,7 @@ void BackingWindow::layoutButton(
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
     nTextWidth += maButtonImageSize.Width() + 8; // add some fuzz to be on the safe side
-    if( nColumn >= 0 && nColumn < static_cast<int>(sizeof(mnColumnWidth)/sizeof(mnColumnWidth[0])) )
+    if( nColumn >= 0 && nColumn < static_cast<int>(SAL_N_ELEMENTS(mnColumnWidth)) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
             mnColumnWidth[nColumn] = nTextWidth;
@@ -958,41 +956,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
                     Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
                     sURL = value.get<rtl::OUString> ();
-
-                    // extend the URLs with Office locale argument
-                    INetURLObject aURLObj( sURL );
-
-                    rtl::OUString sParam = aURLObj.GetParam();
-                    rtl::OUStringBuffer aURLBuf( sParam );
-                    if ( sParam.getLength() > 0 )
-                        aURLBuf.appendAscii( "&" );
-                    aURLBuf.appendAscii( "lang=" );
-
-                    // read locale from configuration
-                    ::rtl::OUString sLocale;
-                    ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup");
-                    ::rtl::OUString sRelPath = ::rtl::OUString::createFromAscii("L10N");
-                    ::rtl::OUString sKey     = ::rtl::OUString::createFromAscii("ooLocale");
-
-                    try
-                    {
-                        ::comphelper::ConfigurationHelper::readDirectKey(comphelper::getProcessServiceFactory(),
-                                                                         sPackage,
-                                                                         sRelPath,
-                                                                         sKey,
-                                                                         ::comphelper::ConfigurationHelper::E_READONLY) >>= sLocale;
-                    }
-                    catch(const com::sun::star::uno::RuntimeException& exRun)
-                        { throw exRun; }
-                    catch(const com::sun::star::uno::Exception&)
-                    { sLocale = ::rtl::OUString::createFromAscii("en-US"); }
-
-                    aURLBuf.append(sLocale);
-
-                    sParam = aURLBuf.makeStringAndClear();
-
-                    aURLObj.SetParam( sParam );
-                    sURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+                    localizeWebserviceURI(sURL);
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                         comphelper::getProcessServiceFactory()->createInstance(
@@ -1032,8 +996,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(OPEN_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1043,8 +1007,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1123,7 +1087,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     aDispatchURL.Complete = i_rURL;
 
     Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ),
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
         com::sun::star::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
     {
@@ -1154,3 +1118,4 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

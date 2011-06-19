@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,8 +106,8 @@ protected:
     sal_Bool                    bLastObjWasLine;
 
 protected:
-    void DoAction(MetaPixelAction           & rAct);
-    void DoAction(MetaPointAction           & rAct);
+    void DoAction(MetaPixelAction           & rAct) const;
+    void DoAction(MetaPointAction           & rAct) const;
     void DoAction(MetaLineAction            & rAct);
     void DoAction(MetaRectAction            & rAct);
     void DoAction(MetaRoundRectAction       & rAct);
@@ -143,7 +144,7 @@ protected:
     void DoAction(MetaRenderGraphicAction& rAct);
 
     void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
-    void SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr=sal_False);
+    void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj( SdrObject* pObj, sal_Bool bScale = sal_True );
     void MapScaling();
 
@@ -165,3 +166,5 @@ public:
 
 #endif //_SVDFMTF_HXX
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

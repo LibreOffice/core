@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,14 +157,14 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW");
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
         if(bIsView) // here we have a view
-            aSql += ::rtl::OUString::createFromAscii("VIEW ");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
         else
-            aSql += ::rtl::OUString::createFromAscii("TABLE ");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
 
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );
@@ -241,3 +242,5 @@ void OTables::addComment(const Reference< XPropertySet >& descriptor,::rtl::OUSt
         _rOut.appendAscii("'");
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,7 +63,11 @@ IDLFILES=\
     XFontBase.idl\
     XDialogsBase.idl\
     XDialogBase.idl\
-    XPageSetupBase.idl
+    XPageSetupBase.idl \
+    XFileSearch.idl\
+    XFoundFiles.idl\
+    XFileDialog.idl \
+    XFileDialogSelectedItems.idl
 
 # ------------------------------------------------------------------
 .ENDIF

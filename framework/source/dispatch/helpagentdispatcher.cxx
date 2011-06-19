@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -228,7 +229,7 @@ void HelpAgentDispatcher::implts_acceptCurrentURL()
     // show the right help content
     // SOLAR SAFE ->
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         Help* pHelp = Application::GetHelp();
         if (pHelp)
             pHelp->Start(sAcceptedURL, NULL);
@@ -265,7 +266,7 @@ void HelpAgentDispatcher::implts_stopTimer()
     // Timer access needs no "own lock" ! It lives if we live ...
     // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         if (! m_aTimer.IsActive())
             return;
         m_aTimer.Stop();
@@ -280,7 +281,7 @@ void HelpAgentDispatcher::implts_startTimer()
     // Timer access needs no "own lock" ! It lives if we live ...
     // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         if (m_aTimer.IsActive())
             return;
     }
@@ -301,7 +302,7 @@ void HelpAgentDispatcher::implts_startTimer()
     // Timer access needs no "own lock" ! It lives if we live ...
     // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         m_aTimer.SetTimeout(nTime*1000); // sec => ms !
         m_aTimer.Start();
     }
@@ -410,7 +411,7 @@ css::uno::Reference< css::awt::XWindow > HelpAgentDispatcher::implts_ensureAgent
     ::svt::HelpAgentWindow* pAgentWindow = 0;
     // SOLAR SAFE ->
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         // create the agent window
         Window* pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
                 pAgentWindow     = new ::svt::HelpAgentWindow(pContainerWindow);
@@ -430,7 +431,7 @@ css::uno::Reference< css::awt::XWindow > HelpAgentDispatcher::implts_ensureAgent
 
     // SOLAR SAFE ->
     {
-        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        SolarMutexGuard aSolarLock;
         // establish callback for our internal used timer.
         // Note: Its only active, if the timer will be started ...
         m_aTimer.SetTimeoutHdl(LINK(this, HelpAgentDispatcher, implts_timerExpired));
@@ -442,3 +443,4 @@ css::uno::Reference< css::awt::XWindow > HelpAgentDispatcher::implts_ensureAgent
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

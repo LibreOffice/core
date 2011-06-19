@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,19 +42,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  Dragging, Handles, Create
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sal_uInt32 SdrTextObj::GetHdlCount() const
 {
@@ -97,19 +85,19 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     Rectangle aTmpRect(aRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
-    FASTBOOL bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
-    FASTBOOL bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
-    FASTBOOL bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
+    bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
+    bool bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
+    bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:
     if (aGeo.nDrehWink!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
     // Unshear:
     if (aGeo.nShearWink!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
     //
-    FASTBOOL bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
-    FASTBOOL bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
-    FASTBOOL bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
-    FASTBOOL bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
+    bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
+    bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
+    bool bTop=(eHdl==HDL_UPRGT || eHdl==HDL_UPPER || eHdl==HDL_UPLFT);
+    bool bBtm=(eHdl==HDL_LWRGT || eHdl==HDL_LOWER || eHdl==HDL_LWLFT);
     if (bLft) aTmpRect.Left()  =aPos.X();
     if (bRgt) aTmpRect.Right() =aPos.X();
     if (bTop) aTmpRect.Top()   =aPos.Y();
@@ -121,8 +109,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
         long nXDiv=nWdt0;
         long nYDiv=nHgt0;
-        FASTBOOL bXNeg=(nXMul<0)!=(nXDiv<0);
-        FASTBOOL bYNeg=(nYMul<0)!=(nYDiv<0);
+        bool bXNeg=(nXMul<0)!=(nXDiv<0);
+        bool bYNeg=(nYMul<0)!=(nYDiv<0);
         nXMul=Abs(nXMul);
         nYMul=Abs(nYMul);
         nXDiv=Abs(nXDiv);
@@ -134,7 +122,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nXDiv=aXFact.GetDenominator();
         nYDiv=aYFact.GetDenominator();
         if (bEcke) { // Eckpunkthandles
-            FASTBOOL bUseX=(aXFact<aYFact) != bBigOrtho;
+            bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
@@ -204,17 +192,17 @@ String SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create
 
-FASTBOOL SdrTextObj::BegCreate(SdrDragStat& rStat)
+bool SdrTextObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
-    return sal_True;
+    return true;
 }
 
-FASTBOOL SdrTextObj::MovCreate(SdrDragStat& rStat)
+bool SdrTextObj::MovCreate(SdrDragStat& rStat)
 {
     Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
@@ -226,10 +214,10 @@ FASTBOOL SdrTextObj::MovCreate(SdrDragStat& rStat)
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
     }
-    return sal_True;
+    return true;
 }
 
-FASTBOOL SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aRect);
     ImpJustifyRect(aRect);
@@ -260,9 +248,9 @@ void SdrTextObj::BrkCreate(SdrDragStat& /*rStat*/)
 {
 }
 
-FASTBOOL SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
+bool SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_True;
+    return true;
 }
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) const
@@ -283,3 +271,4 @@ Pointer SdrTextObj::GetCreatePointer() const
     return Pointer(POINTER_CROSS);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include "rtl/uri.h"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "dp_identifier.hxx"
 #include "dp_persmap.h"
@@ -204,3 +205,5 @@ void ActivePackages::erase(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

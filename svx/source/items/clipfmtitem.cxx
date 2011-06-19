@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ SvxClipboardFmtItem::~SvxClipboardFmtItem()
     delete pImpl;
 }
 
-sal_Bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_uInt16 nCount = Count();
 
@@ -93,10 +94,10 @@ sal_Bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uI
     }
 
     rVal <<= aClipFormats;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
@@ -108,10 +109,10 @@ sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, 
         for ( sal_uInt16 n=0; n < nCount; n++ )
             AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
@@ -178,3 +179,4 @@ const String& SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

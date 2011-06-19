@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -109,7 +110,7 @@ void SvxFillToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    bool bEnableControls = sal_False;
+    bool bEnableControls = false;
 
     if ( bIgnoreStatusUpdate )
         return;
@@ -152,7 +153,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pColorItem = (XFillColorItem*) pState->Clone();
 
                     if( eXFS == XFILL_SOLID )
-                        bEnableControls = sal_True;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_GRADIENT )
                 {
@@ -160,7 +161,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pGradientItem = (XFillGradientItem*) pState->Clone();
 
                     if( eXFS == XFILL_GRADIENT )
-                        bEnableControls = sal_True;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_HATCH )
                 {
@@ -168,7 +169,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pHatchItem = (XFillHatchItem*) pState->Clone();
 
                     if( eXFS == XFILL_HATCH )
-                        bEnableControls = sal_True;
+                        bEnableControls = true;
                 }
                 else if( nSID == SID_ATTR_FILL_BITMAP )
                 {
@@ -176,7 +177,7 @@ void SvxFillToolBoxControl::StateChanged(
                     pBitmapItem = (XFillBitmapItem*) pState->Clone();
 
                     if( eXFS == XFILL_BITMAP )
-                        bEnableControls = sal_True;
+                        bEnableControls = true;
                 }
             }
             if( bEnableControls )
@@ -445,7 +446,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Flaechentyp" );
+                OSL_FAIL( "Nicht unterstuetzter Flaechentyp" );
             break;
         }
     }
@@ -819,9 +820,6 @@ void FillControl::Resize()
     pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
     pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
 }
-/* -----------------------------08.03.2002 15:04------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -844,3 +842,4 @@ void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

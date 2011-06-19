@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _FORMULA_CORE_RESOURCE_HXX_
 #define _FORMULA_CORE_RESOURCE_HXX_
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 class ResMgr;
@@ -109,3 +108,4 @@ namespace formula
 
 #endif // _FORMULA_CORE_RESOURCE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

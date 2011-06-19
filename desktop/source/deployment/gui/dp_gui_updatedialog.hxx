@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include "svx/checklbx.hxx"
 #include "tools/link.hxx"
 #include "tools/solar.h"
-#ifndef _SV_BUTTON_HXX
 #include "vcl/button.hxx"
-#endif
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include <svtools/fixedhyper.hxx>
@@ -122,8 +121,7 @@ private:
     public:
         CheckListBox(
             UpdateDialog & dialog, ResId const & resource,
-            Image const & normalStaticImage,
-            Image const & highContrastStaticImage);
+            Image const & normalStaticImage);
 
         virtual ~CheckListBox();
 
@@ -230,3 +228,5 @@ private:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

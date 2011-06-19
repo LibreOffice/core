@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,18 +42,12 @@
 
 #ifndef _TOOLS_DATE_HXX
 #include <tools/date.hxx>
-
 #include <tools/string.hxx>
-
 #endif
 
 #include <tools/time.hxx>
 #include <tools/fldunit.hxx>
 
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
@@ -61,7 +56,6 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -69,6 +63,9 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
@@ -88,12 +85,6 @@ void SvXMLUnitConverter::initXMLStrings()
 
 void SvXMLUnitConverter::createNumTypeInfo() const
 {
-    // #110680#
-    //Reference< lang::XMultiServiceFactory > xServiceFactory =
-    //        comphelper::getProcessServiceFactory();
-    //OSL_ENSURE( xServiceFactory.is(),
-    //        "XMLUnitConverter: got no service factory" );
-
     if( mxServiceFactory.is() )
     {
         ((SvXMLUnitConverter *)this)->xNumTypeInfo =
@@ -108,9 +99,6 @@ void SvXMLUnitConverter::createNumTypeInfo() const
     the default unit for textual measures
 */
 
-// #110680#
-//SvXMLUnitConverter::SvXMLUnitConverter( MapUnit eCoreMeasureUnit,
-//                                        MapUnit eXMLMeasureUnit ) :
 SvXMLUnitConverter::SvXMLUnitConverter(
     MapUnit eCoreMeasureUnit,
     MapUnit eXMLMeasureUnit,
@@ -148,11 +136,6 @@ MapUnit SvXMLUnitConverter::GetMapUnit(sal_Int16 nFieldUnit)
     case FUNIT_PICA:
         eUnit = MAP_POINT;
         break;
-//  case FUNIT_INCH:
-//  case FUNIT_FOOT:
-//  case FUNIT_MILE:
-//      eUnit = MAP_INCH;
-//      break;
     case FUNIT_100TH_MM:
         eUnit = MAP_100TH_MM;
         break;
@@ -280,11 +263,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('e'):
                 case sal_Unicode('E'):
-        //          pCmp1 = sXML_unit_em;
-        //          nToken1 = CSS1_EMS;
-
-        //          pCmp2 = sXML_unit_ex;
-        //          nToken2 = CSS1_EMX;
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
@@ -307,9 +285,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
                     aScales[1] = 12.*20.; // twip
-
-        //          pCmp3 = sXML_unit_px;
-        //          nToken3 = CSS1_PIXLENGTH;
                     break;
                 }
             }
@@ -326,11 +301,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('e'):
                 case sal_Unicode('E'):
-        //          pCmp1 = sXML_unit_em;
-        //          nToken1 = CSS1_EMS;
-
-        //          pCmp2 = sXML_unit_ex;
-        //          nToken2 = CSS1_EMX;
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
@@ -353,9 +323,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
                     aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
-
-        //          pCmp3 = sXML_unit_px;
-        //          nToken3 = CSS1_PIXLENGTH;
                     break;
                 }
             }
@@ -441,7 +408,7 @@ void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rBuffer,
 }
 
 /** convert string to boolean */
-sal_Bool SvXMLUnitConverter::convertBool( sal_Bool& rBool,
+sal_Bool SvXMLUnitConverter::convertBool( bool& rBool,
                                       const OUString& rString )
 {
     rBool = IsXMLToken(rString, XML_TRUE);
@@ -710,7 +677,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
 }
 
 /** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
     double fNumber, sal_Bool bWriteUnits) const
 {
     SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
@@ -718,7 +685,7 @@ void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
 }
 
 /** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer,
     double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
 {
     if(MAP_RELATIVE == eCoreUnit)
@@ -741,7 +708,7 @@ void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
 }
 
 /** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber)
+void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
 {
     ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
 }
@@ -765,7 +732,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
 
 /** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
+    const OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
@@ -782,7 +749,7 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue, const ::rtl::OUString& rString)
+sal_Bool SvXMLUnitConverter::convertDouble(double& rValue, const OUString& rString)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
@@ -796,13 +763,13 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     if (xNumberFormatsSupplier.is())
     {
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= aNullDate);
     }
     return sal_False;
 }
 
 /** convert double to ISO Time String; negative durations allowed */
-void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertTime( OUStringBuffer& rBuffer,
                             const double& fTime)
 {
 
@@ -861,7 +828,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
     rBuffer.append( sal_Int32( fSecsValue));
     if (f100SecsValue > 0.0)
     {
-        ::rtl::OUString a100th( ::rtl::math::doubleToUString( fValue,
+        OUString a100th( ::rtl::math::doubleToUString( fValue,
                     rtl_math_StringFormat_F, XML_MAXDIGITSCOUNT_TIME - 5, '.',
                     sal_True));
         if ( a100th.getLength() > 2 )
@@ -877,7 +844,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
 static bool lcl_convertTime( const ::rtl::OUString& rString, sal_Int32& o_rDays, sal_Int32& o_rHours, sal_Int32& o_rMins,
                         sal_Int32& o_rSecs, sal_Bool& o_rIsNegativeTime, double& o_rFractionalSecs )
 {
-    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
+    OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     // negative time duration?
@@ -963,7 +930,7 @@ static bool lcl_convertTime( const ::rtl::OUString& rString, sal_Int32& o_rDays,
             {
                 //! how many days is a year or month?
 
-                DBG_ERROR("years or months in duration: not implemented");
+                OSL_FAIL("years or months in duration: not implemented");
                 bSuccess = false;
             }
             else
@@ -1013,7 +980,7 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
 }
 
 /** convert util::DateTime to ISO Time String */
-void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertTime( OUStringBuffer& rBuffer,
                             const ::com::sun::star::util::DateTime& rDateTime )
 {
     double fHour = rDateTime.Hours;
@@ -1029,7 +996,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
 
 /** convert ISO Time String to util::DateTime */
 sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
-                             const ::rtl::OUString& rString )
+                             const OUString& rString )
 {
     sal_Int32 nDays = 0, nHours = 0, nMins = 0, nSecs = 0;
     sal_Bool bIsNegativeDuration = sal_False;
@@ -1050,7 +1017,7 @@ sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDat
 }
 
 /** convert double to ISO Date Time String */
-void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         const double& fDateTime,
         const com::sun::star::util::Date& aTempNullDate,
         sal_Bool bAddTimeIf0AM )
@@ -1138,7 +1105,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         rBuffer.append( sal_Int32( fSecsValue));
         if (f100SecsValue > 0.0)
         {
-            ::rtl::OUString a100th( ::rtl::math::doubleToUString( fValue,
+            OUString a100th( ::rtl::math::doubleToUString( fValue,
                         rtl_math_StringFormat_F,
                         XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True));
             if ( a100th.getLength() > 2 )
@@ -1152,7 +1119,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
-                            const ::rtl::OUString& rString, const com::sun::star::util::Date& aTempNullDate)
+                            const OUString& rString, const com::sun::star::util::Date& aTempNullDate)
 {
     com::sun::star::util::DateTime aDateTime;
     sal_Bool bSuccess = convertDateTime(aDateTime,rString);
@@ -1179,7 +1146,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 
 /** convert util::DateTime to ISO Date String */
 void SvXMLUnitConverter::convertDateTime(
-                ::rtl::OUStringBuffer& rBuffer,
+                OUStringBuffer& rBuffer,
                 const com::sun::star::util::DateTime& rDateTime,
                 sal_Bool bAddTimeIf0AM )
 {
@@ -1224,11 +1191,11 @@ void SvXMLUnitConverter::convertDateTime(
 
 /** convert ISO Date String to util::DateTime */
 sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const ::rtl::OUString& rString )
+                                     const OUString& rString )
 {
     sal_Bool bSuccess = sal_True;
 
-    rtl::OUString aDateStr, aTimeStr, sDoubleStr;
+    OUString aDateStr, aTimeStr, sDoubleStr;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
     sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
     if (nPos2 < 0)
@@ -1356,8 +1323,6 @@ sal_Int32 SvXMLUnitConverter::indexOfComma( const OUString& rStr,
     return -1;
 }
 
-// ---
-
 SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator /* = sal_Unicode(' ') */ )
 : maTokenString( rString ), mnNextTokenPos(0), mcSeperator( cSeperator )
 {
@@ -1389,7 +1354,6 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     return sal_True;
 }
 
-// ---
 bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
 {
     if(!_sValue.getLength() || _sValue[0] != '(')
@@ -1519,7 +1483,7 @@ const
 
 
 
-void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
+void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, OUStringBuffer& sBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
@@ -1572,21 +1536,21 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
-void SvXMLUnitConverter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+void SvXMLUnitConverter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
         ThreeByteToFourByte (pBuffer, i, nBufferLength, sBuffer);
         aStrBuffer.append(sBuffer);
         i += 3;
     }
 }
 
-void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUString& sBuffer)
+void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
 {
     sal_Int32 nCharsDecoded = decodeBase64SomeChars( aBuffer, sBuffer );
     OSL_ENSURE( nCharsDecoded == sBuffer.getLength(),
@@ -1596,7 +1560,7 @@ void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rt
 
 sal_Int32 SvXMLUnitConverter::decodeBase64SomeChars(
         uno::Sequence<sal_Int8>& rOutBuffer,
-        const rtl::OUString& rInBuffer)
+        const OUString& rInBuffer)
 {
     sal_Int32 nInBufferLen = rInBuffer.getLength();
     sal_Int32 nMinOutBufferLen = (nInBufferLen / 4) * 3;
@@ -1729,7 +1693,6 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
                            sal_Int16 nType ) const
 {
     enum XMLTokenEnum eFormat = XML_TOKEN_INVALID;
-    sal_Bool bExt = sal_False;
     switch( nType )
     {
     case NumberingType::CHARS_UPPER_LETTER:     eFormat = XML_A_UPCASE; break;
@@ -1747,7 +1710,6 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
         DBG_ASSERT( eFormat != XML_TOKEN_INVALID, "invalid number format" );
         break;
     default:
-        bExt = sal_True;
         break;
     }
 
@@ -1775,8 +1737,6 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
     case NumberingType::ROMAN_LOWER:
     case NumberingType::ARABIC:
     case NumberingType::NUMBER_NONE:
-        // default
-        // eSync = XML_FALSE;
         break;
 
     case NumberingType::CHARS_UPPER_LETTER_N:
@@ -1833,10 +1793,10 @@ void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>&
     }
 }
 
-void SvXMLUnitConverter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource)
+void SvXMLUnitConverter::clearUndefinedChars(OUString& rTarget, const OUString& rSource)
 {
     sal_uInt32 nLength(rSource.getLength());
-    rtl::OUStringBuffer sBuffer(nLength);
+    OUStringBuffer sBuffer(nLength);
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
         sal_Unicode cChar = rSource[i];
@@ -1902,8 +1862,8 @@ OUString SvXMLUnitConverter::encodeStyleName(
                                 ->xCharClass =
                                     Reference < XCharacterClassification >(
                                 mxServiceFactory->createInstance(
-                                    OUString::createFromAscii(
-                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( xCharClass.is(),
@@ -1975,10 +1935,10 @@ OUString SvXMLUnitConverter::encodeStyleName(
 }
 
 // static
-rtl::OUString SvXMLUnitConverter::convertTimeDuration( const Time& rTime, sal_Int32 nSecondsFraction )
+OUString SvXMLUnitConverter::convertTimeDuration( const Time& rTime, sal_Int32 nSecondsFraction )
 {
     //  return ISO time period string
-    rtl::OUStringBuffer sTmp;
+    OUStringBuffer sTmp;
     sTmp.append( sal_Unicode('P') );                // "period"
 
     sal_uInt16 nHours = rTime.GetHour();
@@ -2011,7 +1971,7 @@ rtl::OUString SvXMLUnitConverter::convertTimeDuration( const Time& rTime, sal_In
     if ( nSecondsFraction )
     {
         sTmp.append( sal_Unicode( '.' ) );
-        ::rtl::OUStringBuffer aFractional;
+        OUStringBuffer aFractional;
         convertNumber( aFractional, nSecondsFraction );
         sTmp.append( aFractional.getStr() );
     }
@@ -2021,9 +1981,9 @@ rtl::OUString SvXMLUnitConverter::convertTimeDuration( const Time& rTime, sal_In
 }
 
 // static
-bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time& rTime, sal_Int32* pSecondsFraction )
+bool SvXMLUnitConverter::convertTimeDuration( const OUString& rString, Time& rTime, sal_Int32* pSecondsFraction )
 {
-    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
+    OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
@@ -2105,7 +2065,7 @@ bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time
             {
                 //! how many days is a year or month?
 
-                DBG_ERROR("years or months in duration: not implemented");
+                OSL_FAIL("years or months in duration: not implemented");
                 bSuccess = false;
             }
             else
@@ -2124,8 +2084,8 @@ bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time
     return bSuccess;
 }
 
-sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
-                                              ::rtl::OUStringBuffer&    sType ,
+sal_Bool SvXMLUnitConverter::convertAny(      OUStringBuffer&    sValue,
+                                              OUStringBuffer&    sType ,
                                         const com::sun::star::uno::Any& aValue)
 {
     sal_Bool bConverted = sal_False;
@@ -2178,7 +2138,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
 
         case com::sun::star::uno::TypeClass_STRING :
             {
-                ::rtl::OUString sTempValue;
+                OUString sTempValue;
                 if (aValue >>= sTempValue)
                 {
                     sType.appendAscii("string");
@@ -2240,20 +2200,20 @@ sal_Bool SvXMLUnitConverter::convertAny(      ::rtl::OUStringBuffer&    sValue,
 }
 
 sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
-                                        const ::rtl::OUString&          sType ,
-                                        const ::rtl::OUString&          sValue)
+                                        const OUString&          sType ,
+                                        const OUString&          sValue)
 {
     sal_Bool bConverted = sal_False;
 
-    if (sType.equalsAscii("boolean"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
     {
-        sal_Bool bTempValue = sal_False;
+        bool bTempValue = false;
         SvXMLUnitConverter::convertBool(bTempValue, sValue);
         aValue <<= bTempValue;
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("integer"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("integer")))
     {
         sal_Int32 nTempValue = 0;
         SvXMLUnitConverter::convertNumber(nTempValue, sValue);
@@ -2261,7 +2221,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("float"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float")))
     {
         double fTempValue = 0.0;
         SvXMLUnitConverter::convertDouble(fTempValue, sValue);
@@ -2269,13 +2229,13 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("string"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("string")))
     {
         aValue <<= sValue;
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("date"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("date")))
     {
         com::sun::star::util::DateTime aTempValue;
         SvXMLUnitConverter::convertDateTime(aTempValue, sValue);
@@ -2283,7 +2243,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
         bConverted = sal_True;
     }
     else
-    if (sType.equalsAscii("time"))
+    if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("time")))
     {
         com::sun::star::util::DateTime aTempValue;
         com::sun::star::util::Time     aConvValue;
@@ -2298,3 +2258,5 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
 
     return bConverted;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,15 +43,13 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef __COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace framework
 {
@@ -60,7 +59,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
 
 {
     public:
-        // #110897#
         MenuBarWrapper(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~MenuBarWrapper();
@@ -107,3 +105,5 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
 } // namespace framework
 
 #endif // __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

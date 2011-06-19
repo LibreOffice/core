@@ -1,6 +1,9 @@
 application/vnd.oasis.opendocument.text:
 	ext: odt
 
+application/vnd.oasis.opendocument.text-flat-xml:
+	ext: fodt
+
 application/vnd.oasis.opendocument.text-template:
 	ext: ott
 
@@ -13,17 +16,26 @@ application/vnd.oasis.opendocument.text-master:
 application/vnd.oasis.opendocument.graphics:
 	ext: odg
 
+application/vnd.oasis.opendocument.graphics-flat-xml:
+	ext: fodg
+
 application/vnd.oasis.opendocument.graphics-template:
 	ext: otg
 
 application/vnd.oasis.opendocument.presentation:
 	ext: odp
 
+application/vnd.oasis.opendocument.presentation-flat-xml:
+	ext: fodp
+
 application/vnd.oasis.opendocument.presentation-template:
 	ext: otp
 
 application/vnd.oasis.opendocument.spreadsheet:
 	ext: ods
+
+application/vnd.oasis.opendocument.spreadsheet-flat-xml:
+	ext: fods
 
 application/vnd.oasis.opendocument.spreadsheet-template:
 	ext: ots

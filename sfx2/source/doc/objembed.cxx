@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,45 +135,6 @@ void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
                 SetModified( sal_True );
 
                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
-
-            /*
-            Size aSize (GetVisArea().GetSize());
-            if ( GetIPEnv() && GetIPEnv()->GetEditWin() )
-                ViewChanged( ASPECT_CONTENT );
-            */
-
-
-            // OutPlace die Gr"o\se des MDI-Fensters anpassen
-            // Unbedingt den Gr"o\senvergleich machen, spart nicht nur Zeit, sondern
-            // vermeidet auch Rundungsfehler !
-            /*
-                // in case of ole outplace editing the frame should be found
-                SfxViewFrame* pFrameToResize = pFrame ? pFrame : SfxViewFrame::GetFirst( GetObjectShell() );
-
-                if ( pFrameToResize && !pIPF && rRect.GetSize() != aSize &&
-                    !pFrameToResize->IsAdjustPosSizePixelLocked_Impl() )
-
-                {
-                    // Zuerst die logischen Koordinaten von IP-Objekt und EditWindow
-                    // ber"ucksichtigen
-                    SfxViewShell *pShell = pFrameToResize->GetViewShell();
-                    Window *pWindow = pShell->GetWindow();
-
-                    // Da in den Applikationen bei der R"ucktransformation immer die
-                    // Eckpunkte tranformiert werden und nicht die Size (um die Ecken
-                    // alignen zu k"onnen), transformieren wir hier auch die Punkte, um
-                    // m"oglichst wenig Rundungsfehler zu erhalten.
-                    Rectangle aRect = pWindow->LogicToPixel( rRect );
-                    Size aSize = aRect.GetSize();
-                    pShell->GetWindow()->SetSizePixel( aSize );
-                    pFrameToResize->DoAdjustPosSizePixel( pShell, Point(), aSize );
-                }
-
-            // bei InPlace die View skalieren
-            if ( GetIPEnv() && GetIPEnv()->GetEditWin() && !bDisableViewScaling && pIPF )
-                pIPF->GetEnv_Impl()->MakeScale( rRect.GetSize(), GetMapUnit(),
-                            pIPF->GetViewShell()->GetWindow()->GetOutputSizePixel() );
-           */
         }
     }
 }
@@ -232,9 +194,6 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
         Fraction aXF( rSize.Width(), aSize.Width() );
         Fraction aYF( rSize.Height(), aSize.Height() );
 
-//REMOVE            Point aOrg = rObjPos;
-//REMOVE            aMod.SetMapUnit( MAP_100TH_MM );
-//REMOVE            aSize = pDev->LogicToLogic( GetVisArea( nAspect ).GetSize(), &aMod, &aWilliMode );
         DoDraw_Impl( pDev, rObjPos, aXF, aYF, rSetup, nAspect );
     }
 }
@@ -253,15 +212,15 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     aMapMode.SetScaleX( rScaleX );
     aMapMode.SetScaleY( rScaleY );
 
-    // Ziel in Pixel
+    // Target in Pixels
     Point aOrg   = pDev->LogicToLogic( rViewPos, NULL, &aMapMode );
     Point aDelta = aOrg - aVisArea.TopLeft();
 
-    // Origin entsprechend zum sichtbaren Bereich verschieben
-    // Origin mit Scale setzen
+    // Origin moved according to the viewable area
+    // Origin set with Scale
     aMapMode.SetOrigin( aDelta );
 
-    // Deviceeinstellungen sichern
+    // Secure the Device settings
     pDev->Push();
 
     Region aRegion;
@@ -280,9 +239,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
         else
             pMtf = NULL;
     }
-// #ifndef UNX
     if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
-// #endif
     {
         aRegion = pDev->PixelToLogic( aRegion );
         pDev->SetClipRegion( aRegion );
@@ -290,14 +247,9 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     if( pMtf )
         pMtf->Record( pDev );
 
-//REMOVE        SvOutPlaceObjectRef xOutRef( this );
-//REMOVE        if ( xOutRef.Is() )
-//REMOVE            xOutRef->DrawObject( pDev, rSetup, rSize, nAspect );
-//REMOVE        else
         Draw( pDev, rSetup, nAspect );
-//REMOVE        DrawHatch( pDev, aVisArea.TopLeft(), aVisArea.GetSize() );
 
-    // Deviceeinstellungen wieder herstellen
+    // Restore Device settings
     pDev->Pop();
 
 }
@@ -315,3 +267,4 @@ void SfxObjectShell::ClearEmbeddedObjects()
     DELETEZ( pImp->mpObjectContainer );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

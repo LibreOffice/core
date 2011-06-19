@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,13 +36,11 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <rtl/uri.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>
@@ -151,8 +150,8 @@ namespace basprov
                 Reference< lang::XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
                 if ( xSMgr.is() )
                 {
-                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString::createFromAscii(
-                        "com.sun.star.uri.UriReferenceFactory" ), m_xContext ), UNO_QUERY );
+                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.uri.UriReferenceFactory" )), m_xContext ), UNO_QUERY );
                 }
 
                 if ( xUriFac.is() )
@@ -176,7 +175,7 @@ namespace basprov
                                 aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                                 Reference<util::XMacroExpander> xMacroExpander(
                                     m_xContext->getValueByName(
-                                    ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.util.theMacroExpander")) ),
                                     UNO_QUERY );
                                 if ( xMacroExpander.is() )
                                     aFileURL = xMacroExpander->expandMacros( aDecodedURL );
@@ -189,7 +188,7 @@ namespace basprov
             if ( aFileURL.getLength() )
             {
                 osl::DirectoryItem aFileItem;
-                osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+                osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 OSL_VERIFY( osl::DirectoryItem::get( aFileURL, aFileItem ) == osl::FileBase::E_None );
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
                 ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
@@ -241,7 +240,7 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( aArguments.getLength() != 1 )
         {
@@ -334,13 +333,13 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Reference< provider::XScript > xScript;
         Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
         Reference< uri::XUriReferenceFactory > xFac (
-            xMcFac->createInstanceWithContext( rtl::OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+            xMcFac->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory")), m_xContext ) , UNO_QUERY );
 
         if ( !xFac.is() )
         {
@@ -357,7 +356,7 @@ namespace basprov
 
         if ( !uriRef.is() || !sfUri.is() )
         {
-            ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "BasicProviderImpl::getScript: failed to parse URI: " );
+            ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("BasicProviderImpl::getScript: failed to parse URI: "));
             errorMsg = errorMsg.concat( scriptURI );
             throw provider::ScriptFrameworkErrorException(
                 errorMsg, Reference< XInterface >(),
@@ -368,10 +367,36 @@ namespace basprov
 
         ::rtl::OUString aDescription = sfUri->getName();
         ::rtl::OUString aLocation = sfUri->getParameter(
-            ::rtl::OUString::createFromAscii( "location" ) );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("location")) );
 
         sal_Int32 nIndex = 0;
-        ::rtl::OUString aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
+        // In some strange circumstances the Library name can have an
+        // apparantly illegal '.' in it ( in imported VBA )
+
+        BasicManager* pBasicMgr =  NULL;
+        if ( aLocation.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document")) ) )
+        {
+            pBasicMgr = m_pDocBasicManager;
+        }
+        else if ( aLocation.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application")) ) )
+        {
+            pBasicMgr = m_pAppBasicManager;
+        }
+        rtl::OUString sProjectName;
+        if (  pBasicMgr )
+            sProjectName = pBasicMgr->GetName();
+
+        ::rtl::OUString aLibrary;
+        if ( sProjectName.getLength() && aDescription.match( sProjectName ) )
+        {
+            OSL_TRACE("LibraryName %s is part of the url %s",
+                rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                rtl::OUStringToOString( aDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aLibrary = sProjectName;
+            nIndex = sProjectName.getLength() + 1;
+        }
+        else
+            aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
         ::rtl::OUString aModule;
         if ( nIndex != -1 )
             aModule = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
@@ -381,15 +406,6 @@ namespace basprov
 
         if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
         {
-            BasicManager* pBasicMgr =  NULL;
-            if ( aLocation.equals( ::rtl::OUString::createFromAscii("document") ) )
-            {
-                pBasicMgr = m_pDocBasicManager;
-            }
-            else if ( aLocation.equals( ::rtl::OUString::createFromAscii("application") ) )
-            {
-                pBasicMgr = m_pAppBasicManager;
-            }
 
             if ( pBasicMgr )
             {
@@ -451,16 +467,16 @@ namespace basprov
     {
         // TODO
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
-        return ::rtl::OUString::createFromAscii( "Basic" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
     }
 
     // -----------------------------------------------------------------------------
 
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Reference< script::XLibraryContainer > xLibContainer;
         BasicManager* pBasicManager = NULL;
@@ -518,7 +534,7 @@ namespace basprov
 
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Bool bReturn = sal_False;
         Reference< script::XLibraryContainer > xLibContainer;
@@ -540,7 +556,7 @@ namespace basprov
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::CONTAINER;
     }
@@ -597,3 +613,5 @@ extern "C"
             pImplName, pServiceManager, pRegistryKey, ::basprov::s_component_entries );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

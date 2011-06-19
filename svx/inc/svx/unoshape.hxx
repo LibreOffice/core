@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,12 +70,11 @@ class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
-// --> OD 2009-01-16 #i59051#
+// Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx
     {
         class B2DPolyPolygon;
     } // end of namespace basegfx
-// <--
 
 class SvxShapeMutex
 {
@@ -139,14 +139,11 @@ protected:
     // Umrechnungen fuer den Writer, der in TWIPS arbeitet
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
-    // --> OD 2009-01-16 #i59051#
+    // Dimension arrows change size/position on save/reload (#i59051#)
     void ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
     void ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw();
-    // <--
 
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const;
-
-    sal_Bool tryQueryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& rAny );
 
     sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName );
 
@@ -209,9 +206,6 @@ public:
         and the property found is returned instead of set at the object
         directly.
      */
-// os: unused function
-//    static ::com::sun::star::uno::Any SAL_CALL GetFillAttributeByName(
-//        const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel );
 
     UNO3_GETIMPLEMENTATION_DECL( SvxShape )
 
@@ -234,12 +228,6 @@ public:
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
-
-
-    /** @obsolete
-        not used anymore
-    */
-    virtual void onUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect);
 
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
@@ -839,7 +827,6 @@ protected:
 public:
     SvxCustomShape( SdrObject* pObj ) throw ();
     // overide these for special property handling in subcasses. Return true if property is handled
-    //virtual bool setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertyMapEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual bool getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 
@@ -890,3 +877,5 @@ protected:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

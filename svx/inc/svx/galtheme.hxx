@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,8 @@
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
 #include <svx/svdmodel.hxx>
-//#include <svx/galobj.hxx>
 #include <svx/galmisc.hxx>
-//#include <svx/gallery1.hxx>
+#include <vector>
 
 // -----------------
 // - GalleryObject -
@@ -59,7 +59,7 @@ struct GalleryObject
     sal_Bool            bDummy;
 };
 
-DECLARE_LIST( GalleryObjectList, GalleryObject* )
+typedef ::std::vector< GalleryObject* > GalleryObjectList;
 
 class GalleryThemeEntry;
 class SgaObject;
@@ -114,12 +114,20 @@ private:
 
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
-    sal_Bool                        ImplWriteSgaObject( const SgaObject& rObj, sal_uIntPtr nPos, GalleryObject* pExistentEntry );
+    sal_Bool                    ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
     void                        ImplRead();
     void                        ImplWrite();
-    const GalleryObject*        ImplGetGalleryObject( sal_uIntPtr nPos ) const { return aObjectList.GetObject( nPos ); }
+    const GalleryObject*        ImplGetGalleryObject( size_t nPos ) const
+                                { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : NULL; }
     SVX_DLLPUBLIC const GalleryObject*      ImplGetGalleryObject( const INetURLObject& rURL );
-    sal_uIntPtr                     ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
+
+    size_t                      ImplGetGalleryObjectPos( const GalleryObject* pObj ) const
+                                {
+                                    for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+                                        if ( pObj == aObjectList[ i ] )
+                                            return i;
+                                    return size_t(-1);
+                                }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPtr nFormat = CVT_UNKNOWN );
     void                        ImplSetModified( sal_Bool bModified );
@@ -133,14 +141,14 @@ public:
 
     static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, sal_Bool bReadOnly );
 
-    sal_uIntPtr                 GetObjectCount() const { return aObjectList.Count(); }
+    size_t                      GetObjectCount() const { return aObjectList.size(); }
 
-    SVX_DLLPUBLIC SgaObject*                    AcquireObject( sal_uIntPtr nPos );
-    SVX_DLLPUBLIC void                      ReleaseObject( SgaObject* pObj );
+    SVX_DLLPUBLIC SgaObject*    AcquireObject( size_t nPos );
+    SVX_DLLPUBLIC void          ReleaseObject( SgaObject* pObj );
 
-    SVX_DLLPUBLIC sal_Bool                      InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
-    SVX_DLLPUBLIC sal_Bool                      RemoveObject( sal_uIntPtr nPos );
-    sal_Bool                        ChangeObjectPos( sal_uIntPtr nOldPos, sal_uIntPtr nNewPos );
+    SVX_DLLPUBLIC bool          InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
+    SVX_DLLPUBLIC bool          RemoveObject( size_t nPos );
+    bool                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
     SVX_DLLPUBLIC const String& GetName() const;
     const String&               GetRealName() const;
@@ -229,3 +237,5 @@ SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme );
 SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _SBIMAGE_HXX
 
 #include "sbintern.hxx"
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include <filefmt.hxx>
 
 // Diese Klasse liest das vom Compiler erzeugte Image ein und verwaltet
@@ -88,7 +87,6 @@ public:
     ::rtl::OUString& GetSource32()  { return aOUSource; }
     sal_uInt16      GetBase() const     { return nDimBase;  }
     String      GetString( short nId ) const;
-    //const char* GetString( short nId ) const;
     const SbxObject*  FindType (String aTypeName) const;
 
     SbxArrayRef GetEnums()          { return rEnums; }
@@ -108,3 +106,5 @@ public:
 #define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

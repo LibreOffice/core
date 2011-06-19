@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #include <editdoc.hxx>
 #include <impedit.hxx>
 
-#ifndef SVX_LIGHT
-
 class EditNodeIdx : public SvxNodeIdx
 {
 private:
@@ -61,10 +60,10 @@ public:
     virtual sal_uLong   GetNodeIdx() const;
     virtual sal_uInt16  GetCntIdx() const;
 
-    // erzeuge von sich selbst eine Kopie
+    // clone
     virtual SvxPosition* Clone() const;
 
-    // erzeuge vom NodeIndex eine Kopie
+    // clone NodeIndex
     virtual SvxNodeIdx* MakeNodeIdx() const;
 };
 
@@ -124,5 +123,6 @@ SV_DECL_REF( EditRTFParser )
 SV_IMPL_REF( EditRTFParser );
 
 
-#endif  // !SVX_LIGH
 #endif  //_EERTFPAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

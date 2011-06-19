@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 
 #include <time.h>
 #include "sal/config.h"
+#include <sal/macros.h>
 #include "tools/pathutils.hxx"
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
@@ -119,7 +121,7 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
     {
         size_t len = lpLastSlash - pszFolder + 1;
         wcsncpy( szPattern, pszFolder, len );
-        wcsncpy( szPattern + len, TEXT("*.dll"), sizeof(szPattern)/sizeof(szPattern[0]) - len );
+        wcsncpy( szPattern + len, TEXT("*.dll"), SAL_N_ELEMENTS(szPattern) - len );
     }
 
     WIN32_FIND_DATA aFindFileData;
@@ -137,7 +139,7 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
             {
                 size_t len = lpLastSlash - pszFolder + 1;
                 wcsncpy( szLibFilePath, pszFolder, len );
-                wcsncpy( szLibFilePath + len, aFindFileData.cFileName, sizeof(szLibFilePath)/sizeof(szLibFilePath[0]) - len );
+                wcsncpy( szLibFilePath + len, aFindFileData.cFileName, SAL_N_ELEMENTS(szLibFilePath) - len );
             }
 
             rebaseImage( szLibFilePath, nNewImageBase );
@@ -185,3 +187,5 @@ extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ namespace css = ::com::sun::star;
 //  exported const
 //_________________________________________________________________________________________________________________
 
-#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")
+#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -292,3 +293,5 @@ sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&  
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

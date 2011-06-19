@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,8 @@ class SfxStyleSheetPool;
 
 class XEditAttribute
 {
-    friend class ContentInfo;   // fuer DTOR
-    friend class BinTextObject; // fuer DTOR
+    friend class ContentInfo;   // for destructor
+    friend class BinTextObject; // for destructor
 
 private:
     const SfxPoolItem*  pItem;
@@ -112,12 +113,16 @@ class XParaPortionList : public  XBaseParaPortionList
     sal_uIntPtr         nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
-    sal_uLong       nPaperWidth;
+    sal_uInt16  nStretchX;
+    sal_uInt16  nStretchY;
+    sal_uLong   nPaperWidth;
 
 
 public:
-            XParaPortionList( OutputDevice* pRefDev, sal_uLong nPW ) :
-                aRefMapMode( pRefDev->GetMapMode() )
+            XParaPortionList( OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY ) :
+                aRefMapMode( pRefDev->GetMapMode() ),
+                nStretchX(_nStretchX),
+                nStretchY(_nStretchY)
                 {
                     nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
                     eRefDevType = pRefDev->GetOutDevType();
@@ -127,6 +132,8 @@ public:
     sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
+    sal_uInt16  GetStretchX() const         { return nStretchX; }
+    sal_uInt16  GetStretchY() const         { return nStretchY; }
 };
 
 /* cl removed because not needed anymore since binfilter
@@ -153,10 +160,6 @@ private:
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
     WrongList*          pWrongs;
-
-/* cl removed because not needed anymore since binfilter
-    LoadStoreTempInfos* pTempLoadStoreInfos;
-*/
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
@@ -186,8 +189,6 @@ public:
 
 typedef ContentInfo* ContentInfoPtr;
 SV_DECL_PTRARR( ContentInfoList, ContentInfoPtr, 1, 4 )
-
-// MT 05/00: Sollte mal direkt EditTextObjekt werden => keine virtuellen Methoden mehr.
 
 class BinTextObject : public EditTextObject, public SfxItemPoolUser
 {
@@ -235,7 +236,7 @@ public:
     sal_uInt16                  GetScriptType() const;
     void                    SetScriptType( sal_uInt16 nType );
 
-    sal_uInt16                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    sal_uInt16                  GetVersion() const; // As long as the outliner does not store any record length
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
@@ -290,12 +291,6 @@ public:
     sal_Bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
     void                    StoreUnicodeStrings( sal_Bool b ) { bStoreUnicodeStrings = b; }
 
-/* cl removed because not needed anymore since binfilter
-    void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
-    void                    FinishStore();
-    void                    FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
-*/
-
     bool                    operator==( const BinTextObject& rCompare ) const;
 
     // #i102062#
@@ -307,3 +302,4 @@ public:
 
 #endif  // _EDITOBJ2_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,6 +57,7 @@ private:
     Edit            maPasswordED;
     FixedText       maConfirmFT;
     Edit            maConfirmED;
+    FixedText       maMinLengthFT;
     FixedLine       maPassword2Box;
     FixedText       maPassword2FT;
     Edit            maPassword2ED;
@@ -66,12 +68,18 @@ private:
     CancelButton    maCancelBtn;
     HelpButton      maHelpBtn;
 
-    sal_uInt16          mnMinLen;
-    sal_uInt16          mnExtras;
+    String          maConfirmStr;
+    String          maMinLenPwdStr;
+    String          maEmptyPwdStr;
+    String          maMainPwdStr;
+    sal_uInt16      mnMinLen;
+    sal_uInt16      mnExtras;
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
     DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
+
+    void            SetPasswdText();
 
 public:
     SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
@@ -95,3 +103,4 @@ public:
 
 #endif // #ifndef _SFX_PASSWD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

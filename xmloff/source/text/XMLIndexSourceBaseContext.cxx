@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
 
-static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
+static SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
     { XML_NAMESPACE_TEXT,
           XML_OUTLINE_LEVEL,
@@ -215,7 +216,7 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_RELATIVE_TABS:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
                 bRelativeTabs = bTmp;
@@ -275,3 +276,5 @@ SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

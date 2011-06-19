@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -193,7 +194,7 @@ namespace ucb { namespace ucp { namespace ext
             }
             break;
             default:
-                OSL_ENSURE( false, "DataSupplier::fetchData: unimplemented content type!" );
+                OSL_FAIL( "DataSupplier::fetchData: unimplemented content type!" );
                 break;
             }
         }
@@ -220,7 +221,7 @@ namespace ucb { namespace ucp { namespace ext
                 return sId;
         }
 
-        OSL_ENSURE( false, "DataSupplier::queryContentIdentifierString: illegal index, or illegal result entry id!" );
+        OSL_FAIL( "DataSupplier::queryContentIdentifierString: illegal index, or illegal result entry id!" );
         return ::rtl::OUString();
     }
 
@@ -343,7 +344,7 @@ namespace ucb { namespace ucp { namespace ext
         }
         break;
         default:
-            OSL_ENSURE( false, "DataSupplier::queryPropertyValues: unhandled case!" );
+            OSL_FAIL( "DataSupplier::queryPropertyValues: unhandled case!" );
             break;
         }
 
@@ -373,3 +374,5 @@ namespace ucb { namespace ucp { namespace ext
 //......................................................................................................................
 } } }   // namespace ucp::ext
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@
 #undef ITEMID_BRUSH
 #endif
 
-// Zeichenattribute....
+// Character Attributes....
 #define ITEMID_FONT             EE_CHAR_FONTINFO
 #define ITEMID_POSTURE          EE_CHAR_ITALIC
 #define ITEMID_WEIGHT           EE_CHAR_WEIGHT
@@ -104,7 +105,7 @@
 #define ITEMID_EMPHASISMARK     EE_CHAR_EMPHASISMARK
 #define ITEMID_CHARRELIEF       EE_CHAR_RELIEF
 
-// Absatzattribute
+// Paragraph Attributes
 #define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #define ITEMID_ADJUST           EE_PARA_JUST
 #define ITEMID_LINESPACING      EE_PARA_SBL
@@ -134,3 +135,4 @@
 
 #endif //_EEITEMID_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

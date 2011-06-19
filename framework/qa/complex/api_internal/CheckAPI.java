@@ -90,12 +90,6 @@ public class CheckAPI  {
         System.out.println("Start with test");
         // if test is idle for 5 minutes, assume that it hangs and kill it.
         // param.put("TimeOut", new Integer("300000"));
-/*        AppProvider office = (AppProvider)dcl.getInstance("helper.OfficeProvider");
-        Object msf = office.getManager(param);
-        if (msf == null) {
-            failed("Could not connect an Office.");
-        }
-        param.put("ServiceFactory",msf); */
         XMultiServiceFactory xMSF = getMSF();
         Object oObj = null;
         try {
@@ -180,7 +174,6 @@ public class CheckAPI  {
                 }
                 catch(java.lang.InterruptedException e) {}
                 OfficeProvider op = new OfficeProvider();
-                //                op.closeExistingOffice(param, true);
                 xMSF = (XMultiServiceFactory)op.getManager(param);
                 param.put("ServiceFactory",xMSF);
                 try {

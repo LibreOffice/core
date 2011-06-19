@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -172,7 +173,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
-    CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, ::rtl::OUString::createFromAscii("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
+    CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self"))); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
@@ -188,3 +189,5 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

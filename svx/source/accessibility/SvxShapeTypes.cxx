@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,14 +67,12 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_POLY_LINE_PATH:
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
-        // --> OD 2004-11-29 #i37790# - default accessiblility shape for
-        // com::sun::star::drawing::CustomShape
+        // Default accessiblility shape for
+        // com::sun::star::drawing::CustomShape (#i37790#)
         case DRAWING_CUSTOM:
-        // <--
-        // --> OD 2008-05-19 #i85429# - default accessiblility shape for
-        // com::sun::star::drawing::MediaShape
+        // Default accessiblility shape for
+        // com::sun::star::drawing::MediaShape (#i85429#)
         case DRAWING_MEDIA:
-        // <--
             return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_CONTROL:
@@ -96,112 +95,112 @@ AccessibleShape* CreateSvxAccessibleShape (
     }
 }
 
-
-
-ShapeTypeDescriptor aSvxShapeTypeList[] = {
-    ShapeTypeDescriptor (DRAWING_TEXT,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.TextShape"),
-        CreateSvxAccessibleShape),
-    ShapeTypeDescriptor (DRAWING_RECTANGLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.RectangleShape"),
-        CreateSvxAccessibleShape),
-    ShapeTypeDescriptor (   DRAWING_ELLIPSE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.EllipseShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CONTROL,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ControlShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CONNECTOR,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ConnectorShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_MEASURE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.MeasureShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_LINE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.LineShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_POLY_POLYGON,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyPolygonShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_POLY_LINE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyLineShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_OPEN_BEZIER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OpenBezierShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CLOSED_BEZIER,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedBezierShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_OPEN_FREEHAND,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OpenFreeHandShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CLOSED_FREEHAND,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.ClosedFreeHandShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_POLY_POLYGON_PATH,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyPolygonPathShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_POLY_LINE_PATH,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PolyLinePathShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_GRAPHIC_OBJECT,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.GraphicObjectShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_GROUP,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.GroupShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_OLE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.OLE2Shape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_PAGE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PageShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CAPTION,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.CaptionShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_FRAME,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.FrameShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_PLUGIN,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.PluginShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_APPLET,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.AppletShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_3D_SCENE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DSceneObject"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_3D_CUBE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DCubeObject"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_3D_SPHERE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DSphereObject"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_3D_LATHE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DLatheObject"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_3D_EXTRUDE,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DExtrudeObject"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_CUSTOM,
-        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.CustomShape"),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_TABLE,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ),
-        CreateSvxAccessibleShape ),
-    ShapeTypeDescriptor (   DRAWING_MEDIA,
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ),
-        CreateSvxAccessibleShape ),
-
-};
-
-
 void RegisterDrawShapeTypes (void)
 {
-    // --> OD 2004-11-26 #i37790#
+    /** List of shape type descriptors corresponding to the
+        <type>SvxShapeTypes</type> enum.
+    */
+    ShapeTypeDescriptor aSvxShapeTypeList[] = {
+        ShapeTypeDescriptor (DRAWING_TEXT,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TextShape")),
+            CreateSvxAccessibleShape),
+        ShapeTypeDescriptor (DRAWING_RECTANGLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")),
+            CreateSvxAccessibleShape),
+        ShapeTypeDescriptor (   DRAWING_ELLIPSE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.EllipseShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CONTROL,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CONNECTOR,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_MEASURE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MeasureShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_LINE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_POLY_POLYGON,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyPolygonShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_POLY_LINE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLineShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_OPEN_BEZIER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OpenBezierShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CLOSED_BEZIER,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ClosedBezierShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_OPEN_FREEHAND,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OpenFreeHandShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CLOSED_FREEHAND,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_POLY_POLYGON_PATH,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_POLY_LINE_PATH,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLinePathShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_GRAPHIC_OBJECT,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_GROUP,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_OLE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_PAGE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PageShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CAPTION,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_FRAME,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.FrameShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_PLUGIN,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PluginShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_APPLET,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.AppletShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_3D_SCENE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSceneObject")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_3D_CUBE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DCubeObject")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_3D_SPHERE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DSphereObject")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_3D_LATHE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DLatheObject")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_3D_EXTRUDE,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_CUSTOM,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_TABLE,
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ),
+            CreateSvxAccessibleShape ),
+        ShapeTypeDescriptor (   DRAWING_MEDIA,
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ),
+            CreateSvxAccessibleShape ),
+
+    };
+
+    // Crash while inserting callout with activated accesibility (#i37790#)
     ShapeTypeHandler::Instance().AddShapeTypeList ( DRAWING_END, aSvxShapeTypeList);
-    // <--
 }
 
-
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

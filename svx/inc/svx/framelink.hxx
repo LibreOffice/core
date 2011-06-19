@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,12 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
+#include <vcl/outdev.hxx>
+#include <editeng/borderline.hxx>
+
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 class OutputDevice;
-class SvxBorderLine;
 
 namespace svx {
 namespace frame {
@@ -112,50 +116,56 @@ class SVX_DLLPUBLIC Style
 {
 public:
     /** Constructs an invisible frame style. */
-    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnPrim( 0 ), mnDist( 0 ), mnSecn( 0 ), mbDotted( false ) {}
+    inline explicit     Style() : meRefMode( REFMODE_CENTERED ), mnType( editeng::SOLID ) { Clear(); }
     /** Constructs a frame style with passed line widths. */
-    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS ) :
-                            meRefMode( REFMODE_CENTERED ), mbDotted( false )
-                            { Set( nP, nD, nS ); }
+    inline explicit     Style( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
+                            meRefMode( REFMODE_CENTERED ), mnType( nType )
+                            { Clear(); Set( nP, nD, nS ); }
     /** Constructs a frame style with passed color and line widths. */
-    inline explicit     Style( const Color& rColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS ) :
-                            meRefMode( REFMODE_CENTERED ), mbDotted( false )
-                            { Set( rColor, nP, nD, nS ); }
+    inline explicit     Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS, editeng::SvxBorderStyle nType ) :
+                            meRefMode( REFMODE_CENTERED ), mnType( nType )
+                            { Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. */
-    inline explicit     Style( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16, bool /*bUseDots*/ = false ) :
+    inline explicit     Style( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
                             meRefMode( REFMODE_CENTERED ) { Set( rBorder, fScale, nMaxWidth ); }
     /** Constructs a frame style from the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    inline explicit     Style( const SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16, bool /*bUseDots*/ = false ) :
+    inline explicit     Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) :
                             meRefMode( REFMODE_CENTERED ) { Set( pBorder, fScale, nMaxWidth ); }
 
     inline RefMode      GetRefMode() const { return meRefMode; }
-    inline const Color& GetColor() const { return maColor; }
+    inline const Color& GetColorPrim() const { return maColorPrim; }
+    inline const Color& GetColorSecn() const { return maColorSecn; }
+    inline const Color& GetColorGap() const { return maColorGap; }
+    inline bool         UseGapColor() const { return mbUseGapColor; }
     inline sal_uInt16   Prim() const { return mnPrim; }
     inline sal_uInt16   Dist() const { return mnDist; }
     inline sal_uInt16   Secn() const { return mnSecn; }
-    inline bool         Dotted() const { return mbDotted; }
+    inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
     inline sal_uInt16   GetWidth() const { return mnPrim + mnDist + mnSecn; }
-
 
     /** Sets the frame style to invisible state. */
     void                Clear();
     /** Sets the frame style to the passed line widths. */
     void                Set( sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
     /** Sets the frame style to the passed line widths. */
-    void                Set( const Color& rColor, sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
+    void                Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
+                            sal_uInt16 nP, sal_uInt16 nD, sal_uInt16 nS );
     /** Sets the frame style to the passed SvxBorderLine struct. */
-    void                Set( const SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16, bool /*bUseDots*/ = false );
+    void                Set( const editeng::SvxBorderLine& rBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
     /** Sets the frame style to the passed SvxBorderLine struct. Clears the style, if pBorder is 0. */
-    void                Set( const SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16, bool /*bUseDots*/ = false );
+    void                Set( const editeng::SvxBorderLine* pBorder, double fScale = 1.0, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
 
     /** Sets a new reference point handling mode, does not modify other settings. */
     inline void         SetRefMode( RefMode eRefMode ) { meRefMode = eRefMode; }
     /** Sets a new color, does not modify other settings. */
-    inline void         SetColor( const Color& rColor ) { maColor = rColor; }
+    inline void         SetColorPrim( const Color& rColor ) { maColorPrim = rColor; }
+    inline void         SetColorSecn( const Color& rColor ) { maColorSecn = rColor; }
+    inline void         SetColorGap( bool bUseIt, const Color& rColor ) { maColorGap = rColor; mbUseGapColor = bUseIt; }
     /** Sets whether to use dotted style for single hair lines. */
-    inline void         SetDotted( bool bDotted ) { mbDotted = bDotted; }
+    inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 
     /** Scales the style by the specified scaling factor. Ensures that visible lines keep visible. */
     Style&              ScaleSelf( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
@@ -168,12 +178,15 @@ public:
     Style               Mirror() const;
 
 private:
-    Color               maColor;    /// The color of the line(s) of this frame border.
+    Color               maColorPrim;
+    Color               maColorSecn;
+    Color               maColorGap;
+    bool                mbUseGapColor;
     RefMode             meRefMode;  /// Reference point handling for this frame border.
     sal_uInt16          mnPrim;     /// Width of primary (single, left, or top) line.
     sal_uInt16          mnDist;     /// Distance between primary and secondary line.
     sal_uInt16          mnSecn;     /// Width of secondary (right or bottom) line.
-    bool                mbDotted;   /// true = Draw dotted lines; false = Draw solid lines.
+    editeng::SvxBorderStyle      mnType;
 };
 
 bool operator==( const Style& rL, const Style& rR );
@@ -483,6 +496,85 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
                     |       \                       /       |
                  rLFromB      \                   /      rRFromB
  */
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
+    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
+    const Style&        rBorder,        /// Style of the processed frame border.
+
+    const DiagStyle&    rLFromTR,       /// Diagonal frame border from top-right to left end of rBorder.
+    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
+    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
+    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
+    const DiagStyle&    rLFromBR,       /// Diagonal frame border from bottom-right to left end of rBorder.
+
+    const DiagStyle&    rRFromTL,       /// Diagonal frame border from top-left to right end of rBorder.
+    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
+    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
+    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
+    const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
+
+    const Color*        pForceColor = 0,/// If specified, overrides frame border color.
+    const long&         rRotationT = 9000, /// Angle of the top slanted frames in 100th of degree
+    const long&         rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
+);
+
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
+    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
+    const Style&        rBorder,        /// Style of the processed frame border.
+
+    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
+    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
+    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
+
+    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
+    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
+    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
+
+    const Color*        pForceColor = 0,/// If specified, overrides frame border color.
+    const long&         rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
+    const long&         rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
+);
+
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
+        const Point& rStart, const Point& rEnd, const Style& rBorder,
+        const Rectangle& rClipRect );
+
+/** Draws a horizontal frame border, regards all connected frame styles.
+
+    The frame style to draw is passed as parameter rBorder. The function
+    calculates the adjustment in X direction for left and right end of primary
+    and secondary line of the frame border (the style may present a double
+    line). The line ends may differ according to the connected frame styles
+    coming from top, bottom, left, right, and/or diagonal.
+
+    Thick frame styles are always drawn centered (in width) to the passed
+    reference points. The Y coordinates of both reference points must be equal
+    (the line cannot be drawn slanted).
+
+    The function preserves all settings of the passed output device.
+
+    All parameters starting with "rL" refer to the left end of the processed
+    frame border, all parameters starting with "rR" refer to the right end.
+    The following part of the parameter name starting with "From" specifies
+    where the frame border comes from. Example: "rLFromTR" means the frame
+    border coming from top-right, connected to the left end of rBorder (and
+    therefore a diagonal frame border).
+
+    The follong picture shows the meaning of all passed parameters:
+
+                 rLFromT      /                   \      rRFromT
+                    |       /                       \       |
+                    |   rLFromTR               rRFromTL     |
+                    |   /                               \   |
+                    | /                                   \ |
+    --- rLFromL ---   ============== rBorder ==============   --- rRFromR ---
+                    | \                                   / |
+                    |   \                               /   |
+                    |   rLFromBR               rRFromBL     |
+                    |       \                       /       |
+                 rLFromB      \                   /      rRFromB
+ */
 SVX_DLLPUBLIC void DrawHorFrameBorder(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
 
@@ -668,25 +760,6 @@ void SVX_DLLPUBLIC DrawVerFrameBorder(
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
 
-// ----------------------------------------------------------------------------
-
-/** Draws a vertical slanted frame border without connected frame styles.
-
-    This is an extended version of the simple DrawVerFrameBorder() function
-    described above. It accepts start and end reference points with different
-    X coordinates. See description above for additional details about the
-    parameters (except the restriction on the reference points).
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawVerFrameBorderSlanted(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-    const Point&        rTPos,          /// Reference point for top end of the processed frame border.
-    const Point&        rBPos,          /// Reference point for bottom end of the processed frame border.
-    const Style&        rBorder,        /// Style of the frame border to draw.
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
 // ============================================================================
 
 /** Draws both diagonal frame borders, regards all connected frame styles.
@@ -725,3 +798,4 @@ SVX_DLLPUBLIC void DrawDiagFrameBorders(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

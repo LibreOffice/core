@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,12 +125,19 @@ enum SvxCellHorJustify
     SVX_HOR_JUSTIFY_REPEAT
 };
 
+enum SvxCellJustifyMethod
+{
+    SVX_JUSTIFY_METHOD_AUTO,
+    SVX_JUSTIFY_METHOD_DISTRIBUTE
+};
+
 enum SvxCellVerJustify
 {
     SVX_VER_JUSTIFY_STANDARD,
     SVX_VER_JUSTIFY_TOP,
     SVX_VER_JUSTIFY_CENTER,
-    SVX_VER_JUSTIFY_BOTTOM
+    SVX_VER_JUSTIFY_BOTTOM,
+    SVX_VER_JUSTIFY_BLOCK
 };
 
 enum SvxCellOrientation
@@ -194,25 +202,27 @@ enum SvxSpellArea
 
 enum SvxFrameAnchor
 {
-    SVX_FLY_AT_CNTNT,       //Absatzgebundener Rahmen
-    SVX_FLY_IN_CNTNT,       //Zeichengebundener Rahmen
-    SVX_FLY_PAGE            //Seitengebundener Rahmen
+    SVX_FLY_AT_CNTNT,       // Paragraph-based frame
+    SVX_FLY_IN_CNTNT,       // Character-based frame
+    SVX_FLY_PAGE            // Page-based frame
 };
 
 enum SvxExtNumType
 {
-    SVX_NUM_CHARS_UPPER_LETTER, // zaehlt von a-z, aa - az, ba - bz, ...
+    SVX_NUM_CHARS_UPPER_LETTER, // Counts from a-z, aa - az, ba - bz, ...
     SVX_NUM_CHARS_LOWER_LETTER,
     SVX_NUM_ROMAN_UPPER,
     SVX_NUM_ROMAN_LOWER,
     SVX_NUM_ARABIC,
     SVX_NUM_NUMBER_NONE,
-    SVX_NUM_CHAR_SPECIAL,   //Bullet
-    SVX_NUM_PAGEDESC,       // Numerierung aus der Seitenvorlage
+    SVX_NUM_CHAR_SPECIAL,   // Bullet
+    SVX_NUM_PAGEDESC,       // Numbering from the page template
     SVX_NUM_BITMAP,
-    SVX_NUM_CHARS_UPPER_LETTER_N, // zaehlt von  a-z, aa-zz, aaa-zzz
+    SVX_NUM_CHARS_UPPER_LETTER_N, // Counts from  a-z, aa-zz, aaa-zzz
     SVX_NUM_CHARS_LOWER_LETTER_N
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

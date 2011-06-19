@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,20 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _RCID_H
 #include <tools/rcid.h>
-#endif
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <cppuhelper/implbase1.hxx>
-
-#ifndef GCC
-#endif
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
@@ -219,8 +213,8 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     SfxChildWinFactory* pFact=0;
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
 
-    // Zuerst ChildWindow im SDT suchen; "Uberlagerungen m"ussen mit einem
-    // ChildWindowContext realisiert werden
+    // First search for ChildWindow in SDT; "Overloading has to be realized
+    // by using ChildWindowContext
     SfxApplication *pApp = SFX_APP();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
@@ -282,12 +276,12 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     if ( pChild )
         pChild->SetFactory_Impl( pFact );
 
-    DBG_ASSERT(pFact && (pChild || !rInfo.bVisible), "ChildWindow-Typ nicht registriert!");
+    DBG_ASSERT(pFact && (pChild || !rInfo.bVisible), "ChildWindow-Typ not registered!");
 
     if ( pChild && !pChild->pWindow )
     {
         DELETEZ(pChild);
-        DBG_WARNING("ChildWindow hat kein Fenster!");
+        DBG_WARNING("ChildWindow has no Window!");
     }
 
     return pChild;
@@ -311,8 +305,6 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     }
 
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
-    // aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-    // aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
     aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
@@ -378,43 +370,6 @@ sal_uInt16 SfxChildWindow::GetPosition()
     return pImp->pFact->nPos;
 }
 
-#if 0
-static void ImplWindowStateFromStr( Point rPos, Size rSize, const ByteString& rStr )
-{
-    sal_uIntPtr       nValidMask  = 0;
-    xub_StrLen  nIndex      = 0;
-    ByteString  aTokenStr;
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rPos.X() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_X;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rPos.Y() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_Y;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ',', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rSize.Width() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_WIDTH;
-    }
-
-    aTokenStr = rStr.GetToken( 0, ';', nIndex );
-    if ( aTokenStr.Len() )
-    {
-        rSize.Height() = aTokenStr.ToInt32();
-        nValidMask |= WINDOWSTATE_MASK_HEIGHT;
-    }
-}
-#endif
-
 //-------------------------------------------------------------------------
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
 {
@@ -433,19 +388,18 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
     String aWinData( aTmp );
     rInfo.aWinState = ByteString( String(aWinOpt.GetWindowState()), RTL_TEXTENCODING_UTF8 );
 
-    //ImplWindowStateFromStr( rInfo.aPos, rInfo.aSize, ByteString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if ( aWinData.Len() )
     {
-        // Nach Versionskennung suchen
+        // Search for version ID
         if ( aWinData.GetChar((sal_uInt16)0) != 0x0056 ) // 'V' = 56h
-            // Keine Versionskennung, daher nicht verwenden
+            // A version ID, so do not use
             return;
 
-        // 'V' l"oschen
+        // Delete 'V'
         aWinData.Erase(0,1);
 
-        // Version lesen
+        // Read version
         char cToken = ',';
         sal_uInt16 nPos = aWinData.Search( cToken );
         sal_uInt16 nActVersion = (sal_uInt16)aWinData.Copy( 0, nPos + 1 ).ToInt32();
@@ -454,10 +408,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
 
         aWinData.Erase(0,nPos+1);
 
-        //aWinOpt.GetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-        //aWinOpt.GetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
-
-        // Sichtbarkeit laden: ist als ein char codiert
+        // Load Visibility: is coded as a char
         rInfo.bVisible = (aWinData.GetChar(0) == 0x0056); // 'V' = 56h
         aWinData.Erase(0,1);
         nPos = aWinData.Search( cToken );
@@ -466,7 +417,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
             sal_uInt16 nNextPos = aWinData.Search( cToken, 2 );
             if ( nNextPos != STRING_NOTFOUND )
             {
-                // es gibt noch Extra-Information
+                // there is extra information
                 rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1, nNextPos - nPos - 1 ).ToInt32();
                 aWinData.Erase( nPos, nNextPos-nPos+1 );
                 rInfo.aExtraString = aWinData;
@@ -495,7 +446,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                 pFact = rFactories[nFactory];
                 if ( pFact->nId == GetType() )
                 {
-                    DBG_ASSERT( pFact->pArr, "Kein Kontext angemeldet!" );
+                    DBG_ASSERT( pFact->pArr, "No context registered!" );
                     if ( !pFact->pArr )
                         break;
 
@@ -527,7 +478,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
             pFact = rFactories[nFactory];
             if ( pFact->nId == GetType() )
             {
-                DBG_ASSERT( pFact->pArr, "Kein Kontext angemeldet!" );
+                DBG_ASSERT( pFact->pArr, "No context registered!" );
                 if ( !pFact->pArr )
                     break;
 
@@ -552,7 +503,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
 
     if ( !pCon )
     {
-        DBG_ERROR( "Kein geeigneter Context gefunden!" );
+        OSL_FAIL( "No suitable context found! ");
         return;
     }
 
@@ -587,7 +538,7 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
     }
     else
     {
-        DBG_ERROR("Kein FloatingWindow-Context!");
+        OSL_FAIL("No FloatingWindow-Context!");
         return NULL;
     }
 }
@@ -661,7 +612,7 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     sal_uInt16          *pPos
 )   const
 {
-    // ung"ultig?
+    // invalid?
     if ( !aExtraString.Len() )
         return sal_False;
     String aStr;
@@ -669,8 +620,8 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     if ( nPos == STRING_NOTFOUND )
         return sal_False;
 
-    // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
-    // er nicht vorhanden ist, liegt eine "altere Version vor
+    // Try to read the alignment string "ALIGN :(...)", but if
+    // it is not present, then use an older version
     if ( nPos != STRING_NOTFOUND )
     {
         sal_uInt16 n1 = aExtraString.Search('(', nPos);
@@ -679,20 +630,20 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
             sal_uInt16 n2 = aExtraString.Search(')', n1);
             if ( n2 != STRING_NOTFOUND )
             {
-                // Alignment-String herausschneiden
+                // Cut out Alignment string
                 aStr = aExtraString.Copy(nPos, n2 - nPos + 1);
                 aStr.Erase(nPos, n1-nPos+1);
             }
         }
     }
 
-    // Zuerst das Alignment extrahieren
+    // First extract the Alignment
     if ( !aStr.Len() )
         return sal_False;
     if ( pAlign )
         *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.ToInt32();
 
-    // Dann das LastAlignment
+    // then the LastAlignment
     nPos = aStr.Search(',');
     if ( nPos == STRING_NOTFOUND )
         return sal_False;
@@ -700,10 +651,10 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     if ( pLastAlign )
         *pLastAlign = (SfxChildAlignment) (sal_uInt16) aStr.ToInt32();
 
-    // Dann die Splitting-Informationen
+    // Then the splitting information
     nPos = aStr.Search(',');
     if ( nPos == STRING_NOTFOUND )
-        // Dockt nicht in einem Splitwindow
+        // No docking in a Splitwindow
         return sal_True;
     aStr.Erase(0, nPos+1);
     Point aChildPos;
@@ -747,8 +698,6 @@ void SfxChildWindow::Hide()
     }
 }
 
-
-
 void SfxChildWindow::Show( sal_uInt16 nFlags )
 {
     switch ( pWindow->GetType() )
@@ -777,20 +726,14 @@ void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
-//SfxWorkWindow* SfxChildWindow::GetWorkWindow_Impl() const
-//{
-//  return pImp->pWorkWin;
-//}
-
 void SfxChildWindow::Activate_Impl()
 {
-    if(pImp->pWorkWin!=NULL) //@#60568#
+    if(pImp->pWorkWin!=NULL)
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
 void SfxChildWindow::Deactivate_Impl()
 {
-//  pImp->pWorkWin->SetActiveChild_Impl( NULL );
 }
 
 sal_Bool SfxChildWindow::QueryClose()
@@ -853,3 +796,4 @@ void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, SfxChildWinFactory* pF
     SFX_APP()->RegisterChildWindow_Impl( pMod, pFact );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

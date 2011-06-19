@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <svx/svdmodel.hxx>
 
-#include <rtl/uuid.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
@@ -82,6 +82,7 @@
 #include "editeng/forbiddencharacterstable.hxx"
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // #90477#
 #include <tools/tenccvt.hxx>
@@ -116,8 +117,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
     mpImpl->mpUndoFactory=0;
-    mpImpl->mbAllowShapePropertyChangeListener=false;
-    mbInDestruction=false;
+    mpImpl->mbAllowShapePropertyChangeListener = false;
+    mbInDestruction = false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
@@ -174,7 +175,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
-    mbModelLocked = sal_False;
+    mbModelLocked = false;
     mpOutlinerCache = NULL;
     mbKernAsianPunctuation = sal_False;
     mbAddExtLeading = sal_False;
@@ -234,7 +235,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
@@ -247,10 +248,10 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32)
 {
@@ -259,10 +260,10 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FAS
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     maMaPag(1024,32,32),
     maPages(1024,32,32),
     aTablePath(rPath)
@@ -272,7 +273,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
@@ -286,7 +287,7 @@ SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
 #endif
 
     // noch nicht implementiert
-    DBG_ERROR("SdrModel::CopyCtor() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::CopyCtor() ist noch nicht implementiert");
 }
 
 SdrModel::~SdrModel()
@@ -312,7 +313,7 @@ SdrModel::~SdrModel()
         aStr += ByteString(pAktUndoGroup->GetComment(), gsl_getSystemTextEncoding());
         aStr += '\"';
 
-        DBG_ERROR(aStr.GetBuffer());
+        OSL_FAIL(aStr.GetBuffer());
     }
 #endif
     if (pAktUndoGroup!=NULL)
@@ -395,26 +396,26 @@ const SvNumberFormatter& SdrModel::GetNumberFormatter() const
 // noch nicht implementiert:
 void SdrModel::operator=(const SdrModel& /*rSrcModel*/)
 {
-    DBG_ERROR("SdrModel::operator=() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::operator=() ist noch nicht implementiert");
 }
 
-FASTBOOL SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
+bool SdrModel::operator==(const SdrModel& /*rCmpModel*/) const
 {
-    DBG_ERROR("SdrModel::operator==() ist noch nicht implementiert");
+    OSL_FAIL("SdrModel::operator==() ist noch nicht implementiert");
     return sal_False;
 }
 
-void SdrModel::SetSwapGraphics( FASTBOOL bSwap )
+void SdrModel::SetSwapGraphics( bool bSwap )
 {
     bSwapGraphics = bSwap;
 }
 
-FASTBOOL SdrModel::IsReadOnly() const
+bool SdrModel::IsReadOnly() const
 {
     return bReadOnly;
 }
 
-void SdrModel::SetReadOnly(FASTBOOL bYes)
+void SdrModel::SetReadOnly(bool bYes)
 {
     bReadOnly=bYes;
 }
@@ -450,12 +451,12 @@ void SdrModel::ClearUndoBuffer()
     }
 }
 
-FASTBOOL SdrModel::Undo()
+bool SdrModel::Undo()
 {
-    FASTBOOL bRet=sal_False;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Undo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Undo(), method not supported with application undo manager!");
     }
     else
     {
@@ -474,12 +475,12 @@ FASTBOOL SdrModel::Undo()
     return bRet;
 }
 
-FASTBOOL SdrModel::Redo()
+bool SdrModel::Redo()
 {
-    FASTBOOL bRet=sal_False;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
     }
     else
     {
@@ -498,12 +499,12 @@ FASTBOOL SdrModel::Redo()
     return bRet;
 }
 
-FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
+bool SdrModel::Repeat(SfxRepeatTarget& rView)
 {
-    FASTBOOL bRet=sal_False;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::Redo(), method not supported with application undo manager!");
+        OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");
     }
     else
     {
@@ -513,7 +514,7 @@ FASTBOOL SdrModel::Repeat(SfxRepeatTarget& rView)
             if(pDo->CanRepeat(rView))
             {
                 pDo->Repeat(rView);
-                bRet=sal_True;
+                bRet = true;
             }
         }
     }
@@ -618,7 +619,7 @@ void SdrModel::BegUndo(SdrUndoGroup* pUndoGrp)
 {
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::BegUndo(), method not supported with application undo manager!" );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -681,7 +682,7 @@ void SdrModel::SetUndoComment(const XubString& rComment)
 
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
     else if( IsUndoEnabled() )
     {
@@ -697,7 +698,7 @@ void SdrModel::SetUndoComment(const XubString& rComment, const XubString& rObjDe
     DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is 0!");
     if( mpImpl->mpUndoManager )
     {
-        DBG_ERROR("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
+        OSL_FAIL("svx::SdrModel::SetUndoComment(), method not supported with application undo manager!" );
     }
     else
     {
@@ -808,7 +809,7 @@ SdrModel* SdrModel::AllocModel() const
     return pModel;
 }
 
-SdrPage* SdrModel::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdrModel::AllocPage(bool bMasterPage)
 {
     return new SdrPage(*this,bMasterPage);
 }
@@ -1085,6 +1086,9 @@ void SdrModel::ImpSetUIUnit()
         // sonstiges
         case FUNIT_CUSTOM : break;
         case FUNIT_PERCENT: nUIUnitKomma+=2; break;
+        // TODO: Add code to handle the following if needed (added to removed warning)
+        case FUNIT_CHAR   : break;
+        case FUNIT_LINE   : break;
     } // switch
 
     // check if mapping is from metric to inch and adapt
@@ -1221,20 +1225,17 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_100TH_MM:
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case FUNIT_MM     :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case FUNIT_CM     :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
         case FUNIT_M      :
@@ -1245,26 +1246,22 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("km"));
             break;
         }
         case FUNIT_TWIP   :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
         case FUNIT_POINT  :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case FUNIT_PICA   :
         {
-            sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pica"));
             break;
         }
         case FUNIT_INCH   :
@@ -1275,14 +1272,12 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("ft"));
             break;
         }
         case FUNIT_MILE   :
         {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mile(s)"));
             break;
         }
         case FUNIT_PERCENT:
@@ -1294,7 +1289,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(long nVal, XubString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not loose decimal places after comma
@@ -1408,7 +1403,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, 
         rStr += aUIUnitStr;
 }
 
-void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) const
+void SdrModel::TakeWinkStr(long nWink, XubString& rStr, bool bNoDegChar) const
 {
     sal_Bool bNeg(nWink < 0);
 
@@ -1436,7 +1431,7 @@ void SdrModel::TakeWinkStr(long nWink, XubString& rStr, FASTBOOL bNoDegChar) con
         rStr += DEGREE_CHAR;
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, FASTBOOL bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPercentChar) const
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1469,7 +1464,7 @@ void SdrModel::SetChanged(sal_Bool bFlg)
     mbChanged = bFlg;
 }
 
-void SdrModel::RecalcPageNums(FASTBOOL bMaster)
+void SdrModel::RecalcPageNums(bool bMaster)
 {
     Container& rPL=*(bMaster ? &maMaPag : &maPages);
     sal_uInt16 nAnz=sal_uInt16(rPL.Count());
@@ -1604,9 +1599,9 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrModel::CheckConsistence() const
+bool SdrModel::CheckConsistence() const
 {
-    FASTBOOL bRet=sal_True;
+    bool bRet = true;
 #ifdef DBG_UTIL
     DBG_CHKTHIS(SdrModel,NULL);
 #endif
@@ -1618,7 +1613,7 @@ FASTBOOL SdrModel::CheckConsistence() const
 // #48289#
 void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                          sal_uInt16 nDestPos,
-                         FASTBOOL bUndo, FASTBOOL bMoveNoCopy)
+                         bool bUndo, bool bMoveNoCopy)
 {
     if( bUndo && !IsUndoEnabled() )
         bUndo = false;
@@ -1635,7 +1630,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
         nFirstPageNum=nMaxPage;
     if (nLastPageNum>nMaxPage)
         nLastPageNum =nMaxPage;
-    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
+    bool bReverse=nLastPageNum<nFirstPageNum;
     if (nDestPos>nPageAnz)
         nDestPos=nPageAnz;
 
@@ -1696,8 +1691,8 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
 void SdrModel::Merge(SdrModel& rSourceModel,
                      sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                      sal_uInt16 nDestPos,
-                     FASTBOOL bMergeMasterPages, FASTBOOL bAllMasterPages,
-                     FASTBOOL bUndo, FASTBOOL bTreadSourceAsConst)
+                     bool bMergeMasterPages, bool bAllMasterPages,
+                     bool bUndo, bool bTreadSourceAsConst)
 {
     if (&rSourceModel==this)
     { // #48289#
@@ -1714,24 +1709,24 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     sal_uInt16 nSrcPageAnz=rSourceModel.GetPageCount();
     sal_uInt16 nSrcMasterPageAnz=rSourceModel.GetMasterPageCount();
     sal_uInt16 nDstMasterPageAnz=GetMasterPageCount();
-    FASTBOOL bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
+    bool bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
     sal_uInt16 nMaxSrcPage=nSrcPageAnz; if (nMaxSrcPage!=0) nMaxSrcPage--;
     if (nFirstPageNum>nMaxSrcPage) nFirstPageNum=nMaxSrcPage;
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
-    FASTBOOL bReverse=nLastPageNum<nFirstPageNum;
+    bool bReverse=nLastPageNum<nFirstPageNum;
 
     sal_uInt16*   pMasterMap=NULL;
-    int* pMasterNeed=NULL;
+    bool* pMasterNeed=NULL;
     sal_uInt16    nMasterNeed=0;
     if (bMergeMasterPages && nSrcMasterPageAnz!=0) {
         // Feststellen, welche MasterPages aus rSrcModel benoetigt werden
         pMasterMap=new sal_uInt16[nSrcMasterPageAnz];
-        pMasterNeed=new int[nSrcMasterPageAnz];
+        pMasterNeed=new bool[nSrcMasterPageAnz];
         memset(pMasterMap,0xFF,nSrcMasterPageAnz*sizeof(sal_uInt16));
         if (bAllMasterPages) {
-            memset(pMasterNeed,sal_True,nSrcMasterPageAnz*sizeof(FASTBOOL));
+            memset(pMasterNeed, true, nSrcMasterPageAnz * sizeof(bool));
         } else {
-            memset(pMasterNeed,sal_False,nSrcMasterPageAnz*sizeof(FASTBOOL));
+            memset(pMasterNeed, false, nSrcMasterPageAnz * sizeof(bool));
             sal_uInt16 nAnf= bReverse ? nLastPageNum : nFirstPageNum;
             sal_uInt16 nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (sal_uInt16 i=nAnf; i<=nEnd; i++) {
@@ -1743,7 +1738,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
                     if(nMPgNum < nSrcMasterPageAnz)
                     {
-                        pMasterNeed[nMPgNum] = sal_True;
+                        pMasterNeed[nMPgNum] = true;
                     }
                 }
             }
@@ -1783,7 +1778,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     bMPgNumsDirty=sal_True;
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
-                    DBG_ERROR("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
+                    OSL_FAIL("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
                 }
             }
         }
@@ -1840,7 +1835,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                 }
 
             } else {
-                DBG_ERROR("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
+                OSL_FAIL("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
             }
             nDestPos++;
             if (bReverse) nSourcePos--;
@@ -1889,12 +1884,12 @@ void SdrModel::setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::
 
 uno::Reference< uno::XInterface > SdrModel::createUnoModel()
 {
-    DBG_ERROR( "SdrModel::createUnoModel() - base implementation should not be called!" );
+    OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt;
     return xInt;
 }
 
-void SdrModel::setLock( sal_Bool bLock )
+void SdrModel::setLock( bool bLock )
 {
     if( mbModelLocked != bLock )
     {
@@ -1970,12 +1965,12 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    mpForbiddenCharactersTable = xForbiddenChars.getBodyPtr();
+    mpForbiddenCharactersTable = xForbiddenChars.get();
 
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->acquire();
@@ -1984,7 +1979,7 @@ void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xF
     ImpSetOutlinerDefaults( pHitTestOutliner );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
 {
     return mpForbiddenCharactersTable;
 }
@@ -2024,20 +2019,20 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-FASTBOOL SdrModel::HasTransparentObjects( sal_Bool bCheckForAlphaChannel ) const
+bool SdrModel::HasTransparentObjects( bool bCheckForAlphaChannel ) const
 {
-    FASTBOOL    bRet = sal_False;
+    bool        bRet = false;
     sal_uInt16      n, nCount;
 
     for( n = 0, nCount = GetMasterPageCount(); ( n < nCount ) && !bRet; n++ )
         if( GetMasterPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-            bRet = sal_True;
+            bRet = true;
 
     if( !bRet )
     {
         for( n = 0, nCount = GetPageCount(); ( n < nCount ) && !bRet; n++ )
             if( GetPage( n )->HasTransparentObjects( bCheckForAlphaChannel ) )
-                bRet = sal_True;
+                bRet = true;
     }
 
     return bRet;
@@ -2151,20 +2146,14 @@ void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
     }
 }
 
+namespace
+{
+    class theSdrModelUnoTunnelImplementationId : public rtl::Static< UnoTunnelIdInit, theSdrModelUnoTunnelImplementationId > {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSdrModelUnoTunnelImplementationId::get().getSeq();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2256,3 +2245,5 @@ const Rectangle& SdrHint::GetRect() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

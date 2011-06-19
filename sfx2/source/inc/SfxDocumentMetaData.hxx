@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,5 +46,17 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
 
 } // closing component helper namespace
 
+namespace comp_CompatWriterDocProps {
+
+namespace css = ::com::sun::star;
+
+// component and service helper functions:
+::rtl::OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
+        css::uno::Reference< css::uno::XComponentContext > const & context );
+
+}
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

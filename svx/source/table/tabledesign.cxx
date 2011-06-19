@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/basemutex.hxx>
@@ -70,7 +71,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 
 using ::rtl::OUString;
-using ::vos::OGuard;
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
@@ -313,7 +313,7 @@ void SAL_CALL TableDesignStyle::setName( const OUString& rName ) throw (RuntimeE
 
 Any SAL_CALL TableDesignStyle::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
@@ -328,7 +328,7 @@ Any SAL_CALL TableDesignStyle::getByName( const OUString& rName ) throw(NoSuchEl
 
 Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const CellStyleNameMap& rMap = getCellStyleNameMap();
     Sequence< OUString > aRet( rMap.size() );
@@ -345,7 +345,7 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getElementNames() throw(RuntimeE
 
 sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
@@ -382,7 +382,7 @@ sal_Int32 SAL_CALL TableDesignStyle::getCount() throw(RuntimeException)
 
 Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (Index < 0) || (Index >= style_count) )
         throw IndexOutOfBoundsException();
@@ -396,7 +396,7 @@ Any SAL_CALL TableDesignStyle::getByIndex( sal_Int32 Index ) throw(IndexOutOfBou
 
 void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const CellStyleNameMap& rMap = getCellStyleNameMap();
     CellStyleNameMap::const_iterator iter = rMap.find( rName );
@@ -546,7 +546,7 @@ void SAL_CALL TableDesignFamily::setName( const OUString& ) throw (RuntimeExcept
 
 Any SAL_CALL TableDesignFamily::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
     {
@@ -561,7 +561,7 @@ Any SAL_CALL TableDesignFamily::getByName( const OUString& rName ) throw(NoSuchE
 
 Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Sequence< OUString > aRet( maDesigns.size() );
     OUString* pNames = aRet.getArray();
@@ -576,7 +576,7 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getElementNames() throw(Runtime
 
 sal_Bool SAL_CALL TableDesignFamily::hasByName( const OUString& aName ) throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
         if( (*iter)->getName() == aName )
@@ -598,7 +598,7 @@ Type SAL_CALL TableDesignFamily::getElementType() throw(RuntimeException)
 
 sal_Bool SAL_CALL TableDesignFamily::hasElements() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return maDesigns.empty() ? sal_False : sal_True;
 }
@@ -609,7 +609,7 @@ sal_Bool SAL_CALL TableDesignFamily::hasElements() throw(RuntimeException)
 
 sal_Int32 SAL_CALL TableDesignFamily::getCount() throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return sal::static_int_cast< sal_Int32 >( maDesigns.size() );
 }
@@ -618,7 +618,7 @@ sal_Int32 SAL_CALL TableDesignFamily::getCount() throw(RuntimeException)
 
 Any SAL_CALL TableDesignFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( (Index >= 0) && (Index < sal::static_int_cast< sal_Int32 >( maDesigns.size() ) ) )
         return Any( maDesigns[Index] );
@@ -632,7 +632,7 @@ Any SAL_CALL TableDesignFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBo
 
 void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any& rElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XStyle > xStyle( rElement, UNO_QUERY );
     if( !xStyle.is() )
@@ -650,7 +650,7 @@ void SAL_CALL TableDesignFamily::insertByName( const OUString& rName, const Any&
 
 void SAL_CALL TableDesignFamily::removeByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     for( TableDesignStyleVector::iterator iter( maDesigns.begin() ); iter != maDesigns.end(); iter++ )
     {
@@ -671,7 +671,7 @@ void SAL_CALL TableDesignFamily::removeByName( const OUString& rName ) throw(NoS
 
 void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XStyle > xStyle( aElement, UNO_QUERY );
     if( !xStyle.is() )
@@ -696,7 +696,7 @@ void SAL_CALL TableDesignFamily::replaceByName( const OUString& rName, const Any
 
 Reference< XInterface > SAL_CALL TableDesignFamily::createInstance() throw(Exception, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     return Reference< XInterface >( static_cast< XStyle* >( new TableDesignStyle ) );
 }
@@ -717,7 +717,7 @@ void SAL_CALL TableDesignFamily::dispose(  ) throw (RuntimeException)
     TableDesignStyleVector aDesigns;
     aDesigns.swap( maDesigns );
 
-    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); iter++ )
+    for( TableDesignStyleVector::iterator iter( aDesigns.begin() ); iter != aDesigns.end(); ++iter )
     {
         Reference< XComponent > xComp( (*iter), UNO_QUERY );
         if( xComp.is() )
@@ -743,7 +743,7 @@ void SAL_CALL TableDesignFamily::removeEventListener( const Reference< XEventLis
 
 Reference<XPropertySetInfo> TableDesignFamily::getPropertySetInfo() throw (RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
     return Reference<XPropertySetInfo>();
 }
 
@@ -751,7 +751,7 @@ Reference<XPropertySetInfo> TableDesignFamily::getPropertySetInfo() throw (Runti
 
 void TableDesignFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
@@ -773,28 +773,28 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
 
 void TableDesignFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // --------------------------------------------------------------------
@@ -806,3 +806,5 @@ SVX_DLLPUBLIC Reference< XNameAccess > CreateTableDesignFamily()
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

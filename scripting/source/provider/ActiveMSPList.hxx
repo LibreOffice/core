@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 #ifndef _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
 #define _FRAMEWORK_SCRIPT_PROVIDER_OPENDOCUMENTLIST_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 #include <osl/mutex.hxx>
@@ -58,7 +59,7 @@ typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
                     ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     >   ScriptComponent_map;
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;
@@ -112,3 +113,5 @@ private:
 };
 } // func_provider
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

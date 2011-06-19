@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace formula
         };
     }
 //===================================================================
-//  class FormulaHelper - statische Methoden
+//  class FormulaHelper - static Method
 //===================================================================
 
 #define FUNC_NOTFOUND 0xffff
@@ -76,7 +77,7 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
 }
 sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
                                  sal_Bool           bBack,
-                                 xub_StrLen&    rFStart,   // Ein- und Ausgabe
+                                 xub_StrLen&    rFStart,   // Input and output
                                  xub_StrLen*    pFEnd,     // = NULL
                                  const IFunctionDescription**   ppFDesc,   // = NULL
                                  ::std::vector< ::rtl::OUString>*   pArgs )  const // = NULL
@@ -110,7 +111,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
                         *ppFDesc = pCurrent;
                         break;
                     }
-                } // for(sal_uInt32 i = 0 ; i < nCount; ++i)
+                }// for(sal_uInt32 i = 0 ; i < nCount; ++i)
             }
             if ( *ppFDesc && pArgs )
             {
@@ -145,7 +146,7 @@ void FormulaHelper::FillArgStrings( const String&   rFormula,
     {
         nStart = GetArgStart( rFormula, nFuncPos, i );
 
-        if ( i+1<nArgs ) // letztes Argument?
+        if ( i+1<nArgs ) // last argument?
         {
             nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
 
@@ -262,11 +263,11 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
         {
             if ( IsFormulaText( m_pCharClass,rFormula, nFStart ) )
             {
-                                    //  Funktion gefunden
+                                    //  Function found
                 if ( pFuncName )
                     *pFuncName = rFormula.Copy( nFStart, nParPos-nFStart );
             }
-            else                    // Klammern ohne Funktion -> weitersuchen
+            else                    // Brackets without function -> keep searching
             {
                 bRepeat = sal_True;
                 if ( !bBack )
@@ -277,7 +278,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
                     bRepeat = sal_False;
             }
         }
-        else                        // keine Klammern gefunden
+        else                        // No brackets found
         {
             nFStart = FUNC_NOTFOUND;
             if ( pFuncName )
@@ -322,7 +323,7 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
             else if ( nParCount < 0 )
             {
                 bFound = sal_True;
-                nStart--;   // einen zu weit gelesen
+                nStart--;   // read one too far
             }
         }
         else if ( c == arrayOpen )
@@ -338,10 +339,10 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
             if ( !bInArray && nParCount == 0 )
             {
                 bFound = sal_True;
-                nStart--;   // einen zu weit gelesen
+                nStart--;   // read one too far
             }
         }
-        nStart++; // hinter gefundene Position stellen
+        nStart++; // Set behind found position
     }
 
     return nStart;
@@ -404,3 +405,5 @@ xub_StrLen FormulaHelper::GetArgStart( const String& rStr, xub_StrLen nStart, sa
 // =============================================================================
 } // formula
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

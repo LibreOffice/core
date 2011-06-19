@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@ private:
     DAVRequestEnvironment m_aEnv;
 
     static bool          m_bGlobalsInited;
-    static osl::Mutex m_aGlobalMutex;
     static NeonLockStore m_aNeonLockStore;
 
 protected:
@@ -293,3 +293,5 @@ private:
 } // namespace webdav_ucp
 
 #endif // _NEONSESSION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

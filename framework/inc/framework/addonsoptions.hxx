@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -312,9 +313,9 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
+        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
+        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig ) const;
 
-        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -372,3 +373,5 @@ class FWE_DLLPUBLIC AddonsOptions
 }
 
 #endif  // #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

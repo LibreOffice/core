@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,45 +34,15 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <sfx2/printer.hxx>
-//#include <sfx2/progress.hxx>
+
 
 class SfxViewShell;
-//class SfxProgress;
 struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------
 
-#define PAGE_MAX    9999        //max. Anzahl der Seiten die gedruckt werden
+#define PAGE_MAX    9999    // max. Number of pages to be printed
 
-//--------------------------------------------------------------------
-/*
-class SFX2_DLLPUBLIC SfxPrintProgress: public SfxProgress
-{
-    SfxPrintProgress_Impl*  pImp;
-
-private:
-//#if 0 // _SOLAR__PRIVATE
-    DECL_DLLPRIVATE_LINK( PrintErrorNotify, void * );
-    DECL_DLLPRIVATE_LINK( StartPrintNotify, void * );
-    DECL_DLLPRIVATE_LINK( EndPrintNotify, void * );
-//#endif
-public:
-                            SfxPrintProgress( SfxViewShell* pViewSh,
-                                              FASTBOOL bShow = sal_True );
-    virtual                 ~SfxPrintProgress();
-
-    virtual void            SetText( const String &rText );
-            sal_Bool            SetStateText( sal_uIntPtr nVal, const String &rVal, sal_uIntPtr nNewRange = 0 );
-    virtual sal_Bool            SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
-
-    void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter );
-    void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter,
-                                               sal_Bool bOldEnablePrintFile );
-    void                    DeleteOnEndPrint();
-    void                    SetCancelHdl( const Link& aCancelHdl );
-    sal_Bool                    IsAborted() const;
-};
-*/
 // ------------------------------------------------------------------------
 
 struct SfxPrintOptDlg_Impl;
@@ -102,3 +73,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

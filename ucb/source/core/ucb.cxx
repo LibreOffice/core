@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,6 @@
 #include <regexpmap.tpt>
 #endif
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -67,6 +67,8 @@ using namespace ucb_impl;
 using namespace com::sun::star;
 using namespace ucbhelper;
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define CONFIG_CONTENTPROVIDERS_KEY \
                 "/org.openoffice.ucb.Configuration/ContentProviders"
@@ -74,14 +76,14 @@ using namespace ucbhelper;
 
 namespace {
 
-bool fillPlaceholders(rtl::OUString const & rInput,
+bool fillPlaceholders(OUString const & rInput,
                       uno::Sequence< uno::Any > const & rReplacements,
-                      rtl::OUString * pOutput)
+                      OUString * pOutput)
 {
     sal_Unicode const * p = rInput.getStr();
     sal_Unicode const * pEnd = p + rInput.getLength();
     sal_Unicode const * pCopy = p;
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     while (p != pEnd)
         switch (*p++)
         {
@@ -119,13 +121,13 @@ bool fillPlaceholders(rtl::OUString const & rInput,
                     ++q;
                 if (q == pEnd)
                     break;
-                rtl::OUString aKey(p, q - p);
-                rtl::OUString aValue;
+                OUString aKey(p, q - p);
+                OUString aValue;
                 bool bFound = false;
                 for (sal_Int32 i = 2; i + 1 < rReplacements.getLength();
                      i += 2)
                 {
-                    rtl::OUString aReplaceKey;
+                    OUString aReplaceKey;
                     if ((rReplacements[i] >>= aReplaceKey)
                         && aReplaceKey == aKey
                         && (rReplacements[i + 1] >>= aValue))
@@ -148,7 +150,7 @@ bool fillPlaceholders(rtl::OUString const & rInput,
 }
 
 void makeAndAppendXMLName(
-                rtl::OUStringBuffer & rBuffer, const rtl::OUString & rIn )
+                OUStringBuffer & rBuffer, const OUString & rIn )
 {
     sal_Int32 nCount = rIn.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -184,22 +186,21 @@ void makeAndAppendXMLName(
 }
 
 bool createContentProviderData(
-    const rtl::OUString & rProvider,
+    const OUString & rProvider,
     const uno::Reference< container::XHierarchicalNameAccess >& rxHierNameAccess,
     ContentProviderData & rInfo)
 {
     // Obtain service name.
-    rtl::OUStringBuffer aKeyBuffer (rProvider);
+    OUStringBuffer aKeyBuffer (rProvider);
     aKeyBuffer.appendAscii( "/ServiceName" );
 
-    rtl::OUString aValue;
+    OUString aValue;
     try
     {
         if ( !( rxHierNameAccess->getByHierarchicalName(
                     aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
         {
-            OSL_ENSURE( false,
-                        "UniversalContentBroker::getContentProviderData - "
+            OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                         "Error getting item value!" );
         }
     }
@@ -217,8 +218,7 @@ bool createContentProviderData(
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
     }
 
@@ -231,8 +231,7 @@ bool createContentProviderData(
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - "
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                     "Error getting item value!" );
     }
 
@@ -350,10 +349,10 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UniversalContentBroker,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UniversalContentBroker" ),
-                     OUString::createFromAscii(
-                         UCB_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UniversalContentBroker" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         UCB_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -658,8 +657,8 @@ Any SAL_CALL UniversalContentBroker::execute(
         {
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
                 Environment );
@@ -676,7 +675,7 @@ Any SAL_CALL UniversalContentBroker::execute(
 
         ucbhelper::cancelCommandExecution(
             makeAny( UnsupportedCommandException(
-                            rtl::OUString(),
+                            OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
         // Unreachable
@@ -717,7 +716,7 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const util::ElementChange& rElem = pElementChanges[ n ];
-            rtl::OUString aKey;
+            OUString aKey;
             rElem.Accessor >>= aKey;
 
             ContentProviderData aInfo;
@@ -779,19 +778,19 @@ Reference< XContentProvider > UniversalContentBroker::queryContentProvider(
 bool UniversalContentBroker::configureUcb()
     throw (uno::RuntimeException)
 {
-    rtl::OUString aKey1;
-    rtl::OUString aKey2;
+    OUString aKey1;
+    OUString aKey2;
     if (m_aArguments.getLength() < 2
         || !(m_aArguments[0] >>= aKey1) || !(m_aArguments[1] >>= aKey2))
     {
-        OSL_ENSURE(false, "UniversalContentBroker::configureUcb(): Bad arguments");
+        OSL_FAIL("UniversalContentBroker::configureUcb(): Bad arguments");
         return false;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(aKey1, aKey2, aData))
     {
-        OSL_ENSURE(false, "UniversalContentBroker::configureUcb(): No configuration");
+        OSL_FAIL("UniversalContentBroker::configureUcb(): No configuration");
         return false;
     }
 
@@ -807,7 +806,7 @@ void UniversalContentBroker::prepareAndRegister(
     for (ContentProviderDataList::const_iterator aIt(rData.begin());
          aIt != aEnd; ++aIt)
     {
-        rtl::OUString aProviderArguments;
+        OUString aProviderArguments;
         if (fillPlaceholders(aIt->Arguments,
                              m_aArguments,
                              &aProviderArguments))
@@ -821,21 +820,19 @@ void UniversalContentBroker::prepareAndRegister(
 
         }
         else
-            OSL_ENSURE(false,
-                       "UniversalContentBroker::prepareAndRegister(): Bad argument placeholders");
+            OSL_FAIL("UniversalContentBroker::prepareAndRegister(): Bad argument placeholders");
     }
 }
 
 //=========================================================================
 bool UniversalContentBroker::getContentProviderData(
-            const rtl::OUString & rKey1,
-            const rtl::OUString & rKey2,
+            const OUString & rKey1,
+            const OUString & rKey2,
             ContentProviderDataList & rListToFill )
 {
     if ( !m_xSMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
     {
-        OSL_ENSURE( false,
-            "UniversalContentBroker::getContentProviderData - Invalid argument!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - Invalid argument!" );
         return false;
     }
 
@@ -843,11 +840,11 @@ bool UniversalContentBroker::getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 m_xSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationProvider" )) ),
                 uno::UNO_QUERY_THROW );
 
-        rtl::OUStringBuffer aFullPath;
+        OUStringBuffer aFullPath;
         aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );
         makeAndAppendXMLName( aFullPath, rKey1 );
         aFullPath.appendAscii( "']/SecondaryKeys/['" );
@@ -857,13 +854,13 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
         aProperty.Name
-            = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
         aProperty.Value <<= aFullPath.makeStringAndClear();
         aArguments[ 0 ] <<= aProperty;
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.configuration.ConfigurationAccess" ) ),
                     aArguments ) );
 
@@ -878,8 +875,8 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Reference< container::XNameAccess > xNameAccess(
                                             xInterface, uno::UNO_QUERY_THROW );
 
-        uno::Sequence< rtl::OUString > aElems = xNameAccess->getElementNames();
-        const rtl::OUString* pElems = aElems.getConstArray();
+        uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
+        const OUString* pElems = aElems.getConstArray();
         sal_Int32 nCount = aElems.getLength();
 
         if ( nCount > 0 )
@@ -896,7 +893,7 @@ bool UniversalContentBroker::getContentProviderData(
 
                     ContentProviderData aInfo;
 
-                    rtl::OUStringBuffer aElemBuffer;
+                    OUStringBuffer aElemBuffer;
                     aElemBuffer.appendAscii( "['" );
                     makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
                     aElemBuffer.appendAscii( "']" );
@@ -911,8 +908,7 @@ bool UniversalContentBroker::getContentProviderData(
                 catch ( container::NoSuchElementException& )
                 {
                     // getByHierarchicalName
-                    OSL_ENSURE( false,
-                                "UniversalContentBroker::getContentProviderData - "
+                    OSL_FAIL( "UniversalContentBroker::getContentProviderData - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -920,16 +916,14 @@ bool UniversalContentBroker::getContentProviderData(
     }
     catch ( uno::RuntimeException& )
     {
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
         return false;
     }
     catch ( uno::Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( false,
-                    "UniversalContentBroker::getContentProviderData - caught Exception!" );
+        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught Exception!" );
         return false;
     }
 
@@ -957,3 +951,5 @@ Reference< XContentProvider > ProviderListEntry_Impl::resolveProvider() const
 
     return m_xResolvedProvider;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

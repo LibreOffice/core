@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,7 +118,7 @@ enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,    // Unbekannt
                      // Hier haben zur Not noch 8 weitere Pagetypen Platz
 };   // fuer die Surrogate reserviert
 
-inline FASTBOOL SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
+inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,3 +168,4 @@ enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
 
 #endif //_SVDTYPES_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,17 +46,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -64,7 +61,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -136,17 +132,17 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAscii( "ConfigurationSource" ))
+        if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConfigurationSource")) )
             Args[n].Value >>= xConfigSource;
-        else if ( Args[n].Name.equalsAscii( "Frame" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ResourceURL")) )
             Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name.equalsAscii( "Persistent" ))
+        else if ( Args[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Persistent")) )
             Args[n].Value >>= bPersistent;
         else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
             Args[n].Value >>= bExtraMode;
-    } // for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
+    }
     if ( aResourceURL.indexOf( rtl::OUString::createFromAscii(_pAsciiName)) != 0 )
         throw IllegalArgumentException();
 
@@ -204,9 +200,11 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         aPropSeq[4] <<= aPropValue;
     }
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInitialization > xInit( _xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

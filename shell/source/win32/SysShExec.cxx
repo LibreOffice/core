@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,9 @@
 #include <osl/diagnose.h>
 #include "SysShExec.hxx"
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
-#ifndef _COM_SUN_STAR_SYS_SHELL_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#endif
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -84,7 +84,7 @@ namespace // private
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SystemShellExecute"));
         return aRet;
     }
 
@@ -146,7 +146,7 @@ namespace // private
     };
 
     /* size of the table */
-    #define ERRTABLESIZE (sizeof(errtable)/sizeof(errtable[0]))
+    #define ERRTABLESIZE (SAL_N_ELEMENTS(errtable))
 
     /* The following two constants must be the minimum and maximum
     values in the (contiguous) range of osl_File_E_xec Failure errors. */
@@ -189,7 +189,6 @@ namespace // private
     #define E_UNKNOWN_EXEC_ERROR -1
 
     //-----------------------------------------
-    //-----------------------------------------
 
     bool is_system_path(const OUString& path_or_uri)
     {
@@ -202,8 +201,8 @@ namespace // private
     // trying to identify a jump mark
     //-----------------------------------------
 
-    const OUString    JUMP_MARK_HTM  = OUString::createFromAscii(".htm#");
-    const OUString    JUMP_MARK_HTML = OUString::createFromAscii(".html#");
+    const OUString    JUMP_MARK_HTM(RTL_CONSTASCII_USTRINGPARAM(".htm#"));
+    const OUString    JUMP_MARK_HTML(RTL_CONSTASCII_USTRINGPARAM(".html#"));
     const sal_Unicode HASH_MARK      = (sal_Unicode)'#';
 
     bool has_jump_mark(const OUString& system_path, sal_Int32* jmp_mark_start = NULL)
@@ -218,7 +217,6 @@ namespace // private
         return (jmp_mark > -1);
     }
 
-    //-----------------------------------------
     //-----------------------------------------
 
     bool is_existing_file(const OUString& file_name)
@@ -261,8 +259,6 @@ namespace // private
 } // end namespace
 
 //-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
 
 CSysShExec::CSysShExec( ) :
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex )
@@ -279,8 +275,6 @@ CSysShExec::CSysShExec( ) :
 }
 
 //-------------------------------------------------
-//
-//-------------------------------------------------
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
@@ -288,13 +282,13 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     // parameter checking
     if (0 == aCommand.getLength())
         throw IllegalArgumentException(
-            OUString::createFromAscii( "Empty command" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command")),
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
     if (!(nFlags >= DEFAULTS && nFlags <= NO_SYSTEM_ERROR_MESSAGE))
         throw IllegalArgumentException(
-            OUString::createFromAscii( "Invalid Flags specified" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Flags specified")),
             static_cast< XSystemShellExecute* >( this ),
             3 );
 
@@ -344,7 +338,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             psxErr = MapError(psxErr);
 
         throw SystemShellExecuteException(
-            OUString::createFromAscii("Error executing command"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Error executing command")),
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }
@@ -357,7 +351,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 OUString SAL_CALL CSysShExec::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( SYSSHEXEC_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -386,3 +380,4 @@ Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
     return SysShExec_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

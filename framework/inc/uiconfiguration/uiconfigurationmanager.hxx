@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -56,9 +57,7 @@
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORGAE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -156,7 +155,7 @@ namespace framework
 
             struct UIElementType;
             friend struct UIElementType;
-            typedef ::std::hash_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
 
             struct UIElementType
             {
@@ -176,7 +175,7 @@ namespace framework
 
             typedef ::std::vector< UIElementType > UIElementTypesVector;
             typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-            typedef ::std::hash_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
 
             // private methods
             void            impl_Initialize();
@@ -208,3 +207,5 @@ namespace framework
 }
 
 #endif // __FRAMEWORK_UICONFIGURATION_UICONFIGMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

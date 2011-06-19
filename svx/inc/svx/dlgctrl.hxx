@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,8 +63,8 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 /*************************************************************************
 |*
-|* Von SfxTabPage abgeleitet, um vom Control ueber virtuelle Methode
-|* benachrichtigt werden zu koennen.
+|* Derived from SfxTabPage for being able to get notified through the
+|* virtual method from the control.
 |*
 \************************************************************************/
 class SvxTabPage : public SfxTabPage
@@ -78,8 +79,8 @@ public:
 
 /*************************************************************************
 |*
-|*  Control zur Darstellung und Auswahl der Eckpunkte (und Mittelpunkt)
-|*  eines Objekts
+|* Control for display and selection of the corner and center points of
+|* an object
 |*
 \************************************************************************/
 typedef sal_uInt16 CTL_STATE;
@@ -110,7 +111,6 @@ protected:
     Bitmap*                         pBitmap;
     CTL_STATE                       m_nState;
 
-    // #103516# Added a possibility to completely disable this control
     sal_Bool                        mbCompleteDisable;
 
     RECT_POINT          GetRPFromPoint( Point ) const;
@@ -149,15 +149,14 @@ public:
 
     RECT_POINT          GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& rPixelPoint ) const;
 
-    // #103516# Added a possibility to completely disable this control
     sal_Bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(sal_Bool bNew);
 };
 
 /*************************************************************************
 |*
-|*  Control zur Darstellung und Auswahl des Winkels der Eckpunkte
-|*  eines Objekts
+|* Control for display and selecton of the angle of the corner points
+|* of an object
 |*
 \************************************************************************/
 class SvxAngleCtl : public SvxRectCtl
@@ -181,7 +180,7 @@ public:
 
 /*************************************************************************
 |*
-|*  Preview-Control zur Darstellung von Bitmaps
+|* Preview control for the display of bitmaps
 |*
 \************************************************************************/
 
@@ -207,7 +206,7 @@ public:
 
 /*************************************************************************
 |*
-|*  Control zum Editieren von Bitmaps
+|* Control for editing bitmaps
 |*
 \************************************************************************/
 class SVX_DLLPUBLIC SvxPixelCtl : public Control
@@ -253,7 +252,7 @@ public:
 
 /*************************************************************************
 |*
-|* ColorLB kann mit Farben und Namen gefuellt werden
+|* ColorLB can be filled with colors and names
 |*
 \************************************************************************/
 class SVX_DLLPUBLIC ColorLB : public ColorListBox
@@ -348,7 +347,7 @@ private:
 
 /*************************************************************************
 |*
-|* FillAttrLB vereint alle Fuellattribute in einer ListBox
+|* FillAttrLB unites all fill attributes an a ListBox
 |*
 \************************************************************************/
 class FillAttrLB : public ColorListBox
@@ -474,7 +473,6 @@ private:
     SdrObject*                                      mpLineObjB;
     SdrObject*                                      mpLineObjC;
 
-    //#58425# Symbole auf einer Linie (z.B. StarChart)
     Graphic*                                        mpGraphic;
     sal_Bool                                        mbWithSymbol;
     Size                                            maSymbolSize;
@@ -537,3 +535,4 @@ public:
 
 #endif // _SVX_DLG_CTRL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

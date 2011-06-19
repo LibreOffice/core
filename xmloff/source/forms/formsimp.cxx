@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLOFF_ANIMIMP_HXX
 #include <xmloff/formsimp.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -56,3 +55,5 @@ SvXMLImportContext * XMLFormsContext::CreateChildContext( sal_uInt16 nPrefix, co
 {
     return GetImport().GetFormImport()->createContext( nPrefix, rLocalName, xAttrList );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
+SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
 {
     { XML_LEFT,     text::HorizontalAdjust_LEFT },
     { XML_CENTER,   text::HorizontalAdjust_CENTER },
@@ -86,7 +87,7 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
 // aXML_WritingDirection_Enum is used with and without 'page'
 // attribute, so you'll find uses of aXML_WritingDirection_Enum
 // directly, as well as &(aXML_WritingDirection_Enum[1])
-SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
+SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
 {
     // aXML_WritingDirection_Enum
     { XML_PAGE,     text::WritingMode2::PAGE },
@@ -112,7 +113,7 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
 //
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
-    for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); pPos++ )
+    for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); ++pPos )
         delete pPos->second;
 }
 
@@ -448,3 +449,5 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
 
     return pPropHdl;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>
@@ -51,10 +50,8 @@ private:
     QueryBox                aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );
     DECL_DLLPRIVATE_LINK( ModifyHdl, ComboBox * );
-//#endif
 
 public:
     SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& );
@@ -65,3 +62,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define _SVX_ACCESSIBILITY_DG_COLOR_NAME_LOOK_UP_HXX
 
 #include <rtl/ustrbuf.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace accessibility {
 
@@ -70,7 +71,7 @@ public:
 
 private:
     /// Define hash map type to convert numerical color values to names.
-    typedef std::hash_map<long int, ::rtl::OUString>
+    typedef boost::unordered_map<long int, ::rtl::OUString>
         tColorValueToNameMap;
 
     /// This ma translates from numerical color values to names.
@@ -97,3 +98,5 @@ private:
 } // end of namespace accessibility
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

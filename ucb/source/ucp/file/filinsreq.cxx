@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,7 +207,7 @@ XInteractionRequestImpl::getRequest()
         InteractiveAugmentedIOException excep;
         excep.Code = IOErrorCode_INVALID_CHARACTER;
         PropertyValue prop;
-        prop.Name = rtl::OUString::createFromAscii("ResourceName");
+        prop.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceName"));
         prop.Handle = -1;
         prop.Value <<= m_aClashingName;
         Sequence<Any> seq(1);
@@ -222,3 +223,5 @@ XInteractionRequestImpl::getRequest()
     }
     return aAny;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

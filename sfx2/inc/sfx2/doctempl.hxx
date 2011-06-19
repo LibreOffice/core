@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ public:
     static sal_Bool         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
-    sal_Bool                Rescan( );      // Aktualisieren
+    sal_Bool                           Rescan( );
     void                ReInitFromComponent();
 
     sal_Bool                IsRegionLoaded( sal_uInt16 nIdx ) const;
@@ -86,16 +87,15 @@ public:
 
     String              GetDefaultTemplatePath(const String &rLongName);
 
-    // Pfad zur Vorlage geben lassen; logischer Name muss angegeben
-    // werden, damit beim Ueberschreiben einer Vorlage der
-    // richtige Dateiname gefunden werden kann
+    // Path to the template; the logical name must be given in order to find
+    // the correct file name when overwriting a template
     String              GetTemplatePath(sal_uInt16 nRegion, const String &rLongName) const;
 
     // Allows to retrieve the target template URL from the UCB
     ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                          const ::rtl::OUString& aTitle );
 
-    // Speichern als Vorlage hat geklappt -> Aktualisieren
+    // Save as template worked -> update
     void            NewTemplate(sal_uInt16 nRegion,
                                 const String &rLongName,
                                 const String &rFileName);
@@ -146,3 +146,4 @@ public:
 #endif // #ifndef _SFXDOCTEMPL_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

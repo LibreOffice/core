@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,10 +84,8 @@ Win32Exception::Win32Exception(int Error) :
 */
 Win32Exception::~Win32Exception() throw()
 {
-#ifndef OS2
     if (m_MsgBuff)
         LocalFree(m_MsgBuff);
-#endif
 }
 
 //------------------------------------------
@@ -94,9 +93,6 @@ Win32Exception::~Win32Exception() throw()
 */
 const char* Win32Exception::what() const throw()
 {
-#ifdef OS2
-    return "Win32Exception!";
-#else
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
@@ -109,7 +105,6 @@ const char* Win32Exception::what() const throw()
         NULL);
 
     return reinterpret_cast<char*>(m_MsgBuff);
-#endif
 }
 
 //------------------------------------------
@@ -135,3 +130,5 @@ IOException::IOException(int Error) :
     Win32Exception(Error)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

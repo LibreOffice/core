@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,9 +76,8 @@ ResMgr* GetGalleryResMgr()
 
     if( !pGalleryResMgr )
     {
-        ByteString aResMgrName( "gal" );
         pGalleryResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+            "gal", Application::GetSettings().GetUILocale() );
     }
 
     return pGalleryResMgr;
@@ -126,13 +126,13 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
-        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
+        GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+        GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL;
         sal_uInt16              nFormat;
 
-        if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
+        if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
-            rFilterName = pGraphicFilter->GetImportFormatName( nFormat );
+            rFilterName = rGraphicFilter.GetImportFormatName( nFormat );
             nRet = SGA_IMPORT_FILE;
         }
 
@@ -161,7 +161,7 @@ sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 
         if( 1 == nVersion )
         {
-            DBG_ERROR( "staroffice binary file formats are no longer supported inside the gallery!" );
+            OSL_FAIL( "staroffice binary file formats are no longer supported inside the gallery!" );
             bRet = false;
         }
         else if( 2 == nVersion )
@@ -284,7 +284,7 @@ sal_Bool FileExists( const INetURLObject& rURL )
             ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
             OUString    aTitle;
 
-            aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
         catch( const ucb::ContentCreationException& )
@@ -318,11 +318,11 @@ sal_Bool CreateDir( const INetURLObject& rURL )
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
-            aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
+            aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
         ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues, aContent );
+        bRet = aParent.insertNewContent( OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder")), aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -348,7 +348,7 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     {
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
 
-        aDestPath.executeCommand( OUString::createFromAscii( "transfer" ),
+        aDestPath.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = sal_True;
@@ -377,7 +377,7 @@ sal_Bool KillFile( const INetURLObject& rURL )
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-            aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -408,7 +408,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     if( xMgr.is() )
     {
         uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
-                                                      ::rtl::OUString::createFromAscii( "com.sun.star.awt.XProgressMonitor" ) ),
+                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.XProgressMonitor")) ),
                                                       uno::UNO_QUERY );
 
         if ( xMonitor.is() )
@@ -529,7 +529,7 @@ void GalleryTransferable::InitData( bool bLazy )
         break;
 
         default:
-            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
+            OSL_FAIL( "GalleryTransferable::GalleryTransferable: invalid object type" );
         break;
     }
 }
@@ -667,3 +667,5 @@ void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceAction
         TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

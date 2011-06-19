@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 #define _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 
-//#include <editeng/ChildrenManager.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -61,7 +61,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
     :   public MutexOwner,
-        public cppu::WeakComponentImplHelper4<
+        public cppu::PartialWeakComponentImplHelper4<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -398,3 +398,5 @@ private:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

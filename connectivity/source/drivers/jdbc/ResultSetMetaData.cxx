@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -63,7 +63,7 @@ java_sql_ResultSetMetaData::~java_sql_ResultSetMetaData()
 jclass java_sql_ResultSetMetaData::getMyClass() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSetMetaData::getMyClass" );
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // The class needs to be fetched just once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/ResultSetMetaData");
     return theClass;
@@ -236,3 +236,4 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column ) thr
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

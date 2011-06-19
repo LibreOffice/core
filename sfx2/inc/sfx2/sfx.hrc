@@ -69,7 +69,7 @@
 #define EVENT_SGA_START             EVENT_OBJ3_START
 #define EVENT_SVX_START             EVENT_OBJ4_START
 
-// Achtung: die folgenden sind gleichzeitig SID_ON_...
+// Warning: the following are simultaneously SID_ON_ ...
 #define SFX_EVENT_STARTAPP          (EVENT_SFX_START)
 #define SFX_EVENT_CLOSEAPP          (EVENT_SFX_START + 1)
 #define SFX_EVENT_CREATEDOC         (EVENT_SFX_START + 2)
@@ -111,7 +111,7 @@
 #define SFX_EVENT_TITLECHANGED      (EVENT_SFX_START + 30)
 #define SFX_EVENT_MODECHANGED       (EVENT_SFX_START + 31)
 
-// Events f"ur Controls etc.
+// Events for Controls etc.
 #define SFX_EVENT_MOUSEOVER_OBJECT     ( EVENT_SFX_START + 100 )
 #define SFX_EVENT_MOUSECLICK_OBJECT    ( EVENT_SFX_START + 101 )
 #define SFX_EVENT_MOUSEOUT_OBJECT      ( EVENT_SFX_START + 102 )
@@ -165,7 +165,7 @@
 #define SFX_OBJECTBAR_NAVIGATION        12
 #define SFX_OBJECTBAR_MAX               13
 
-// temp. wg. Kompatibilitaet
+// temporary due to compatibility
 
 #define SFX_OBJECTBAR_IDE               2
 #define SFX_OBJECTBAR_FRAME             3
@@ -183,9 +183,7 @@
 #define RID_DEFAULTIMAGELIST_LC             (RID_SFX_START+17)
 #define RID_DEFAULTIMAGELIST_LM             (RID_SFX_START+18)
 #define RID_STYLEDLG                        (RID_SFX_START+28)
-#define RID_DEFAULTIMAGELIST_SCH            (RID_SFX_START+35)
 #define RID_DEFAULTIMAGELIST_SMH            (RID_SFX_START+36)
-#define RID_DEFAULTIMAGELIST_LCH            (RID_SFX_START+37)
 #define RID_DEFAULTIMAGELIST_LMH            (RID_SFX_START+38)
 #define RID_IMAGELIST_SCH                   (RID_SFX_START+39)
 #define RID_IMAGELIST_SMH                   (RID_SFX_START+40)
@@ -202,7 +200,6 @@
 #define RID_DEFAULTINTRO                    (RID_SFX_START+0)
 #define RID_DEFAULTINTRO_ADABAS             (RID_SFX_START+1)
 #define RID_DEFAULTINTRO_PORTAL             (RID_SFX_START+2)
-#define RID_DEFAULT_ABOUT_BMP_LOGO          (RID_SFX_START+3)
 
 #define RID_STYLECATALOG                    (RID_SFX_START+1201)
 
@@ -222,16 +219,15 @@
 #define TP_MANAGE_STYLES                    (RID_SFX_START+7)
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
 
-#define RID_SFX_PROTECT_RECORDS             (RID_SFX_START+216)
-#define RID_SFX_UNPROTECT_RECORDS           (RID_SFX_START+217)
-#define RID_SFX_INCORRECT_PASSWORD          (RID_SFX_START+218)
+#define RID_SFX_INCORRECT_PASSWORD          (RID_SFX_START+216)
 
 #define STR_STYLE_FILTER_AUTO               (RID_SFX_START+9)
 #define STR_STYLE_FILTER_USED               (RID_SFX_START+10)
 #define STR_STYLE_FILTER_USERDEF            (RID_SFX_START+11)
 #define STR_STYLE_FILTER_ALL                (RID_SFX_START+12)
-// +13 schon benutzt!
+// +13 already used!
 #define STR_STYLE_FILTER_HIERARCHICAL       (RID_SFX_START+1200)
+#define STR_STYLE_ELEMTLIST                 (RID_SFX_START+1202)
 
 #define STR_NONAME                          (RID_SFX_START+100)
 #define STR_NONE                            (RID_SFX_START+101)
@@ -291,6 +287,7 @@
 #define GID_MODIFY                          (RID_GROUPS_SFXOFFSET+23)
 #define GID_DRAWING                         (RID_GROUPS_SFXOFFSET+24)
 #define GID_CONTROLS                        (RID_GROUPS_SFXOFFSET+25)
+#define GID_NAVIGATION                      (RID_GROUPS_SFXOFFSET+26)
 
 // compatibility-#defines
 #define GID_FORMEL                          GID_MATH
@@ -355,8 +352,10 @@
 #define MID_DOCINFO_ENCRYPTED                0x2c
 #define MID_DOCINFO_STATISTIC                0x33
 #define MID_DOCINFO_CHARLOCALE               0x34
-
-#define MID_LAST_USED_PROPID                 MID_DOCINFO_CHARLOCALE
+#define MID_CATEGORY                                     0x35
+#define MID_COMPANY                                      0x36
+#define MID_MANAGER                                      0x37
+#define MID_LAST_USED_PROPID              MID_MANAGER
 
 // Config-Ids -----------------------------------------------------------
 

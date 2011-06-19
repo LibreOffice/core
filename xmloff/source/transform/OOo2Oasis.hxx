@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include "ActionMapTypesOOo.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX_
 #include "TransformerBase.hxx"
-#endif
 
 class XMLTransformerOOoEventMap_Impl;
 
@@ -112,3 +111,5 @@ public:
 };
 
 #endif  //  _XMLOFF_TRANSFORMER_BASE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include "defs.hxx"
 #include "convdic.hxx"
 
-///////////////////////////////////////////////////////////////////////////
 
 class HHConvDic :
     public ConvDic
@@ -72,7 +72,7 @@ inline ::rtl::OUString HHConvDic::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.HHConvDic" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

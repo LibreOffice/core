@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ int SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
              mbBookMode == rItem.IsBookMode() );
 }
 
-sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -130,14 +131,14 @@ sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt
         case MID_VIEWLAYOUT_COLUMNS : rVal <<= (sal_Int32) GetValue(); break;
         case MID_VIEWLAYOUT_BOOKMODE: rVal <<= (sal_Bool) mbBookMode; break;
         default:
-            DBG_ERROR("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
-            return sal_False;
+            OSL_FAIL("svx::SvxViewLayoutItem::QueryValue(), Wrong MemberId!");
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -170,11 +171,11 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
                 {
                     SetValue( (sal_uInt16)nColumns );
                     mbBookMode = bBookMode;
-                    return sal_True;
+                    return true;
                 }
             }
 
-            return sal_False;
+            return false;
         }
 
         case MID_VIEWLAYOUT_COLUMNS:
@@ -183,10 +184,10 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
             if ( rVal >>= nVal )
             {
                 SetValue( (sal_uInt16)nVal );
-                return sal_True;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         case MID_VIEWLAYOUT_BOOKMODE:
@@ -194,18 +195,19 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
             sal_Bool bBookMode = sal_False;
             if ( rVal >>= bBookMode )
             {
-                 mbBookMode = bBookMode;
-                return sal_True;
+                mbBookMode = bBookMode;
+                return true;
             }
             else
-                return sal_False;
+                return false;
         }
 
         default:
-            DBG_ERROR("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
-            return sal_False;
+            OSL_FAIL("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

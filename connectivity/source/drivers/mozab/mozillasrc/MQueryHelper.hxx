@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <comphelper/stl_types.hxx>
 #include <osl/thread.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace connectivity
 {
@@ -46,7 +47,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef ::std::hash_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
+            typedef ::boost::unordered_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
 
             mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;
@@ -64,7 +65,7 @@ namespace connectivity
             void setCard(nsIAbCard *card);
             nsIAbCard *getCard();
             sal_Bool setRowStates(sal_Int32 state){m_RowStates = state; return sal_True;};
-            sal_Int32 getRowStates()  { return m_RowStates;};
+            sal_Int32 getRowStates() const { return m_RowStates;};
         };
 
         class MQueryHelper : public nsIAbDirectoryQueryResultListener
@@ -95,16 +96,13 @@ namespace connectivity
 #endif
 
         public:
-
             NS_DECL_ISUPPORTS
             NS_DECL_NSIABDIRECTORYQUERYRESULTLISTENER
 
                                             MQueryHelper();
-
             virtual                         ~MQueryHelper();
 
             void                            reset();
-
             void                            rewind();
 
             MQueryHelperResultEntry*   next( );
@@ -114,19 +112,15 @@ namespace connectivity
             const ErrorDescriptor&     getError() const { return m_aError; }
 
             sal_Bool                   isError() const;
-
             sal_Bool                   hasMore() const;
-
             sal_Bool                   atEnd() const;
 
             sal_Bool                   queryComplete() const;
 
             sal_Bool                   waitForQueryComplete(  );
-
             sal_Bool                   waitForRow( sal_Int32 rowNum );
 
             sal_Int32                  getResultCount() const;
-
             sal_uInt32                 getRealCount() const;
             sal_Int32                  createNewCard(); //return Row count number
             sal_Bool                   resyncRow(sal_Int32 rowIndex);
@@ -140,3 +134,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

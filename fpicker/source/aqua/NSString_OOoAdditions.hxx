@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 #include <rtl/ustring.hxx>
-// #include <sal/types.h>
 
 //for Cocoa types
 @interface NSString (OOoAdditions)
@@ -42,3 +42,5 @@
 @end
 
 #endif // _NSSTRING_OOOADDITIONS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

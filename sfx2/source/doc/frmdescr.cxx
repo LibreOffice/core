@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,6 @@
 #include <tools/stream.hxx>
 #include <vcl/splitwin.hxx>
 #include <svl/itemset.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/app.hxx>
@@ -163,7 +162,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
         pFrame->pImp->pWallpaper = new Wallpaper( *pImp->pWallpaper );
     if( pImp->pArgs )
     {
-        // Aktuell ist im Clone von SfxAllItemSets noch ein Bug...
+        // Currently in the clone of SfxAllItemSets there is still a bug ...
         pFrame->pImp->pArgs = new SfxAllItemSet( SFX_APP()->GetPool() );
         pFrame->pImp->pArgs->Put(*pImp->pArgs);
     }
@@ -327,3 +326,4 @@ SfxItemPresentation SfxFrameDescriptorItem::GetPresentation
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

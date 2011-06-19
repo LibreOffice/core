@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@ class BreakpointWindow;
 
 #include "dataedit.hxx"
 
-//#include <xtextedt.hxx>
 
 class TextEditImp : public Window, public SfxListener
 {
@@ -97,10 +97,7 @@ public:
     void                Paint( const Rectangle& rRect );
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
-//  void                MouseMove( const MouseEvent& rMouseEvent );
     void                Command( const CommandEvent& rCEvt );
-    //sal_Bool              Drop( const DropEvent& rEvt );
-    //sal_Bool              QueryDrop( DropEvent& rEvt );
 
     sal_Bool                ViewMoved();
 
@@ -136,3 +133,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

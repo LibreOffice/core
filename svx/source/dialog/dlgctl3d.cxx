@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -412,7 +413,7 @@ void Svx3DLightControl::ConstructLightObjects()
 {
     for(sal_uInt32 a(0); a < MAX_NUMBER_LIGHTS; a++)
     {
-        // get rid of evtl. existing light object
+        // get rid of possible existing light object
         if(maLightObjects[a])
         {
             mpScene->Remove3DObj(maLightObjects[a]);
@@ -587,8 +588,7 @@ void Svx3DLightControl::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            // Einfacher Click ohne viel Bewegen, versuche eine
-            // Selektion
+            // Single click without moving much trying to do a selection
             TrySelection(rMEvt.GetPosPixel());
             bCallParent = false;
         }
@@ -1323,3 +1323,5 @@ IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, EMPTYARG)
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

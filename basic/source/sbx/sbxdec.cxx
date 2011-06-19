@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,14 +36,11 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 
-// int GnDecCounter = 0;
-
 // Implementation SbxDecimal
 SbxDecimal::SbxDecimal( void )
 {
     setInt( 0 );
     mnRefCount = 0;
-    // GnDecCounter++;
 }
 
 SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
@@ -53,7 +51,6 @@ SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
     (void)rDec;
 #endif
     mnRefCount = 0;
-    // GnDecCounter++;
 }
 
 SbxDecimal::SbxDecimal
@@ -69,7 +66,6 @@ SbxDecimal::SbxDecimal
     (void)rAutomationDec;
 #endif
     mnRefCount = 0;
-    // GnDecCounter++;
 }
 
 void SbxDecimal::fillAutomationDecimal
@@ -88,7 +84,6 @@ void SbxDecimal::fillAutomationDecimal
 
 SbxDecimal::~SbxDecimal()
 {
-    // GnDecCounter--;
 }
 
 void releaseDecimalPtr( SbxDecimal*& rpDecimal )
@@ -493,38 +488,32 @@ start:
             if( !pnDecRes->setSingle( p->nSingle ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             break;
+        case SbxCURRENCY:
+            {
+                if( !pnDecRes->setDouble( ImpCurrencyToDouble( p->nInt64 ) ) )
+                    SbxBase::SetError( SbxERR_OVERFLOW );
+                break;
+            }
         case SbxSALINT64:
             {
-                double d = (double)p->nInt64;
-                pnDecRes->setDouble( d );
+                if( !pnDecRes->setDouble( (double)p->nInt64 ) )
+                    SbxBase::SetError( SbxERR_OVERFLOW );
                 break;
             }
         case SbxSALUINT64:
             {
-                double d = ImpSalUInt64ToDouble( p->uInt64 );
-                pnDecRes->setDouble( d );
+                if( !pnDecRes->setDouble( (double)p->uInt64 ) )
+                    SbxBase::SetError( SbxERR_OVERFLOW );
                 break;
             }
         case SbxDATE:
         case SbxDOUBLE:
-        case SbxLONG64:
-        case SbxULONG64:
-        case SbxCURRENCY:
-            {
-            double dVal;
-            if( p->eType == SbxCURRENCY )
-                dVal = ImpCurrencyToDouble( p->nLong64 );
-            else if( p->eType == SbxLONG64 )
-                dVal = ImpINT64ToDouble( p->nLong64 );
-            else if( p->eType == SbxULONG64 )
-                dVal = ImpUINT64ToDouble( p->nULong64 );
-            else
-                dVal = p->nDouble;
-
+        {
+            double dVal = p->nDouble;
             if( !pnDecRes->setDouble( dVal ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             break;
-            }
+        }
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
@@ -557,17 +546,13 @@ start:
         case SbxBYREF | SbxUSHORT:
             pnDecRes->setUShort( *p->pUShort ); break;
 
-        // ab hier muss getestet werden
+        // from here on had to be tested
         case SbxBYREF | SbxSINGLE:
             aTmp.nSingle = *p->pSingle; goto ref;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
-        case SbxBYREF | SbxULONG64:
-            aTmp.nULong64 = *p->pULong64; goto ref;
-        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
-            aTmp.nLong64 = *p->pLong64; goto ref;
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
@@ -597,7 +582,7 @@ void ImpPutDecimal( SbxValues* p, SbxDecimal* pDec )
 start:
     switch( +p->eType )
     {
-        // hier muss getestet werden
+        // here had to be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -607,30 +592,28 @@ start:
         case SbxERROR:
         case SbxUSHORT:
             aTmp.pUShort = &p->nUShort; goto direct;
-        case SbxSALUINT64:
-            aTmp.puInt64 = &p->uInt64; goto direct;
         case SbxINTEGER:
         case SbxBOOL:
             aTmp.pInteger = &p->nInteger; goto direct;
         case SbxLONG:
             aTmp.pLong = &p->nLong; goto direct;
+        case SbxCURRENCY:
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
-        case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
+        case SbxSALUINT64:
+            aTmp.puInt64 = &p->uInt64; goto direct;
+
         direct:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // ab hier nicht mehr
+        // from here on no longer
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
         {
             if( pDec != p->pDecimal )
             {
                 releaseDecimalPtr( p->pDecimal );
-                // if( p->pDecimal )
-                    // p->pDecimal->ReleaseRef();
                 p->pDecimal = pDec;
                 if( pDec )
                     pDec->addRef();
@@ -652,27 +635,12 @@ start:
             p->nDouble = d;
             break;
         }
-        case SbxULONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            p->nULong64 = ImpDoubleToUINT64( d );
-            break;
-        }
-        case SbxLONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            p->nLong64 = ImpDoubleToINT64( d );
-            break;
-        }
 
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
             if( !p->pOUString )
                 p->pOUString = new ::rtl::OUString;
-            // ImpCvtNum( (double) n, 0, *p->pString );
             pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:
@@ -707,7 +675,6 @@ start:
                 *p->pInteger = 0;
             }
             break;
-            // *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( !pDec->getUShort( *p->pUShort ) )
@@ -729,6 +696,12 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW );
                 *p->pULong = 0;
             }
+            break;
+        case SbxBYREF | SbxCURRENCY:
+            double d;
+            if( !pDec->getDouble( d ) )
+                SbxBase::SetError( SbxERR_OVERFLOW );
+            *p->pnInt64 = ImpDoubleToCurrency( d );
             break;
         case SbxBYREF | SbxSALINT64:
             {
@@ -755,7 +728,6 @@ start:
                 *p->pSingle = 0;
             }
             break;
-            // *p->pSingle = (float) n; break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             if( !pDec->getDouble( *p->pDouble ) )
@@ -764,28 +736,6 @@ start:
                 *p->pDouble = 0;
             }
             break;
-        case SbxBYREF | SbxULONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pULong64 = ImpDoubleToUINT64( d );
-            break;
-        }
-        case SbxBYREF | SbxLONG64:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pLong64 = ImpDoubleToINT64( d );
-            break;
-        }
-        case SbxBYREF | SbxCURRENCY:
-        {
-            double d;
-            pDec->getDouble( d );
-            *p->pLong64 = ImpDoubleToCurrency( d );
-            break;
-        }
-
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
@@ -795,3 +745,4 @@ start:
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

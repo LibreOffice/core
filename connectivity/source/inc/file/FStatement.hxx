@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -203,7 +204,7 @@ namespace connectivity
             // factory method for resultset's
             virtual OResultSet* createResultSet();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
             DECLARE_SERVICE_INFO();
 
@@ -221,3 +222,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_FILE_OSTATEMENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,7 @@ namespace framework
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        class FactoryManagerMap : public std::hash_map< rtl::OUString,
+        class FactoryManagerMap : public boost::unordered_map< rtl::OUString,
                                                      rtl::OUString,
                                                      OUStringHashCode,
                                                      ::std::equal_to< ::rtl::OUString > >
@@ -112,6 +113,7 @@ namespace framework
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigListener;
         sal_Bool                          m_bConfigAccessInitialized;
         bool                              m_bConfigDirty;
 };
@@ -149,3 +151,5 @@ class UIElementFactoryManager :  private ThreadHelpBase                         
 } // namespace framework
 
 #endif // __FRAMEWORK_UIFACTORY_UIELEMENTFACTORYMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

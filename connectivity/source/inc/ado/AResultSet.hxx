@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,6 @@
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -81,7 +79,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             ::std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
-            sal_Int32                       m_nRowPos;
+            ADO_LONGPTR                     m_nRowPos;
             sal_Bool                        m_bWasNull;
             sal_Bool                        m_bEOF;
             sal_Bool                        m_bOnFirstAfterOpen;
@@ -120,7 +118,7 @@ namespace connectivity
                                          ) const;
             virtual ~OResultSet();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( ADORecordset* _pRecordSet,OStatement_Base* pStmt);
             OResultSet( ADORecordset* _pRecordSet);
 
@@ -235,3 +233,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_ADO_ARESULTSET_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,9 +56,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
@@ -127,7 +126,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
             StatusBar*        pStatusBar( 0 );
             StatusBarManager* pStatusBarManager( 0 );
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
@@ -203,3 +202,4 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( Ru
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

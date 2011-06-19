@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,8 +114,8 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
+         m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory")) ) , UNO_QUERY );
     if ( xFac.is() )
     {
         Reference<  uri::XUriReference > uriRef(
@@ -256,9 +257,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+        ::rtl::OUString reason(RTL_CONSTASCII_USTRINGPARAM(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
-        );
+        ));
         invokeResult <<= reason;
     }
 
@@ -401,8 +402,8 @@ void ScriptProtocolHandler::createScriptProvider()
             Reference< XComponentContext > xCtx(
                 xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
 
-            ::rtl::OUString tmspf = ::rtl::OUString::createFromAscii(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
+            ::rtl::OUString tmspf(RTL_CONSTASCII_USTRINGPARAM(
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"));
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
@@ -514,7 +515,7 @@ extern "C"
 #undef css
 #define css ::com::sun::star
 
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {
         (void)ppEnvironment;
@@ -522,7 +523,7 @@ extern "C"
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
     }
 
-    void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,
                                          void * pRegistryKey )
     {
@@ -563,3 +564,4 @@ extern "C"
 } // extern "C"
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

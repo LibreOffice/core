@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,14 +38,13 @@
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
 #include <vcl/graph.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include "editeng/editengdllapi.h"
 
 #include <svtools/grfmgr.hxx>
 
-#include <tools/rtti.hxx>   // wegen typedef TypeId
+#include <tools/rtti.hxx>   // due to typedef TypeId
 #include <vector>
 
 class OutlinerEditEng;
@@ -85,7 +85,7 @@ namespace svl
 
 #include <com/sun/star/uno/Reference.h>
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
@@ -104,7 +104,7 @@ typedef std::vector<SpellPortion> SpellPortions;
 
 namespace basegfx { class B2DPolyPolygon; }
 
-// nur interner Gebrauch!
+// internal use only!
 #define PARAFLAG_DROPTARGET         0x1000
 #define PARAFLAG_DROPTARGET_EMPTY   0x2000
 #define PARAFLAG_HOLDDEPTH          0x4000
@@ -222,8 +222,8 @@ private:
     enum MouseTarget {
         MouseText = 0,
         MouseBullet = 1,
-        MouseHypertext = 2,    //            ausserhalb OutputArea
-        MouseOutside = 3,    //            ausserhalb OutputArea
+        MouseHypertext = 2,  // Outside OutputArea
+        MouseOutside = 3,    // Outside OutputArea
         MouseDontKnow = 4
     };
     MouseTarget OLD_ePrevMouseTarget;
@@ -264,7 +264,7 @@ public:
     void        Scroll( long nHorzScroll, long nVertScroll );
 
     void        Paint( const Rectangle& rRect );
-    sal_Bool        PostKeyEvent( const KeyEvent& rKEvt );
+    sal_Bool        PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin = NULL );
     sal_Bool        MouseButtonDown( const MouseEvent& );
     sal_Bool        MouseButtonUp( const MouseEvent& );
     sal_Bool        MouseMove( const MouseEvent& );
@@ -286,10 +286,9 @@ public:
 
     Rectangle   GetVisArea() const;
 
-    List*       CreateSelectionList();
+    void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
-    // gibt Anzahl selektierter Absaetze zurueck
-    // MT 07/00: Who needs this?
+    // Retruns the number of selected paragraphs
     sal_uLong       Select( Paragraph* pParagraph,
                     sal_Bool bSelect=sal_True,
                     sal_Bool bWChilds=sal_True);
@@ -298,7 +297,7 @@ public:
     void        SelectRange( sal_uLong nFirst, sal_uInt16 nCount );
     void        SetAttribs( const SfxItemSet& );
     void        Indent( short nDiff );
-    void        AdjustDepth( short nDX );   // Spaeter gegeb Indent ersetzen!
+    void        AdjustDepth( short nDX );   // Later replace with Indent!
 
     sal_Bool        AdjustHeight( long nDY );
     void        AdjustDepth( Paragraph* pPara, short nDX,
@@ -399,12 +398,7 @@ public:
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( String &rStatusVal, LanguageType &rLang, const EditView &rEditView );
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
 
-
-//#if 0 // _SOLAR__PRIVATE
-DECLARE_LIST(ViewList,OutlinerView*)
-//#else
-//typedef List ViewList;
-//#endif
+typedef ::std::vector< OutlinerView* > ViewList;
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {
@@ -424,8 +418,10 @@ public:
     const Color maOverlineColor;
     const Color maTextLineColor;
 
-    // #101498# BiDi level needs to be transported, too.
     sal_uInt8               mnBiDiLevel;
+
+    bool                mbFilled;
+    long                mnWidthToFill;
 
     // bitfield
     unsigned            mbEndOfLine : 1;
@@ -450,6 +446,8 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor,
         sal_uInt8 nBiDiLevel,
+        bool bFilled,
+        long nWidthToFill,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet)
@@ -467,6 +465,8 @@ public:
         maOverlineColor(rOverlineColor),
         maTextLineColor(rTextLineColor),
         mnBiDiLevel(nBiDiLevel),
+        mbFilled( bFilled ),
+        mnWidthToFill( nWidthToFill ),
         mbEndOfLine(bEndOfLine),
         mbEndOfParagraph(bEndOfParagraph),
         mbEndOfBullet(bEndOfBullet)
@@ -635,7 +635,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     sal_uInt16              nOutlinerMode;
 
-    sal_Bool                bIsExpanding; // Nur in Expand/Collaps-Hdl gueltig, mal umstellen
+    sal_Bool                bIsExpanding; // Only valid in Expand/Collaps-Hdl, reset
     sal_Bool                bFirstParaIsEmpty;
     sal_Bool                bBlockInsCallback;
     sal_Bool                bStrippingPortions;
@@ -728,11 +728,11 @@ public:
     void            SetAddExtLeading( sal_Bool b );
     sal_Bool            IsAddExtLeading() const;
 
-    sal_uLong           InsertView( OutlinerView* pView, sal_uLong nIndex=LIST_APPEND);
+    size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
     OutlinerView*   RemoveView( OutlinerView* pView );
-    OutlinerView*   RemoveView( sal_uLong nIndex );
-    OutlinerView*   GetView( sal_uLong nIndex ) const;
-    sal_uLong           GetViewCount() const;
+    OutlinerView*   RemoveView( size_t nIndex );
+    OutlinerView*   GetView( size_t nIndex ) const;
+    size_t          GetViewCount() const;
 
     Paragraph*      Insert( const String& rText, sal_uLong nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
@@ -769,9 +769,7 @@ public:
     sal_Bool            HasChilds( Paragraph* pParagraph ) const;
     sal_uLong           GetChildCount( Paragraph* pParent ) const;
     sal_Bool            IsExpanded( Paragraph* pPara ) const;
-//  Paragraph*      GetParagraph( Paragraph* pParent, sal_uLong nRelPos ) const;
-    Paragraph*      GetParent( Paragraph* pParagraph ) const;
-//  sal_uLong           GetRelPos( Paragraph* pParent, Paragraph* pPara ) const;
+    Paragraph*          GetParent( Paragraph* pParagraph ) const;
     sal_uLong           GetAbsPos( Paragraph* pPara );
 
     sal_Int16       GetDepth( sal_uLong nPara ) const;
@@ -817,9 +815,10 @@ public:
     virtual long    IndentingPagesHdl( OutlinerView* );
     void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
     Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
-    // nur gueltig in den beiden oberen Handlern
+    // valid only in the two upper handlers
     sal_uInt16          GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
-    // nur gueltig in den beiden oberen Handlern
+
+    // valid only in the two upper handlers
     sal_uLong           GetFirstSelPage() const { return mnFirstSelPage; }
 
     void            SetCalcFieldValueHdl(const Link& rLink ) { aCalcFieldValueHdl= rLink; }
@@ -887,7 +886,6 @@ public:
 
     void            StripPortions();
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
         const sal_Int32* pDXArray, const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
@@ -900,7 +898,16 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
+    virtual void DrawingTab(
+        const Point& rStartPos, long nWidth, const String& rChar,
+        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor);
+
     Size            CalcTextSize();
+    Size            CalcTextSizeNTP();
 
     Point           GetDocPos( Paragraph* pPara );
 
@@ -923,8 +930,8 @@ public:
     void            RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag );
     bool            HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const;
 
-    // gibt ein Array mit den Bulletbreiten der n Einrueckebenen
-    // zurueck. Letzter Wert muss -1 sein. Wird vom Outliner geloescht.
+    // Returns an array containing the widths of the Bullet Indentations
+    // Last value must be -1. Is deleted by the outliner.
     Link            GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
     void            SetWidthArrReqHdl(const Link& rLink){aWidthArrReqHdl=rLink; }
 
@@ -940,7 +947,7 @@ public:
     sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
     sal_uLong           GetLineHeight( sal_uLong nParagraph, sal_uLong nLine = 0 );
 
-    // nFormat muss ein Wert aus dem enum EETextFormat sein (wg.CLOOKS)
+    // nFormat must be a value from the enum EETextFormat (due to CLOOKS)
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     ::svl::IUndoManager&
@@ -950,7 +957,7 @@ public:
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
 
-    // nur fuer EditEngine-Modus
+    // Only for EditEngine mode
     void            QuickInsertText( const String& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
     void            QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
@@ -974,8 +981,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     // Depricated
     void            SetDefaultLanguage( LanguageType eLang );
@@ -1024,11 +1031,11 @@ public:
     sal_uInt16  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
 
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
-    //spell and return a sentence
+    // spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
-    //applies a changed sentence
+    // applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     void            EndSpelling();
 
@@ -1057,3 +1064,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

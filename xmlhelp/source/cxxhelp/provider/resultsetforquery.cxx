@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 #include "resultsetforquery.hxx"
 #include "databases.hxx"
 
-// For testing
-// #define LOGGING
-
 using namespace std;
 using namespace chelp;
 using namespace xmlsearch::excep;
@@ -89,7 +87,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(
-        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Transliteration" ) ),
+        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Transliteration" )) ),
         UNO_QUERY );
     Locale aLocale( aURLParameter.get_language(),
                     rtl::OUString(),
@@ -100,7 +98,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
     // Access Lucene via XInvocation
     Reference< script::XInvocation > xInvocation(
-        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.help.HelpSearch" ) ),
+        xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.help.HelpSearch" )) ),
         UNO_QUERY );
 
     vector< vector< rtl::OUString > > queryList;
@@ -140,10 +138,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
         sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
-#ifdef LOGGING
-        FILE* pFile = fopen( "d:\\resultset_out.txt", "w" );
-#endif
-
         IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
         rtl::OUString idxDir;
         bool bExtension = false;
@@ -181,27 +175,27 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                     int nParamCount = bCaptionsOnly ? 7 : 6;
                     Sequence<uno::Any> aParamsSeq( nParamCount );
 
-                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
+                    aParamsSeq[0] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-lang" )) );
                     aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
 
-                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
+                    aParamsSeq[2] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-index" )) );
                     rtl::OUString aSystemPath;
                     osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
                     aParamsSeq[3] = uno::makeAny( aSystemPath );
 
-                    aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-query" ) );
+                    aParamsSeq[4] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-query" )) );
 
                     const std::vector< rtl::OUString >& aListItem = queryList[i];
                     ::rtl::OUString aNewQueryStr = aListItem[0];
                     aParamsSeq[5] = uno::makeAny( aNewQueryStr );
 
                     if( bCaptionsOnly )
-                        aParamsSeq[6] = uno::makeAny( rtl::OUString::createFromAscii( "-caption" ) );
+                        aParamsSeq[6] = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-caption" )) );
 
                     Sequence< sal_Int16 > aOutParamIndex;
                     Sequence< uno::Any > aOutParam;
 
-                    uno::Any aRet = xInvocation->invoke( rtl::OUString::createFromAscii( "search" ),
+                    uno::Any aRet = xInvocation->invoke( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "search" )),
                         aParamsSeq, aOutParamIndex, aOutParam );
 
                     Sequence< float > aScoreSeq;
@@ -234,14 +228,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                             pQueryResultVector->push_back( HitItem( aURL, fScore ) );
                             if( nQueryListSize > 1 )
                                 aSet.insert( aURL );
-
-#ifdef LOGGING
-                            if( pFile )
-                            {
-                                rtl::OString tmp(rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8));
-                                fprintf( pFile, "Dir %d, Query %d, Item: score=%f, URL=%s\n", iDir, i, fScore, tmp.getStr() );
-                            }
-#endif
                         }
                     }
 
@@ -284,14 +270,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                 {
                                     // Use first pass to create entry
                                     aIndexFolderResultVector.push_back( aItemCopy );
-
-#ifdef LOGGING
-                                    if( pFile )
-                                    {
-                                        rtl::OString tmp(rtl::OUStringToOString( aItemCopy.m_aURL, RTL_TEXTENCODING_UTF8));
-                                        fprintf( pFile, "Combine: Query %d (first pass), Item %d: score=%f (%f), URL=%s\n", n, i, aItemCopy.m_fScore, rItem.m_fScore, tmp.getStr() );
-                                    }
-#endif
                                 }
                                 else
                                 {
@@ -302,15 +280,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                         HitItem& rFindItem = aIndexFolderResultVector[ j ];
                                         if( rFindItem.m_aURL.equals( aItemCopy.m_aURL ) )
                                         {
-#ifdef LOGGING
-                                            if( pFile )
-                                            {
-                                                rtl::OString tmp(rtl::OUStringToOString( aItemCopy.m_aURL, RTL_TEXTENCODING_UTF8));
-                                                fprintf( pFile, "Combine: Query %d, Item %d: score=%f + %f = %f, URL=%s\n", n, i,
-                                                    rFindItem.m_fScore, aItemCopy.m_fScore, rFindItem.m_fScore + aItemCopy.m_fScore, tmp.getStr() );
-                                            }
-#endif
-
                                             rFindItem.m_fScore += aItemCopy.m_fScore;
                                             break;
                                         }
@@ -345,26 +314,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         vector<HitItem>::size_type* pCurrentVectorIndex = new vector<HitItem>::size_type[nVectorCount];
         for( int j = 0 ; j < nVectorCount ; ++j )
             pCurrentVectorIndex[j] = 0;
-
-#ifdef LOGGING
-        if( pFile )
-        {
-            for( int k = 0 ; k < nVectorCount ; ++k )
-            {
-                vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[k];
-                int nItemCount = rIndexFolderVector.size();
-
-                fprintf( pFile, "Vector %d, %d elements\n", k, nItemCount );
-
-                for( int i = 0 ; i < nItemCount ; ++i )
-                {
-                    const HitItem& rItem = rIndexFolderVector[ i ];
-                    rtl::OString tmp(rtl::OUStringToOString(rItem.m_aURL, RTL_TEXTENCODING_UTF8));
-                    fprintf( pFile, "    Item_vector%d, %d/%d: score=%f, URL=%s\n", k, i, nItemCount, rItem.m_fScore, tmp.getStr() );
-                }
-            }
-        }
-#endif
 
         sal_Int32 nTotalHitCount = m_aURLParameter.get_hitCount();
         sal_Int32 nHitCount = 0;
@@ -405,14 +354,10 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             vector<HitItem>* pIndexFolderVector = aIndexFolderResultVectorVector[n];
             delete pIndexFolderVector;
         }
-
-#ifdef LOGGING
-        fclose( pFile );
-#endif
     }
 
-    sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
-    rtl::OUString replWith = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
+    sal_Int32 replIdx = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "#HLP#" )).getLength();
+    rtl::OUString replWith = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ));
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
@@ -426,16 +371,16 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ));
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
             m_aPath[m_nRow]                                          +
-            rtl::OUString::createFromAscii( "?Language=" )           +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "?Language=" ))           +
             m_aURLParameter.get_language()                           +
-            rtl::OUString::createFromAscii( "&System=" )             +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "&System=" ))             +
             m_aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();
@@ -447,3 +392,5 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     }
     m_nRow = 0xffffffff;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

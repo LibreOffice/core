@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,29 +197,13 @@ throw (::com::sun::star::uno::RuntimeException)
             xDocument = m_pClient->GetViewShell()->GetObjectShell()->GetModel();
         SfxObjectShell::SetCurrentComponent( xDocument );
     }
-    else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
-    {
-/*
-        uno::Reference < lang::XUnoTunnel > xObj( m_xObject->getComponent(), uno::UNO_QUERY );
-        uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
-        sal_Int64 nHandle = xObj.is() ? xObj->getSomething( aSeq ) : 0;
-        if ( nHandle )
-        {
-            // currently needs SFX code
-            SfxObjectShell* pDoc = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
-            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDoc );
-            SfxWorkWindow *pWorkWin = pFrame->GetFrame().GetWorkWindow_Impl();
-            pWorkWin->UpdateObjectBars_Impl();
-        }
-*/
-    }
 }
 
 void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-    if ( m_pClient && aEvent.EventName.equalsAscii("OnVisAreaChanged") && m_nAspect != embed::Aspects::MSOLE_ICON )
+    if ( m_pClient && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
         m_pClient->FormatChanged(); // for Writer when format of the object is changed with the area
         m_pClient->ViewChanged();
@@ -354,7 +339,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -438,7 +423,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
+        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) );
         aAny >>= xMan;
     }
     catch ( uno::Exception& )
@@ -692,7 +677,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
         if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON
           && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
         {
-            OSL_ENSURE( sal_False, "Iconified object should not be activated inplace!\n" );
+            OSL_FAIL( "Iconified object should not be activated inplace!\n" );
             return;
         }
 
@@ -737,7 +722,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Can not clean the client site!\n" );
+                OSL_FAIL( "Can not clean the client site!\n" );
             }
         }
     }
@@ -761,7 +746,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can not set the client site!\n" );
+            OSL_FAIL( "Can not set the client site!\n" );
         }
 
         m_pImp->m_aTimer.Start();
@@ -1167,3 +1152,5 @@ sal_Bool SfxInPlaceClient::IsUIActive()
 {
     return m_pImp->m_bUIActive;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

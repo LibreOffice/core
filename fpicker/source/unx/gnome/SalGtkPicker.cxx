@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
@@ -45,7 +52,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalGtkPicker.hxx"
 #include <tools/urlobj.hxx>
@@ -123,9 +130,10 @@ extern "C"
     extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
-    cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
-    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
+    uno::Reference< frame::XDesktop >& rDesktop ) :
+    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
+    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit), mxDesktop(rDesktop)
 {
     awt::SystemDependentXWindow aWindowHandle;
 
@@ -179,6 +187,18 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
 }
 
+void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
+        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventObject& )
+        throw(::com::sun::star::uno::RuntimeException)
+{
+    GdkThreadLock aLock;
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+}
+
 void RunDialog::cancel()
 {
     GdkThreadLock aLock;
@@ -214,19 +234,19 @@ static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>&
     {
         uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
           uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
               UNO_QUERY_THROW );
 
         Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
 
         uno::Reference< container::XNameAccess > xNameAccess =
           uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs ),
               UNO_QUERY_THROW );
 
         if (xNameAccess.is())
-            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
+            xNameAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= sUILocale;
     } catch (...) {}
 
     if (sUILocale.getLength())
@@ -292,3 +312,5 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
     GdkThreadLock aLock;
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

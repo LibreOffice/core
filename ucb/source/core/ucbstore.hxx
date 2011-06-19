@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ public:
     PropertySetRegistry(
         const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-        const ::com::sun::star::uno::Sequence<
+                const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry();
 
@@ -343,3 +344,5 @@ public:
 };
 
 #endif /* !_UCBSTORE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

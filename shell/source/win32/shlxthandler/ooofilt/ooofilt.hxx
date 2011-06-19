@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,39 +29,29 @@
 #include "internal/types.hxx"
 
 //+-------------------------------------------------------------------------
-//
 //  Contents:   OpenOffice.org filter declarations
-//
 //  Platform:   Windows 2000, Windows XP
-//
 //--------------------------------------------------------------------------
 
 #pragma once
 
 //+-------------------------------------------------------------------------
-//
 //  forward declaration
-//
 //--------------------------------------------------------------------------
 class CContentReader;
 class CMetaInfoReader;
 class CFullPropSpec;
 
 //+-------------------------------------------------------------------------
-//
 //  Global definitions
-//
 //--------------------------------------------------------------------------
 
 long g_lInstances = 0;                        // Global count of COooFilter and COooFilterCF instances
 GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 
 //C-------------------------------------------------------------------------
-//
 //  Class:      COooFilter
-//
 //  Purpose:    Implements interfaces of OpenOffice.org filter
-//
 //--------------------------------------------------------------------------
 
 // OooFilter Class ID
@@ -179,11 +170,8 @@ private:
 };
 
 //C-------------------------------------------------------------------------
-//
 //  Class:      COooFilterCF
-//
 //  Purpose:    Implements class factory for OpenOffice.org filter
-//
 //--------------------------------------------------------------------------
 
 class COooFilterCF : public IClassFactory
@@ -216,3 +204,5 @@ private:
 
     long m_lRefs;           // Reference count
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

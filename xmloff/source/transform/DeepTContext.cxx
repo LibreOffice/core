@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "DeepTContext.hxx"
-#ifndef _XMLOFF_FLATTTCONTEXT_HXX
 #include "FlatTContext.hxx"
-#endif
 #include "EventOOoTContext.hxx"
 #include "TransformerActions.hxx"
 #include "ElemTransformerAction.hxx"
 #include "PersMixedContentTContext.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -179,3 +176,4 @@ void XMLPersElemContentTContext::ExportContent()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

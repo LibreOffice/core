@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define FORMULA_FORMULA_HXX
 
 #include <sfx2/basedlgs.hxx>
-// #include "formula/funcutl.hxx"
 #include <memory>
 #include "formula/formuladllapi.h"
 
@@ -155,3 +155,4 @@ protected:
 
 #endif // FORMULA_FORMULA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

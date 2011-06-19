@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include "dp_registry.hrc"
 
@@ -55,8 +56,7 @@ namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
 
-char const* const BACKEND_SERVICE_NAME =
-"com.sun.star.deployment.PackageRegistryBackend";
+#define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"
 
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
@@ -121,16 +121,16 @@ public:
         const ::rtl::OUString m_mediaType;
         const ::rtl::OUString m_fileFilter;
         const ::rtl::OUString m_shortDescr;
-        const sal_uInt16 m_smallIcon, m_smallIcon_HC;
+        const sal_uInt16 m_smallIcon;
     public:
         virtual ~TypeInfo();
         TypeInfo( ::rtl::OUString const & mediaType,
                   ::rtl::OUString const & fileFilter,
                   ::rtl::OUString const & shortDescr,
-                  sal_uInt16 smallIcon, sal_uInt16 smallIcon_HC )
+                  sal_uInt16 smallIcon)
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon), m_smallIcon_HC(smallIcon_HC)
+              m_smallIcon(smallIcon)
             {}
         // XPackageTypeInfo
         virtual ::rtl::OUString SAL_CALL getMediaType()
@@ -286,7 +286,7 @@ class PackageRegistryBackend
     // XPackageManager::getDeployedPackages is called often. This results in a lot
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
         ::rtl::OUStringHash > t_string2ref;
     t_string2ref m_bound;
@@ -398,3 +398,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

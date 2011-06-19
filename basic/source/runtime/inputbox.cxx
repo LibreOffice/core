@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>
@@ -153,7 +152,6 @@ IMPL_LINK_INLINE_END( SvRTLInputBox, CancelHdl, Button *, pButton )
 
 // *********************************************************************
 // *********************************************************************
-// *********************************************************************
 
 // Syntax: String InputBox( Prompt, [Title], [Default] [, nXpos, nYpos ] )
 
@@ -195,3 +193,4 @@ RTLFUNC(InputBox)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

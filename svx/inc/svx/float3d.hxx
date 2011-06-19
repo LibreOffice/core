@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +30,10 @@
 #define _SVX_FLOAT3D_HXX
 
 #include <sfx2/ctrlitem.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <sfx2/dockwin.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/valueset.hxx>
 #include <svtools/stdctrl.hxx>
 #include "svx/svxdllapi.h"
@@ -84,8 +79,8 @@ private:
     ImageButton         aBtnUpdate;
     ImageButton         aBtnAssign;
 
+// geometry
     FixedLine           aFLGeometrie;
-// Geometrie
     FixedText           aFtPercentDiagonal;
     MetricField         aMtrPercentDiagonal;
     FixedText           aFtBackscale;
@@ -110,7 +105,7 @@ private:
 
     ImageButton         aBtnDoubleSided;
     FixedLine           aFLRepresentation;
-// Darstellung
+// presentation
     FixedText           aFtShademode;
     ListBox             aLbShademode;
     FixedLine           aFLShadow;
@@ -124,7 +119,7 @@ private:
     FixedLine           aFLCamera;
     FixedLine           aFLLight;
 
-// Beleuchtung
+// lighting
     ImageButton         aBtnLight1;
     ImageButton         aBtnLight2;
     ImageButton         aBtnLight3;
@@ -153,7 +148,7 @@ private:
 
        FixedLine           aFLTexture;
 
-// Texturen
+// Textures
     FixedText           aFtTexKind;
     ImageButton         aBtnTexLuminance;
     ImageButton         aBtnTexColor;
@@ -172,9 +167,9 @@ private:
     FixedText           aFtTexFilter;
     ImageButton         aBtnTexFilter;
 
-// Material
+// material
+// material editor
        FixedLine           aFLMaterial;
-// Materialeditor
     FixedText           aFtMatFavorites;
     ListBox             aLbMatFavorites;
     FixedText           aFtMatColor;
@@ -193,19 +188,19 @@ private:
     Svx3DPreviewControl aCtlPreview;
     SvxLightCtl3D       aCtlLightPreview;
 
-// Unterer Teil
+// bottom part
     ImageButton         aBtnConvertTo3D;
     ImageButton         aBtnLatheObject;
     ImageButton         aBtnPerspective;
 
-// der Rest ...
+// the rest ...
     Image               aImgLightOn;
     Image               aImgLightOff;
     sal_Bool                bUpdate;
     ViewType3D          eViewType;
     Size                aSize;
 
-    // Model, Page, View etc. fuer Favoriten
+    // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
     FmFormPage*         pFmPage;
     VirtualDevice*      pVDev;
@@ -274,7 +269,7 @@ public:
 
 /*************************************************************************
 |*
-|* ControllerItem fuer 3D-Window (Floating/Docking)
+|* Controller item for 3D Window (Floating/Docking)
 |*
 \************************************************************************/
 
@@ -292,7 +287,7 @@ class Svx3DCtrlItem : public SfxControllerItem
 
 /*************************************************************************
 |*
-|* ControllerItem fuer Status eines Slots
+|* ControllerItem for State of a Slot
 |* (SID_CONVERT_TO_3D, SID_CONVERT_TO_3D_LATHE_FAST)
 |*
 \************************************************************************/
@@ -311,3 +306,4 @@ public:
 
 #endif      // _SVX_FLOAT3D_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

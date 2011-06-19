@@ -38,8 +38,6 @@ import org.openide.util.Utilities;
 
 /**
  * Description of the OpenOffice.org Document filesystem.
- *
- * @author misha <misha@openoffice.org>
  */
 public class OpenOfficeDocFileSystemBeanInfo
     extends SimpleBeanInfo

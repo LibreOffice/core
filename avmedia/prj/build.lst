@@ -1,4 +1,4 @@
-av	avmedia	:    L10N:l10n tools sfx2 LIBXSLT:libxslt NULL
+av	avmedia	:    TRANSLATIONS:translations tools sfx2 LIBXSLT:libxslt NULL
 av	avmedia                 	usr1	-	all	av_mkout												NULL
 av	avmedia\prj					get		-	all	av_prj													NULL
 av	avmedia\inc					get		-	all	av_inv													NULL

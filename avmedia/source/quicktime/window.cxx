@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
 {
 
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
-
 
     if( mpParentView ) // sanity check
     {
@@ -296,7 +296,6 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
     maListeners.removeInterface( getCppuType( &xListener ), xListener );
 }
 
-
 // XComponent
 // ------------------------------------------------------------------------------
 
@@ -351,3 +350,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
 
 } // namespace quicktime
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

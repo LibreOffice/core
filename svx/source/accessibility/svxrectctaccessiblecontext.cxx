@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
@@ -166,7 +166,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msName = *pName;
     else
     {
-        ::vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aSolarGuard;
         msName = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_NAME : RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
     }
 
@@ -174,7 +174,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msDescription = *pDesc;
     else
     {
-        ::vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aSolarGuard;
         msDescription = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR : RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
@@ -291,7 +291,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
     Reference< XAccessible >    xChild = mpChilds[ nIndex ];
     if( !xChild.is() )
     {
-        ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aSolarGuard;
 
         ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -388,8 +388,6 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccess
 
     if( IsAlive() )
     {
-        // pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-        // pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         if( mpRepr->HasFocus() )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
@@ -485,7 +483,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::removeFocusListener( const Reference<
 
 void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -502,7 +500,7 @@ Any SAL_CALL SvxRectCtlAccessibleContext::getAccessibleKeyBinding() throw( Runti
 sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
@@ -511,7 +509,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
 
@@ -560,7 +558,7 @@ Sequence< sal_Int8 > SAL_CALL SvxRectCtlAccessibleContext::getImplementationId( 
 
 void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
 
     ::osl::MutexGuard   aGuard( m_aMutex );
 
@@ -755,7 +753,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
 
 Rectangle SvxRectCtlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -765,7 +763,7 @@ Rectangle SvxRectCtlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( Run
 
 Rectangle SvxRectCtlAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
@@ -845,7 +843,6 @@ Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAcc
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
@@ -900,13 +897,13 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( 
 void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw( RuntimeException )
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeException )
@@ -921,7 +918,7 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleKeyBinding() throw( 
 sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
     ThrowExceptionIfNotAlive();
     return mrParentWindow.GetControlForeground().GetColor();
@@ -929,7 +926,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
 sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard   aGuard( maMutex );
 
     ThrowExceptionIfNotAlive();
@@ -1204,3 +1201,4 @@ void SvxRectCtlChildAccessibleContext::setStateChecked( sal_Bool bChecked )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

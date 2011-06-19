@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifndef GCC
-#endif
 
 #include <stdio.h>
 #include <tools/rcid.h>
@@ -69,12 +67,10 @@ public:
     SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
-    ImageList*                  pImgListHiSmall;
-    ImageList*                  pImgListHiBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
-    ImageList*                  GetImageList( ResMgr*, sal_Bool, sal_Bool bHiContrast = sal_False );
+    ImageList*                  GetImageList( ResMgr* pResMgr, bool bBig );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -91,18 +87,15 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pFactArr;
     delete pImgListSmall;
     delete pImgListBig;
-    delete pImgListHiSmall;
-    delete pImgListHiBig;
 }
 
-ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, sal_Bool bBig, sal_Bool bHiContrast )
+ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 {
-    ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig: pImgListBig ) :
-                                ( bHiContrast ? pImgListHiSmall : pImgListSmall );
+    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
     if ( !rpList )
     {
-        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
-                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr );
+        ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr );
+
         aResId.SetRT( RSC_IMAGELIST );
 
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
@@ -131,16 +124,7 @@ ResMgr* SfxModule::GetResMgr()
 }
 
 //====================================================================
-/*
-SfxModule::SfxModule( ResMgr* pMgrP, sal_Bool bDummyP,
-                      SfxObjectFactory* pFactoryP )
-    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
-{
-    Construct_Impl();
-    if ( pFactoryP )
-        pFactoryP->SetModule_Impl( this );
-}
-*/
+
 SfxModule::SfxModule( ResMgr* pMgrP, sal_Bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
     : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
@@ -171,8 +155,6 @@ void SfxModule::Construct_Impl()
         pImpl->pFactArr=0;
         pImpl->pImgListSmall=0;
         pImpl->pImgListBig=0;
-        pImpl->pImgListHiSmall=0;
-        pImpl->pImgListHiBig=0;
 
         SetPool( &pApp->GetPool() );
     }
@@ -186,7 +168,8 @@ SfxModule::~SfxModule()
     {
         if ( SFX_APP()->Get_Impl() )
         {
-            // Das Modul wird noch vor dem DeInitialize zerst"ort, also auis dem Array entfernen
+            // The module will be destroyed before the Deinitialize,
+            // so remove from the array
             SfxModuleArr_Impl& rArr = GetModules_Impl();
             for( sal_uInt16 nPos = rArr.Count(); nPos--; )
             {
@@ -215,22 +198,20 @@ SfxSlotPool* SfxModule::GetSlotPool() const
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "Kein echtes Modul!" );
+    DBG_ASSERT( pImpl, "No real Module!" );
 
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
 
-//#ifdef DBG_UTIL
     for (sal_uInt16 nFactory=0; nFactory<pImpl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
             pImpl->pFactArr->Remove( nFactory );
-            DBG_ERROR("ChildWindow mehrfach registriert!");
+            OSL_FAIL("ChildWindow registered multiple times!");
             return;
         }
     }
-//#endif
 
     pImpl->pFactArr->C40_INSERT(
         SfxChildWinFactory, pFact, pImpl->pFactArr->Count() );
@@ -241,7 +222,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 void SfxModule::RegisterChildWindowContext( sal_uInt16 nId,
         SfxChildWinContextFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "Kein echtes Modul!" );
+    DBG_ASSERT( pImpl, "No real Module!" );
 
     sal_uInt16 nCount = pImpl->pFactArr->Count();
     for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
@@ -256,7 +237,7 @@ void SfxModule::RegisterChildWindowContext( sal_uInt16 nId,
         }
     }
 
-    DBG_ERROR( "Kein ChildWindow fuer diesen Context!" );
+    OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
 //-------------------------------------------------------------------------
@@ -273,7 +254,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -295,7 +276,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -317,7 +298,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("MenuController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -355,15 +336,10 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 
 ImageList* SfxModule::GetImageList_Impl( sal_Bool bBig )
 {
-    return pImpl->GetImageList( pResMgr, bBig, sal_False );
+    return pImpl->GetImageList( pResMgr, bBig );
 }
 
-ImageList* SfxModule::GetImageList_Impl( sal_Bool bBig, sal_Bool bHiContrast )
-{
-    return pImpl->GetImageList( pResMgr, bBig, bHiContrast );
-}
-
-SfxTabPage* SfxModule::CreateTabPage( sal_uInt16, Window*, const SfxItemSet& )
+SfxTabPage*     SfxModule::CreateTabPage( sal_uInt16, Window*, const SfxItemSet& )
 {
     return NULL;
 }
@@ -381,10 +357,11 @@ void SfxModule::DestroyModules_Impl()
     {
         SfxModuleArr_Impl& rModules = *pModules;
         for( sal_uInt16 nPos = rModules.Count(); nPos--; )
-    {
-        SfxModule* pMod = rModules.GetObject(nPos);
-        delete pMod;
-    }
+        {
+            SfxModule* pMod = rModules.GetObject(nPos);
+            delete pMod;
+        }
+        delete pModules, pModules = 0;
     }
 }
 
@@ -482,3 +459,5 @@ FieldUnit SfxModule::GetFieldUnit() const
         eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     return eUnit;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

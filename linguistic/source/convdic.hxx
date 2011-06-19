@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/string.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 #include <memory>
 #include "linguistic/misc.hxx"
@@ -50,11 +51,7 @@
 
 class SvStream;
 
-///////////////////////////////////////////////////////////////////////////
-
 sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
-
-///////////////////////////////////////////////////////////////////////////
 
 struct StrLT
 {
@@ -72,15 +69,14 @@ struct StrEQ
     }
 };
 
-typedef std::hash_multimap< const rtl::OUString, rtl::OUString,
+typedef boost::unordered_multimap< const rtl::OUString, rtl::OUString,
                        const rtl::OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< rtl::OUString, StrLT > ConvMapKeySet;
 
-typedef std::hash_multimap< const rtl::OUString, sal_Int16,
+typedef boost::unordered_multimap< const rtl::OUString, sal_Int16,
                        rtl::OUStringHash, StrEQ > PropTypeMap;
 
-///////////////////////////////////////////////////////////////////////////
 
 class ConvDic :
     public ::cppu::WeakImplHelper4
@@ -173,7 +169,7 @@ inline ::rtl::OUString ConvDic::getImplementationName_Static() throw()
     return A2OU( "com.sun.star.lingu2.ConvDic" );
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

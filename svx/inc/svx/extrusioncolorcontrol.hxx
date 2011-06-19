@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,8 @@ namespace svx {
 class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
-    ToolboxButtonColorUpdater*  mpBtnUpdater;
+    ToolboxButtonColorUpdater* mpBtnUpdater;
+    Color                      mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -54,3 +56,4 @@ public:
 
 #endif      // _SVX_EXTRUSIONCOLORCONTROL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

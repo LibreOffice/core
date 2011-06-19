@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,17 +43,16 @@ namespace rtl
 // class SvxProtectItem --------------------------------------------------
 
 
-/*
-[Beschreibung]
-Dieses Item beschreibt, ob Inhalt, Groesse oder Position geschuetzt werden
-sollen.
+/*  [Description]
+
+    This item describes, if content, size or position should be protected.
 */
 
 class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 {
-    sal_Bool bCntnt :1;     //Inhalt geschuetzt
-    sal_Bool bSize  :1;     //Groesse geschuetzt
-    sal_Bool bPos   :1;     //Position geschuetzt
+    sal_Bool bCntnt :1;     // Content protected
+    sal_Bool bSize  :1;     // Size protected
+    sal_Bool bPos   :1;     // Position protected
 
 public:
     TYPEINFO();
@@ -60,7 +60,7 @@ public:
     inline SvxProtectItem( const sal_uInt16 nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -80,8 +80,8 @@ public:
     void SetSizeProtect ( sal_Bool bNew ) { bSize  = bNew; }
     void SetPosProtect  ( sal_Bool bNew ) { bPos   = bNew; }
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
@@ -103,3 +103,4 @@ inline SvxProtectItem &SvxProtectItem::operator=( const SvxProtectItem &rCpy )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

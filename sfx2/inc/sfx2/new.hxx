@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 
 //=========================================================================
@@ -70,13 +63,6 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    /** state whether a system setting for high contrast should be evaluated
-        and taken into account for this window.
-
-        The default implementation uses the accessibility option IsForDrawings
-      */
-    virtual bool    UseHighContrastSetting() const;
-
 public:
     SfxPreviewWin( Window* pParent,
                    const ResId& rResId,
@@ -96,9 +82,8 @@ public:
     SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
     ~SfxNewFileDialog();
 
-        // Liefert sal_False, wenn '- Keine -' als Vorlage eingestellt ist
-        // Nur wenn IsTemplate() sal_True liefert, koennen Vorlagennamen
-        // erfragt werden
+    // Returns sal_False, when '- No -' is set as Template
+    // Template names can only be obtained when IsTemplate() returns sal_True.
     sal_Bool IsTemplate() const;
     String GetTemplateRegion() const;
     String GetTemplateName() const;
@@ -110,3 +95,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

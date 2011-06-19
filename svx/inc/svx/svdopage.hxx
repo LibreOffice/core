@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,8 @@ public:
 
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrPageObj* Clone() const;
+    SdrPageObj& operator=(const SdrPageObj& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -74,3 +76,4 @@ public:
 
 #endif //_SVDOPAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

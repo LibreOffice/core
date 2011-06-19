@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <editeng/eeitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#ifndef _TOOLKIT_HELPRE_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -264,3 +263,4 @@ uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

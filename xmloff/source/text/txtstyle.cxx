@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,17 +109,6 @@ void XMLTextParagraphExport::exportStyleAttributes(
                                           GetExport().EncodeStyleName( sName ) );
         }
     }
-    //sal_Int32 nOutlineLevel = //#outline level, zhaojianwei, moved to styleexp.cxx - XMLStyleExport::exportStyle(бнбн)
-    //  GetExport().GetTextParagraphExport()->GetHeadingLevel( rStyle->getName() );
-    //if( nOutlineLevel != -1 )
-    //{
-    //  OUStringBuffer sTmp;
-    //              sTmp.append( static_cast<sal_Int32>(nOutlineLevel+1L) );
-    //  GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-    //                      XML_DEFAULT_OUTLINE_LEVEL,
-    //                      sTmp.makeStringAndClear() );
-    //}
-
     if( bProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
@@ -182,3 +172,5 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
 
     bProgress = bOldProg;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

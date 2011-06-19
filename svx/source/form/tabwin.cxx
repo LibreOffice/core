@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,25 +45,17 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
 #include "svx/dbtoolsclient.hxx"
 #include <svx/fmpage.hxx>
 
-#ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>
@@ -430,7 +423,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FmTabWin::UpdateContent: caught an exception!" );
+        OSL_FAIL( "FmTabWin::UpdateContent: caught an exception!" );
     }
 }
 
@@ -474,3 +467,4 @@ FmFieldWinMgr::FmFieldWinMgr(Window* _pParent, sal_uInt16 _nId,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 #ifndef __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 
-#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
 #include <framework/statusbarconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -47,7 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdtypes.h>
 #include <framework/fwedllapi.h>
 
@@ -129,7 +126,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // S
     private:
         ::rtl::OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString                ,
+        class StatusBarHashMap : public ::boost::unordered_map< ::rtl::OUString             ,
                                                          StatusBar_XML_Entry            ,
                                                          OUStringHashCode               ,
                                                          ::std::equal_to< ::rtl::OUString > >
@@ -183,3 +180,5 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler : private ThreadHelpBase // S
 } // namespace framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

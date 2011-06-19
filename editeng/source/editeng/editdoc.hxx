@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _EDITDOC_HXX
 #define _EDITDOC_HXX
 
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#endif
 
 #include <editattr.hxx>
 #include <edtspell.hxx>
@@ -39,6 +38,7 @@
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <tools/table.hxx>
+#include <vector>
 
 #include <deque>
 
@@ -142,6 +142,7 @@ SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 )
 //  class SvxFontTable
 //  ----------------------------------------------------------------------
 DECLARE_TABLE( DummyFontTable, SvxFontItem* )
+
 class SvxFontTable : public DummyFontTable
 {
 public:
@@ -155,25 +156,43 @@ public:
 //  class SvxColorList
 //  ----------------------------------------------------------------------
 typedef ContentNode* ContentNodePtr;
-DECLARE_LIST( DummyColorList, SvxColorItem* )
-class SvxColorList : public DummyColorList
+typedef ::std::vector< SvxColorItem* > DummyColorList;
+
+class SvxColorList
 {
+private:
+    DummyColorList aColorList;
+
 public:
             SvxColorList();
             ~SvxColorList();
 
-    sal_uLong   GetId( const SvxColorItem& rColor );
+    size_t  GetId( const SvxColorItem& rColor );
+    size_t  Count() { return aColorList.size(); };
+    void    Insert( SvxColorItem* pItem, size_t nIndex );
+    SvxColorItem* GetObject( size_t nIndex );
 };
 
 //  ----------------------------------------------------------------------
 //  class ItemList
 //  ----------------------------------------------------------------------
 typedef const SfxPoolItem* ConstPoolItemPtr;
-DECLARE_LIST( DummyItemList, ConstPoolItemPtr )
-class ItemList : public DummyItemList
+typedef ::std::vector< ConstPoolItemPtr > DummyItemList;
+
+class ItemList
 {
+private:
+    DummyItemList aItemPool;
+    size_t  CurrentItem;
+
 public:
+    ItemList();
     const SfxPoolItem*  FindAttrib( sal_uInt16 nWhich );
+    const SfxPoolItem*  First();
+    const SfxPoolItem*  Next();
+    size_t              Count() { return aItemPool.size(); };
+    void                Insert( const SfxPoolItem* pItem );
+    void                Clear() { aItemPool.clear(); };
 };
 
 // -------------------------------------------------------------------------
@@ -188,7 +207,7 @@ private:
 public:
                     ContentAttribs( SfxItemPool& rItemPool );
                     ContentAttribs( const ContentAttribs& );
-                    ~ContentAttribs();  // erst bei umfangreicheren Tabs
+                    ~ContentAttribs();  // only for larger Tabs
 
     SvxTabStop      FindTabStop( long nCurPos, sal_uInt16 nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
@@ -206,8 +225,8 @@ class CharAttribList
 {
 private:
     CharAttribArray aAttribs;
-    SvxFont         aDefFont;               // schneller, als jedesmal vom Pool!
-    sal_Bool            bHasEmptyAttribs;
+    SvxFont         aDefFont;          // faster than ever from the pool!
+    sal_Bool        bHasEmptyAttribs;
 
                     CharAttribList( const CharAttribList& ) {;}
 
@@ -330,7 +349,6 @@ public:
 #define PORTIONKIND_LINEBREAK   2
 #define PORTIONKIND_FIELD       3
 #define PORTIONKIND_HYPHENATOR  4
-// #define PORTIONKIND_EXTRASPACE   5
 
 #define DELMODE_SIMPLE          0
 #define DELMODE_RESTOFWORD      1
@@ -449,16 +467,16 @@ private:
     CharPosArray    aPositions;
     long            nTxtWidth;
     sal_uInt16          nStartPosX;
-    sal_uInt16          nStart;     // koennte durch nStartPortion ersetzt werden
-    sal_uInt16          nEnd;       // koennte durch nEndPortion ersetzt werden
+    sal_uInt16          nStart;     // could be replaced by nStartPortion
+    sal_uInt16          nEnd;       // could be replaced by nEndPortion
     sal_uInt16          nStartPortion;
     sal_uInt16          nEndPortion;
-    sal_uInt16          nHeight;    // Gesamthoehe der Zeile
-    sal_uInt16          nTxtHeight; // Reine Texthoehe
-    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu gro�.
+    sal_uInt16          nHeight;    //  Total height of the line
+    sal_uInt16          nTxtHeight; // Pure Text height
+    sal_uInt16          nCrsrHeight;    // For contour flow high lines => cursor is large.
     sal_uInt16          nMaxAscent;
     sal_Bool            bHangingPunctuation;
-    sal_Bool            bInvalid;   // fuer geschickte Formatierung
+    sal_Bool            bInvalid;   // for skillful formatting
 
 public:
                     EditLine();
@@ -551,7 +569,7 @@ public:
 // -------------------------------------------------------------------------
 class ParaPortion
 {
-    friend class ImpEditEngine; // zum Einstellen der Hoehe
+    friend class ImpEditEngine; // to adjust the height
 private:
     EditLineList        aLineList;
     TextPortionList     aTextPortionList;
@@ -562,13 +580,13 @@ private:
     WritingDirectionInfos   aWritingDirectionInfos;
 
     sal_uInt16              nInvalidPosStart;
-    sal_uInt16              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
+    sal_uInt16              nFirstLineOffset;   // For Writer-LineSpacing-Interpretation
     sal_uInt16              nBulletX;
-    short               nInvalidDiff;
+    short                   nInvalidDiff;
 
     sal_Bool                bInvalid            : 1;
-    sal_Bool                bSimple             : 1;    // nur lineares Tippen
-    sal_Bool                bVisible            : 1;    // MT 05/00: Gehoert an den Node!!!
+    sal_Bool                bSimple             : 1;    // only linear Tap
+    sal_Bool                bVisible            : 1;    // Belongs to the node!
     sal_Bool                bForceRepaint       : 1;
 
                         ParaPortion( const ParaPortion& );
@@ -596,6 +614,8 @@ public:
 
     void                SetVisible( sal_Bool bVisible );
     sal_Bool                IsVisible()                 { return bVisible; }
+
+    sal_Bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_uInt16              GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
@@ -634,7 +654,7 @@ public:
 
     sal_uInt16                  GetPos( const ParaPortionPtr &rPtr ) const;
 
-    // temporaer:
+    // temporary:
     void            DbgCheck( EditDoc& rDoc );
 };
 
@@ -648,7 +668,8 @@ private:
     EditPaM         aEndPaM;
 
 public:
-                    EditSelection();    // kein CCTOR und DTOR, geht autom. richtig!
+                    EditSelection();    // No constructor and destructor
+                                        // are automtically excecuted correctly!
                     EditSelection( const EditPaM& rStartAndAnd );
                     EditSelection( const EditPaM& rStart, const EditPaM& rEnd );
 
@@ -701,7 +722,7 @@ private:
     SfxItemPool*    pItemPool;
     Link            aModifyHdl;
 
-    SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
+    SvxFont         aDefFont;           //faster than ever from the pool!!
     sal_uInt16          nDefTab;
     sal_Bool            bIsVertical;
     sal_Bool            bIsFixedCellHeight;
@@ -803,3 +824,5 @@ public:
 };
 
 #endif // _EDITDOC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

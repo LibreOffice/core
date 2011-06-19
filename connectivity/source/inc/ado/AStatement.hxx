@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,7 @@ namespace connectivity
             ::std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
-            sal_Int32                                   m_nMaxRows;
+            ADO_LONGPTR                                 m_nMaxRows;
             sal_Int32                                   m_nFetchSize;
             LockTypeEnum                                m_eLockType;
             CursorTypeEnum                              m_eCursorType;
@@ -181,7 +182,7 @@ namespace connectivity
                             public ::com::sun::star::lang::XServiceInfo
         {
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OStatement( OConnection* _pConnection) : OStatement_Base( _pConnection){};
             ~OStatement();
 
@@ -199,3 +200,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_ADO_ASTATEMENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

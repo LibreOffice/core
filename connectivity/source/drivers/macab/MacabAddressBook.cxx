@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ const ::rtl::OUString & MacabAddressBook::getDefaultTableName()
 {
     /* This string probably needs to be localized. */
     static const ::rtl::OUString aDefaultTableName
-        (::rtl::OUString::createFromAscii("Address Book"));
+        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Address Book")));
 
     return aDefaultTableName;
 }
@@ -246,11 +247,12 @@ void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroup
         if(count != 1)
         {
             ::rtl::OUString sName = (*iter1)->getName();
-            sName += ::rtl::OUString::createFromAscii(" (") +
+            sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
                 ::rtl::OUString::valueOf(count) +
-                ::rtl::OUString::createFromAscii(")");
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
             (*iter1)->setName(sName);
         }
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

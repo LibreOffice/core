@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>      // nur fuer die GetText-Kruecke
+#include <editeng/editobj.hxx>      // only for the GetText crutch
 
 #include <editeng/unofored.hxx>
 
@@ -53,7 +54,7 @@ SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
 
 SvxEditEngineForwarder::~SvxEditEngineForwarder()
 {
-    //  die EditEngine muss ggf. von aussen geloescht werden
+    // the EditEngine may need to be deleted from the outside
 }
 
 sal_uInt16 SvxEditEngineForwarder::GetParagraphCount() const
@@ -90,7 +91,7 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, sal_Bool 
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SvxOutlinerForwarder::GetAttribs");
+            OSL_FAIL("unknown flags for SvxOutlinerForwarder::GetAttribs");
         }
 
         return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
@@ -427,7 +428,6 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
 
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_uInt16& nPara, sal_uInt16& nIndex ) const
 {
-    // #101701#
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
@@ -555,3 +555,5 @@ void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
 }
 
 //------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

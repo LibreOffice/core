@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _RESARY_HXX //autogen
 #include <tools/resary.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 //  class SvxStringArray -------------------------------------------------
@@ -51,3 +50,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

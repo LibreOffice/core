@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
-#ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
-#endif
 #include "fmexpl.hxx"
 
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <svx/fmglob.hxx>
 #include "fmservs.hxx"
 #include <svx/fmmodel.hxx>
@@ -46,13 +41,9 @@
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <svx/dialmgr.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
@@ -71,9 +62,7 @@
 #include <sfx2/request.hxx>
 #include <tools/shl.hxx>
 
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/sound.hxx>
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
@@ -221,6 +210,43 @@ FmEntryDataList::~FmEntryDataList()
     DBG_DTOR(FmEntryDataList,NULL);
 }
 
+//------------------------------------------------------------------------
+FmEntryData* FmEntryDataList::remove( FmEntryData* pItem )
+{
+    for ( FmEntryDataBaseList::iterator it = maEntryDataList.begin();
+          it < maEntryDataList.end();
+          ++it
+        )
+    {
+        if ( *it == pItem )
+        {
+            maEntryDataList.erase( it );
+            break;
+        }
+    }
+    return pItem;
+}
+
+//------------------------------------------------------------------------
+void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
+{
+    if ( Index < maEntryDataList.size() )
+    {
+        FmEntryDataBaseList::iterator it = maEntryDataList.begin();
+        ::std::advance( it, Index );
+        maEntryDataList.insert( it, pItem );
+    }
+    else
+        maEntryDataList.push_back( pItem );
+}
+
+//------------------------------------------------------------------------
+void FmEntryDataList::clear()
+{
+    for ( size_t i = 0, n = maEntryDataList.size(); i < n; ++i )
+        delete maEntryDataList[ i ];
+    maEntryDataList.clear();
+}
 
 //========================================================================
 // class FmEntryData
@@ -263,16 +289,15 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
     pChildList = new FmEntryDataList();
     aText = rEntryData.GetText();
     m_aNormalImage = rEntryData.GetNormalImage();
-    m_aHCImage = rEntryData.GetHCImage();
     pParent = rEntryData.GetParent();
 
     FmEntryData* pChildData;
-    sal_uInt32 nEntryCount = rEntryData.GetChildList()->Count();
-    for( sal_uInt32 i=0; i<nEntryCount; i++ )
+    size_t nEntryCount = rEntryData.GetChildList()->size();
+    for( size_t i = 0; i < nEntryCount; i++ )
     {
-        pChildData = rEntryData.GetChildList()->GetObject(i);
+        pChildData = rEntryData.GetChildList()->at( i );
         FmEntryData* pNewChildData = pChildData->Clone();
-        pChildList->Insert( pNewChildData, LIST_APPEND );
+        pChildList->insert( pNewChildData, size_t(-1) );
     }
 
     m_xNormalizedIFace = rEntryData.m_xNormalizedIFace;
@@ -284,13 +309,7 @@ FmEntryData::FmEntryData( const FmEntryData& rEntryData )
 void FmEntryData::Clear()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::Clear" );
-    for (;;)
-    {
-        FmEntryData* pEntryData = GetChildList()->Remove(sal_uLong(0));
-        if (pEntryData == NULL)
-            break;
-        delete pEntryData;
-    }
+    GetChildList()->clear();
 }
 
 //------------------------------------------------------------------------
@@ -328,16 +347,19 @@ sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmFormData, FmEntryData );
 DBG_NAME(FmFormData);
 //------------------------------------------------------------------------
-FmFormData::FmFormData( const Reference< XForm >& _rxForm, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent, _rxForm )
-    ,m_xForm( _rxForm )
+FmFormData::FmFormData(
+    const Reference< XForm >& _rxForm,
+    const ImageList& _rNormalImages,
+    FmFormData* _pParent
+)
+:   FmEntryData( _pParent, _rxForm ),
+    m_xForm( _rxForm )
 {
     DBG_CTOR(FmEntryData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
 
     m_aNormalImage = _rNormalImages.GetImage( RID_SVXIMG_FORM );
-    m_aHCImage = _rHCImages.GetImage( RID_SVXIMG_FORM );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -395,16 +417,19 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 TYPEINIT1( FmControlData, FmEntryData );
 DBG_NAME(FmControlData);
 //------------------------------------------------------------------------
-FmControlData::FmControlData( const Reference< XFormComponent >& _rxComponent, const ImageList& _rNormalImages, const ImageList& _rHCImages, FmFormData* _pParent )
-    :FmEntryData( _pParent, _rxComponent )
-    ,m_xFormComponent( _rxComponent )
+FmControlData::FmControlData(
+    const Reference< XFormComponent >& _rxComponent,
+    const ImageList& _rNormalImages,
+    FmFormData* _pParent
+)
+:   FmEntryData( _pParent, _rxComponent ),
+    m_xFormComponent( _rxComponent )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::FmControlData" );
     DBG_CTOR(FmControlData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Images setzen
     m_aNormalImage = GetImage( _rNormalImages );
-    m_aHCImage = GetImage( _rHCImages );
 
     //////////////////////////////////////////////////////////////////////
     // Titel setzen
@@ -565,7 +590,10 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
 }
 
 //------------------------------------------------------------------------
-void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, const ImageList& _rNormalImages, const ImageList& _rHCImages )
+void FmControlData::ModelReplaced(
+    const Reference< XFormComponent >& _rxNew,
+    const ImageList& _rNormalImages
+)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::ModelReplaced" );
     m_xFormComponent = _rxNew;
@@ -573,7 +601,6 @@ void FmControlData::ModelReplaced( const Reference< XFormComponent >& _rxNew, co
 
     // Images neu setzen
     m_aNormalImage = GetImage( _rNormalImages );
-    m_aHCImage = GetImage( _rHCImages );
 }
 
 //............................................................................
@@ -705,3 +732,5 @@ namespace svxform
 //............................................................................
 }   // namespace svxform
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,12 +40,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "PageMasterPropHdlFactory.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 #include "PageMasterExportPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
 
@@ -152,13 +149,6 @@ sal_Bool XMLPageExport::exportStyle(
                     GetExport().EncodeStyleName( sNextName ) );
             }
         }
-//      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
-//                                          XML_STYLE_FAMILY_PAGE_MASTER,
-//                                          xPropSet );
-//      if( sPageMaster.getLength() )
-//          GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-//                                    XML_PAGE_MASTER_NAME,
-//                                    sPageMaster );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_MASTER_PAGE, sal_True, sal_True );
@@ -265,8 +255,6 @@ void XMLPageExport::exportDefaultStyle()
                 }
             }
 
-        //  if ( xPropStates.size() != 0 &&
-          //          ( xPropStates.size() != 1 || xPropStates[0].mnIndex != -1 ) )
             if( bExport )
             {
                 //<style:default-page-layout>
@@ -280,3 +268,5 @@ void XMLPageExport::exportDefaultStyle()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

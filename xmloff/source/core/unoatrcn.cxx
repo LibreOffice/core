@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <xmloff/xmlcnimp.hxx>
 
@@ -108,20 +109,14 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     return USHRT_MAX;
 }
 
+namespace
+{
+    class theSvUnoAttributeContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvUnoAttributeContainerUnoTunnelId> {};
+}
+
 const ::com::sun::star::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvUnoAttributeContainerUnoTunnelId::get().getSeq();
 }
 
 SvUnoAttributeContainer* SvUnoAttributeContainer::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
@@ -159,7 +154,7 @@ uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
 
     xml::AttributeData aData;
     aData.Namespace = mpContainer->GetAttrNamespace(nAttr);
-    aData.Type = OUString::createFromAscii("CDATA");
+    aData.Type = OUString(RTL_CONSTASCII_USTRINGPARAM("CDATA"));
     aData.Value = mpContainer->GetAttrValue(nAttr);
 
     uno::Any aAny;
@@ -286,13 +281,13 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
 //XServiceInfo
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return OUString::createFromAscii( "SvUnoAttributeContainer" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "SvUnoAttributeContainer" ));
 }
 
 uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    OUString aSN( OUString::createFromAscii( "com.sun.star.xml.AttributeContainer" ) );
+    OUString aSN( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.AttributeContainer" )) );
     uno::Sequence< OUString > aNS( &aSN, 1L );
     return aNS;
 }
@@ -313,3 +308,4 @@ sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,11 @@
 #include <string.h>
 #include <vector>
 #include "formula/opcode.hxx"
-//#include "refdata.hxx"
-//#include "scmatrix.hxx"
-#include "formula/intruref.hxx"
 #include <tools/mempool.hxx>
 #include "formula/IFunctionDescription.hxx"
 #include "formula/formuladllapi.h"
+
+#include <boost/intrusive_ptr.hpp>
 
 namespace formula
 {
@@ -87,8 +87,8 @@ typedef StackVarEnum StackVar;
 
 
 class FormulaToken;
-typedef SimpleIntrusiveReference< class FormulaToken > FormulaTokenRef;
-typedef SimpleIntrusiveReference< const class FormulaToken > FormulaConstTokenRef;
+typedef ::boost::intrusive_ptr<FormulaToken>        FormulaTokenRef;
+typedef ::boost::intrusive_ptr<const FormulaToken>  FormulaConstTokenRef;
 
 class FormulaTokenArray;
 
@@ -113,8 +113,9 @@ public:
 
     inline  void                Delete()                { delete this; }
     inline  StackVar            GetType() const         { return eType; }
-            sal_Bool                IsFunction() const; // pure functions, no operators
-            sal_Bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
+            bool                IsFunction() const; // pure functions, no operators
+            bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
+            bool                IsExternalRef() const;
             sal_uInt8                GetParamCount() const;
     inline  void                IncRef() const          { nRefCnt++; }
     inline  void                DecRef() const
@@ -157,9 +158,9 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
-    virtual sal_Bool                Is3DRef() const;    // reference with 3D flag set
-    virtual sal_Bool                TextEqual( const formula::FormulaToken& rToken ) const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                Is3DRef() const;    // reference with 3D flag set
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     virtual bool isFunction() const
     {
@@ -180,6 +181,16 @@ public:
     static  size_t              GetStrLenBytes( const String& rStr )
                                     { return GetStrLenBytes( rStr.Len() ); }
 };
+
+inline void intrusive_ptr_add_ref(const FormulaToken* p)
+{
+    p->IncRef();
+}
+
+inline void intrusive_ptr_release(const FormulaToken* p)
+{
+    p->DecRef();
+}
 
 class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {
@@ -209,7 +220,7 @@ public:
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                HasForceArray() const;
     virtual void                SetForceArray( bool b );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 };
@@ -230,7 +241,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaFAPToken(*this); }
     virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaDoubleToken : public FormulaToken
@@ -246,7 +257,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaDoubleToken(*this); }
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
@@ -264,7 +275,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaStringToken(*this); }
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
@@ -284,7 +295,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaStringOpToken(*this); }
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
@@ -300,7 +311,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
     virtual sal_uInt16              GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -324,7 +335,7 @@ public:
     virtual const String&       GetExternal() const;
     virtual sal_uInt8                GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -339,7 +350,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaMissingToken(*this); }
     virtual double              GetDouble() const;
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
@@ -361,7 +372,7 @@ public:
                                 }
     virtual                     ~FormulaJumpToken();
     virtual short*              GetJump() const;
-    virtual sal_Bool                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new FormulaJumpToken(*this); }
 };
 
@@ -375,7 +386,7 @@ public:
                                 FormulaSubroutineToken( const FormulaSubroutineToken& r );
     virtual                     ~FormulaSubroutineToken();
     virtual FormulaToken*       Clone() const { return new FormulaSubroutineToken(*this); }
-    virtual sal_Bool            operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
     const FormulaTokenArray*    GetTokenArray() const;
 
 private:
@@ -392,7 +403,7 @@ public:
                                     FormulaToken( r ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaUnknownToken(*this); }
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -408,7 +419,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaErrorToken(*this); }
     virtual sal_uInt16              GetError() const;
     virtual void                SetError( sal_uInt16 nErr );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 // =============================================================================
@@ -416,3 +427,5 @@ public:
 // =============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

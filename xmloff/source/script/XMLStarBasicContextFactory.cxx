@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,18 +80,6 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
         if (XML_NAMESPACE_SCRIPT == nPrefix)
         {
-//          if (IsXMLToken(sLocalName, XML_LIBRARY))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
-//          }
-//          if (IsXMLToken(sLocalName, XML_LOCATION))
-//          {
-//              sLibraryVal = xAttrList->getValueByIndex(nAttr);
-//                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
-//                    sLibraryVal =
-//                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
-//          }
-//          else
             if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
@@ -137,3 +126,5 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     // return dummy context
     return new SvXMLImportContext(rImport, p_nPrefix, rLocalName);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

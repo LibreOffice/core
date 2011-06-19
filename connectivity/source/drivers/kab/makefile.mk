@@ -72,7 +72,8 @@ SHL1STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(DBTOOLSLIB)               \
-    $(SALLIB)
+    $(SALLIB)                   \
+    $(SALHELPERLIB)
 
 SHL1DEPN=
 SHL1IMPLIB= i$(TARGET)
@@ -109,14 +110,14 @@ SHL2VERSIONMAP=$(TARGET2).map
 
 SHL2TARGET= $(TARGET2)$(KAB_MAJOR)
 SHL2OBJS=$(SLO2FILES)
+SHL2LINKFLAGS+=$(KAB_LIB)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(VOSLIB)                   \
     $(SALLIB)                   \
+    $(SALHELPERLIB)                   \
     $(DBTOOLSLIB)               \
-    $(COMPHELPERLIB)            \
-    $(KAB_LIB)
+    $(COMPHELPERLIB)
 
 SHL2DEPN=
 SHL2IMPLIB= i$(TARGET2)

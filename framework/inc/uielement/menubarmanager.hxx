@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ struct PopupControllerEntry
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
 };
 
-typedef std::hash_map< rtl::OUString, PopupControllerEntry, OUStringHashCode, ::std::equal_to< rtl::OUString > > PopupControllerCache;
+typedef boost::unordered_map< rtl::OUString, PopupControllerEntry, OUStringHashCode, ::std::equal_to< rtl::OUString > > PopupControllerCache;
 
 class BmkMenu;
 class AddonMenu;
@@ -96,7 +97,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                        public ::cppu::OWeakObject
 {
     protected:
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
@@ -105,7 +105,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool            bDelete,
             sal_Bool            bDeleteChildren );
 
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
@@ -115,7 +114,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool            bDeleteChildren );
 
     public:
-        // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
@@ -126,7 +124,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         virtual ~MenuBarManager();
@@ -247,7 +244,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                                                                m_bDeleteChildren : 1,
                                                                                                m_bActive : 1,
                                                                                                m_bIsBookmarkMenu : 1,
-                                                                                               m_bWasHiContrast : 1,
                                                                                                m_bShowMenuImages : 1;
         sal_Bool                                                                               m_bRetrieveImages : 1,
                                                                                                m_bAcceleratorCfg : 1;
@@ -276,3 +272,5 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -45,9 +44,7 @@
 #include <svx/xsflclit.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
 #include "svx/chrtitem.hxx"
@@ -689,10 +686,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             sal_Bool    bParallel = sal_True;
             Position3D  aViewPoint( 3472, -3472, 25000 );
-            double      fOriginX = 0.50;
-            double      fOriginY = -0.50;
             double      fSkewAngle = -135;
-            double      fSkew = 50.0;
 
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
             sal_Int16 nProjectionMode = sal_Int16();
@@ -701,6 +695,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 
             if( bParallel )
             {
+                double      fSkew = 50.0;
                 EnhancedCustomShapeParameterPair aSkewPropPair;
                 pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sSkew );
                 if( pAny && ( *pAny >>= aSkewPropPair ) )
@@ -715,6 +710,8 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             }
             else
             {
+                double      fOriginX = 0.50;
+                double      fOriginY = -0.50;
                 pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, sViewPoint );
                 if( pAny )
                     *pAny >>= aViewPoint;
@@ -1372,3 +1369,5 @@ void ExtrusionBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
         getExtrusionColorState( pSdrView, rSet );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

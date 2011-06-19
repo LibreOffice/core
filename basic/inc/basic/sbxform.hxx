@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,8 +115,6 @@ class SbxBasicFormater {
     static  sal_Bool isBasicFormat( String sFormatStrg );
 
   private:
-    //*** some helper methods ***
-    //void  ShowError( char *sErrMsg );
     inline void ShiftString( String& sStrg, sal_uInt16 nStartPos );
     inline void StrAppendChar( String& sStrg, sal_Unicode ch );
     void    AppendDigit( String& sStrg, short nDigit );
@@ -179,3 +178,4 @@ class SbxBasicFormater {
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

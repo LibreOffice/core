@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define _XMLOFF_XMLASTPL_IMPL_HXX
 
 #include <sal/types.h>
-#include <tools/list.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -38,6 +38,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
+#include <vector>
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
@@ -53,8 +54,8 @@ class SvXMLExport;
 // Implementationclass for stylefamily-information
 //
 
-typedef ::rtl::OUString *OUStringPtr;
-DECLARE_LIST( SvXMLAutoStylePoolCache_Impl, OUStringPtr )
+typedef ::rtl::OUString* OUStringPtr;
+typedef ::std::vector< OUStringPtr > SvXMLAutoStylePoolCache_Impl;
 
 class XMLFamilyData_Impl
 {
@@ -125,8 +126,8 @@ public:
     void SetName( const ::rtl::OUString& rNew ) { msName = rNew; }
 };
 
-typedef SvXMLAutoStylePoolPropertiesP_Impl *SvXMLAutoStylePoolPropertiesPPtr;
-DECLARE_LIST( SvXMLAutoStylePoolPropertiesPList_Impl, SvXMLAutoStylePoolPropertiesPPtr )
+typedef SvXMLAutoStylePoolPropertiesP_Impl* SvXMLAutoStylePoolPropertiesPPtr;
+typedef ::std::vector< SvXMLAutoStylePoolPropertiesPPtr > SvXMLAutoStylePoolPropertiesPList_Impl;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -190,9 +191,6 @@ public:
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
         com::sun::star::uno::Sequence<rtl::OUString>& aNames );
 
-//  ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
-//                       const ::std::vector< XMLPropertyState >& rProperties,
-//                       sal_Bool bCache = sal_False );
     sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
@@ -225,3 +223,5 @@ struct SvXMLAutoStylePoolPExport_Impl
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

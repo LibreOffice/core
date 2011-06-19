@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -294,15 +295,15 @@ throw ( RuntimeException )
 
 const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticPropertyDescriptor()
 {
-    static const Property pActionTriggerPropertys[] =
+    const Property pActionTriggerPropertys[] =
     {
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeparatorType" )), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!
-    static const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
+    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
-    // Return static "PropertyDescriptor"
+    // Return "PropertyDescriptor"
     return seqActionTriggerPropertyDescriptor ;
 }
 
@@ -347,3 +348,4 @@ throw( IllegalArgumentException )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

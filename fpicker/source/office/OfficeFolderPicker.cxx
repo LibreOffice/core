@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -245,14 +246,14 @@ Sequence< ::rtl::OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 Sequence< ::rtl::OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< ::rtl::OUString > seqServiceNames(1);
-    seqServiceNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
+    seqServiceNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFolderPicker" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 ::rtl::OUString SvtFolderPicker::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFolderPicker" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFolderPicker" ));
 }
 
 /* Helper for registry */
@@ -263,3 +264,4 @@ Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Ref
     return Reference< XInterface >( *new SvtFolderPicker( xServiceManager ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

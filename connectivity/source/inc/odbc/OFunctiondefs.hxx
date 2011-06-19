@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,14 +61,6 @@
 
 //--------------------------------------------------------------------------
 
-#ifdef OS2
-#define ALLREADY_HAVE_OS2_TYPES
-#define DONT_TD_VOID
-#include <svpm.h>
-#include <odbc/sqlext.h>
-#define SDB_ODBC_CHAR UCHAR
-#endif // OS2
-
 #ifdef OS2__00
 
 #ifdef ODBCIMP
@@ -106,13 +99,11 @@
 #define SQL_FETCH_PRIOR SQL_FETCH_PREV
 #define SQL_NO_TOTAL (-4)
 
-//  #include "odbc3defs.hxx"
-
 #endif
 
 // In der ODBC.H von Watcom werden Strings als char * erwartet
 // (nicht, wie sonst bei ODBC ueblich, als UCHAR *).
-#if defined( ICC ) || defined( WTC )
+#if defined( ICC )
 #define SDB_ODBC_CHAR unsigned char
 #else
 #define SDB_ODBC_CHAR char
@@ -173,3 +164,4 @@
 #endif // _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

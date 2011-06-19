@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/SmartTagMgr.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
@@ -261,7 +262,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 // ::com::sun::star::util::XModifyListener
 void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     maRecognizerList.clear();
     maActionList.clear();
@@ -273,7 +274,7 @@ void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException 
 // ::com::sun::star::lang::XEventListener
 void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
     uno::Reference< util::XModifyBroadcaster >  xMB(xModel, uno::UNO_QUERY);
@@ -300,7 +301,7 @@ void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeExc
 // ::com::sun::star::util::XChangesListener
 void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const util::ElementChange* pElementChanges = rEvent.Changes.getConstArray();
     const sal_Int32 nNumberOfChanges = rEvent.Changes.getLength();
@@ -550,3 +551,4 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

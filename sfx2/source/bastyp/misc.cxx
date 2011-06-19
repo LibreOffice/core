@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
-
 #include "sfxtypes.hxx"
 
 //--------------------------------------------------------------------
 
-#if defined(DBG_UTIL) && ( defined(WNT) || defined(OS2) )
+#if defined(DBG_UTIL) && defined(WNT)
 unsigned SfxStack::nLevel = 0;
 #endif
 
@@ -73,3 +71,4 @@ String SfxStringDecode( const String &, const char *  )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

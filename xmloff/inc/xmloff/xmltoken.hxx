@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,11 +146,19 @@ namespace xmloff { namespace token {
         XML_NP_OFFICE_EXT,
         XML_N_OFFICE_EXT,
 
+        // jonp: 2008-09-24 Excel Interop
+        XML_NP_FORMX,
+        XML_N_FORMX,
+
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
 
         XML_NP_DRAW_EXT,
         XML_N_DRAW_EXT,
+
+        // css text level 3
+        XML_NP_CSS3TEXT,
+        XML_N_CSS3TEXT,
 
         // units
         XML_UNIT_MM,
@@ -606,6 +615,7 @@ namespace xmloff { namespace token {
         XML_DISTANCE,
         XML_DISTANCE_AFTER_SEP,
         XML_DISTANCE_BEFORE_SEP,
+        XML_DISTRIBUTE,
         XML_DISTRIBUTE_LETTER,
         XML_DISTRIBUTE_SPACE,
         XML_DIVIDE,
@@ -919,14 +929,12 @@ namespace xmloff { namespace token {
         XML_HINT,
         XML_HORIZONTAL,
         XML_HORIZONTAL_LINES,
-        // --> OD 2005-05-12 #i49139#
         // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
         // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
         // Usage is deprecated, but the old token are needed for the
-        // OpenOffice.org file format import/export filter for the renaming
+        // OpenOffice.org file format import/export filter for the renaming (#i49139#)
         XML_HORIZONTAL_ON_LEFT_PAGES,
         XML_HORIZONTAL_ON_RIGHT_PAGES,
-        // <--
         XML_HORIZONTAL_POS,
         XML_HORIZONTAL_REL,
         XML_HORIZONTAL_SCROLLBAR_WIDTH,
@@ -1067,6 +1075,7 @@ namespace xmloff { namespace token {
         XML_LINE_NUMBER,
         XML_LINE_SKEW,
         XML_LINE_SPACING,
+        XML_LINE_STYLE,
         XML_LINEAR,
         XML_LINENUMBERING_CONFIGURATION,
         XML_LINENUMBERING_SEPARATOR,
@@ -1411,6 +1420,8 @@ namespace xmloff { namespace token {
         XML_PROTECT_SIZE,
         XML_PROTECTED,
         XML_PROTECTION_KEY,
+        XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+        XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
         XML_PRSUBSET,
         XML_PUBLISHER,
         XML_PUNCTUATION_WRAP,
@@ -1520,6 +1531,8 @@ namespace xmloff { namespace token {
         XML_SECTION_NAME,
         XML_SECTION_SOURCE,
         XML_SELECT_PAGE,
+        XML_SELECT_PROTECTED_CELLS,
+        XML_SELECT_UNPROTECTED_CELLS,
         XML_SELECTOR,
         XML_SEMANTICS,
         XML_SEMI_AUTOMATIC,
@@ -1732,6 +1745,7 @@ namespace xmloff { namespace token {
         XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE,
         XML_TABLE_OF_CONTENT_SOURCE,
         XML_TABLE_PAGE,
+        XML_TABLE_PROTECTION,
         XML_TABLE_ROW,
         XML_TABLE_ROW_GROUP,
         XML_TABLE_ROWS,
@@ -1771,6 +1785,7 @@ namespace xmloff { namespace token {
         XML_TEXT_GLOBAL,
         XML_TEXT_INDENT,
         XML_TEXT_INPUT,
+        XML_TEXT_JUSTIFY,
         XML_TEXT_OUTLINE,
         XML_TEXT_POSITION,
         XML_TEXT_ROTATION_ANGLE,
@@ -1904,6 +1919,7 @@ namespace xmloff { namespace token {
         XML_VERSION_LIST,
         XML_VERTICAL,
         XML_VERTICAL_ALIGN,
+        XML_VERTICAL_JUSTIFY,
         XML_VERTICAL_LINES,
         XML_VERTICAL_POS,
         XML_VERTICAL_REL,
@@ -2089,6 +2105,7 @@ namespace xmloff { namespace token {
         XML_LAYOUT_GRID_STANDARD_MODE,
         XML_LAYOUT_GRID_BASE_WIDTH,
         XML_LAYOUT_GRID_SNAP_TO_CHARS,
+        XML_LAYOUT_GRID_SNAP_TO,
 
         XML_SNAP_TO_LAYOUT_GRID,
         XML_DONT_BALANCE_TEXT_COLUMNS,
@@ -2355,13 +2372,13 @@ namespace xmloff { namespace token {
         XML_REPEAT_CONTENT,
         XML_SHRINK_TO_FIT,
 
-        // OD 2004-05-05 #i28701#
+        /* Core impl. of the positioning of floating screen objects without
+           considering its wrapping style (#i28701#)
+         */
         XML_WRAP_INFLUENCE_ON_POSITION,
-        // --> OD 2004-10-18 #i35017# - tokens have been renamed and
-        // <XML_ITERATIVE> has been added
+        // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
         XML_ONCE_SUCCESSIVE,
         XML_ONCE_CONCURRENT,
-        // <--
 
         // Names for OOo format only
         XML_N_OFFICE_OOO,
@@ -2511,6 +2528,7 @@ namespace xmloff { namespace token {
 
         XML_SHOW_FILTER_BUTTON,
         XML_DRILL_DOWN_ON_DOUBLE_CLICK,
+        XML_HEADER_GRID_LAYOUT,
         XML_GROUPED_BY,
         XML_DAYS,
         XML_MONTHS,
@@ -2877,11 +2895,9 @@ namespace xmloff { namespace token {
         XML_URI_W3_PREFIX,
         XML_URI_XFORMS_SUFFIX,
 
-        // --> OD 2005-05-12 #i49139#
         // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
-        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
+        // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD. (#i49139#)
         XML_HORIZONTAL_ON_EVEN,
-        // --> OJ 2005-09-01
         XML_N_RPT_OASIS,
         XML_N_RPT,
         XML_GROUP,
@@ -2957,15 +2973,11 @@ namespace xmloff { namespace token {
         XML_ODD_ROWS,
         XML_EVEN_COLUMNS,
         XML_ODD_COLUMNS,
-        // <--
         XML_HORIZONTAL_ON_ODD,
-        // <--
-        // --> OD 2005-10-10 #i45874#
+        // Password error from 1.4 to 2.0 Beta (#i45874#)
         XML_RESTART_NUMBERING,
-        // <--
-        // --> FLR #i52127#
+        // OpenDocument <text:numbered-paragraph> element not supported on OpenDocument import (#i52127#)
         XML_NUMBERED_PARAGRAPH,
-        // <--
         XML_MASTER_DETAIL_FIELDS,
         XML_MASTER_DETAIL_FIELD,
         XML_SUB_DOCUMENT,
@@ -3023,11 +3035,9 @@ namespace xmloff { namespace token {
         XML_TABLE_INCLUDE_FILTER,
         XML_DEFAULT_ROW_STYLE_NAME,
         XML_ANGLE_OFFSET,
-        // --> OD 2007-09-14 #i81002#
+        // Core implementation for direct cross-references (#i81002#)
         XML_NUMBER_NO_SUPERIOR,
         XML_NUMBER_ALL_SUPERIOR,
-        // <--
-        // --> OD 2008-01-15 #newlistlevelattrs#
         XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
         XML_LABEL_WIDTH_AND_POSITION,
         XML_LABEL_ALIGNMENT,
@@ -3037,16 +3047,13 @@ namespace xmloff { namespace token {
         XML_SPACE,
         XML_NOTHING,
         XML_LIST_TAB_STOP_POSITION,
-        // <--
         XML_STANDARD_ERROR,
         XML_CELL_RANGE,
         XML_ERROR_LOWER_RANGE,
         XML_ERROR_UPPER_RANGE,
 
-        // --> OD 2008-04-22 #refactorlists#
         XML_CONTINUE_LIST,
         XML_STYLE_OVERRIDE,
-        // <--
 
         // fs: #i90243#
         XML_XFORM_MODEL_SETTINGS,
@@ -3156,3 +3163,5 @@ namespace xmloff { namespace token {
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

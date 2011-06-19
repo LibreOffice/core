@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <editeng/bulitem.hxx>
 #include <editeng/editrids.hrc>
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 #define BULITEM_VERSION     ((sal_uInt16)2)
@@ -55,7 +55,6 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
     rStream << rFont.GetColor();
     nTemp = (sal_uInt16)rFont.GetFamily(); rStream << nTemp;
 
-    // #90477# nTemp = (sal_uInt16)GetStoreCharSet( rFont.GetCharSet(), rStream.GetVersion() );
     nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet(), (sal_uInt16)rStream.GetVersion());
     rStream << nTemp;
 
@@ -84,7 +83,6 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     sal_uInt16 nTemp;
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
 
-    // #90477#
     rStream >> nTemp;
     nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp, (sal_uInt16)rStream.GetVersion());
     aFont.SetCharSet((rtl_TextEncoding)nTemp);
@@ -188,18 +186,16 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
         aFont = CreateFont( rStrm, BULITEM_VERSION );
     else
     {
-        // Sicheres Laden mit Test auf leere Bitmap
+        // Safe Load with Test on empty Bitmap
         Bitmap          aBmp;
         const sal_uInt32    nOldPos = rStrm.Tell();
-        // #69345# Errorcode beim Bitmap lesen ignorieren,
-        // siehe Kommentar #67581# in SvxBulletItem::Store()
+        // Ignore Errorcode when reading Bitmap,
+        // see comment in SvxBulletItem::Store()
         sal_Bool bOldError = rStrm.GetError() ? sal_True : sal_False;
         rStrm >> aBmp;
         if ( !bOldError && rStrm.GetError() )
         {
             rStrm.ResetError();
-            // #71493# Keine Warnung: Das BulletItem interessiert seit 5.0 im Dateiformat nicht mehr.
-            // rStrm.SetError(ERRCODE_CLASS_READ | ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_WARNING_MASK);
         }
 
         if( aBmp.IsEmpty() )
@@ -337,8 +333,8 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT(rItem.ISA(SvxBulletItem),"operator==Types not matching");
     const SvxBulletItem& rBullet = (const SvxBulletItem&)rItem;
-    // ValidMask mitvergleichen, da sonst kein Putten in ein AttrSet moeglich,
-    // wenn sich das Item nur in der ValidMask von einem existierenden unterscheidet.
+    // Compare with ValidMask, otherwise no put possible in a AttrSet if the
+    // item differs only in terms of the ValidMask from an existing one.
     if( nValidMask != rBullet.nValidMask    ||
         nStyle != rBullet.nStyle            ||
         nScale != rBullet.nScale            ||
@@ -373,7 +369,7 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
 SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    // Korrektur bei leerer Bitmap
+    // Correction for empty bitmap
     if( ( nStyle == BS_BMP ) &&
         ( !pGraphicObject || ( GRAPHIC_NONE == pGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == pGraphicObject->GetType() ) ) )
     {
@@ -394,7 +390,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     {
         sal_uLong _nStart = rStrm.Tell();
 
-        // Kleine Vorab-Schaetzung der Groesse...
+        // Small preliminary estimate of the size ...
         sal_uInt16 nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
         const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
         sal_uLong nBytes = aBmp.GetSizeBytes();
@@ -402,15 +398,14 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
             rStrm << aBmp;
 
         sal_uLong nEnd = rStrm.Tell();
-        // #67581# Item darf mit Overhead nicht mehr als 64K schreiben,
-        // sonst platzt der SfxMultiRecord
-        // Dann lieber auf die Bitmap verzichten, ist nur fuer Outliner
-        // und auch nur fuer <= 5.0 wichtig.
-        // Beim Einlesen merkt der Stream-Operator der Bitmap, dass dort keine steht.
-        // Hiermit funktioniert jetzt der Fall das die grosse Bitmap aus einem anderen
-        // Fileformat entstanden ist, welches keine 64K belegt, aber wenn eine
-        // Bitmap > 64K verwendet wird, hat das SvxNumBulletItem beim Laden ein Problem,
-        // stuerzt aber nicht ab.
+        // Item can not write with an overhead more than 64K or SfxMultiRecord
+        // will crash. Then prefer to forego on the bitmap, it is only
+        // important for the outliner and only for <= 5.0.
+        // When reading, the stream-operator makes note of the bitmap and the
+        // fact that there is none. This is now the case how it works with
+        // large bitmap created from another file format, which do not occupy a
+        // 64K chunk, but if a bitmap > 64K is used, the SvxNumBulletItem will
+        // have problem loading it, but does not crash.
 
         if ( (nEnd-_nStart) > 0xFF00 )
             rStrm.Seek( _nStart );
@@ -532,3 +527,5 @@ void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
         pGraphicObject = new GraphicObject( rGraphicObject );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

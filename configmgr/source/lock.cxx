@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,14 @@
 
 namespace configmgr {
 
-osl::Mutex lock;
+boost::shared_ptr<osl::Mutex> lock()
+{
+    static boost::shared_ptr<osl::Mutex> theLock;
+    if (!theLock.get())
+        theLock.reset(new osl::Mutex);
+    return theLock;
+}
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

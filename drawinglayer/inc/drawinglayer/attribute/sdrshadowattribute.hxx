@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: sdrattribute.hxx,v $
- *
- *  $Revision: 1.4 $
- *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -56,7 +53,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrShadowAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrShadowAttribute
         {
         private:
             ImpSdrShadowAttribute*              mpSdrShadowAttribute;
@@ -91,3 +88,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

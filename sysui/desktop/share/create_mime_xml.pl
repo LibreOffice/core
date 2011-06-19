@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use File::Basename;
 $basedir = dirname($0);
-$productname = 'OpenOffice.org';
+$productname = 'LibreOffice';
 $mimedir = $basedir.'/../mimetypes';
 
 $FS= ' ';       # field seperator (space) - for documents.ulf

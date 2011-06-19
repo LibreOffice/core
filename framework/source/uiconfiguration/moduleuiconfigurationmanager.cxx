@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <framework/toolboxconfiguration.hxx>
 
-#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
 #include <framework/statusbarconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -288,7 +287,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                             aUIElementData.bDefaultNode = false;
                         }
 
-                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -298,7 +297,6 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         }
     }
 
-    //rElementTypeData.bLoaded = true;
 }
 
 void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData )
@@ -409,7 +407,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
     impl_preloadUIElementTypeList( LAYER_USERDEFINED, nElementType );
     impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-    // first try to look into our user-defined vector/hash_map combination
+    // first try to look into our user-defined vector/boost::unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )
@@ -423,7 +421,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
         }
     }
 
-    // Not successfull, we have to look into our default vector/hash_map combination
+    // Not successfull, we have to look into our default vector/boost::unordered_map combination
     UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
     pIter = rDefaultHashMap.find( aResourceURL );
     if ( pIter != rDefaultHashMap.end() )
@@ -830,8 +828,8 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleShortName")), ::rtl::OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -909,8 +907,6 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
     if ( m_bDisposed )
         throw DisposedException();
 
-    bool bResetStorage( false );
-
     if ( !isReadOnly() )
     {
         // Remove all elements from our user-defined storage!
@@ -941,8 +937,6 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     }
                 }
             }
-
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
@@ -1392,7 +1386,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
 
         PropertyValue aProp;
-        aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
+        aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier"));
         aProp.Value <<= aModule;
 
         Sequence< Any > lArgs(1);
@@ -1452,7 +1446,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         // preload list of element types on demand
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-        // Look into our default vector/hash_map combination
+        // Look into our default vector/boost::unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
         if ( pIter != rDefaultHashMap.end() )
@@ -1621,3 +1615,5 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const Configu
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

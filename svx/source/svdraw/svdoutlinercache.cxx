@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -93,7 +94,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
-            // #101088# Deregister on outliner, might be reused from outliner cache
+            // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link() );
         }
         else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (NULL == mpModeText) )
@@ -102,7 +103,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
-            // #101088# Deregister on outliner, might be reused from outliner cache
+            // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link() );
         }
         else
@@ -113,3 +114,4 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

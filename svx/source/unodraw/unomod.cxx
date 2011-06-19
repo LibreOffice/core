@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,12 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
@@ -62,13 +63,10 @@
 #include <svx/svdpage.hxx>
 #include <svx/unoshape.hxx>
 
-extern UHashMapEntry pSdrShapeIdentifierMap[];
-
 //-////////////////////////////////////////////////////////////////////
 
 using namespace ::rtl;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::com::sun::star;
 
 //-////////////////////////////////////////////////////////////////////
@@ -81,8 +79,6 @@ using namespace ::com::sun::star;
     ::getCppuType((const uno::Reference< xint >*)0)
 
 //-////////////////////////////////////////////////////////////////////
-
-#ifndef SVX_LIGHT
 
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
@@ -110,10 +106,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-#endif
 //-////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -125,7 +119,6 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
-#endif
 
 //-////////////////////////////////////////////////////////////////////
 
@@ -185,14 +178,14 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
     return sal_True;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& ServiceSpecifier )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& rServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
 {
     const OUString aDrawingPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
 
-    if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
+    if( rServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
-        sal_uInt32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
+        sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
             sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
@@ -202,7 +195,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         }
     }
 
-    uno::Reference< uno::XInterface > xRet( createTextField( ServiceSpecifier ) );
+    uno::Reference< uno::XInterface > xRet( createTextField( rServiceSpecifier ) );
     if( !xRet.is() )
         throw lang::ServiceNotRegisteredException();
 
@@ -223,28 +216,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
     throw( uno::RuntimeException )
 {
-    UHashMapEntry* pMap = pSdrShapeIdentifierMap;
-
-    sal_uInt32 nCount = 0;
-    while (pMap->aIdentifier.getLength())
-    {
-        pMap++;
-        nCount++;
-    }
-
-    uno::Sequence< OUString > aSeq( nCount );
-    OUString* pStrings = aSeq.getArray();
-
-    pMap = pSdrShapeIdentifierMap;
-    sal_uInt32 nIdx = 0;
-    while(pMap->aIdentifier.getLength())
-    {
-        pStrings[nIdx] = pMap->aIdentifier;
-        pMap++;
-        nIdx++;
-    }
-
-    return aSeq;
+    return UHashMap::getServiceNames();
 }
 
 uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence< OUString >& rServices1, uno::Sequence< OUString >& rServices2 ) throw()
@@ -270,8 +242,6 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-
-#ifndef SVX_LIGHT
 
 ///
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
@@ -333,22 +303,21 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
     return maTypeSequence;
 }
 
+namespace
+{
+    class theSvxUnoDrawingModelImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoDrawingModelImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-    }
-    return aId;
+    return theSvxUnoDrawingModelImplementationId::get().getSeq();
 }
 
 void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
     throw(uno::RuntimeException)
 {
     if( mpDoc )
-        mpDoc->setLock( sal_True );
+        mpDoc->setLock(true);
 }
 
 void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
@@ -356,7 +325,7 @@ void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
 {
     if( mpDoc && mpDoc->isLocked() )
     {
-        mpDoc->setLock( sal_False );
+        mpDoc->setLock(false);
     }
 }
 
@@ -370,7 +339,7 @@ sal_Bool SAL_CALL SvxUnoDrawingModel::hasControllersLocked(  )
 uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
 
@@ -384,7 +353,7 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages(
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
     throw(uno::Exception, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
     {
@@ -623,7 +592,7 @@ SvxUnoDrawPagesAccess::~SvxUnoDrawPagesAccess() throw()
 sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
 
@@ -636,7 +605,7 @@ sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
 uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Any aAny;
 
@@ -688,7 +657,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
 uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     uno::Reference< drawing::XDrawPage > xDrawPage;
 
@@ -711,7 +680,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
 void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPage )
         throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
     if( nPageCount > 1 )
@@ -775,4 +744,4 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 
 ///////////////////////////////////////////////////////////////////////
 
-#endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

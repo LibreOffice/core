@@ -38,32 +38,21 @@ LIBTARGET = NO
 
 # --- Common ------------------------------------------------------------
 
-OBJFILES = \
-    $(OBJ)$/ttbasic.obj	\
-    $(OBJ)$/basicrt.obj	\
-    $(OBJ)$/processw.obj    \
-    $(OBJ)$/process.obj     \
-    $(OBJ)$/brkpnts.obj     \
-    $(OBJ)$/mybasic.obj     \
-    $(OBJ)$/status.obj      \
-    $(OBJ)$/printer.obj     \
-    $(OBJ)$/appwin.obj      \
-    $(OBJ)$/appedit.obj     \
-    $(OBJ)$/appbased.obj    \
-    $(OBJ)$/apperror.obj    \
-    $(OBJ)$/textedit.obj    \
-    $(OBJ)$/msgedit.obj     \
-    $(OBJ)$/dialogs.obj     \
-
 EXCEPTIONSFILES = \
-    $(OBJ)$/app.obj \
-    $(OBJ)$/printer.obj     \
-    $(OBJ)$/process.obj
-
-.IF "$(GUI)" == "WNT"
-EXCEPTIONSFILES += \
-    $(OBJ)$/process.obj
-.ENDIF
+        $(OBJ)$/app.obj          \
+        $(OBJ)$/appbased.obj     \
+        $(OBJ)$/appedit.obj      \
+        $(OBJ)$/apperror.obj     \
+        $(OBJ)$/appwin.obj       \
+        $(OBJ)$/basicrt.obj	 \
+        $(OBJ)$/brkpnts.obj      \
+        $(OBJ)$/dialogs.obj      \
+        $(OBJ)$/msgedit.obj      \
+        $(OBJ)$/mybasic.obj	 \
+        $(OBJ)$/printer.obj      \
+        $(OBJ)$/process.obj      \
+        $(OBJ)$/status.obj       \
+        $(OBJ)$/textedit.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
@@ -76,21 +65,8 @@ SRC1FILES = \
 LIB1TARGET=$(LB)$/app.lib
 LIB1ARCHIV=$(LB)$/libapp.a
 LIB1OBJFILES = \
-        $(OBJ)$/basicrt.obj	\
+        $(EXCEPTIONSFILES)       \
         $(OBJ)$/processw.obj     \
-        $(OBJ)$/process.obj      \
-        $(OBJ)$/brkpnts.obj      \
-        $(OBJ)$/app.obj          \
-        $(OBJ)$/mybasic.obj	\
-        $(OBJ)$/status.obj       \
-        $(OBJ)$/printer.obj      \
-        $(OBJ)$/appwin.obj       \
-        $(OBJ)$/appedit.obj      \
-        $(OBJ)$/appbased.obj     \
-        $(OBJ)$/apperror.obj     \
-        $(OBJ)$/textedit.obj     \
-        $(OBJ)$/msgedit.obj      \
-        $(OBJ)$/dialogs.obj      \
         $(OBJ)$/sbintern.obj
 
 # --- Targets ------------------------------------------------------------

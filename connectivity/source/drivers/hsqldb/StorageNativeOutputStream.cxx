@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -212,8 +213,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb
         }
         catch(Exception&)
         {
-            OSL_ENSURE( false, "StorageNativeOutputStream::sync: could not flush output stream!" );
+            OSL_FAIL( "StorageNativeOutputStream::sync: could not flush output stream!" );
         }
     }
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

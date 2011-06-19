@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,8 @@ XMLTextListsHelper::XMLTextListsHelper()
    :  mpProcessedLists( 0 ),
       msLastProcessedListId(),
       msListStyleOfLastProcessedList(),
-      // --> OD 2008-08-15 #i92811#
+      // Inconsistent behavior regarding lists (#i92811#)
       mpMapListIdToListStyleDefaultListId( 0 ),
-      // <--
       mpContinuingLists( 0 ),
       mpListStack( 0 )
 {
@@ -66,13 +66,12 @@ XMLTextListsHelper::~XMLTextListsHelper()
         mpProcessedLists->clear();
         delete mpProcessedLists;
     }
-    // --> OD 2008-08-15 #i92811#
+    // Inconsistent behavior regarding lists (#i92811#)#
     if ( mpMapListIdToListStyleDefaultListId )
     {
         mpMapListIdToListStyleDefaultListId->clear();
         delete mpMapListIdToListStyleDefaultListId;
     }
-    // <--
     if ( mpContinuingLists )
     {
         mpContinuingLists->clear();
@@ -143,7 +142,7 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
     }
 }
 
-// --> OD 2008-08-15 #i92811# - handling for parameter <sListStyleDefaultListId>
+// Handling for parameter <sListStyleDefaultListId> (#i92811#)
 void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                               ::rtl::OUString sListStyleName,
                                               ::rtl::OUString sContinueListId,
@@ -168,7 +167,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;
 
-    // --> OD 2008-08-15 #i92811#
+    // Inconsistent behavior regarding lists (#i92811#)
     if ( sListStyleDefaultListId.getLength() != 0 )
     {
         if ( mpMapListIdToListStyleDefaultListId == 0 )
@@ -185,7 +184,6 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
                                                                 aListIdMapData;
         }
     }
-    // <--
 }
 
 sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) const
@@ -240,15 +238,13 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
 ::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
 {
-    // --> OD 2008-08-06 #i92478#
-    ::rtl::OUString sTmpStr( ::rtl::OUString::createFromAscii( "list" ) );
-    // <--
+    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+    ::rtl::OUString sTmpStr( RTL_CONSTASCII_USTRINGPARAM( "list" ) );
     sal_Int64 n = Time().GetTime();
     n += Date().GetDate();
     n += rand();
-    // --> OD 2008-08-06 #i92478#
+    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
     sTmpStr += ::rtl::OUString::valueOf( n );
-    // <--
 
     long nHitCount = 0;
     ::rtl::OUString sNewListId( sTmpStr );
@@ -265,8 +261,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
     return sNewListId;
 }
 
-// --> OD 2008-08-15 #i92811#
-// provide list id for a certain list block for import
+// Provide list id for a certain list block for import (#i92811#)
 ::rtl::OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
 {
     ::rtl::OUString sListBlockListId( rListBlock.GetContinueListId() );
@@ -296,7 +291,6 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
     return sListBlockListId;
 }
-// <--
 
 void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
                                                   ::rtl::OUString sContinuingListId )
@@ -358,7 +352,7 @@ XMLTextListsHelper::GetNumberedParagraphListId(
     const ::rtl::OUString i_StyleName)
 {
     if (!i_StyleName.getLength()) {
-        OSL_ENSURE(false, "invalid numbered-paragraph: no style-name");
+        OSL_FAIL("invalid numbered-paragraph: no style-name");
     }
     if (i_StyleName.getLength()
         && (i_Level < mLastNumberedParagraphs.size())
@@ -470,15 +464,6 @@ XMLTextListsHelper::MakeNumRule(
             uno::Any any = rNumStyles->getByName( sDisplayStyleName );
             any >>= xStyle;
 
-            // --> OD 2008-05-07 #refactorlists# - no longer needed
-//            // If the style has not been used, the restart numbering has
-//            // to be set never.
-//            if ( mbRestartNumbering && !xStyle->isInUse() )
-//            {
-//                mbRestartNumbering = sal_False;
-//            }
-            // <--
-
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
             any = xPropSet->getPropertyValue(s_NumberingRules);
@@ -491,18 +476,11 @@ XMLTextListsHelper::MakeNumRule(
             if( pListStyle )
             {
                 xNumRules = pListStyle->GetNumRules();
-                // --> OD 2008-05-07 #refactorlists# - no longer needed
-//                sal_Bool bUsed = mxNumRules.is();
-                // <--
                 if( !xNumRules.is() )
                 {
                     pListStyle->CreateAndInsertAuto();
                     xNumRules = pListStyle->GetNumRules();
                 }
-                // --> OD 2008-05-07 #refactorlists# - no longer needed
-//                if( mbRestartNumbering && !bUsed )
-//                    mbRestartNumbering = sal_False;
-                // <--
             }
         }
     }
@@ -539,3 +517,4 @@ XMLTextListsHelper::MakeNumRule(
     return xNumRules;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <sal/types.h>
 #include <tools/solar.h>
@@ -66,7 +69,7 @@ namespace drawinglayer
             When in the future FontHandling may move to an own library independent
             from VCL, primitives will be prepared.
          */
-        class TextLayouterDevice
+        class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice
         {
             /// internally used VirtualDevice
             VirtualDevice&                  mrDevice;
@@ -138,7 +141,7 @@ namespace drawinglayer
             both defines FontStretching, where no stretching happens at
             fFontScaleY == fFontScaleX
          */
-        Font getVclFontFromFontAttribute(
+        Font DRAWINGLAYER_DLLPUBLIC getVclFontFromFontAttribute(
             const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
@@ -150,7 +153,7 @@ namespace drawinglayer
             above) will be set in return parameter o_rSize to allow further
             processing
          */
-        attribute::FontAttribute getFontAttributeFromVclFont(
+        attribute::FontAttribute DRAWINGLAYER_DLLPUBLIC getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,
             bool bRTL,
@@ -162,3 +165,5 @@ namespace drawinglayer
 //////////////////////////////////////////////////////////////////////////////
 
 #endif //_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

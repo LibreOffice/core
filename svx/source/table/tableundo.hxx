@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ private:
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
-        Data() : mpProperties(0), mpOutlinerParaObject(0) {};
+        Data() : mpProperties(NULL), mpOutlinerParaObject(NULL), mfValue(0) {};
     };
 
     void setDataToCell( const Data& rData );
@@ -257,3 +258,5 @@ private:
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

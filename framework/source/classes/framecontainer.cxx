@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,23 +33,15 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
-#endif
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
-
-#ifndef __FRAMEWORK_COMMANDS_HXX_
-#include <commands.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCH_FLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -158,12 +151,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         // We don't need the write lock any longer ...
         // downgrade to read access.
         aWriteLock.downgrade();
-/*DEPRECATEME
-        // If last frame was removed and special quit mode is enabled by the desktop
-        // we must terminate the application by using this asynchronous callback!
-        if (m_aContainer.size()<1 && m_bAsyncQuit)
-            m_aAsyncCall.Post(0);
-*/
     }
 
     aWriteLock.unlock();
@@ -209,12 +196,6 @@ void FrameContainer::clear()
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
-/*DEPRECATEME
-    // If special quit mode is used - we must terminate the desktop.
-    // He is the owner of this container and can't work without any visible tasks/frames!
-    if (m_bAsyncQuit)
-        m_aAsyncCall.Post(0);
-*/
 
     aWriteLock.unlock();
     // } SAFE
@@ -416,3 +397,5 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
 }
 
 } //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

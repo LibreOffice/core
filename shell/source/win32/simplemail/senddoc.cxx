@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 #include <osl/diagnose.h>
+#include <sal/macros.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/uri.hxx>
+#include <osl/thread.hxx>
 
-#ifndef _RTL_STRING_HXX_
-//#include <rtl/string.hxx>
-#endif
 #include "simplemapi.hxx"
 
 #define WIN32_LEAN_AND_MEAN
@@ -167,7 +170,17 @@ void initMapiMessage(
 {
     ZeroMemory(pMapiMessage, sizeof(MapiMessage));
 
+    try {
+         rtl_uString *subject = NULL;
+         rtl_uString_newFromAscii(&subject, const_cast<char*>(gSubject.c_str()));
+         rtl_uString *decoded_subject = NULL;
+         rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
+         rtl::OUString ou_subject(decoded_subject);
+         pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
+    }
+    catch (...) {
     pMapiMessage->lpszSubject = const_cast<char*>(gSubject.c_str());
+    }
     pMapiMessage->lpszNoteText = (gBody.length() ? const_cast<char*>(gBody.c_str()) : NULL);
     pMapiMessage->lpOriginator = aMapiOriginator;
     pMapiMessage->lpRecips = aMapiRecipientList.size() ? &aMapiRecipientList[0] : 0;
@@ -189,7 +202,7 @@ char* KnownParameter[] =
     "--mapi-logon-ui"
 };
 
-const size_t nKnownParameter = (sizeof(KnownParameter)/sizeof(KnownParameter[0]));
+const size_t nKnownParameter = (SAL_N_ELEMENTS(KnownParameter));
 
 /** @internal */
 bool isKnownParameter(const char* aParameterName)
@@ -208,7 +221,7 @@ void initParameter(int argc, char* argv[])
     {
         if (!isKnownParameter(argv[i]))
         {
-            OSL_ENSURE(false, "Wrong parameter received");
+            OSL_FAIL("Wrong parameter received");
             continue;
         }
 
@@ -251,7 +264,6 @@ void initParameter(int argc, char* argv[])
 */
 int main(int argc, char* argv[])
 {
-    //MessageBox(NULL, "Debug", "Debug", MB_OK);
 
     initParameter(argc, argv);
 
@@ -265,7 +277,7 @@ int main(int argc, char* argv[])
     {
         CSimpleMapi mapi;
 
-        // #93007# we have to set the flag MAPI_NEW_SESSION,
+        // we have to set the flag MAPI_NEW_SESSION,
         // because in the case Outlook xxx (not Outlook Express!)
         // is installed as Exchange and Mail Client a Profile
         // selection dialog must appear because we specify no
@@ -288,6 +300,20 @@ int main(int argc, char* argv[])
 
             ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
 
+            // There is no point in treating an aborted mail sending
+            // dialog as an error to be returned as our exit
+            // status. If the user decided to abort sending a document
+            // as mail, OK, that is not an error.
+
+            // Also, it seems that GroupWise makes MAPISendMail()
+            // return MAPI_E_USER_ABORT even if the mail sending
+            // dialog was not aborted by the user, and the mail was
+            // actually sent just fine. See bnc#660241 (visible to
+            // Novell people only, sorry).
+
+            if (ulRet == MAPI_E_USER_ABORT)
+                ulRet = SUCCESS_SUCCESS;
+
             mapi.MAPILogoff(hSession, 0, 0, 0);
         }
     }
@@ -297,7 +323,7 @@ int main(int argc, char* argv[])
     #endif
     )
     {
-        OSL_ENSURE(false, ex.what());
+        OSL_FAIL(ex.what());
     }
     return ulRet;
 }
@@ -345,3 +371,5 @@ int main(int argc, char* argv[])
         MessageBox(NULL, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
     }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

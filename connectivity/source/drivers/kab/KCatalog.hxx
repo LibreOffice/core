@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,3 +63,5 @@ namespace connectivity
 }
 
 #endif // _CONNECTIVITY_KAB_CATALOG_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

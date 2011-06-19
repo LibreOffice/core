@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -189,9 +190,11 @@ css::uno::Any Service::getPropertyValue(rtl::OUString const & PropertyName)
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (PropertyName.equalsAscii(
-                gconfaccess::ConfigurationValues[i].OOoConfItem))
+    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i)
+    {
+        if (PropertyName.equalsAsciiL(
+                gconfaccess::ConfigurationValues[i].OOoConfItem,
+                gconfaccess::ConfigurationValues[i].nOOoConfItemLen))
         {
             return css::uno::makeAny(
                 enabled_
@@ -225,9 +228,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         pImplName, pServiceManager, pRegistryKey, services);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

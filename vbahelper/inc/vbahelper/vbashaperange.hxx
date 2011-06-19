@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,6 +57,8 @@ public:
     virtual void SAL_CALL IncrementRotation( double Increment ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL IncrementLeft( double Increment ) throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL IncrementTop( double Increment ) throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);
@@ -76,6 +79,7 @@ public:
     virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL SAL_CALL WrapFormat(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) throw (css::uno::RuntimeException);
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
@@ -84,3 +88,5 @@ public:
 };
 
 #endif//SC_VBA_SHAPERANGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

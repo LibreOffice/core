@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,7 +143,7 @@ namespace svt
             break;
 
         default:
-            DBG_ERROR( "AsyncPickerAction::execute: unknown action!" );
+            OSL_FAIL( "AsyncPickerAction::execute: unknown action!" );
             break;
         }
 
@@ -207,7 +208,7 @@ namespace svt
             break;
 
         default:
-            DBG_ERROR( "AsyncPickerAction::OnActionDone: unknown action!" );
+            OSL_FAIL( "AsyncPickerAction::OnActionDone: unknown action!" );
             break;
         }
 
@@ -218,3 +219,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

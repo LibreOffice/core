@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,18 +39,12 @@
 TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
 
 //////////////////////////////////////////////////////////////////////////////
-// #110094# DrawContact section
+// DrawContact section
 
 sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dPolygon(*this);
 }
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
@@ -58,21 +53,15 @@ E3dPolygonObj::E3dPolygonObj(
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
-    // Geometrie setzen
+    // Set geometry
     SetPolyPolygon3D(rPolyPoly3D);
 
-    // Default-Normals erzeugen
+    // Create default normals
     CreateDefaultNormals();
 
-    // Default-Texturkoordinaten erzeugen
+    // Create default texture coordinates
     CreateDefaultTexture();
 }
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
@@ -82,19 +71,13 @@ E3dPolygonObj::E3dPolygonObj(
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
-    // Geometrie und Normalen setzen
+    // Set geometry and the normal
     SetPolyPolygon3D(rPolyPoly3D);
     SetPolyNormals3D(rPolyNormals3D);
 
-    // Default-Texturkoordinaten erzeugen
+    // Create default texture coordinates
     CreateDefaultTexture();
 }
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
@@ -110,105 +93,85 @@ E3dPolygonObj::E3dPolygonObj(
     SetPolyTexture2D(rPolyTexture2D);
 }
 
-/*************************************************************************
-|*
-|* Leer-Konstruktor
-|*
-\************************************************************************/
-
 E3dPolygonObj::E3dPolygonObj()
 :   E3dCompoundObject(),
     bLineOnly(false) // added missing initialisation
 {
-    // Keine Geometrie erzeugen
+    // Create no geometry
 }
-
-/*************************************************************************
-|*
-|* Default-Normalen erzeugen
-|*
-\************************************************************************/
 
 void E3dPolygonObj::CreateDefaultNormals()
 {
     basegfx::B3DPolyPolygon aPolyNormals;
 
-    // Komplettes PolyPolygon mit den Ebenennormalen anlegen
+    // Create a complete PolyPolygon with the plane normal
     for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
     {
-        // Quellpolygon finden
+        // Find source polygon
         const basegfx::B3DPolygon aPolygon(aPolyPoly3D.getB3DPolygon(a));
 
-        // Neues Polygon fuer Normalen anlegen
+        // Creating a new polygon for the normal
         basegfx::B3DPolygon aNormals;
 
-        // Normale holen (und umdrehen)
+        // Get normal (and invert)
         basegfx::B3DVector aNormal(-basegfx::tools::getNormal(aPolygon));
 
-        // Neues Polygon fuellen
+        // Fill new polygon
         for(sal_uInt32 b(0L); b < aPolygon.count(); b++)
         {
             aNormals.append(aNormal);
         }
 
-        // Neues Polygon in PolyPolygon einfuegen
+        // Insert new polygon into the PolyPolygon
         aPolyNormals.append(aNormals);
     }
 
-    // Default-Normalen setzen
+    // Set default normal
     SetPolyNormals3D(aPolyNormals);
 }
-
-/*************************************************************************
-|*
-|* Default-Texturkoordinaten erzeugen
-|*
-\************************************************************************/
 
 void E3dPolygonObj::CreateDefaultTexture()
 {
     basegfx::B2DPolyPolygon aPolyTexture;
-
-    // Komplettes PolyPolygon mit den Texturkoordinaten anlegen
-    // Die Texturkoordinaten erstrecken sich ueber X,Y und Z
-    // ueber die gesamten Extremwerte im Bereich 0.0 .. 1.0
+    // Create a complete PolyPolygon with the texture coordinates
+    // The texture coordinates extend over X,Y and Z
+    // on the whole extreme values in the range 0.0 .. 1.0
     for(sal_uInt32 a(0L); a < aPolyPoly3D.count(); a++)
     {
-        // Quellpolygon finden
+        // Find source polygon
         const basegfx::B3DPolygon& aPolygon(aPolyPoly3D.getB3DPolygon(a));
 
-        // Gesamtgroesse des Objektes feststellen
+        // Determine the total size of the object
         basegfx::B3DRange aVolume(basegfx::tools::getRange(aPolygon));
 
-        // Normale holen
+        // Get normal
         basegfx::B3DVector aNormal(basegfx::tools::getNormal(aPolygon));
         aNormal.setX(fabs(aNormal.getX()));
         aNormal.setY(fabs(aNormal.getY()));
         aNormal.setZ(fabs(aNormal.getZ()));
 
-        // Entscheiden, welche Koordinaten als Source fuer das
-        // Mapping benutzt werden sollen
+        // Decide which coordinates should be used as a source for the mapping
         sal_uInt16 nSourceMode = 0;
 
-        // Groessten Freiheitsgrad ermitteln
+        // Determine the greatest degree of freedom
         if(!(aNormal.getX() > aNormal.getY() && aNormal.getX() > aNormal.getZ()))
         {
             if(aNormal.getY() > aNormal.getZ())
             {
-                // Y ist am groessten, benutze X,Z als mapping
+                // Y is the largest, use X,Z as mapping
                 nSourceMode = 1;
             }
             else
             {
-                // Z ist am groessten, benutze X,Y als mapping
+                // Z is the largest, use X,Y as mapping
                 nSourceMode = 2;
             }
         }
 
-        // Neues Polygon fuer Texturkoordinaten anlegen
+        // Create new polygon for texture coordinates
         basegfx::B2DPolygon aTexture;
 
-        // Neues Polygon fuellen
+        // Fill new polygon
         for(sal_uInt32 b(0L); b < aPolygon.count(); b++)
         {
             basegfx::B2DPoint aTex;
@@ -216,21 +179,21 @@ void E3dPolygonObj::CreateDefaultTexture()
 
             switch(nSourceMode)
             {
-                case 0: // Quelle ist Y,Z
+                case 0: //Source is Y,Z
                     if(aVolume.getHeight())
                         aTex.setX((aCandidate.getY() - aVolume.getMinY()) / aVolume.getHeight());
                     if(aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
-                case 1: // Quelle ist X,Z
+                case 1: // Source is X,Z
                     if(aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
                     if(aVolume.getDepth())
                         aTex.setY((aCandidate.getZ() - aVolume.getMinZ()) / aVolume.getDepth());
                     break;
 
-                case 2: // Quelle ist X,Y
+                case 2: // Source is X,Y
                     if(aVolume.getWidth())
                         aTex.setX((aCandidate.getX() - aVolume.getMinX()) / aVolume.getWidth());
                     if(aVolume.getHeight())
@@ -241,49 +204,31 @@ void E3dPolygonObj::CreateDefaultTexture()
             aTexture.append(aTex);
         }
 
-        // Neues Polygon in PolyPolygon einfuegen
+        // Insert new polygon into the PolyPolygon
         aPolyTexture.append(aTexture);
     }
 
-    // Default-Texturkoordinaten setzen
+    // Set default Texture coordinates
     SetPolyTexture2D(aPolyTexture);
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 E3dPolygonObj::~E3dPolygonObj()
 {
 }
-
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
 
 sal_uInt16 E3dPolygonObj::GetObjIdentifier() const
 {
     return E3D_POLYGONOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Polygon setzen
-|*
-\************************************************************************/
-
 void E3dPolygonObj::SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D)
 {
     if ( aPolyPoly3D != rNewPolyPoly3D )
     {
-        // Neues PolyPolygon; kopieren
+        // New PolyPolygon; copying
         aPolyPoly3D = rNewPolyPoly3D;
 
-        // Geometrie neu erzeugen
+        // Create new geometry
         ActionChanged();
     }
 }
@@ -292,10 +237,10 @@ void E3dPolygonObj::SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyNorm
 {
     if ( aPolyNormals3D != rNewPolyNormals3D )
     {
-        // Neue Normalen; kopieren
+        // New PolyPolygon; copying
         aPolyNormals3D = rNewPolyNormals3D;
 
-        // Geometrie neu erzeugen
+        // Create new geometry
         ActionChanged();
     }
 }
@@ -304,50 +249,25 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 {
     if ( aPolyTexture2D != rNewPolyTexture2D )
     {
-        // Neue Texturkoordinaten; kopieren
+        // New PolyPolygon; copying
         aPolyTexture2D = rNewPolyTexture2D;
 
-        // Geometrie neu erzeugen
+        // Create new geometry
         ActionChanged();
     }
 }
 
-/*************************************************************************
-|*
-|* Wandle das Objekt in ein Gruppenobjekt bestehend aus 6 Polygonen
-|*
-\************************************************************************/
+// Convert the object into a group object consisting of 6 polygons
 
 SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dPolygonObj::operator=(const SdrObject& rObj)
+E3dPolygonObj* E3dPolygonObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dPolygonObj& r3DObj = (const E3dPolygonObj&)rObj;
-
-    aPolyPoly3D      = r3DObj.aPolyPoly3D;
-    aPolyNormals3D   = r3DObj.aPolyNormals3D;
-    aPolyTexture2D   = r3DObj.aPolyTexture2D;
-    bLineOnly        = r3DObj.bLineOnly;
+    return CloneHelper< E3dPolygonObj >();
 }
-
-/*************************************************************************
-|*
-|* LineOnly setzen
-|*
-\************************************************************************/
 
 void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
 {
@@ -359,3 +279,5 @@ void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

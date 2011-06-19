@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
-#ifndef _SVDOCAPT_HXX
 #include <svx/svdocapt.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/sdasaitm.hxx>
@@ -59,12 +58,8 @@
 #include <svx/xhatch.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#endif
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -467,7 +462,6 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
             const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
             const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-//          const rtl::OUString sMap                ( RTL_CONSTASCII_USTRINGPARAM( "Map" ) );
             const rtl::OUString sRefX               ( RTL_CONSTASCII_USTRINGPARAM( "RefX" ) );
             const rtl::OUString sRefY               ( RTL_CONSTASCII_USTRINGPARAM( "RefY" ) );
             const rtl::OUString sRefAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RefAngle" ) );
@@ -1004,7 +998,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
         {
             if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
             {
-                double fValue;
+                double fValue(0.0);
                 if ( rParameter.Value >>= fValue )
                 {
                     rRetValue = fValue;
@@ -1719,7 +1713,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     ByteString aString( "CustomShapes::unknown PolyFlagValue :" );
                     aString.Append( ByteString::CreateFromInt32( nCommand ) );
-                    DBG_ERROR( aString.GetBuffer() );
+                    OSL_FAIL( aString.GetBuffer() );
                 }
                 break;
 #endif
@@ -1740,6 +1734,22 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
     if(aNewB2DPolyPolygon.count())
     {
+        if( !bLineGeometryNeededOnly )
+        {
+            // hack aNewB2DPolyPolygon to fill logic rect - this is
+            // needed to produce gradient fills that look like mso
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(0,0));
+            aNewB2DPolygon.setClosed(true);
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+
+            aNewB2DPolygon.clear();
+            aNewB2DPolygon.append(basegfx::B2DPoint(aLogicRect.GetWidth(),
+                                                    aLogicRect.GetHeight()));
+            aNewB2DPolygon.setClosed(true);
+            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+        }
+
         // #i37011#
         bool bForceCreateTwoObjects(false);
 
@@ -2129,8 +2139,6 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     if ( eSpType == mso_sptRectangle )
     {
         pRet = new SdrRectObj( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
     if ( !pRet )
@@ -2150,14 +2158,6 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
             aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
             aGluePoint.SetPercent( sal_False );
-
-//          const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
-//          double fXRel = rPoint.X();
-//          double fYRel = rPoint.Y();
-//          fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
-//          fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
-//          aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-//          aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();
@@ -2173,3 +2173,4 @@ SdrObject* EnhancedCustomShape2d::CreateLineGeometry()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

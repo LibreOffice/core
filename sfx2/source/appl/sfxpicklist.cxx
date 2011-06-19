@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,8 @@
 #include "objshimp.hxx"
 #include <sfx2/docfilt.hxx>
 
+#include <rtl/instance.hxx>
+
 #include <algorithm>
 
 // ----------------------------------------------------------------------------
@@ -67,7 +70,6 @@ using namespace ::com::sun::star::util;
 
 // ----------------------------------------------------------------------------
 
-osl::Mutex*     SfxPickList::pMutex = 0;
 SfxPickList*    SfxPickList::pUniqueInstance = 0;
 
 // ----------------------------------------------------------------------------
@@ -85,20 +87,6 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
             return aString.getLength();
         }
 };
-
-// ----------------------------------------------------------------------------
-
-osl::Mutex* SfxPickList::GetOrCreateMutex()
-{
-    if ( !pMutex )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pMutex )
-            pMutex = new osl::Mutex;
-    }
-
-    return pMutex;
-}
 
 void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
 {
@@ -124,8 +112,6 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
         String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-//      ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
 
         ::rtl::OUString aSystemPath( aFileSystemPath );
         ::rtl::OUString aCompactedSystemPath;
@@ -160,9 +146,15 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     pMenu->SetAccessibleName( nItemId, aAccessibleName );
 }
 
+namespace
+{
+    class thePickListMutex
+        : public rtl::Static<osl::Mutex, thePickListMutex> {};
+}
+
 void SfxPickList::RemovePickListEntries()
 {
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
     for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
         delete m_aPicklistVector[i];
     m_aPicklistVector.clear();
@@ -178,28 +170,10 @@ SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
         return 0;
 }
 
-SfxPickList*    SfxPickList::GetOrCreate( const sal_uInt32 nMenuSize )
+SfxPickList& SfxPickList::Get()
 {
-    if ( !pUniqueInstance )
-    {
-        ::osl::MutexGuard aGuard( GetOrCreateMutex() );
-        if ( !pUniqueInstance )
-            pUniqueInstance = new SfxPickList( nMenuSize );
-    }
-
-    return pUniqueInstance;
-}
-
-SfxPickList* SfxPickList::Get()
-{
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
-    return pUniqueInstance;
-}
-
-void SfxPickList::Delete()
-{
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
-    DELETEZ( pUniqueInstance );
+    static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
+    return aUniqueInstance;
 }
 
 SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
@@ -219,7 +193,7 @@ void SfxPickList::CreatePickListEntries()
 {
     RemovePickListEntries();
 
-    // Einlesen der Pickliste
+    // Reading the pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
 
     sal_uInt32 nCount   = seqPicklist.getLength();
@@ -266,9 +240,9 @@ void SfxPickList::CreatePickListEntries()
 
 void SfxPickList::CreateMenuEntries( Menu* pMenu )
 {
-    static sal_Bool bPickListMenuInitializing = sal_False;
+    ::osl::MutexGuard aGuard( thePickListMutex::get() );
 
-    ::osl::MutexGuard aGuard( GetOrCreateMutex() );
+    static sal_Bool bPickListMenuInitializing = sal_False;
 
     if ( bPickListMenuInitializing ) // method is not reentrant!
         return;
@@ -301,9 +275,9 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
 
 void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 {
-    ::osl::ClearableMutexGuard aGuard( GetOrCreateMutex() );
+    ::osl::ClearableMutexGuard aGuard( thePickListMutex::get() );
 
-    PickListEntry *pPick = SfxPickList::Get()->GetPickListEntry( nIndex );
+    PickListEntry *pPick = SfxPickList::Get().GetPickListEntry( nIndex );
 
     if ( pPick )
     {
@@ -335,7 +309,7 @@ void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
 
 String SfxPickList::GetMenuEntryTitle( sal_uInt32 nIndex )
 {
-    PickListEntry *pPick = SfxPickList::Get()->GetPickListEntry( nIndex );
+    PickListEntry *pPick = SfxPickList::Get().GetPickListEntry( nIndex );
 
     if ( pPick )
         return pPick->aTitle;
@@ -356,7 +330,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE( SfxEventHint )))
     {
         SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
-        // nur ObjectShell-bezogene Events mit Medium interessieren
+        // only ObjectShell-related events with media interest
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
@@ -392,12 +366,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in History
+                // Unnamed Documents and embedded-Documents not in History
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -423,12 +397,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in Pickliste
+                // Unnamed Documents and embedded-Documents not im Pickliste
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -471,3 +445,5 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

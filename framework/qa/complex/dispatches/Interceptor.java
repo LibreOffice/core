@@ -45,9 +45,6 @@ import com.sun.star.frame.XStatusListener;
 // helper
 import com.sun.star.util.URL;
 
-// others
-//import java.lang.*;
-
 // __________ Implementation __________
 
 /**

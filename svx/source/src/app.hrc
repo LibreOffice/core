@@ -197,6 +197,9 @@
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
+#define RID_SC_TP_DEFAULTS          (RID_OFA_START + 259)
 
 // Strings ------------------------------------------
 
@@ -242,10 +245,9 @@
 #define RID_BMP_DB_RELATIONS_S          (RID_OFA_START + 172)
 #define RID_BMP_DB_RELATIONS_L          (RID_OFA_START + 173)
 #define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
-#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
 
-                                        // 12 und 13 nicht benutzen!!!
-// ..._BEGIN kann nochmal benutzt werden, nur zum Iterieren
+// don't use 12 and 13 !!!
+// ..._BEGIN can be used again. Just for iteration here
 #define RID_STR_PRIO_BEGIN              (RID_OFA_START + 17)
 #define RID_STR_PRIO_HIGHEST            (RID_OFA_START + 18)
 #define RID_STR_PRIO_HIGH               (RID_OFA_START + 19)

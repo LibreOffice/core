@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <comphelper/stl_types.hxx>
 #include <jni.h>
 //........................................................................
@@ -92,3 +91,4 @@ namespace connectivity
 //........................................................................
 #endif // CONNECTIVI_HSQLDB_HSTORAGEMAP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

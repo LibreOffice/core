@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,15 +40,13 @@ struct SvNamePos
         : aUUId( rName )
         , nStmPos( nPos ) {}
 };
-DECLARE_LIST( SvNamePosList, SvNamePos *)
 
-/******************** class SvMetaModule *********************************/
 class SvMetaModule : public SvMetaExtern
 {
     SvMetaClassMemberList       aClassList;
     SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
-// Browser
+// browser
     String                  aIdlFileName;
     SvString                aHelpFileName;
     SvString                aSlotIdFile;
@@ -96,7 +95,6 @@ public:
     virtual void        WriteAttributes( SvIdlDataBase & rBase,
                                         SvStream & rOutStm, sal_uInt16 nTab,
                                             WriteType, WriteAttribute = 0 );
-//    virtual void        WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm, SvNamePosList & rList );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                     WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
@@ -115,3 +113,4 @@ SV_DECL_IMPL_PERSIST_LIST(SvMetaModule,SvMetaModule *)
 
 #endif // _MODULE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

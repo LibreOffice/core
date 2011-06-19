@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -915,7 +916,7 @@ bool SdrDragMovHdl::BeginSdrDrag()
     {
         if (pH1==NULL || pH2==NULL)
         {
-            DBG_ERROR("SdrDragMovHdl::BeginSdrDrag(): Verschieben der Spiegelachse: Referenzhandles nicht gefunden");
+            OSL_FAIL("SdrDragMovHdl::BeginSdrDrag(): Verschieben der Spiegelachse: Referenzhandles nicht gefunden");
             return false;
         }
 
@@ -2058,7 +2059,7 @@ bool SdrDragRotate::BeginSdrDrag()
     }
     else
     {
-        DBG_ERROR("SdrDragRotate::BeginSdrDrag(): Kein Referenzpunkt-Handle gefunden");
+        OSL_FAIL("SdrDragRotate::BeginSdrDrag(): Kein Referenzpunkt-Handle gefunden");
         return false;
     }
 }
@@ -2207,7 +2208,7 @@ bool SdrDragShear::BeginSdrDrag()
     }
     else
     {
-        DBG_ERROR("SdrDragShear::BeginSdrDrag(): Kein Referenzpunkt-Handle fuer Shear gefunden");
+        OSL_FAIL("SdrDragShear::BeginSdrDrag(): Kein Referenzpunkt-Handle fuer Shear gefunden");
         return false;
     }
 
@@ -2501,7 +2502,7 @@ bool SdrDragMirror::BeginSdrDrag()
     }
     else
     {
-        DBG_ERROR("SdrDragMirror::BeginSdrDrag(): Spiegelachse nicht gefunden");
+        OSL_FAIL("SdrDragMirror::BeginSdrDrag(): Spiegelachse nicht gefunden");
         return false;
     }
 }
@@ -2642,7 +2643,7 @@ bool SdrDragGradient::BeginSdrDrag()
     }
     else
     {
-        DBG_ERROR("SdrDragGradient::BeginSdrDrag(): IAOGradient nicht gefunden");
+        OSL_FAIL("SdrDragGradient::BeginSdrDrag(): IAOGradient nicht gefunden");
     }
 
     return bRetval;
@@ -3660,3 +3661,5 @@ Pointer SdrDragCrop::GetSdrDragPointer() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

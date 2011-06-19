@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/logfile.hxx>
 
@@ -83,10 +84,7 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
-using namespace ::osl                           ;
-using namespace ::rtl                           ;
-using namespace ::vos                           ;
-
+    using ::rtl::OUString;
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
@@ -210,7 +208,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
         {
             uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
-            OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             {
                 Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
@@ -272,8 +270,6 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 
 //*****************************************************************************************************************
 //  private method
-//
-//
 //*****************************************************************************************************************
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
@@ -294,8 +290,6 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
 
 //*****************************************************************************************************************
 //  private method
-//
-//
 //*****************************************************************************************************************
 sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource )
 {
@@ -306,7 +300,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         Window* pWindow = NULL;
 
         // Use SolarMutex for threadsafe code too!
-        OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         {
             pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             while ( pWindow && !pWindow->IsSystemWindow() )
@@ -357,14 +351,10 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 // set new menu on our system window and create new menu manager
                 if ( bMenuFromResource )
                 {
-                    // #110897#
-                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );
                     m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
                 }
                 else
                 {
-                    // #110897#
-                    // m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_True );
                     m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
                 }
 
@@ -385,7 +375,7 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
         return 0;
 
     css::util::URL aURL;
-    aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseWin");
+    aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
                         SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
     if( xTrans.is() )
@@ -486,3 +476,5 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   u
 #endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

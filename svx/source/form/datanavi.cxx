@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "datanavi.hxx"
 #include "fmservs.hxx"
 
@@ -304,14 +306,12 @@ namespace svxform
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
-        m_TbxHCImageList( SVX_RES( IL_TBX_BMPS_HC ) )
+        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) )
 
     {
         FreeResource();
 
-        const ImageList& rImageList =
-            GetBackground().GetColor().IsDark() ? m_TbxHCImageList : m_TbxImageList;
+        const ImageList& rImageList = m_TbxImageList;
         m_aToolBox.SetItemImage( TBI_ITEM_ADD, rImageList.GetImage( IID_ITEM_ADD ) );
         m_aToolBox.SetItemImage( TBI_ITEM_ADD_ELEMENT, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
         m_aToolBox.SetItemImage( TBI_ITEM_ADD_ATTRIBUTE, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
@@ -708,7 +708,7 @@ namespace svxform
                         {
                             try
                             {
-                                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                                 ::rtl::OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sNewName += String( sTemp );
@@ -755,12 +755,12 @@ namespace svxform
 
         case MID_INSERT_CONTROL:
         {
-            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
+            OSL_FAIL( "XFormsPage::DoToolboxAction: MID_INSERT_CONTROL not implemented, yet!" );
         }
         break;
 
         default:
-            OSL_ENSURE( false, "XFormsPage::DoToolboxAction: unknown ID!" );
+            OSL_FAIL( "XFormsPage::DoToolboxAction: unknown ID!" );
             break;
         }
 
@@ -775,9 +775,7 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvLBoxEntry* pParent = m_aItemList.FirstSelected();
-        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? m_pNaviWin->GetItemHCImageList()
-            : m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
         ::rtl::OUString sName;
@@ -812,10 +810,8 @@ namespace svxform
         {
             // create a resource manager, for the svx resource file
             // and the UI locale
-            ByteString aResourceFile( "svx" );
             ResMgr* pResMgr = ResMgr::CreateResMgr(
-                aResourceFile.GetBuffer(),
-                Application::GetSettings().GetUILocale() );
+                "svx", Application::GetSettings().GetUILocale() );
 
             // load the resources for the AddSubmission modal dialog.
             // This will create our own resource context.
@@ -985,9 +981,7 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvLBoxEntry* pEntry = NULL;
-        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? m_pNaviWin->GetItemHCImageList()
-            : m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
 
         ItemNode* pNode = new ItemNode( _rEntry );
@@ -1035,7 +1029,7 @@ namespace svxform
         {
             try
             {
-                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                 ::rtl::OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += String( sTemp );
@@ -1241,9 +1235,7 @@ namespace svxform
         m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
         String sRet;
         m_bHasModel = true;
-        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? m_pNaviWin->GetItemHCImageList()
-            : m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
 
         switch ( m_eGroup )
         {
@@ -1256,13 +1248,13 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    sal_uInt16 nIter = 0;
                     Reference< XEnumerationAccess > xNumAccess( _xModel->getInstances(), UNO_QUERY );
                     if ( xNumAccess.is() )
                     {
                         Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                         if ( xNum.is() && xNum->hasMoreElements() )
                         {
+                            sal_uInt16 nIter = 0;
                             while ( xNum->hasMoreElements() )
                             {
                                 if ( nIter == _nPagePos )
@@ -1342,7 +1334,7 @@ namespace svxform
                         {
                             Image aImage1 = rImageList.GetImage( IID_ELEMENT );
                             Image aImage2 = rImageList.GetImage( IID_ELEMENT );
-                            String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                            String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
@@ -1372,7 +1364,7 @@ namespace svxform
                 break;
             }
             default:
-                DBG_ERROR( "XFormsPage::SetModel: unknown group!" );
+                OSL_FAIL( "XFormsPage::SetModel: unknown group!" );
                 break;
         }
 
@@ -1559,7 +1551,6 @@ namespace svxform
         m_bIsNotifyDisabled ( false ),
 
         m_aItemImageList    (       SVX_RES( IL_ITEM_BMPS ) ),
-        m_aItemHCImageList  (       SVX_RES( IL_ITEM_BMPS_HC ) ),
         m_xDataListener     ( new DataListener( this ) )
 
     {
@@ -1892,6 +1883,7 @@ namespace svxform
                             m_aTabCtrl.SetPageText( nId, sNewName );
                             bIsDocModified = true;
                         }
+                        delete(pPage);
                     }
                     break;
                 }
@@ -2799,7 +2791,7 @@ namespace svxform
                             m_eItemType = DITText;
                             break;
                         default:
-                            DBG_ERROR( "AddDataItemDialog::InitFronNode: cannot handle this node type!" );
+                            OSL_FAIL( "AddDataItemDialog::InitFronNode: cannot handle this node type!" );
                             break;
                     }
 
@@ -2924,7 +2916,7 @@ namespace svxform
                 &m_aCalculateBtn
             };
             Window** pCurrent = pWinsForHide;
-            for ( ; i < sizeof( pWinsForHide ) / sizeof( pWinsForHide[ 0 ] ); ++i, ++pCurrent )
+            for ( ; i < SAL_N_ELEMENTS( pWinsForHide ); ++i, ++pCurrent )
                 (*pCurrent)->Hide();
 
             Window* pWinsForMove[] =
@@ -2932,7 +2924,7 @@ namespace svxform
                 &m_aButtonsFL, &m_aOKBtn, &m_aEscBtn, &m_aHelpBtn
             };
             pCurrent = pWinsForMove;
-            for ( i = 0; i < sizeof( pWinsForMove ) / sizeof( pWinsForMove[ 0 ] ); ++i, ++pCurrent )
+            for ( i = 0; i < SAL_N_ELEMENTS( pWinsForMove ); ++i, ++pCurrent )
             {
                 Point aNewPos = (*pCurrent)->GetPosPixel();
                 aNewPos.Y() -= nDelta;
@@ -3534,7 +3526,7 @@ namespace svxform
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                     if ( xNum.is() && xNum->hasMoreElements() )
                     {
-                        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                        String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                         while ( xNum->hasMoreElements() )
                         {
                             Reference< XPropertySet > xPropSet;
@@ -3730,3 +3722,4 @@ namespace svxform
 //............................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

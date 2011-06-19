@@ -1,4 +1,4 @@
-sb	basic	:    L10N:l10n offuh oovbaapi svtools xmlscript framework salhelper LIBXSLT:libxslt NULL
+sb	basic	:    TRANSLATIONS:translations offuh oovbaapi svtools xmlscript framework salhelper LIBXSLT:libxslt NULL
 sb	basic									usr1	-	all	sb_mkout NULL
 sb	basic\inc								nmake	-	all	sb_inc NULL
 sb	basic\source\app						nmake	-	all	sb_app sb_class sb_inc NULL

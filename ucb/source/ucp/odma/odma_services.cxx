@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,43 +28,28 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
-#include "odma_lib.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 //=========================================================================
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 //=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * /*pServiceManager*/, void * pRegistryKey )
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // Write info into registry.
-    //////////////////////////////////////////////////////////////////////
-
-    // @@@ Adjust namespace names.
-    writeInfo( pRegistryKey,
-               ::odma::ContentProvider::getImplementationName_Static(),
-               ::odma::ContentProvider::getSupportedServiceNames_Static() );
-}
-
-//=========================================================================
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -80,10 +66,8 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( ::odma::ContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        if(::odma::LoadLibrary())
+        if(::odma::DMSsAvailable())
             xFactory = ::odma::ContentProvider::createServiceFactory( xSMgr );
-        else
-            OSL_ASSERT(!"Could not load library!");
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -97,3 +81,4 @@ extern "C" void * SAL_CALL component_getFactory(
     return pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

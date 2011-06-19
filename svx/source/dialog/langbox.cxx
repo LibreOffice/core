@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,7 +156,6 @@ void SvxLanguageBox::Init()
     m_pLangTable = new SvtLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
-    m_aCheckedImageHC = Image( SVX_RES( RID_SVXIMG_CHECKED_H ) );
     m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
     m_nLangList             = LANG_LIST_EMPTY;
     m_bHasLangNone          = sal_False;
@@ -201,8 +201,6 @@ sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, sal_uInt16 
     sal_uInt16 nRet = 0;
     if( !bChecked )
         nRet = InsertEntry( rEntry, m_aNotCheckedImage, nPos );
-    else if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        nRet = InsertEntry( rEntry, m_aCheckedImageHC, nPos );
     else
         nRet = InsertEntry( rEntry, m_aCheckedImage, nPos );
     return nRet;
@@ -516,11 +514,8 @@ bool SvxLanguageBox::IsLanguageSelected( const LanguageType/*type*/) const
     return true;
 }
 
-/*IMPL_IMPL (SvxLanguageBox, ListBox);
-IMPL_CONSTRUCTORS ( SvxLanguageBox, ListBox, "svxlanguagebox" );
-IMPL_GET_IMPL( SvxLanguageBox );
-IMPL_GET_WINDOW (SvxLanguageBox);*/
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

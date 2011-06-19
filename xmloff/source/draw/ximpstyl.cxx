@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -525,7 +526,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
         if(pContext)
         {
             pContext->AddRef();
-            maList.Insert((SdXMLPresentationPlaceholderContext*)pContext, LIST_APPEND);
+            maList.push_back( (SdXMLPresentationPlaceholderContext*)pContext );
         }
     }
 
@@ -541,12 +542,12 @@ void SdXMLPresentationPageLayoutContext::EndElement()
     // build presentation page layout type here
     // calc mnTpeId due to content of maList
     // at the moment only use number of types used there
-    if(maList.Count())
+    if( !maList.empty() )
     {
-        SdXMLPresentationPlaceholderContext* pObj0 = maList.GetObject(0);
+        SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ];
         if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("handout"))))
         {
-            switch( maList.Count() )
+            switch( maList.size() )
             {
             case 1:
                 mnTypeId = 22; // AUTOLAYOUT_HANDOUT1
@@ -569,7 +570,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
         }
         else
         {
-            switch(maList.Count())
+            switch( maList.size() )
             {
                 case 1:
                 {
@@ -585,7 +586,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 2:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("subtitle"))))
@@ -634,8 +635,8 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 3:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList.GetObject(2);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("outline"))))
@@ -706,8 +707,8 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 4:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
-                    SdXMLPresentationPlaceholderContext* pObj2 = maList.GetObject(2);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                    SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
@@ -729,7 +730,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 5:
                 {
-                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
 
                     if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
@@ -757,8 +758,9 @@ void SdXMLPresentationPageLayoutContext::EndElement()
         }
 
         // release remembered contexts, they are no longer needed
-        while(maList.Count())
-            maList.Remove(maList.Count() - 1)->ReleaseRef();
+        for ( size_t i = maList.size(); i > 0; )
+            maList[ --i ]->ReleaseRef();
+        maList.clear();
     }
 }
 
@@ -1017,14 +1019,8 @@ SdXMLStylesContext::SdXMLStylesContext(
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
-    // #110680#
-    // Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference< lang::XMultiServiceFactory > xMSF = rImport.getServiceFactory();
-
     mpNumFormatter = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
-
-    // #110680#
-    // mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter );
     mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xMSF );
 }
 
@@ -1164,21 +1160,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
 
 sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
 {
-//  if(rFamily.getLength())
-//  {
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME))))
-//          return XML_STYLE_FAMILY_SD_GRAPHICS_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME))))
-//          return XML_STYLE_FAMILY_SD_PRESENTATION_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_POOL_NAME))))
-//          return XML_STYLE_FAMILY_SD_POOL_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME))))
-//          return XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID;
-//  }
-
     // call base class
     return SvXMLStylesContext::GetFamily(rFamily);
 }
@@ -1189,20 +1170,6 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
     sal_uInt16 nFamily) const
 {
     UniReference < SvXMLImportPropertyMapper > xMapper;
-
-//  if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_POOL_ID == nFamily)
-//  {
-//      if(!xPropImpPropMapper.is())
-//      {
-//          UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
-//          ((SdXMLStylesContext*)this)->xPropImpPropMapper =
-//              new SvXMLImportPropertyMapper(aImpHelper->GetPropertySetMapper());
-//      }
-//      xMapper = xPropImpPropMapper;
-//      return xMapper;
-//  }
 
     switch( nFamily )
     {
@@ -1263,7 +1230,6 @@ void SdXMLStylesContext::EndElement()
             if(pStyle && pStyle->ISA(XMLShapeStyleContext))
             {
                 XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-//              pDocStyle->Filter();
 
                 SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
                 if( pStylesContext )
@@ -1310,7 +1276,7 @@ void SdXMLStylesContext::EndElement()
 //
 void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const
 {
-    UniString sPrefix(rMaster.GetDisplayName(), (sal_uInt16)rMaster.GetDisplayName().getLength());
+    UniString sPrefix(rMaster.GetDisplayName());
     sPrefix += sal_Unicode('-');
 
     if(GetSdImport().GetLocalDocStyleFamilies().is() && GetSdImport().GetLocalDocStyleFamilies()->hasByName(rMaster.GetDisplayName())) try
@@ -1320,7 +1286,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
     }
 }
 
@@ -1340,7 +1306,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
     }
 }
 
@@ -1356,7 +1322,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
+        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
     }
 }
 
@@ -1551,8 +1517,9 @@ SdXMLMasterStylesContext::SdXMLMasterStylesContext(
 
 SdXMLMasterStylesContext::~SdXMLMasterStylesContext()
 {
-    while(maMasterPageList.Count())
-        maMasterPageList.Remove(maMasterPageList.Count() - 1)->ReleaseRef();
+    for ( size_t i = maMasterPageList.size(); i > 0; )
+        maMasterPageList[ --i ]->ReleaseRef();
+    maMasterPageList.clear();
 }
 
 SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
@@ -1596,7 +1563,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
                     if(pContext)
                     {
                         pContext->AddRef();
-                        maMasterPageList.Insert((SdXMLMasterPageContext*)pContext, LIST_APPEND);
+                        maMasterPageList.push_back( (SdXMLMasterPageContext*)pContext );
                     }
                 }
             }
@@ -1690,3 +1657,4 @@ void SdXMLHeaderFooterDeclContext::Characters( const ::rtl::OUString& rChars )
     maStrText += rChars;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

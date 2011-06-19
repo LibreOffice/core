@@ -27,10 +27,8 @@
 
 #define SDR_ResourceBegin            2560
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Achtung: Alle Strings zwischen SDR_StringCacheBegin und
-// SDR_StringCacheEnd muessen buendig aneinander liegen.
-//BFS06#define SDR_StringCacheBegin         (SDR_ResourceBegin)
+// Attention: All strings between SDR_StringCacheBegin and
+// SDR_StringCacheEnd must be aligned next to each other.
 
 #define STR_ObjNameBegin             (SDR_ResourceBegin)
 #define STR_ObjNameSingulNONE        (STR_ObjNameBegin +  0)
@@ -155,7 +153,6 @@
 #define STR_ObjNameSingulUno         (STR_ObjNameBegin +119)
 #define STR_ObjNamePluralUno         (STR_ObjNameBegin +120)
 
-// Neu ab 537: Namen fuer 3D-Objekte
 #define STR_ObjNameSingulCube3d     (STR_ObjNameBegin + 121)
 #define STR_ObjNamePluralCube3d     (STR_ObjNameBegin + 122)
 #define STR_ObjNameSingulExtrude3d  (STR_ObjNameBegin + 123)
@@ -166,7 +163,6 @@
 #define STR_ObjNamePluralLathe3d    (STR_ObjNameBegin + 128)
 #define STR_ObjNameSingulObj3d      (STR_ObjNameBegin + 129)
 #define STR_ObjNamePluralObj3d      (STR_ObjNameBegin + 130)
-//BFS01#define  STR_ObjNameSingulPoly3d     (STR_ObjNameBegin + 131)
 #define STR_ObjNamePluralPoly3d     (STR_ObjNameBegin + 132)
 #define STR_ObjNameSingulScene3d    (STR_ObjNameBegin + 133)
 #define STR_ObjNamePluralScene3d    (STR_ObjNameBegin + 134)
@@ -326,11 +322,10 @@
 #define STR_UndoDelLayer             (STR_UndoBegin +14)
 #define STR_UndoMovLayer             (STR_UndoBegin +15)
 
-// --> OD 2009-07-09 #i73249#
+// #i73249#
 #define STR_UndoObjName              (STR_UndoBegin +16)
 #define STR_UndoObjTitle             (STR_UndoBegin +17)
 #define STR_UndoObjDescription       (STR_UndoBegin +18)
-// <--
 #define STR_UndoEnd                  (STR_UndoObjDescription)
 
 
@@ -404,12 +399,6 @@
 #define STR_ItemNam_SHADOWTRANSPARENCE   (STR_ItemNamBegin +  4)
 #define STR_ItemNam_SHADOW3D             (STR_ItemNamBegin +  5)
 #define STR_ItemNam_SHADOWPERSP          (STR_ItemNamBegin +  6)
-//BFS01#define STR_ItemNam_SHADOWRESERVE1       (STR_ItemNamBegin +  7)
-//BFS01#define STR_ItemNam_SHADOWRESERVE2       (STR_ItemNamBegin +  8)
-//BFS01#define STR_ItemNam_SHADOWRESERVE3       (STR_ItemNamBegin +  9)
-//BFS01#define STR_ItemNam_SHADOWRESERVE4       (STR_ItemNamBegin + 10)
-//BFS01#define STR_ItemNam_SHADOWRESERVE5       (STR_ItemNamBegin + 11)
-//BFS01#define STR_ItemNamSET_SHADOW            (STR_ItemNamBegin + 12)
 #define STR_ItemNam_CAPTIONTYPE          (STR_ItemNamBegin + 13)
 #define STR_ItemNam_CAPTIONFIXEDANGLE    (STR_ItemNamBegin + 14)
 #define STR_ItemNam_CAPTIONANGLE         (STR_ItemNamBegin + 15)
@@ -420,13 +409,6 @@
 #define STR_ItemNam_CAPTIONESCABS        (STR_ItemNamBegin + 20)
 #define STR_ItemNam_CAPTIONLINELEN       (STR_ItemNamBegin + 21)
 #define STR_ItemNam_CAPTIONFITLINELEN    (STR_ItemNamBegin + 22)
-//BFS01#define STR_ItemNam_CAPTIONRESERVE1      (STR_ItemNamBegin + 23)
-//BFS01#define STR_ItemNam_CAPTIONRESERVE2      (STR_ItemNamBegin + 24)
-//BFS01#define STR_ItemNam_CAPTIONRESERVE3      (STR_ItemNamBegin + 25)
-//BFS01#define STR_ItemNam_CAPTIONRESERVE4      (STR_ItemNamBegin + 26)
-//BFS01#define STR_ItemNam_CAPTIONRESERVE5      (STR_ItemNamBegin + 27)
-//BFS01#define STR_ItemNamSET_CAPTION           (STR_ItemNamBegin + 28)
-//BFS01#define STR_ItemNamSET_OUTLINER          (STR_ItemNamBegin + 29)
 
 #define STR_ItemNam_ECKENRADIUS          (STR_ItemNamBegin + 30)
 #define STR_ItemNam_TEXT_LEFTDIST        (STR_ItemNamBegin + 31)
@@ -475,27 +457,12 @@
 #define STR_ItemNamEnd                   (STR_ItemNam_SHEARANGLE)
 #define STR_ItemEnd                      STR_ItemNamEnd
 
-// 64 Resource-Id's reserviert fuer kompatible Erweiterungen
-//BFS06#define STR_SvDraw_CacheReserve_Begin    (STR_ItemEnd+1)
-//BFS06#define STR_SvDraw_CacheReserve_End      (STR_SvDraw_CacheReserve_Begin+63)
-//BFS06#define SDR_StringCacheEnd               (STR_SvDraw_CacheReserve_Begin-1)
-
-//BFS06#define STR_ErrorBegin                   (STR_SvDraw_CacheReserve_End+1)
-//BFS06#define STR_ErrorBegin                   (STR_ItemEnd+1)
-//BFS06#define STR_SvDraw_ErrorReserve_Begin    (STR_ErrorBegin + 2)
-// hier ist Platz fuer 30 Eintraege
-//BFS06#define STR_SvDraw_ErrorReserve_End      (STR_SvDraw_ErrorReserve_Begin + 29)
-//BFS06#define STR_ErrorEnd                     STR_SvDraw_ErrorReserve_End
-//BFS06#define STR_ErrorEnd                     (STR_ErrorBegin + 2)
-
-// 22-05-98: 2 Eintraege fuer die Bitmaps von der StrErrorReserve abgeknapst
-//BFS06#define BMAP_Begin                       (STR_ErrorEnd+1)
 #define BMAP_Begin                       (STR_ItemEnd+1)
 #define BMAP_GrafikEi                    (BMAP_Begin +0)
 #define BMAP_GrafikDe                    (BMAP_Begin +1)
 #define BMAP_End                         (BMAP_GrafikDe)
 
-// Strings fuer den Vorlagen-Dialog
+// Strings for the template dialog
 #define SIP_Begin                           (BMAP_End)
 
 #define SIP_UNKNOWN_ATTR                    (SIP_Begin +   0)
@@ -565,7 +532,6 @@
 #define SIP_XA_FTRESERVED4                  (SIP_Begin +  64)
 #define SIP_XA_FTRESERVED5                  (SIP_Begin +  65)
 #define SIP_XA_FTRESERVED_LAST              (SIP_Begin +  66)
-//BFS01#define  SIP_XATTRSET_TEXT                   (SIP_Begin +  67)
 #define SIP_SA_SHADOW                       (SIP_Begin +  68)
 #define SIP_SA_SHADOWCOLOR                  (SIP_Begin +  69)
 #define SIP_SA_SHADOWXDIST                  (SIP_Begin +  70)
@@ -573,12 +539,6 @@
 #define SIP_SA_SHADOWTRANSPARENCE           (SIP_Begin +  72)
 #define SIP_SA_SHADOW3D                     (SIP_Begin +  73)
 #define SIP_SA_SHADOWPERSP                  (SIP_Begin +  74)
-//BFS01#define  SIP_SA_SHADOWRESERVE1               (SIP_Begin +  75)
-//BFS01#define  SIP_SA_SHADOWRESERVE2               (SIP_Begin +  76)
-//BFS01#define  SIP_SA_SHADOWRESERVE3               (SIP_Begin +  77)
-//BFS01#define  SIP_SA_SHADOWRESERVE4               (SIP_Begin +  78)
-//BFS01#define  SIP_SA_SHADOWRESERVE5               (SIP_Begin +  79)
-//BFS01#define  SIP_SDRATTRSET_SHADOW               (SIP_Begin +  80)
 #define SIP_SA_CAPTIONTYPE                  (SIP_Begin +  81)
 #define SIP_SA_CAPTIONFIXEDANGLE            (SIP_Begin +  82)
 #define SIP_SA_CAPTIONANGLE                 (SIP_Begin +  83)
@@ -589,13 +549,6 @@
 #define SIP_SA_CAPTIONESCABS                (SIP_Begin +  88)
 #define SIP_SA_CAPTIONLINELEN               (SIP_Begin +  89)
 #define SIP_SA_CAPTIONFITLINELEN            (SIP_Begin +  90)
-//BFS01#define  SIP_SA_CAPTIONRESERVE1              (SIP_Begin +  91)
-//BFS01#define  SIP_SA_CAPTIONRESERVE2              (SIP_Begin +  92)
-//BFS01#define  SIP_SA_CAPTIONRESERVE3              (SIP_Begin +  93)
-//BFS01#define  SIP_SA_CAPTIONRESERVE4              (SIP_Begin +  94)
-//BFS01#define  SIP_SA_CAPTIONRESERVE5              (SIP_Begin +  95)
-//BFS01#define  SIP_SDRATTRSET_CAPTION              (SIP_Begin +  96)
-//BFS01#define  SIP_SDRATTRSET_OUTLINER             (SIP_Begin +  97)
 #define SIP_SA_ECKENRADIUS                  (SIP_Begin +  98)
 #define SIP_SA_TEXT_MINFRAMEHEIGHT          (SIP_Begin +  99)
 #define SIP_SA_TEXT_AUTOGROWHEIGHT          (SIP_Begin + 100)
@@ -625,7 +578,6 @@
 #define SIP_SA_AUTOGROWSIZE                 (SIP_Begin + 124)
 #define SIP_SA_RESERVE18                    (SIP_Begin + 125)
 #define SIP_SA_RESERVE19                    (SIP_Begin + 126)
-//BFS01#define  SIP_SDRATTRSET_MISC                 (SIP_Begin + 127)
 #define SIP_SA_EDGEKIND                     (SIP_Begin + 128)
 #define SIP_SA_EDGENODE1HORZDIST            (SIP_Begin + 129)
 #define SIP_SA_EDGENODE1VERTDIST            (SIP_Begin + 130)
@@ -637,15 +589,6 @@
 #define SIP_SA_EDGELINE1DELTA               (SIP_Begin + 136)
 #define SIP_SA_EDGELINE2DELTA               (SIP_Begin + 137)
 #define SIP_SA_EDGELINE3DELTA               (SIP_Begin + 138)
-//BFS01#define  SIP_SA_EDGERESERVE02                (SIP_Begin + 139)
-//BFS01#define  SIP_SA_EDGERESERVE03                (SIP_Begin + 140)
-//BFS01#define  SIP_SA_EDGERESERVE04                (SIP_Begin + 141)
-//BFS01#define  SIP_SA_EDGERESERVE05                (SIP_Begin + 142)
-//BFS01#define  SIP_SA_EDGERESERVE06                (SIP_Begin + 143)
-//BFS01#define  SIP_SA_EDGERESERVE07                (SIP_Begin + 144)
-//BFS01#define  SIP_SA_EDGERESERVE08                (SIP_Begin + 145)
-//BFS01#define  SIP_SA_EDGERESERVE09                (SIP_Begin + 146)
-//BFS01#define  SIP_SDRATTRSET_EDGE                 (SIP_Begin + 147)
 #define SIP_SA_MEASUREKIND                  (SIP_Begin + 148)
 #define SIP_SA_MEASURETEXTHPOS              (SIP_Begin + 149)
 #define SIP_SA_MEASURETEXTVPOS              (SIP_Begin + 150)
@@ -670,7 +613,6 @@
 #define SIP_SA_MEASURERESERVE05             (SIP_Begin + 169)
 #define SIP_SA_MEASURERESERVE06             (SIP_Begin + 170)
 #define SIP_SA_MEASURERESERVE07             (SIP_Begin + 171)
-//BFS01#define  SIP_SDRATTRSET_MEASURE              (SIP_Begin + 172)
 #define SIP_SA_CIRCKIND                     (SIP_Begin + 173)
 #define SIP_SA_CIRCSTARTANGLE               (SIP_Begin + 174)
 #define SIP_SA_CIRCENDANGLE                 (SIP_Begin + 175)
@@ -757,17 +699,12 @@
 #define SIP_SA_GRAFRESERVE4                 (SIP_Begin + 255)
 #define SIP_SA_GRAFRESERVE5                 (SIP_Begin + 256)
 #define SIP_SA_GRAFRESERVE6                 (SIP_Begin + 257)
-//BFS01#define SIP_SDRATTRSET_GRAF                  (SIP_Begin + 258)
 
 #define SIP_SA_MARKERS                      (SIP_Begin + 258)
 #define SIP_SA_PAGESHADOW35X35              (SIP_Begin + 259)
 #define SIP_SA_FINE_MARKERS                 (SIP_Begin + 260)
 
-// #100499#
 #define BMP_SVXOLEOBJ                       (SIP_Begin + 261)
-
-// #101928#
-#define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 262)
 
 #define STR_TABLE_ATTR                      (SIP_Begin + 263)
 #define STR_TABLE_AUTOFMT                   (SIP_Begin + 264)
@@ -784,11 +721,7 @@
 #define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 275)
 #define SIP_SA_CROP_MARKERS                 (SIP_Begin + 276)
 #define SIP_SA_CROP_FINE_MARKERS            (SIP_Begin + 277)
-#define SIP_SA_ACCESSIBILITY_CROP_MARKERS   (SIP_Begin + 278)
 
-#define SIP_End                             (SIP_SA_ACCESSIBILITY_CROP_MARKERS)
+#define SIP_End                             (SIP_SA_CROP_FINE_MARKERS)
 
 #define SDR_ResourceEnd                     (SIP_End)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-

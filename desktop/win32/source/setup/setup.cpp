@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,7 @@
  ************************************************************************/
 
 #define WIN // scope W32 API
+#define _WIN32_WINNT 0x0501
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -85,8 +87,8 @@
 
 #define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
 #define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
-#define PRODUCTCODE_X86     TEXT( "{E503B4BF-F7BB-3D5F-8BC8-F694B1CFF942}" )
-#define PRODUCTCODE_X64     TEXT( "{350AA351-21FA-3270-8B7A-835434E766AD}" )
+#define PRODUCTCODE_X86     TEXT( "{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" )
+#define PRODUCTCODE_X64     TEXT( "{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"
@@ -263,22 +265,21 @@ boolean SetupAppX::GetProfileSection( LPCTSTR pFileName, LPCTSTR pSection,
 {
     if ( !rSize || !*pRetBuf )
     {
-        rSize = 512;
+        rSize = 10000;
         *pRetBuf = new TCHAR[ rSize ];
     }
 
     DWORD nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
 
-    if ( nRet && ( nRet + 2 > rSize ) ) // buffer was too small, retry with bigger one
+    while ( nRet && ( nRet + 2 >= rSize ) ) // buffer was too small, retry until big enough
     {
-        if ( nRet < 32767 - 2 )
-        {
-            delete [] (*pRetBuf);
-            rSize = nRet + 2;
-            *pRetBuf = new TCHAR[ rSize ];
+        if (rSize > 1000000)
+            break;
+        delete [] (*pRetBuf);
+        rSize = rSize * 2;
+        *pRetBuf = new TCHAR[ rSize ];
 
-            nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
-        }
+        nRet = GetPrivateProfileSection( pSection, *pRetBuf, rSize, pFileName );
     }
 
     if ( !nRet )
@@ -290,7 +291,7 @@ boolean SetupAppX::GetProfileSection( LPCTSTR pFileName, LPCTSTR pSection,
         Log( sBuf );
         return false;
     }
-    else if ( nRet + 2 > rSize )
+    else if ( nRet + 2 >= rSize )
     {
         SetError( ERROR_OUTOFMEMORY );
         Log( TEXT( "ERROR: GetPrivateProfileSection() out of memory\r\n" ) );
@@ -834,10 +835,10 @@ boolean SetupAppX::LaunchInstaller( LPCTSTR pParam )
     PROCESS_INFORMATION aPI;
 
     Log( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    Log( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    Log( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     OutputDebugStringFormat( TEXT( " Will install using <%s>\r\n" ), sMsiPath );
-    OutputDebugStringFormat( TEXT( "   Prameters are: %s\r\n" ), pParam );
+    OutputDebugStringFormat( TEXT( "   Parameters are: %s\r\n" ), pParam );
 
     ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
     ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
@@ -1320,9 +1321,7 @@ boolean SetupAppX::AlreadyRunning() const
     const TCHAR sGUniqueName[] = TEXT( "Global\\_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
     const TCHAR sUniqueName[]  = TEXT( "_MSISETUP_{EA8130C1-8D3D-4338-9309-1A52D530D846}" );
 
-    if ( IsWin9x() )
-        sMutexName = sUniqueName;
-    else if ( ( GetOSVersion() < 5 ) && ! IsTerminalServerInstalled() )
+    if ( ( GetOSVersion() < 5 ) && ! IsTerminalServerInstalled() )
         sMutexName = sUniqueName;
     else
         sMutexName = sGUniqueName;
@@ -1393,8 +1392,7 @@ void SetupAppX::Log( LPCTSTR pMessage, LPCTSTR pText ) const
         if ( !bInit )
         {
             bInit = true;
-            if ( ! IsWin9x() )
-                _ftprintf( m_pLogFile, TEXT("%c"), 0xfeff );
+            _ftprintf( m_pLogFile, TEXT("%c"), 0xfeff );
 
             _tsetlocale( LC_ALL, TEXT("") );
             _ftprintf( m_pLogFile, TEXT("\nCodepage=%s\nMultiByte Codepage=[%d]\n"),
@@ -1652,9 +1650,6 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
 //--------------------------------------------------------------------------
 boolean SetupAppX::IsAdmin()
 {
-    if ( IsWin9x() )
-        return true;
-
     PSID aPsidAdmin;
     SID_IDENTIFIER_AUTHORITY aAuthority = SECURITY_NT_AUTHORITY;
 
@@ -2064,3 +2059,5 @@ SetupApp* Create_SetupAppX()
 }
 
 //--------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

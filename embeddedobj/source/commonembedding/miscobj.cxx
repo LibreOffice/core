@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,15 +117,15 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     // TODO/LATER: in future UI names can be also provided here
     for ( sal_Int32 nInd = 0; nInd < aObjectProps.getLength(); nInd++ )
     {
-        if ( aObjectProps[nInd].Name.equalsAscii( "ClassID" ) )
+        if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ClassID" ) ) )
             aObjectProps[nInd].Value >>= m_aClassID;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentServiceName" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectDocumentServiceName" ) ) )
             aObjectProps[nInd].Value >>= m_aDocServiceName;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectDocumentFilterName" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectDocumentFilterName" ) ) )
             aObjectProps[nInd].Value >>= m_aPresetFilterName;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectMiscStatus" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectMiscStatus" ) ) )
             aObjectProps[nInd].Value >>= m_nMiscStatus;
-        else if ( aObjectProps[nInd].Name.equalsAscii( "ObjectVerbs" ) )
+        else if ( aObjectProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ObjectVerbs" ) ) )
             aObjectProps[nInd].Value >>= m_aObjectVerbs;
     }
 
@@ -234,9 +235,9 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     // setPersistance has no effect on own links, so the complete initialization must be done here
 
     for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
-        if ( aMediaDescr[nInd].Name.equalsAscii( "URL" ) )
+        if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aMediaDescr[nInd].Value >>= m_aLinkURL;
-        else if ( aMediaDescr[nInd].Name.equalsAscii( "FilterName" ) )
+        else if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             aMediaDescr[nInd].Value >>= m_aLinkFilterName;
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
@@ -253,12 +254,12 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
     uno::Reference< frame::XDispatchProviderInterceptor > xDispatchInterceptor;
     for ( sal_Int32 nObjInd = 0; nObjInd < aObjectDescr.getLength(); nObjInd++ )
-        if ( aObjectDescr[nObjInd].Name.equalsAscii( "OutplaceDispatchInterceptor" ) )
+        if ( aObjectDescr[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutplaceDispatchInterceptor" ) ) )
         {
             aObjectDescr[nObjInd].Value >>= xDispatchInterceptor;
             break;
         }
-        else if ( aObjectDescr[nObjInd].Name.equalsAscii( "Parent" ) )
+        else if ( aObjectDescr[nObjInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Parent" ) ) )
         {
             aObjectDescr[nObjInd].Value >>= m_xParent;
         }
@@ -321,7 +322,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Exception on request to resize!\n" );
+                OSL_FAIL( "Exception on request to resize!\n" );
             }
         }
     }
@@ -514,14 +515,9 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't store object without persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
-
-    // if ( m_bWaitSaveCompleted )
-    //     throw embed::WrongStateException(
-    //                 ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //                 uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
 }
@@ -705,3 +701,4 @@ void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< 
                                                 xListener );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

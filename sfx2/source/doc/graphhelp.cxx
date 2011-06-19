@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,7 +118,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 #ifdef WNT
     if ( pGDIMeta )
     {
-        String aStr = ::rtl::OUString::createFromAscii( ".emf" );
+        String aStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".emf"));
         ::utl::TempFile aTempFile( ::rtl::OUString(),
                                    &aStr,
                                    NULL,
@@ -463,32 +464,32 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
             {
                 uno::Reference< graphic::XGraphicProvider > xGraphProvider(
                     xServiceManager->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ),
                     uno::UNO_QUERY );
                 if ( xGraphProvider.is() )
                 {
-                    ::rtl::OUString aURL = ::rtl::OUString::createFromAscii( "private:resource/sfx/bitmapex/" );
+                    ::rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("private:resource/sfx/bitmapex/"));
                     aURL += ::rtl::OUString::valueOf( nResID );
 
                     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                    aMediaProps[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                     aMediaProps[0].Value <<= aURL;
 
                     uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
                     if ( xGraphic.is() )
                     {
                         uno::Sequence< beans::PropertyValue > aStoreProps( 2 );
-                        aStoreProps[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aStoreProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
                         aStoreProps[0].Value <<= xStream;
-                        aStoreProps[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
-                        aStoreProps[1].Value <<= ::rtl::OUString::createFromAscii( "image/png" );
+                        aStoreProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
+                        aStoreProps[1].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png"));
 
                         xGraphProvider->storeGraphic( xGraphic, aStoreProps );
                         bResult = sal_True;
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
             }
         }
@@ -503,23 +504,23 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
 {
     sal_uInt16 nResult = 0;
 
-    if ( aFactoryShortName.equalsAscii( "scalc" ) )
+    if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "scalc" ) ) )
     {
         nResult = BMP_128X128_CALC_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "sdraw" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) )
     {
         nResult = BMP_128X128_DRAW_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "simpress" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) )
     {
         nResult = BMP_128X128_IMPRESS_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "smath" ) )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "smath" ) ) )
     {
         nResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName.equalsAscii( "swriter" ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "swriter" ) ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
     {
         nResult = BMP_128X128_WRITER_DOC;
     }
@@ -527,3 +528,4 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
     return nResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

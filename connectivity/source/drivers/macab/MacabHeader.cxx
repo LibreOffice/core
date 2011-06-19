@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -305,10 +306,11 @@ MacabHeader::iterator::~iterator ()
 {
 }
 
-void MacabHeader::iterator::operator= (MacabHeader *_record)
+MacabHeader::iterator& MacabHeader::iterator::operator= (MacabHeader *_record)
 {
     id = 0;
     record = _record;
+    return *this;
 }
 
 // -------------------------------------------------------------------------
@@ -341,3 +343,4 @@ sal_Int32 MacabHeader::end() const
     return size;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

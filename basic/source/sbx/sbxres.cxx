@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ static const char* pSbxRes[] = {
     "Item",
     "Remove",
 
-    "Error ",   // mit Blank!
+    "Error ",   // with blank!
     "False",
     "True"
 };
@@ -89,3 +90,4 @@ SbxRes::SbxRes( sal_uInt16 nId )
     : ::rtl::OUString( ::rtl::OUString::createFromAscii( GetSbxRes( nId ) ) )
 {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

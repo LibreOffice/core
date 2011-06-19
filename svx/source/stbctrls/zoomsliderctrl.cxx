@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 
 // include ---------------------------------------------------------------
 #include <svx/zoomsliderctrl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/dialmgr.hxx>
@@ -185,10 +182,9 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     SfxStatusBarControl( _nSlotId, _nId, _rStb ),
     mpImpl( new SvxZoomSliderControl_Impl )
 {
-    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maSliderButton   = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
-    mpImpl->maIncreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
-    mpImpl->maDecreaseButton = Image( SVX_RES( bHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
+    mpImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
+    mpImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
+    mpImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
 }
 
 // -----------------------------------------------------------------------
@@ -446,3 +442,5 @@ sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

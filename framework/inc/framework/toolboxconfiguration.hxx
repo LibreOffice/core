@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,6 @@
 #endif
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace framework
@@ -47,13 +46,11 @@ namespace framework
 class FWE_DLLPUBLIC ToolBoxConfiguration
 {
     public:
-        // #110897#
         static sal_Bool LoadToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration );
 
-        // #110897#
         static sal_Bool StoreToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
@@ -63,3 +60,5 @@ class FWE_DLLPUBLIC ToolBoxConfiguration
 } // namespace framework
 
 #endif // __FRAMEWORK_XML_TOOLBOXCONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

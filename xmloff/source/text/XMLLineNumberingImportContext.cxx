@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     enum LineNumberingToken eToken,
     OUString sValue)
 {
-    sal_Bool bTmp;
+    bool bTmp;
     sal_Int32 nTmp;
 
     switch (eToken)
@@ -320,3 +321,4 @@ void XMLLineNumberingImportContext::SetSeparatorIncrement(
     nSeparatorIncrement = nIncr;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

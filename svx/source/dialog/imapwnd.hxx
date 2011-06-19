@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 struct NotifyInfo
 {
     String  aMarkURL;
@@ -64,13 +59,6 @@ struct NotifyPosSize
     sal_Bool    bPictureSize;
     sal_Bool    bMousePos;
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 #define SVD_IMAP_USERDATA   0x0001
 
@@ -109,47 +97,6 @@ public:
     const IMapObjectPtr     GetObject() const { return mpObj; }
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-/* move to cui //CHINA001
-class URLDlg : public ModalDialog
-{
-    FixedLine           aFlURL;
-    FixedText           aFtURL1;
-    Edit                aEdtURL;
-    FixedText           aFtURLDescription;
-    Edit                aEdtURLDescription;
-    FixedText           aFtTarget;
-    ComboBox            aCbbTargets;
-    FixedText           aFtName;
-    Edit                aEdtName;
-    OKButton            aBtnOk;
-    CancelButton        aBtnCancel;
-
-public:
-
-                        URLDlg( Window* pWindow,
-                                const String& rURL, const String& rDescription,
-                                const String& rTarget, const String& rName,
-                                TargetList& rTargetList );
-
-    String              GetURL() const { return aEdtURL.GetText(); }
-    String              GetDescription() const { return aEdtURLDescription.GetText(); }
-    String              GetTarget() const { return aCbbTargets.GetText(); }
-    String              GetName() const { return aEdtName.GetText(); }
-};
-*/
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class IMapWindow : public GraphCtrl, public DropTargetHelper
 {
@@ -224,3 +171,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

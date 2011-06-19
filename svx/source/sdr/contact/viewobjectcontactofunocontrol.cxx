@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 /** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -193,7 +194,7 @@ namespace sdr { namespace contact {
                 m_xControlView.set( m_xControl, UNO_QUERY );
                 if ( !m_xControlWindow.is() || !m_xControlView.is() )
                 {
-                    OSL_ENSURE( false, "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
+                    OSL_FAIL( "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
                     clear();
                 }
             }
@@ -1059,7 +1060,7 @@ namespace sdr { namespace contact {
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
-                OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
+                OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
         }
         catch( const Exception& )
         {
@@ -1139,7 +1140,7 @@ namespace sdr { namespace contact {
     {
         if ( m_bCreatingControl )
         {
-            OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
+            OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
             // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
             // those affected the grid control, which is the only control so far which is visible in design mode (and
             // not only in alive mode).
@@ -1243,16 +1244,15 @@ namespace sdr { namespace contact {
                 _rInitialZoomNormalization
             );
 
-            // #107049# set design mode before peer is created,
+            // set design mode before peer is created,
             // this is also needed for accessibility
             _out_rControl.setDesignMode( _rPageView.isDesignMode() );
 
             // adjust the initial visibility according to the visibility of the layer
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( _out_rControl, _rUnoObject, _rPageView, false, true );
 
             // add the control to the respective control container
-            // #108327# do this last
+            // do this last
             Reference< XControlContainer > xControlContainer( _rPageView.getControlContainer( _rDevice ) );
             if ( xControlContainer.is() )
                 xControlContainer->addControl( sControlServiceName, _out_rControl.getControl() );
@@ -1435,7 +1435,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
@@ -1488,7 +1488,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // (re)painting might require VCL operations, which need the SolarMutex
 
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::propertyChange: already disposed()" );
@@ -1512,17 +1512,16 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *this );
 
-        DBG_ASSERT( _rSource.NewMode.equalsAscii( "design" ) || _rSource.NewMode.equalsAscii( "alive" ),
+        DBG_ASSERT( _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) || _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "alive" ) ),
             "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
 
-        m_eControlDesignMode = _rSource.NewMode.equalsAscii( "design" ) ? eDesign : eAlive;
+        m_eControlDesignMode = _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) ? eDesign : eAlive;
 
         impl_switchDesignModeListening_nothrow( impl_isControlDesignMode_nothrow() );
 
         try
         {
             // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( false );
         }
         catch( const Exception& )
@@ -1540,7 +1539,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // some code below - in particular our disposal - might trigger actions which require the
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
@@ -1932,3 +1931,4 @@ namespace sdr { namespace contact {
 } } // namespace sdr::contact
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

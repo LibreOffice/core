@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,10 +102,10 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     rtl::OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.HierarchyContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -164,21 +165,8 @@ void SAL_CALL HierarchyContentProvider::initialize(
                                 const uno::Sequence< uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
-#if 0
     if ( aArguments.getLength() > 0 )
-    {
-         // Extract config provider from service init args.
-         aArguments[ 0 ] >>= m_xConfigProvider;
-
-        OSL_ENSURE( m_xConfigProvider.is(),
-                    "HierarchyContentProvider::initialize - "
-                    "No config provider!" );
-    }
-#else
-    if ( aArguments.getLength() > 0 )
-        OSL_ENSURE( false,
-                    "HierarchyContentProvider::initialize : not supported!" );
-#endif
+        OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 
 //=========================================================================
@@ -212,13 +200,11 @@ HierarchyContentProvider::getConfigProvider(
         }
         catch ( uno::Exception const & )
         {
-//            OSL_ENSURE( sal_False,
-//                        "HierarchyContentProvider::getConfigProvider - "
+//            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
 //                        "caught exception!" );
         }
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getConfigProvider - "
+        OSL_FAIL( "HierarchyContentProvider::getConfigProvider - "
                     "No config provider!" );
 
         return uno::Reference< lang::XMultiServiceFactory >();
@@ -241,8 +227,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
         {
             if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
                 return uno::Reference< container::XHierarchicalNameAccess >();
             }
@@ -283,8 +268,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
             }
         }
@@ -336,3 +320,4 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
     return m_xOfficeInstDirs;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

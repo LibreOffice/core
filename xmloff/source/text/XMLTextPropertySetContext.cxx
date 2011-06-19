@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,9 @@
 #include "XMLBackgroundImageContext.hxx"
 #include "XMLSectionFootnoteConfigImport.hxx"
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include "xmltabi.hxx"
-#ifndef _XMLOFF_TXTDROPI_HXX
 #include "txtdropi.hxx"
-#endif
 
 using ::rtl::OUString;
 
@@ -82,14 +79,9 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                                    rProperties );
         break;
     case CTF_TEXTCOLUMNS:
-#ifndef SVX_LIGHT
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                                    rLocalName, xAttrList, rProp,
                                                    rProperties );
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         break;
 
     case CTF_DROPCAPFORMAT:
@@ -137,14 +129,12 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProperties );
     }
     break;
-#ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
     case CTF_SECTION_ENDNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper());
         break;
-#endif // #ifndef SVX_LIGHT
     }
 
     if( !pContext )
@@ -156,3 +146,4 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

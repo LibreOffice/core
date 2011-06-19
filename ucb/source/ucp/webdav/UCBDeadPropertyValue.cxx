@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,32 +50,20 @@ struct UCBDeadPropertyValueParseContext
 };
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aTypeString
-    = rtl::OUString::createFromAscii( "string" );
-const rtl::OUString UCBDeadPropertyValue::aTypeLong
-    = rtl::OUString::createFromAscii( "long" );
-const rtl::OUString UCBDeadPropertyValue::aTypeShort
-    = rtl::OUString::createFromAscii( "short" );
-const rtl::OUString UCBDeadPropertyValue::aTypeBoolean
-    = rtl::OUString::createFromAscii( "boolean" );
-const rtl::OUString UCBDeadPropertyValue::aTypeChar
-    = rtl::OUString::createFromAscii( "char" );
-const rtl::OUString UCBDeadPropertyValue::aTypeByte
-    = rtl::OUString::createFromAscii( "byte" );
-const rtl::OUString UCBDeadPropertyValue::aTypeHyper
-    = rtl::OUString::createFromAscii( "hyper" );
-const rtl::OUString UCBDeadPropertyValue::aTypeFloat
-    = rtl::OUString::createFromAscii( "float" );
-const rtl::OUString UCBDeadPropertyValue::aTypeDouble
-    = rtl::OUString::createFromAscii( "double" );
+const rtl::OUString UCBDeadPropertyValue::aTypeString(RTL_CONSTASCII_USTRINGPARAM("string"));
+const rtl::OUString UCBDeadPropertyValue::aTypeLong(RTL_CONSTASCII_USTRINGPARAM("long"));
+const rtl::OUString UCBDeadPropertyValue::aTypeShort(RTL_CONSTASCII_USTRINGPARAM("short"));
+const rtl::OUString UCBDeadPropertyValue::aTypeBoolean(RTL_CONSTASCII_USTRINGPARAM("boolean"));
+const rtl::OUString UCBDeadPropertyValue::aTypeChar(RTL_CONSTASCII_USTRINGPARAM("char"));
+const rtl::OUString UCBDeadPropertyValue::aTypeByte(RTL_CONSTASCII_USTRINGPARAM("byte"));
+const rtl::OUString UCBDeadPropertyValue::aTypeHyper(RTL_CONSTASCII_USTRINGPARAM("hyper"));
+const rtl::OUString UCBDeadPropertyValue::aTypeFloat(RTL_CONSTASCII_USTRINGPARAM("float"));
+const rtl::OUString UCBDeadPropertyValue::aTypeDouble(RTL_CONSTASCII_USTRINGPARAM("double"));
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aXMLPre
-    = rtl::OUString::createFromAscii( "<ucbprop><type>" );
-const rtl::OUString UCBDeadPropertyValue::aXMLMid
-    = rtl::OUString::createFromAscii( "</type><value>" );
-const rtl::OUString UCBDeadPropertyValue::aXMLEnd
-    = rtl::OUString::createFromAscii( "</value></ucbprop>" );
+const rtl::OUString UCBDeadPropertyValue::aXMLPre(RTL_CONSTASCII_USTRINGPARAM("<ucbprop><type>"));
+const rtl::OUString UCBDeadPropertyValue::aXMLMid(RTL_CONSTASCII_USTRINGPARAM("</type><value>"));
+const rtl::OUString UCBDeadPropertyValue::aXMLEnd(RTL_CONSTASCII_USTRINGPARAM("</value></ucbprop>"));
 
 #define STATE_TOP (1)
 
@@ -226,8 +215,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
             if ( nPos == nEnd )
             {
-                OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
 
@@ -239,8 +227,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 4 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -255,8 +242,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -266,8 +252,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -280,8 +265,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -291,8 +275,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -305,15 +288,13 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
         }
@@ -398,7 +379,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
-                            rtl::OUString::createFromAscii( "true" ) ) )
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );
@@ -425,8 +406,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                                "UCBDeadPropertyValue::createFromXML - "
+                    OSL_FAIL( "UCBDeadPropertyValue::createFromXML - "
                                 "Unsupported property type!" );
                     success = false;
                 }
@@ -524,8 +504,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::toXML - "
+        OSL_FAIL( "UCBDeadPropertyValue::toXML - "
                     "Unsupported property type!" );
         return false;
     }
@@ -541,3 +520,5 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ namespace dp_misc {
 namespace {
 
 struct OfficeLocale :
-        public rtl::StaticWithInit<const OUString, OfficeLocale> {
+        public rtl::StaticWithInit<OUString, OfficeLocale> {
     const OUString operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
@@ -231,3 +232,4 @@ lang::Locale getOfficeLocale()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

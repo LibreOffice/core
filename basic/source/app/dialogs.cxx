@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,36 +33,22 @@
 #include <algorithm>
 #include <tools/rc.hxx>
 #include <vcl/metric.hxx>
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <tools/config.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/debug.hxx>
-#ifndef _SV_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <vcl/splitwin.hxx>
-#ifndef _ZFORLIST_HXX //autogen
 #include <svl/zformat.hxx>
-#endif
 #include <svtools/ctrltool.hxx>
 
-// Ohne Includeschutz
+
 #include <svtools/svtdata.hxx>
 #include <svl/solar.hrc>
 
@@ -87,7 +74,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
     FreeResource();
 }
 
-////////////////////////////////////////////////////////////////////
 
 FindDialog::FindDialog( Window* pParent, const ResId& id, String& Text )
 : ModalDialog( pParent, id )
@@ -143,7 +129,6 @@ IMPL_LINK( ReplaceDialog, ButtonClick, Button *, pB )
     return sal_True;
 }
 
-////////////////////////////////////////////////////////////////////
 
 
 void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
@@ -219,12 +204,18 @@ OptConfEdit::OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nRes
     rBase.SetModifyHdl( LINK( this, OptConfEdit, BaseModifyHdl ) );
 }
 
+#if defined(WNT)
+    #define FSYS_STYLE_DEFAULT FSYS_STYLE_NTFS
+# else
+    #define FSYS_STYLE_DEFAULT FSYS_STYLE_UNX
+#endif
+
 void OptConfEdit::Reload( Config &aConf )
 {
     ConfEdit::Reload( aConf );
 
     DirEntry aCalculatedHIDDir( rBase.GetValue() );
-    aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+    aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_DEFAULT );
 
     DirEntry aCurrentHIDDir( aEdit.GetText() );
 
@@ -246,7 +237,7 @@ IMPL_LINK( OptConfEdit, BaseModifyHdl, Edit*, EMPTYARG )
     if ( aCheck.IsChecked() )
     {
         DirEntry aCalculatedHIDDir( rBase.GetValue() );
-        aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_FAT );
+        aCalculatedHIDDir += DirEntry( "global/hid", FSYS_STYLE_DEFAULT );
         aEdit.SetText( aCalculatedHIDDir.GetFull() );
     }
     return 0;
@@ -314,7 +305,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_FON:
                 pNewTabPage = new FontOptions( pTabCtrl, aConfig );
                 break;
-            default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
+            default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
@@ -690,9 +681,6 @@ FontOptions::FontOptions( Window* pParent, Config &aConfig )
     aFontName.EnableWYSIWYG();
     aFontName.EnableSymbols();
 
-//    aFontSize.SetUnit( FUNIT_POINT );
-//    MapMode aMode( MAP_POINT );
-//    aFTPreview.SetMapMode( aMode );
 
     aFontName.SetModifyHdl( LINK( this, FontOptions, FontNameChanged ) );
     aFontStyle.SetModifyHdl( LINK( this, FontOptions, FontStyleChanged ) );
@@ -735,7 +723,6 @@ IMPL_LINK( FontOptions, FontSizeChanged, void*, EMPTYARG )
 void FontOptions::UpdatePreview()
 {
     Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
-//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
     sal_uIntPtr nFontSize = static_cast<sal_uIntPtr>((aFontSize.GetValue() + 5) / 10);
     aFont.SetHeight( nFontSize );
     aFTPreview.SetFont( aFont );
@@ -805,7 +792,7 @@ StringList* GenericOptions::GetAllGroups()
     for ( sal_uInt16 i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
         String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
-        pGroups->Insert( pGroup );
+        pGroups->push_back( pGroup );
     }
     return pGroups;
 }
@@ -813,31 +800,29 @@ StringList* GenericOptions::GetAllGroups()
 void GenericOptions::LoadData()
 {
     StringList* pGroups = GetAllGroups();
-    String* pGroup;
-    while ( (pGroup = pGroups->First()) != NULL )
+    for ( size_t i = 0, n = pGroups->size(); i < n; ++i )
     {
-        pGroups->Remove( pGroup );
+        String* pGroup = pGroups->at( i );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
-        {
             aCbArea.InsertEntry( *pGroup );
-        }
         delete pGroup;
     }
+    pGroups->clear();
     delete pGroups;
-    aCbArea.SetText( aCbArea.GetEntry( 0 ) );
+        aCbArea.SetText( aCbArea.GetEntry( 0 ) );
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
 
     // Add load the data
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
-void GenericOptions::ShowSelectPath( const String aType )
+void GenericOptions::ShowSelectPath( const String &rType )
 {
     Point aNPos = aPbNewValue.GetPosPixel();
     Point aDPos = aPbDelValue.GetPosPixel();
     long nDelta = aDPos.Y() - aNPos.Y();
-    if ( aType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
+    if ( rType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
     {   // Show Path button
         nMoveButtons += nDelta;
         aMoveTimer.Start();
@@ -845,7 +830,7 @@ void GenericOptions::ShowSelectPath( const String aType )
         aPbSelectPath.Show( sal_True );
         aPbSelectPath.Enable( sal_True );
     }
-    else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
+    else if ( !rType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
     {   // Hide Path button
         nMoveButtons -= nDelta;
         aMoveTimer.Start();
@@ -1096,15 +1081,6 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 {
     FreeResource();
 
-/*  ResMgr* pRM = CREATERESMGR( svt );
-    ToolBox aOrig( this, ResId( 12345, pRM ) );
-    delete pRM;
-
-    aTbConf.CopyItem( aOrig, 4 );
-    aTbConf.InsertSeparator();
-    aTbConf.CopyItem( aOrig, 5 );
-    aTbConf.CopyItem( aOrig, 6 );
-    aTbConf.CopyItem( aOrig, 7 );             */
     aTbConf.SetOutStyle( TOOLBOX_STYLE_FLAT );
 
 #if OSL_DEBUG_LEVEL < 2
@@ -1199,8 +1175,6 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
 
         if ( pWinInfo->nRType & DH_MODE_DATA_VALID )    // no old office
             nDisplayMode = pWinInfo->nRType; // Is used for mode transmission while reset
-//        if ( pWinInfo->aUId.GetULONG() & DH_MODE_DATA_VALID ) // kein altes Office
-//          nDisplayMode = pWinInfo->aUId.GetULONG();   // Wird im Reset zur �bermittlung des Modus verwendet
 
         return;
     }
@@ -1266,8 +1240,6 @@ void DisplayHidDlg::Resize()
     }
     else
     {
-//      SetUpdateMode( sal_False );
-
         // Minimum size
         Size aSize( GetOutputSizePixel() );
         aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
@@ -1321,9 +1293,6 @@ void DisplayHidDlg::Resize()
         aPos.Move( nSpace, -aOKClose.GetSizePixel().Height() );
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
         aOKClose.SetPosPixel( aPos );
-
-//      SetUpdateMode( sal_True );
-//      Invalidate();
     }
     FloatingWindow::Resize();
 }
@@ -1363,9 +1332,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 else
                     aRadioButtonRID_RB_NEW_BOOL_F.Check();
                 break;
-//              case SbxCURRENCY:
-//              case SbxDATE:
-//              break;
             case SbxINTEGER:
                 aNumericFieldRID_NF_NEW_INTEGER.Show();
                 aNumericFieldRID_NF_NEW_INTEGER.SetText( pVar->GetString() );
@@ -1379,8 +1345,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
-//              case SbxOBJECT:     // cannot be edited
-//              break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
@@ -1406,41 +1370,6 @@ IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 
 
     SbxDataType eType = pVar->GetType();
-/*
-Boolean
-Currency
-Date
-Double
-Integer
-Long
-Object
-Single
-String
-Variant
-
-
-atof
-
-  ecvt
-  f
-  gcvt
-
-SvNumberformat::
-    static double StringToDouble( const xub_Unicode* pStr,
-                                const International& rIntl,
-                                int& nErrno,
-                                const xub_Unicode** ppEnd = NULL );
-    // Converts just as strtod a decimal string to a double.
-    // Decimal and thousand separators come from International,
-    // leading spaces are omitted.
-    // If ppEnd!=NULL then *ppEnd is set after the parsed data.
-    // If pStr contains only the String to be parsed, then if success:
-    // **ppEnd=='\0' and *ppEnd-pStr==strlen(pStr).
-    // If overflow fVal=+/-HUGE_VAL, if underflow 0,
-    // nErrno is in this cases set to ERANGE otherwise 0.
-    // "+/-1.#INF" are recognized as +/-HUGE_VAL.
-
-    */
 
 
 
@@ -1451,12 +1380,6 @@ SvNumberformat::
         case SbxBOOL:
             pVar->PutBool( aRadioButtonRID_RB_NEW_BOOL_T.IsChecked() );
             break;
-//      case SbxCURRENCY:
-//          pVar->PutCurrency( aContent );
-//          break;
-//      case SbxDATE:
-//          pVar->PutDate( aContent );
-//          break;
         case SbxINTEGER:
             pVar->PutInteger( (sal_Int16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
@@ -1479,7 +1402,6 @@ SvNumberformat::
     }
 
 
-//  pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
     if ( !bWasError && SbxBase::IsError() )
     {
         bError = sal_True;
@@ -1492,12 +1414,6 @@ SvNumberformat::
         return 1;
     }
 
-//  if ( aEditRID_ED_NEW_STRING.GetText().Compare( pVar->GetString() ) != COMPARE_EQUAL )
-//  {
-//      aFixedTextRID_FT_CONTENT_VALUE.SetText( pVar->GetString() );
-//      aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
-//      return 1;
-//  }
 
     Close();
     return 0;
@@ -1505,3 +1421,4 @@ SvNumberformat::
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

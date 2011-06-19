@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,6 +96,8 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_GROUP_NAME);
+        m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
@@ -303,11 +306,11 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+                OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
             }
         }
         else
-            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
+            OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
     }
 }
 
@@ -471,7 +474,7 @@ void OFormLayerXMLImport_Impl::endPage()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
+        OSL_FAIL("OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
     }
 
     // now that we have all children of the forms collection, attach the events
@@ -499,7 +502,7 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const ::rtl:
         if (m_aCurrentPageIds->second.end() != aPos)
             xReturn = aPos->second;
         else
-            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+            OSL_FAIL("OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
     }
     return xReturn;
 }
@@ -532,7 +535,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
 
     if ( !pContext )
     {
-        OSL_ENSURE( false, "unknown element" );
+        OSL_FAIL( "unknown element" );
         pContext =
             new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
     }
@@ -590,7 +593,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
+                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
             }
         }
         m_aCellValueBindings.clear();
@@ -617,7 +620,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
+                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
             }
         }
         m_aCellRangeListSources.clear();
@@ -644,3 +647,4 @@ void OFormLayerXMLImport_Impl::documentDone( )
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

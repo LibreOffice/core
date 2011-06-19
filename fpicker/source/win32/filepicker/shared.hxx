@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,10 @@
 
 #include <rtl/ustring.hxx>
 
-const ::rtl::OUString BACKSLASH          = ::rtl::OUString::createFromAscii( "\\" );
-const ::rtl::OUString FILTER_SEPARATOR   = ::rtl::OUString::createFromAscii( "------------------------------------------" );
-const ::rtl::OUString ALL_FILES_WILDCARD = ::rtl::OUString::createFromAscii( "*.*" );
+const ::rtl::OUString BACKSLASH(RTL_CONSTASCII_USTRINGPARAM( "\\" ));
+const ::rtl::OUString FILTER_SEPARATOR(RTL_CONSTASCII_USTRINGPARAM( "------------------------------------------" ));
+const ::rtl::OUString ALL_FILES_WILDCARD(RTL_CONSTASCII_USTRINGPARAM( "*.*" ));
 const ::sal_Bool      ALLOW_DUPLICATES   = sal_True;
 
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

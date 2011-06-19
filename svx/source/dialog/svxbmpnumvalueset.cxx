@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/languageoptions.hxx>
-#ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
-#endif
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
@@ -103,10 +100,7 @@ static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
 
-/* -----------------28.10.98 08:32-------------------
- *
- * --------------------------------------------------*/
-// Die Auswahl an Bullets aus den StarSymbol
+// The selection of bullets from the star symbol
 static const sal_Unicode aBulletTypes[] =
 {
     0x2022,
@@ -158,7 +152,7 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    static sal_uInt16 __READONLY_DATA aLinesArr[] =
+    static sal_uInt16 aLinesArr[] =
     {
         15, 10,
         20, 30,
@@ -209,8 +203,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     if(!pVDev)
     {
-        // Die Linien werden nur einmalig in das VirtualDevice gepainted
-        // nur die Gliederungspage bekommt es aktuell
+        // The lines are only one time in the virtual device, only the outline
+        // page is currently done
         pVDev = new VirtualDevice(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
@@ -222,7 +216,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if(aBackColor == aLineColor)
             aLineColor.Invert();
         pVDev->SetLineColor(aLineColor);
-        // Linien nur einmalig Zeichnen
+        // Draw line only once
         if(nPageType != NUM_PAGETYPE_NUM)
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
@@ -239,7 +233,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
-    // jetzt kommt der Text
+    // Now comes the text
     const OUString sValue(C2U(cValue));
     if( NUM_PAGETYPE_SINGLENUM == nPageType ||
             NUM_PAGETYPE_BULLET == nPageType )
@@ -271,10 +265,10 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString");
+                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
                 }
-                // knapp neben dem linken Rand beginnen
+                // start just next to the left edge
                 aStart.X() = aBLPos.X() + 2;
                 aStart.Y() -= pDev->GetTextHeight()/2;
             }
@@ -343,7 +337,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString");
+                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
 
                     aLeft.Y() -= (pDev->GetTextHeight()/2);
@@ -391,7 +385,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
 
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
-                    Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
+                    Point aLineLeft(aLeft.X(), nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
                     pVDev->DrawLine(aLineLeft,  aLineRight);
                 }
@@ -403,7 +397,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 static sal_Bool bAssert = sal_False;
                 if(!bAssert)
                 {
-                    DBG_ERROR("exception in ::UserDraw");
+                    OSL_FAIL("exception in ::UserDraw");
                     bAssert = sal_True;
                 }
             }
@@ -421,11 +415,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetFont(aOldFont);
     pDev->SetLineColor(aOldColor);
 }
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
 
 SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType ) :
 
@@ -449,17 +438,11 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16
     }
 }
 
-/*-----------------08.02.97 12.38-------------------
-
---------------------------------------------------*/
-
- SvxNumValueSet::~SvxNumValueSet()
+SvxNumValueSet::~SvxNumValueSet()
 {
     delete pVDev;
 }
-/* -----------------------------30.01.01 16:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxNumValueSet::SetNumberingSettings(
     const Sequence<Sequence<PropertyValue> >& aNum,
     Reference<XNumberingFormatter>& xFormat,
@@ -477,9 +460,7 @@ void SvxNumValueSet::SetNumberingSettings(
                 SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
     }
 }
-/* -----------------------------31.01.01 09:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxNumValueSet::SetOutlineNumberingSettings(
             Sequence<Reference<XIndexAccess> >& rOutline,
             Reference<XNumberingFormatter>& xFormat,
@@ -498,10 +479,9 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId ) :
 
     SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-//    rStrList    ( rStrNames ),
     bGrfNotFound( sal_False )
 
 {
@@ -512,20 +492,13 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, co
     aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
-/*-----------------13.02.97 09.41-------------------
-
---------------------------------------------------*/
-
- SvxBmpNumValueSet::~SvxBmpNumValueSet()
+SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatTimer.Stop();
 }
-/*-----------------13.02.97 09.41-------------------
 
---------------------------------------------------*/
-
-void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     SvxNumValueSet::UserDraw(rUDEvt);
 
@@ -555,13 +528,9 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-/*-----------------14.02.97 07.34-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
 {
-    // nur, wenn eine Grafik nicht da war, muss formatiert werden
+    // only when a graphics was not there, it needs to be formatted
     if(bGrfNotFound)
     {
         bGrfNotFound = sal_False;
@@ -570,3 +539,5 @@ IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
     Invalidate();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

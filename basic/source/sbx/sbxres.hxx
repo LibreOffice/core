@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,9 @@
 
 #include <tools/string.hxx>
 
-// Zur Zeit sind Ressources im SVTOOLS-Projekt nicht vorgesehen.
-// Da es sich um unkritische Ressourcen handelt (BASIC-Keywords),
-// koennen wir mit Dummies arbeiten.
+// Currently there are no resources provided in the SVTOOLS-Project.
+// Because it is non-critical resources (BASIC-Keywords),
+// we can work with dummies.
 
 #define STRING_TYPES        0
 #define STRING_EMPTY        0
@@ -85,3 +86,5 @@ const char* GetSbxRes( sal_uInt16 );
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

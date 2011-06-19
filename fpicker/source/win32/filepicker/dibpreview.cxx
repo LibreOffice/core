@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,9 @@
 #include "dibpreview.hxx"
 #include <osl/diagnose.h>
 
-#ifndef _COM_SUN_STAR_UI_DIALOG_FILEPREVIEWIMAGEFORMATS_HPP_
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>
-#endif
 
-#ifndef _USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <stdexcept>
 #include <string>
@@ -470,3 +467,5 @@ void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass()
         s_ClassAtom = 0;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

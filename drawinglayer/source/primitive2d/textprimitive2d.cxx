@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -237,7 +238,9 @@ namespace drawinglayer
             const ::std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
-            const basegfx::BColor& rFontColor)
+            const basegfx::BColor& rFontColor,
+            bool bFilled,
+            long nWidthToFill)
         :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
@@ -247,9 +250,11 @@ namespace drawinglayer
             maFontAttribute(rFontAttribute),
             maLocale(rLocale),
             maFontColor(rFontColor),
-            maB2DRange()
+            maB2DRange(),
+            mbFilled(bFilled),
+            mnWidthToFill(nWidthToFill)
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             const xub_StrLen aStringLength(getText().Len());
             OSL_ENSURE(aStringLength >= getTextPosition() && aStringLength >= getTextPosition() + getTextLength(),
                 "TextSimplePortionPrimitive2D with text out of range (!)");
@@ -276,7 +281,9 @@ namespace drawinglayer
                     && getDXArray() == rCompare.getDXArray()
                     && getFontAttribute() == rCompare.getFontAttribute()
                     && LocalesAreEqual(getLocale(), rCompare.getLocale())
-                    && getFontColor() == rCompare.getFontColor());
+                    && getFontColor() == rCompare.getFontColor()
+                    && mbFilled == rCompare.mbFilled
+                    && mnWidthToFill == rCompare.mnWidthToFill);
             }
 
             return false;
@@ -337,3 +344,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

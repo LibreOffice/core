@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ class ExtensionDescription
 public:
     /**throws an exception if the description.xml is not
         available, cannot be read, does not contain the expected data,
-        or any other error occured. Therefore it shoult only be used with
+        or any other error occurred. Therefore it shoult only be used with
         new extensions.
 
         Throws com::sun::star::uno::RuntimeException,
@@ -166,7 +167,6 @@ class FileDoesNotExistFilter
                                       css::task::XInteractionHandler >
 
 {
-    //css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
     bool m_bExist;
     css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
 
@@ -862,3 +862,5 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

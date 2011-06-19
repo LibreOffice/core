@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,29 +31,46 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
+#include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
-#define _SVX_MODCTRL_CXX
-
 #include <svx/dialogs.hrc>
-
-#include "svx/modctrl.hxx"
+#include <svx/modctrl.hxx>
 #include <svx/dialmgr.hxx>
+
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::PropertyValue;
+using ::rtl::OUString;
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
 // class SvxModifyControl ------------------------------------------------
+
+struct SvxModifyControl::ImplData
+{
+    Image maModifiedButton;
+    Image maNonModifiedButton;
+
+    bool mbModified;
+
+    ImplData() :
+        maModifiedButton( SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES) ),
+        maNonModifiedButton( SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO) ),
+        mbModified(false)
+    {
+    }
+};
 
 SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
                                     sal_uInt16 _nId,
                                     StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bState( sal_True )
+    mpImpl(new ImplData)
 {
 }
 
@@ -62,32 +80,70 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
-        GetStatusBar().SetItemText( GetId(), String() );
+        return;
+
+    DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
+    SfxBoolItem* pItem = (SfxBoolItem*)pState;
+    mpImpl->mbModified = pItem->GetValue();
+
+    if ( GetStatusBar().AreItemsVisible() )
+        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+
+    int nResId = mpImpl->mbModified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
+    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
+}
+
+// -----------------------------------------------------------------------
+
+namespace {
+
+/**
+ * Given a bounding rectangle and an image, determine the top-left position
+ * of the image so that the image would look centered both horizontally and
+ * vertically.
+ *
+ * @param rBoundingRect bounding rectangle
+ * @param rImg image
+ *
+ * @return Point top-left corner of the centered image position
+ */
+Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
+{
+    Size aImgSize = rImg.GetSizePixel();
+    Size aRectSize = rBoundingRect.GetSize();
+    long nXOffset = (aRectSize.getWidth() - aImgSize.getWidth())/2;
+    long nYOffset = (aRectSize.getHeight() - aImgSize.getHeight())/2;
+    Point aPt = rBoundingRect.TopLeft();
+    aPt += Point(nXOffset, nYOffset);
+    return aPt;
+}
+
+}
+void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
+{
+    OutputDevice*       pDev =  rUsrEvt.GetDevice();
+    Rectangle           aRect = rUsrEvt.GetRect();
+
+    if (mpImpl->mbModified)
+    {
+        Point aPt = centerImage(aRect, mpImpl->maModifiedButton);
+        pDev->DrawImage(aPt, mpImpl->maModifiedButton);
+    }
     else
     {
-        DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
-        SfxBoolItem* pItem = (SfxBoolItem*)pState;
-        bState = pItem->GetValue();
-        DrawItemText_Impl();
+        Point aPt = centerImage(aRect, mpImpl->maNonModifiedButton);
+        pDev->DrawImage(aPt, mpImpl->maNonModifiedButton);
     }
 }
 
-// -----------------------------------------------------------------------
-
-void SvxModifyControl::Paint( const UserDrawEvent& )
+void SvxModifyControl::DoubleClick()
 {
-    DrawItemText_Impl();
-}
+    if (!mpImpl->mbModified)
+        // document not modified.  nothing to do here.
+        return;
 
-// -----------------------------------------------------------------------
-
-void SvxModifyControl::DrawItemText_Impl()
-{
-    String sMode;
-
-    if ( bState )
-        sMode = '*';
-    GetStatusBar().SetItemText( GetId(), sMode );
+    Sequence<PropertyValue> aArgs;
+    execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
 }
 
 sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
@@ -96,3 +152,4 @@ sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

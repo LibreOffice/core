@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,17 +34,13 @@
 //_________________________________________________________________________________________________________________
 #include <framework/menuconfiguration.hxx>
 
-#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX_
 #include <framework/bmkmenu.hxx>
-#endif
 #include <framework/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>
 
-#ifndef _FRAMEWORK_UIELEMENT_ROOTITEMCONTAINER_HXX_
 #include <uielement/rootitemcontainer.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -106,7 +103,6 @@ throw ( WrappedTargetException )
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
 
-    // #110897# Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( xItemContainer ));
     Reference< XDocumentHandler > xDocHandler( new OReadMenuDocumentHandler( m_rxServiceManager, xItemContainer ));
 
     Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
@@ -185,3 +181,4 @@ throw ( WrappedTargetException )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

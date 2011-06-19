@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _SFX_ALIENWARN_HXX
 #define _SFX_ALIENWARN_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 #include <sfx2/basedlgs.hxx>
@@ -54,3 +53,4 @@ public:
 
 #endif // #ifndef _SFX_ALIENWARN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,12 +55,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_XGRAPHICOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -83,9 +80,8 @@ class XMLSettingsExportHelper;
 class XMLImageMapExport;
 class XMLErrors;
 
-// --> OD 2006-03-14 #i51726#
+// Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>
-// <--
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -173,10 +169,9 @@ public:
 
 private:
 
-    // --> OD 2006-03-10 #i51726#
+    // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory meModelType;
     SAL_DLLPRIVATE void _DetermineModelType();
-    // <--
 
     SAL_DLLPRIVATE void ImplExportMeta(); // <office:meta>
     SAL_DLLPRIVATE void ImplExportSettings(); // <office:settings>
@@ -374,7 +369,7 @@ public:
     ::rtl::OUString
     EnsureNamespace(::rtl::OUString const & i_rNamespace,
         ::rtl::OUString const & i_rPreferredPrefix
-        = ::rtl::OUString::createFromAscii("gen") );
+        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gen")) );
 
     // Check if common attribute list is empty.
 #ifndef DBG_UTIL
@@ -535,7 +530,7 @@ public:
     void IgnorableWhitespace();
 
     /**
-     * Record an error condition that occured during export. The
+     * Record an error condition that occurred during export. The
      * behavior of SetError can be modified using the error flag
      * constants.
      */
@@ -570,16 +565,14 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     GetComponentContext() const;
 
-    // --> OD 2006-03-10 #i51726#
+    // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const
     {
         return meModelType;
     }
-    // <--
 
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     sal_Bool writeOutlineStyleAsNormalListStyle() const;
-    // <--
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
@@ -604,9 +597,7 @@ public:
     void AddAttributesRDFa( ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextContent> const & i_xTextContent);
 
-    // --> OD 2008-11-26 #158694#
     sal_Bool exportTextNumberElement() const;
-    // <--
 
     /// set null date from model to unit converter, if not already done
     sal_Bool SetNullDateOnUnitConverter();
@@ -731,3 +722,4 @@ public:
 
 #endif  //  _XMLOFF_SVXMLEXP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

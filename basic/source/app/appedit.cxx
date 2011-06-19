@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <svtools/texteng.hxx>
 #include <svl/undo.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "appedit.hxx"
@@ -53,9 +52,6 @@ AppEdit::AppEdit( BasicFrame* pParent )
 
     pDataEdit = new TextEdit( this, WB_LEFT );
     LoadIniFile();
-    // define Icon:
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->SetText( aEmpty );
 
@@ -93,9 +89,7 @@ void AppEdit::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
     sal_uIntPtr nFontSize = aFontSize.ToInt32();
-//    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -104,8 +98,6 @@ void AppEdit::LoadIniFile()
     }
 #endif
     aFont.SetTransparent( sal_False );
-//    aFont.SetAlign( ALIGN_BOTTOM );
-//    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
 
     if ( ((TextEdit*)pDataEdit)->GetBreakpointWindow() )
@@ -277,7 +269,6 @@ void AppEdit::Resize()
         aStartDocPos.Y() = nMaxVisAreaStart;
         pTextView->SetStartDocPos( aStartDocPos );
         pTextView->ShowCursor();
-//              pModulWindow->GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
     }
     InitScrollBars();
     if ( nVisY != pTextView->GetStartDocPos().Y() )
@@ -299,3 +290,4 @@ void AppEdit::Highlight( sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 )
     ToTop();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

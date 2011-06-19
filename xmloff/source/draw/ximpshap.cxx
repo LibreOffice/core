@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,10 +87,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-
-// --> OD 2006-02-22 #b6382898#
 #include <com/sun/star/text/XTextDocument.hpp>
-// <--
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -339,7 +337,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "exception during setting of glue points!");
+            OSL_FAIL( "exception during setting of glue points!");
         }
     }
 }
@@ -374,9 +372,14 @@ void SdXMLShapeContext::EndElement()
 
     if( msHyperlink.getLength() != 0 ) try
     {
+        uno::Reference< beans::XPropertySet > xProp( mxShape, uno::UNO_QUERY );
+
+        rtl::OUString sLink( RTL_CONSTASCII_USTRINGPARAM( "Hyperlink" ) );
+        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName( sLink ) )
+            xProp->setPropertyValue( sLink, uno::Any( msHyperlink ) );
+        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY_THROW );
         const OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
 
-        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY );
         if( xEventsSupplier.is() )
         {
             const OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
@@ -413,7 +416,7 @@ void SdXMLShapeContext::EndElement()
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
+        OSL_FAIL("xmloff::SdXMLShapeContext::EndElement(), exception caught while setting hyperlink!");
     }
 
     if( mxLockable.is() )
@@ -457,7 +460,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         }
         catch( Exception& )
         {
-            DBG_ERROR( "SdXMLShapeContext::AddShape(), exception caught!" );
+            OSL_FAIL( "SdXMLShapeContext::AddShape(), exception caught!" );
         }
 
         // #107848#
@@ -497,23 +500,22 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
     {
         try
         {
-            // --> OD 2006-02-22 #b6382898#
-            // Since fix for issue i33294 the Writer model doesn't support
-            // com.sun.star.drawing.OLE2Shape anymore.
-            // To handle Draw OLE objects it's decided to import these
-            // objects as com.sun.star.drawing.OLE2Shape and convert these
-            // objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            /* Since fix for issue i33294 the Writer model doesn't support
+               com.sun.star.drawing.OLE2Shape anymore.
+               To handle Draw OLE objects it's decided to import these
+               objects as com.sun.star.drawing.OLE2Shape and convert these
+               objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            */
             uno::Reference< drawing::XShape > xShape;
             if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii("com.sun.star.drawing.temporaryForXMLImportOLE2Shape")), uno::UNO_QUERY);
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"))), uno::UNO_QUERY);
             }
             else
             {
                 xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
             }
-            // <--
             if( xShape.is() )
                 AddShape( xShape );
         }
@@ -686,7 +688,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "could not find style for shape!" );
+                    OSL_FAIL( "could not find style for shape!" );
                 }
             }
 
@@ -701,7 +703,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "could not find style for shape!" );
+                    OSL_FAIL( "could not find style for shape!" );
                 }
             }
 
@@ -989,7 +991,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -1642,7 +1644,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -1700,7 +1702,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
         {
-#ifndef SVX_LIGHT
             if( GetImport().IsFormsSupported() )
             {
                 uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
@@ -1712,7 +1713,6 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                 }
             }
-#endif // #ifndef SVX_LIGHT
         }
 
         SetStyle();
@@ -1927,7 +1927,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
             if ( maPath.hasValue() )
             {
-                // --> OD #i115492#
+                // #i115492#
                 // Ignore svg:d attribute for text documents created by OpenOffice.org
                 // versions before OOo 3.3, because these OOo versions are storing
                 // svg:d values not using the correct unit.
@@ -1953,7 +1953,6 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
                 {
                     xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
                 }
-                // <--
             }
 
             SdXMLShapeContext::StartElement(xAttrList);
@@ -2245,7 +2244,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 }
                 catch( uno::Exception& )
                 {
-                    DBG_ERROR( "exception during setting of corner radius!");
+                    OSL_FAIL( "exception during setting of corner radius!");
                 }
             }
         }
@@ -2510,14 +2509,12 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 aAny <<= aCLSID;
                 xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
 
-#ifndef SVX_LIGHT
                 aAny = xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) );
                 uno::Reference< frame::XModel > xChartModel;
                 if( aAny >>= xChartModel )
                 {
                     mpChartContext = GetImport().GetChartImport()->CreateChartContext( GetImport(), XML_NAMESPACE_SVG, GetXMLToken(XML_CHART), xChartModel, xAttrList );
                 }
-#endif
             }
         }
 
@@ -3334,8 +3331,15 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
     if( !mxImplContext.Is() )
     {
-        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+
+        SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
+
+        pContext = pShapeContext;
+
+        // propagate the hyperlink to child context
+        if ( msHyperlink.getLength() > 0 )
+            pShapeContext->setHyperlink( msHyperlink );
 
         mxImplContext = pContext;
         mbSupportsReplacement = IsXMLToken( rLocalName, XML_OBJECT ) ||
@@ -3540,7 +3544,7 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "could not set enhanced customshape geometry" );
+            OSL_FAIL( "could not set enhanced customshape geometry" );
         }
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -3572,7 +3576,7 @@ void SdXMLCustomShapeContext::EndElement()
         }
         catch( uno::Exception& )
         {
-            DBG_ERROR( "could not set enhanced customshape geometry" );
+            OSL_FAIL( "could not set enhanced customshape geometry" );
         }
 
         sal_Int32 nUPD( 0 );
@@ -3683,7 +3687,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
             }
             catch( Exception& )
             {
-                DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
             }
 
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
@@ -3696,7 +3700,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                    OSL_FAIL("SdXMLTableShapeContext::StartElement(), exception caught!");
                 }
             }
         }
@@ -3769,3 +3773,4 @@ SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( sal_uInt16 nPref
         return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

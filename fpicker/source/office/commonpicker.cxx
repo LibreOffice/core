@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/weakeventlistener.hxx>
 #include <comphelper/types.hxx>
@@ -66,13 +67,13 @@ namespace svt
     {
         // the two properties we have
         registerProperty(
-            ::rtl::OUString::createFromAscii( "HelpURL" ), PROPERTY_ID_HELPURL,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
             &m_sHelpURL, ::getCppuType( &m_sHelpURL )
         );
 
         registerProperty(
-            ::rtl::OUString::createFromAscii( "Window" ), PROPERTY_ID_WINDOW,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" )), PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
             &m_xWindow, ::getCppuType( &m_xWindow )
         );
@@ -120,7 +121,7 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::disposing()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         stopWindowListening();
 
@@ -151,7 +152,7 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         sal_Bool bDialogDying = _rSource.Source == m_xWindow;
         sal_Bool bParentDying = _rSource.Source == m_xDialogParent;
 
@@ -168,7 +169,7 @@ namespace svt
         }
         else
         {
-            DBG_ERROR( "OCommonPicker::disposing: where did this come from?" );
+            OSL_FAIL( "OCommonPicker::disposing: where did this come from?" );
         }
     }
 
@@ -209,7 +210,7 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OCommonPicker::createPicker()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( !m_pDlg )
         {
@@ -262,7 +263,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -275,7 +276,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -292,7 +293,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -307,7 +308,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -322,7 +323,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -337,7 +338,7 @@ namespace svt
     {
         checkAlive();
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( createPicker() )
         {
             ::svt::OControlAccess aAccess( m_pDlg, m_pDlg->GetView() );
@@ -352,14 +353,14 @@ namespace svt
     //---------------------------------------------------------------------
     void SAL_CALL OCommonPicker::setTitle( const rtl::OUString& _rTitle ) throw( RuntimeException )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         m_aTitle = _rTitle;
     }
 
     //---------------------------------------------------------------------
     sal_Int16 OCommonPicker::execute() throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         prepareDialog();
 
@@ -464,7 +465,7 @@ namespace svt
             }
             else
             {
-                DBG_ERROR(
+                OSL_FAIL(
                     (   ::rtl::OString( "OCommonPicker::initialize: unknown argument type at position " )
                     +=  ::rtl::OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
                     ).getStr()
@@ -489,7 +490,7 @@ namespace svt
     sal_Bool OCommonPicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
     {
         sal_Bool bKnown = sal_True;
-        if ( _rName.equalsAscii( "ParentWindow" ) )
+        if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
         {
             m_xDialogParent.clear();
             OSL_VERIFY( _rValue >>= m_xDialogParent );
@@ -504,3 +505,4 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

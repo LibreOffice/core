@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -51,7 +53,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <hash_map>
+#include <vbahelper/vbadocumentbase.hxx>
+#include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
 
 #include "vbahelper/vbahelper.hxx"
@@ -60,10 +63,10 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const rtl::OUString sSpreadsheetDocument( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
-static const rtl::OUString sTextDocument( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) );
+static const rtl::OUString sSpreadsheetDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
+static const rtl::OUString sTextDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -91,7 +94,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -148,8 +151,13 @@ public:
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
-                INetURLObject aURL( xModel->getURL() );
-                namesToIndices[ aURL.GetLastName() ] = nIndex++;
+                rtl::OUString sName;
+                uno::Reference< ::ooo::vba::XDocumentBase > xVbaDocument = new VbaDocumentBase( uno::Reference< XHelperInterface >(), xContext, xModel );
+                if ( xVbaDocument.is() )
+                {
+                    sName = xVbaDocument->getName();
+                }
+                namesToIndices[ sName ] = nIndex++;
             }
         }
 
@@ -255,7 +263,7 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException)
 
      uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
                 mxContext), uno::UNO_QUERY_THROW );
     rtl::OUString sURL;
     if( meDocType == WORD_DOCUMENT )
@@ -315,11 +323,11 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")                    , mxContext),
+        (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))                    , mxContext),
         uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-        ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
         mxContext),
         uno::UNO_QUERY_THROW );
 
@@ -350,3 +358,4 @@ uno::Any VbaDocumentsBase::openDocument( const rtl::OUString& rFileName, const u
     return uno::makeAny( xComponent );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

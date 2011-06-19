@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,100 +112,6 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ModuleUIConfigurationManagerSupplier
 DEFINE_INIT_SERVICE                     (   ModuleUIConfigurationManagerSupplier, {} )
 
 
-/*TODO_AS
-void ModuleUIConfigurationManagerSupplier::impl_initStorages()
-{
-RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::impl_initStorages" );
-    if ( !m_bInit )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ModuleUIConfigurationManagerSupplier::impl_initStorages" );
-
-        rtl::OUString aFinalSlash( RTL_CONSTASCII_USTRINGPARAM( "/" ));
-        rtl::OUString aConfigRootFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/modules" ));
-        rtl::OUString aConfigSubFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/modules/soffice.cfg" ));
-        rtl::OUString aConfigRootFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg" ));
-        rtl::OUString aConfigSubFolder( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/soffice.cfg" ));
-        rtl::OUString aConfigFileName( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/uiconfig.zip" ));
-
-        Reference< XPropertySet > xPathSettings( m_xServiceManager->createInstance(
-                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ))),
-                                                  UNO_QUERY_THROW );
-
-        Any a = xPathSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIConfig" )));
-        a >>= m_aDefaultConfigURL;
-        a = xPathSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" )));
-        a >>= m_aUserConfigURL;
-
-        // Use only the first entry from "UIConfig"
-        sal_Int32 nIndex = m_aDefaultConfigURL.indexOf( ';' );
-        if ( nIndex > 0 )
-            m_aDefaultConfigURL = m_aDefaultConfigURL.copy( 0, nIndex );
-
-        rtl::OUString aDefaultConfigFolderURL( m_aDefaultConfigURL );
-
-        nIndex = m_aDefaultConfigURL.lastIndexOf( '/' );
-        if (( nIndex > 0 ) &&  ( nIndex != ( m_aDefaultConfigURL.getLength()-1 )))
-        {
-            m_aDefaultConfigURL += aFinalSlash;
-            aDefaultConfigFolderURL += aFinalSlash;
-        }
-
-        nIndex = m_aUserConfigURL.lastIndexOf( '/' );
-        if (( nIndex > 0 ) &&  ( nIndex != ( m_aUserConfigURL.getLength()-1 )))
-            m_aUserConfigURL += aFinalSlash;
-
-//        aDefaultConfigFolderURL += aConfigRootFolder;
-
-        // Create root storages for user interface configuration data (default and customizable)
-        Reference< XSingleServiceFactory > xStorageFactory( m_xServiceManager->createInstance(
-                                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ))),
-                                                            UNO_QUERY_THROW );
-
-        Sequence< Any > aArgs( 2 );
-
-        // Default root storage (READ-ACCESS)
-        aArgs[0] <<= m_aDefaultConfigURL + aConfigFileName; //aConfigSubFolder;
-        aArgs[1] <<= ElementModes::READ;
-        m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
-
-        Reference < XOutputStream > xTempOut( m_xServiceManager->createInstance (
-                                                ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                                              UNO_QUERY );
-
-        Reference< XPackageStructureCreator > xPackageStructCreator( m_xServiceManager->createInstance(
-                                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.PackageStructureCreator" ))),
-                                                                     UNO_QUERY_THROW );
-
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ convertToPackage" );
-        xPackageStructCreator->convertToPackage( aDefaultConfigFolderURL, xTempOut );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} convertToPackage" );
-
-        xTempOut->closeOutput();
-        Reference< XInputStream > xTempIn( xTempOut, UNO_QUERY );
-        Reference< XSeekable > xTempSeek( xTempOut, UNO_QUERY );
-
-        // Default root storage (READ-ACCESS)
-        xTempSeek->seek( 0 );
-
-        aArgs[0] <<= xTempIn;
-        aArgs[1] <<= ElementModes::READ;
-        m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
-
-        // Customizable root storage (READWRITE-ACCESS)
-        aArgs[0] <<= m_aUserConfigURL + aConfigSubFolder;
-        aArgs[1] <<= ElementModes::READWRITE;
-        m_xUserCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY );
-
-        // Create wrapper object for module user interface configuration managers, so they are able to call commit/revert on
-        // root storage and nothing more (saftey)!
-        RootStorageWrapper* pUserRootStorageWrapper = new RootStorageWrapper( Reference< XTransactedObject >( m_xUserCfgRootStorage, UNO_QUERY ));
-        m_xUserRootCommit = Reference< XTransactedObject>( static_cast< OWeakObject *>( pUserRootStorageWrapper ), UNO_QUERY );
-    }
-
-    m_bInit = true;
-}
-*/
-
 
 ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
@@ -215,7 +122,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier" );
-    // Retrieve known modules and insert them into our hash_map to speed-up access time.
+    // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
     Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY );
     const Sequence< ::rtl::OUString >     aNameSeq   = xNameAccess->getElementNames();
     const ::rtl::OUString*                pNameSeq   = aNameSeq.getConstArray();
@@ -236,20 +143,6 @@ ModuleUIConfigurationManagerSupplier::~ModuleUIConfigurationManagerSupplier()
             xComponent->dispose();
         ++pIter;
     }
-/*TODO_AS
-    // Dispose our root configuration storages
-    if ( m_xDefaultCfgRootStorage.is() )
-    {
-        Reference< XComponent > xComponent( m_xDefaultCfgRootStorage, UNO_QUERY );
-        xComponent->dispose();
-    }
-
-    if ( m_xUserCfgRootStorage.is() )
-    {
-        Reference< XComponent > xComponent( m_xUserCfgRootStorage, UNO_QUERY );
-        xComponent->dispose();
-    }
-*/
 }
 
 // XComponent
@@ -310,53 +203,6 @@ throw ( NoSuchElementException, RuntimeException)
     // Create instance on demand
     if ( !pIter->second.is() )
     {
-        /*TODO_AS
-        Reference< XStorage > xDefaultConfigModuleStorage;
-        Reference< XStorage > xUserConfigModuleStorage;
-
-        try
-        {
-            xDefaultConfigModuleStorage = Reference< XStorage >( m_xDefaultCfgRootStorage->openStorageElement(
-                                                                    sShort, ElementModes::READ ), UNO_QUERY_THROW );
-
-            if ( m_xUserCfgRootStorage.is() )
-            {
-                try
-                {
-                    xUserConfigModuleStorage = Reference< XStorage >( m_xUserCfgRootStorage->openStorageElement(
-                                                                        sShort, ElementModes::READWRITE ), UNO_QUERY );
-                }
-                catch( ::com::sun::star::io::IOException& )
-                {
-                    try
-                    {
-                        xUserConfigModuleStorage = Reference< XStorage >( m_xUserCfgRootStorage->openStorageElement(
-                                                                            sShort, ElementModes::READ ), UNO_QUERY );
-                    }
-                    catch( com::sun::star::uno::Exception& )
-                    {
-                    }
-                }
-            }
-        }
-        catch ( com::sun::star::uno::Exception& )
-        {
-        }
-        PropertyValue   aArg;
-        Sequence< Any > aArgs( 5 );
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
-        aArg.Value <<= ModuleIdentifier;
-        aArgs[0] <<= aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultConfigStorage" ));
-        aArg.Value <<= xDefaultConfigModuleStorage;
-        aArgs[1] <<= aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
-        aArg.Value <<= xUserConfigModuleStorage;
-        aArgs[2] <<= aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
-        aArg.Value <<= m_xUserRootCommit;
-        aArgs[3] <<= aArg;
-        */
         ::rtl::OUString sShort;
         try
         {
@@ -365,7 +211,7 @@ throw ( NoSuchElementException, RuntimeException)
             xCont->getByName(ModuleIdentifier) >>= lProps;
             for (sal_Int32 i=0; i<lProps.getLength(); ++i)
             {
-                if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
+                if (lProps[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryShortName")))
                 {
                     lProps[i].Value >>= sShort;
                     break;
@@ -396,3 +242,4 @@ throw ( NoSuchElementException, RuntimeException)
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,7 +141,7 @@ private:
     FixedText           aDivisionPointY;
 
     CheckBox            aCbxSynchronize;
-    FixedLine           aGrpDrawGrid; // Neu
+    FixedLine           aGrpDrawGrid;
 
 protected:
     //these controls are used in draw and impress
@@ -164,7 +165,6 @@ protected:
 
 private:
     sal_Bool                bAttrModified;
-//  sal_Bool                bEqualGrid; // Neu
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );
@@ -178,3 +178,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,8 @@
 #include "precompiled_shell.hxx"
 #include "algorithm"
 #include "internal/fileextensions.hxx"
+#include <sal/macros.h>
 
-//------------------------------------
-//
 //------------------------------------
 
 const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
@@ -68,7 +68,7 @@ FileExtensionEntry OOFileExtensionTable[] = {
     };
 
 
-size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
+size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
 
 //---------------------------------
 /** Return the extension of a file
@@ -118,3 +118,4 @@ File_Type_t get_file_type(const std::string& file_name)
         return UNKNOWN;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,6 @@ throw (uno::RuntimeException)
 {
 }
 
-
 void BaseCommandEnv::update( uno::Any const & /*Status */)
 throw (uno::RuntimeException)
 {
@@ -200,7 +200,6 @@ void LicenseCommandEnv::handle(
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
-
     deployment::LicenseException licExc;
 
     bool approve = false;
@@ -224,7 +223,6 @@ void LicenseCommandEnv::handle(
 }
 
 //================================================================================
-//================================================================================
 
 NoLicenseCommandEnv::NoLicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler):
@@ -239,7 +237,6 @@ void NoLicenseCommandEnv::handle(
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
-
     deployment::LicenseException licExc;
 
     bool approve = false;
@@ -252,11 +249,6 @@ void NoLicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
-// SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv(
-//     css::uno::Reference< css::task::XInteractionHandler> const & handler):
-//     BaseCommandEnv(handler)
-// {
-// }
 SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
 {
 }
@@ -289,36 +281,7 @@ void SilentCheckPrerequisitesCommandEnv::handle(
         m_UnknownException = request;
     }
 }
-// NoExceptionCommandEnv::NoExceptionCommandEnv(
-//     css::uno::Reference< css::task::XInteractionHandler> const & handler,
-//     css::uno::Type const & type):
-//     BaseCommandEnv(handler),
-//     m_type(type)
-// {
-// }
-// // XInteractionHandler
-// void NoExceptionCommandEnv::handle(
-//     Reference< task::XInteractionRequest> const & xRequest )
-//     throw (uno::RuntimeException)
-// {
-//     uno::Any request( xRequest->getRequest() );
-//     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
+}
 
-//  deployment::LicenseException licExc;
-
-//     bool approve = false;
-//     bool abort = false;
-
-//     if (request.getValueType() == m_type)
-//     {
-//         approve = true;
-//     }
-//     handle_(approve, abort, xRequest);
-// }
-
-
-
-} // namespace dp_manager
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

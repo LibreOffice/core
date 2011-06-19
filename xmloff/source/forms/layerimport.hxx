@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include "formattributes.hxx"
 #include "callbacks.hxx"
 #include "eventimport.hxx"
@@ -52,27 +53,6 @@ namespace xmloff
 //.........................................................................
 
     class OAttribute2Property;
-
-    //=====================================================================
-    //= ControlReference
-    //=====================================================================
-    /// a structure containing a property set (the referred control) and a string (the list of referring controls)
-/*  struct ControlReference
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    xReferredControl;
-        ::rtl::OUString
-                    sReferringControls;
-
-        ControlReference(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxReferredControl,
-                const ::rtl::OUString& _rReferringControls)
-            :xReferredControl(_rxReferredControl)
-            ,sReferringControls(_rReferringControls)
-        {
-        }
-    };
-*/
 
     //=====================================================================
     //= OFormLayerXMLImport_Impl
@@ -217,3 +197,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_LAYERIMPORT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

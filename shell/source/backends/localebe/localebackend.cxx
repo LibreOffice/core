@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,54 +35,37 @@
 
 #include <stdio.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
+#ifdef WNT
 
-#include <rtl/ustrbuf.hxx>
-#include <locale.h>
-#include <string.h>
+#ifdef WINVER
+#undef WINVER
+#endif
+#define WINVER 0x0501
 
-/*
- * Note: setlocale is not at all thread safe, so is this code. It could
- * especially interfere with the stuff VCL is doing, so make sure this
- * is called from the main thread only.
- */
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+#include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
-static rtl::OUString ImplGetLocale(int category)
+rtl::OUString ImplGetLocale(LCID lcid)
 {
-    const char *locale = setlocale(category, "");
+    TCHAR buffer[8];
+    LPTSTR cp = buffer;
 
-    // Return "en-US" for C locales
-    if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
-
-
-    const char *cp;
-    const char *uscore = NULL;
-
-    // locale string have the format lang[_ctry][.encoding][@modifier]
-    // we are only interested in the first two items, so we handle
-    // '.' and '@' as string end.
-    for (cp = locale; *cp; cp++)
+    cp += GetLocaleInfo( lcid, LOCALE_SISO639LANGNAME , buffer, 4 );
+    if( cp > buffer )
     {
-        if (*cp == '_')
-            uscore = cp;
-        if (*cp == '.' || *cp == '@')
-            break;
+        if( 0 < GetLocaleInfo( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
+            // #i50822# minus character must be written before cp
+            *(cp - 1) = '-';
+
+        return rtl::OUString::createFromAscii(buffer);
     }
 
-    rtl::OUStringBuffer aLocaleBuffer;
-    if( uscore != NULL )
-    {
-        aLocaleBuffer.appendAscii(locale, uscore++ - locale);
-        aLocaleBuffer.appendAscii("-");
-        aLocaleBuffer.appendAscii(uscore, cp - uscore);
-    }
-    else
-    {
-        aLocaleBuffer.appendAscii(locale, cp - locale);
-    }
-
-    return aLocaleBuffer.makeStringAndClear();
+    return rtl::OUString();
 }
 
 #elif defined(MACOSX)
@@ -183,44 +167,57 @@ namespace /* private */
 
 } // namespace /* private */
 
-#endif
+#else
 
-// -------------------------------------------------------------------------------
+#include <rtl/ustrbuf.hxx>
+#include <locale.h>
+#include <string.h>
 
-#ifdef WNT
+/*
+ * Note: setlocale is not at all thread safe, so is this code. It could
+ * especially interfere with the stuff VCL is doing, so make sure this
+ * is called from the main thread only.
+ */
 
-#ifdef WINVER
-#undef WINVER
-#endif
-#define WINVER 0x0501
-
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
-rtl::OUString ImplGetLocale(LCID lcid)
+static rtl::OUString ImplGetLocale(int category)
 {
-    TCHAR buffer[8];
-    LPTSTR cp = buffer;
+    const char *locale = setlocale(category, "");
 
-    cp += GetLocaleInfo( lcid, LOCALE_SISO639LANGNAME , buffer, 4 );
-    if( cp > buffer )
+    // Return "en-US" for C locales
+    if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
+        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+
+
+    const char *cp;
+    const char *uscore = NULL;
+
+    // locale string have the format lang[_ctry][.encoding][@modifier]
+    // we are only interested in the first two items, so we handle
+    // '.' and '@' as string end.
+    for (cp = locale; *cp; cp++)
     {
-        if( 0 < GetLocaleInfo( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
-            // #i50822# minus character must be written before cp
-            *(cp - 1) = '-';
-
-        return rtl::OUString::createFromAscii(buffer);
+        if (*cp == '_')
+            uscore = cp;
+        if (*cp == '.' || *cp == '@')
+            break;
     }
 
-    return rtl::OUString();
+    rtl::OUStringBuffer aLocaleBuffer;
+    if( uscore != NULL )
+    {
+        aLocaleBuffer.appendAscii(locale, uscore++ - locale);
+        aLocaleBuffer.appendAscii("-");
+        aLocaleBuffer.appendAscii(uscore, cp - uscore);
+    }
+    else
+    {
+        aLocaleBuffer.appendAscii(locale, cp - locale);
+    }
+
+    return aLocaleBuffer.makeStringAndClear();
 }
 
-#endif // WNT
+#endif
 
 // -------------------------------------------------------------------------------
 
@@ -245,12 +242,12 @@ LocaleBackend* LocaleBackend::createInstance()
 
 rtl::OUString LocaleBackend::getLocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
-    return ImplGetLocale(LC_CTYPE);
+#if defined WNT
+    return ImplGetLocale( GetUserDefaultLCID() );
 #elif defined (MACOSX)
     return ImplGetLocale("AppleLocale");
-#elif defined WNT
-    return ImplGetLocale( GetUserDefaultLCID() );
+#else
+    return ImplGetLocale(LC_CTYPE);
 #endif
 }
 
@@ -258,12 +255,12 @@ rtl::OUString LocaleBackend::getLocale(void)
 
 rtl::OUString LocaleBackend::getUILocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
-    return ImplGetLocale(LC_MESSAGES);
+#if defined WNT
+    return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
 #elif defined(MACOSX)
     return ImplGetLocale("AppleLanguages");
-#elif defined WNT
-    return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
+#else
+    return ImplGetLocale(LC_MESSAGES);
 #endif
 }
 
@@ -324,7 +321,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL LocaleBackend::getBackendName(void) {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.LocaleBackend") ;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LocaleBackend")) ;
 }
 
 //------------------------------------------------------------------------------
@@ -365,3 +362,5 @@ uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(vo
 {
     return getBackendServiceNames() ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

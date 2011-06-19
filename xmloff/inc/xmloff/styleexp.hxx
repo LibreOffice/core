@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _VCL_MAPUNIT_HXX
-//#include <tools/mapunit.hxx>
-#endif
 #include <xmloff/uniref.hxx>
 
 namespace com { namespace sun { namespace star
@@ -47,10 +45,10 @@ namespace com { namespace sun { namespace star
     {
         class XPropertySet;
     }
-    namespace container     //#outline level,add by zhaojianwei
+    namespace container
     {
         class XNameAccess;
-    }                       //<-end,zhaojianwei
+    }
 
 } } }
 
@@ -67,7 +65,7 @@ protected:
     const ::rtl::OUString sIsAutoUpdate;
     const ::rtl::OUString sFollowStyle;
     const ::rtl::OUString sNumberingStyleName;
-    const ::rtl::OUString sOutlineLevel;    //#outline level,add by zhaojianwei
+    const ::rtl::OUString sOutlineLevel;
 
     SvXMLExport& GetExport() { return rExport; }
     const SvXMLExport& GetExport() const  { return rExport; }
@@ -80,19 +78,13 @@ private:
 
 protected:
 
-    //virtual sal_Bool exportStyle(             //#outline level,zhaojianwei
-    //  const ::com::sun::star::uno::Reference<
-    //          ::com::sun::star::style::XStyle > & rStyle,
-    //  const ::rtl::OUString& rXMLFamily,
-    //  const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-    //  const ::rtl::OUString* pPrefix = 0L );
-    virtual sal_Bool exportStyle(               //add by zhaojianwei
+    virtual sal_Bool exportStyle(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const ::rtl::OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xStyles,
-        const ::rtl::OUString* pPrefix = 0L );  //<-end,zhaojianwei
+        const ::rtl::OUString* pPrefix = 0L );
 
     virtual void exportStyleAttributes(
         const ::com::sun::star::uno::Reference<
@@ -140,3 +132,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <svtools/svtreebx.hxx>
 #include <svtools/svlbitm.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 // class SvxCheckListBox -------------------------------------------------
@@ -62,8 +61,7 @@ public:
     SvxCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
     SvxCheckListBox( Window* pParent, const ResId& rResId );
     SvxCheckListBox( Window* pParent, const ResId& rResId,
-                     const Image& rNormalStaticImage,
-                     const Image& rHighContrastStaticImage );
+                     const Image& rNormalStaticImage );
     ~SvxCheckListBox();
 
     void            InsertEntry         ( const String& rStr,
@@ -92,3 +90,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

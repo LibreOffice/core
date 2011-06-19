@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@ namespace rtl
 
 // class SvxLanguageItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt eine Sprache.
+    This item describes a Language.
 */
 
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
@@ -54,7 +55,7 @@ public:
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
                      const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -76,9 +77,10 @@ public:
                                 { return (LanguageType)GetValue(); }
     void                    SetLanguage( const LanguageType eLang )
                                 { SetValue( (sal_uInt16)eLang ); }
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

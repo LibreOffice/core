@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@ class SbMethod : public SbxMethod
     friend class SbIfaceMapperMethod;
 
     SbMethodImpl* mpSbMethodImpl;           // Impl data
+    SbxVariable* mCaller;                   // caller
     SbModule* pMod;
     sal_uInt16    nDebugFlags;
     sal_uInt16    nLine1, nLine2;
@@ -71,8 +73,8 @@ public:
     void      SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
     void      GetLineRange( sal_uInt16&, sal_uInt16& );
 
-    // Schnittstelle zum Ausfuehren einer Methode aus den Applikationen
-    virtual ErrCode Call( SbxValue* pRet = NULL );
+    // Interface to execute a method from the applications
+    virtual ErrCode Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
     virtual void Broadcast( sal_uIntPtr nHintId );
 };
 
@@ -99,3 +101,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

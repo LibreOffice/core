@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,8 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -54,7 +57,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -65,7 +67,6 @@ using namespace ::com::sun::star::frame;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 namespace framework
 {
@@ -102,7 +103,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
 rtl::OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const
@@ -268,7 +269,10 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         aLock.unlock();
 
         if ( xContainer.is() )
-            xContainer->addContainerListener( this );
+        {
+            m_xConfigAccessListener = new WeakContainerListener(this);
+            xContainer->addContainerListener(m_xConfigAccessListener);
+        }
     }
 }
 
@@ -339,3 +343,5 @@ sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any&
     return sal_True;
 }
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,12 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #define _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HXX_
+#include <com/sun/star/frame/XModel.hpp>
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
 #include "xmlscript/xmlns.h"
 #include "xmlscript/xcrdllapi.h"
@@ -51,7 +46,9 @@ XCR_DLLPUBLIC void SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::container::XNameContainer > const & xDialogModel )
+    ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
@@ -60,7 +57,9 @@ SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 // additional functions for convenience
@@ -71,19 +70,25 @@ SAL_CALL exportDialogModel(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==============================================================================
 XCR_DLLPUBLIC void SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::io::XInputStream > xInput,
+    ::com::sun::star::io::XInputStream > const & xInput,
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::uno::XComponentContext > const & xContext )
+    ::com::sun::star::uno::XComponentContext > const & xContext,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::frame::XModel > const & xDocument )
     SAL_THROW( (::com::sun::star::uno::Exception) );
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

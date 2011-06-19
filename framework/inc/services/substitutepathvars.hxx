@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //      my own includes
@@ -110,7 +111,7 @@ struct SubstitutePathNotify
     const com::sun::star::uno::Sequence<rtl::OUString> aPropertyNames;
 };
 
-class SubstituteVariables : public ::std::hash_map< ::rtl::OUString,
+class SubstituteVariables : public ::boost::unordered_map< ::rtl::OUString,
                                                     SubstituteRule,
                                                     OUStringHashCode,
                                                     ::std::equal_to< ::rtl::OUString > >
@@ -192,10 +193,9 @@ enum PreDefVariable
     PREDEFVAR_PROGURL,
     PREDEFVAR_USERURL,
     PREDEFVAR_WORKDIRURL,
-    // --> PB 2004-10-27 #i32656# - new variable of hierachy service
+    // New variable of hierachy service (#i32656#)
     PREDEFVAR_BASEINSTURL,
     PREDEFVAR_USERDATAURL,
-    // <--
     PREDEFVAR_BRANDBASEURL,
     PREDEFVAR_COUNT
 };
@@ -278,7 +278,7 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            class VarNameToIndexMap : public std::hash_map< ::rtl::OUString,
+            class VarNameToIndexMap : public boost::unordered_map< ::rtl::OUString,
                                                             PreDefVariable,
                                                             OUStringHashCode,
                                                             ::std::equal_to< ::rtl::OUString > >
@@ -305,3 +305,5 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
 }
 
 #endif // __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

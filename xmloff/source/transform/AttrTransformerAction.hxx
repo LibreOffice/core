@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,9 +128,8 @@ enum XMLAttrTransformerAction
     XML_ATACTION_SVG_WIDTH_HEIGHT_OOO,   // replace "inch" with "in" and subtracts 1/100th mm
     XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS, // replace "in" with "inch" and adds 1/100th mm
     XML_ATACTION_DRAW_MIRROR_OOO,        // renames draw:mirror to style:mirror and adapts values
-    // --> OD 2005-05-12 #i49139#
+    // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
     XML_ATACTION_STYLE_MIRROR_OOO,        // adapts style:mirror values
-    // <--
     XML_ATACTION_DRAW_MIRROR_OASIS,      // renames style:mirror to draw:mirror and adapts values
     XML_ATACTION_GAMMA_OASIS,            // converts percentage to double value
     XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
@@ -140,3 +140,5 @@ enum XMLAttrTransformerAction
 };
 
 #endif  //  _XMLOFF_ATTRTRANSFORMERACTION_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

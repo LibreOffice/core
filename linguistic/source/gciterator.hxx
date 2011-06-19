@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@
 
 #include "defs.hxx"
 
-//////////////////////////////////////////////////////////////////////
 
 
 struct FPEntry
@@ -78,7 +78,6 @@ struct FPEntry
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class GrammarCheckingIterator:
@@ -109,10 +108,6 @@ class GrammarCheckingIterator:
     typedef std::map< XComponent *, ::rtl::OUString > DocMap_t;
     DocMap_t        m_aDocIdMap;
 
-    // parameter ::rtl::OUString --> implementation name
-    // parameter ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > --> list of locales supported by service
-//    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > > GCLocales_t;
-//    GCLocales_t     m_aGCLocalesByService;
 
     // language -> implname mapping
     typedef std::map< LanguageType, ::rtl::OUString > GCImplNames_t;
@@ -131,7 +126,6 @@ class GrammarCheckingIterator:
 
     //! beware of initilization order !
     struct MyMutex : public rtl::Static< osl::Mutex, MyMutex > {};
-    //
     cppu::OInterfaceContainerHelper     m_aEventListeners;
     cppu::OInterfaceContainerHelper     m_aNotifyListeners;
 
@@ -153,8 +147,6 @@ class GrammarCheckingIterator:
     sal_Int32 GetSuggestedEndOfSentence( const ::rtl::OUString &rText, sal_Int32 nSentenceStartPos, const ::com::sun::star::lang::Locale &rLocale );
 
     void GetConfiguredGCSvcs_Impl();
-//    void GetMatchingGCSvcs_Impl();
-//    void GetAvailableGCSvcs_Impl();
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > GetGrammarChecker( const ::com::sun::star::lang::Locale & rLocale );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >   GetUpdateAccess() const;
@@ -203,7 +195,7 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

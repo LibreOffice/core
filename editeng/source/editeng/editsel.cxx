@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,18 +43,18 @@ EditSelFunctionSet::EditSelFunctionSet()
     pCurView = NULL;
 }
 
-void __EXPORT EditSelFunctionSet::CreateAnchor()
+void EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
         pCurView->pImpEditView->CreateAnchor();
 }
 
-void __EXPORT EditSelFunctionSet::DestroyAnchor()
+void EditSelFunctionSet::DestroyAnchor()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
-sal_Bool __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
+sal_Bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
@@ -61,7 +62,7 @@ sal_Bool __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel
     return sal_False;
 }
 
-sal_Bool __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
@@ -69,20 +70,20 @@ sal_Bool __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPix
     return sal_False;
 }
 
-void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
+void EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !  Implementieren, wenn Mehrfachselektion moeglich  !
+// !   Implement when multiple selection is possible   !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-void __EXPORT EditSelFunctionSet::BeginDrag()
+void EditSelFunctionSet::BeginDrag()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
 
-void __EXPORT EditSelFunctionSet::DeselectAll()
+void EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
         pCurView->pImpEditView->DeselectAll();
@@ -93,8 +94,6 @@ void __EXPORT EditSelFunctionSet::DeselectAll()
 //  ----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
-    // Wegen Bug OV: (1994)
-    // 1995: RangeSelection lassen, SingleSelection nur fuer ListBoxen geeignet!
     SetSelectionMode( RANGE_SELECTION );
     EnableDrag( sal_True );
 }
@@ -119,3 +118,4 @@ EditView* EditSelectionEngine::GetCurView()
     return pView;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

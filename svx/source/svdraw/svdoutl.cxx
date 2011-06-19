@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,11 +37,7 @@
 #include <svl/itempool.hxx>
 
 DBG_NAME(SdrOutliner)
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
+
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
@@ -50,22 +47,12 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 }
 
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 SdrOutliner::~SdrOutliner()
 {
     DBG_DTOR(SdrOutliner,NULL);
 }
 
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
     if( pObj && pObj != mpTextObj.get() )
@@ -93,25 +80,15 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
     mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 {
     mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
-    FASTBOOL bOk = sal_False;
+    bool bOk = false;
     XubString aRet;
 
     if(mpTextObj.is())
@@ -130,3 +107,5 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
     else
         return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

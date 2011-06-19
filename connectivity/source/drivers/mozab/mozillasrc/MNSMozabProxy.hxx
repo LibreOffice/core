@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,9 @@
 #include <osl/thread.hxx>
 
 #include <MNSInclude.hxx>
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_MOZILLA_XCODEPROXY_HDL_
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MOZILLA_XPROXYRUNNER_HDL_
 #include "com/sun/star/mozilla/XProxyRunner.hdl"
-#endif
 
 namespace connectivity
 {
@@ -117,3 +112,5 @@ namespace connectivity
     }
 }
 #endif //_CONNECTIVITY_MAB_MOZABHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

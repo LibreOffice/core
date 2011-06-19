@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,6 @@
 #define _TPLCOMP_HXX
 
 #include <osl/mutex.hxx>
-//ASDBG #ifndef _USR_UNO_HXX
-//ASDBG #include <usr/uno.hxx>
-//ASDBG #endif
-//ASDBG #ifndef _USR_LSTCOMP_HXX
-//ASDBG #include <usr/iterhlp.hxx>
-//ASDBG #endif
-//ASDBG #ifndef _USR_SERVICES_HXX
-//ASDBG #include <usr/services.hxx>
-//ASDBG #endif
 #include <com/sun/star/chaos/XCommandExecutor.hpp>
 #include <com/sun/star/chaos/XStatusCallback.hpp>
 #include <com/sun/star/chaos/UnknownCommandException.hpp>
@@ -222,3 +214,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

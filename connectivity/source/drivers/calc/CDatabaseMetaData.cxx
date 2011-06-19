@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.reserve(18);
 
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"))));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)65535));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -113,35 +114,35 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DECIMAL"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL")));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("BOOL"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOL")));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)20);
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = new ORowSetValueDecorator((sal_Int32)15);
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DATE"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE")));
         aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIME"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME")));
         aRow[2] = new ORowSetValueDecorator(DataType::TIME);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
         aRow[15] = ODatabaseMetaDataResultSet::get0Value();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = ODatabaseMetaDataResultSet::get0Value();
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
@@ -230,10 +231,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
                     switch(sal_Int32(aRow[11]->getValue()))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
+                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO")));
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("YES"));
+                        aRow[18]  = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES")));
                         break;
                     default:
                         aRow[18]  = new ORowSetValueDecorator(::rtl::OUString());
@@ -309,33 +310,11 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
         if (xProp.is())
         {
             sal_Bool bVisible = sal_Bool();
-            Any aVisAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsVisible") );
+            Any aVisAny = xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")) );
             if ( aVisAny >>= bVisible )
                 if (!bVisible)
                     return sal_True;                // hidden
         }
-
-#if 0
-        //  test if whole sheet is empty
-
-        Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
-        Reference<XCellRangesQuery> xQuery( xSheet, UNO_QUERY );
-        if ( xAddr.is() && xQuery.is() )
-        {
-            CellRangeAddress aTotalRange = xAddr->getRangeAddress();
-            // queryIntersection to get a ranges object
-            Reference<XSheetCellRanges> xRanges = xQuery->queryIntersection( aTotalRange );
-            if (xRanges.is())
-            {
-                Reference<XEnumerationAccess> xCells = xRanges->getCells();
-                if (xCells.is())
-                {
-                    if ( !xCells->hasElements() )
-                        return sal_True;            // empty
-                }
-            }
-        }
-#endif
 
         //  use the same data area as in OCalcTable to test for empty table
 
@@ -374,7 +353,7 @@ sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::
         {
             try
             {
-                Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsUserDefined") );
+                Any aUserAny = xRangeProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUserDefined")) );
                 sal_Bool bUserDefined = sal_Bool();
                 if ( aUserAny >>= bUserDefined )
                     bUnnamed = !bUserDefined;
@@ -405,7 +384,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
+    ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -459,7 +438,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
     if ( xDocProp.is() )
     {
-        Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString::createFromAscii("DatabaseRanges") );
+        Any aRangesAny = xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseRanges")) );
         Reference<XDatabaseRanges> xRanges;
         if ( aRangesAny >>= xRanges )
         {
@@ -488,3 +467,4 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

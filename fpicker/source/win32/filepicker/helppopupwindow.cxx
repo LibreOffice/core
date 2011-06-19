@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -607,9 +608,11 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
         if ( !UnregisterClass(
                  (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
         {
-            OSL_ENSURE( false, "unregister window class failed" );
+            OSL_FAIL( "unregister window class failed" );
         }
 
         s_ClassAtom = 0;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
-// class SvxWritingModeItem -------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 
@@ -65,13 +65,13 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxWritingModeItem::Create( SvStream & , sal_uInt16  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
 SvStream& SvxWritingModeItem::Store( SvStream & rStrm, sal_uInt16  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 
@@ -104,10 +104,10 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
     return eRet;
 }
 
-sal_Bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int32 nVal = 0;
-    sal_Bool bRet = ( rVal >>= nVal );
+    bool bRet = ( rVal >>= nVal );
 
     if( !bRet )
     {
@@ -139,7 +139,7 @@ sal_Bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal
     return bRet;
 }
 
-sal_Bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
     rVal <<= (WritingMode)GetValue();
@@ -151,3 +151,5 @@ SvxWritingModeItem& SvxWritingModeItem::operator=( const SvxWritingModeItem& rIt
     SetValue( rItem.GetValue() );
     return *this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

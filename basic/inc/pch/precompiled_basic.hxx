@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,6 +149,7 @@
 
 #include "i18npool/lang.h"
 
+#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/module.h"
 #include "osl/mutex.hxx"
@@ -211,7 +213,6 @@
 #include "tools/fsys.hxx"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/rc.hxx"
 #include "tools/rcid.h"
 #include "tools/ref.hxx"
@@ -275,14 +276,11 @@
 #include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "vos/diagnose.hxx"
-#include "vos/macros.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-
 #include "xmlscript/xmldlg_imexp.hxx"
 #include "xmlscript/xmllib_imexp.hxx"
 #include "xmlscript/xmlmod_imexp.hxx"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

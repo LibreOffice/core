@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _COMPHELPER_STORAGEHELPER_HXX_
 #include <comphelper/storagehelper.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <osl/mutex.hxx>
@@ -66,7 +65,8 @@
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
-
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
+#include <cppuhelper/implbase1.hxx>
 namespace basic
 {
 
@@ -81,6 +81,8 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
+
+using ::rtl::OUString;
 
 using ::rtl::OUString;
 
@@ -135,7 +137,6 @@ sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const String& rLibraryNa
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     return pImplLib->mbPasswordProtected;
 }
-
 
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( void )
@@ -197,7 +198,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
+        OSL_FAIL( "### couln't create sax-writer component\n" );
         return;
     }
 
@@ -254,7 +255,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax parser component\n" );
+        OSL_FAIL( "### couln't create sax parser component\n" );
         return aRetAny;
     }
 
@@ -395,8 +396,6 @@ void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const ::rtl::OUSt
     SotStorageRef xStorage = new SotStorage( sal_False, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
-        // We need a BasicManager to avoid problems
-        // StarBASIC* pBas = new StarBASIC();
         BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );
 
         // Set info
@@ -640,7 +639,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             SbModule* pMod = pBasicLib->FindModule( aElementName );
             if( pMod )
             {
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName = aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 
@@ -675,7 +673,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
             if( pLib->mbPasswordVerified || pLib->mbDoc50Password )
             {
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -683,7 +680,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     continue;
                 }
@@ -709,12 +706,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
                     writeLibraryElement( xLib, aElementName, xOutput );
-                    // writeLibraryElement should have the stream already closed
-                    // xOutput->closeOutput();
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Problem on storing of password library!\n" );
+                    OSL_FAIL( "Problem on storing of password library!\n" );
                     // TODO: error handling
                 }
             }
@@ -761,7 +756,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -769,7 +763,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     continue;
                 }
@@ -860,13 +854,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     // TODO: handle error
                 }
 
-                // Storage Dtor commits too, that makes problems
-                // xElementRootStorage->Commit();
             }
         }
         catch( Exception& )
         {
-            //throw e;
         }
     }
     return sal_True;
@@ -935,7 +926,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( 0, "### couln't open sub storage for library\n" );
+                OSL_FAIL( "### couln't open sub storage for library\n" );
                 return sal_False;
             }
         }
@@ -954,7 +945,6 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     pBasicLib->SetModified( sal_False );
                 }
 
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName= aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 
@@ -1144,17 +1134,23 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         }
     }
 
-//REMOVE        // If the password is verified the library must remain modified, because
-//REMOVE        // otherwise for saving the storage would be copied and that doesn't work
-//REMOVE        // with mtg's storages when the password is verified
-//REMOVE        if( !pLib->mbPasswordVerified )
-//REMOVE            pLib->mbModified = sal_False;
     return bRet;
 }
 
 
 void SfxScriptLibraryContainer::onNewRootStorage()
 {
+}
+
+sal_Bool SAL_CALL
+SfxScriptLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+{
+    BasicManager* pBasicMgr = getBasicManager();
+    OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
+    if ( pBasicMgr )
+        return pBasicMgr->HasExeCode( Library ); // need to change this to take name
+    // default to it has code if we can't decide
+    return sal_True;
 }
 
 //============================================================================
@@ -1177,9 +1173,9 @@ Sequence< ::rtl::OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServ
 Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString::createFromAscii( "com.sun.star.script.DocumentScriptLibraryContainer" );
+    aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ));
     // plus, for compatibility:
-    aServiceNames[1] = OUString::createFromAscii( "com.sun.star.script.ScriptLibraryContainer" );
+    aServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ));
     return aServiceNames;
 }
 
@@ -1191,7 +1187,7 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ScriptLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sfx2.ScriptLibraryContainer" ));
         bNeedsInit = sal_False;
     }
     return aImplName;
@@ -1318,3 +1314,5 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const ::rtl::OUString& ModuleN
 //============================================================================
 
 }   // namespace basic
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

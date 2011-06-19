@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,11 @@
 #ifndef _PROPMAP_HXX_
 #define _PROPMAP_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          void*                              ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > TPropMapBase;
@@ -99,3 +100,5 @@ class TPropMap
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

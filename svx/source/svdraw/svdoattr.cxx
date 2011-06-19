@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,6 @@
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
 
-//#include <editeng/charscaleitem.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svl/style.hxx>
@@ -137,7 +137,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // syntactical sugar for ItemSet accesses
 
-void __EXPORT SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     sal_Bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
@@ -178,3 +178,5 @@ sal_Bool SdrAttrObj::HasLine() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

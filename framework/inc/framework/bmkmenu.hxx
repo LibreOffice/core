@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,17 +54,19 @@ class BmkMenu_Impl;
 class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 {
     public:
-                        enum BmkMenuType
-                        {
-                            BMK_NEWMENU,
-                            BMK_WIZARDMENU
-                        };
+        enum BmkMenuType
+        {
+            BMK_NEWMENU,
+            BMK_WIZARDMENU
+        };
 
                         BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType nType );
-                        ~BmkMenu();
+                 BmkMenuType nType
+        );
 
-    void                Initialize(); // Synchrones Laden der Eintraege
+        ~BmkMenu();
+
+        void Initialize(); // Synchrones Laden der Eintraege
 
     protected:
         BmkMenu::BmkMenuType m_nType;
@@ -71,7 +74,8 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 
     private:
                         BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType, BmkMenu* pRoot );
+                 BmkMenuType, BmkMenu* pRoot
+        );
 
         BmkMenu_Impl*   _pImp;
 };
@@ -79,3 +83,5 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

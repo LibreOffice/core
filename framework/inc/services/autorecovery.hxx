@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -334,6 +335,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
 
         //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
+
+        //---------------------------------------
         /** @short  points to the used configuration package or.openoffice.Setup
             @descr  This instance does not cache - it calls directly the
                     configuration API!
@@ -345,6 +352,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     where we listen for new created documents.
           */
         css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+
+        //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::document::XEventListener > m_xNewDocBroadcasterListener;
 
         //---------------------------------------
         /** @short  because we stop/restart listening sometimes, it's a good idea to know
@@ -848,6 +861,26 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                                                                             const ::rtl::OUString&             sEventType,
                                                                                   AutoRecovery::TDocumentInfo* pInfo     );
 
+
+        class ListenerInformer
+        {
+        private:
+            AutoRecovery &m_rRecovery;
+            sal_Int32 m_eJob;
+            bool m_bStopped;
+        public:
+            ListenerInformer(AutoRecovery &rRecovery, sal_Int32 eJob)
+                : m_rRecovery(rRecovery), m_eJob(eJob), m_bStopped(false)
+            {
+            }
+            void start();
+            void stop();
+            ~ListenerInformer()
+            {
+                stop();
+            }
+        };
+
         //---------------------------------------
 
         // TODO document me
@@ -1020,3 +1053,5 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ using ::rtl::OUStringBuffer;
 
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
+SvXMLEnumMapEntry const pXML_Para_Adjust_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_END,          style::ParagraphAdjust_RIGHT },
@@ -53,7 +54,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Align_Last_Enum[] =
+SvXMLEnumMapEntry const pXML_Para_Align_Last_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
@@ -85,7 +86,7 @@ sal_Bool XMLParaAdjustPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 sal_Bool XMLParaAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if(!rValue.hasValue())
-        return sal_False;     //added by BerryJia for fixing Bug102407 2002-11-5
+        return sal_False;
     OUStringBuffer aOut;
     sal_Int16 nVal = 0;
 
@@ -134,3 +135,4 @@ sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno:
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

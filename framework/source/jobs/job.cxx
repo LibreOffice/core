@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -755,9 +756,6 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    // don't disagree with this request if job was already stopped or finished it's work
-    // if (m_eRunState != E_RUNNING)
-    //    return;
 
     // Otherwhise try to close() it
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
@@ -942,3 +940,5 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,19 @@
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include "cppuhelper/implementationentry.hxx"
-#endif
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
 
-#ifndef _SV_APP_HXX
 #include "vcl/svapp.hxx"
+
+#ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#undef GradientStyle_RECT
+#include <odma_lib.hxx>
 #endif
 
 namespace css = com::sun::star;
@@ -52,6 +57,7 @@ using rtl::OUString;
  */
 static OUString FilePicker_getSystemPickerServiceName()
 {
+#ifdef UNX
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
     if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFilePicker"));
@@ -61,8 +67,14 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
-    else
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
+#endif
+#ifdef WNT
+    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFilePicker"));
+    }
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.Win32FilePicker"));
+#endif
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 }
 
 static Reference< css::uno::XInterface > FilePicker_createInstance (
@@ -123,14 +135,20 @@ static Sequence< OUString > FilePicker_getSupportedServiceNames()
 static OUString FolderPicker_getSystemPickerServiceName()
 {
     OUString aDesktopEnvironment (Application::GetDesktopEnvironment());
+#ifdef UNX
     if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("gnome"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
-    else
-        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
+#endif
+#ifdef WNT
+    if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.ODMAFolderPicker"));
+    }
+#endif
+    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
 }
 
 static Reference< css::uno::XInterface > FolderPicker_createInstance (
@@ -224,3 +242,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

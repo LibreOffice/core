@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <editeng/eerdll.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ist der Printer gueltig
+    Description:    Is the printer valid
  --------------------------------------------------------------------*/
 
 inline sal_Bool IsValidPrinter( const Printer* pPtr )
@@ -57,10 +58,9 @@ Size SvxPaperInfo::GetPaperSize( Paper ePaper, MapUnit eUnit )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Papiergroesse der Druckers liefern, aligned auf
-                die eigenen Groessen.
-                Falls kein Printer im System eingestellt ist,
-                wird DIN A4 Portrait als Defaultpapiergroesse geliefert.
+ Description:   Return the paper size of the printer, aligned to our
+                own sizes. If no Printer is set in the system, A4 portrait
+                will be delivered as the default paper size.
 ------------------------------------------------------------------------*/
 
 //Is this method may be confused about the units it returns ?
@@ -75,8 +75,8 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 
     if ( ePaper == PAPER_USER )
     {
-        // Orientation nicht beruecksichtigen, da durch SV bereits
-        // die richtigen Masze eingestellt worden sind.
+        // Orientation not take into account, as the right size has
+        // been already set by SV
         Size aPaperSize = pPrinter->GetPaperSize();
         const Size aInvalidSize;
 
@@ -93,7 +93,7 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
 
     const Orientation eOrient = pPrinter->GetOrientation();
     Size aSize( GetPaperSize( ePaper ) );
-        // bei Landscape die Seiten tauschen, ist bei SV schon geschehen
+        // for Landscape exchange the pages, has already been done by SV
     if ( eOrient == ORIENTATION_LANDSCAPE )
         Swap( aSize );
     return aSize;
@@ -129,8 +129,7 @@ Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  String Repr"asentation f"ur die SV-Defines f"ur
-                Papiergroessen.
+ Description:   String representation for the SV-defines of paper size
 ------------------------------------------------------------------------*/
 
 String SvxPaperInfo::GetName( Paper ePaper )
@@ -139,3 +138,4 @@ String SvxPaperInfo::GetName( Paper ePaper )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

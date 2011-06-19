@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -252,22 +253,49 @@ namespace drawinglayer
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
+                    String aText( rTextCandidate.getText() );
+                    xub_StrLen nPos = rTextCandidate.getTextPosition();
+                    xub_StrLen nLen = rTextCandidate.getTextLength();
+
+                    sal_Int32* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL ;
+
+                    if ( rTextCandidate.isFilled() )
+                    {
+                        basegfx::B2DVector aOldFontScaling, aOldTranslate;
+                        double fOldRotate, fOldShearX;
+                        rTextCandidate.getTextTransform().decompose(aOldFontScaling, aOldTranslate, fOldRotate, fOldShearX);
+
+                        long nWidthToFill = static_cast<long>(rTextCandidate.getWidthToFill( ) * aFontScaling.getX() / aOldFontScaling.getX());
+
+                        long nWidth = mpOutputDevice->GetTextArray(
+                            rTextCandidate.getText(), pDXArray, 0, 1 );
+                        long nChars = 2;
+                        if ( nWidth )
+                            nChars = nWidthToFill / nWidth;
+
+                        String aFilled;
+                        aFilled.Fill( (sal_uInt16)nChars, aText.GetChar( 0 ) );
+                        aText = aFilled;
+                        nPos = 0;
+                        nLen = nChars;
+                    }
+
                     if(aTransformedDXArray.size())
                     {
                         mpOutputDevice->DrawTextArray(
                             aStartPoint,
-                            rTextCandidate.getText(),
-                            &(aTransformedDXArray[0]),
-                            rTextCandidate.getTextPosition(),
-                            rTextCandidate.getTextLength());
+                            aText,
+                            pDXArray,
+                            nPos,
+                            nLen);
                     }
                     else
                     {
                         mpOutputDevice->DrawText(
                             aStartPoint,
-                            rTextCandidate.getText(),
-                            rTextCandidate.getTextPosition(),
-                            rTextCandidate.getTextLength());
+                            aText,
+                            nPos,
+                            nLen);
                     }
 
                     if(rTextCandidate.getFontAttribute().getRTL())
@@ -1157,7 +1185,7 @@ namespace drawinglayer
 
                     mpOutputDevice->EnableMapMode(false);
 
-                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
                     {
                         const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * (*aIter)) - aDiscreteHalfSize);
                         const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
@@ -1177,7 +1205,7 @@ namespace drawinglayer
             const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
             const Color aVCLColor(aRGBColor);
 
-            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); ++aIter)
             {
                 const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
                 const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
@@ -1561,3 +1589,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

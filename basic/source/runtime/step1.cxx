@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,6 +93,15 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
     {
         String aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
+        if( bVBAEnabled && ( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) ) )
+        {
+            // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
+            if ( pVal->GetType() == SbxEMPTY )
+                pVal->Broadcast( SBX_HINT_DATAWANTED );
+            // Methoden und Properties evaluieren!
+            SbxVariable* pRes = new SbxVariable( *pVal );
+            pVal = pRes;
+        }
         refArgv->Put( pVal, nArgc );
         refArgv->PutAlias( aAlias, nArgc++ );
     }
@@ -109,8 +119,8 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
         SbxDataType t = (SbxDataType) (nOp1 & 0x7FFF);
         SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // letztes Arg
 
-        // BYVAL prüfen
-        if( pVar->GetRefCount() > 2 )       // 2 ist normal für BYVAL
+        // BYVAL prï¿½fen
+        if( pVar->GetRefCount() > 2 )       // 2 ist normal fï¿½r BYVAL
         {
             // Parameter ist eine Referenz
             if( bByVal )
@@ -121,7 +131,7 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
                 refExprStk->Put( pVar, refArgv->Count() - 1 );
             }
             else
-                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag für DllMgr
+                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag fï¿½r DllMgr
         }
         else
         {
@@ -181,7 +191,9 @@ void SbiRuntime::StepJUMPT( sal_uInt32 nOp1 )
 void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
 {
     SbxVariableRef p = PopVar();
-    if( !p->GetBool() )
+    // In a test e.g. If Null then
+        // will evaluate Null will act as if False
+    if( ( bVBAEnabled && p->IsNull() ) || !p->GetBool() )
         StepJUMP( nOp1 );
 }
 
@@ -200,12 +212,10 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     if( nOp1 & 0x8000 )
     {
         nOp1 &= 0x7FFF;
-        //PushGosub( pCode + 3 * nOp1 );
         PushGosub( pCode + 5 * nOp1 );
     }
     if( n < 1 || static_cast<sal_uInt32>(n) > nOp1 )
         n = static_cast<sal_Int16>( nOp1 + 1 );
-    //nOp1 = (sal_uInt32) ( (const char*) pCode - pImg->GetCode() ) + 3 * --n;
     nOp1 = (sal_uInt32) ( (const char*) pCode - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
 }
@@ -366,7 +376,7 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
 
 void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 {
-    // AB #32714 Resume ohne Error? -> Fehler
+    // #32714 Resume ohne Error? -> Fehler
     if( !bInError )
     {
         Error( SbERR_BAD_RESUME );
@@ -426,15 +436,15 @@ void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 
 // Check, ob TOS eine bestimmte Objektklasse ist (+StringID)
 
-bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
+bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
 {
     bool bRet = true;
 
-    if( aClass.Len() != 0 )
+    if( !aClass.isEmpty() )
     {
         bRet = pObj->IsClass( aClass );
         if( !bRet )
-            bRet = aClass.EqualsIgnoreCaseAscii( String( RTL_CONSTASCII_USTRINGPARAM("object") ) );
+            bRet = aClass.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("object") );
         if( !bRet )
         {
             String aObjClass = pObj->GetClassName();
@@ -452,7 +462,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
 }
 
 bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
-    const String& aClass, bool bRaiseErrors, bool bDefault )
+    const ::rtl::OUString& aClass, bool bRaiseErrors, bool bDefault )
 {
     bool bOk = bDefault;
 
@@ -571,3 +581,4 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

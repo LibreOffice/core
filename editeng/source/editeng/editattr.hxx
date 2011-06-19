@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,12 +60,12 @@ class SfxVoidItem;
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      (sal_Unicode)   0x01
 
-// DEF_METRIC: Bei meinem Pool sollte immer die DefMetric bei
-// GetMetric( nWhich ) ankommen!
-// => Zum ermitteln der DefMetrik einfach ein GetMetric( 0 )
+// DEF_METRIC: For my pool, the DefMetric should always appear when
+// GetMetric (nWhich)!
+// => To determine the DefMetric simply use GetMetric(0)
 #define DEF_METRIC  0
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditAttrib
 // -------------------------------------------------------------------------
 class EditAttrib
@@ -80,18 +81,18 @@ protected:
     virtual             ~EditAttrib();
 
 public:
-    // RemoveFromPool muss immer vorm DTOR Aufruf erfolgen!!
+    // RemoveFromPool must always be called before the destructor!!
     void                RemoveFromPool( SfxItemPool& rPool );
 
     sal_uInt16              Which() const   { return pItem->Which(); }
     const SfxPoolItem*  GetItem() const { return pItem; }
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttrib
 // -------------------------------------------------------------------------
-// bFeature: Attribut darf nicht expandieren/schrumfen, Laenge immer 1
-// bEdge: Attribut expandiert nicht, wenn genau an der Kante expandiert werden soll
+// bFeature: Attribute must not expand/shrink, length is always 1
+// bEdge: Attribute will not expand, if you want to expand just on the edge
 class EditCharAttrib : public EditAttrib
 {
 protected:
@@ -157,18 +158,18 @@ inline void EditCharAttrib::MoveBackward( sal_uInt16 nDiff )
 inline void EditCharAttrib::Expand( sal_uInt16 nDiff )
 {
     DBG_ASSERT( ( ((long)nEnd + nDiff) <= (long)0xFFFF ), "EditCharAttrib: Expand?!" );
-    DBG_ASSERT( !bFeature, "Bitte keine Features expandieren!" );
+    DBG_ASSERT( !bFeature, "Please do not expand any features!" );
     nEnd = nEnd + nDiff;
 }
 
 inline void EditCharAttrib::Collaps( sal_uInt16 nDiff )
 {
     DBG_ASSERT( (long)nEnd - nDiff >= (long)nStart, "EditCharAttrib: Collaps?!" );
-    DBG_ASSERT( !bFeature, "Bitte keine Features schrumpfen!" );
+    DBG_ASSERT( !bFeature, "Please do not shrink any Features!" );
     nEnd = nEnd - nDiff;
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFont
 // -------------------------------------------------------------------------
 class EditCharAttribFont: public EditCharAttrib
@@ -424,3 +425,5 @@ public:
 
 
 #endif // _EDITATTR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

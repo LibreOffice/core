@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,6 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-//#include "precompiled_framework.hxx"
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -58,7 +58,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <ucbhelper/content.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
@@ -79,7 +79,6 @@ using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::rtl                           ;
-using namespace ::vos                           ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const
@@ -419,3 +418,5 @@ void PopupMenuDispatcher::impl_CreateUriRefFactory()
 }
 
 }       //  namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

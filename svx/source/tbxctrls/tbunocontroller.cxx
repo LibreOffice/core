@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>
 
@@ -323,7 +324,7 @@ throw (uno::RuntimeException)
 {
     svt::ToolboxController::dispose();
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     delete m_pBox;
     m_pBox = 0;
 }
@@ -335,8 +336,8 @@ throw ( uno::RuntimeException )
 {
     if ( m_pBox )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-        if ( rEvent.FeatureURL.Path.equalsAscii( "FontHeight" ))
+        SolarMutexGuard aSolarMutexGuard;
+        if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontHeight" ) ))
         {
             if ( rEvent.IsEnabled )
             {
@@ -350,7 +351,7 @@ throw ( uno::RuntimeException )
             else
                 m_pBox->Disable();
         }
-        else if ( rEvent.FeatureURL.Path.equalsAscii( "CharFontName" ))
+        else if ( rEvent.FeatureURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharFontName" ) ))
         {
             if ( rEvent.State >>= m_aCurrentFont )
                 m_pBox->UpdateFont( m_aCurrentFont );
@@ -390,7 +391,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
     Window* pParent = VCLUnoHelper::GetWindow( xParent );
     if ( pParent )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_pBox = new SvxFontSizeBox_Impl(
                         pParent,
                         uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
@@ -427,3 +428,5 @@ uno::Reference< uno::XInterface > SAL_CALL FontHeightToolBoxControl_createInstan
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

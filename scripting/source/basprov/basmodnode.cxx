@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include "basmodnode.hxx"
 #include "basmethnode.hxx"
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -74,7 +75,7 @@ namespace basprov
 
     ::rtl::OUString BasicModuleNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ::rtl::OUString sModuleName;
         if ( m_pModule )
@@ -87,7 +88,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicModuleNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
@@ -124,7 +125,7 @@ namespace basprov
 
     sal_Bool BasicModuleNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Bool bReturn = sal_False;
         if ( m_pModule )
@@ -141,7 +142,7 @@ namespace basprov
 
     sal_Int16 BasicModuleNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         return browse::BrowseNodeTypes::CONTAINER;
     }
@@ -151,3 +152,5 @@ namespace basprov
 //.........................................................................
 }   // namespace basprov
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

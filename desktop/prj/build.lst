@@ -1,4 +1,4 @@
-dt      desktop :    L10N:l10n sfx2 stoc BERKELEYDB:berkeleydb sysui SO:sysui_so BOOST:boost svx xmlhelp sal unoil officecfg offuh filter LIBXSLT:libxslt NULL
+dt      desktop :    TRANSLATIONS:translations sfx2 stoc BERKELEYDB:berkeleydb sysui BOOST:boost svx xmlhelp sal unoil officecfg offuh filter LIBXSLT:libxslt NULL
 dt	desktop									usr1	-	all	dt_mkout NULL
 dt	desktop\inc								nmake	-	all	dt_inc NULL
 dt	desktop\prj								get		-	all	dt_prj NULL
@@ -22,8 +22,10 @@ dt	desktop\win32\source\QuickStart\so	nmake	-	w	dt_win32_quickstart_so dt_win32_
 
 dt	desktop\os2\source\applauncher			nmake	-	p	dt_applauncher dt_inc NULL
 dt	desktop\unx\source\officeloader		nmake	-	u	dt_officeloader_unx dt_inc NULL
+dt     desktop\unx\source                      nmake   -       u       dt_uwrapper dt_pagein.u dt_inc NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein dt_inc NULL
 dt	desktop\source\pkgchk\unopkg			nmake	-	all	dt_unopkg dt_dp_misc dt_app dt_inc dt_guiloader.w NULL
+dt     desktop\unx\splash                      nmake   -       u       dt_usplash      dt_pagein.u dt_inc NULL
 dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_executable dt_dp_registry_help dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_unopkg dt_inc dt_dp_misc NULL
 dt	desktop\source\deployment\misc				nmake	-	all	dt_dp_misc dt_inc NULL
 dt	desktop\source\deployment\unopkg			nmake	-	all	dt_dp_unopkg dt_inc NULL
@@ -38,7 +40,7 @@ dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_c
 dt	desktop\source\deployment\registry\help			nmake	-	all	dt_dp_registry_help dt_inc NULL
 dt	desktop\source\deployment\registry\executable		nmake	-	all	dt_dp_registry_executable dt_inc NULL
 dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
-dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_so_comp dt_spl dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w dt_win32_quickstart_so.w NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_so_comp dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w dt_win32_quickstart_so.w dt_zipintro NULL
 dt	desktop\zipintro							nmake	-	all	dt_zipintro NULL
 dt  desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
 dt  desktop\source\registration\com\sun\star\servicetag\resources   get     -  all sn_svctagres NULL

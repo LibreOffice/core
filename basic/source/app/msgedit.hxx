@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 class BasicFrame;
 class AppError;
 
-#define SelectChildren SelectChilds     // Sonst wird mir schlecht
+#define SelectChildren SelectChilds
 
 typedef sal_uInt16 TTFeatures;          // Bitfield for features of the entries
 #define HasNothing  TTFeatures(0x00)
@@ -48,8 +49,6 @@ typedef sal_uInt16 TTFeatures;          // Bitfield for features of the entries
 class TTTreeListBox : public SvTreeListBox
 {
 protected:
-//  virtual void    Command( const CommandEvent& rCEvt );
-//  sal_uInt16          nDeselectParent;
     BasicFrame      *pBasicFrame;
     void            InitEntry( SvLBoxEntry*, const String&, const Image&,
                                const Image&, SvLBoxButtonKind eButtonKind );
@@ -61,13 +60,10 @@ public:
     TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinStyle=0 );
     ~TTTreeListBox(){}
 
-//  virtual void    SelectHdl();
-//  virtual void    DeselectHdl();
     virtual sal_Bool    DoubleClickHdl();
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
 
-//  sal_uIntPtr         SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect );
     TTFeatures      GetFeatures( SvLBoxEntry* );
 };
 
@@ -112,3 +108,5 @@ DATA_FUNC_DEF( aEditTree, TTTreeListBox )
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

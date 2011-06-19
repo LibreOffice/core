@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,9 +208,6 @@ void AccessibleControlShape::Init()
         // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
         // I'm aware of at the moment .....
-        //
-        // 98750 - 30.04.2002 - fs@openoffice.org
-        //
 
         // get the control which belongs to our model (relative to our view)
         const Window* pViewWindow = maShapeTreeInfo.GetWindow();
@@ -304,7 +302,7 @@ void AccessibleControlShape::Init()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
+        OSL_FAIL( "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
     }
 }
 
@@ -379,10 +377,10 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
             if ( !sDesc.getLength() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBackground"),
+                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
                     DescriptionGenerator::COLOR,
                     ::rtl::OUString());
-                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBorder"),
+                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
                     DescriptionGenerator::INTEGER,
                     ::rtl::OUString());
             }
@@ -392,8 +390,8 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         break;
 
         default:
-            aDG.Initialize (::rtl::OUString::createFromAscii (
-                "Unknown accessible control shape"));
+            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unknown accessible control shape")) );
             Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -432,7 +430,7 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
 #if OSL_DEBUG_LEVEL > 0
     else
     {
-        OSL_ENSURE( sal_False, "AccessibleControlShape::propertyChange: where did this come from?" );
+        OSL_FAIL( "AccessibleControlShape::propertyChange: where did this come from?" );
     }
 #endif
 }
@@ -533,7 +531,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSour
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        OSL_ENSURE( sal_False, "AccessibleControlShape::modeChanged: where did this come from?" );
+        OSL_FAIL( "AccessibleControlShape::modeChanged: where did this come from?" );
 #endif
 }
 
@@ -563,12 +561,12 @@ sal_Bool AccessibleControlShape::ensureListeningState(
                 m_xControlModel->removePropertyChangeListener( _rPropertyName, static_cast< XPropertyChangeListener* >( this ) );
         }
         else
-            OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
+            OSL_FAIL( "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
     }
     catch( const Exception& e )
     {
         (void)e;    // make compiler happy
-        OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
+        OSL_FAIL( "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
     }
 
     return _bNeedNewListening;
@@ -684,7 +682,7 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     // stop listening at the control container (should never be necessary here, but who knows ....)
     if ( m_bWaitingForControl )
     {
-        OSL_ENSURE( sal_False, "AccessibleControlShape::disposing: this should never happen!" );
+        OSL_FAIL( "AccessibleControlShape::disposing: this should never happen!" );
         Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
         if ( xContainer.is() )
         {
@@ -734,7 +732,7 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
     catch( const Exception& e )
     {
         (void)e;    // make compiler happy
-        OSL_ENSURE( sal_False, "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
+        OSL_FAIL( "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
     }
 
     return m_xControlModel.is();
@@ -793,7 +791,7 @@ void AccessibleControlShape::stopStateMultiplexing()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+        OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
     }
     return sReturn;
 }
@@ -918,3 +916,5 @@ void SAL_CALL AccessibleControlShape::elementReplaced( const ::com::sun::star::c
 {
     // not interested in
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

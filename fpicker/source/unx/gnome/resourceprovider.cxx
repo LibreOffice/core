@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -82,7 +83,8 @@ _Entry CtrlIdToResIdTable[] = {
     { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
     { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
     { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION },
-    { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE }
+    { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE },
+    { FILE_PICKER_ALLFORMATS,                   STR_SVT_ALLFORMATS }
 };
 
 _Entry OtherCtrlIdToResIdTable[] = {
@@ -92,8 +94,8 @@ _Entry OtherCtrlIdToResIdTable[] = {
 };
 
 
-const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
-const sal_Int32 OTHER_SIZE_TABLE = sizeof( OtherCtrlIdToResIdTable ) / sizeof( _Entry );
+const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
+const sal_Int32 OTHER_SIZE_TABLE = SAL_N_ELEMENTS( OtherCtrlIdToResIdTable );
 
 //------------------------------------------------------------
 //
@@ -223,3 +225,5 @@ OUString CResourceProvider::getResString( sal_Int32 aId )
 {
    return m_pImpl->getResString( aId ).replace('~', '_');
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

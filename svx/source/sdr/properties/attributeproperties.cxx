@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -352,7 +353,7 @@ namespace sdr
                         if(pOldPool && pNewPool)
                         {
                             // build a list of to-be-copied Styles
-                            List aList;
+                            std::vector<SfxStyleSheetBase*> aStyleList;
                             SfxStyleSheetBase* pAnchor = 0L;
 
                             while(pSheet)
@@ -361,7 +362,7 @@ namespace sdr
 
                                 if(!pAnchor)
                                 {
-                                    aList.Insert(pSheet, LIST_APPEND);
+                                    aStyleList.push_back(pSheet);
                                     pSheet = pOldPool->Find(pSheet->GetParent(), pSheet->GetFamily());
                                 }
                                 else
@@ -372,15 +373,15 @@ namespace sdr
                             }
 
                             // copy and set the parents
-                            pSheet = (SfxStyleSheetBase*)aList.First();
                             SfxStyleSheetBase* pNewSheet = 0L;
                             SfxStyleSheetBase* pLastSheet = 0L;
                             SfxStyleSheetBase* pForThisObject = 0L;
 
-                            while(pSheet)
+                            std::vector<SfxStyleSheetBase*>::iterator iter;
+                            for (iter = aStyleList.begin(); iter != aStyleList.end(); ++iter)
                             {
-                                pNewSheet = &pNewPool->Make(pSheet->GetName(), pSheet->GetFamily(), pSheet->GetMask());
-                                pNewSheet->GetItemSet().Put(pSheet->GetItemSet(), sal_False);
+                                pNewSheet = &pNewPool->Make((*iter)->GetName(), (*iter)->GetFamily(), (*iter)->GetMask());
+                                pNewSheet->GetItemSet().Put((*iter)->GetItemSet(), sal_False);
 
                                 if(bScaleUnitChanged)
                                 {
@@ -398,7 +399,6 @@ namespace sdr
                                 }
 
                                 pLastSheet = pNewSheet;
-                                pSheet = (SfxStyleSheetBase*)aList.Next();
                             }
 
                             // Set link to the Style found in the Pool
@@ -425,23 +425,20 @@ namespace sdr
                         {
                             // there is no StyleSheetPool in the new model, thus set
                             // all items as hard items in the object
-                            List aList;
+                            std::vector<const SfxItemSet*> aSetList;
                             const SfxItemSet* pItemSet = &pOldStyleSheet->GetItemSet();
 
                             while(pItemSet)
                             {
-                                aList.Insert((void*)pItemSet, CONTAINER_APPEND);
+                                aSetList.push_back(pItemSet);
                                 pItemSet = pItemSet->GetParent();
                             }
 
                             SfxItemSet* pNewSet = &CreateObjectSpecificItemSet(pNewModel->GetItemPool());
-                            pItemSet = (SfxItemSet*)aList.Last();
 
-                            while(pItemSet)
-                            {
-                                pNewSet->Put(*pItemSet);
-                                pItemSet = (SfxItemSet*)aList.Prev();
-                            }
+                            std::vector<const SfxItemSet*>::reverse_iterator riter;
+                            for (riter = aSetList.rbegin(); riter != aSetList.rend(); ++riter)
+                                pNewSet->Put(*(*riter));
 
                             // Items which were hard attributes before need to stay
                             if(mpItemSet)
@@ -626,3 +623,5 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

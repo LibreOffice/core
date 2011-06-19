@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -51,7 +52,7 @@ DGColorNameLookUp& DGColorNameLookUp::Instance (void)
     // the shape type handler is instantiated.
     if (mpInstance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (mpInstance == NULL)
         {
             // Create the single instance of the color name look up.
@@ -98,7 +99,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         // Create color table in which to look up the given color.
         uno::Reference<container::XNameContainer> xColorTable (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
             uno::UNO_QUERY);
 
         // Get list of color names in order to iterate over the color table.
@@ -107,13 +108,13 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         {
             // Look the solar mutex here as workarround for missing lock in
             // called function.
-            ::vos::OGuard aGuard (::Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             aNames = xNA->getElementNames();
         }
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
-        // When an excpetion occured then whe have an empty name sequence
+        // When an exception occurred then whe have an empty name sequence
         // and the loop below is not entered.
     }
 
@@ -129,9 +130,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
                 aColor >>= nColor;
                 maColorValueToNameMap[nColor] = aNames[i];
             }
-            catch (uno::RuntimeException e)
+            catch (uno::RuntimeException const&)
             {
-                // Ignore the exception: the color who lead to the excpetion
+                // Ignore the exception: the color who lead to the exception
                 // is not included into the map.
             }
         }
@@ -146,3 +147,5 @@ DGColorNameLookUp::~DGColorNameLookUp (void)
 }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

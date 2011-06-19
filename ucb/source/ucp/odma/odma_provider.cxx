@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <ucbhelper/contentidentifier.hxx>
 #include "odma_provider.hxx"
 #include "odma_content.hxx"
@@ -42,6 +41,8 @@
 #include <rtl/uri.hxx>
 #include <algorithm>
 #include <osl/file.hxx>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace com::sun::star;
 using namespace odma;
@@ -79,11 +80,26 @@ ContentProvider::~ContentProvider()
     }
 }
 // -----------------------------------------------------------------------------
+inline bool is_current_process_window(HWND hwnd)
+{
+    DWORD pid;
+    GetWindowThreadProcessId(hwnd, &pid);
+    return (pid == GetCurrentProcessId());
+}
+
+HWND choose_parent_window()
+{
+    HWND hwnd_parent = GetForegroundWindow();
+    if (!is_current_process_window(hwnd_parent))
+       hwnd_parent = GetDesktopWindow();
+    return hwnd_parent;
+}
+
 ODMHANDLE ContentProvider::getHandle()
 {
     if(!m_aOdmHandle)
     {
-        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,NULL,NULL);
+        ODMSTATUS odm = NODMRegisterApp(&m_aOdmHandle,ODM_API_VERSION,ODMA_ODMA_REGNAME,(DWORD) choose_parent_window( ),NULL);
         switch(odm)
         {
         case ODM_SUCCESS:
@@ -135,8 +151,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                            "com.sun.star.comp.odma.ContentProvider" ),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.odma.ContentProvider" )),
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_PROVIDER_SERVICE_NAME) ) );
 
 //=========================================================================
@@ -175,21 +191,10 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             sCanonicURL.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(ODMA_URL_SCHEME ODMA_URL_SHORT))))
         throw ucb::IllegalIdentifierException();
 
-    // @@@ Further id checks may go here...
-#if 0
-    if ( id-check-failes )
-        throw ucb::IllegalIdentifierException();
-#endif
 
     // @@@ Id normalization may go here...
-#if 0
-    // Normalize URL and create new Id.
-    rtl::OUString aCanonicURL = ( Identifier->getContentIdentifier() );
-    uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
-#else
+
     uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
-#endif
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -434,7 +439,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
         lpszDMSList[strlen(lpszDMSList)+1] = '\0';
 
         ::rtl::OString sTitleText(::rtl::OUStringToOString(_sDocumentName,RTL_TEXTENCODING_ASCII_US));
-        ::rtl::OString sQuery("SELECT ODM_DOCID, ODM_NAME WHERE ODM_TITLETEXT = '");
+        ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME WHERE ODM_TITLETEXT = '");
         sQuery += sTitleText;
         sQuery += "'";
 
@@ -500,9 +505,9 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     ::rtl::Reference<ContentProperties> aReturn;
     ContentsMap::const_iterator aFind = ::std::find_if( m_aContents.begin(),
                                                         m_aContents.end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(_aFunctor,_sName),
-                                                            ::std::select2nd<ContentsMap::value_type>()
+                                                            ::o3tl::select2nd<ContentsMap::value_type>()
                                                         )
                                                     );
     if(aFind != m_aContents.end())
@@ -520,6 +525,12 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
 {
     ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getTitle));
     return getContentProperty(_sTitle,aFunc);
+}
+// -----------------------------------------------------------------------------
+::rtl::Reference<ContentProperties> ContentProvider::getContentPropertyWithDocumentId(const ::rtl::OUString& _sDocumentId) const
+{
+    ContentPropertiesMemberFunctor aFunc(::std::mem_fun(&ContentProperties::getDocumentId));
+    return getContentProperty(_sDocumentId,aFunc);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ContentProvider::openDoc(const ::rtl::Reference<ContentProperties>& _rProp)  throw (uno::Exception)
@@ -597,3 +608,5 @@ sal_Bool ContentProvider::deleteDocument(const ::rtl::Reference<ContentPropertie
     return odm == ODM_SUCCESS;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

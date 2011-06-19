@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,11 @@
 #include "precompiled_framework.hxx"
 
 #include <stdio.h>
+#include <sal/macros.h>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <xml/menudocumenthandler.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -48,16 +43,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/attributelist.hxx>
 
-//_________________________________________________________________________________________________________________
-//  defines
-//_________________________________________________________________________________________________________________
 
 #define XMLNS_MENU                  "http://openoffice.org/2001/menu"
 #define XMLNS_PREFIX                "menu:"
@@ -139,7 +128,7 @@ MenuStyleItem MenuItemStyles[ ] = {
 };
 
 
-sal_Int32 nMenuStyleItemEntries = sizeof( MenuItemStyles ) / sizeof( MenuItemStyles[ 0 ] );
+sal_Int32 nMenuStyleItemEntries = SAL_N_ELEMENTS( MenuItemStyles );
 
 static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
                                    ::rtl::OUString&                       rCommandURL,
@@ -151,28 +140,28 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
-        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
         {
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
         {
             rProp[i].Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
         {
             rProp[i].Value >>= rSubMenu;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
         {
             rProp[i].Value >>= rLabel;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
         {
             rProp[i].Value >>= rType;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        else if ( rProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
         {
             rProp[i].Value >>= rStyle;
         }
@@ -264,10 +253,8 @@ OReadMenuDocumentHandler::OReadMenuDocumentHandler(
 {
 }
 
-// #110897#
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuDocumentHandler::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 
@@ -307,8 +294,6 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
         m_bMenuBarMode = sal_True;
-
-        // #110897# m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( m_xMenuBarContainer, m_xContainerFactory ));
         m_xReader = Reference< XDocumentHandler >( new OReadMenuBarHandler( getServiceFactory(), m_xMenuBarContainer, m_xContainerFactory ));
 
         m_xReader->startDocument();
@@ -347,8 +332,6 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const ::rtl::OUString& aName
 
 // -----------------------------------------------------------------------------
 
-
-// #110897#
 OReadMenuBarHandler::OReadMenuBarHandler(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const Reference< XIndexContainer >& rMenuBarContainer,
@@ -361,10 +344,9 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 {
 }
 
-// #110897#
+
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuBarHandler::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 
@@ -904,8 +886,8 @@ throw ( SAXException, RuntimeException )
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
-                if ( aCommandURL.equalsAscii( ADDDIRECT_CMD ) ||
-                    aCommandURL.equalsAscii( AUTOPILOTMENU_CMD ))
+                if ( aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ADDDIRECT_CMD)) ||
+                    aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(AUTOPILOTMENU_CMD)) )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = sal_False;
@@ -919,7 +901,7 @@ throw ( SAXException, RuntimeException )
                                             m_aAttributeType,
                                             aCommandURL );
 
-                    if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+                    if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL))) )
                         pListMenu->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                                  m_aAttributeType,
                                                  aLabel );
@@ -978,13 +960,13 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
                              aHelpURL );
     }
 
-    if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+    if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
     {
         pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                 m_aAttributeType,
                                 aLabel );
     }
-    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
     {
         rtl::OUString aValue;
         MenuStyleItem* pStyle = MenuItemStyles;
@@ -1020,3 +1002,4 @@ void OWriteMenuDocumentHandler::WriteMenuSeparator()
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

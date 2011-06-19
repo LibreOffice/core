@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vcl/dialog.hxx"
 #include "cppuhelper/implbase3.hxx"
 
@@ -79,7 +80,7 @@
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
 #include "osl/mutex.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "com/sun/star/uno/Sequence.h"
 #include "comphelper/anytostring.hxx"
@@ -187,7 +188,7 @@ UpdateInstallDialog::Thread::Thread(
 void UpdateInstallDialog::Thread::stop() {
     cssu::Reference< css::task::XAbortChannel > abort;
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         abort = m_abort;
         m_stop = true;
     }
@@ -216,7 +217,7 @@ void UpdateInstallDialog::Thread::execute()
 
     {
         //make sure m_dialog is still alive
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (! m_stop)
              m_dialog.updateDone();
     }
@@ -376,7 +377,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         sal_uInt16 count = 0;
         typedef std::vector<UpdateData>::iterator It;
-        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++)
+        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i)
         {
             UpdateData & curData = *i;
 
@@ -388,7 +389,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
             //update the name of the extension which is to be downloaded
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -422,7 +423,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             }
             //update the progress and display download error
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -449,7 +450,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
     }
     catch (cssu::Exception & e)
     {
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -460,7 +461,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 {
     //Update the fix text in the dialog to "Installing extensions..."
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -470,11 +471,11 @@ void UpdateInstallDialog::Thread::installExtensions()
 
     sal_uInt16 count = 0;
     typedef std::vector<UpdateData>::iterator It;
-    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++, count++)
+    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i, ++count)
     {
         //update the name of the extension which is to be installed
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -486,8 +487,6 @@ void UpdateInstallDialog::Thread::installExtensions()
              }
             m_dialog.m_ft_extension_name.SetText(i->aInstalledPackage->getDisplayName());
         }
-//         TimeValue v = {1, 0};
-//       osl::Thread::wait(v);
         bool bError = false;
         bool bLicenseDeclined = false;
         cssu::Reference<css::deployment::XPackage> xExtension;
@@ -498,7 +497,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             cssu::Reference< css::task::XAbortChannel > xAbortChannel(
                 curData.aInstalledPackage->createAbortChannel() );
             {
-                vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 if (m_stop) {
                     return;
                 }
@@ -554,7 +553,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 
         if (bLicenseDeclined)
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -563,7 +562,7 @@ void UpdateInstallDialog::Thread::installExtensions()
         }
         else if (!xExtension.is() || bError)
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -572,7 +571,7 @@ void UpdateInstallDialog::Thread::installExtensions()
         }
     }
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -599,7 +598,7 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
 void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, UpdateData & aUpdateData)
 {
     {
-        ::vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (m_stop) {
             return;
         }
@@ -634,7 +633,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     {
         //the user may have cancelled the dialog because downloading took to long
         {
-            ::vos::OGuard g(Application::GetSolarMutex());
+            SolarMutexGuard g;
             if (m_stop) {
                 return;
             }
@@ -754,3 +753,5 @@ void UpdateCommandEnv::pop() throw (cssu::RuntimeException)
 
 
 } //end namespace dp_gui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

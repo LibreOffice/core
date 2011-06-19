@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -44,7 +47,7 @@ namespace drawinglayer
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date DiscreteUnit accessible using getDiscreteUnit()
          */
-        class DiscreteMetricDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC DiscreteMetricDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used fDiscreteUnit definitions for decomposition. Since this
@@ -83,7 +86,7 @@ namespace drawinglayer
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date Viewport accessible using getViewport()
          */
-        class ViewportDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ViewportDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used Viewport definition for decomposition. Since this
@@ -122,7 +125,7 @@ namespace drawinglayer
             guards the buffered local decomposition and ensures that a create2DDecomposition
             implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
          */
-        class ViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used ViewTransformation definition for decomposition. Since this
@@ -162,7 +165,7 @@ namespace drawinglayer
             implementation may use an up-to-date ViewTransformation accessible using getViewTransformation()
             and an object transformation via getObjectTransformation()
          */
-        class ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC ObjectAndViewTransformationDependentPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /** the last used ViewTransformation and the last ObjectTransformation
@@ -197,3 +200,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

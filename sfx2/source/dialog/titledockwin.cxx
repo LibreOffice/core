@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -246,12 +247,7 @@ namespace sfx2
 
         // Get the closer bitmap and set it as right most button.
         Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
-        Image aImageHC( SfxResId( SFX_IMG_CLOSE_DOC_HC ) );
-        m_aToolbox.InsertItem( 1,
-                GetSettings().GetStyleSettings().GetHighContrastMode()
-            ?   aImageHC
-            :   aImage
-        );
+        m_aToolbox.InsertItem( 1, aImage );
         m_aToolbox.ShowItem( 1 );
     }
 
@@ -358,3 +354,5 @@ namespace sfx2
 //......................................................................................................................
 } // namespace sfx2
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

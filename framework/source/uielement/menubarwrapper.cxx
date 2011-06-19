@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,6 @@ DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
                             ::com::sun::star::container::XNameAccess
                         )
 
-// #110897#
 MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
@@ -154,7 +154,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             MenuBar*        pVCLMenuBar = 0;
             VCLXMenuBar*    pAwtMenuBar = 0;
             {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarMutexGuard;
                 pVCLMenuBar = new MenuBar();
             }
 
@@ -195,7 +195,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 PropertyValue aPropValue;
                 if ( aArguments[n] >>= aPropValue )
                 {
-                    if ( aPropValue.Name.equalsAscii( "MenuOnly" ))
+                    if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MenuOnly")) )
                         aPropValue.Value >>= bMenuOnly;
                 }
             }
@@ -208,7 +208,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // support. This feature is currently used for "Inplace editing"!
                 Reference< XDispatchProvider > xDispatchProvider;
 
-                // #110897#
                 MenuBarManager* pMenuBarManager = new MenuBarManager( m_xServiceFactory,
                                                                       xFrame,
                                                                       xTrans,
@@ -377,3 +376,4 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( Runt
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

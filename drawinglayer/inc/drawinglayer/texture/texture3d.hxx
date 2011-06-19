@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/texture/texture.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -44,7 +47,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxMono : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMono : public GeoTexSvx
         {
         protected:
             basegfx::BColor                             maSingleColor;
@@ -67,7 +70,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxBitmap : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmap : public GeoTexSvx
         {
         protected:
             Bitmap                                      maBitmap;
@@ -95,7 +98,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxBitmapTiled : public GeoTexSvxBitmap
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapTiled : public GeoTexSvxBitmap
         {
         protected:
             // helpers
@@ -131,7 +134,7 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class GeoTexSvxMultiHatch : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxMultiHatch : public GeoTexSvx
         {
         protected:
             basegfx::BColor                 maColor;
@@ -163,3 +166,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

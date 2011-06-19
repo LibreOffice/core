@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <unotools/configitem.hxx>
 
-//#include <vcl/timer.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
@@ -61,7 +62,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XThesaurus;
 } } } }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 class LngSvcMgr :
@@ -106,17 +106,13 @@ class LngSvcMgr :
 
     LngSvcMgrListenerHelper *                           pListenerHelper;
 
-    typedef std::vector< SvcInfo * >    SvcInfoArray;
+    typedef boost::ptr_vector< SvcInfo >    SvcInfoArray;
     SvcInfoArray *                                      pAvailSpellSvcs;
     SvcInfoArray *                                      pAvailGrammarSvcs;
     SvcInfoArray *                                      pAvailHyphSvcs;
     SvcInfoArray *                                      pAvailThesSvcs;
 
     sal_Bool bDisposing;
-    sal_Bool bHasAvailSpellLocales;
-    sal_Bool bHasAvailGrammarLocales;
-    sal_Bool bHasAvailHyphLocales;
-    sal_Bool bHasAvailThesLocales;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
@@ -142,8 +138,6 @@ class LngSvcMgr :
 
     void    SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
                     const SvcInfoArray &rAvailSvcs );
-
-    static void clearSvcInfoArray(SvcInfoArray *pInfo);
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
@@ -195,7 +189,7 @@ inline ::rtl::OUString LngSvcMgr::getImplementationName_Static()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

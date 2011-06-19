@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <xml/eventsdocumenthandler.hxx>
 #include <services.h>
 
-#ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
 #include <xml/saxnamespacefilter.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -47,9 +46,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/streamwrap.hxx>
 #include <tools/debug.hxx>
 
@@ -67,26 +64,20 @@ namespace framework
 {
 
 static Reference< XParser > GetSaxParser(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
     return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
 }
 
-// #110897#
+
 sal_Bool EventsConfiguration::LoadEventsConfig(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rInStream, EventsConfig& aItems )
@@ -127,7 +118,7 @@ sal_Bool EventsConfiguration::LoadEventsConfig(
     }
 }
 
-// #110897#
+
 sal_Bool EventsConfiguration::StoreEventsConfig(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rOutStream, const EventsConfig& aItems )
@@ -163,3 +154,4 @@ sal_Bool EventsConfiguration::StoreEventsConfig(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

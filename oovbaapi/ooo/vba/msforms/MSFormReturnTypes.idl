@@ -26,26 +26,14 @@
  ************************************************************************/
 module msforms
 {
-    struct ReturnBoolean
-    {
-        boolean Value;
-    };
-
     struct ReturnEffect
     {
         //fmDropEffect Value;
         short Value;
     };
 
-    struct ReturnInteger
-    {
-        long Value;
-    };
-
     struct ReturnSingle
     {
         float Value;
     };
-
-
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,14 +52,13 @@
 #include "boost/scoped_array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <comphelper/processfactory.hxx>
+#include <salhelper/linkhelper.hxx>
 
 #ifdef WNT
-//#include "tools/prewin.h"
 #define UNICODE
 #define _UNICODE
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-//#include "tools/postwin.h"
 #endif
 
 using namespace ::com::sun::star;
@@ -79,7 +79,7 @@ namespace dp_misc {
 namespace {
 
 struct UnoRc : public rtl::StaticWithInit<
-    const boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
+    boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( RTL_CONSTASCII_USTRINGPARAM(
                             "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")) );
@@ -91,7 +91,7 @@ struct UnoRc : public rtl::StaticWithInit<
     }
 };
 
-struct OfficePipeId : public rtl::StaticWithInit<const OUString, OfficePipeId> {
+struct OfficePipeId : public rtl::StaticWithInit<OUString, OfficePipeId> {
     const OUString operator () ();
 };
 
@@ -143,6 +143,18 @@ bool existsOfficePipe()
     return pipe.is();
 }
 
+//get modification time
+static bool getModifyTimeTargetFile(const OUString &rFileURL, TimeValue &rTime)
+{
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_ModifyTime);
+
+    if (aResolver.fetchFileStatus(rFileURL) != osl::FileBase::E_None)
+        return false;
+
+    rTime = aResolver.m_aStatus.getModifyTime();
+
+    return true;
+}
 
 //Returns true if the Folder was more recently modified then
 //the lastsynchronized file. That is the repository needs to
@@ -161,7 +173,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     }
     else if (err1 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access extension folder");
+        OSL_FAIL("Cannot access extension folder");
         return true; //sync just in case
     }
 
@@ -175,21 +187,18 @@ bool compareExtensionFolderWithLastSynchronizedFile(
     }
     else if (err2 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access file lastsynchronized");
+        OSL_FAIL("Cannot access file lastsynchronized");
         return true; //sync just in case
     }
 
     //compare the modification time of the extension folder and the last
     //modified file
-    ::osl::FileStatus statFolder(FileStatusMask_ModifyTime);
-    ::osl::FileStatus statFile(FileStatusMask_ModifyTime);
-    if (itemExtFolder.getFileStatus(statFolder) == ::osl::File::E_None)
+    TimeValue timeFolder;
+    if (getModifyTimeTargetFile(folderURL, timeFolder))
     {
-        if (itemFile.getFileStatus(statFile) == ::osl::File::E_None)
+        TimeValue timeFile;
+        if (getModifyTimeTargetFile(fileURL, timeFile))
         {
-            TimeValue timeFolder = statFolder.getModifyTime();
-            TimeValue timeFile = statFile.getModifyTime();
-
             if (timeFile.Seconds < timeFolder.Seconds)
                 bNeedsSync = true;
         }
@@ -204,6 +213,7 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         OSL_ASSERT(0);
         bNeedsSync = true;
     }
+
     return bNeedsSync;
 }
 
@@ -368,7 +378,7 @@ bool office_is_running()
         if (
 #if defined UNIX
             sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
-#elif defined WNT || defined OS2
+#elif defined WNT
             //osl_getExecutableFile should deliver "soffice.bin" on windows
             //even if swriter.exe, scalc.exe etc. was started. This is a bug
             //in osl_getExecutableFile
@@ -390,7 +400,7 @@ bool office_is_running()
     }
     else
     {
-        OSL_ENSURE(0, "NOT osl_Process_E_None ");
+        OSL_FAIL("NOT osl_Process_E_None ");
         //if osl_getExecutable file than we take the risk of creating a pipe
         ret =  existsOfficePipe();
     }
@@ -420,7 +430,7 @@ oslProcess raiseProcess(
     case osl_Process_E_NotFound:
         throw RuntimeException( OUSTR("image not found!"), 0 );
     case osl_Process_E_TimedOut:
-        throw RuntimeException( OUSTR("timout occured!"), 0 );
+        throw RuntimeException( OUSTR("timout occurred!"), 0 );
     case osl_Process_E_NoPermission:
         throw RuntimeException( OUSTR("permission denied!"), 0 );
     case osl_Process_E_Unknown:
@@ -619,6 +629,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
                 OUSTR( "/singletons/com.sun.star.task.OfficeRestartManager") ), UNO_QUERY );
         if (restarter.is())
         {
+            OSL_TRACE( "Request restart for modified extensions manager" );
             restarter->requestRestart(xCmdEnv.is() == sal_True ? xCmdEnv->getInteractionHandler() :
                                       Reference<task::XInteractionHandler>());
         }
@@ -628,3 +639,5 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -61,6 +62,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -383,7 +385,7 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_ENSURE( false, "Content::getParentURL: unhandled case!" );
+            OSL_FAIL( "Content::getParentURL: unhandled case!" );
             break;
         }
         return ::rtl::OUString();
@@ -433,22 +435,22 @@ namespace ucb { namespace ucp { namespace ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "ContentType" ),
+            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "Title" ),
+            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsDocument" ),
+            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 sal_False );
-            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsFolder" ),
+            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -512,11 +514,11 @@ namespace ucb { namespace ucp { namespace ext
         }
 
         default:
-            OSL_ENSURE( false, "Content::getPropertyValues: unhandled case!" );
+            OSL_FAIL( "Content::getPropertyValues: unhandled case!" );
             break;
         }
 
-        OSL_ENSURE( false, "Content::getPropertyValues: unreachable!" );
+        OSL_FAIL( "Content::getPropertyValues: unreachable!" );
         return NULL;
     }
 
@@ -539,7 +541,7 @@ namespace ucb { namespace ucp { namespace ext
         for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString::createFromAscii( "property is read-only." ), *this );
+            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("property is read-only.")), *this );
         }
 
         return aRet;
@@ -619,7 +621,7 @@ namespace ucb { namespace ucp { namespace ext
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
         };
-        return Sequence< Property >( aProperties, sizeof( aProperties ) / sizeof( aProperties[0] ) );
+        return Sequence< Property >( aProperties, SAL_N_ELEMENTS( aProperties ));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -670,3 +672,5 @@ namespace ucb { namespace ucp { namespace ext
 //......................................................................................................................
 } } }   // namespace ucp::ext
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

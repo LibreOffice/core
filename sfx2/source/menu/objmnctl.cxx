@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,8 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
-#include <tools/list.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _SXSTRITEM_HXX //autogen
 #include <svl/stritem.hxx>
-#endif
-#ifndef GCC
-#endif
 
 #include <sfx2/sfxsids.hrc>
 #include "objmnctl.hxx"
@@ -55,8 +49,8 @@ using namespace com::sun::star;
 //--------------------------------------------------------------------
 
 /*
-    Ctor; setzt Select-Handler am Menu und traegt Menu
-    in seinen Parent ein.
+    Constructor; sets the Select-Handler for the Menu and inserts it into
+    its Parent.
  */
 
 SfxObjectVerbsControl::SfxObjectVerbsControl(sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings)
@@ -72,7 +66,7 @@ SfxObjectVerbsControl::SfxObjectVerbsControl(sal_uInt16 nSlotId, Menu &rMenu, Sf
 //--------------------------------------------------------------------
 
 /*
-    Fuellt das Menu mit den aktuellen Verben aus der ViewShell.
+    Make up a menu with the current view of the verbs from ViewShell.
  */
 
 void SfxObjectVerbsControl::FillMenu()
@@ -96,7 +90,7 @@ void SfxObjectVerbsControl::FillMenu()
                 if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                     continue;
 
-                DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
+                DBG_ASSERT(nSlotId <= SID_VERB_END, "Too many Verbs!");
                 if (nSlotId > SID_VERB_END)
                     break;
 
@@ -111,11 +105,10 @@ void SfxObjectVerbsControl::FillMenu()
 //--------------------------------------------------------------------
 
 /*
-    Statusbenachrichtigung;
-    fuellt gfs. das Menu mit den aktuellen Verben aus der ViewShell.
-    der DocumentShell.
-    Ist die Funktionalit"at disabled, wird der entsprechende
-    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
+    Status notification:
+    Fill the menu with the current verbs from the ViewShell of the
+    the DocumentShell. If the functionality is disabled, the corresponding
+    menu entry in Parent menu is disabled, otherwise it is enabled.
  */
 
 void SfxObjectVerbsControl::StateChanged(
@@ -131,8 +124,8 @@ void SfxObjectVerbsControl::StateChanged(
 //--------------------------------------------------------------------
 
 /*
-    Select-Handler des Menus;
-    das selektierte Verb mit ausgef"uhrt,
+    Select-Handler for Menus;
+    run the selected Verb,
  */
 
 IMPL_LINK_INLINE_START( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
@@ -147,7 +140,7 @@ IMPL_LINK_INLINE_END( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 //--------------------------------------------------------------------
 
 /*
-    Dtor; gibt das Menu frei.
+    Destructor; releases the Menu.
  */
 
 SfxObjectVerbsControl::~SfxObjectVerbsControl()
@@ -163,3 +156,4 @@ PopupMenu* SfxObjectVerbsControl::GetPopup() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

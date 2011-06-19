@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,12 +67,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxDATE:
         case SbxDOUBLE:
             nRes = p->nDouble; break;
-        case SbxULONG64:
-            nRes = ImpUINT64ToDouble( p->nULong64 ); break;
-        case SbxLONG64:
-            nRes = ImpINT64ToDouble( p->nLong64 ); break;
         case SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( p->nLong64 ); break;
+            nRes = ImpCurrencyToDouble( p->nInt64 ); break;
         case SbxSALINT64:
             nRes = static_cast< double >(p->nInt64); break;
         case SbxSALUINT64:
@@ -101,13 +98,13 @@ double ImpGetDate( const SbxValues* p )
                 xub_StrLen nCheckPos = 0;
                 short nType = 127;
 
-                // Standard-Vorlagen des Formatters haben nur zweistellige
-                // Jahreszahl. Deshalb eigenes Format registrieren
+                // Default templates of the formatter have only two-digit
+                // date. Therefore register an own format.
 
-                // HACK, da der Numberformatter in PutandConvertEntry die Platzhalter
-                // fuer Monat, Tag, Jahr nicht entsprechend der Systemeinstellung
-                // austauscht. Problem: Print Year(Date) unter engl. BS
-                // siehe auch basic\source\runtime\runtime.cxx
+                // HACK, because the number formatter in PutandConvertEntry replace the wildcard
+                // for month, day, year not according to the configuration.
+                // Problem: Print Year(Date) under Engl. OS
+                // quod vide basic\source\runtime\runtime.cxx
 
                 SvtSysLocale aSysLocale;
                 DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
@@ -173,12 +170,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             nRes = *p->pDouble; break;
-        case SbxBYREF | SbxULONG64:
-            nRes = ImpUINT64ToDouble( *p->pULong64 ); break;
-        case SbxBYREF | SbxLONG64:
-            nRes = ImpINT64ToDouble( *p->pLong64 ); break;
         case SbxBYREF | SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( *p->pLong64 ); break;
+            nRes = ImpCurrencyToDouble( *p->pnInt64 ); break;
         case SbxBYREF | SbxSALINT64:
             nRes = static_cast< double >(*p->pnInt64); break;
         case SbxBYREF | SbxSALUINT64:
@@ -201,7 +194,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
 
-        // ab hier wird getestet
+        // from here will be tested
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -218,11 +211,7 @@ start:
             aTmp.pUShort = &p->nUShort; goto direct;
         case SbxSINGLE:
             aTmp.pSingle = &p->nSingle; goto direct;
-        case SbxULONG64:
-            aTmp.pULong64 = &p->nULong64; goto direct;
-        case SbxLONG64:
         case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
@@ -260,7 +249,7 @@ start:
             SvtSysLocale aSysLocale;
             DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
             String aStr;
-            // ist der ganzzahlige Teil 0, wollen wir kein Jahr!
+            // if the whole-number part is 0, we want no year!
             if( n <= -1.0 || n >= 1.0 )
             {
                 // Time only if != 00:00:00
@@ -397,10 +386,11 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
+            *p->pnInt64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

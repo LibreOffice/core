@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,7 +132,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), css::uno::UNO_QUERY )
+        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), css::uno::UNO_QUERY )
 {
 }
 
@@ -201,7 +202,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     aScriptBuffer.appendAscii("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
     std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
-    for ( p = m_aStatements.begin(); p != m_aStatements.end(); p++ )
+    for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
     ::rtl::OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
@@ -344,7 +345,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     ::rtl::OUStringBuffer aArgumentBuffer(1000);
     ::rtl::OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = ::rtl::OUString::createFromAscii("args");
+    sArrayName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("args"));
     sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
@@ -491,3 +492,5 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

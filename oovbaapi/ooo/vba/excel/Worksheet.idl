@@ -28,16 +28,9 @@
 #ifndef __ooo_vba_excel_Worksheet_idl__
 #define __ooo_vba_excel_Worksheet_idl__
 
-#ifndef __ooo_vba_excel_XWorksheet_idl__
 #include <ooo/vba/excel/XWorksheet.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XComponentContext_idl__
 #include <com/sun/star/uno/XComponentContext.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 module ooo {  module vba { module excel {
 service Worksheet : XWorksheet

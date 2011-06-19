@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,6 +38,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#ifdef WNT
+#include <windows.h>
+#endif
 #include "odma_content.hxx"
 
 using namespace com::sun::star;
@@ -245,3 +244,4 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,10 +49,9 @@ public:
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

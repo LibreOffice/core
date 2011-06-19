@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,15 +50,11 @@
 //      1)  LOGTYPE                                                         use it to define the output of all assertions, errors, exception infos
 //      2)  LOGFILE_ASSERTIONS                                              use it to define the file name to log assertions if LOGTYPE=LOGTYPE_FILE...
 //      3)  LOGFILE_WARNINGS                                                use it to define the file name to log warnings if LOGTYPE=LOGTYPE_FILE...
-//
 //      active for "non product":
-//
 //      4)  LOG_ASSERT( BCONDITION, STEXT )                                 assert some critical errors wich depend from given condition
 //      4a) LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                       same like 4) + additional location of error
 //      5)  LOG_ERROR( SMETHOD, STEXT )                                     show errors without any condition
-//
 //      active for debug only!
-//
 //      6)  LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )        show/log an exception for easier debug
 //      7)  LOG_WARNING( SMETHOD, STEXT )                                   should be used to detect leaks in algorithm, mechanism or operation handling
 //*****************************************************************************************************************
@@ -233,3 +230,5 @@
 #endif  // ENABLE_WARNINGS
 
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

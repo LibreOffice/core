@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,9 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
-#ifndef _XMLOFF_TRANSFOERMERCONTEXT_HXX
 #include "TransformerContext.hxx"
-#endif
 
 using ::rtl::OUString;
 
@@ -111,3 +108,5 @@ void XMLTransformerContext::ExportContent()
 {
     OSL_ENSURE( !this, "context is not persistent" );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

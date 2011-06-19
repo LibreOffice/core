@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,14 @@
 #define _SFX_SFXTYPES_HXX
 
 #include <tools/debug.hxx>
-#ifndef _RC_HXX //autogen
 #include <tools/rc.hxx>
-#endif
-#ifndef _RCID_H //autogen
 #include <tools/rcid.h>
-#endif
-#ifndef _RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
 #include <tools/link.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
 
-#ifndef _VOS_MUTEX_HXX //autogen
-#include <vos/mutex.hxx>
-#endif
+#include <osl/mutex.hxx>
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) ( delete pPtr, pPtr = 0 )
@@ -64,8 +55,8 @@ class Timer;
 
 //------------------------------------------------------------------------
 
-// Macro fuer den Call-Profiler unter WinNT
-// mit S_CAP kann eine Messung gestarted, mit E_CAP wieder gestoppt werden
+// Macro for the Call-Profiler under WinNT
+// with S_CAP a measurement can be started, and stopped with E_CAP
 #if defined( WNT ) && defined( PROFILE )
 
 extern "C" {
@@ -113,7 +104,7 @@ String SfxShellIdent_Impl( const SfxShell *pSh );
 
 //------------------------------------------------------------------------
 
-#if defined(DBG_UTIL) && ( defined(WNT) || defined(OS2) )
+#if defined(DBG_UTIL) && defined(WNT)
 
 class SfxStack
 {
@@ -191,3 +182,4 @@ public:
 #endif // #ifndef _SFX_SFXTYPES_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

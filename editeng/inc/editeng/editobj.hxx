@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ public:
 
     sal_uInt16              Which() const { return nWhich; }
 
-    virtual sal_uInt16      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
+    virtual sal_uInt16      GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
     virtual void        SetUserType( sal_uInt16 n );
 
     virtual sal_uLong       GetObjectSettings() const;
@@ -74,7 +75,7 @@ public:
 
     virtual sal_uInt16      GetScriptType() const;
 
-    virtual sal_uInt16      GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    virtual sal_uInt16      GetVersion() const; // As long as the outliner does not store any record length.
 
     virtual EditTextObject* Clone() const = 0;
 
@@ -124,3 +125,5 @@ public:
 };
 
 #endif  // _EDITOBJ_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

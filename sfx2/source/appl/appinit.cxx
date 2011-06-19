@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,23 +40,17 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/ehdl.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <unotools/configmgr.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vos/security.hxx>
+#include <osl/security.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/historyoptions.hxx>
@@ -118,22 +113,23 @@ void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( 
 
 void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !SFX_APP()->QueryExit_Impl() )
         throw TerminationVetoException();
 }
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
-    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER = ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster");
-    static ::rtl::OUString EVENT_QUIT_APP                 = ::rtl::OUString::createFromAscii("OnCloseApp");
+    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"));
+    static ::rtl::OUString EVENT_QUIT_APP                (RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
 
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    SolarMutexGuard aGuard;
+    utl::ConfigManager::GetConfigManager().StoreConfigItems();
+
     SfxApplication* pApp = SFX_APP();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
@@ -148,14 +144,13 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xGlobalBroadcaster->notifyEvent(aEvent2);
     }
 
-    //pApp->Deinitialize();
     delete pApp;
     Application::Quit();
 }
 
 ::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    static const ::rtl::OUString IMPLNAME = ::rtl::OUString::createFromAscii("com.sun.star.comp.sfx2.SfxTerminateListener");
+    static const ::rtl::OUString IMPLNAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.SfxTerminateListener"));
     return IMPLNAME;
 }
 
@@ -182,7 +177,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    static const ::rtl::OUString SERVICENAME = ::rtl::OUString::createFromAscii("com.sun.star.frame.TerminateListener");
+    static const ::rtl::OUString SERVICENAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TerminateListener"));
     Sequence< ::rtl::OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
@@ -207,7 +202,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !bDetermineFunction )
     {
         bDetermineFunction = true;
@@ -258,20 +253,20 @@ bool SfxApplication::Initialize_Impl()
 
 
 #ifdef DBG_UTIL
-    // Der SimplerErrorHandler dient Debugzwecken. In der Product werden
-    // nichtgehandelte Fehler durch Errorcode 1 an SFX gegeben.
-    new SimpleErrorHandler;
+    // The SimplerErrorHandler is for debugging. In the Product errors
+    // not processed are given to SFX as Errorcode 1.
+    pAppData_Impl->m_pSimpleErrorHdl = new SimpleErrorHandler;
 #endif
+    pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
+        RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
+
     pAppData_Impl->pBasicResMgr = CreateResManager("sb");
     pAppData_Impl->pSvtResMgr = CreateResManager("svt");
-    new SfxErrorHandler( RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1 );
-    new SfxErrorHandler( RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );
-    new SfxErrorHandler( RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
-    // diverse Pointer
-    SfxPickList::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
-
-    /////////////////////////////////////////////////////////////////
+    pAppData_Impl->m_pSoErrorHdl = new SfxErrorHandler(
+        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );
+    pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
+        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
@@ -305,10 +300,12 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         // Set special characters callback on vcl edit control
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

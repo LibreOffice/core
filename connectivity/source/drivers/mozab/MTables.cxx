@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "MCatalog.hxx"
-#ifndef _CONNECTIVITY_MOZAB_BCONNECTION_HXX_
 #include "MConnection.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbexception.hxx"
@@ -102,3 +101,4 @@ m_xMetaData.clear();
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

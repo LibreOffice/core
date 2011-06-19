@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,9 +55,8 @@ class XMLParaContext : public SvXMLImportContext
     bool                        m_bHaveAbout;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
-    // --> OD 2007-07-25 #i73509#
+    // Lost outline numbering in master document (#i73509#)
     sal_Bool                mbOutlineLevelAttrFound;
-    // <--
     sal_Bool                bIgnoreLeadingSpace;
     sal_Bool                bHeading;
     sal_Bool                bIsListHeader;
@@ -129,3 +129,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

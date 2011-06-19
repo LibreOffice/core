@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,23 +30,17 @@
 #define _BASICAPP_HXX
 
 #include <vcl/svapp.hxx>
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 
 class BasicFrame;
 #include <basic/mybasic.hxx>
+#include <vector>
 
-class EditList;
 class AppWin;
 class AppEdit;
 class AppBasEd;
@@ -55,15 +50,15 @@ class StatusLine;
 class BasicPrinter;
 struct TTLogMsg;
 
+typedef ::std::vector< AppWin* > EditList;
+
 class BasicApp : public Application {
     short       nWait;              // Wait-Zaehler
 public:
-//  Help*       pHelp;              // Hilfesystem
     BasicFrame* pFrame;             // Frame Window
-//  MenuBar*    pMainMenu;          // Hauptmenue
     Accelerator*    pMainAccel;     // Acceleratoren
 
-    void  Main( );
+    int Main( );
 
     void  LoadIniFile();
     void  SetFocus();
@@ -95,19 +90,18 @@ class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 using SystemWindow::Notify;
 using Window::Command;
 
-virtual sal_Bool Close();
+    virtual sal_Bool Close();
     sal_Bool CloseAll();          // Close all windows
     sal_Bool CompileAll();        // Compile all texts
     AutoTimer aLineNum;       // Show the line numbers
-virtual void Resize();
-virtual void Move();
-virtual void GetFocus();
+    virtual void Resize();
+    virtual void Move();
+    virtual void GetFocus();
     void LoadLibrary();
     void SaveLibrary();
     sal_Bool bIsAutoRun;
     DisplayHidDlg* pDisplayHidDlg;
 
-//  BreakPoint *pRunToCursorBP;
 
     SbxVariable *pEditVar;
 
@@ -195,3 +189,5 @@ public:
 extern BasicApp aBasicApp;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svxitems.src,v $
- * $Revision: 1.83.212.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,7 +28,7 @@
 #include <editeng/editrids.hrc>
  // pragma -------------------------------------------------------------------
 
- // Value-Strings ------------------------------------------------------------
+ // Value strings ------------------------------------------------------------
 String RID_SVXITEMS_TRUE
 {
     Text [ en-US ] = "True" ;
@@ -544,69 +541,61 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
 {
     Text [ en-US ] = "Default" ;
 };
-String RID_SINGLE_LINE0
+String RID_SOLID
 {
-    Text [ en-US ] = "Single, fine lines" ;
+    Text [ en-US ] = "Single, solid" ;
 };
-String RID_SINGLE_LINE1
+String RID_DOTTED
 {
-    Text [ en-US ] = "Single, thin" ;
+    Text [ en-US ] = "Single, dotted" ;
 };
-String RID_SINGLE_LINE2
+String RID_DASHED
 {
-    Text [ en-US ] = "Single, thick" ;
+    Text [ en-US ] = "Single, dashed" ;
 };
-String RID_SINGLE_LINE3
+String RID_DOUBLE
 {
-    Text [ en-US ] = "Single, very thick" ;
+    Text [ en-US ] = "Double" ;
 };
-String RID_SINGLE_LINE4
+String RID_THINTHICK_SMALLGAP
 {
-    Text [ en-US ] = "Single, bold" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: small";
 };
-String RID_DOUBLE_LINE0
+String RID_THINTHICK_MEDIUMGAP
 {
-    Text [ en-US ] = "Double, fine lines, spacing: small" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: medium";
 };
-String RID_DOUBLE_LINE1
+String RID_THINTHICK_LARGEGAP
 {
-    Text [ en-US ] = "Double, fine line, spacing: large" ;
+    Text [ en-US ] = "Double, inside: fine, outside: thick, spacing: large";
 };
-String RID_DOUBLE_LINE2
+String RID_THICKTHIN_SMALLGAP
 {
-    Text [ en-US ] = "Double, thin, spacing: small" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: small";
 };
-String RID_DOUBLE_LINE3
+String RID_THICKTHIN_MEDIUMGAP
 {
-    Text [ en-US ] = "Double, thick, spacing: large" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: medium";
 };
-String RID_DOUBLE_LINE4
+String RID_THICKTHIN_LARGEGAP
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
+    Text [ en-US ] = "Double, inside: thick, outside: fine, spacing: large";
 };
-String RID_DOUBLE_LINE5
+String RID_EMBOSSED
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
+    Text [ en-US ] = "3D embossed" ;
 };
-String RID_DOUBLE_LINE6
+String RID_ENGRAVED
 {
-    Text [ en-US ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
+    Text [ en-US ] = "3D engraved" ;
 };
-String RID_DOUBLE_LINE7
+String RID_INSET
 {
-    Text [ en-US ] = "Double, inside: thin, outside: thick, spacing: large" ;
+    Text [ en-US ] = "Inset" ;
 };
-String RID_DOUBLE_LINE8
+String RID_OUTSET
 {
-    Text [ en-US ] = "Double, inside: thick, outside: thin, spacing: small" ;
-};
-String RID_DOUBLE_LINE9
-{
-    Text [ en-US ] = "Double, inside: thick, outside: very thick, spacing: large" ;
-};
-String RID_DOUBLE_LINE10
-{
-    Text [ en-US ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
+    Text [ en-US ] = "Outset" ;
 };
 String RID_SVXITEMS_METRIC_MM
 {
@@ -1022,6 +1011,57 @@ String RID_SVXITEMS_CHARHIDDEN_FALSE
 String RID_SVXITEMS_CHARHIDDEN_TRUE
 {
     Text [ en-US ] = "Hidden";
+};
+ // enum SvxCellHorJustify ----------------------------------------------------
+String RID_SVXITEMS_HORJUST_STANDARD
+{
+    Text [ en-US ] = "Horizontal alignment default" ;
+};
+String RID_SVXITEMS_HORJUST_LEFT
+{
+    Text [ en-US ] = "Align left" ;
+};
+String RID_SVXITEMS_HORJUST_CENTER
+{
+    Text [ en-US ] = "Centered horizontally" ;
+};
+String RID_SVXITEMS_HORJUST_RIGHT
+{
+    Text [ en-US ] = "Align right" ;
+};
+String RID_SVXITEMS_HORJUST_BLOCK
+{
+    Text [ en-US ] = "Justify" ;
+};
+String RID_SVXITEMS_HORJUST_REPEAT
+{
+    Text [ en-US ] = "Repeat alignment" ;
+};
+ // enum SvxCellVerJustify ----------------------------------------------------
+String RID_SVXITEMS_VERJUST_STANDARD
+{
+    Text [ en-US ] = "Vertical alignment default" ;
+};
+String RID_SVXITEMS_VERJUST_TOP
+{
+    Text [ en-US ] = "Align to top" ;
+};
+String RID_SVXITEMS_VERJUST_CENTER
+{
+    Text [ en-US ] = "Centered vertically" ;
+};
+String RID_SVXITEMS_VERJUST_BOTTOM
+{
+    Text [ en-US ] = "Align to bottom" ;
+};
+ // enum SvxCellJustifyMethod ----------------------------------------------------
+String RID_SVXITEMS_JUSTMETHOD_AUTO
+{
+    Text [ en-US ] = "Automatic" ;
+};
+String RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE
+{
+    Text [ en-US ] = "Distributed" ;
 };
 // ********************************************************************** EOF
 

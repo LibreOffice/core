@@ -31,9 +31,8 @@ PRJNAME=connectivity
 TARGET=ado
 VISIBILITY_HIDDEN=TRUE
 
-#	ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
+
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -71,13 +70,13 @@ EXCEPTIONSFILES= \
         $(SLO)$/AStatement.obj							\
         $(SLO)$/APreparedStatement.obj					\
         $(SLO)$/AResultSetMetaData.obj					\
-        $(SLO)$/ADriver.obj								\
-        $(SLO)$/Aservices.obj
+        $(SLO)$/ADriver.obj                             \
+        $(SLO)$/Aservices.obj                           \
+        $(SLO)$/Awrapado.obj                            \
+        $(SLO)$/adoimp.obj
 
 SLOFILES=\
-        $(EXCEPTIONSFILES)								\
-        $(SLO)$/Awrapado.obj							\
-        $(SLO)$/adoimp.obj
+        $(EXCEPTIONSFILES)
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(ADO_TARGET)$(DLLPOSTFIX)
@@ -85,8 +84,8 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
+    $(SALHELPERLIB)				\
     $(OLE32LIB)					\
     $(OLEAUT32LIB)				\
     $(UUIDLIB)					\
@@ -97,7 +96,6 @@ SHL1STDLIBS=\
 SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
-#SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def

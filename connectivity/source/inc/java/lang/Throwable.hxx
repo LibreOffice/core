@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,12 +38,12 @@ namespace connectivity
     class java_lang_Throwable : public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+    // static Data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_lang_Throwable();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Throwable( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         ::rtl::OUString getMessage() const;
         ::rtl::OUString getLocalizedMessage() const;
@@ -52,3 +53,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_JAVA_LANG_THROWABLE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

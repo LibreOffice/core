@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,8 @@ class SvDDEObject : public SvLinkSource
     DdeRequest* pRequest;
     ::com::sun::star::uno::Any * pGetData;
 
-    sal_uInt8 bWaitForData : 1;                     // wird auf Daten gewartet?
-    sal_uInt8 nError        : 7;                    // Error Code fuer den Dialog
+    sal_uInt8 bWaitForData : 1;  // waiting for data?
+    sal_uInt8 nError       : 7;  // Error code for dialogue
 
 
     sal_Bool ImplHasOtherFormat( DdeTransaction& );
@@ -76,3 +77,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

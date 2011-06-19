@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,6 +69,17 @@ sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException)
     return msforms::fmSpecialEffect::fmSpecialEffectEtched;
 }
 
+::sal_Int32 SAL_CALL ScVbaFrame::getForeColor() throw (::com::sun::star::uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL ScVbaFrame::setForeColor( ::sal_Int32 /*_forecolor*/ ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return;
+}
+
+
 void SAL_CALL ScVbaFrame::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
 {
 }
@@ -104,3 +116,4 @@ uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex ) throw (uno::Run
 // XHelperInterface
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaFrame, "ooo.vba.msforms.Frame" )
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

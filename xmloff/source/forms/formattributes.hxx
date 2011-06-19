@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/types.h>
-#include <vos/refernce.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <comphelper/stl_types.hxx>
 
 class SvXMLExport;
@@ -123,6 +124,7 @@ namespace xmloff
     #define SCA_MAX_VALUE               0x00000002
     #define SCA_MIN_VALUE               0x00000004
     #define SCA_VALIDATION              0x00000008
+    #define SCA_GROUP_NAME              0x00000010
     #define SCA_MULTI_LINE              0x00000020
     #define SCA_AUTOMATIC_COMPLETION    0x00000080
     #define SCA_MULTIPLE                0x00000100
@@ -361,3 +363,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMATTRIBUTES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

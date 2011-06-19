@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <sal/macros.h>
 #include "svx/ParseContext.hxx"
 #include "stringlistresource.hxx"
 #include "svx/fmresids.hrc"
@@ -37,7 +39,7 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace svxform;
 using namespace ::connectivity;
@@ -49,7 +51,7 @@ DBG_NAME(OSystemParseContext)
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ::svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
     aKeywords.get( m_aLocalizedKeywords );
@@ -71,7 +73,7 @@ OSystemParseContext::~OSystemParseContext()
 ::rtl::OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     String aMsg;
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     switch (_eCode)
     {
         case ERROR_GENERAL:                 aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
@@ -122,7 +124,7 @@ OSystemParseContext::~OSystemParseContext()
         case KEY_FUSION:    nIndex = 22; break;
         case KEY_INTERSECTION: nIndex = 23; break;
         case KEY_NONE:
-            DBG_ERROR( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
+            OSL_FAIL( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
             break;
     }
 
@@ -170,7 +172,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const ::
         KEY_COLLECT, KEY_FUSION, KEY_INTERSECTION
     };
 
-    sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
+    sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
         ::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
@@ -247,3 +249,4 @@ const OSystemParseContext* OParseContextClient::getParseContext() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

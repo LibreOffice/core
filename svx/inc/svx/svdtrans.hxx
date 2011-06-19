@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
@@ -68,7 +67,7 @@ inline void MovePoly(PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 void MoveXPoly(XPolyPolygon& rPoly, const Size& S);
 
-SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, FASTBOOL bNoJustify=sal_False);
+SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bNoJustify = false);
 inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
 void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -83,43 +82,43 @@ void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs);
 
 // MirrorRect macht nur Sinn bei Spiegelachsen
 // mit einem durch 45 Degree teilbaren Winkel!
-void MirrorRect(Rectangle& rRect, const Point& rRef1, const Point& rRef2, FASTBOOL bNoJustify); // ni.
+void MirrorRect(Rectangle& rRect, const Point& rRef1, const Point& rRef2, bool bNoJustify); // ni.
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2);
 void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2);
 
-inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
-void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, FASTBOOL bVShear=sal_False);
+inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear = false);
+SVX_DLLPUBLIC void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
+void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
+void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
+void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear = false);
 
 // rPnt.X bzw rPnt.Y wird auf rCenter.X bzw. rCenter.Y gesetzt!
 // anschliessend muss rPnt nur noch um rCenter gedreht werden.
 // Der Rueckgabewinkel ist ausnahmsweise in Rad.
-inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, FASTBOOL bVertical);
+inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, bool bVertical);
 // Die folgenden Methoden behandeln einen Punkt eines XPolygons, wobei die
 // benachbarten Kontrollpunkte des eigentlichen Punktes ggf. in pC1/pC2
 // uebergeben werden. Ueber rSin/rCos wird gleichzeitig sin(nWink) und cos(nWink)
 // zurueckgegeben.
 // Der Rueckgabewinkel ist hier ebenfalls in Rad.
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                         const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert);
+                         const Point& rRad, double& rSin, double& rCos, bool bVert);
 double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                        const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert);
+                        const Point& rRad, double& rSin, double& rCos, bool bVert);
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
-                          const Point& rRad, double& rSin, double& rCos, FASTBOOL bVert,
+                          const Point& rRad, double& rSin, double& rCos, bool bVert,
                           const Rectangle rRefRect);
 
-void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect);
+void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
+void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect);
 
-void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert);
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, FASTBOOL bVert, const Rectangle rRefRect);
+void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
+void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect);
 
 /**************************************************************************************************/
 /*  Inline                                                                                        */
@@ -141,7 +140,7 @@ inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
     rPnt.Y()=Round(rRef.Y()+dy*cs-dx*sn);
 }
 
-inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShear)
+inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 {
     if (!bVShear) { // Horizontal
         if (rPnt.Y()!=rRef.Y()) { // sonst nicht noetig
@@ -154,7 +153,7 @@ inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, FASTBOOL bVShe
     }
 }
 
-inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, FASTBOOL bVertical)
+inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, bool bVertical)
 {
     double nWink;
     if (bVertical) {
@@ -237,8 +236,8 @@ public:
 Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
 void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
 
-SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
-SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
+SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
+SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 
 // Multiplikation und anschliessende Division.
 // Rechnung und Zwischenergebnis sind BigInt.
@@ -271,20 +270,20 @@ FrPair GetMapFactor(MapUnit eS, FieldUnit eD);
 FrPair GetMapFactor(FieldUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
-inline FASTBOOL IsMetric(MapUnit eU) {
+inline bool IsMetric(MapUnit eU) {
     return (eU==MAP_100TH_MM || eU==MAP_10TH_MM || eU==MAP_MM || eU==MAP_CM);
 }
 
-inline FASTBOOL IsInch(MapUnit eU) {
+inline bool IsInch(MapUnit eU) {
     return (eU==MAP_1000TH_INCH || eU==MAP_100TH_INCH || eU==MAP_10TH_INCH || eU==MAP_INCH ||
             eU==MAP_POINT       || eU==MAP_TWIP);
 }
 
-inline FASTBOOL IsMetric(FieldUnit eU) {
+inline bool IsMetric(FieldUnit eU) {
     return (eU==FUNIT_MM || eU==FUNIT_CM || eU==FUNIT_M || eU==FUNIT_KM || eU==FUNIT_100TH_MM);
 }
 
-inline FASTBOOL IsInch(FieldUnit eU) {
+inline bool IsInch(FieldUnit eU) {
     return (eU==FUNIT_TWIP || eU==FUNIT_POINT || eU==FUNIT_PICA ||
             eU==FUNIT_INCH || eU==FUNIT_FOOT || eU==FUNIT_MILE);
 }
@@ -294,9 +293,9 @@ class SVX_DLLPUBLIC SdrFormatter {
     long      nMul_;
     long      nDiv_;
     short     nKomma_;
-    FASTBOOL  bSrcFU;
-    FASTBOOL  bDstFU;
-    FASTBOOL  bDirty;
+    bool      bSrcFU;
+    bool      bDstFU;
+    bool      bDirty;
     MapUnit   eSrcMU;
     MapUnit   eDstMU;
     FieldUnit eSrcFU;
@@ -324,3 +323,4 @@ public:
 
 #endif //_SVDTRANS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

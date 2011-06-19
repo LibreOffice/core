@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <boost/bind.hpp>
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "cell.hxx"
 #include "cellcursor.hxx"
@@ -49,11 +50,8 @@
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 
-//#define PLEASE_DEBUG_THE_TABLES 1
-
 using ::rtl::OUString;
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::lang;
@@ -315,7 +313,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return createCursorByRange( Reference< XCellRange >( this ) );
 }
 
@@ -323,7 +321,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& Range ) throw (IllegalArgumentException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     ICellRange* pRange = dynamic_cast< ICellRange* >( Range.get() );
     if( (pRange == 0) || (pRange->getTable().get() != this) )
@@ -337,7 +335,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
 
 sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return getRowCountImpl();
 }
 
@@ -345,7 +343,7 @@ sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 
 sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return getColumnCountImpl();
 }
 
@@ -355,7 +353,7 @@ sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 
 void TableModel::dispose() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     TableModelBase::dispose();
 }
 
@@ -379,7 +377,7 @@ void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >
 
 sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     return mbModified;
 }
 
@@ -388,7 +386,7 @@ sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException)
 {
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        ::SolarMutexGuard aGuard;
         mbModified = bModified;
     }
     if( bModified )
@@ -417,7 +415,7 @@ void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener
 
 Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !mxTableColumns.is() )
         mxTableColumns.set( new TableColumns( this ) );
@@ -428,7 +426,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeExcep
 
 Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( !mxTableRows.is() )
         mxTableRows.set( new TableRows( this ) );
@@ -441,7 +439,7 @@ Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 
 Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw ( IndexOutOfBoundsException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     CellRef xCell( getCell( nColumn, nRow ) );
     if( xCell.is() )
@@ -454,7 +452,7 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
 
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (nLeft >= 0) && (nTop >= 0) && (nRight >= nLeft) && (nBottom >= nTop) && (nRight < getColumnCountImpl()) && (nBottom < getRowCountImpl() ) )
     {
@@ -592,14 +590,14 @@ void TableModel::disposing()
 
 void TableModel::lockBroadcasts() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     ++mnNotifyLock;
 }
 // -----------------------------------------------------------------------------
 
 void TableModel::unlockBroadcasts() throw (RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
     --mnNotifyLock;
     if( mnNotifyLock <= 0 )
     {
@@ -610,10 +608,6 @@ void TableModel::unlockBroadcasts() throw (RuntimeException)
 }
 
 // -----------------------------------------------------------------------------
-#ifdef PLEASE_DEBUG_THE_TABLES
-#include <stdio.h>
-#endif
-
 void TableModel::notifyModification()
 {
     ::osl::MutexGuard guard( m_aMutex );
@@ -633,50 +627,6 @@ void TableModel::notifyModification()
     {
         mbNotifyPending = true;
     }
-
-#ifdef PLEASE_DEBUG_THE_TABLES
-        FILE* file = fopen( "c:\\table.xml","w" );
-
-        const sal_Int32 nColCount = getColumnCountImpl();
-        const sal_Int32 nRowCount = getRowCountImpl();
-
-        fprintf( file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r" );
-        fprintf( file, "<table columns=\"%ld\" rows=\"%ld\" updated=\"%s\">\n\r", nColCount, nRowCount, mbNotifyPending ? "false" : "true");
-
-        for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
-        {
-            fprintf( file, "<column this=\"%lx\"/>\n\r", maColumns[nCol].get() );
-        }
-
-        // first check merged cells before and inside the removed rows
-        for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
-        {
-            fprintf( file, "<row this=\"%lx\">\n\r", maRows[nRow].get() );
-            for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
-            {
-                CellRef xCell( getCell( nCol, nRow ) );
-                fprintf( file, "<cell this=\"%lx\"", xCell.get() );
-
-                sal_Int32 nRowSpan = xCell->getRowSpan();
-                sal_Int32 nColSpan = xCell->getColumnSpan();
-                sal_Bool bMerged = xCell->isMerged();
-
-                if( nColSpan != 1 )
-                    fprintf( file, " column-span=\"%ld\"", nColSpan );
-                if( nRowSpan != 1 )
-                    fprintf( file, " row-span=\"%ld\"", nRowSpan );
-
-                if( bMerged )
-                    fprintf( file, " merged=\"true\"" );
-
-                fprintf( file, "/>" );
-            }
-            fprintf( file, "\n\r</row>\n\r" );
-        }
-
-        fprintf( file, "</table>\n\r" );
-        fclose( file );
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -693,26 +643,6 @@ CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
         return xRet;
     }
 }
-
-// -----------------------------------------------------------------------------
-/*
-bool TableModel::getCellPos( const CellRef& xCell, ::sal_Int32& rnCol, ::sal_Int32& rnRow ) const
-{
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-    for( rnRow = 0; rnRow < nRowCount; rnRow++ )
-    {
-        for( rnCol = 0; rnCol < nColCount; rnCol++ )
-        {
-            if( maRows[rnRow]->maCells[rnCol] == xCell )
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/
 
 // -----------------------------------------------------------------------------
 
@@ -798,7 +728,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertColumns(), exception caught!");
         }
         updateColumns();
         setModified(sal_True);
@@ -907,7 +837,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeColumns(), exception caught!");
         }
 
         updateColumns();
@@ -965,7 +895,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertRows(), exception caught!");
         }
         if( bUndo )
             pModel->EndUndo();
@@ -1066,7 +996,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeRows(), exception caught!");
         }
 
         updateRows();
@@ -1132,7 +1062,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeColumns( nCol, 1 );
@@ -1169,7 +1099,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeRows( nRow, 1 );
@@ -1196,7 +1126,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
     {
-        DBG_ERROR("TableModel::merge(), merge beyound the table!");
+        OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
 
     // merge first cell
@@ -1256,3 +1186,5 @@ void TableModel::updateColumns()
 // -----------------------------------------------------------------------------
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

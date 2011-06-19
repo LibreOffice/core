@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,13 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
-#ifndef OS2
 #include <windows.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include "internal/dbgmacros.hxx"
 
 extern long g_DllRefCnt;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

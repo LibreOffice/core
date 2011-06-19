@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,8 @@
 
 #include "properties.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -54,16 +57,13 @@
 #include <unotools/configmgr.hxx>
 #include <tools/string.hxx>
 
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <comphelper/sequence.hxx>
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -74,7 +74,6 @@ using namespace ::com::sun::star::frame;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 struct ModuleToCommands
 {
@@ -173,7 +172,7 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
                                                 std::vector< ::rtl::OUString >& aImageMirrorVector);
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  CmdToInfoMap,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > CommandToInfoCache;
@@ -196,9 +195,10 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
-        //Reference< XMultiServiceFactory > m_xConfigProviderPopups;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         Reference< XNameAccess >          m_xConfigAccessPopups;
+        Reference< XContainerListener >   m_xConfigAccessListener;
         Sequence< rtl::OUString >         m_aCommandImageList;
         Sequence< rtl::OUString >         m_aCommandRotateImageList;
         Sequence< rtl::OUString >         m_aCommandMirrorImageList;
@@ -236,7 +236,6 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
 
     m_aConfigPopupAccess += aModuleName;
     m_aConfigPopupAccess += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURATION_POP_ELEMENT_ACCESS ));
-    //m_xConfigProviderPopups = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
 
     rtl::OUString aTmp;
     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= aTmp;
@@ -249,10 +248,10 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
     xContainer = Reference< XContainer >( m_xConfigAccessPopups, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
 
@@ -402,7 +401,7 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
             {
             }
         }
-    } // if ( m_xConfigAccessPopups.is() )
+    }
 }
 sal_Bool ConfigurationAccess_UICommand::fillCache()
 {
@@ -566,7 +565,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         aPropValue.Value <<= m_aConfigPopupAccess;
@@ -577,7 +579,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccessPopups, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigAccessListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigAccessListener);
+            }
         }
 
         return sal_True;
@@ -651,7 +656,7 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericUICommand( ::rtl::OUString::createFromAscii( "GenericCommands" ));
+    rtl::OUString aGenericUICommand( RTL_CONSTASCII_USTRINGPARAM("GenericCommands") );
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, xServiceManager );
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");
@@ -800,3 +805,4 @@ throw (::com::sun::star::uno::RuntimeException)
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

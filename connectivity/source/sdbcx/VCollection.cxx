@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,7 +107,6 @@ namespace
                 // during the swap. If we would not do this, the UStringMixLess instance which is used would be
                 // default constructed (instead of being constructed from the same instance in m_aNameMap), and
                 // it's case-sensitive flag would have an unpredictable value.
-                // 2002-01-09 - #106589# - fs@openoffice.org
         }
         // -----------------------------------------------------------------------------
         virtual void clear()
@@ -601,3 +601,5 @@ void OCollection::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString /*_sEleme
 {
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

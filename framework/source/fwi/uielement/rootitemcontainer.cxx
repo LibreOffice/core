@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,25 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+#include <comphelper/servicehelper.hxx>
 #include <uielement/rootitemcontainer.hxx>
-
-#ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HHX_
 #include <uielement/itemcontainer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HHX_
 #include <uielement/constitemcontainer.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -148,7 +138,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                     Reference< XIndexAccess > xIndexAccess;
                     for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                     {
-                        if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                        if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
                         {
                             aPropSeq[j].Value >>= xIndexAccess;
                             nContainerIndex = j;
@@ -185,7 +175,7 @@ void RootItemContainer::copyItemContainer( const std::vector< Sequence< Property
         Reference< XIndexAccess > xIndexAccess;
         for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
         {
-            if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+            if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
             {
                 aPropSeq[j].Value >>= xIndexAccess;
                 nContainerIndex = j;
@@ -225,20 +215,14 @@ sal_Int64 RootItemContainer::getSomething( const ::com::sun::star::uno::Sequence
     return 0;
 }
 
+namespace
+{
+    class theRootItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theRootItemContainerUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 >& RootItemContainer::GetUnoTunnelId() throw()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theRootItemContainerUnoTunnelId::get().getSeq();
 }
 
 RootItemContainer* RootItemContainer::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw()
@@ -443,24 +427,25 @@ throw (::com::sun::star::uno::RuntimeException)
 
 const com::sun::star::uno::Sequence< com::sun::star::beans::Property > RootItemContainer::impl_getStaticPropertyDescriptor()
 {
-    // Create a new static property array to initialize sequence!
+    // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
     // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    static const com::sun::star::beans::Property pProperties[] =
+    const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
                                          ::getCppuType((const rtl::OUString*)NULL),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT )
     };
     // Use it to initialize sequence!
-    static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
-    // Return static "PropertyDescriptor"
+    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
+    // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

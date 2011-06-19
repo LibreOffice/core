@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ java_math_BigDecimal::~java_math_BigDecimal()
 
 jclass java_math_BigDecimal::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/math/BigDecimal");
     return theClass;
@@ -53,8 +54,8 @@ java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // Java-Call for the Constructor
+    // initialize temporary Variable
     static const char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -66,7 +67,7 @@ java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     ThrowSQLException( t.pEnv, NULL );
-    // und aufraeumen
+    // and cleanup
 }
 
 java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Object( NULL, (jobject)NULL )
@@ -74,8 +75,8 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // Java-Call for the Constructor
+    // initialize temporary Variable
     static const char * cSignature = "(D)V";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -84,6 +85,7 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     ThrowSQLException( t.pEnv, NULL );
-    // und aufraeumen
+    // and cleanup
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

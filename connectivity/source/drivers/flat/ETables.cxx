@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,10 +54,11 @@ namespace starutil      = ::com::sun::star::util;
 sdbcx::ObjectType OFlatTables::createObject(const ::rtl::OUString& _rName)
 {
     OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString::createFromAscii("TABLE"));
+                                        _rName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")));
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

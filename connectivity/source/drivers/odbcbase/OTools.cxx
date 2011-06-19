@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,6 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLSMALLINT fSqlType;
     SQLSMALLINT fCType;
     SQLLEN  nMaxLen = 0;
-    //  void*&   pData   = pDataBuffer;
     SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
     SQLULEN nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
@@ -99,9 +99,6 @@ void OTools::bindParameter( OConnection* _pConnection,
 
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
-
-    // 20.09.2001 OJ: Problems with mysql. mysql returns only CHAR as parameter type
-    //  nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
                   (SQLUSMALLINT)nPos,
@@ -140,7 +137,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 _nColumnSize = sStr.getLength();
                 *((rtl::OUString*)_pData) = sStr;
 
-                // Zeiger auf Char*
+                // Pointer on Char*
                 _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
             }
             else
@@ -166,7 +163,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 _nColumnSize = aString.getLength();
                 *pLen = _nColumnSize;
                 *((rtl::OUString*)_pData) = aString;
-                // Zeiger auf Char*
+                // Pointer on Char*
                 _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
             }
             else
@@ -293,23 +290,13 @@ void OTools::bindValue( OConnection* _pConnection,
             {
                 case SQL_CHAR:
                 case SQL_VARCHAR:
-                //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  _nMaxLen = rCol.GetPrecision();
-//                  *pLen = SQL_NTS;
-//                  *((rtl::OUString*)pData) = (rtl::OUString)_aValue;
-//
-//                  // Zeiger auf Char*
-//                  pData = (void*)((rtl::OUString*)pData)->getStr();
-//              }
-//              else
                 {
                     ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                     *pLen = SQL_NTS;
                     *((::rtl::OString*)_pData) = aString;
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
 
-                    // Zeiger auf Char*
+                    // Pointer on Char*
                     _pData = (void*)aString.getStr();
                 }   break;
                 case SQL_BIGINT:
@@ -318,21 +305,12 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
-                //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  rtl::OUString aString(rtl::OUString(SdbTools::ToString(ODbTypeConversion::toDouble(*pVariable),rCol.GetScale())));
-//                  *pLen = _nMaxLen;
-//                  *((rtl::OUString*)_pData) = aString;
-//                  // Zeiger auf Char*
-//                  _pData = (void*)((rtl::OUString*)_pData)->getStr();
-//              }
-//              else
                 {
                     ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
                     *((::rtl::OString*)_pData) = aString;
-                    // Zeiger auf Char*
+                    // Pointer on Char*
                     _pData = (void*)((::rtl::OString*)_pData)->getStr();
                 }   break;
                 case SQL_BIT:
@@ -360,14 +338,13 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_BINARY:
                 case SQL_VARBINARY:
-                                                //      if (_pValue == ::getCppuType((const ::com::sun::star::uno::Sequence< sal_Int8 > *)0))
                     {
                         _pData = (void*)((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getConstArray();
                         *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
-                    _pData = (void*)(columnIndex);
+                    _pData = (void*)(sal_IntPtr)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -375,7 +352,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_LONGVARCHAR:
                 {
-                    _pData = (void*)(columnIndex);
+                    _pData = (void*)(sal_IntPtr)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((::rtl::OUString*)_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -432,13 +409,12 @@ void OTools::ThrowException(OConnection* _pConnection,
         case SQL_ERROR:             break;
 
 
-        case SQL_INVALID_HANDLE:    OSL_ENSURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
+        case SQL_INVALID_HANDLE:    OSL_FAIL("SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
                                     throw SQLException();
     }
 
-
-    // Zusaetliche Informationen zum letzten ODBC-Funktionsaufruf vorhanden.
-    // SQLError liefert diese Informationen.
+    // Additional Information on the latest ODBC-functioncall available
+    // SQLError provides this Information.
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
@@ -447,12 +423,12 @@ void OTools::ThrowException(OConnection* _pConnection,
     szErrorMessage[0] = '\0';
     SQLSMALLINT pcbErrorMsg = 0;
 
-    // Informationen zur letzten Operation:
-    // wenn hstmt != SQL_NULL_HSTMT ist (Benutzung von SetStatus in SdbCursor, SdbTable, ...),
-    // dann wird der Status des letzten Statements erfragt, sonst der Status des letzten
-    // Statements zu dieser Verbindung [was in unserem Fall wahrscheinlich gleichbedeutend ist,
-    // aber das Reference Manual drueckt sich da nicht so klar aus ...].
-    // Entsprechend bei hdbc.
+    // Information for latest operation:
+    // when hstmt != SQL_NULL_HSTMT is (Used from SetStatus in SdbCursor, SdbTable, ...),
+    // then the status of the latest statments will be fetched, without the Status of the last
+    // Statments of this connection [what in this case will probably be the same, but the Reference
+    // Manual isn't totally clear in this...].
+    // corresponding for hdbc.
     SQLRETURN n = (*(T3SQLGetDiagRec)_pConnection->getOdbcFunction(ODBC3SQLGetDiagRec))(_nHandleType,_pContext,1,
                          szSqlState,
                          &pfNativeError,
@@ -461,7 +437,7 @@ void OTools::ThrowException(OConnection* _pConnection,
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
-    // Zum Return Code von SQLError siehe ODBC 2.0 Programmer's Reference Seite 287ff
+    // For the Return Code of SQLError see ODBC 2.0 Programmer's Reference Page 287ff
     throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
                                     _xInterface,
                                     ::rtl::OUString((char *)szSqlState,5,_nTextEncoding),
@@ -480,8 +456,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBytesValue" );
     char aCharArray[2048];
-    // Erstmal versuchen, die Daten mit dem kleinen Puffer
-    // abzuholen:
+    // First try to fetch the data with the little Buffer:
     SQLLEN nMaxLen = sizeof aCharArray - 1;
     //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
     SQLLEN pcbValue = 0;
@@ -502,23 +477,19 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         --nBytes;
     Sequence<sal_Int8> aData((sal_Int8*)aCharArray, nBytes);
 
-
-    // Es handelt sich um Binaerdaten, um einen String, der fuer
-    // StarView zu lang ist oder der Treiber kann die Laenge der
-    // Daten nicht im voraus bestimmen - also als MemoryStream
-    // speichern.
+    // It is about Binariy Data, a String, that for StarView is to long or
+    // the driver kan't predict the length of the data - as well as save the
+    // MemoryStream.
     while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
     {
-        // Bei Strings wird der Puffer nie ganz ausgenutzt
-        // (das letzte Byte ist immer ein NULL-Byte, das
-        // aber bei pcbValue nicht mitgezaehlt wird)
+        // At Strings the Buffer won't be completly used
+        // (The last Byte is always a NULL-Byte, however it won't be counted with pcbValue)
         if (pcbValue != SQL_NO_TOTAL && (pcbValue - nMaxLen) < nMaxLen)
             nBytes = pcbValue - nMaxLen;
         else
             nBytes = nMaxLen;
 
-        // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-        //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
+        // While there is a "truncation"-Warning, proceed with fetching Data.
         OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         SQL_C_BINARY,
@@ -552,7 +523,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             sal_Unicode waCharArray[2048];
             // read the unicode data
             SQLLEN nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
-            //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
             SQLLEN pcbValue=0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
@@ -565,8 +535,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
                 return ::rtl::OUString();
-            // Bei Fehler bricht der GETDATA-Makro mit return ab,
-            // bei NULL mit break!
+            // at failure the GETDATA-Makro will stop with returning,
+            // at NULL with break!
             SQLLEN nRealSize = 0;
             if ( pcbValue > -1 )
                 nRealSize = pcbValue / sizeof(sal_Unicode);
@@ -574,22 +544,19 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             waCharArray[nLen] = 0;
             aData.append(waCharArray,nLen);
 
-            // Es handelt sich um Binaerdaten, um einen String, der fuer
-            // StarView zu lang ist oder der Treiber kann die Laenge der
-            // Daten nicht im voraus bestimmen - also als MemoryStream
-            // speichern.
+            // It is about Binariy Data, a String, that for StarView is to long or
+            // the driver kan't predict the length of the data - as well as save the
+            // MemoryStream.
             while ((pcbValue == SQL_NO_TOTAL ) || nLen > nMaxLen)
             {
-                // Bei Strings wird der Puffer nie ganz ausgenutzt
-                // (das letzte Byte ist immer ein NULL-Byte, das
-                // aber bei pcbValue nicht mitgezaehlt wird)
+                // At Strings the Buffer won't be completly used
+                // (The last Byte is always a NULL-Byte, however it won't be counted with pcbValue)
                 if (pcbValue != SQL_NO_TOTAL && (pcbValue - nMaxLen) < nMaxLen)
                     nLen = pcbValue - nMaxLen;
                 else
                     nLen = nMaxLen;
 
-                // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-                //  GETDATA(SQL_C_CHAR,waCharArray, nLen + 1);
+                // While there is a "truncation"-Warning, proceed with fetching Data.
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
@@ -610,10 +577,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         default:
         {
             char aCharArray[2048];
-            // Erstmal versuchen, die Daten mit dem kleinen Puffer
-            // abzuholen:
+            // First try to fetch the data with the little Buffer:
             SQLLEN nMaxLen = sizeof aCharArray - 1;
-            //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
             SQLLEN pcbValue = 0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
@@ -632,14 +597,12 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 --nLen;
             aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding));
 
-            // Es handelt sich um Binaerdaten, um einen String, der fuer
-            // StarView zu lang ist oder der Treiber kann die Laenge der
-            // Daten nicht im voraus bestimmen - also als MemoryStream
-            // speichern.
+            // It is about Binariy Data, a String, that for StarView is to long or
+            // the driver kan't predict the length of the data - as well as save the
+            // MemoryStream.
             while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
             {
-                // Solange eine "truncation"-Warnung vorliegt, weiter Daten abholen
-                //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
+                // While there is a "truncation"-Warning, proceed with fetching Data.
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
@@ -655,8 +618,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding));
             }
 
-            // delete all blanks
-            //  aData.EraseTrailingChars();
         }
     }
 
@@ -944,3 +905,4 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

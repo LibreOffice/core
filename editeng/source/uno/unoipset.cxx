@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,8 @@
 #include "precompiled_editeng.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
-#include <tools/list.hxx>
 
-#include <hash_map>
-#include <vector>
+#include <boost/unordered_map.hpp>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -43,6 +42,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+
+using ::std::vector;
 
 //----------------------------------------------------------------------
 
@@ -59,13 +60,11 @@ struct SvxIDPropertyCombine
     uno::Any    aAny;
 };
 
-DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, sal_Bool bConvertTwips )
 :   m_aPropertyMap( pMap ),
     _pMap(pMap), mbConvertTwips(bConvertTwips), mrItemPool( rItemPool )
 {
-    pCombiList = NULL;
 }
 
 //----------------------------------------------------------------------
@@ -77,16 +76,11 @@ SvxItemPropertySet::~SvxItemPropertySet()
 //----------------------------------------------------------------------
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 {
-    if(pCombiList && pCombiList->Count())
+    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
     {
-        SvxIDPropertyCombine* pActual = pCombiList->First();
-        while(pActual)
-        {
-            if(pActual->nWID == nWID)
-                return &pActual->aAny;
-            pActual = pCombiList->Next();
-
-        }
+        SvxIDPropertyCombine* pActual = aCombineList[ i ];
+        if( pActual->nWID == nWID )
+            return &pActual->aAny;
     }
     return NULL;
 }
@@ -94,22 +88,19 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 //----------------------------------------------------------------------
 void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 {
-    if(!pCombiList)
-        pCombiList = new SvxIDPropertyCombineList();
-
     SvxIDPropertyCombine* pNew = new SvxIDPropertyCombine;
     pNew->nWID = nWID;
     pNew->aAny = rAny;
-    pCombiList->Insert(pNew);
+    aCombineList.push_back( pNew );
 }
 
 //----------------------------------------------------------------------
 
 void SvxItemPropertySet::ClearAllUsrAny()
 {
-    if(pCombiList)
-        delete pCombiList;
-    pCombiList = NULL;
+    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
+        delete aCombineList[ i ];
+    aCombineList.clear();
 }
 
 //----------------------------------------------------------------------
@@ -164,7 +155,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     }
     else
     {
-        DBG_ERROR( "No SfxPoolItem found for property!" );
+        OSL_FAIL( "No SfxPoolItem found for property!" );
     }
 
     return aVal;
@@ -176,18 +167,18 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     if(!pMap || !pMap->nWID)
         return;
 
-    // item holen
+    // Get item
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
-    // UnoAny in item-Wert stecken
+    // Put UnoAny in the item value
     if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
     {
         if( pPool == NULL )
         {
-            DBG_ERROR( "No default item and no pool?" );
+            OSL_FAIL( "No default item and no pool?" );
             return;
         }
 
@@ -216,7 +207,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
         if( pNewItem->PutValue( aValue, nMemberId ) )
         {
-            // neues item in itemset setzen
+            // Set new item in item set
             rSet.Put( *pNewItem, pMap->nWID );
         }
         delete pNewItem;
@@ -226,25 +217,22 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 //----------------------------------------------------------------------
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const
 {
-    // Schon ein Wert eingetragen? Dann schnell fertig
+    // Already entered a value? Then finish quickly
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
     if(pUsrAny)
         return *pUsrAny;
 
-    // Noch kein UsrAny gemerkt, generiere Default-Eintrag und gib
-    // diesen zurueck
-
+    // No UsrAny detected yet, generate Default entry and return this
     const SfxMapUnit eMapUnit = mrItemPool.GetMetric((sal_uInt16)pMap->nWID);
     sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
-
     uno::Any aVal;
     SfxItemSet aSet( mrItemPool, pMap->nWID, pMap->nWID);
 
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
-        // Default aus ItemPool holen
+        // Get Default from ItemPool
         if(mrItemPool.IsWhich(pMap->nWID))
             aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
     }
@@ -343,13 +331,13 @@ void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, uno::Any & rMetric ) th
                 rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)rMetric.getValue()));
                 break;
             default:
-                DBG_ERROR("AW: Missing unit translation to 100th mm!");
+                OSL_FAIL("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            DBG_ERROR("AW: Missing unit translation to 100th mm!");
+            OSL_FAIL("AW: Missing unit translation to 100th mm!");
         }
     }
 }
@@ -381,14 +369,15 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, uno::Any & rMetr
                     rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rMetric.getValue()));
                     break;
                 default:
-                    DBG_ERROR("AW: Missing unit translation to 100th mm!");
+                    OSL_FAIL("AW: Missing unit translation to 100th mm!");
             }
             break;
         }
         default:
         {
-            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+            OSL_FAIL("AW: Missing unit translation to PoolMetrics!");
         }
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

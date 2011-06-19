@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -97,7 +98,7 @@ SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& 
 {
     m_aCommand.Complete = rCommand;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -111,14 +112,14 @@ SfxQueryStatus_Impl::~SfxQueryStatus_Impl()
 void SAL_CALL SfxQueryStatus_Impl::disposing( const EventObject& )
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xDispatch.clear();
 }
 
 void SAL_CALL SfxQueryStatus_Impl::statusChanged( const FeatureStateEvent& rEvent)
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     m_pItem  = NULL;
     m_eState = SFX_ITEM_DISABLED;
@@ -189,7 +190,7 @@ throw( RuntimeException )
 // Query method
 SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_bQueryInProgress )
     {
         m_pItem  = NULL;
@@ -236,6 +237,8 @@ SfxQueryStatus::~SfxQueryStatus()
 
 SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return m_pSfxQueryStatusImpl->QueryState( rpPoolItem );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::cppu                          ;
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 
 //_________________________________________________________________________________________________________________
 //  non exported const
@@ -130,8 +130,6 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
             css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
                                                 aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
 
-            // client size of container window
-//            css::uno::Reference< css::awt::XLayoutConstrains > xLayoutContrains( xComponentWindow, css::uno::UNO_QUERY );
             css::awt::Size aMinSize( 0, 0 ); // = xLayoutContrains->getMinimumSize();
 
             // Check if request border space would decrease component window size below minimum size
@@ -167,8 +165,6 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
             css::awt::DeviceInfo aInfo       = xDevice->getInfo();
             css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
                                                 aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-            // client size of container window
-//            css::uno::Reference< css::awt::XLayoutConstrains > xLayoutContrains( xComponentWindow, css::uno::UNO_QUERY );
             css::awt::Size aMinSize( 0, 0 );// = xLayoutContrains->getMinimumSize();
 
             // Check if request border space would decrease component window size below minimum size
@@ -185,3 +181,5 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

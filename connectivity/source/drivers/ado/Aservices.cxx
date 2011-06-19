@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ struct ProviderRequest
         sal_Char const* pImplementationName
     )
     : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString::createFromAscii(pImplementationName))
+    , sImplementationName(OUString(RTL_CONSTASCII_USTRINGPARAM(pImplementationName)))
     {
     }
 
@@ -85,8 +86,7 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -95,7 +95,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
@@ -121,3 +121,4 @@ extern "C" void* SAL_CALL component_getFactory(
 };
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

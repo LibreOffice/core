@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -270,6 +271,7 @@ public:
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( 0 )
 , mpLayouter( 0 )
+, mbModifyPending( false )
 {
 }
 
@@ -355,7 +357,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
     }
     catch( Exception& )
     {
-        DBG_ERROR("svx::SdrTableObjImpl::SetModel(), exception caught!");
+        OSL_FAIL("svx::SdrTableObjImpl::SetModel(), exception caught!");
     }
 
     mxTableStyle = xNewTableStyle;
@@ -522,7 +524,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SdrTableObjImpl::DragEdge(), exception caught!" );
+        OSL_FAIL( "svx::SdrTableObjImpl::DragEdge(), exception caught!" );
     }
 }
 
@@ -627,7 +629,7 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SdrTableObjImpl::getCell(), exception caught!" );
+        OSL_FAIL( "svx::SdrTableObjImpl::getCell(), exception caught!" );
     }
     return xCell;
 }
@@ -1167,7 +1169,7 @@ void SdrTableObj::InsertRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::InsertRows(), exception caught!");
+        OSL_FAIL("SdrTableObj::InsertRows(), exception caught!");
     }
 }
 
@@ -1182,7 +1184,7 @@ void SdrTableObj::InsertColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::InsertColumns(), exception caught!");
+        OSL_FAIL("SdrTableObj::InsertColumns(), exception caught!");
     }
 }
 
@@ -1197,7 +1199,7 @@ void SdrTableObj::DeleteRows( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::DeleteRows(), exception caught!");
+        OSL_FAIL("SdrTableObj::DeleteRows(), exception caught!");
     }
 }
 
@@ -1212,7 +1214,7 @@ void SdrTableObj::DeleteColumns( sal_Int32 nIndex, sal_Int32 nCount /*= 1*/ )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::DeleteColumns(), exception caught!");
+        OSL_FAIL("SdrTableObj::DeleteColumns(), exception caught!");
     }
 }
 
@@ -1351,16 +1353,16 @@ void SdrTableObj::FitFrameToTextSize()
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::IsAutoGrowHeight() const
+bool SdrTableObj::IsAutoGrowHeight() const
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::IsAutoGrowWidth() const
+bool SdrTableObj::IsAutoGrowWidth() const
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -1460,7 +1462,7 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText, Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
+void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     if( mpImpl )
         TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
@@ -1468,7 +1470,7 @@ void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FA
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText, Rectangle* pAnchorRect, sal_Bool /*bLineWidth*/ ) const
+void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
 {
     if( !mpImpl )
         return;
@@ -1616,7 +1618,7 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SdrTableObj::setActiveCell(), exception caught!");
+        OSL_FAIL("SdrTableObj::setActiveCell(), exception caught!");
     }
 }
 
@@ -1849,84 +1851,6 @@ struct ImplTableShadowPaintInfo
 
 // --------------------------------------------------------------------
 
-void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
-        const Color& rColor, long nXOffs, long nWidth,
-        const svx::frame::Style& rTopLine, const svx::frame::Style& rBottomLine )
-{
-    rDev.SetLineColor(rColor);              // PEN_NULL ???
-    rDev.SetFillColor(rColor);
-
-    //  Position oben/unten muss unabhaengig von der Liniendicke sein,
-    //  damit der Winkel stimmt (oder X-Position auch anpassen)
-    long nTopPos = rTop.Y();
-    long nBotPos = rBottom.Y();
-
-    long nTopLeft = rTop.X() + nXOffs;
-    long nTopRight = nTopLeft + nWidth - 1;
-
-    long nBotLeft = rBottom.X() + nXOffs;
-    long nBotRight = nBotLeft + nWidth - 1;
-
-    //  oben abschliessen
-
-    if ( rTopLine.Prim() )
-    {
-        long nLineW = rTopLine.GetWidth();
-        if (nLineW >= 2)
-        {
-            Point aTriangle[3];
-            aTriangle[0] = Point( nTopLeft, nTopPos );      // wie aPoints[0]
-            aTriangle[1] = Point( nTopRight, nTopPos );     // wie aPoints[1]
-            aTriangle[2] = Point( rTop.X(), nTopPos - (nLineW - 1) / 2 );
-            Polygon aTriPoly( 3, aTriangle );
-            rDev.DrawPolygon( aTriPoly );
-        }
-    }
-
-    //  unten abschliessen
-
-    if ( rBottomLine.Prim() )
-    {
-        long nLineW = rBottomLine.GetWidth();
-        if (nLineW >= 2)
-        {
-            Point aTriangle[3];
-            aTriangle[0] = Point( nBotLeft, nBotPos );      // wie aPoints[3]
-            aTriangle[1] = Point( nBotRight, nBotPos );     // wie aPoints[2]
-            aTriangle[2] = Point( rBottom.X(), nBotPos - (nLineW - 1) / 2 + nLineW - 1 );
-            Polygon aTriPoly( 3, aTriangle );
-            rDev.DrawPolygon( aTriPoly );
-        }
-    }
-}
-
-void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
-                    const svx::frame::Style& rLine,
-                    const svx::frame::Style& rTopLine, const svx::frame::Style& rBottomLine,
-                    const Color* pForceColor )
-{
-    if( rLine.Prim() )
-    {
-        svx::frame::DrawVerFrameBorderSlanted( rDev, rTop, rBottom, rLine, pForceColor );
-
-        svx::frame::Style aScaled( rLine );
-        aScaled.ScaleSelf( 1.0 / cos( svx::frame::GetVerDiagAngle( rTop, rBottom ) ) );
-        if( pForceColor )
-            aScaled.SetColor( *pForceColor );
-
-        long nXOffs = (aScaled.GetWidth() - 1) / -2L;
-
-        lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColor(),
-            nXOffs, aScaled.Prim(), rTopLine, rBottomLine );
-
-        if( aScaled.Secn() )
-            lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColor(),
-                nXOffs + aScaled.Prim() + aScaled.Dist(), aScaled.Secn(), rTopLine, rBottomLine );
-    }
-}
-
-// --------------------------------------------------------------------
-
 void SdrTableObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulTable);
@@ -1950,31 +1874,35 @@ void SdrTableObj::TakeObjNamePlural(XubString& rName) const
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::operator=(const SdrObject& rObj)
+SdrTableObj* SdrTableObj::Clone() const
 {
+    return CloneHelper< SdrTableObj >();
+}
+
+SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     // call parent
     SdrObject::operator=(rObj);
 
-    const SdrTableObj* pTableObj = dynamic_cast< const SdrTableObj* >( &rObj );
-    if (pTableObj!=NULL)
-    {
-        TableModelNotifyGuard aGuard( mpImpl ? mpImpl->mxTable.get() : 0 );
+    TableModelNotifyGuard aGuard( mpImpl ? mpImpl->mxTable.get() : 0 );
 
-        maLogicRect = pTableObj->maLogicRect;
-        aRect = pTableObj->aRect;
-        aGeo = pTableObj->aGeo;
-        eTextKind = pTableObj->eTextKind;
-        bTextFrame = pTableObj->bTextFrame;
-        aTextSize = pTableObj->aTextSize;
-        bTextSizeDirty = pTableObj->bTextSizeDirty;
-        bNoShear = pTableObj->bNoShear;
-        bNoRotate = pTableObj->bNoRotate;
-        bNoMirror = pTableObj->bNoMirror;
-        bDisableAutoWidthOnDragging = pTableObj->bDisableAutoWidthOnDragging;
+    maLogicRect = rObj.maLogicRect;
+    aRect = rObj.aRect;
+    aGeo = rObj.aGeo;
+    eTextKind = rObj.eTextKind;
+    bTextFrame = rObj.bTextFrame;
+    aTextSize = rObj.aTextSize;
+    bTextSizeDirty = rObj.bTextSizeDirty;
+    bNoShear = rObj.bNoShear;
+    bNoRotate = rObj.bNoRotate;
+    bNoMirror = rObj.bNoMirror;
+    bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
-        if( pTableObj->mpImpl )
-            *mpImpl = *pTableObj->mpImpl;
-    }
+    if( rObj.mpImpl )
+        *mpImpl = *rObj.mpImpl;
+    return *this;
 }
 
 // --------------------------------------------------------------------
@@ -2050,7 +1978,7 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
 // --
-        FASTBOOL bUpdMerk=rOutl.GetUpdateMode();
+        bool bUpdMerk=rOutl.GetUpdateMode();
         if (bUpdMerk) rOutl.SetUpdateMode(sal_False);
         Size aPaperMin;
         Size aPaperMax;
@@ -2212,10 +2140,10 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
+bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     Rectangle aNeuRect(maLogicRect);
-    FASTBOOL bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
+    bool bRet=AdjustTextFrameWidthAndHeight(aNeuRect,bHgt,bWdt);
     if (bRet)
     {
         Rectangle aBoundRect0;
@@ -2232,7 +2160,7 @@ FASTBOOL SdrTableObj::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHeight, FASTBOOL bWidth) const
+bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, bool bWidth) const
 {
     if((pModel == NULL) || rR.IsEmpty() || !mpImpl || !mpImpl->mxTable.is() )
         return sal_False;
@@ -2328,9 +2256,9 @@ bool SdrTableObj::IsRealyEdited() const
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::IsFontwork() const
+bool SdrTableObj::IsFontwork() const
 {
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------------------------
@@ -2450,7 +2378,7 @@ SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     // #i73248#
     // Warn the user that this is ineffective and show alternatives. Should not be used at all.
-    OSL_ENSURE(false, "SdrTableObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
+    OSL_FAIL("SdrTableObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
 
     // to have an alternative, get single handle using the ineffective way
     SdrHdl* pRetval = 0;
@@ -2599,19 +2527,19 @@ basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag
 // Create
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::BegCreate(SdrDragStat& rStat)
+bool SdrTableObj::BegCreate(SdrDragStat& rStat)
 {
     rStat.SetOrtho4Possible();
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::MovCreate(SdrDragStat& rStat)
+bool SdrTableObj::MovCreate(SdrDragStat& rStat)
 {
     Rectangle aRect1;
     rStat.TakeCreateRect(aRect1);
@@ -2620,12 +2548,12 @@ FASTBOOL SdrTableObj::MovCreate(SdrDragStat& rStat)
     aRect=aRect1; // fuer ObjName
     SetBoundRectDirty();
     bSnapRectDirty=sal_True;
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aRect);
     ImpJustifyRect(aRect);
@@ -2638,9 +2566,9 @@ void SdrTableObj::BrkCreate(SdrDragStat& /*rStat*/)
 
 // --------------------------------------------------------------------
 
-FASTBOOL SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
+bool SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return sal_True;
+    return true;
 }
 
 // --------------------------------------------------------------------
@@ -2734,7 +2662,7 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
         }
         catch( Exception& )
         {
-            DBG_ERROR( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
+            OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
         }
     }
 
@@ -2818,3 +2746,5 @@ void SdrTableObj::uno_unlock()
 
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

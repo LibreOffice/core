@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,32 +30,25 @@
 #include "precompiled_sfx2.hxx"
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop includes
+#include <string>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/util/XURLTransformer.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
@@ -144,13 +138,11 @@ void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
     sal_uInt16 nSlotId,
     const String& rTitle,
-    const String &rHelpText,
     SfxBindings &rBindings )
 {
     DBG_MEMTEST();
 
     aTitle = rTitle;
-    aHelpText = rHelpText;
     pOwnMenu = pOwn;
     pSubMenu = 0;
     if ( pOwn )
@@ -171,7 +163,6 @@ void SfxMenuControl::Bind(
     sal_uInt16 nSlotId,
     SfxVirtualMenu& rMenu,
     const String& rTitle,
-    const String &rHelpText,
     SfxBindings &rBindings )
 {
     DBG_MEMTEST();
@@ -180,12 +171,11 @@ void SfxMenuControl::Bind(
     pOwnMenu = pOwn;
     pSubMenu = &rMenu;
     aTitle = rTitle;
-    aHelpText = rHelpText;
 }
 
 //--------------------------------------------------------------------
 
-// ctor for explicit registration
+// Constructor for explicit registration
 
 SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 :   pOwnMenu(0),
@@ -197,8 +187,7 @@ SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 
 //--------------------------------------------------------------------
 
-// ctor for array
-
+// Constructor for array
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
@@ -217,17 +206,15 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 {
     DBG_MEMTEST();
 
-    // Dieser Ctor soll es erm"oglichen, w"ahrend der Konstruktion schon
-    // auf die Bindings zur"uckgreifen zu k"onnen, aber gebunden wird
-    // wie immer erst sp"ater. Anwendung z.B. wenn im ctor der abgeleiteten
-    // Klasse z.B. ein StatusForwarder erzeugt werden soll.
+    // This constructor should make it possible already during the design
+    // to fall back to the bindings, but can as always be bound later.
+    // The usefullness of this is for example if a StatusForwarder should
+    // be created in the constructor of a derived class.
     UnBind();
 }
 
 
 //--------------------------------------------------------------------
-
-// dtor
 
 SfxMenuControl::~SfxMenuControl()
 {
@@ -250,7 +237,7 @@ void SfxMenuControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    (void)nSID; //unused
+    (void)nSID;
     DBG_MEMTEST();
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
@@ -258,7 +245,7 @@ void SfxMenuControl::StateChanged
     bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
-    // enabled/disabled-Flag pauschal korrigieren
+    // Fix inclusion of enabled/disabled-Flag
 
 #ifdef UNIX
     if (nSID == SID_PASTE)
@@ -271,27 +258,21 @@ void SfxMenuControl::StateChanged
 
     if ( eState != SFX_ITEM_AVAILABLE )
     {
-        // checken nur bei nicht-Object-Menus
+        // check only for non-Object Menus
         if ( !bIsObjMenu )
             pOwnMenu->CheckItem( GetId(), sal_False );
 
-        // SetItemText flackert in MenuBar insbes. unter OS/2 (Bug #20658)
-        if ( // !bIsObjMenu && nicht wegen "Format/Datenbank"
-             pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
+        if ( pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
         {
              DBG_WARNING("Title of menu item changed - please check if this needs correction!");
-            // pOwnMenu->SetItemText( GetId(), GetTitle() );
         }
         return;
     }
 
-    // ggf. das alte Enum-Menu entfernen/loeschen
-    //! delete pOwnMenu->GetMenu().ChangePopupMenu( GetId(), 0 );
-
     bool bCheck = false;
     if ( pState->ISA(SfxBoolItem) )
     {
-        // BoolItem fuer checken
+        // BoolItem for check
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((const SfxBoolItem*)pState)->GetValue();
@@ -299,14 +280,14 @@ void SfxMenuControl::StateChanged
     else if ( pState->ISA(SfxEnumItemInterface) &&
               ((SfxEnumItemInterface *)pState)->HasBoolValue() )
     {
-        // EnumItem wie Bool behandeln
+        // Treat EnumItem as Bool
         DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = ((SfxEnumItemInterface *)pState)->GetBoolValue();
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {
-        // MenuText aus SfxStringItem holen
+        // Get MenuText from SfxStringItem
         String aStr( ((const SfxStringItem*)pState)->GetValue() );
         if ( aStr.CompareToAscii("($1)",4) == COMPARE_EQUAL )
         {
@@ -445,7 +426,6 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -471,15 +451,12 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_uIntPtr nSymbolsStyle = rSettings.GetSymbolsStyle();
-        sal_Bool bIsHiContrastMode = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
-            ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
             m_nSymbolsStyle         = nSymbolsStyle;
-            m_bWasHiContrastMode    = bIsHiContrastMode;
             m_bShowMenuImages       = bShowMenuImages;
 
             sal_uInt16 nCount = pActMenu->GetItemCount();
@@ -501,7 +478,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, sal_False, bIsHiContrastMode );
+                            Image aImage = GetImage( xFrame, aImageId, false );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
@@ -513,7 +490,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), sal_False, bIsHiContrastMode );
+                                INetURLObject(aCmd), false );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nItemId, aImage );
                         }
@@ -537,18 +514,17 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        sal_uInt16 nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        sal_uInt16 nId, Menu& rMenu, const String& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
-    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
+    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, rBindings, pVirt);
 }
 
 SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, sal_uInt16 nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
-    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
-                        rMenu.GetHelpText(nSlotId), rBindings);
+    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId), rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();
@@ -557,11 +533,11 @@ SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, sal_uInt16 nSlotId,
 
 SfxUnoMenuControl::SfxUnoMenuControl(
     const String& rCmd, sal_uInt16 nSlotId, Menu& /*rMenu*/,
-    const String& rItemText, const String& rHelpText,
+    const String& rItemText,
     SfxBindings& rBindings, SfxVirtualMenu* pVirt)
     : SfxMenuControl( nSlotId, rBindings )
 {
-    Bind( pVirt, nSlotId, rItemText, rHelpText, rBindings);
+    Bind( pVirt, nSlotId, rItemText, rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();
@@ -578,3 +554,5 @@ void SfxUnoMenuControl::Select()
 {
     pUnoCtrl->Execute();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

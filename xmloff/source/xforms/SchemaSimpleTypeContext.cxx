@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,10 +107,12 @@ SvXMLImportContext* SchemaSimpleTypeContext::HandleChild(
                                                  mxRepository, msTypeName );
         break;
     default:
-        DBG_ERROR( "Booo!" );
+        OSL_FAIL( "Booo!" );
     }
 
     return ( pContext != NULL )
         ? pContext
         : new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

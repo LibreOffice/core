@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _FILRSET_HXX_
 #define _FILRSET_HXX_
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <ucbhelper/macros.hxx>
 #include <osl/file.hxx>
 
@@ -40,9 +39,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP__
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#endif
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
@@ -681,3 +678,5 @@ namespace fileaccess {
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

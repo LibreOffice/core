@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,7 +145,7 @@ namespace drawinglayer
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR( "Chart cannot be painted pretty!" );
+            OSL_FAIL( "Chart cannot be painted pretty!" );
         }
 
         return bChartRendered;
@@ -153,3 +154,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@ using namespace connectivity;
 using namespace connectivity::mysql;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -80,18 +80,18 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("GRANT USAGE ON * TO ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "GRANT USAGE ON * TO " ));
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString::createFromAscii(" @\"%\" ");
+                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" @\"%\" "));
     ::rtl::OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( sPassword.getLength() )
     {
-        aSql += ::rtl::OUString::createFromAscii(" IDENTIFIED BY '");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IDENTIFIED BY '"));
         aSql += sPassword;
-        aSql += ::rtl::OUString::createFromAscii("'");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
@@ -105,7 +105,7 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "REVOKE ALL ON * FROM " ));
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     aSql += ::dbtools::quoteName(aQuote,_sElementName);
 
@@ -116,3 +116,5 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 }
 
 // -------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

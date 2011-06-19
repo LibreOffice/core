@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SVX_XSETITEM_HXX
 #define _SVX_XSETITEM_HXX
 
-#ifndef _XATTR_HXX
 #include <svx/xit.hxx>
-#endif
 #include <svl/metitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/rectenum.hxx>
@@ -51,3 +50,5 @@
 #include <svx/xflbckit.hxx>
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

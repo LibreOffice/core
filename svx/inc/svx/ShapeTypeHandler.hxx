@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace accessibility {
 
@@ -203,7 +204,7 @@ private:
     /** This hash map allows the fast look up of a type descriptor for a
         given service name.
     */
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString,ShapeTypeId,
         ::rtl::OUStringHash,
         //        ::comphelper::UStringHash,
@@ -235,3 +236,5 @@ private:
 } // end of namespace accessible
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

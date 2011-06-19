@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,10 @@
  *
  ************************************************************************/
 
-#include <tools/prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
@@ -39,7 +38,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postwin.h>
 
 #include "player.hxx"
 #include "framegrabber.hxx"
@@ -206,7 +204,8 @@ void Player::setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurf
 
 long Player::processEvent()
 {
-    long nCode, nParam1, nParam2;
+    long nCode;
+    LONG_PTR nParam1, nParam2;
 
     if( mpME && SUCCEEDED( mpME->GetEvent( &nCode, &nParam1, &nParam2, 0 ) ) )
     {
@@ -492,3 +491,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
 
 } // namespace win
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

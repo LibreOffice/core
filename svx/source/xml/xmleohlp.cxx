@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#ifndef _COM_SUN_STAR_EMBED_XEMBED_PERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#endif
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -52,9 +51,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
-#ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
-#endif
 #include <map>
 #include "svx/xmleohlp.hxx"
 
@@ -193,7 +190,7 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
     {
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
         SvXMLEmbeddedObjectHelper_Impl::iterator aEnd = mpStreamMap->end();
-        for( ; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; ++aIter )
         {
             if( aIter->second )
             {
@@ -352,7 +349,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
     if( -1 != rContainerStorageName.indexOf( '/' ) )
     {
-        DBG_ERROR( "SvXMLEmbeddedObjectHelper: invalid path name" );
+        OSL_FAIL( "SvXMLEmbeddedObjectHelper: invalid path name" );
         return sal_False;
     }
 
@@ -817,3 +814,4 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

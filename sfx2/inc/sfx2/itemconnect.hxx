@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,8 +49,6 @@ const ItemConnFlags ITEMCONN_NONE               = 0x0000;
 
 /** Connection is inactive - virtual functions will not be called. */
 const ItemConnFlags ITEMCONN_INACTIVE           = 0x0001;
-/** Clone item in FillItemSet() from old item set. */
-//const ItemConnFlags ITEMCONN_CLONE_ITEM         = 0x0002;
 
 /** Enable control(s), if the item is known. */
 const ItemConnFlags ITEMCONN_ENABLE_KNOWN       = 0x0010;
@@ -593,3 +592,4 @@ ValueSetConnection< ItemWrpT >::ValueSetConnection(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

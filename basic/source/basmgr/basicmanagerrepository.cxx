@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 #include <rtl/instance.hxx>
-#endif
 
 #include <map>
 
@@ -302,18 +301,18 @@ namespace basic
         if ( !aAppBasicDir.Len() )
             aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
-        // #58293# soffice.new search only in user dir => first dir
+        // soffice.new search only in user dir => first dir
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
 
         // Create basic and load it
-        // MT: #47347# AppBasicDir is now a PATH
+        // AppBasicDir is now a PATH
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
 
         BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
         setApplicationBasicManager( pBasicManager );
 
-        // Als Destination das erste Dir im Pfad:
+        // The first dir in the path as destination:
         String aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
         DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -365,7 +364,7 @@ namespace basic
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
         else {
-            DBG_ERROR( "ImplRepository::revokeCreationListener: listener is not registered!" );
+            OSL_FAIL( "ImplRepository::revokeCreationListener: listener is not registered!" );
         }
     }
 
@@ -484,14 +483,11 @@ namespace basic
         LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
         OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
         _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
-        //pBasicCont->setBasicManager( _out_rpBasicManager );
-            // that's not needed anymore today. The containers will retrieve their associated
-            // BasicManager from the BasicManagerRepository, when needed.
 
         // initialize the containers
         impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );
 
-        // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
+        // so that also dialogs etc. could be 'qualified' addressed
         _out_rpBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic
@@ -616,7 +612,7 @@ namespace basic
                 // a BasicManager which is still in our repository is being deleted.
                 // That's bad, since by definition, we *own* all instances in our
                 // repository.
-                OSL_ENSURE( false, "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
+                OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
                 m_aStore.erase( loop );
                 break;
             }
@@ -660,3 +656,4 @@ namespace basic
 } // namespace basic
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

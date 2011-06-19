@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 
@@ -80,7 +81,7 @@ handleLockedDocumentRequest_(
 
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
@@ -171,7 +172,7 @@ handleChangedByOthersRequest_(
 
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
@@ -210,7 +211,7 @@ handleLockFileIgnoreRequest_(
 
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
@@ -314,3 +315,4 @@ UUIInteractionHelper::handleLockFileIgnoreRequest(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

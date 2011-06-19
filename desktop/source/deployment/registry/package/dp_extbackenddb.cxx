@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "rtl/string.h"
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -137,3 +137,4 @@ ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & ur
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

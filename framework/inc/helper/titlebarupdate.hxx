@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,73 +33,43 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
-#endif
 
-#ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
 #include <com/sun/star/frame/XTitle.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGELISTENER_HPP_
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <unotools/moduleoptions.hxx>
-#endif
 
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  const
@@ -242,8 +213,14 @@ class TitleBarUpdate : // interfaces
          */
         void impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
+        //Hook to set GNOME3/Windows 7 applicationID for toplevel frames
+        //http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
+        //http://live.gnome.org/GnomeShell/ApplicationBased
+        void impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame);
 }; // class TitleBarUpdate
 
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

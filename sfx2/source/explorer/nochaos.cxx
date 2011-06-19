@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 
 #define WID_CHAOS_START 500
 //=========================================================================
-//
 // class CntStaticPoolDefaults_Impl
-//
 //=========================================================================
 
 class CntItemPool;
@@ -102,9 +101,7 @@ sal_uInt16 NoChaos::ReleaseItemPool()
 }
 
 //=========================================================================
-//
 //  CntItemPool implementation
-//
 //=========================================================================
 
 static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = NULL;
@@ -174,9 +171,7 @@ sal_uInt16 CntItemPool::Release()
 }
 
 //=========================================================================
-//
 // CntStaticPoolDefaults_Impl implementation.
-//
 //=========================================================================
 
 inline void CntStaticPoolDefaults_Impl::Insert(
@@ -213,3 +208,5 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
         0,
         SFX_ITEM_POOLABLE );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

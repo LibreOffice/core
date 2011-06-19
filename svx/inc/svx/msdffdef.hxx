@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
@@ -249,7 +248,7 @@
 
 #define DFF_msofbtSelection         0xF119 //                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0
 
-// Werte fuer den sal_uIntPtr im DFF_PST_TextHeaderAtom
+// Values for the ULONG in DFF_PST_TextHeaderAtom
 enum DFF_TextHeader {
     DFFTH_TITLE,
     DFFTH_BODY,
@@ -580,7 +579,7 @@ enum DFF_TextHeader {
 #define DFF_PBit_Print              0x00000001
 
 //---------------------------------------------------------------------------
-//  Dreh- und Angelpunkt: der Shape-Typ
+// linchpin: the shape type
 //---------------------------------------------------------------------------
 typedef enum
    {
@@ -792,10 +791,10 @@ typedef enum
    mso_sptNil = mso_sptMax
  } MSO_SPT;
 
-// verschiedene enums aus der OfficeDraw-Doku, Appendix D - Anfang
+// different enums from the OfficeDraw documentation, Appendix D - beginning
 //
-// beachte: in Abweichung von der MS-Doku beginnen alle
-// mit "mso_" statt mit "mso"
+// note: in opposite to the MS documentation, they all
+// start with "mso_" instead of "mso"
 //
 enum MSO_ShapePath {
    mso_shapeLines,        // A line of straight segments
@@ -1098,7 +1097,7 @@ typedef enum {
 } MSO_BLIPUSAGE;
 
 typedef enum {                          // GEL provided types...
-   mso_blipERROR = 0,          // An error occured during loading
+   mso_blipERROR = 0,          // An error occurred during loading
    mso_blipUNKNOWN,            // An unknown blip type
    mso_blipEMF,                // Windows Enhanced Metafile
    mso_blipWMF,                // Windows Metafile
@@ -1186,38 +1185,6 @@ typedef enum {
     mso_colorBParamShift = 16           // To extract the parameter value
 } MSO_SYSCOLORINDEX;
 
-#ifdef Hier_noch_was_aus_der_Doku
-/* The secondary, or data, UID - should always be set. */
-sal_uInt8  m_rgbUid[16];
-/* The primary UID - this defaults to 0, in which case the primary ID is
-   that of the internal data. NOTE!: The primary UID is only saved to disk
-   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.inst and
-   blip_signature is one of the values defined in MSO_BI */
-sal_uInt8  m_rgbUidPrimary[16]; // optional based on the above check
-
-/* Metafile Blip overhead = 34 bytes. m_cb gives the number of
-   bytes required to store an uncompressed version of the file, m_cbSave
-   is the compressed size.  m_mfBounds gives the boundary of all the
-   drawing calls within the metafile (this may just be the bounding box
-   or it may allow some whitespace, for a WMF this comes from the
-   SetWindowOrg and SetWindowExt records of the metafile). */
-int           m_cb;           // Cache of the metafile size
-RECT          m_rcBounds;     // Boundary of metafile drawing commands
-POINT         m_ptSize;       // Size of metafile in EMUs
-int           m_cbSave;       // Cache of saved size (size of m_pvBits)
-sal_uInt8          m_fCompression; // MSO_BLIPCOMPRESSION
-sal_uInt8          m_fFilter;      // always mso_filterNone
-void         *m_pvBits;       // Compressed bits of metafile.
-
-/* The secondary, or data, UID - should always be set. */
-sal_uInt8  m_rgbUid[16];
-/* The primary UID - this defaults to 0, in which case the primary ID is
-   that of the internal data. NOTE!: The primary UID is only saved to disk
-   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.finst and
-   blip_signature is one of the values defined in MSO_BI*/
-sal_uInt8  m_rgbUidPrimary[16];    // optional based on the above check
-sal_uInt8  m_bTag;
-void  *m_pvBits;              // raster bits of the blip.
 #endif
 
-#endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

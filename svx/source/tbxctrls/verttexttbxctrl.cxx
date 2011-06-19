@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,6 @@
 SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
 
-// -----------------------------27.04.01 15:50--------------------------------
-
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
@@ -63,15 +62,10 @@ SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId
 {
 }
 
-/* -----------------------------27.04.01 15:53--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
-/* -----------------------------27.04.01 15:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxVertCTLTextTbxCtrl::StateChanged(
     sal_uInt16 nSID,
     SfxItemState eState,
@@ -117,7 +111,5 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         }
     }
 }
-/* -----------------------------27.04.01 15:50--------------------------------
 
- ---------------------------------------------------------------------------*/
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

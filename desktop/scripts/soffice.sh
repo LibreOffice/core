@@ -39,6 +39,19 @@ export SAL_ENABLE_FILE_LOCKING
 # working on your system.
 # SAL_NOOPENGL=true; export SAL_NOOPENGL
 
+unset XENVIRONMENT
+
+# uncomment line below to disable anti aliasing of fonts
+# SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
+
+# uncomment line below if you encounter problems starting soffice on your system
+# SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
+
+# read database entries for Adabas D
+if [ -f /etc/adabasrc ]; then
+  . /etc/adabasrc
+fi
+
 # The following is needed on Linux PPC with IBM j2sdk142:
 #@# export JITC_PROCESSOR_TYPE=6
 
@@ -54,81 +67,37 @@ cd "`dirname "$sd_res"`"
 sd_prog=`pwd`
 cd "$sd_cwd"
 
-sd_binary=`basename "$0"`.bin
+# linked build needs additional settings
+if [ -e $sd_prog/ooenv ] ; then
+    . $sd_prog/ooenv
+fi
 
-#collect all bootstrap variables specified on the command line
-#so that they can be passed as arguments to javaldx later on
-for arg in $@
-do
-  case "$arg" in
-       -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
-  esac
-done
-
-# pagein
-sd_pagein_args=@pagein-common
-for sd_arg in "$@"; do
-    case ${sd_arg} in
-    -calc)
-        sd_pagein_args="${sd_pagein_args} @pagein-calc"
-        break;
-        ;;
-    -draw)
-        sd_pagein_args="${sd_pagein_args} @pagein-draw"
-        break;
-        ;;
-    -impress)
-        sd_pagein_args="${sd_pagein_args} @pagein-impress"
-        break;
-        ;;
-    -writer)
-        sd_pagein_args="${sd_pagein_args} @pagein-writer"
-        break;
-        ;;
-    esac
-done
-"$sd_prog/../basis-link/program/pagein" -L"$sd_prog/../basis-link/program" \
-    ${sd_pagein_args}
-
-# extend the ld_library_path for java: javaldx checks the sofficerc for us
-if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
-    my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
-        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
-    if [ -n "$my_path" ] ; then
-        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-        export LD_LIBRARY_PATH
+if [ "$VALGRIND" != "" ]; then
+    VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes --trace-children-skip=*/java --error-exitcode=101"
+    export VALGRINDCHECK
+    if [ "$VALGRIND" = "memcheck" ]; then
+        G_SLICE=always-malloc
+        export G_SLICE
     fi
 fi
 
-unset XENVIRONMENT
-
-# uncomment line below to disable anti aliasing of fonts
-# SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
-
-# uncomment line below if you encounter problems starting soffice on your system
-# SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
-
-# read database entries for Adabas D
-if [ -f /etc/adabasrc ]; then
-  . /etc/adabasrc
-fi
-
-# execute soffice binary
-"$sd_prog/$sd_binary" "$@" &
-trap 'kill -9 $!' TERM
-wait $!
-sd_ret=$?
-
-while [ $sd_ret -eq 79 -o $sd_ret -eq 81 ]
-do
-    if [ $sd_ret -eq 79 ]; then
-        "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
-    elif [ $sd_ret -eq 81 ]; then
-        "$sd_prog/$sd_binary" "$@" &
+case "`uname -s`" in
+NetBSD|OpenBSD|FreeBSD|DragonFly)
+# this is a temporary hack until we can live with the default search paths
+    sd_prog1="$sd_prog/../basis-link/program"
+    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+    LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+    JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
+    export LD_LIBRARY_PATH
+    if [ -n "${JAVA_HOME}" ]; then
+        export JAVA_HOME
     fi
+    ;;
+AIX)
+    LIBPATH=$sd_prog:$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LIBPATH:+:$LIBPATH}
+    export LIBPATH
+    ;;
+esac
 
-    wait $!
-    sd_ret=$?
-done
-
-exit $sd_ret
+# oosplash does the rest: forcing pages in, javaldx etc. are
+exec $VALGRINDCHECK "$sd_prog/oosplash.bin" "$@"

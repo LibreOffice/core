@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <map>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
-#ifndef _VCL_TIMER_HXX_
 #include <vcl/timer.hxx>
-#endif
 #include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -45,7 +44,6 @@
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
 
 #define DESKTOP_SAVETASKS_MOD 0x1
 #define DESKTOP_SAVETASKS_UNMOD 0x2
@@ -59,13 +57,13 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
+class AcceptorMap : public std::map< rtl::OUString, Reference<XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
     friend class UserInstall;
 
-    void doShutdown();
+    int doShutdown();
 
     public:
         enum BootstrapError
@@ -88,8 +86,9 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual void            Main( );
+        virtual int         Main( );
         virtual void            Init();
+        virtual void            InitFinished();
         virtual void            DeInit();
         virtual sal_Bool            QueryExit();
         virtual sal_uInt16          Exception(sal_uInt16 nError);
@@ -105,7 +104,7 @@ class Desktop : public Application
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();
-        static CommandLineArgs* GetCommandLineArgs();
+        static CommandLineArgs& GetCommandLineArgs();
 
         void                    HandleBootstrapErrors( BootstrapError );
         void                    SetBootstrapError( BootstrapError nError )
@@ -130,10 +129,7 @@ class Desktop : public Application
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
-        // first-start (ever) & license relate methods
-        static rtl::OUString    GetLicensePath();
-        static sal_Bool         LicenseNeedsAcceptance();
-        static sal_Bool         IsFirstStartWizardNeeded();
+        // first-start (ever) related methods
         static sal_Bool         CheckExtensionDependencies();
 
         static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
@@ -142,6 +138,8 @@ class Desktop : public Application
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
+
+        void                    CreateProcessServiceFactory();
 
     private:
         // Bootstrap methods
@@ -158,6 +156,7 @@ class Desktop : public Application
         sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
         sal_Bool                InitializeConfiguration();
         void                    FlushConfiguration();
+        static sal_Bool         shouldLaunchQuickstart();
         sal_Bool                InitializeQuickstartMode( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
@@ -170,7 +169,7 @@ class Desktop : public Application
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const ::rtl::OUString& aFileURL );
 
-        static void             PreloadModuleData( CommandLineArgs* );
+        static void             PreloadModuleData( const CommandLineArgs& );
         static void             PreloadConfigurationData();
 
         Reference<XStatusIndicator> m_rSplashScreen;
@@ -196,9 +195,9 @@ class Desktop : public Application
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void                         createAcceptor(const OUString& aDescription);
+        static void                         createAcceptor(const rtl::OUString& aDescription);
         static void                         enableAcceptors();
-        static void                         destroyAcceptor(const OUString& aDescription);
+        static void                         destroyAcceptor(const rtl::OUString& aDescription);
 
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
@@ -217,3 +216,5 @@ class Desktop : public Application
 }
 
 #endif // _DESKTOP_APP_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

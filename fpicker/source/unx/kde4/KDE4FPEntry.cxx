@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,19 +51,19 @@ static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiS
 // the three uno functions that will be exported
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
     {
         void* pRet = 0;
 
         if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FILE_PICKER_IMPL_NAME ) ) )
         {
             Sequence< OUString > aSNS( 1 );
-            aSNS.getArray( )[0] = OUString::createFromAscii( FILE_PICKER_SERVICE_NAME );
+            aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_SERVICE_NAME ));
 
             Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
                         reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -79,3 +80,5 @@ extern "C"
         return pRet;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

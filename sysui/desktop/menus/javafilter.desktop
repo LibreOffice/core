@@ -2,7 +2,7 @@
 Version=1.0
 Terminal=false
 Type=Application
-Exec=openoffice -writer %U
+Exec=${UNIXBASISROOTNAME} --writer %U
 MimeType=application/x-aportisdoc;application/x-pocket-word;application/x-pocket-excel;
 Name=%PRODUCTNAME Small Device Format Importer
 GenericName=Small Device Format Importer

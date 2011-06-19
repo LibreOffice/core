@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,16 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XComponent;
+using ::com::sun::star::util::XCloseable;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 namespace sfx2
 {
 
@@ -89,16 +100,30 @@ LinkManager::~LinkManager()
     }
 }
 
+void LinkManager::InsertCachedComp(const Reference<XComponent>& xComp)
+{
+    maCachedComps.push_back(xComp);
+}
 
-/************************************************************************
-|*    LinkManager::Remove()
-|*
-|*    Beschreibung
-*************************************************************************/
+void LinkManager::CloseCachedComps()
+{
+    CompVector::iterator itr = maCachedComps.begin(), itrEnd = maCachedComps.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        Reference<XCloseable> xCloseable(*itr, UNO_QUERY);
+        if (!xCloseable.is())
+            continue;
+
+        xCloseable->close(true);
+    }
+    maCachedComps.clear();
+}
+
+//--------------------------------------------------------------------------
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
-    // keine Links doppelt einfuegen
+    // No duplicate links inserted
     int bFound = sal_False;
     SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData();
     for( sal_uInt16 n = aLinkTbl.Count(); n; --n, ++ppRef )
@@ -111,7 +136,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
             bFound = sal_True;
         }
 
-        // falls noch leere rum stehen sollten, weg damit
+        // Remove emty ones if they exist
         if( !(*ppRef)->Is() )
         {
             delete *ppRef;
@@ -148,7 +173,7 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
-    // keine Links doppelt einfuegen
+  // No duplicate links inserted
     for( sal_uInt16 n = 0; n < aLinkTbl.Count(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
@@ -171,7 +196,7 @@ sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nUpdateMode,
                                 const String* pName )
 {
-    // unbedingt zuerst
+    // This First
     pLink->SetObjType( nObjType );
     if( pName )
         pLink->SetName( *pName );
@@ -210,7 +235,7 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 }
 
 
-// erfrage die Strings fuer den Dialog
+// Obtain the string for the dialog
 sal_Bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         String* pType,
                                         String* pFile,
@@ -283,8 +308,8 @@ void LinkManager::UpdateAllLinks(
     SvStringsDtor aApps, aTopics, aItems;
     String sApp, sTopic, sItem;
 
-    // erstmal eine Kopie vom Array machen, damit sich updatende Links in
-    // Links in ... nicht dazwischen funken!!
+    // First make a copy of the array in order to update links
+    // links in ... no contact between them!
     SvPtrarr aTmpArr( 255, 50 );
     sal_uInt16 n;
     for( n = 0; n < aLinkTbl.Count(); ++n )
@@ -302,7 +327,7 @@ void LinkManager::UpdateAllLinks(
     {
         SvBaseLink* pLink = (SvBaseLink*)aTmpArr[ n ];
 
-        // suche erstmal im Array nach dem Eintrag
+        // search first in the array after the entry
         sal_uInt16 nFndPos = USHRT_MAX;
         for( sal_uInt16 i = 0; i < aLinkTbl.Count(); ++i )
             if( pLink == *aLinkTbl[ i ] )
@@ -312,9 +337,9 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( USHRT_MAX == nFndPos )
-            continue;                   // war noch nicht vorhanden!
+            continue;  // was not available!
 
-        // Graphic-Links noch nicht updaten
+        // Graphic-Links not to update yet
         if( !pLink->IsVisible() ||
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
@@ -323,19 +348,16 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
             if( RET_YES != nRet )
-                return ;        // es soll nichts geupdatet werden
-            bAskUpdate = sal_False;     // einmal reicht
+                return ;         // nothing should be updated
+            bAskUpdate = sal_False;  // once is enough
         }
 
         pLink->Update();
     }
+    CloseCachedComps();
 }
 
-/************************************************************************
-|*    SvBaseLink::CreateObject()
-|*
-|*    Beschreibung
-*************************************************************************/
+//--------------------------------------------------------------------------
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 {
@@ -356,7 +378,7 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 
 sal_Bool LinkManager::InsertServer( SvLinkSource* pObj )
 {
-    // keine doppelt einfuegen
+    // no duplicate inserts
     if( !pObj || USHRT_MAX != aServerTbl.GetPos( pObj ) )
         return sal_False;
 
@@ -387,6 +409,56 @@ void MakeLnkName( String& rName, const String* pType, const String& rFile,
         ((rName += cTokenSeperator ) += *pFilter).EraseLeadingChars().EraseTrailingChars();
 }
 
+void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    SfxMedium* pMed = rServer.GetMedium();
+    if (!pMed)
+        return;
+
+    const ::sfx2::SvBaseLinks& rLinks = GetLinks();
+    sal_uInt16 n = rLinks.Count();
+
+    for (sal_uInt16 i = 0; i < n; ++i)
+    {
+        ::sfx2::SvBaseLink* p = *rLinks[i];
+        String aType, aFile, aLink, aFilter;
+        if (!GetDisplayNames(p, &aType, &aFile, &aLink, &aFilter))
+            continue;
+
+        if (!aType.EqualsAscii("soffice"))
+            // DDE connections between OOo apps are always named 'soffice'.
+            continue;
+
+        String aTmp;
+        OUString aURL = aFile;
+        if (utl::LocalFileHelper::ConvertPhysicalNameToURL(aFile, aTmp))
+            aURL = aTmp;
+
+        if (!aURL.equalsIgnoreAsciiCase(pMed->GetName()))
+            // This DDE link is not associated with this server shell...  Skip it.
+            continue;
+
+        if (!aLink.Len())
+            continue;
+
+        LinkServerShell(aLink, rServer, *p);
+    }
+}
+
+void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const
+{
+    ::sfx2::SvLinkSource* pSrvSrc = rServer.DdeCreateLinkSource(rPath);
+    if (pSrvSrc)
+    {
+        ::com::sun::star::datatransfer::DataFlavor aFl;
+        SotExchange::GetFormatDataFlavor(rLink.GetContentType(), aFl);
+        rLink.SetObj(pSrvSrc);
+        pSrvSrc->AddDataAdvise(
+            &rLink, aFl.MimeType,
+            sfx2::LINKUPDATE_ONCALL == rLink.GetUpdateMode() ? ADVISEMODE_ONLYONCE : 0);
+    }
+}
+
 sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
                                     sal_uInt16 nFileType,
                                     const String& rFileNm,
@@ -413,8 +485,8 @@ sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink )
     return sal_False;
 }
 
-// eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
-// (ist zur Zeit nur fuer die FileLinks interressant!)
+// A transfer is aborted, so cancel all download media
+// (for now this is only of interest for the file links!)
 void LinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
@@ -425,27 +497,22 @@ void LinkManager::CancelTransfers()
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-//          0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
-//                                  CastAndAddRef( pLnk->GetObj() )) )
             pFileObj->CancelTransfers();
 }
-
-    // um Status Informationen aus dem FileObject an den BaseLink zu
-    // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
-    // dann die entsprechenden Informationen als String.
-    // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
-    // - das braucht Informationen ueber Load/Abort/Error
+    // For the purpose of sending Status information from the file object to
+    // the base link, there exist a dedicated ClipBoardId. The SvData-object
+    // gets the appropriate information as a string
+    // For now this is required for file object in conjunction with JavaScript
+    // - needs information about Load/Abort/Error
 sal_uIntPtr LinkManager::RegisterStatusInfoId()
 {
     static sal_uIntPtr nFormat = 0;
 
     if( !nFormat )
     {
-// wie sieht die neue Schnittstelle aus?
-//      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                                "StatusInfo vom SvxInternalLink" )));
+                                "StatusInfo from SvxInternalLink" )));
     }
     return nFormat;
 }
@@ -511,13 +578,11 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     SfxObjectShell* pFndShell = 0;
     sal_uInt16 nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
     String sTopic, sItem, sReferer;
-    if( pLink->GetLinkManager() &&
-        pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sTopic, &sItem )
-        && sTopic.Len() )
+    LinkManager* pLinkMgr = pLink->GetLinkManager();
+    if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && sTopic.Len())
     {
-        // erstmal nur ueber die DocumentShells laufen und die mit dem
-        // Namen heraussuchen:
-
+        // first only loop over the DocumentShells the shells and find those
+        // with the name:
         com::sun::star::lang::Locale aLocale;
         MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
         CharClass aCC( aLocale );
@@ -528,7 +593,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         TypeId aType( TYPE(SfxObjectShell) );
 
         sal_Bool bFirst = sal_True;
-        SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
+        SfxObjectShell* pShell = pLinkMgr->GetPersist();
         if( pShell && pShell->GetMedium() )
         {
             sReferer = pShell->GetMedium()->GetBaseURL();
@@ -556,7 +621,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             aCC.toLower( sTmp );
-            if( sTmp == sNmURL )        // die wollen wir haben
+            if( sTmp == sNmURL )  // we want these
             {
                 pFndShell = pShell;
                 break;
@@ -578,9 +643,25 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     if( !sTopic.Len() )
         return sal_False;
 
-    if( !pFndShell )
+    if (pFndShell)
     {
-        // dann versuche die Datei zu laden:
+        sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
+        if( pNewSrc )
+        {
+            ::com::sun::star::datatransfer::DataFlavor aFl;
+            SotExchange::GetFormatDataFlavor( pLink->GetContentType(), aFl );
+
+            pLink->SetObj( pNewSrc );
+            pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
+                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
+                                    ? ADVISEMODE_ONLYONCE
+                                    : 0 );
+            return true;
+        }
+    }
+    else
+    {
+        // then try to download the file:
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
         aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );
@@ -593,7 +674,11 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
-            SfxBoolItem aReadOnly(SID_DOC_READONLY, sal_True);
+            SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
+
+            // Disable automatic re-connection to avoid this link instance
+            // being destroyed at re-connection.
+            SfxBoolItem aDdeConnect(SID_DDE_RECONNECT_ONLOAD, false);
 
             // #i14200# (DDE-link crashes wordprocessor)
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
@@ -604,29 +689,19 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             aArgs.Put(aName);
             aArgs.Put(aUpdate);
             aArgs.Put(aReadOnly);
-            pFndShell = SfxObjectShell::CreateAndLoadObject( aArgs );
+            aArgs.Put(aDdeConnect);
+            Reference<XComponent> xComp = SfxObjectShell::CreateAndLoadComponent(aArgs);
+            pFndShell = SfxObjectShell::GetShellFromComponent(xComp);
+            if (xComp.is() && pFndShell)
+            {
+                pLinkMgr->InsertCachedComp(xComp);
+                pLinkMgr->LinkServerShell(sItem, *pFndShell, *pLink);
+                return true;
+            }
         }
     }
 
-    sal_Bool bRet = sal_False;
-    if( pFndShell )
-    {
-        sfx2::SvLinkSource* pNewSrc = pFndShell->DdeCreateLinkSource( sItem );
-        if( pNewSrc )
-        {
-            bRet = sal_True;
-
-            ::com::sun::star::datatransfer::DataFlavor aFl;
-            SotExchange::GetFormatDataFlavor( pLink->GetContentType(), aFl );
-
-            pLink->SetObj( pNewSrc );
-            pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
-                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
-                                    ? ADVISEMODE_ONLYONCE
-                                    : 0 );
-        }
-    }
-    return bRet;
+    return false;
 }
 
 
@@ -634,3 +709,4 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

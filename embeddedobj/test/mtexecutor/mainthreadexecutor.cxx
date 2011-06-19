@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,15 +39,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.thread.MainThreadExecutor");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.thread.MainThreadExecutor");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.thread.MainThreadExecutor"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MainThreadExecutor::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.thread.MainThreadExecutor");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
 }
 
 //-------------------------------------------------------------------------
@@ -67,7 +68,7 @@ uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::Named
     sal_Int32 nValuesSize = 0;
 
     for ( sal_Int32 nInd = 0; nInd < aArguments.getLength(); nInd++ )
-        if ( aArguments[nInd].Name.equalsAscii( "JobToExecute" ) )
+        if ( aArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JobToExecute" ) ) )
             aArguments[nInd].Value >>= xJob;
         else
         {
@@ -137,3 +138,4 @@ void MainThreadExecutorRequest::doIt()
         m_xJob->execute( m_aValues );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,21 +34,13 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/conditn.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <map>
-
-#ifdef XP_OS2
-#define INCL_DOSERRORS
-#define INCL_DOSFILEMGR
-#include <os2.h>
-#endif
 
 using namespace com::sun::star::mozilla;
 class nsProfile;
@@ -78,3 +71,4 @@ namespace connectivity
 
 #endif // __MNSProfileManager_h___
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

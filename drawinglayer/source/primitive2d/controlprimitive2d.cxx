@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ namespace drawinglayer
 
                 if(xSet.is())
                 {
-                    uno::Any aValue(xSet->getPropertyValue(rtl::OUString::createFromAscii("DefaultControl")));
+                    uno::Any aValue(xSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"))));
                     rtl::OUString aUnoControlTypeName;
 
                     if(aValue >>= aUnoControlTypeName)
@@ -381,3 +382,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@
 
 #include <unistd.h>
 
-const rtl::OUString RECENTLY_USED_FILE_NAME = rtl::OUString::createFromAscii(".recently-used");
-const rtl::OUString SLASH = rtl::OUString::createFromAscii("/");
+const rtl::OUString RECENTLY_USED_FILE_NAME(RTL_CONSTASCII_USTRINGPARAM(".recently-used"));
+const rtl::OUString SLASH(RTL_CONSTASCII_USTRINGPARAM("/"));
 
 namespace /* private */ {
 
@@ -145,3 +146,4 @@ bool recently_used_file::eof() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -164,9 +165,12 @@
 #define CTF_PM_FTN_LINE_ADJUST          (XML_PM_CTF_START + 0x0064)
 #define CTF_PM_FTN_LINE_DISTANCE        (XML_PM_CTF_START + 0x0065)
 #define CTF_PM_FTN_DISTANCE             (XML_PM_CTF_START + 0x0066)
+#define CTF_PM_FTN_LINE_STYLE           (XML_PM_CTF_START + 0x0067)
 
 extern const XMLPropertyMapEntry aXMLPageMasterStyleMap[];
 extern const XMLPropertyMapEntry aXMLPageMasterHeaderImportStyleMap[];
 extern const XMLPropertyMapEntry aXMLPageMasterFooterImportStyleMap[];
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

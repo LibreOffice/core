@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
 
-#ifndef _XMLOFF_XMLTIMP_HXX_
 #include <xmloff/xmlimp.hxx>
-#endif
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -164,3 +161,5 @@ void XMLTextShapeImportHelper::addShape(
         break;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

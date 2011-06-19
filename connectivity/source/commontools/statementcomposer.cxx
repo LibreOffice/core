@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,7 +193,7 @@ namespace dbtools
 
                         // the filter
                         sal_Bool bApplyFilter = sal_True;
-                        const ::rtl::OUString sPropApply = ::rtl::OUString::createFromAscii( "ApplyFilter" );
+                        const ::rtl::OUString sPropApply( RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" ));
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );
@@ -211,7 +212,7 @@ namespace dbtools
                     break;
 
                     default:
-                        OSL_ENSURE(sal_False, "lcl_ensureUpToDateComposer_nothrow: no table, no query, no statement - what else ?!");
+                        OSL_FAIL("lcl_ensureUpToDateComposer_nothrow: no table, no query, no statement - what else ?!");
                         break;
                 }
 
@@ -313,3 +314,5 @@ namespace dbtools
 //........................................................................
 } // namespace dbtools
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

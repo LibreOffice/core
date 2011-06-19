@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: hittestprimitive3d.hxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: aw $ $Date: 2008/09/24 14:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HIDDENGEOMETRYPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HIDDENGEOMETRYPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -54,7 +51,7 @@ namespace drawinglayer
         // decomposes to nothing, so no one not knowing it will be influenced. Only
         // helper processors for hit test (and maybe BoundRect extractors) will
         // use it and it's children subcontent.
-        class HiddenGeometryPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive3D : public GroupPrimitive3D
         {
         public:
             HiddenGeometryPrimitive3D(const Primitive3DSequence& rChildren);
@@ -79,3 +76,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

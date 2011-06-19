@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,11 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 
 // Returns a SbxObject that wrapps an Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
-SbxObjectRef GetSbUnoObject( const String& aName, const com::sun::star::uno::Any& aUnoObj_ );
+SbxObjectRef GetSbUnoObject( const ::rtl::OUString& aName, const com::sun::star::uno::Any& aUnoObj_ );
 
 // Force creation of all properties for debugging
 void createAllObjectProperties( SbxObject* pObj );
+void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
 ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
@@ -45,3 +47,4 @@ void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

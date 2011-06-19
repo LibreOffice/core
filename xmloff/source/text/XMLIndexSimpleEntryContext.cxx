@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-
-
-//using namespace ::com::sun::star::text;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
@@ -144,3 +142,5 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

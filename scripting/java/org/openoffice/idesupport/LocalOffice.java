@@ -38,8 +38,6 @@ import java.util.Vector;
  * releated functionality of the locally running office. The
  * office has to be started with options appropriate for establishing
  * local connection.
- *
- * @author misha <misha@openoffice.org>
  */
 public class LocalOffice
 {

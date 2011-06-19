@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,13 +47,11 @@ private:
     FontNameMenu*   pMenu;
     Menu&           rParent;
 
-//#if 0 // _SOLAR__PRIVATE
     SVX_DLLPRIVATE void         FillMenu();
     DECL_LINK( MenuSelect, FontNameMenu * );
     SVX_DLLPRIVATE virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     SVX_DLLPRIVATE virtual void     Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-//#endif
 
 public:
     SvxFontMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
@@ -67,3 +66,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

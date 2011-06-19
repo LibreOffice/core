@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,10 @@
 // include ---------------------------------------------------------------
 #define _SVX_HLNKITEM_CXX
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/stream.hxx>
-
-#ifndef _MEMBERID_HRC
-#include <svx/memberid.hrc>
-#endif
-
-#ifndef __SBX_SBXVARIABLE_HXX
+#include <svl/memberid.hrc>
 #include <basic/sbxvar.hxx>
-#endif
 
 #include "svx/hlnkitem.hxx"
 
@@ -51,10 +44,6 @@
 TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 
 // class SvxHyperlinkItem ------------------------------------------------
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 #define HYPERLINKFF_MARKER  0x599401FE
 
@@ -137,10 +126,6 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     return rStrm;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     SvxHyperlinkItem* pNew = new SvxHyperlinkItem( Which() );
@@ -215,10 +200,6 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     return pNew;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
             SfxPoolItem(rHyperlinkItem)
 {
@@ -235,10 +216,6 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
         pMacroTable=NULL;
 
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
@@ -257,18 +234,10 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& r
         pMacroTable=NULL;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 {
     return new SvxHyperlinkItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -312,11 +281,6 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     return sal_True;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     if( nEvent < EVENT_SFX_START )
@@ -348,10 +312,6 @@ void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
         pMacroTable->Insert( nEvent, new SvxMacro( rMacro ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {
     if ( pMacroTable )
@@ -360,7 +320,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }
 
-sal_Bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -382,13 +342,13 @@ sal_Bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8
             rVal <<= (sal_Int32) eType;
         break;
         default:
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -422,9 +382,10 @@ sal_Bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_u
             eType = (SvxLinkInsertMode) (sal_uInt16) nVal;
         break;
         default:
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

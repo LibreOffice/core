@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,33 +53,33 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     using Window::Notify;
 
     SvxRulerItem **pCtrlItem;
-    SvxLongLRSpaceItem *pLRSpaceItem;  //Linker und Rechter Rand
-    SfxRectangleItem *pMinMaxItem; //Maxima fuers Draggen
-    SvxLongULSpaceItem *pULSpaceItem;  //Oberer und Unterer Rand
-    SvxTabStopItem *pTabStopItem;  //Tabstops
-    SvxLRSpaceItem *pParaItem;     //Absaetze
-    SvxLRSpaceItem *pParaBorderItem; //Border distance
-    SvxPagePosSizeItem *pPagePosItem; //Seitenabstaende zum Lineal
-    SvxColumnItem *pColumnItem;    //Spalten
-    SvxObjectItem *pObjectItem;    //Objekt
+    SvxLongLRSpaceItem *pLRSpaceItem;  // left and right edge
+    SfxRectangleItem *pMinMaxItem; // maxima for dragging
+    SvxLongULSpaceItem *pULSpaceItem;  // upper and lower edge
+    SvxTabStopItem *pTabStopItem;  // tab stops
+    SvxLRSpaceItem *pParaItem;     // paragraphs
+    SvxLRSpaceItem *pParaBorderItem; // border distance
+    SvxPagePosSizeItem *pPagePosItem; // page distance to the rule
+    SvxColumnItem *pColumnItem;    // columns
+    SvxObjectItem *pObjectItem;    // object
     Window *pEditWin;
     SvxRuler_Impl *pRuler_Imp;
     sal_Bool bAppSetNullOffset :1;
     sal_Bool bHorz :1;
-    long lLogicNullOffset;      // in logischen Koordinaten
-    long lAppNullOffset;        // in logischen Koordinaten
-    long lMinFrame;             // minimale Framebreite in Pixel
+    long lLogicNullOffset;      // in logic coordinates
+    long lAppNullOffset;        // in logic coordinates
+    long lMinFrame;             // minimal frame width in pixels
     long lInitialDragPos;
     sal_uInt16 nFlags;
     enum {
         NONE = 0x0000,
         DRAG_OBJECT =  0x0001,
-        // letzte Spalte verkleinern, Shift
+        // reduce size of the last column, shift
         DRAG_OBJECT_SIZE_LINEAR = 0x0002,
         DRAG_OBJECT_SIZE_PROPORTIONAL = 0x0004, // proportional, Ctrl
-        // nur aktuelle Zeile (Tabelle; Shift-Ctrl)
+        // only current line (table; Shift-Ctrl)
         DRAG_OBJECT_ACTLINE_ONLY = 0x0008,
-        // aktuell gleiche Tastenbelegung
+        // currently same key assignment
         DRAG_OBJECT_LEFT_INDENT_ONLY = DRAG_OBJECT_SIZE_PROPORTIONAL
         }
     nDragType;
@@ -87,8 +88,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_uInt16 nTabBufSize;
     long lDefTabDist;
     long lTabPos;
-    RulerTab *pTabs;            // Tabpositionen in Pixel
-    RulerIndent *pIndents;      // Absatzraender in Pixel
+    RulerTab *pTabs;            // tab positions in pixel
+    RulerIndent *pIndents;      // paragraph margins in pixel
     RulerBorder *pBorders;
     sal_uInt16 nBorderCount;
     RulerBorder *pObjectBorders;
@@ -99,33 +100,32 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_Bool bValid;
     sal_Bool bListening;
     sal_Bool bActive;
-//#if 0 // _SOLAR__PRIVATE
     void StartListening_Impl();
     long GetCorrectedDragPos( sal_Bool bLeft = sal_True, sal_Bool bRight = sal_True );
     void DrawLine_Impl(long &lTabPos, int, sal_Bool Hori=sal_True);
     sal_uInt16 GetObjectBordersOff(sal_uInt16 nIdx) const;
 
-    // Seitenr"ander oder umgebender Rahmen
+    // page borders or surrounding frame
     void UpdateFrame(const SvxLongLRSpaceItem *);
     void UpdateFrame(const SvxLongULSpaceItem *);
     void UpdateFrameMinMax(const SfxRectangleItem *);
-    // Absatzeinzuege
+    // paragraph indentations
     void UpdatePara(const SvxLRSpaceItem *);
     // Border distance
     void UpdateParaBorder(const SvxLRSpaceItem *);
     // Tabs
     void Update(const SvxTabStopItem *);
-    // Seitenposition und -breite
+    // page position and width
     void Update(const SvxPagePosSizeItem *);
-    // Spalten
+    // columns
     void Update(const SvxColumnItem *, sal_uInt16 nSID);
-    // Object Selektion
+    // object selection
     void Update(const SvxObjectItem *);
-    // Protect
+    // protect
     void Update( const SvxProtectItem* );
     // left-to-right text
     void UpdateTextRTL( const SfxBoolItem* );
-    // Absatzeinzuege
+    // paragraph indentations
     void UpdatePara();
     void UpdateTabs();
     void UpdatePage();
@@ -154,9 +154,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long ConvertSizeLogic(long lSize) const;
 
     long GetFirstLineIndent() const;
-//  long GetLogicFirstLineIndent() const;
     long GetLeftIndent() const;
-//  long GetLogicLeftIndent() const;
     long GetRightIndent() const;
     long GetLogicRightIndent() const;
     long GetPageWidth() const;
@@ -194,7 +192,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     sal_uInt16 GetNextVisible(sal_uInt16 nColumn);
     sal_uInt16 GetPrevVisible(sal_uInt16 nColumn);
-//#endif
 
     void Update();
 
@@ -215,8 +212,8 @@ protected:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    // Berechnung der Grenzwerte fuer Objectgrenzen
-    // Werte sind bezogen auf die Seite
+    // calculation of boundary values for object borders
+    // values refer to the page
     virtual sal_Bool    CalcLimits(long &nMax1, long &nMax2, sal_Bool bFirst) const;
     sal_Bool IsActLastColumn(
         sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX) const ;
@@ -253,7 +250,7 @@ public:
     void SetDefTabDist(long);
     long GetDefTabDist() const;
 
-    // Setzen / Erfragen NullOffset in logischen Einheiten
+    // set/get NullOffset in logic units
     void SetNullOffsetLogic(long lOff = 0);
     long GetNullOffsetLogic() const { return lAppNullOffset; }
 
@@ -268,3 +265,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 
  *************************************************************************/
 #include "webdavresultset.hxx"
-#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#endif
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
@@ -93,3 +92,4 @@ void DynamicResultSet::initDynamic()
     m_xResultSet2 = m_xResultSet1;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

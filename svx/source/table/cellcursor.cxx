@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -249,7 +250,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
+        OSL_FAIL("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
     }
     return false;
 }
@@ -279,7 +280,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::CellCursor::merge(), exception caught!");
+        OSL_FAIL("sdr::table::CellCursor::merge(), exception caught!");
     }
 
     if( bUndo )
@@ -549,7 +550,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::CellCursor::split(), exception caught!");
+        OSL_FAIL("sdr::table::CellCursor::split(), exception caught!");
         throw NoSupportException();
     }
 
@@ -588,3 +589,5 @@ sal_Bool SAL_CALL CellCursor::isUnmergeable(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

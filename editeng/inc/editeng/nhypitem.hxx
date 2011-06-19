@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,6 @@
 #include <editeng/editengdllapi.h>
 
 // class SvxNoHyphenItem -------------------------------------------------
-
-/*  [Beschreibung]
-
-    PB: ???
-*/
-
 class EDITENG_DLLPUBLIC SvxNoHyphenItem : public SfxBoolItem
 {
 public:
@@ -47,7 +42,7 @@ public:
     SvxNoHyphenItem( const sal_Bool bHyphen /*= sal_True*/,
                      const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
@@ -66,3 +61,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

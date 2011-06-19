@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,16 +60,15 @@
 #include "dicimp.hxx"
 #include "lngopt.hxx"
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-///////////////////////////////////////////////////////////////////////////
+using ::rtl::OUString;
+
 
 static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
 
@@ -76,7 +76,6 @@ static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const rtl::OUString& rNew );
 static void AddUserData( const uno::Reference< XDictionary > &rDic );
 
-///////////////////////////////////////////////////////////////////////////
 
 class DicEvtListenerHelper :
     public cppu::WeakImplHelper1
@@ -183,10 +182,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    /*sal_Bool bActiveDicsModified = sal_False;*/
-    //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
-    //
     DictionaryType eDicType = xDic->getDictionaryType();
     DBG_ASSERT(eDicType != DictionaryType_MIXED,
         "lng : unexpected dictionary type");
@@ -296,7 +292,6 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 void DicList::MyAppExitListener::AtExit()
@@ -346,7 +341,7 @@ void DicList::SearchForDictionaries(
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
-            // Wenn kein
+            // When not
             xub_StrLen nPos  = aURL.Search('.');
             String aExt(aURL.Copy(nPos + 1));
             aExt.ToLowerAscii();
@@ -359,9 +354,8 @@ void DicList::SearchForDictionaries(
                 continue;          // andere Files
         }
 
-        // Aufnehmen in die Liste der Dictionaries
-        // Wenn existent nicht aufnehmen
-        //
+        // Record in the list of Dictoinaries
+        // When it already exists don't record
         sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
         String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
@@ -644,6 +638,7 @@ void SAL_CALL
                     xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
             }
         }
+        xDicEvtLstnrHelper.clear();
     }
 }
 
@@ -696,12 +691,10 @@ void DicList::_CreateDicList()
 
 
     // evaluate list of dictionaries to be activated from configuration
-    //
     //! to suppress overwriting the list of active dictionaries in the
     //! configuration with incorrect arguments during the following
     //! activation of the dictionaries
     pDicEvtLstnrHelper->BeginCollectEvents();
-    //
     const uno::Sequence< rtl::OUString > aActiveDics( aOpt.GetActiveDics() );
     const rtl::OUString *pActiveDic = aActiveDics.getConstArray();
     sal_Int32 nLen = aActiveDics.getLength();
@@ -754,9 +747,7 @@ void DicList::SaveDics()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 rtl::OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 {
@@ -791,7 +782,7 @@ uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw(
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< rtl::OUString > aSNS( 1 );   // auch mehr als 1 Service moeglich
+    uno::Sequence< rtl::OUString > aSNS( 1 );   // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_DICTIONARY_LIST );
     return aSNS;
 }
@@ -815,7 +806,6 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 xub_StrLen lcl_GetToken( String &rToken,
             const String &rText, xub_StrLen nPos, const String &rDelim )
@@ -891,7 +881,6 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 #if defined _MSC_VER
 #pragma optimize("g",off)
@@ -940,5 +929,5 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
     return sal_False;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

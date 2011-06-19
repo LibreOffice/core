@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,7 @@ inline sal_Bool BitSet::IsRealSubSet( const BitSet& ) const
 }
 //--------------------------------------------------------------------
 
-// detsermines if the other bitset is a superset or equal
+// determines if the other bitset is a superset or equal
 
 inline sal_Bool BitSet::IsSubSet( const BitSet& ) const
 {
@@ -255,3 +256,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,11 +50,12 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace rtl;
 using namespace cppu;
 
+using ::rtl::OUString;
 
-#if (defined UNX) || (defined OS2)
+
+#if (defined UNX)
 void main( int argc, char * argv[] )
 #else
 void _cdecl main( int argc, char * argv[] )
@@ -65,28 +67,28 @@ void _cdecl main( int argc, char * argv[] )
 
     try{
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xFac =
-                createRegistryServiceFactory(OUString::createFromAscii("g:\\office50\\program\\applicat.rdb"),OUString());
+                createRegistryServiceFactory(OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\office50\\program\\applicat.rdb")),OUString());
         if(!xFac.is())
             return;
 
-        m_xDriver = Reference<XDriver>(xFac->createInstance(OUString::createFromAscii("com.sun.star.sdbc.driver.dbase.Driver")),UNO_QUERY);
+        m_xDriver = Reference<XDriver>(xFac->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.driver.dbase.Driver"))),UNO_QUERY);
         if(m_xDriver.is())
         {
 
             Sequence<PropertyValue> aValue;
-    //      aValue.getArray()[0] = PropertyValue( OUString::createFromAscii("user"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
-    //      aValue.getArray()[1] = PropertyValue( OUString::createFromAscii("password"),0,makeAny(OUString::createFromAscii("TEST1")),PropertyState_DIRECT_VALUE);
+    //      aValue.getArray()[0] = PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("user")),0,makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("TEST1"))),PropertyState_DIRECT_VALUE);
+    //      aValue.getArray()[1] = PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("password")),0,makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("TEST1"))),PropertyState_DIRECT_VALUE);
     //
-            m_xConnection = m_xDriver->connect(OUString::createFromAscii("sdbc:dbase:g:\\"),aValue);
+            m_xConnection = m_xDriver->connect(OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:g:\\")),aValue);
             if(m_xConnection.is())
             {
                 Reference<XStatement> xStmt = m_xConnection->createStatement();
                 if(xStmt.is())
                 {
-                    Reference<XResultSet> xRes = xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM Tele"));
+                    Reference<XResultSet> xRes = xStmt->executeQuery(OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM Tele")));
                     if(xRes.is())
                     {
-                        ::rtl::OUString aPat = ::rtl::OUString::createFromAscii("%s\t");
+                        ::rtl::OUString aPat( RTL_CONSTASCII_USTRINGPARAM( "%s\t" ));
                         Reference<XRow> xRow(xRes,UNO_QUERY);
                         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
                         for(sal_Int32 i=1;i<xMeta->getColumnCount();++i)
@@ -115,3 +117,4 @@ void _cdecl main( int argc, char * argv[] )
     scanf("%d",&d);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

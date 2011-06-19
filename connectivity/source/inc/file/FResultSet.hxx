@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,31 +29,15 @@
 #ifndef _CONNECTIVITY_FILE_FRESULTSET_HXX_
 #define _CONNECTIVITY_FILE_FRESULTSET_HXX_
 
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XCLOSEABLE_HPP_
 #include <com/sun/star/sdbc/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
-#endif
 #include <com/sun/star/util/XCancellable.hpp>
-#ifndef _COM_SUN_STAR_SQLC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SQLC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "file/FStatement.hxx"
@@ -117,14 +102,14 @@ namespace connectivity
 //          ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
-            ::vos::ORef<OKeySet>                    m_pFileSet;
+            ::rtl::Reference<OKeySet>                   m_pFileSet;
             OKeySet::Vector::iterator               m_aFileSetIter;
 
 
 
             OSortIndex*                             m_pSortIndex;
-            ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
-            ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
+            ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
+            ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;
             OFileTable*                             m_pTable;
             connectivity::OSQLParseNode*            m_pParseTree;
 
@@ -198,7 +183,7 @@ namespace connectivity
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
@@ -306,7 +291,7 @@ namespace connectivity
             inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
             inline void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
             inline void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
-            inline void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&   _xParamColumns) { m_xParamColumns = _xParamColumns; }
+            inline void setParameterColumns(const ::rtl::Reference<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
             inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
             inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
             inline void setSelectRow(const OValueRefRow& _rRow)
@@ -326,7 +311,7 @@ namespace connectivity
             void clear();
             static void setBoundedColumns(const OValueRefRow& _rRow,
                                     const OValueRefRow& _rSelectRow,
-                                    const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                    const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
                                     sal_Bool _bSetColumnMapping,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
@@ -355,3 +340,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_FILE_ORESULTSET_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

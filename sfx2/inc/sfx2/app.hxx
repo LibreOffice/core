@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/shell.hxx>
+#include <vector>
 
 class Timer;
 class ApplicationEvent;
@@ -68,7 +70,6 @@ class SfxEventHint;
 class SfxItemSet;
 class SfxMacroConfig;
 class SfxMedium;
-class SfxMediumList;
 class SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
@@ -102,6 +103,8 @@ class ModalDialog;
 class SbxArray;
 class SbxValue;
 
+typedef ::std::vector< SfxMedium* > SfxMediumList;
+
 namespace sfx2
 {
     class SvLinkSource;
@@ -123,30 +126,8 @@ public:
 };
 
 //TODO/CLEANUP
-//wird anscheinend nur in SfxPickList/SfxFrameLoader benutzt
+//is apparently used only in SfxPickList/SfxFrameLoader
 DECL_OBJHINT( SfxStringHint, String );
-
-/*
-typedef SfxPoolItem* (*SfxItemCreateFunc)();
-class SfxItemFactory_Impl;
-class SfxItemFactoryList
-{
-    List aList;
-public:
-    ~SfxItemFactoryList();
-
-    SfxItemFactory_Impl* GetFactory_Impl( const SvGlobalName& rName ) const;
-    SfxItemFactory_Impl* GetFactory_Impl( TypeId ) const;
-    const SvGlobalName* GetGlobalName( const SfxPoolItem* pItem ) const;
-    SfxPoolItem* Create(
-        const SvGlobalName& rName, sal_uInt16 nId, SvStream* pStrm = 0) const;
-    void         RegisterItemFactory(
-        const SvGlobalName& rName, SfxItemCreateFunc );
-};
-
-#define REGISTER_ITEM( ItemClass, aGlobName )                                 \
-RegisterItemFactory( aGlobName, ( SfxItemCreateFunc) ItemClass::StaticType() );
-*/
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
@@ -236,9 +217,6 @@ public:
     StarBASIC*                  GetBasic();
     sal_uInt16                  SaveBasicManager() const;
     sal_uInt16                  SaveBasicAndDialogContainer() const;
-    void                        RegisterBasicConstants( const char *pPrefix,
-                                                        const SfxConstant *pConsts,
-                                                        sal_uInt16 nCount );
 
     // misc.
     sal_Bool                        GetOptions(SfxItemSet &);
@@ -254,7 +232,6 @@ public:
                                                   const String* pPostStr = 0);
     void                        ResetLastDir();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
@@ -309,8 +286,9 @@ public:
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
     SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();
-//#endif
 
+    /* loads a branded bitmap - that can be overridden per locale */
+    static bool  LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
     /** loads the application logo as used in the about dialog and impress slideshow pause screen */
     static Image GetApplicationLogo();
 };
@@ -327,3 +305,4 @@ inline SfxApplication* SfxGetpApp()
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

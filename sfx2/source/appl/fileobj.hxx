@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,8 +83,7 @@ public:
     virtual sal_Bool    Connect( sfx2::SvBaseLink* );
     virtual void    Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
 
-    // erfrage ob das man direkt auf die Daten zugreifen kann oder ob das
-    // erst angestossen werden muss
+    // Ask whether you can access data directly or whether it has to be triggered
     virtual sal_Bool IsPending() const;
     virtual sal_Bool IsDataComplete() const;
 
@@ -93,3 +93,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

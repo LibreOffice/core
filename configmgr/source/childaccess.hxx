@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "boost/shared_ptr.hpp"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -75,11 +77,9 @@ public:
         rtl::Reference< Node > const & node);
 
     virtual Path getAbsolutePath();
-
     virtual Path getRelativePath();
 
     virtual rtl::OUString getRelativePathRepresentation();
-
     virtual rtl::Reference< Node > getNode();
 
     virtual bool isFinalized();
@@ -87,11 +87,9 @@ public:
     virtual rtl::OUString getNameInternal();
 
     virtual rtl::Reference< RootAccess > getRootAccess();
-
     virtual rtl::Reference< Access > getParentAccess();
 
     virtual void SAL_CALL acquire() throw ();
-
     virtual void SAL_CALL release() throw ();
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
@@ -117,9 +115,7 @@ public:
     void unbind() throw ();
 
     bool isInTransaction() const { return inTransaction_; }
-
     void committed();
-
     void setNode(rtl::Reference< Node > const & node);
 
     void setProperty(
@@ -150,8 +146,11 @@ private:
     std::auto_ptr< com::sun::star::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

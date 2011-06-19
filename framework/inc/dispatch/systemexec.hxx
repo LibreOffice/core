@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ namespace framework{
 /**
     @short          protocol handler for "systemexec:*" URLs
     @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
-                    be automaticly used by the framework dispatch mechanism if such URL occured.
+                    be automaticly used by the framework dispatch mechanism if such URL occurred.
                     It forwards all URL's to the underlying operating system.
                     So it would e.g. be possible to open HTML files outside the office within a web browser.
 
@@ -143,3 +144,5 @@ class SystemExec : // interfaces
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

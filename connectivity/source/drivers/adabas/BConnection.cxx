@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include "adabas/BCatalog.hxx"
 #include "odbc/OFunctions.hxx"
 #include "odbc/OTools.hxx"
-#ifndef _CONNECTIVITY_ODBC_ODATABASEMETADATA_HXX_
 #include "adabas/BDatabaseMetaData.hxx"
-#endif
 #include "adabas/BStatement.hxx"
 #include "adabas/BPreparedStatement.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -113,7 +112,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     m_sUser = aUID;
 
     if ( sHostName.getLength() )
-        aDSN = sHostName + ':' + aDSN;
+        aDSN = sHostName + rtl::OUString(static_cast<sal_Unicode>(':')) + aDSN;
     SQLRETURN nSQLRETURN = openConnectionWithAuth(aDSN,nTimeout, aUID,aPWD);
 
     return nSQLRETURN;
@@ -142,7 +141,7 @@ SQLRETURN OAdabasConnection::openConnectionWithAuth(const ::rtl::OUString& aConn
 
 
 
-    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_INTEGER);
+    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)(sal_IntPtr)nTimeOut,SQL_IS_INTEGER);
     // Verbindung aufbauen
 
     nSQLRETURN = N3SQLConnect(m_aConnectionHandle,
@@ -252,9 +251,9 @@ Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
     return new OAdabasConnection(m_pDriverHandleCopy,m_pDriver);
 }
 // -----------------------------------------------------------------------------
-::vos::ORef<OSQLColumns> OAdabasConnection::createSelectColumns(const ::rtl::OUString& _rSql)
+::rtl::Reference<OSQLColumns> OAdabasConnection::createSelectColumns(const ::rtl::OUString& _rSql)
 {
-    ::vos::ORef<OSQLColumns> aRet;
+    ::rtl::Reference<OSQLColumns> aRet;
     OSQLParser aParser(getDriver()->getORB());
     ::rtl::OUString sErrorMessage;
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_rSql);
@@ -272,3 +271,4 @@ Sequence< sal_Int8 > OAdabasConnection::getUnoTunnelImplementationId()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

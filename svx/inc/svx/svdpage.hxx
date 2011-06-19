@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,8 +98,8 @@ friend class SdrEditView;
     Rectangle   aOutRect;
     Rectangle   aSnapRect;
     SdrObjListKind eListKind;
-    FASTBOOL    bObjOrdNumsDirty;
-    FASTBOOL    bRectsDirty;
+    bool    bObjOrdNumsDirty;
+    bool    bRectsDirty;
 protected:
     virtual void RecalcRects();
 
@@ -131,7 +132,7 @@ public:
     virtual void      SetModel(SdrModel* pNewModel);
     // Neuberechnung der Objekt-Ordnungsnummern
     void     RecalcObjOrdNums();
-    FASTBOOL IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
+    bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
     virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND
                                  , const SdrInsertReason* pReason=NULL
                                                                       );
@@ -169,7 +170,7 @@ public:
     SdrObject* GetObj(sal_uIntPtr nNum) const;
 
     // Gelinkte Seite oder gelinktes Gruppenobjekt
-    virtual FASTBOOL IsReadOnly() const;
+    virtual bool IsReadOnly() const;
 
     // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
     sal_uIntPtr   CountAllObjects() const;
@@ -475,12 +476,12 @@ public:
     SdrPage(const SdrPage& rSrcPage);
     virtual ~SdrPage();
     // pModel, pPage, pUpList, pOwnerObj und mbInserted werden Zuweisungeoperator nicht veraendert!
-    virtual void operator=(const SdrPage& rSrcPage);
+    SdrPage& operator=(const SdrPage& rSrcPage);
     virtual SdrPage* Clone() const;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool IsMasterPage() const       { return mbMaster; }
     void SetInserted(bool bNew = true);
-    FASTBOOL IsInserted() const         { return mbInserted; }
+    bool IsInserted() const         { return mbInserted; }
     virtual void SetChanged();
 
     // #i68775# React on PageNum changes (from Model in most cases)
@@ -519,10 +520,8 @@ public:
     void TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew);
     sdr::contact::ViewContact& TRG_GetMasterPageDescriptorViewContact() const;
 
-//#if 0 // _SOLAR__PRIVATE
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
-//#endif // __PRIVATE
 public:
 
     // Aenderungen an den Layern setzen nicht das Modified-Flag !
@@ -532,11 +531,11 @@ public:
     // GetBitmap und GetMetafile sind noch nicht implementiert.
     // Bitmap in Bildschirmaufloesung und -farbtiefe aus den Objekten der
     // Page erzeugen.
-    Bitmap        GetBitmap(FASTBOOL bTrimBorders=sal_True) const               { return GetBitmap(aPrefVisiLayers,bTrimBorders); }
-    Bitmap        GetBitmap(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=sal_True) const;
+    Bitmap        GetBitmap(bool bTrimBorders = true) const             { return GetBitmap(aPrefVisiLayers,bTrimBorders); }
+    Bitmap        GetBitmap(const SetOfByte& rVisibleLayers, bool bTrimBorders = true) const;
     // Metafile aus den Objekten der Page erzeugen
-    GDIMetaFile   GetMetaFile(FASTBOOL bTrimBorders=sal_True)                   { return GetMetaFile(aPrefVisiLayers,bTrimBorders); }
-    GDIMetaFile   GetMetaFile(const SetOfByte& rVisibleLayers, FASTBOOL bTrimBorders=sal_True);
+    GDIMetaFile   GetMetaFile(bool bTrimBorders = true)                 { return GetMetaFile(aPrefVisiLayers,bTrimBorders); }
+    GDIMetaFile   GetMetaFile(const SetOfByte& rVisibleLayers, bool bTrimBorders = true);
 
     virtual String GetLayoutName() const;
 
@@ -559,7 +558,7 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
-    FASTBOOL HasTransparentObjects( sal_Bool bCheckForAlphaChannel = sal_False ) const;
+    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
 
     /** *deprecated* returns an averaged background color of this page */
     // #i75566# GetBackgroundColor -> GetPageBackgroundColor
@@ -616,3 +615,4 @@ public:
 
 #endif //_SVDPAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

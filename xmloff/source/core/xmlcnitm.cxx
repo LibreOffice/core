@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,12 @@
 #include <xmloff/xmlcnimp.hxx>
 #include "xmloff/unoatrcn.hxx"
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
+
+using ::rtl::OUString;
 
 typedef ::rtl::OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( SvXMLAttrContainerData_Impl, OUStringPtr, 5, 5 )
@@ -195,7 +197,7 @@ void SvXMLAttrContainerData::Remove( sal_uInt16 i )
     }
     else
     {
-        DBG_ERROR( "illegal index" );
+        OSL_FAIL( "illegal index" );
     }
 }
 
@@ -216,3 +218,4 @@ const ::rtl::OUString& SvXMLAttrContainerData::GetAttrValue(sal_uInt16 i) const
     return *(*pValues)[i];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

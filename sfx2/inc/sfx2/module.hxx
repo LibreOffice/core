@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,8 @@
  *
  ************************************************************************/
 #ifndef _SFXMODULE_HXX
-#define _SFXMODULE_HXX  // intern
-#define _SFXMOD_HXX     // extern
+#define _SFXMODULE_HXX  // internal
+#define _SFXMOD_HXX     // external
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -69,9 +70,7 @@ private:
     sal_Bool                    bDummy : 1;
     SfxModule_Impl*             pImpl;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Construct_Impl();
-//#endif
 
 public:
                                 TYPEINFO();
@@ -111,7 +110,6 @@ public:
     static FieldUnit            GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & i_frame );
     FieldUnit                   GetFieldUnit() const;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();
     SAL_DLLPRIVATE static void DestroyModules_Impl();
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
@@ -119,9 +117,8 @@ public:
     SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl* GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
     SAL_DLLPRIVATE ImageList* GetImageList_Impl( sal_Bool bBig );
-    SAL_DLLPRIVATE ImageList* GetImageList_Impl( sal_Bool bBig, sal_Bool bHiContrast );
-//#endif
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,8 +42,8 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(CPPUNITLIB) \
-    $(SALLIB) \
-    $(TESTSHL2LIB)
+    $(SALLIB)
+
 SHL1TARGET = unit
 SHL1VERSIONMAP = version.map
 DEF1NAME = $(SHL1TARGET)
@@ -52,7 +52,7 @@ DEF1NAME = $(SHL1TARGET)
 
 ALLTAR: TEST
 
-.IF "$(OS)" == "OS2" || "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT"
 MY_INI = .ini
 .ELSE
 MY_INI = rc

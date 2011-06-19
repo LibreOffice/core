@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,10 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <limits>
+#include <algorithm>
 #include <com/sun/star/script/ModuleType.hpp>
 
-// nInc ist die Inkrementgroesse der Puffer
+// nInc is the increment size of the buffers
 
 SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
          : rMod( r ), aCode( p, nInc )
@@ -51,7 +53,7 @@ sal_uInt32 SbiCodeGen::GetPC()
     return aCode.GetSize();
 }
 
-// Statement merken
+// memorize the statement
 
 void SbiCodeGen::Statement()
 {
@@ -60,12 +62,12 @@ void SbiCodeGen::Statement()
     nLine = pParser->GetLine();
     nCol  = pParser->GetCol1();
 
-    // #29955 Information der for-Schleifen-Ebene
-    // in oberen Byte der Spalte speichern
+    // #29955 Store the information of the for-loop-layer
+    // in the uppper Byte of the column
     nCol = (nCol & 0xff) + 0x100 * nForLevel;
 }
 
-// Anfang eines Statements markieren
+// Mark the beginning of a statement
 
 void SbiCodeGen::GenStmnt()
 {
@@ -76,8 +78,8 @@ void SbiCodeGen::GenStmnt()
     }
 }
 
-// Die Gen-Routinen returnen den Offset des 1. Operanden,
-// damit Jumps dort ihr Backchain versenken koennen
+// The Gen-Routines return the offset of the 1. operand,
+// so that jumps can sink their backchain there.
 
 sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
@@ -117,15 +119,15 @@ sal_uInt32 SbiCodeGen::Gen( SbiOpcode eOpcode, sal_uInt32 nOpnd1, sal_uInt32 nOp
     return n;
 }
 
-// Abspeichern des erzeugten Images im Modul
+// Storing of the created image in the module
 
 void SbiCodeGen::Save()
 {
     SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
-    // OPTION BASE-Wert:
+    // OPTION BASE-Value:
     p->nDimBase = pParser->nBase;
-    // OPTION EXPLICIT-Flag uebernehmen
+    // OPTION take over the EXPLICIT-Flag
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
 
@@ -163,8 +165,6 @@ void SbiCodeGen::Save()
         rMod.bIsProxyModule = false;
     }
 
-    if( pParser->bText )
-        p->SetFlag( SBIMG_COMPARETEXT );
     // GlobalCode-Flag
     if( pParser->HasGlobalCode() )
         p->SetFlag( SBIMG_INITCODE );
@@ -237,25 +237,24 @@ void SbiCodeGen::Save()
                             ePropType = SbxOBJECT;
                             break;
                         case PROPERTY_MODE_NONE:
-                            DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                            OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                             break;
                     }
                     String aPropName = pProc->GetPropName();
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
-                    SbProcedureProperty* pProcedureProperty = NULL;
-                    pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
+                    OSL_TRACE("*** getProcedureProperty for thing %s",
+                        rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
+                    rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
                 {
-                    SbIfaceMapperMethod* pMapperMeth = NULL;
-                    pMapperMeth = rMod.GetIfaceMapperMethod( aProcName, pMeth );
+                    rMod.GetIfaceMapperMethod( aProcName, pMeth );
                 }
                 else
                 {
                     pMeth = rMod.GetMethod( aProcName, pProc->GetType() );
 
-                    // #110004
                     if( !pProc->IsPublic() )
                         pMeth->SetFlag( SBX_PRIVATE );
 
@@ -266,22 +265,22 @@ void SbiCodeGen::Save()
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
-                    // Die Parameter:
+                    // The parameter:
                     SbxInfo* pInfo = pMeth->GetInfo();
                     String aHelpFile, aComment;
                     sal_uIntPtr nHelpId = 0;
                     if( pInfo )
                     {
-                        // Die Zusatzdaten retten
+                        // Rescue the additional data
                         aHelpFile = pInfo->GetHelpFile();
                         aComment  = pInfo->GetComment();
                         nHelpId   = pInfo->GetHelpId();
                     }
-                    // Und die Parameterliste neu aufbauen
+                    // And reestablish the parameter list
                     pInfo = new SbxInfo( aHelpFile, nHelpId );
                     pInfo->SetComment( aComment );
                     SbiSymPool* pPool = &pProc->GetParams();
-                    // Das erste Element ist immer der Funktionswert!
+                    // The first element is always the value of the function!
                     for( sal_uInt16 i = 1; i < pPool->GetSize(); i++ )
                     {
                         SbiSymDef* pPar = pPool->Get( i );
@@ -290,7 +289,7 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxBYREF );
                         if( pPar->GetDims() )
                             t = (SbxDataType) ( t | SbxARRAY );
-                        // #33677 Optional-Info durchreichen
+                        // #33677 hand-over an Optional-Info
                         sal_uInt16 nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                             nFlags |= SBX_OPTIONAL;
@@ -317,10 +316,10 @@ void SbiCodeGen::Save()
             }   // for( iPass...
         }
     }
-    // Der Code
+    // The code
     p->AddCode( aCode.GetBuffer(), aCode.GetSize() );
 
-    // Der globale StringPool. 0 ist nicht belegt.
+    // The global StringPool. 0 is not occupied.
     SbiStringPool* pPool = &pParser->aGblStrings;
     sal_uInt16 nSize = pPool->GetSize();
     p->MakeStrings( nSize );
@@ -328,7 +327,7 @@ void SbiCodeGen::Save()
     for( i = 1; i <= nSize; i++ )
         p->AddString( pPool->Find( i ) );
 
-    // Typen einfuegen
+    // Insert types
     sal_uInt16 nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
@@ -438,10 +437,7 @@ public:
         T result = 0 ;
         static const S max = std::numeric_limits< S >::max();
         result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams );
-        if ( result > max )
-            return max;
-
-        return static_cast<S>(result);
+        return std::min(static_cast<T>(max), result);
     }
    virtual bool processParams(){ return false; }
 };
@@ -539,3 +535,5 @@ PCodeBuffConvertor<T,S>::convert()
 
 template class PCodeBuffConvertor< sal_uInt16, sal_uInt32 >;
 template class PCodeBuffConvertor< sal_uInt32, sal_uInt16 >;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

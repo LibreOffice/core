@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,37 +39,21 @@
 //===============================================
 // interface includes
 
-#ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_XPACKAGESTRUCTURECREATOR_HPP_
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
 
 //===============================================
 // other includes
@@ -79,7 +64,7 @@
 
 #define PATH_SEPERATOR_ASCII        "/"
 #define PATH_SEPERATOR_UNICODE      ((sal_Unicode)'/')
-#define PATH_SEPERATOR              ::rtl::OUString::createFromAscii(PATH_SEPERATOR_ASCII)
+#define PATH_SEPERATOR              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(PATH_SEPERATOR_ASCII))
 
 //===============================================
 // namespace
@@ -376,7 +361,7 @@ void StorageHolder::notifyPath(const ::rtl::OUString& sPath)
     {
         IStorageListener* pListener = *pIt2;
         if (pListener)
-            pListener->changesOccured(sNormedPath);
+            pListener->changesOccurred(sNormedPath);
     }
 
     aReadLock.unlock();
@@ -635,3 +620,5 @@ OUStringList StorageHolder::impl_st_parsePath(const ::rtl::OUString& sPath)
 
 //===============================================
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

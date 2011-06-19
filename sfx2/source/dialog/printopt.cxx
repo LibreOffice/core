@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef GCC
-#endif
+#include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <svtools/printoptions.hxx>
@@ -42,18 +42,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/printopt.hxx>
 
-// -----------
-// - statics -
-// -----------
-
 static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 static sal_Bool     bOutputForPrinter = sal_True;
-
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
-
-// --------------------------------
-// - SfxCommonPrintOptionsTabPage -
-// --------------------------------
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SfxResId( TP_COMMONPRINTOPTIONS ), rSet ),
@@ -107,8 +97,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     aReduceGradientsStripesRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl ) );
     aReduceBitmapsResolutionRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
 
-    // --> PB 2008-06-09 #i89164#
-    // calculate dynamically the width of radiobutton and listbox
+    // #i89164# calculate dynamically the width of radiobutton and listbox
     const long nOffset = 10;
     Size aOldSize = aReduceBitmapsResolutionRB.GetSizePixel();
     Size aNewSize = aReduceBitmapsResolutionRB.GetOptimalSize( WINDOWSIZE_PREFERRED );
@@ -123,23 +112,16 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     aNewSize.Width() += nOffset;
     aNewSize.Height() = aOldSize.Height();
     aReduceBitmapsResolutionLB.SetPosSizePixel( aPos, aNewSize );
-    // <--
 }
-
-// -----------------------------------------------------------------------------
 
 SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
 }
 
-// -----------------------------------------------------------------------------
-
 SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, rAttrSet ) );
 }
-
-// -----------------------------------------------------------------------------
 
 Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const
 {
@@ -160,8 +142,6 @@ Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow )
     else
         return SfxTabPage::GetParentLabelFor( pWindow );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
@@ -187,8 +167,6 @@ sal_Bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     return bModified;
 }
 
-// -----------------------------------------------------------------------------
-
 void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
@@ -209,12 +187,9 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
 
     ImplUpdateControls( aPrinterOutputRB.IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
 
-    // --> OD 2008-06-25 #i63982#
+    // #i63982#
     ImplSetAccessibleNames();
-    // <--
 }
-
-// -----------------------------------------------------------------------------
 
 int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
 {
@@ -223,8 +198,6 @@ int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
 
     return LEAVE_PAGE;
 }
-
-// -----------------------------------------------------------------------------
 
 void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCurrentOptions )
 {
@@ -259,7 +232,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         aReduceBitmapsResolutionLB.SelectEntryPos( 0 );
     else
     {
-        for( long i = ( DPI_COUNT - 1 ); i >= 0; i-- )
+        for( long i = ( SAL_N_ELEMENTS(aDPIArray) - 1 ); i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {
@@ -278,8 +251,6 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
     ClickReduceGradientsCBHdl( &aReduceGradientsCB );
     ClickReduceBitmapsCBHdl( &aReduceBitmapsCB );
 }
-
-// -----------------------------------------------------------------------------
 
 void SfxCommonPrintOptionsTabPage::ImplSetAccessibleNames()
 {
@@ -379,8 +350,6 @@ void SfxCommonPrintOptionsTabPage::ImplSetAccessibleNames()
     aTransparencyCB.SetAccessibleName( sAccessibleName );
 }
 
-// -----------------------------------------------------------------------------
-
 void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOptions )
 {
     pCurrentOptions->SetReduceTransparency( aReduceTransparencyCB.IsChecked() );
@@ -392,12 +361,10 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReducedBitmapMode( aReduceBitmapsOptimalRB.IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( aReduceBitmapsNormalRB.IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) aReduceBitmapsResolutionLB.GetSelectEntryPos(),
-                                                            (sal_uInt16)( sizeof( aDPIArray ) / sizeof( aDPIArray[ 0 ] ) - 1 ) ) ] );
+                                                            (sal_uInt16)( SAL_N_ELEMENTS( aDPIArray ) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( aReduceBitmapsTransparencyCB.IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( aConvertToGreyscalesCB.IsChecked() );
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
@@ -412,8 +379,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
@@ -427,8 +392,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, p
 
     return 0;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBox )
 {
@@ -446,8 +409,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBo
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
 {
     (void)pButton; //unused
@@ -457,8 +418,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, Radi
 
     return 0;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
 {
@@ -470,8 +429,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, Rad
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*, pButton )
 {
     if( pButton->IsChecked() )
@@ -479,17 +436,14 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*,
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrinterOptions );
         bOutputForPrinter = sal_True;
-        // --> OD 2008-06-25 #i63982#
+        // #i63982#
         ImplSetAccessibleNames();
-        // <--
     }
     else
         ImplSaveControls( &maPrinterOptions );
 
     return 0;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton*, pButton )
 {
@@ -498,19 +452,14 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrintFileOptions );
         bOutputForPrinter = sal_False;
-        // --> OD 2008-06-25 #i63982#
+        // #i63982#
         ImplSetAccessibleNames();
-        // <--
     }
     else
         ImplSaveControls( &maPrintFileOptions );
 
     return 0;
 }
-
-// -------------------------------
-// - TransparencyPrintWarningBox -
-// -------------------------------
 
 TransparencyPrintWarningBox::TransparencyPrintWarningBox( Window* pParent ) :
     ModalDialog( pParent, SfxResId( RID_WARN_PRINTTRANSPARENCY ) ),
@@ -529,13 +478,9 @@ TransparencyPrintWarningBox::TransparencyPrintWarningBox( Window* pParent ) :
     aNoBtn.SetClickHdl( LINK( this, TransparencyPrintWarningBox, ClickNoBtn ) );
 }
 
-// -----------------------------------------------------------------------------
-
 TransparencyPrintWarningBox::~TransparencyPrintWarningBox()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( TransparencyPrintWarningBox, ClickNoBtn, PushButton*, pButton )
 {
@@ -543,3 +488,5 @@ IMPL_LINK( TransparencyPrintWarningBox, ClickNoBtn, PushButton*, pButton )
     EndDialog( RET_NO );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

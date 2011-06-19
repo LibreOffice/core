@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,11 +40,14 @@
 #include "LockEntrySequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace std;
 using namespace webdav_ucp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 // -------------------------------------------------------------------
 namespace
@@ -142,7 +146,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                          RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
                     thePropertyValue.Value
-                        <<= OUString::createFromAscii( "collection" );
+                        <<= OUString(RTL_CONSTASCII_USTRINGPARAM("collection"));
                 }
             }
 
@@ -241,6 +245,8 @@ extern "C" void NPFR_propnames_results( void* userdata,
     theResources->push_back( theResource );
 }
 
+extern osl::Mutex aGlobalNeonMutex;
+
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
@@ -268,12 +274,15 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         thePropNames[ theIndex ].nspace = NULL;
         thePropNames[ theIndex ].name   = NULL;
 
-        nError = ne_simple_propfind( inSession,
-                                     inPath,
-                                     inDepth,
-                                     thePropNames,
-                                     NPFR_propfind_results,
-                                     &ioResources );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            nError = ne_simple_propfind( inSession,
+                                         inPath,
+                                         inDepth,
+                                         thePropNames,
+                                         NPFR_propfind_results,
+                                         &ioResources );
+        }
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
             free( (void *)thePropNames[ theIndex ].name );
@@ -283,6 +292,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     else
     {
         // ALLPROP
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
         nError = ne_simple_propfind( inSession,
                                      inPath,
                                      inDepth,
@@ -308,11 +318,14 @@ NeonPropFindRequest::NeonPropFindRequest(
                             std::vector< DAVResourceInfo > & ioResInfo,
                             int & nError )
 {
-    nError = ne_propnames( inSession,
-                           inPath,
-                           inDepth,
-                           NPFR_propnames_results,
-                           &ioResInfo );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        nError = ne_propnames( inSession,
+                            inPath,
+                            inDepth,
+                            NPFR_propnames_results,
+                            &ioResInfo );
+    }
 
     // #87585# - Sometimes neon lies (because some servers lie).
     if ( ( nError == NE_OK ) && ioResInfo.empty() )
@@ -325,3 +338,5 @@ NeonPropFindRequest::NeonPropFindRequest(
 NeonPropFindRequest::~NeonPropFindRequest( )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

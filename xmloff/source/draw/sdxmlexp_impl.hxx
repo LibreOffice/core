@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,13 @@
 
 #include <xmloff/xmlexp.hxx>
 
-
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <comphelper/stl_types.hxx>
+
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,15 +50,17 @@ class OUStringsSort_Impl;
 class Rectangle;
 
 class ImpPresPageDrawStylePropMapper;
-class ImpXMLEXPPageMasterList;
 class ImpXMLEXPPageMasterInfo;
 class ImpXMLDrawPageInfoList;
-class ImpXMLAutoLayoutInfoList;
+class ImpXMLAutoLayoutInfo;
 class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
 class ImpXMLShapeStyleInfo;
 class XMLShapeExportPropertyMapper;
 class XMLPageExportPropertyMapper;
+
+typedef ::std::vector< ImpXMLEXPPageMasterInfo* > ImpXMLEXPPageMasterList;
+typedef ::std::vector< ImpXMLAutoLayoutInfo*    > ImpXMLAutoLayoutInfoList;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -226,3 +230,4 @@ public:
 
 #endif  //  _SDXMLEXP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -89,12 +89,11 @@ SHL1OBJS= $(SLOFILES)
 SHL1STDLIBS=\
     $(UNOTOOLSLIB)\
     $(SALLIB)\
-    $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(COMPHELPERLIB)\
     $(TOOLSLIB)
-    
+
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -109,12 +108,6 @@ SHL1STDLIBS+=\
     $(GDI32LIB)\
     $(UUIDLIB)\
     $(OLEAUT32LIB)
-
-DEF1EXPORTFILE=	exports.dxp
-.ELIF "$(GUI)"=="OS2"
-
-SHL1STDLIBS+=\
-    iembobj.lib
 
 DEF1EXPORTFILE=	exports.dxp
 

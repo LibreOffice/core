@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
+static SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
     { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
@@ -291,3 +292,4 @@ void SvxXMLTabStopImportContext::EndElement( )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

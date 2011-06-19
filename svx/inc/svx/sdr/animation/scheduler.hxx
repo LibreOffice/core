@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace sdr
 
             // get/set time
             sal_uInt32 GetTime() const;
-            void SetTime(sal_uInt32 nNew);
+            void SVX_DLLPUBLIC SetTime(sal_uInt32 nNew);
 
             // execute event
             virtual void Trigger(sal_uInt32 nTime) = 0;
@@ -142,7 +143,7 @@ namespace sdr
             void checkTimeout();
 
             // insert/remove events, wrapper to EventList methods
-            void InsertEvent(Event* pNew);
+            void SVX_DLLPUBLIC InsertEvent(Event* pNew);
             void RemoveEvent(Event* pOld);
 
             // get/set pause
@@ -157,3 +158,5 @@ namespace sdr
 #endif //_SDR_ANIMATION_SCHEDULER_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

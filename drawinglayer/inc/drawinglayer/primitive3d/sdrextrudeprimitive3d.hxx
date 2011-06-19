@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDEPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDEPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -48,7 +51,7 @@ namespace drawinglayer
 
             The decomposition will create all necessary 3D planes for visualisation.
          */
-        class SdrExtrudePrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrExtrudePrimitive3D : public SdrPrimitive3D
         {
         private:
             /// geometry helper for slices
@@ -134,3 +137,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

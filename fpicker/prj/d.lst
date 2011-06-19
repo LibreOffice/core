@@ -1,18 +1,13 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\bin\hid
 
-..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin\hid\*.hid
 
-..\%__SRC%\bin\f*.res %_DEST%\bin%_EXT%\
-..\%__SRC%\bin\f*.dll %_DEST%\bin%_EXT%\
-..\%__SRC%\lib\f*.so %_DEST%\lib%_EXT%\
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\bin\f*.res %_DEST%\bin\
+..\%__SRC%\bin\f*.dll %_DEST%\bin\
+..\%__SRC%\bin\kdefilepicker %_DEST%\bin\kdefilepicker
+..\%__SRC%\lib\f*.so %_DEST%\lib\
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
 
-..\source\win32\filepicker\*.xml %_DEST%\xml%_EXT%\*.xml
-..\source\win32\folderpicker\*.xml %_DEST%\xml%_EXT%\*.xml
-..\%__SRC%\misc\fop.component %_DEST%\xml%_EXT%\fop.component
-..\%__SRC%\misc\fpicker.component %_DEST%\xml%_EXT%\fpicker.component
-..\%__SRC%\misc\fps.component %_DEST%\xml%_EXT%\fps.component
-..\%__SRC%\misc\fps_aqua.component %_DEST%\xml%_EXT%\fps_aqua.component
-..\%__SRC%\misc\fps_gnome.component %_DEST%\xml%_EXT%\fps_gnome.component
-..\%__SRC%\misc\fps_kde4.component %_DEST%\xml%_EXT%\fps_kde4.component
-..\%__SRC%\misc\fps_office.component %_DEST%\xml%_EXT%\fps_office.component
+..\source\win32\filepicker\*.xml %_DEST%\xml\*.xml
+..\source\win32\folderpicker\*.xml %_DEST%\xml\*.xml
+..\%__SRC%\misc\*.component %_DEST%\xml\*.component

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
 #include <MNSTerminateListener.hxx>
@@ -345,3 +344,4 @@ sal_Bool MNS_Term(sal_Bool aForce)
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,8 +90,6 @@ using namespace ::com::sun::star::uno;
 
 //====================================================================
 
-//====================================================================
-
 static
 bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 {
@@ -118,19 +117,17 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     return sal_False;
 }
 
-
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
-    return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
+    return CreatePreviewMetaFile_Impl( bFullContent );
 }
 
-
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
+SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 {
-    // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
-    // werden, sonst wird u.U. der Printer abgeschossen !
+    // DoDraw can only be called when no printing is done, otherwise
+    // the printer may be turned off
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
@@ -141,10 +138,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( sal_False );
-
-    // adjust the output device if HC-metafile is requested
-    if ( bHighContrast )
-        aDevice.SetDrawMode( aDevice.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
@@ -170,10 +163,10 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     pFile->Record( &aDevice );
 
     LanguageType eLang;
-    SvtCTLOptions*  pCTLOptions = new SvtCTLOptions;
-    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+    SvtCTLOptions aCTLOptions;
+    if ( SvtCTLOptions::NUMERALS_HINDI == aCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == aCTLOptions.GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
         eLang = (LanguageType) Application::GetSettings().GetLanguage();
@@ -240,7 +233,7 @@ lcl_add(util::Duration & rDur, Time const& rTime)
     rDur.Seconds += rTime.GetSec();
 }
 
-// Bearbeitungszeit aktualisieren
+// Update the processing time
 void SfxObjectShell::UpdateTime_Impl(
     const uno::Reference<document::XDocumentProperties> & i_xDocProps)
 {
@@ -328,11 +321,9 @@ void SfxObjectShell::SetOrganizerSearchMask(
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxObjectShell::GetContentCount(
-    sal_uInt16 nIdx1,
-    sal_uInt16 /*nIdx2*/)
+sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
 {
-    switch(nIdx1)
+    switch(nIdx)
     {
         case INDEX_IGNORE:
             return DEF_CONTENT_COUNT;
@@ -346,20 +337,14 @@ sal_uInt16 SfxObjectShell::GetContentCount(
         }
         case CONTENT_MACRO:
             break;
-/*
-        case CONTENT_CONFIG:
-            return ( GetConfigManager() ) ?
-                        GetConfigManager()->GetItemCount() : 0;
-            break;
- */
     }
     return 0;
 }
 
 
 //--------------------------------------------------------------------
-//TODO/CLEANUP: remove this method (it's virtual)
-void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16)
+//TODO/CLEANUP: remove this method
+void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
     if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
     {
@@ -368,23 +353,18 @@ void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt
     }
 }
 
-sal_Bool   SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1,
-                                       sal_uInt16 nIdx2)
+sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
-    switch(nIdx1) {
+    switch(nIdx1)
+    {
     case INDEX_IGNORE:
-        return sal_True;
+        return true;
     case CONTENT_STYLE:
-        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool()? sal_False: sal_True;
+        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool() ? false : true;
     case CONTENT_MACRO:
-//!!    return INDEX_IGNORE == nIdx2? sal_False: sal_True;
-        return sal_False;
-/*
-    case CONTENT_CONFIG:
-        return INDEX_IGNORE == nIdx2 ? sal_False : sal_True;
- */
+        return false;
     }
-    return sal_False;
+    return false;
 }
 
 //--------------------------------------------------------------------
@@ -394,27 +374,12 @@ void SfxObjectShell::GetContent(String &rText,
                                 Bitmap &rOpenedBitmap,
                                 sal_Bool &bCanDel,
                                 sal_uInt16 i,
-                                sal_uInt16 nIdx1,
-                                sal_uInt16 nIdx2 )
+                                sal_uInt16 nIdx
+)
 {
-    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
-    SfxObjectShell::GetContent( rText, rClosedBitmap, rOpenedBitmap, BMP_COLOR_NORMAL, bCanDel, i, nIdx1, nIdx2 );
-}
+    bCanDel=true;
 
-//--------------------------------------------------------------------
-
-void   SfxObjectShell::GetContent(String &rText,
-                                  Bitmap &rClosedBitmap,
-                                  Bitmap &rOpenedBitmap,
-                                  BmpColorMode eColorMode,
-                                  sal_Bool &bCanDel,
-                                  sal_uInt16 i,
-                                  sal_uInt16 nIdx1,
-                                  sal_uInt16 /*nIdx2*/ )
-{
-    bCanDel=sal_True;
-
-    switch(nIdx1)
+    switch(nIdx)
     {
         case INDEX_IGNORE:
         {
@@ -425,37 +390,14 @@ void   SfxObjectShell::GetContent(String &rText,
             {
                 case CONTENT_STYLE:
                     nTextResId = STR_STYLES;
-                    if ( eColorMode == BMP_COLOR_NORMAL )
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED;
-                    }
-                    else
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
-                    }
-                    break;
-                case CONTENT_MACRO:
-                    nTextResId = STR_MACROS;
-                    if ( eColorMode == BMP_COLOR_NORMAL )
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED;
-                    }
-                    else
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
-                    }
-                    break;
-/*
-                case CONTENT_CONFIG:
-                    nTextResId = STR_CONFIG;
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
- */
+                case CONTENT_MACRO:
+                    nTextResId = STR_MACROS;
+                    nClosedBitmapResId= BMP_STYLES_CLOSED;
+                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    break;
             }
 
             if ( nTextResId )
@@ -476,52 +418,32 @@ void   SfxObjectShell::GetContent(String &rText,
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
             rClosedBitmap = rOpenedBitmap =
-                GetStyleFamilyBitmap(pStyle->GetFamily(), eColorMode );
+                GetStyleFamilyBitmap(pStyle->GetFamily());
         }
             break;
         case CONTENT_MACRO:
             break;
-/*
-        case CONTENT_CONFIG:
-            if ( GetConfigManager() )
-            {
-                rText = GetConfigManager()->GetItem(i);
-                bCanDel = GetConfigManager()->CanDelete(i);
-            }
-            else
-                rText = String();
-            rClosedBitmap = Bitmap(SfxResId(BMP_STYLES_CLOSED));
-            rOpenedBitmap = Bitmap(SfxResId(BMP_STYLES_OPENED));
-            break;
-*/
     }
 }
 
 //--------------------------------------------------------------------
-Bitmap SfxObjectShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
-{
-    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
-    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, BMP_COLOR_NORMAL );
-}
 
-//--------------------------------------------------------------------
-
-Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode )
+Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
 {
     sal_uInt16 nResId = 0;
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY1 : BMP_STYLES_FAMILY1_HC;
+            nResId = BMP_STYLES_FAMILY1;
             break;
         case SFX_STYLE_FAMILY_PARA:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY2 : BMP_STYLES_FAMILY2_HC;
+            nResId = BMP_STYLES_FAMILY2;
             break;
         case SFX_STYLE_FAMILY_FRAME:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY3 : BMP_STYLES_FAMILY3_HC;
+            nResId = BMP_STYLES_FAMILY3;
             break;
         case SFX_STYLE_FAMILY_PAGE :
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
+            nResId = BMP_STYLES_FAMILY4;
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
         case SFX_STYLE_FAMILY_ALL:
@@ -562,8 +484,8 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
         if ( pHisPool && pHisPool->Count() > nSourceIdx2 )
             pHisSheet = (*pHisPool)[nSourceIdx2];
 
-        // Einfuegen ist nur dann noetig, wenn ein StyleSheet
-        // zwischen unterschiedlichen(!) Pools bewegt wird
+        // Pasting is only needed if a style sheet is moved between
+        // different (!) Pools
 
         if ( pHisSheet && pMyPool != pHisPool )
         {
@@ -572,12 +494,11 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 nIdx2 = pMyPool->Count();
             }
 
-            // wenn so eine Vorlage schon existiert: loeschen!
+            // if such a template already exists: delete!
             String aOldName(pHisSheet->GetName());
             SfxStyleFamily eOldFamily = pHisSheet->GetFamily();
 
             SfxStyleSheetBase* pExist = pMyPool->Find(aOldName, eOldFamily);
-            // sal_uInt16 nOldHelpId = pExist->GetHelpId(??? VB ueberlegt sich was);
             sal_Bool bUsedOrUserDefined;
             if( pExist )
             {
@@ -600,10 +521,11 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 aOldName, eOldFamily,
                 pHisSheet->GetMask(), nIdx2);
 
-            // ItemSet der neuen Vorlage fuellen
+            // Fill the Itemset of the new template
             rNewSheet.GetItemSet().Set(pHisSheet->GetItemSet());
 
-            // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
+            // Who gets the new one as a Parent?
+            // Who is using the new one as Follow?
             SfxStyleSheetBase* pTestSheet = pMyPool->First();
             while (pTestSheet)
             {
@@ -612,7 +534,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetParent() == aOldName)
                 {
                     pTestSheet->SetParent(aOldName);
-                    // Verknuepfung neu aufbauen
+                    // Rebuild Link
                 }
 
                 if (pTestSheet->GetFamily() == eOldFamily &&
@@ -620,7 +542,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                     pTestSheet->GetFollow() == aOldName)
                 {
                     pTestSheet->SetFollow(aOldName);
-                    // Verknuepfung neu aufbauen
+                    // Rebuild Link
                 }
 
                 pTestSheet = pMyPool->Next();
@@ -629,7 +551,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 rNewSheet.IsUsed() || rNewSheet.IsUserDefined();
 
 
-            // hat der Neue einen Parent? wenn ja, mit gleichem Namen bei uns suchen
+            // has a New Parent? if so, start search with the same name
             if (pHisSheet->HasParentSupport())
             {
                 const String& rParentName = pHisSheet->GetParent();
@@ -642,8 +564,8 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
                 }
             }
 
-            // hat der Neue einen Follow? wenn ja, mit gleichem
-            // Namen bei uns suchen
+            // Has the new got a Follow? if so start search
+            // with the same name.
             if (pHisSheet->HasFollowSupport())
             {
                 const String& rFollowName = pHisSheet->GetFollow();
@@ -664,29 +586,7 @@ sal_Bool SfxObjectShell::Insert(SfxObjectShell &rSource,
         else
             bRet = sal_False;
     }
-/*
-    else if (nSourceIdx1 == CONTENT_CONFIG)
-    {
-        nIdx1 = CONTENT_CONFIG;
 
-        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-        if ( !GetConfigManager() )
-        {
-            SetConfigManager(new SfxConfigManager(0, pCfgMgr));
-            SetTemplateConfig(sal_False);
-            if (this == Current())
-                GetConfigManager()->Activate(pCfgMgr);
-        }
-
-        if (GetConfigManager()->CopyItem(
-            nSourceIdx2, nIdx2, rSource.GetConfigManager()))
-        {
-            SetModified(sal_True);
-            bRet = sal_True;
-            SFX_APP()->GetDispatcher_Impl()->Update_Impl(sal_True);
-        }
-    }
-*/
     return bRet;
 }
 
@@ -721,14 +621,14 @@ sal_Bool SfxObjectShell::Remove
                 pTestSheet->HasParentSupport() &&
                 pTestSheet->GetParent() == aName)
             {
-                pTestSheet->SetParent(aEmpty); // Verknuepfung aufloesen
+                pTestSheet->SetParent(aEmpty); // Remove link
             }
 
             if (pTestSheet->GetFamily() == eFamily &&
                 pTestSheet->HasFollowSupport() &&
                 pTestSheet->GetFollow() == aName)
             {
-                pTestSheet->SetFollow(aEmpty); // Verknuepfung aufloesen
+                pTestSheet->SetFollow(aEmpty); // Remove link
             }
 
             pTestSheet = pMyPool->Next();
@@ -750,10 +650,6 @@ sal_Bool SfxObjectShell::Print
     sal_uInt16          /*nIdx3*/,
     const String*   pObjectName
 )
-
-/*  [Beschreibung]
-*/
-
 {
     switch(nIdx1)
     {
@@ -763,12 +659,11 @@ sal_Bool SfxObjectShell::Print
             SetOrganizerSearchMask(pStylePool);
             SfxStyleSheetIterator* pIter = pStylePool->CreateIterator(
                 pStylePool->GetSearchFamily(), pStylePool->GetSearchMask() );
-            sal_uInt16 nStyles = pIter->Count();
             SfxStyleSheetBase *pStyle = pIter->First();
             if ( !pStyle )
                 return sal_True;
 
-            // pepare adaptor for old style StartPage/EndPage printing
+            // prepare adaptor for old style StartPage/EndPage printing
             boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
             vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
             boost::shared_ptr< vcl::PrinterController > pController( pAdaptor );
@@ -793,7 +688,6 @@ sal_Bool SfxObjectShell::Print
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
-            nStyles = 1;
             while(pStyle)
             {
                 // print template name
@@ -884,18 +778,17 @@ sal_Bool SfxObjectShell::Print
 
 void SfxObjectShell::LoadStyles
 (
-    SfxObjectShell &rSource         /*  die Dokument-Vorlage, aus der
-                                            die Styles geladen werden sollen */
+    SfxObjectShell &rSource         /*  the document template from which
+                                        the styles are to be loaded */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird vom SFx gerufen, wenn aus einer Dokument-Vorlage
-    Styles nachgeladen werden sollen. Bestehende Styles soll dabei
-    "uberschrieben werden. Das Dokument mu"s daher neu formatiert werden.
-    Daher werden die Applikationen in der Regel diese Methode "uberladen
-    und in ihrer Implementierung die Implementierung der Basisklasse
-    rufen.
+    This method is called by the SFx if template styles are to be loaded.
+    Existing styles are in this case overwritten. The document has then to be
+    newly formatted. Therefore, the application of this method is usually
+    overloaded and its implementation is calling the implementation in
+    the base class.
 */
 
 {
@@ -903,7 +796,6 @@ void SfxObjectShell::LoadStyles
     {
         SfxStyleSheetBase *pSource;
         SfxStyleSheetBase *pDest;
-//      Styles_Impl () : pSource(0), pDest(0) {}
     };
 
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
@@ -923,7 +815,7 @@ void SfxObjectShell::LoadStyles
         {
             pDest = &pMyPool->Make( pSource->GetName(),
                     pSource->GetFamily(), pSource->GetMask());
-            // Setzen des Parents, der Folgevorlage
+            // Setting of Parents, the next style
         }
         pFound[nFound].pSource = pSource;
         pFound[nFound].pDest = pDest;
@@ -934,7 +826,6 @@ void SfxObjectShell::LoadStyles
     for ( sal_uInt16 i = 0; i < nFound; ++i )
     {
         pFound[i].pDest->GetItemSet().PutExtended(pFound[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
-//      pFound[i].pDest->SetHelpId(pFound[i].pSource->GetHelpId());
         if(pFound[i].pSource->HasParentSupport())
             pFound[i].pDest->SetParent(pFound[i].pSource->GetParent());
         if(pFound[i].pSource->HasFollowSupport())
@@ -947,13 +838,12 @@ void SfxObjectShell::LoadStyles
 
 void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese interne Methode pr"uft, ob das Dokument aus einem Template
-    erzeugt wurde, und ob dieses neuer ist als das Dokument. Ist dies
-    der Fall, wird der Benutzer gefragt, ob die Vorlagen (StyleSheets)
-    updated werden sollen. Wird dies positiv beantwortet, werden die
-    StyleSheets updated.
+    This internal method checks whether the document was created from a
+    template, and if this is newer than the document. If this is the case,
+    the user is asked if the Templates (StyleSheets) should be updated.
+    If this is answered positively, the StyleSheets are updated.
 */
 
 {
@@ -983,10 +873,10 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     if ( aTemplName.getLength() || (aTemplURL.getLength() && !IsReadOnly()) )
     {
-        // try to locate template, first using filename
-        // this must be done because writer global document uses this "great" idea to manage the templates of all parts
-        // in the master document
-        // but it is NOT an error if the template filename points not to a valid file
+        // try to locate template, first using filename this must be done
+        // because writer global document uses this "great" idea to manage
+        // the templates of all parts in the master document but it is NOT
+        // an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
         if ( aTemplURL.getLength() )
@@ -997,7 +887,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         }
 
         if( !aFoundName.Len() && aTemplName.getLength() )
-            // if the template filename did not lead to success, try to get a file name for the logical template name
+            // if the template filename did not lead to success,
+            // try to get a file name for the logical template name
             aTempl.GetFull( String(), aTemplName, aFoundName );
     }
 
@@ -1085,7 +976,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // remember date/time of check
                     xDocProps->setTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
-//REPLACE                   pInfo->Save(xDocStor);
                 }
             }
         }
@@ -1229,3 +1119,4 @@ sal_Bool SfxObjectShell::IsModifyPasswordEntered()
     return pImp->m_bModifyPasswordEntered;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

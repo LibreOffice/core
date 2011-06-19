@@ -50,6 +50,8 @@ DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
 
+.IF "$(SOLAR_JAVA)" != ""
+
 ALLTAR : $(MISC)/active.oxt
 
 $(MISC)/active.oxt : manifest.xml description.xml Addons.xcu \
@@ -81,3 +83,5 @@ $(MISC)/$(TARGET)/active_java.jar : MANIFEST.MF $(JAVATARGET)
         $(MISC)/$(TARGET)/active_java.jar-zip/$(PACKAGE)/
     cd $(MISC)/$(TARGET)/active_java.jar-zip && zip ../active_java.jar \
         META-INF/MANIFEST.MF $(foreach,i,$(JAVAFILES:b) $(PACKAGE)/$i.class)
+
+.ENDIF

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ XInputStream_impl::XInputStream_impl( const rtl::OUString& aUncPath )
     : m_bIsOpen( false ),
       m_aFile( aUncPath )
 {
-    m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( OpenFlag_Read ) );
+    m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( osl_File_OpenFlag_Read ) );
 }
 
 
@@ -177,7 +178,7 @@ XInputStream_impl::seek(
 {
     if( location < 0 )
         throw lang::IllegalArgumentException();
-    if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
         throw io::IOException();
 }
 
@@ -207,7 +208,7 @@ XInputStream_impl::getLength(
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
-    err = m_aFile.setPos( Pos_End, 0 );
+    err = m_aFile.setPos( osl_Pos_End, 0 );
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
@@ -215,9 +216,11 @@ XInputStream_impl::getLength(
     if( err != osl::FileBase::E_None )
         throw io::IOException();
 
-    err = m_aFile.setPos( Pos_Absolut, uCurrentPos );
+    err = m_aFile.setPos( osl_Pos_Absolut, uCurrentPos );
     if( err != osl::FileBase::E_None )
         throw io::IOException();
     else
         return sal_Int64( uEndPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,12 @@
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-#include <tools/pstm.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svx/svxids.hrc>
 
-#define _SVX_SRCHDLG_CXX // damit private-Methoden vom SrchDlg bekannt sind
-
-
+#define _SVX_SRCHDLG_CXX // so that private methods from SrchDlgare known
 
 #include "srchctrl.hxx"
 #include "svx/srchdlg.hxx"
@@ -88,3 +86,4 @@ void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

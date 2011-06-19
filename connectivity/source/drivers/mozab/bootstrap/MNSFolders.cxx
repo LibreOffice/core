@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace
         ::rtl::OUString   aConfigPath;
 
         aSecurity.getConfigDir( aConfigPath );
-        return aConfigPath + ::rtl::OUString::createFromAscii( "/" );
+        return aConfigPath + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     // -------------------------------------------------------------------
@@ -123,7 +124,7 @@ namespace
                     ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + ::rtl::OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
                     if ( result == ::osl::FileBase::E_None  )
                     {
-                        ::osl::FileStatus aStatus( FileStatusMask_Validate );
+                        ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
                         result = aRegistryItem.getFileStatus( aStatus );
                         if ( result == ::osl::FileBase::E_None  )
                         {
@@ -151,3 +152,5 @@ namespace
 
     return lcl_guessProfileRoot( product );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

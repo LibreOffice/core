@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ void XFormsModelContext::HandleAttribute(
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        DBG_ERROR( "this should not happen" );
+        OSL_FAIL( "this should not happen" );
         break;
     }
 }
@@ -144,7 +145,7 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
                 ->getDataTypeRepository() );
         break;
     default:
-        DBG_ERROR( "Boooo!" );
+        OSL_FAIL( "Boooo!" );
         break;
     }
 
@@ -161,3 +162,5 @@ void XFormsModelContext::EndElement()
     GetImport().initXForms();
     lcl_addXFormsModel( GetImport().GetModel(), getModel() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

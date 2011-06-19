@@ -87,7 +87,6 @@
      <menu:menuitem menu:id="slot:5910" menu:helpid="5910" menu:label="~Function Bar"/>
      <menu:menuitem menu:id="slot:5905" menu:helpid="5905" menu:label="~Object Bar"/>
      <menu:menuitem menu:id="slot:5909" menu:helpid="5909" menu:label="Main ~Toolbar"/>
-     <menu:menuitem menu:id="slot:10360" menu:helpid="10360" menu:label="~Hyperlink Bar"/>
      <menu:menuitem menu:id="slot:5911" menu:helpid="5911" menu:label="Optio~n Bar"/>
      <menu:menuitem menu:id="slot:10417" menu:helpid="10417" menu:label="~Color Bar"/>
      <menu:menuseparator/>
@@ -121,7 +120,7 @@
    <menu:menuseparator/>
    <menu:menu menu:id="slot:338" menu:label="~Grid">
     <menu:menupopup>
-     <menu:menuitem menu:id="slot:27322" menu:helpid="27322" menu:label="~Visible Grid"/>
+     <menu:menuitem menu:id="slot:27322" menu:helpid="27322" menu:label="~Display Grid"/>
      <menu:menuitem menu:id="slot:27154" menu:helpid="27154" menu:label="Snap to Grid"/>
      <menu:menuitem menu:id="slot:27323" menu:helpid="27323" menu:label="Grid to ~Front"/>
     </menu:menupopup>
@@ -129,9 +128,9 @@
    <menu:menuseparator/>
    <menu:menu menu:id="slot:339" menu:label="~Snap Lines">
     <menu:menupopup>
-     <menu:menuitem menu:id="slot:27324" menu:helpid="27324" menu:label="~Snap Lines Visible"/>
-     <menu:menuitem menu:id="slot:27152" menu:helpid="27152" menu:label="Snap to Snap Lines"/>
-     <menu:menuitem menu:id="slot:27325" menu:helpid="27325" menu:label="Snap Lines to Front"/>
+     <menu:menuitem menu:id="slot:27324" menu:helpid="27324" menu:label="~Display Snap Lines"/>
+     <menu:menuitem menu:id="slot:27152" menu:helpid="27152" menu:label="~Snap to Snap Lines"/>
+     <menu:menuitem menu:id="slot:27325" menu:helpid="27325" menu:label="Snap Lines to ~Front"/>
     </menu:menupopup>
    </menu:menu>
    <menu:menuseparator/>
@@ -198,8 +197,8 @@
    <menu:menuitem menu:id="slot:27338" menu:helpid="27338" menu:label="~Connector..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:10296" menu:helpid="10296" menu:label="C~haracter..."/>
-   <menu:menuitem menu:id="slot:10156" menu:helpid="10156" menu:label="~Numbering/Bullets..."/>
-   <menu:menu menu:id="slot:1" menu:label="Case/Characters">
+   <menu:menuitem menu:id="slot:10156" menu:helpid="10156" menu:label="~Bullets and Numbering..."/>
+   <menu:menu menu:id="slot:1" menu:label="~Change Case">
     <menu:menupopup>
      <menu:menuitem menu:id="slot:10912" menu:helpid="10912" menu:label="~Uppercase"/>
      <menu:menuitem menu:id="slot:10913" menu:helpid="10913" menu:label="~Lowercase"/>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,7 +149,6 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     sal_uIntPtr nNext;
     while( ( nNext = r.Tell() ) < nLast )
     {
-        short i;
 
         r >> nSign >> nLen >> nCount;
         nNext += nLen + 8;
@@ -157,18 +157,15 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         {
             case B_NAME:
                 r.ReadByteString( aName, eCharSet );
-                //r >> aName;
                 break;
             case B_COMMENT:
                 r.ReadByteString( aComment, eCharSet );
-                //r >> aComment;
                 break;
             case B_SOURCE:
             {
                 String aTmp;
                 r.ReadByteString( aTmp, eCharSet );
                 aOUSource = aTmp;
-                //r >> aSource;
                 break;
             }
 #ifdef EXTENDED_BINARY_MODULES
@@ -216,6 +213,7 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             case B_STRINGPOOL:
                 if( bBadVer ) break;
                 MakeStrings( nCount );
+                short i;
                 for( i = 0; i < nStrings && SbiGood( r ); i++ )
                 {
                     r >> nOff;
@@ -249,8 +247,6 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     }
 done:
     r.Seek( nLast );
-    //if( eCharSet != ::GetSystemCharSet() )
-        //ConvertStrings();
     if( !SbiGood( r ) )
         bError = sal_True;
     return sal_Bool( !bError );
@@ -290,7 +286,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
         r.WriteByteString( aName, eCharSet );
-        //r << aName;
         SbiCloseRecord( r, nPos );
     }
     // Comment?
@@ -298,7 +293,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
         r.WriteByteString( aComment, eCharSet );
-        //r << aComment;
         SbiCloseRecord( r, nPos );
     }
     // Source?
@@ -313,7 +307,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         else
             aTmp = aOUSource;
         r.WriteByteString( aTmp, eCharSet );
-        //r << aSource;
         SbiCloseRecord( r, nPos );
 
 #ifdef EXTENDED_BINARY_MODULES
@@ -407,8 +400,6 @@ void SbiImage::MakeStrings( short nSize )
         bError = sal_True;
 }
 
-// Hinzufuegen eines Strings an den StringPool. Der String-Puffer
-// waechst dynamisch in 1K-Schritten
 // Add a string to StringPool. The String buffer is dynamically
 // growing in 1K-Steps
 void SbiImage::AddString( const String& r )
@@ -441,7 +432,6 @@ void SbiImage::AddString( const String& r )
         if( !bError )
         {
             pStringOff[ nStringIdx++ ] = nStringOff;
-            //ByteString aByteStr( r, eCharSet );
             memcpy( pStrings + nStringOff, r.GetBuffer(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
             // Last String? The update the size of the buffer
@@ -542,3 +532,5 @@ sal_Bool SbiImage::ExceedsLegacyLimits()
         return sal_True;
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

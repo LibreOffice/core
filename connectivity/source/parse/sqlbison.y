@@ -87,6 +87,7 @@
 #include "connectivity/dbconversion.hxx"
 #endif
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 
 #if defined __GNUC__
     #pragma GCC system_header
@@ -4304,7 +4305,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::dbtools;
-//	using namespace connectivity;
 
 //============================================================
 //= a helper for static ascii pseudo-unicode strings
@@ -4316,7 +4316,6 @@ struct _ConstAsciiString_
 	sal_Char  const* str;
 
 	operator rtl::OUString () const { return rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-//	operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
 	operator const sal_Char * () const { return str; }
 	operator ::rtl::OString() const { return str; }
 };
@@ -4398,7 +4397,7 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_TABLE_EXIST:		aMsg = ERROR_STR_INVALID_TABLE_EXIST; break;
 		case ERROR_INVALID_QUERY_EXIST:		aMsg = ERROR_STR_INVALID_QUERY_EXIST; break;
         default:
-            OSL_ENSURE( false, "OParseContext::getErrorMessage: unknown error code!" );
+            OSL_FAIL( "OParseContext::getErrorMessage: unknown error code!" );
             break;
 	}
 	return aMsg;
@@ -4436,7 +4435,7 @@ OParseContext::~OParseContext()
         case KEY_INTERSECTION:aKeyword = KEY_STR_INTERSECTION; break;
         case KEY_NONE:      break;
         default:
-            OSL_ENSURE( false, "OParseContext::getIntlKeywordAscii: unknown key!" );
+            OSL_FAIL( "OParseContext::getIntlKeywordAscii: unknown key!" );
             break;
 	}
 	return aKeyword;
@@ -4455,7 +4454,7 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
         KEY_VAR_POP,KEY_COLLECT,KEY_FUSION,KEY_INTERSECTION
 	};
 
-	sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
+	sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
@@ -4669,7 +4668,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
-	OSL_ENSURE(nRuleID < (sizeof yytname/sizeof yytname[0]), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
+	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
 	return ::rtl::OUString::createFromAscii(yytname[nRuleID]);
 }
 
@@ -4678,7 +4677,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 {
 	// In yysvar nach dem angegebenen Namen suchen, den Index zurueckliefern
 	// (oder 0, wenn nicht gefunden)
-	static sal_uInt32 nLen = sizeof(yytname)/sizeof(yytname[0]);
+	static sal_uInt32 nLen = SAL_N_ELEMENTS(yytname);
 	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
 		if (yytname && rValue == yytname[i])
@@ -4758,7 +4757,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 //-----------------------------------------------------------------------------
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
-	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString::createFromAscii("="), SQL_NODE_EQUAL);
+	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")), SQL_NODE_EQUAL);
 	return buildPredicateRule(pAppend,pLiteral,pComp);
 }
 
@@ -4782,12 +4781,12 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 }
 
 // -------------------------------------------------------------------------
-void OSQLParser::error(sal_Char *fmt)
+void OSQLParser::error(const sal_Char *fmt)
 {
 	if(!m_sErrorMessage.getLength())
 	{
 		::rtl::OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
-		::rtl::OUString sSQL_TOKEN(::rtl::OUString::createFromAscii("SQL_TOKEN_"));
+		::rtl::OUString sSQL_TOKEN(RTL_CONSTASCII_USTRINGPARAM("SQL_TOKEN_"));
 
 		sal_Int32 nPos1 = sStr.indexOf(sSQL_TOKEN);
 		if(nPos1 != -1)
@@ -4811,7 +4810,7 @@ void OSQLParser::error(sal_Char *fmt)
 		::rtl::OUString aError = s_pScanner->getErrorMessage();
 		if(aError.getLength())
 		{
-			m_sErrorMessage += ::rtl::OUString::createFromAscii(", ");
+			m_sErrorMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
 			m_sErrorMessage += aError;
 		}
 	}

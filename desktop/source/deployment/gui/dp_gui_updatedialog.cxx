@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,7 +107,7 @@
 #include "vcl/image.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "comphelper/processfactory.hxx"
 
@@ -123,7 +124,6 @@
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
-#include "dp_gui_system.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -226,31 +226,10 @@ private:
     Thread(UpdateDialog::Thread &); // not defined
     void operator =(UpdateDialog::Thread &); // not defined
 
-    struct Entry {
-        explicit Entry(
-            uno::Reference< deployment::XPackage > const & thePackage,
-            rtl::OUString const & theVersion);
-
-        uno::Reference< deployment::XPackage > package;
-        rtl::OUString version;
-        //Indicates that the extension provides its own update URLs.
-        //If this is true, then we must not use the default update
-        //URL to find the update information.
-        bool bProvidesOwnUpdate;
-        uno::Reference< xml::dom::XNode > info;
-        UpdateDialog::DisabledUpdate disableUpdate;
-        dp_gui::UpdateData updateData;
-    };
-
-    // A multimap in case an extension is installed in "user", "shared" or "bundled"
-    typedef std::map< rtl::OUString, Entry > Map;
-
     virtual ~Thread();
 
     virtual void execute();
-#if 0
-    void handleGeneralError(uno::Any const & exception) const;
-#endif
+
     void handleSpecificError(
         uno::Reference< deployment::XPackage > const & package,
         uno::Any const & exception) const;
@@ -260,10 +239,6 @@ private:
         uno::Reference< deployment::XPackage > const & package,
         uno::Sequence< rtl::OUString > const & urls,
         rtl::OUString const & identifier) const;
-
-    void getOwnUpdateInformation(
-        uno::Reference< deployment::XPackage > const & package,
-        Map * map);
 
     ::rtl::OUString getUpdateDisplayString(
         dp_gui::UpdateData const & data, ::rtl::OUString const & version = ::rtl::OUString()) const;
@@ -317,7 +292,7 @@ UpdateDialog::Thread::Thread(
 void UpdateDialog::Thread::stop() {
     uno::Reference< task::XAbortChannel > abort;
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         abort = m_abort;
         m_stop = true;
     }
@@ -325,17 +300,6 @@ void UpdateDialog::Thread::stop() {
         abort->sendAbort();
     }
     m_updateInformation->cancel();
-}
-
-UpdateDialog::Thread::Entry::Entry(
-    uno::Reference< deployment::XPackage > const & thePackage,
-    rtl::OUString const & theVersion):
-
-    package(thePackage),
-    version(theVersion),
-    bProvidesOwnUpdate(false),
-    updateData(thePackage)
-{
 }
 
 UpdateDialog::Thread::~Thread()
@@ -347,7 +311,7 @@ UpdateDialog::Thread::~Thread()
 void UpdateDialog::Thread::execute()
 {
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if ( m_stop ) {
             return;
         }
@@ -362,10 +326,10 @@ void UpdateDialog::Thread::execute()
 
     typedef std::vector<std::pair<uno::Reference<deployment::XPackage>,
         uno::Any> >::const_iterator ITERROR;
-    for (ITERROR ite = errors.begin(); ite != errors.end(); ite ++)
+    for (ITERROR ite = errors.begin(); ite != errors.end(); ++ite )
         handleSpecificError(ite->first, ite->second);
 
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
     {
         dp_misc::UpdateInfo const & info = i->second;
         UpdateData updateData(info.extension);
@@ -438,26 +402,12 @@ void UpdateDialog::Thread::execute()
     }
 
 
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.checkingDone();
     }
 }
-#if 0
-void UpdateDialog::Thread::handleGeneralError(uno::Any const & exception)
-    const
-{
-    rtl::OUString message;
-    uno::Exception e;
-    if (exception >>= e) {
-        message = e.Message;
-    }
-    vos::OGuard g(Application::GetSolarMutex());
-    if (!m_stop) {
-        m_dialog.addGeneralError(message);
-    }
-}
-#endif
+
 //Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     uno::Reference< deployment::XPackage > const & package,
@@ -470,7 +420,7 @@ void UpdateDialog::Thread::handleSpecificError(
     if (exception >>= e) {
         data.message = e.Message;
     }
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     if (!m_stop) {
         m_dialog.addSpecificError(data);
     }
@@ -483,7 +433,7 @@ void UpdateDialog::Thread::handleSpecificError(
     rtl::OUStringBuffer b(data.aInstalledPackage->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
     {
-        vos::OGuard g( Application::GetSolarMutex() );
+        SolarMutexGuard g;
         if(!m_stop)
             b.append(m_dialog.m_version);
     }
@@ -497,7 +447,7 @@ void UpdateDialog::Thread::handleSpecificError(
     {
         b.append(static_cast< sal_Unicode >(' '));
         {
-            vos::OGuard g( Application::GetSolarMutex() );
+            SolarMutexGuard g;
             if(!m_stop)
                 b.append(m_dialog.m_browserbased);
         }
@@ -545,13 +495,13 @@ bool UpdateDialog::Thread::update(
     bool ret = false;
     if (du.unsatisfiedDependencies.getLength() == 0)
     {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
             m_dialog.addEnabledUpdate(getUpdateDisplayString(data), data);
         }
         ret = !m_stop;
     } else {
-        vos::OGuard g(Application::GetSolarMutex());
+        SolarMutexGuard g;
         if (!m_stop) {
                 m_dialog.addDisabledUpdate(du);
         }
@@ -573,8 +523,7 @@ UpdateDialog::UpdateDialog(
     m_update(this, DpGuiResId(RID_DLG_UPDATE_UPDATE)),
     m_updates(
         *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
-        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)),
-        Image(DpGuiResId(RID_DLG_UPDATE_HIGHCONTRASTALERT))),
+        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))),
     m_all(this, DpGuiResId(RID_DLG_UPDATE_ALL)),
     m_description(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTION)),
     m_PublisherLabel(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LABEL)),
@@ -673,9 +622,8 @@ short UpdateDialog::Execute() {
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 UpdateDialog::CheckListBox::CheckListBox( UpdateDialog & dialog, ResId const & resource,
-                                          Image const & normalStaticImage,
-                                          Image const & highContrastStaticImage ):
-    SvxCheckListBox( &dialog, resource, normalStaticImage, highContrastStaticImage ),
+                                          Image const & normalStaticImage ):
+    SvxCheckListBox( &dialog, resource, normalStaticImage ),
     m_ignoreUpdate( String( DpGuiResId( RID_DLG_UPDATE_IGNORE ) ) ),
     m_ignoreAllUpdates( String( DpGuiResId( RID_DLG_UPDATE_IGNORE_ALL ) ) ),
     m_enableUpdate( String( DpGuiResId( RID_DLG_UPDATE_ENABLE ) ) ),
@@ -954,10 +902,10 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         return;
 
     uno::Sequence< uno::Sequence< rtl::OUString > > aItemList;
-    sal_Int32 nCount = 0;
 
     if ( ! bRecheckOnly )
     {
+        sal_Int32 nCount = 0;
         for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
         {
             uno::Sequence< rtl::OUString > aItem(2);
@@ -1130,16 +1078,6 @@ bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublis
     return true;
 }
 
-bool UpdateDialog::isReadOnly( const uno::Reference< deployment::XPackage > &xPackage ) const
-{
-    if ( m_xExtensionManager.is() && xPackage.is() )
-    {
-        return m_xExtensionManager->isReadOnlyRepository( xPackage->getRepositoryName() );
-    }
-    else
-        return true;
-}
-
 //------------------------------------------------------------------------------
 void UpdateDialog::getIgnoredUpdates()
 {
@@ -1296,6 +1234,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 }
 
 //------------------------------------------------------------------------------
+
 IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 {
     rtl::OUStringBuffer b;
@@ -1324,22 +1263,37 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
             }
             case DISABLED_UPDATE:
             {
-                bInserted = showDescription( m_disabledUpdates[pos].aUpdateInfo );
+                if ( !m_disabledUpdates.empty() )
+                    bInserted = showDescription( m_disabledUpdates[pos].aUpdateInfo );
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
+
+                if ( m_disabledUpdates.empty() )
+                    break;
 
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[ pos ];
                 if (data.unsatisfiedDependencies.getLength() != 0)
                 {
                     // create error string for version mismatch
                     ::rtl::OUString sVersion( RTL_CONSTASCII_USTRINGPARAM("%VERSION") );
+                    ::rtl::OUString sProductName( RTL_CONSTASCII_USTRINGPARAM("%PRODUCTNAME") );
                     sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
                     if ( nPos >= 0 )
                     {
                         ::rtl::OUString sCurVersion( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}"));
                         ::rtl::Bootstrap::expandMacros(sCurVersion);
                         m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sVersion.getLength(), sCurVersion );
+                    }
+                    nPos = m_noDependencyCurVer.indexOf( sProductName );
+                    if ( nPos >= 0 )
+                    {
+                        m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
+                    }
+                    nPos = m_noDependency.indexOf( sProductName );
+                    if ( nPos >= 0 )
+                    {
+                        m_noDependency = m_noDependency.replaceAt( nPos, sProductName.getLength(), BrandName::get() );
                     }
 
                     b.append(m_noInstall);
@@ -1431,21 +1385,11 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
     //If users are going to update a shared extension then we need
     //to warn them
     typedef ::std::vector<UpdateData>::const_iterator CIT;
-    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); i++)
+    for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); ++i)
     {
         OSL_ASSERT(i->aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
-//        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
-#if 0
-        // TODO: check!
-        OSL_ASSERT(m_extensionManagerDialog.get());
-        if (RET_CANCEL == m_extensionManagerDialog->continueUpdateForSharedExtension(
-            this, i->aPackageManager))
-        {
-            EndDialog(RET_CANCEL);
-        }
-#endif
     }
 
 
@@ -1492,3 +1436,5 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
 
     return 1;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

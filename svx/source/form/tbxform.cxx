@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <svl/intitem.hxx>
@@ -42,19 +43,13 @@
 
 #include <vcl/sound.hxx>
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include "svx/tbxctl.hxx"
 #include "svx/tbxdraw.hxx"
 #include "tbxform.hxx"
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
 #include "fmitems.hxx"
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -213,11 +208,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
             {   // set a new image, matching to this slot
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
-                Image aImage = GetImage( m_xFrame,
-                                        aSlotURL,
-                                        hasBigImages(),
-                                        GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
-
+                Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;
             }
@@ -414,7 +405,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 {
     pFixedText = new FixedText( pParent );
-    String aSample( "123456", sizeof( "123456" ) - 1 );
+    String aSample(RTL_CONSTASCII_USTRINGPARAM("123456"));
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
@@ -475,3 +466,4 @@ SvxFmTbxPrevRec::SvxFmTbxPrevRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& r
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

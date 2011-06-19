@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <svx/sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 
-#ifndef _SXCGIITM_HXX
 #include <svx/sxcgitm.hxx>
-#endif
 #include <svx/sxciaitm.hxx>
 #include <svx/sxcikitm.hxx>
 #include <svx/sxcllitm.hxx>
@@ -44,13 +43,9 @@
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
 
-#ifndef _SXFIITM_HXX
 #include <svx/sxfiitm.hxx>
-#endif
 
-#ifndef _SXLAYITM_HXX
 #include <svx/sxlayitm.hxx>
-#endif
 #include <svx/sxlogitm.hxx>
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmfsitm.hxx>
@@ -58,9 +53,7 @@
 #include <svx/sxmoitm.hxx>
 #include <svx/sxmovitm.hxx>
 
-#ifndef _SXMSIITM_HXX
 #include <svx/sxmsitm.hxx>
-#endif
 #include <svx/sxmspitm.hxx>
 #include <svx/sxmsuitm.hxx>
 #include <svx/sxmtaitm.hxx>
@@ -83,3 +76,5 @@
 #include <svx/sxtraitm.hxx>
 
 #endif  //_SVDATTRX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

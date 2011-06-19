@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,9 @@ RootAccess::RootAccess(
     rtl::OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
     locale_(locale), update_(update)
-{}
+{
+    lock_ = lock();
+}
 
 Path RootAccess::getAbsolutePath() {
     getNode();
@@ -127,8 +130,9 @@ bool RootAccess::isUpdate() const {
     return update_;
 }
 
-RootAccess::~RootAccess() {
-    osl::MutexGuard g(lock);
+RootAccess::~RootAccess()
+{
+    osl::MutexGuard g(*lock_);
     getComponents().removeRootAccess(this);
 }
 
@@ -226,7 +230,7 @@ css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     if (res.hasValue()) {
@@ -250,7 +254,7 @@ void RootAccess::addChangesListener(
 {
     OSL_ASSERT(thisIs(IS_ANY));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
@@ -273,7 +277,7 @@ void RootAccess::removeChangesListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     ChangesListeners::iterator i(changesListeners_.find(aListener));
     if (i != changesListeners_.end()) {
@@ -281,13 +285,22 @@ void RootAccess::removeChangesListener(
     }
 }
 
+extern int tempHACK;
+
 void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
+
+        // OSL_ENSURE(tempHACK, "fucktastic!, seriously busted lifecycles\n");
+        if (!tempHACK)
+        {
+            return;
+        }
+
         checkLocalizedPropertyAccess();
         int finalizedLayer;
         Modifications globalMods;
@@ -305,7 +318,7 @@ void RootAccess::commitChanges()
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_UPDATE));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
     std::vector< css::util::ElementChange > changes;
@@ -317,11 +330,21 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_UPDATE));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
     return changes.getAsConstList();
 }
 
+rtl::OUString RootAccess::getImplementationName() throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.RootAccess" ) );
 }
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

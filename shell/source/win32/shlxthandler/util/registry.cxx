@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #pragma warning(pop)
 #endif
 #include <malloc.h>
-#include "internal/dbgmacros.hxx"
 #include "internal/registry.hxx"
 
 #if defined _MSC_VER
@@ -48,14 +48,10 @@
 #endif
 
 //---------------------------------------
-//
-//---------------------------------------
 
 // Size of a CLSID as a string
 const int CLSID_STRING_SIZE = 39;
 
-//---------------------------------------
-//
 //---------------------------------------
 
 bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value)
@@ -77,8 +73,6 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     return (ERROR_SUCCESS == rc);
 }
 
-//---------------------------------------
-//
 //---------------------------------------
 
 bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
@@ -179,8 +173,6 @@ std::string ClsidToString(const CLSID& clsid)
 }
 
 //---------------------------------------
-//
-//---------------------------------------
 
 bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)
 {
@@ -203,3 +195,5 @@ bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, 
 
     return (ERROR_SUCCESS == rc);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

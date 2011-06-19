@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -308,7 +309,7 @@ void SdrTableRTFParser::FillTable()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
+        OSL_FAIL("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
     }
 }
 
@@ -445,3 +446,4 @@ void SdrTableObj::ImportAsRTF( SvStream& rStream, SdrTableObj& rObj )
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

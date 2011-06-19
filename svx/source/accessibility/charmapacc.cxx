@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : 
 ,m_pTable(NULL)
 {
     osl_incrementInterlockedCount(&m_refCount);
-    { // #b6211265 #
+    {
         lateInit(this);
     }
     osl_decrementInterlockedCount(&m_refCount);
@@ -300,7 +301,7 @@ SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAc
   ,m_pParent( _pParent )
 {
     osl_incrementInterlockedCount(&m_refCount);
-    { // #b6211265 #
+    {
         lateInit(this);
     }
     osl_decrementInterlockedCount(&m_refCount);
@@ -889,3 +890,4 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

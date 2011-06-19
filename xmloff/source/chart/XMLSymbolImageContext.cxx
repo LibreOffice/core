@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_END = XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
+static SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },
@@ -148,3 +149,5 @@ void XMLSymbolImageContext::EndElement()
 
     XMLElementPropertyContext::EndElement();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

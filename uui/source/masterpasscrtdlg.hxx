@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 #ifndef UUI_MASTERPASSCRTDLG_HXX
 #define UUI_MASTERPASSCRTDLG_HXX
 
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
@@ -78,3 +75,5 @@ private:
 };
 
 #endif // UUI_MASTERPASSCRTDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

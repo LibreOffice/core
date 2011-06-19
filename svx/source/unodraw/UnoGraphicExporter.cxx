@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -85,7 +86,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::vos;
 using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -1000,24 +1000,24 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( NULL == mpUnoPage )
         return sal_False;
 
-    GraphicFilter*              pFilter = GraphicFilter::GetGraphicFilter();
-
-    if( NULL == pFilter || NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
+    if( NULL == mpUnoPage->GetSdrPage() || NULL == mpDoc )
         return sal_False;
+
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
 
     // get the arguments from the descriptor
     ExportSettings aSettings( mpDoc );
     ParseSettings( aDescriptor, aSettings );
 
     const sal_uInt16    nFilter = aSettings.maMediaType.getLength()
-                            ? pFilter->GetExportFormatNumberForMediaType( aSettings.maMediaType )
-                            : pFilter->GetExportFormatNumberForShortName( aSettings.maFilterName );
-    sal_Bool            bVectorType = !pFilter->IsExportPixelFormat( nFilter );
+                            ? rFilter.GetExportFormatNumberForMediaType( aSettings.maMediaType )
+                            : rFilter.GetExportFormatNumberForShortName( aSettings.maFilterName );
+    sal_Bool            bVectorType = !rFilter.IsExportPixelFormat( nFilter );
 
     // create the output stuff
     Graphic aGraphic;
@@ -1046,7 +1046,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
                 SvMemoryStream aStream( 1024, 1024 );
 
-                nStatus = pFilter->ExportGraphic( aGraphic, String(), aStream, nFilter, &aSettings.maFilterData );
+                nStatus = rFilter.ExportGraphic( aGraphic, String(), aStream, nFilter, &aSettings.maFilterData );
 
                 // copy temp stream to XOutputStream
                 SvOutputStream aOutputStream( aSettings.mxOutputStream );
@@ -1058,7 +1058,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 INetURLObject aURLObject( aSettings.maURL.Complete );
                 DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, &aSettings.maFilterData );
+                nStatus = XOutBitmap::ExportGraphic( aGraphic, aURLObject, rFilter, nFilter, &aSettings.maFilterData );
             }
         }
     }
@@ -1089,7 +1089,7 @@ void SAL_CALL GraphicExporter::cancel()
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
     throw(IllegalArgumentException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     mxShapes = NULL;
     mpUnoPage = NULL;
@@ -1223,12 +1223,12 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 {
     const String aMimeTypeName( MimeTypeName );
 
-    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-    sal_uInt16 nCount = pFilter->GetExportFormatCount();
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nCount = rFilter.GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
     {
-        if( aMimeTypeName.Equals( pFilter->GetExportFormatMediaType( nFilter ) ) )
+        if( aMimeTypeName.Equals( rFilter.GetExportFormatMediaType( nFilter ) ) )
         {
             return sal_True;
         }
@@ -1239,8 +1239,8 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeNam
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException)
 {
-    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-    sal_uInt16 nCount = pFilter->GetExportFormatCount();
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
+    sal_uInt16 nCount = rFilter.GetExportFormatCount();
     sal_uInt16 nFilter;
     sal_uInt16 nFound = 0;
 
@@ -1249,7 +1249,7 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) thr
 
     for( nFilter = 0; nFilter < nCount; nFilter++ )
     {
-        OUString aMimeType( pFilter->GetExportFormatMediaType( nFilter ) );
+        OUString aMimeType( rFilter.GetExportFormatMediaType( nFilter ) );
         if( aMimeType.getLength() )
         {
             *pStr++ = aMimeType;
@@ -1276,8 +1276,9 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector )
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxGetGraphicForShape(), exception caught!");
+        OSL_FAIL("SvxGetGraphicForShape(), exception caught!");
     }
     return aGraphic;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

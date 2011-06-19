@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,6 @@
 #include <svx/camera3d.hxx>
 #include <tools/stream.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen, double fBankAng) :
     aResetPos(rPos),
@@ -51,23 +46,11 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
     SetFocalLength(fFocalLen);
 }
 
-/*************************************************************************
-|*
-|* Default-Konstruktor
-|*
-\************************************************************************/
-
 Camera3D::Camera3D()
 {
     basegfx::B3DPoint aVector3D(0.0 ,0.0 ,1.0);
     Camera3D(aVector3D, basegfx::B3DPoint());
 }
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 void Camera3D::Reset()
 {
@@ -78,11 +61,7 @@ void Camera3D::Reset()
     SetFocalLength(fResetFocalLength);
 }
 
-/*************************************************************************
-|*
-|* Defaultwerte fuer Reset setzen
-|*
-\************************************************************************/
+// Set default values for reset
 
 void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                             double fFocalLen, double fBankAng)
@@ -93,11 +72,7 @@ void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoin
     fResetBankAngle     = fBankAng;
 }
 
-/*************************************************************************
-|*
-|* ViewWindow setzen und PRP anpassen
-|*
-\************************************************************************/
+// Set ViewWindow and adjust PRP
 
 void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
@@ -105,12 +80,6 @@ void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
     if ( bAutoAdjustProjection )
         SetFocalLength(fFocalLength);
 }
-
-/*************************************************************************
-|*
-|* Kameraposition setzen
-|*
-\************************************************************************/
 
 void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 {
@@ -123,12 +92,6 @@ void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
     }
 }
 
-/*************************************************************************
-|*
-|* Blickpunkt setzen
-|*
-\************************************************************************/
-
 void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 {
     if ( rNewLookAt != aLookAt )
@@ -138,12 +101,6 @@ void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
         SetBankAngle(fBankAngle);
     }
 }
-
-/*************************************************************************
-|*
-|* Position und Blickpunkt setzen
-|*
-\************************************************************************/
 
 void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
                                const basegfx::B3DPoint& rNewLookAt)
@@ -159,12 +116,6 @@ void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
     }
 }
 
-/*************************************************************************
-|*
-|* seitlichen Neigungswinkel setzen
-|*
-\************************************************************************/
-
 void Camera3D::SetBankAngle(double fAngle)
 {
     basegfx::B3DVector aDiff(aPosition - aLookAt);
@@ -176,7 +127,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aPrj.setY(-1.0);
     }
     else
-    {   // aPrj = Projektion von aDiff auf die XZ-Ebene
+    {   // aPrj = Projection from aDiff on the XZ-plane
         aPrj.setY(0.0);
 
         if ( aDiff.getY() < 0.0 )
@@ -185,12 +136,12 @@ void Camera3D::SetBankAngle(double fAngle)
         }
     }
 
-    // von aDiff nach oben zeigenden View-Up-Vektor berechnen
+    // Calculate from aDiff to uppwards pointing View-Up-Vector
     aPrj = aPrj.getPerpendicular(aDiff);
     aPrj = aPrj.getPerpendicular(aDiff);
     aDiff.normalize();
 
-    // auf Z-Achse rotieren, dort um BankAngle drehen und zurueck
+    // Rotate on Z axis, to rotate the BankAngle and back
     basegfx::B3DHomMatrix aTf;
     const double fV(sqrt(aDiff.getY() * aDiff.getY() + aDiff.getZ() * aDiff.getZ()));
 
@@ -253,12 +204,6 @@ void Camera3D::SetBankAngle(double fAngle)
     SetVUV(aTf * aPrj);
 }
 
-/*************************************************************************
-|*
-|* Brennweite setzen
-|*
-\************************************************************************/
-
 void Camera3D::SetFocalLength(double fLen)
 {
     if ( fLen < 5 )
@@ -267,11 +212,7 @@ void Camera3D::SetFocalLength(double fLen)
     fFocalLength = fLen;
 }
 
-/*************************************************************************
-|*
-|* Um die Kameraposition drehen, LookAt wird dabei veraendert
-|*
-\************************************************************************/
+// To rotate the camera position, this changes LookAt
 
 void Camera3D::Rotate(double fHAngle, double fVAngle)
 {
@@ -319,12 +260,7 @@ void Camera3D::Rotate(double fHAngle, double fVAngle)
     SetLookAt(aPosition + aDiff);
 }
 
-
-/*************************************************************************
-|*
-|* Um den Blickpunkt drehen, Position wird dabei veraendert
-|*
-\************************************************************************/
+// To rotate the view point, this changes the position
 
 void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
 {
@@ -372,11 +308,7 @@ void Camera3D::RotateAroundLookAt(double fHAngle, double fVAngle)
     SetPosition(aLookAt + aDiff);
 }
 
-/*************************************************************************
-|*
-|* FG: ??? Setzt wohl die Projektionsebene in eine bestimmte Tiefe
-|*
-\************************************************************************/
+// ??? this probably sets the projection plane in a certain depth
 
 void Camera3D::SetFocalLengthWithCorrect(double fLen)
 {
@@ -390,3 +322,5 @@ void Camera3D::SetFocalLengthWithCorrect(double fLen)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

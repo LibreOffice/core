@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 #ifndef MACOSX
-    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_UINTEGER);
+    N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)(sal_IntPtr)nTimeOut,SQL_IS_UINTEGER);
     // Verbindung aufbauen
 #endif
 
@@ -160,7 +161,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
         ::rtl::OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == ::rtl::OUString::createFromAscii("02.50") || sVersion == ::rtl::OUString::createFromAscii("02.00");
+        m_bUseOldDateFormat =  sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.50")) || sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.00"));
     }
     catch(Exception&)
     {
@@ -235,12 +236,12 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";UID=") + aUID;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -249,7 +250,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
-            aDSN += ::rtl::OUString::createFromAscii(";");
+            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))
@@ -434,7 +435,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
 
     OTools::ThrowException(this,N3SQLSetConnectAttr(m_aConnectionHandle,
                                    SQL_ATTR_TXN_ISOLATION,
-                                   (SQLPOINTER)level,SQL_IS_INTEGER),
+                                   (SQLPOINTER)(sal_IntPtr)level,SQL_IS_INTEGER),
                                    m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
@@ -668,3 +669,4 @@ void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

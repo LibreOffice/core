@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #define _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace accessibility {
@@ -78,11 +77,8 @@ enum SvxShapeTypes
     DRAWING_END = DRAWING_MEDIA
 };
 
-/** List of shape type descriptors corresponding to the
-    <type>SvxShapeTypes</type> enum.
-*/
-extern ShapeTypeDescriptor aSvxShapeTypeList[];
-
 } // end of namespace accessibility
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

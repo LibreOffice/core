@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <rtl/ref.hxx>
 #include <functional>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #include <cppuhelper/implbase1.hxx>
@@ -44,7 +45,7 @@ namespace comphelper {
 // -----------------------------------------------------------------------------
 
 typedef std::vector< ::com::sun::star::beans::Property > PropertyVector;
-typedef std::hash_map< ::rtl::OUString, ::sal_uInt32, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > PropertyMap;
+typedef boost::unordered_map< ::rtl::OUString, ::sal_uInt32, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > PropertyMap;
 
 // -----------------------------------------------------------------------------
 
@@ -107,3 +108,5 @@ private:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

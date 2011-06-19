@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,9 @@ public:
     // XFrame attributes
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+
+    virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSpecialEffect() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSpecialEffect( sal_Int32 nSpecialEffect ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBorderStyle() throw (css::uno::RuntimeException);
@@ -63,3 +67,5 @@ private:
     css::uno::Reference< css::awt::XControl > mxDialog;
 };
 #endif //SC_VBA_LABEL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

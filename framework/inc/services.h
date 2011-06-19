@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@ namespace framework{
 #define SERVICENAME_URLTRANSFORMER                              DECLARE_ASCII("com.sun.star.util.URLTransformer"                    )
 #define SERVICENAME_PLUGINFRAME                                 DECLARE_ASCII("com.sun.star.mozilla.Plugin"                         )
 #define SERVICENAME_BRIDGEFACTORY                               DECLARE_ASCII("com.sun.star.bridge.BridgeFactory"                   )
-#define SERVICENAME_INIMANAGER                                  DECLARE_ASCII("com.sun.star.config.INIManager"                      )
 #define SERVICENAME_MEDIATYPEDETECTIONHELPER                    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"         )
 #define SERVICENAME_LOGINDIALOG                                 DECLARE_ASCII("com.sun.star.framework.LoginDialog"                  )
 #define SERVICENAME_CONFIGURATION                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )
@@ -220,3 +220,4 @@ namespace framework{
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_H_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

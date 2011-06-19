@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef SCRIPTING_DLGPROV_HXX
 #define SCRIPTING_DLGPROV_HXX
 
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCEWITHSTORAGE_HPP_
 #include <com/sun/star/resource/XStringResourceWithStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCEWITHSTORAGE_HPP_
 #include <com/sun/star/resource/XStringResourceWithLocation.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -46,7 +43,7 @@
 #include <osl/mutex.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace stringresource
@@ -81,7 +78,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OUString,
     ::rtl::OUString,
@@ -90,7 +87,7 @@ typedef std::hash_map
 >
 IdToStringMap;
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OUString,
     sal_Int32,
@@ -689,3 +686,5 @@ public:
 //.........................................................................
 
 #endif // SCRIPTING_DLGPROV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

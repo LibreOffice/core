@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/media/XManager.hpp>
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HDL_
 #include <com/sun/star/lang/XComponent.hdl>
-#endif
 
 #define MEDIA_TIMER_TIMEOUT 100
 
@@ -47,18 +46,9 @@ namespace avmedia { namespace priv {
 // - MediaWindowBaseImpl -
 // -----------------------
 
-struct ServiceManager
-{
-    const char* pServiceName;
-    sal_Bool    bIsJavaBased;
-};
-
-// ---------------------------------------------------------------------
-
 
 MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow ) :
-    mpMediaWindow( pMediaWindow ),
-    mbIsMediaWindowJavaBased( sal_False )
+    mpMediaWindow( pMediaWindow )
 {
 }
 
@@ -71,47 +61,28 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL, sal_Bool& rbJavaBased )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
 {
     uno::Reference< lang::XMultiServiceFactory >    xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< media::XPlayer >                xPlayer;
 
-    rbJavaBased = sal_False;
-
     if( xFactory.is() )
     {
-        static const ServiceManager aServiceManagers[] =
+        try
         {
-            { AVMEDIA_MANAGER_SERVICE_NAME, AVMEDIA_MANAGER_SERVICE_IS_JAVABASED },
-            { AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1, AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1 }
-        };
 
-        for( sal_uInt32 i = 0; !xPlayer.is() && ( i < ( sizeof( aServiceManagers ) / sizeof( ServiceManager ) ) ); ++i )
+            uno::Reference< ::com::sun::star::media::XManager > xManager(
+                xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MANAGER_SERVICE_NAME )) ),
+                uno::UNO_QUERY );
+
+            if( xManager.is() )
+            {
+                xPlayer = uno::Reference< ::com::sun::star::media::XPlayer >(
+                    xManager->createPlayer( rURL ), uno::UNO_QUERY );
+            }
+        }
+        catch( ... )
         {
-            const String aServiceName( aServiceManagers[ i ].pServiceName, RTL_TEXTENCODING_ASCII_US );
-
-            if( aServiceName.Len() )
-            {
-                OSL_TRACE( "Trying to create media manager service %s", aServiceManagers[ i ].pServiceName );
-
-                try
-                {
-                    uno::Reference< media::XManager > xManager( xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-
-                    if( xManager.is() )
-                    {
-                        xPlayer = uno::Reference< media::XPlayer >( xManager->createPlayer( rURL ), uno::UNO_QUERY );
-                    }
-                }
-                catch( ... )
-                {
-                }
-            }
-
-            if( xPlayer.is() )
-            {
-                rbJavaBased = aServiceManagers[ i ].bIsJavaBased;
-            }
         }
     }
 
@@ -140,7 +111,7 @@ void MediaWindowBaseImpl::setURL( const ::rtl::OUString& rURL )
         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             maFileURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-        mxPlayer = createPlayer( maFileURL, mbIsMediaWindowJavaBased );
+        mxPlayer = createPlayer( maFileURL );
         onURLChanged();
     }
 }
@@ -431,12 +402,7 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
             case( MEDIASTATE_PLAY ):
             case( MEDIASTATE_PLAYFFW ):
             {
-/*
-                const double fNewRate = ( ( MEDIASTATE_PLAYFFW == rItem.getState() ) ? AVMEDIA_FFW_PLAYRATE : 1.0 );
 
-                if( getRate() != fNewRate )
-                    setRate( fNewRate );
-*/
                 if( !isPlaying() )
                     start();
             }
@@ -465,3 +431,5 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
 
 } // namespace priv
 } // namespace avemdia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,10 +1,10 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\hid
+mkdir: %COMMON_DEST%\bin\hid
 
-..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\bin\uui*.dll %_DEST%\bin%_EXT%\uui*.dll
-..\%__SRC%\bin\uui*.res %_DEST%\bin%_EXT%\uui*.res
-..\%__SRC%\lib\libuui*.* %_DEST%\lib%_EXT%\libuui*.*
-..\%__SRC%\lib\iuui.lib %_DEST%\lib%_EXT%\iuui.lib
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin\hid\*.hid
+..\%__SRC%\bin\uui*.dll %_DEST%\bin\uui*.dll
+..\%__SRC%\bin\uui*.res %_DEST%\bin\uui*.res
+..\%__SRC%\lib\libuui*.* %_DEST%\lib\libuui*.*
+..\%__SRC%\lib\iuui.lib %_DEST%\lib\iuui.lib
 
-..\util\uui.xml %_DEST%\xml%_EXT%\uui.xml
-..\%__SRC%\misc\uui.component %_DEST%\xml%_EXT%\uui.component
+..\util\uui.xml %_DEST%\xml\uui.xml
+..\%__SRC%\misc\uui.component %_DEST%\xml\uui.component

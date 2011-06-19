@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 
-#ifndef _XMLOFF_XMLSTYLE_HXX_
 #include <xmloff/xmlstyle.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace style { class XStyle; }
@@ -90,3 +89,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

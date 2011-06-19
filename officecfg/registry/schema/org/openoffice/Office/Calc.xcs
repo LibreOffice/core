@@ -326,8 +326,8 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<info>
 						<author>NN</author>
-						<desc>Specifies whether guides are displayed when moving objects.</desc>
-						<label>Guides</label>
+						<desc>Specifies whether helplines are displayed when moving objects.</desc>
+						<label>Helplines</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1217,6 +1217,31 @@
 					</info>
 					<value>true</value>
 				</prop>
+                <prop oor:name="FormulaSyntax" oor:type="xs:int">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Calculate -->
+                    <!-- This node is deprecated, but we still need to keep it for migration purposes. -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Specifies what formula syntax type to use.</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Calc A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>Excel A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="2">
+                            <info>
+                                <desc>Excel R1C1</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                </prop>
 				<node-ref oor:name="Date" oor:node-type="Date">
 					<info>
 						<desc>Specifies the date that is represented by the number 0.</desc>
@@ -1224,6 +1249,72 @@
 				</node-ref>
 			</group>
 		</group>
+        <group oor:name="Formula">
+            <info>
+                <desc>Contains settings that affect formula handling.</desc>
+            </info>
+            <group oor:name="Syntax">
+                <info>
+                    <desc>Contains settings for formula syntax.</desc>
+                </info>
+                <prop oor:name="Grammar" oor:type="xs:int">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Specifies what formula syntax type to use.</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Calc A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>Excel A1</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="2">
+                            <info>
+                                <desc>Excel R1C1</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                </prop>
+                <prop oor:name="EnglishFunctionName" oor:type="xs:boolean">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Whether to use English function names or localized function names.</desc>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="SeparatorArg" oor:type="xs:string">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Argument separator in worksheet function</desc>
+                    </info>
+                    <value></value>
+                </prop>
+                <prop oor:name="SeparatorArrayRow" oor:type="xs:string">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Row separator in array constant</desc>
+                    </info>
+                    <value></value>
+                </prop>
+                <prop oor:name="SeparatorArrayCol" oor:type="xs:string">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Column separator in array constant</desc>
+                    </info>
+                    <value></value>
+                </prop>
+            </group>
+        </group>
 		<group oor:name="Revision">
 			<info>
 				<desc>Contains settings that affect revision marking.</desc>
@@ -1311,7 +1402,7 @@
               <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
               <label>Executable code</label>
             </info>
-            <value>false</value>
+            <value>true</value>
           </prop>
           <prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
@@ -1451,74 +1542,52 @@
                 </prop>
             </group>
         </group>
-	</component>
+        <group oor:name="Compatibility">
+            <info>
+                <desc>Contains various compatibility settings.</desc>
+            </info>
+            <group oor:name="KeyBindings">
+                <info>
+                    <desc>Contains options related to key bindings</desc>
+                </info>
+                <prop oor:name="BaseGroup" oor:type="xs:int">
+                    <!-- UIHints: Tools - Options - Spreadsheet - Compatibility -->
+                    <info>
+                        <author>Kohei Yoshida</author>
+                        <desc>Specifies baseline key binding group to use.</desc>
+                    </info>
+                    <constraints>
+                        <enumeration oor:value="0">
+                            <info>
+                                <desc>Default</desc>
+                            </info>
+                        </enumeration>
+                        <enumeration oor:value="1">
+                            <info>
+                                <desc>OpenOffice.org legacy</desc>
+                            </info>
+                        </enumeration>
+                    </constraints>
+                </prop>
+            </group>
+	</group>
+	<group oor:name="Defaults">
+	  <info>
+		<desc>Contains various defaults settings.</desc>
+	  </info>
+	  <group oor:name="Other">
+		<info>
+			  <desc>Other Program defaults</desc>
+		</info>
+		<prop oor:name="TabCount" oor:type="xs:int">
+			  <!-- UIHints: Tools - Options - Spreadsheet - Defaults -->
+			  <info>
+				<author>Albert Thuswaldner</author>
+				<desc>Option to set initial number of sheet tabs</desc>
+			  </info>
+		  <value>3</value>
+		</prop>
+	  </group>
+	</group>
+      </component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

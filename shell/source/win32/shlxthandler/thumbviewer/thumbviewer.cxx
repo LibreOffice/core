@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "internal/global.hxx"
 
-#ifndef INFOTIPS_HXX_INCLUDED
 #include "internal/thumbviewer.hxx"
-#endif
 #include "internal/shlxthdl.hxx"
 #include "internal/registry.hxx"
 #include "internal/fileextensions.hxx"
@@ -290,7 +289,6 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Clone(IStream **)
 {  return E_NOTIMPL; }
 
 
-//#########################################
 
 
 CThumbviewer::CThumbviewer(long RefCnt) :
@@ -531,3 +529,4 @@ Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Re
     return result;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

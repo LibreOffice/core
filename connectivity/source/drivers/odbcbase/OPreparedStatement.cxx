@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <osl/diagnose.h>
+#include "diagnose_ex.h"
 #include "odbc/OPreparedStatement.hxx"
 #include "odbc/OBoundParam.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -595,6 +597,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
     nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_UNBIND);
+    OSL_UNUSED(nRet);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
@@ -971,3 +974,5 @@ OResultSet* OPreparedStatement::createResulSet()
     return pReturn;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

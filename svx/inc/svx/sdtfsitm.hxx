@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,19 +32,21 @@
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 
-enum SdrFitToSizeType {SDRTEXTFIT_NONE,         // - kein FitToSize
-                       SDRTEXTFIT_PROPORTIONAL, // - Alle Buchstaben proportional umgroessern
-                       SDRTEXTFIT_ALLLINES,     // - Zus. jede Zeile separat in der Breite stretchen
-                       SDRTEXTFIT_RESIZEATTR};  // - Bei Rahmenumgroesserung (ausser Autogrow) wird
-                                                //   die Schriftgroesse umattributiert (hart)
+enum SdrFitToSizeType {
+    SDRTEXTFIT_NONE,         // - no fit-to-size
+    SDRTEXTFIT_PROPORTIONAL, // - resize all glyhs proportionally
+                             //   (might scale anisotrophically)
+    SDRTEXTFIT_ALLLINES,     // - like SDRTEXTFIT_PROPORTIONAL, but
+                             //   scales each line separately
+    SDRTEXTFIT_AUTOFIT};     // - mimics PPT's automatic adaption of
+                             //   font size to text rect - comparable
+                             //   to SDRTEXTFIT_PROPORTIONAL, but
+                             //   scales isotrophically
 
-// Bei SDRTEXTFIT_PROPORTIONAL und SDRTEXTFIT_ALLLINES gibt es kein AutoGrow und
-// keine automatischen Umbrueche.
-// Ist SDRTEXTFIT_RESIZEATTR gesetzt, so wird beim umgroessern des Textrahmens
-// (ausser bei AutoGrow) die Schrift durch harte Attributierung ebenfalls
-// umgegroessert.
-// Bei AutoGrowingWidth gibt es ebenfalls keine automatischen Umbrueche (erst bei
-// TextMaxFrameWidth).
+// No AutoGrow and no automatic line breaks for
+// SDRTEXTFIT_PROPORTIONAL and SDRTEXTFIT_ALLLINES.
+// No automatic line breaks for AutoGrowingWidth as well (only if
+// TextMaxFrameWidth is reached).
 
 //--------------------------------
 // class SdrTextFitToSizeTypeItem
@@ -58,8 +61,8 @@ public:
     virtual sal_uInt16           GetValueCount() const; // { return 4; }
             SdrFitToSizeType GetValue() const      { return (SdrFitToSizeType)SfxEnumItem::GetValue(); }
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
@@ -69,3 +72,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

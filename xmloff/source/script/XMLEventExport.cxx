@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,11 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/XMLEventExport.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -75,7 +70,7 @@ XMLEventExport::~XMLEventExport()
     for( HandlerMap::iterator aIter =
              aHandlerMap.begin();
          aIter != aEnd;
-         aIter++ )
+         ++aIter )
     {
         delete aIter->second;
     }
@@ -164,7 +159,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
             // don't proceed further
             ::rtl::OString aStr("Unknown event name:" );
             aStr += ::rtl::OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
-            DBG_ERROR( aStr.getStr() );
+            OSL_FAIL( aStr.getStr() );
         }
 #endif
     }
@@ -214,7 +209,7 @@ void XMLEventExport::ExportSingleEvent(
         // don't proceed further
         ::rtl::OString aStr("Unknown event name:" );
         aStr += ::rtl::OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
-        DBG_ERROR( aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 #endif
 }
@@ -261,7 +256,7 @@ void XMLEventExport::ExportEvent(
             {
                 if (! sType.equalsAsciiL("None", sizeof("None")-1))
                 {
-                    DBG_ERROR("unknown event type returned by API");
+                    OSL_FAIL("unknown event type returned by API");
                     // unknown type -> error (ignore)
                 }
                 // else: we ignore None fields
@@ -365,3 +360,5 @@ const XMLEventNameTranslation aStandardEventTable[] =
 
     { NULL, 0, 0 }
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

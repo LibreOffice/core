@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,30 +51,24 @@ public:
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const = 0;
 
     virtual NodeMap & getMembers();
-
     virtual rtl::OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);
-
     virtual int getMandatory() const;
 
     void setLayer(int layer);
-
     int getLayer() const;
 
     void setFinalized(int layer);
-
     int getFinalized() const;
 
     rtl::Reference< Node > getMember(rtl::OUString const & name);
 
 protected:
     explicit Node(int layer);
-
     Node(const Node & other);
 
     virtual ~Node();
-
     virtual void clear();
 
     int layer_;
@@ -83,3 +78,5 @@ protected:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

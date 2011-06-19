@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef UUI_COOKIEDG_HXX
 #define UUI_COOKIEDG_HXX
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
@@ -63,3 +62,4 @@ public:
 
 #endif // UUI_COOKIEDG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

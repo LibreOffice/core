@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -182,15 +183,15 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNa
 
                     } while (tmpLongVal > 0);
                 }
-                catch(Exception& )
+                catch(const Exception&)
                 {
                 }
 
                 return n - tmpLongVal;
             }
-            catch(Exception& e)
+            catch(const Exception& e)
             {
-                OSL_ENSURE(0,"Exception catched! : skip();");
+                OSL_FAIL("Exception caught! : skip();");
                 StorageContainer::throwJavaException(e,env);
             }
         }
@@ -231,9 +232,9 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
 #endif
             return nAvailable;
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
-           OSL_ENSURE(0,"Exception caught! : available();");
+            OSL_FAIL("Exception caught! : available();");
             StorageContainer::throwJavaException(e,env);
         }
     }
@@ -275,9 +276,9 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
         {
             nBytesRead = xIn->readBytes(aData,nLen);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : skip();");
+            OSL_FAIL("Exception caught! : skip();");
             StorageContainer::throwJavaException(e,env);
         }
 
@@ -304,3 +305,5 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
     return nBytesRead;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

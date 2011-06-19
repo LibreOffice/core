@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,10 +37,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-namespace vos
-{
-    class IMutex;
-}
 
 //........................................................................
 namespace sfx2
@@ -66,10 +63,10 @@ namespace sfx2
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
         IModifiableDocument*    m_pDocument;
-        ::vos::IMutex&          m_rMutex;
+        ::osl::SolarMutex&      m_rMutex;
 
     public:
-        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::vos::IMutex& _rMutex );
+        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex );
 
         void dispose();
 
@@ -93,3 +90,5 @@ namespace sfx2
 //........................................................................
 
 #endif // SFX2_DOCSTORAGEMODIFYLISTENER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "migration.hxx"
 
@@ -137,7 +138,7 @@ struct MigrationItem
     ::rtl::OUString GetPrevSibling() const { return m_sPrevSibling; }
 };
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::std::vector< MigrationItem >,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > MigrationHashMap;
@@ -206,13 +207,14 @@ private:
 
     // functions to control the migration process
     bool          readAvailableMigrations(migrations_available&);
+    bool          alreadyMigrated();
     migrations_vr readMigrationSteps(const ::rtl::OUString& rMigrationName);
     sal_Int32     findPreferedMigrationProcess(const migrations_available&);
     install_info  findInstallation(const strings_v& rVersions);
     strings_vr    compileFileList();
 
     // helpers
-    void substract(strings_v& va, const strings_v& vb_c) const;
+    void subtract(strings_v& va, const strings_v& vb_c) const;
     strings_vr getAllFiles(const rtl::OUString& baseURL) const;
     strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
     NS_UNO::Reference< NS_CSS::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
@@ -234,19 +236,19 @@ private:
     void refresh();
 
     void setMigrationCompleted();
-    sal_Bool checkMigrationCompleted();
+    bool checkMigrationCompleted();
 
 public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
     ~MigrationImpl();
+    bool initializeMigration();
     sal_Bool doMigration();
-    sal_Bool checkMigration();
     rtl::OUString getOldVersionName();
-
-
 };
 }
 #undef NS_CSS
 #undef NS_UNO
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

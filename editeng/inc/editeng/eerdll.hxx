@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,12 +47,12 @@ class EditDLL
     GlobalEditData* pGlobalData;
 
 public:
-                    EditDLL();
-                    ~EditDLL();
+    EditDLL();
+    ~EditDLL();
 
     ResMgr*         GetResMgr() const       { return pResMgr; }
     GlobalEditData* GetGlobalData() const   { return pGlobalData; }
-    static EditDLL* Get();
+    static EditDLL& Get();
 };
 
 #define EE_DLL() EditDLL::Get()
@@ -59,3 +60,5 @@ public:
 #define EE_RESSTR(x) String( EditResId(x) )
 
 #endif //_EERDLL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

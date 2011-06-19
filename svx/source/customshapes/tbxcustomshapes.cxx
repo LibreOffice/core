@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/toolbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
@@ -109,7 +108,7 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId
 
 /*************************************************************************
 |*
-|* Benachrichtigung, wenn sich der Applikationsstatus geaendert hat
+|* Notification when the application status has changed
 |*
 \************************************************************************/
 
@@ -121,7 +120,7 @@ void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 /*************************************************************************
 |*
-|* Wenn man ein PopupWindow erzeugen will
+|* when one wants to create a popup window
 |*
 \************************************************************************/
 
@@ -132,9 +131,9 @@ SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 
 /*************************************************************************
 |*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
+|* Here is the window created
+|* The location of the Toolbox is queried through GetToolBox()
+|* rItemRect are the screen coordinates
 |*
 \************************************************************************/
 
@@ -158,7 +157,7 @@ void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
 
 ::sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
 {
-    // We control a sub-toolbar therefor, we have to return true.
+    // We control a sub-toolbar therefore we have to return true.
     return sal_True;
 }
 
@@ -175,13 +174,13 @@ void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rC
     m_aCommand = rCommand;
     // Our sub-toolbar wants to execute a function.
     // We have to change the image of our toolbar button to reflect the new function.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_bDisposed )
     {
         if ( m_aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -192,13 +191,14 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
 {
     // We should update the button image of our parent (toolbar).
     // Use the stored command to set the correct current image.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

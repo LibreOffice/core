@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,8 @@
 
 // class SvxContourItem --------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob Konturschrift eingestellt ist.
+/*  [Description]
+    This item describes, if contour is employed.
 */
 
 class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
@@ -47,7 +47,7 @@ public:
     SvxContourItem( const sal_Bool bContoured /*= sal_False*/,
                     const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
@@ -66,3 +66,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

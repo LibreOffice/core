@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: UnifiedTransparencePrimitive2D.hxx,v $
- *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDTRANSPARENCEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDTRANSPARENCEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +50,7 @@ namespace drawinglayer
             regions of combined transparency, but be all rendered with the
             defined, single transparency.
          */
-        class UnifiedTransparencePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparencePrimitive2D : public GroupPrimitive2D
         {
         private:
             /// the unified transparence
@@ -89,3 +86,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 // id + 100
 #define LB_LABEL_OFFSET 100
 
-const rtl::OUString TILDE = OUString::createFromAscii( "~" );
+const rtl::OUString TILDE = OUString(RTL_CONSTASCII_USTRINGPARAM( "~" ));
 const sal_Unicode TILDE_SIGN = L'~';
 
 #define FOLDERPICKER_TITLE            500
@@ -227,3 +228,5 @@ OUString CResourceProvider::getResString( sal_Int32 aId )
 {
    return m_pImpl->getResString( aId );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

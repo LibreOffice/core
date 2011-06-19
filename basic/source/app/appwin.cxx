@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_basic.hxx"
 
 #include <stdio.h>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <tools/fsys.hxx>
 #include <svtools/stringtransfer.hxx>
 
@@ -188,11 +187,9 @@ void AppWin::Help()
     // Trim leading whitespaces
     while( s.GetChar(0) == ' ' )
       s.Erase( 0, 1 );
-//      aBasicApp.pHelp->Start( s );
   }
   else
   {
-//      aBasicApp.pHelp->Start( OOO_HELP_INDEX );
   }
 }
 
@@ -211,7 +208,6 @@ void AppWin::GetFocus()
     if( pDataEdit ) // GetFocus is called by the destructor, so this check
     {
         pDataEdit->GrabFocus();
-//      InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));
     }
 }
 
@@ -221,7 +217,7 @@ long AppWin::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
         Activate();
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        if ( pFrame->pList->Last() != this )
+        if ( pFrame->pList->back() != this )
             Activate();
     return sal_False;       // Der event soll weiter verarbeitet werden
 }
@@ -249,7 +245,6 @@ long AppWin::InitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
     pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp, this ) ) );
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
-//  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
     sal_Bool bHasText;
     if( pDataEdit )
@@ -317,7 +312,7 @@ void AppWin::Command( const CommandEvent& rCEvt )
             }
             break;
         case RID_EDITDEL:
-            /*if( bHasMark ) */pDataEdit->Delete();
+            pDataEdit->Delete();
             break;
         case RID_EDITUNDO:
             pDataEdit->Undo();
@@ -370,8 +365,6 @@ sal_Bool AppWin::DiskFileChanged( sal_uInt16 nWhat )
                 else
                     return DiskFileChanged( SINCE_LAST_ASK_RELOAD );
             }
-// uncomment to avoid compiler warning
-//          break;
         case SINCE_LAST_ASK_RELOAD:
             {
                 String aFilename( GetText() );
@@ -382,10 +375,8 @@ sal_Bool AppWin::DiskFileChanged( sal_uInt16 nWhat )
                 return ( !aLastAccess.GetError() != !aStat.GetError() )
                     || aLastAccess.IsYounger( aStat ) || aStat.IsYounger( aLastAccess );
             }
-// uncomment to avoid compiler warning
-//          break;
         default:
-            DBG_ERROR("Not Implemented in AppWin::DiskFileChanged");
+            OSL_FAIL("Not Implemented in AppWin::DiskFileChanged");
     }
     return sal_True;
 }
@@ -410,7 +401,7 @@ void AppWin::UpdateFileInfo( sal_uInt16 nWhat )
             }
             break;
         default:
-            DBG_ERROR("Not Implemented in AppWin::UpdateFileInfo");
+            OSL_FAIL("Not Implemented in AppWin::UpdateFileInfo");
     }
 }
 
@@ -427,7 +418,6 @@ void AppWin::CheckReload()
     if ( !aFile.Exists() )
         return;
 
-//  FileStat aStat( aFile );
 
     if ( DiskFileChanged( SINCE_LAST_ASK_RELOAD ) && ReloadAllowed() )
     {
@@ -461,8 +451,6 @@ sal_Bool AppWin::Load( const String& aName )
     SkipReload();
     sal_Bool bErr;
 
-//  if( !QuerySave() )
-//      return;
     bErr = !pDataEdit->Load( aName );
     if( bErr )
     {
@@ -585,7 +573,7 @@ sal_uInt16 AppWin::QuerySave( QueryBits nBits )
             nReturn = SAVE_RES_CANCEL;
             break;
         default:
-            DBG_ERROR("switch default where no default should be: Internal error");
+            OSL_FAIL("switch default where no default should be: Internal error");
             nReturn = SAVE_RES_CANCEL;
     }
     SkipReload( sal_False );
@@ -603,18 +591,12 @@ sal_Bool AppWin::Close()
             delete this;
             return sal_True;
         }
-// uncomment to avoid compiler warning
-//  break;
     case SAVE_RES_ERROR:
         return sal_False;
-// uncomment to avoid compiler warning
-//      break;
     case SAVE_RES_CANCEL:
         return sal_False;
-// uncomment to avoid compiler warning
-//      break;
     default:
-        DBG_ERROR("Not Implemented in AppWin::Close");
+        OSL_FAIL("Not Implemented in AppWin::Close");
         return sal_False;
     }
 }
@@ -649,3 +631,4 @@ void AppWin::Repeat()
       pDataEdit->ReplaceSelected( aReplace );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

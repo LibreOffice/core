@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,7 +225,7 @@ const ParagraphData& OutlinerParaObject::GetParagraphData(sal_uInt32 nIndex) con
     }
     else
     {
-        OSL_ENSURE(false, "OutlinerParaObject::GetParagraphData: Access out of range (!)");
+        OSL_FAIL("OutlinerParaObject::GetParagraphData: Access out of range (!)");
         static ParagraphData aEmptyParagraphData;
         return aEmptyParagraphData;
     }
@@ -269,3 +270,5 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const XubString rNewN
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

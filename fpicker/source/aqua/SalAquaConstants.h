@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _SALAQUACONSTANTS_H_
 #define _SALAQUACONSTANTS_H_
 
-#define kAppFourCharCode 'OOo2'
+#define kAppFourCharCode 'LibO'
 #define kControlPropertyTracking 'Trck'
 #define kControlPropertyLastPartCode 'LsPc'
 #define kControlPropertySubType 'SuTy'
@@ -61,3 +62,4 @@
 
 #endif //_SALAQUACONSTANTS_H_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

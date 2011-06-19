@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ enum SvXMLTokenMapDropAttrs
     XML_TOK_DROP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aDropAttrTokenMap[] =
+static SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
     { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },
@@ -152,3 +153,4 @@ void XMLTextDropCapImportContext::EndElement()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -251,7 +252,7 @@ sal_Bool CMtaFolderPicker::browseForFolder( )
 
         if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
         {
-            OSL_ENSURE( sal_False, "sta thread not ready" );
+            OSL_FAIL( "sta thread not ready" );
             return sal_False;
         }
 
@@ -720,7 +721,7 @@ unsigned int CMtaFolderPicker::run( )
     // we stop here and return
     if ( FAILED( hr ) )
     {
-        OSL_ENSURE( sal_False, "CoInitialize failed" );
+        OSL_FAIL( "CoInitialize failed" );
         return sal::static_int_cast< unsigned int >(-1);
     }
 
@@ -739,7 +740,7 @@ unsigned int CMtaFolderPicker::run( )
     }
     else
     {
-        OSL_ENSURE( sal_False, "failed to create sta thread" );
+        OSL_FAIL( "failed to create sta thread" );
         nRet = sal::static_int_cast< unsigned int >(-1);
     }
 
@@ -837,3 +838,5 @@ void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )
         s_ClassAtom = 0;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define INCLUDED_DP_PLATFORM_HXX
 
 
-#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_API_HXX
 #include "dp_misc_api.hxx"
-#endif
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "rtl/ustring.hxx"
@@ -54,3 +53,5 @@ bool hasValidPlatform( ::com::sun::star::uno::Sequence< ::rtl::OUString > const 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

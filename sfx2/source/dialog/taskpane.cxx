@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -184,8 +185,7 @@ namespace sfx2
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
 
-                        const sal_Bool bHiContrast( Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False, bHiContrast ) );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
                         return aPanelImage.GetXGraphic();
                     }
 
@@ -1128,7 +1128,7 @@ namespace sfx2
     // ---------------------------------------------------------------------------------------------------------------------
     void TaskPaneController_Impl::Dying()
     {
-        OSL_ENSURE( false, "TaskPaneController_Impl::Dying: unexpected call!" );
+        OSL_FAIL( "TaskPaneController_Impl::Dying: unexpected call!" );
         // We are expected to live longer than the ToolPanelDeck we work with. Since we remove ourself, in our dtor,
         // as listener from the panel deck, this method here should never be called.
     }
@@ -1297,3 +1297,5 @@ namespace sfx2
 //......................................................................................................................
 } // namespace sfx2
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

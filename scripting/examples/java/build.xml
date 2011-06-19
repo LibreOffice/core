@@ -47,7 +47,7 @@
 
     <javac srcdir="HelloWorld" destdir="${outdir}/HelloWorld"
            includes="**/*.java" classpathref="idlclasspath"
-           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+           debug="${debug}" optimize="${optimize}" deprecation="on" includeantruntime="false"/>
 
     <copy file="HelloWorld/HelloWorld.java" todir="${outdir}/HelloWorld"/>
     <copy file="HelloWorld/parcel-descriptor.xml" todir="${outdir}/HelloWorld"/>
@@ -69,7 +69,7 @@
 
     <javac srcdir="Highlight" destdir="${outdir}/Highlight"
            includes="**/*.java" classpathref="idlclasspath"
-           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+           debug="${debug}" optimize="${optimize}" deprecation="on" includeantruntime="false"/>
 
     <copy file="Highlight/HighlightText.java" todir="${outdir}/Highlight"/>
     <copy file="Highlight/parcel-descriptor.xml" todir="${outdir}/Highlight"/>
@@ -91,7 +91,7 @@
 
     <javac srcdir="MemoryUsage" destdir="${outdir}/MemoryUsage"
            includes="**/*.java" classpathref="idlclasspath"
-           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+           debug="${debug}" optimize="${optimize}" deprecation="on" includeantruntime="false"/>
 
     <copy file="MemoryUsage/MemoryUsage.java" todir="${outdir}/MemoryUsage"/>
     <copy file="MemoryUsage/parcel-descriptor.xml" todir="${outdir}/MemoryUsage"/>

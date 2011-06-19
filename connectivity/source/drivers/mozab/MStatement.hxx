@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sqliterator.hxx"
-#ifndef _CONNECTIVITY_PARSE_SQLPARSE_HXX_
 #include "connectivity/sqlparse.hxx"
-#endif
 #include <connectivity/FValue.hxx>
 #include "TSortIndex.hxx"
 #include "MConnection.hxx"
@@ -200,7 +199,7 @@ namespace connectivity
         protected:
             ~OStatement(){}
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor, for when the object needs to be returned:
             OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
 
@@ -211,3 +210,5 @@ namespace connectivity
     }
 }
 #endif // CONNECTIVITY_SSTATEMENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,11 @@
 #define  DECLARE_FN_POINTERS 1
 #include "EApi.h"
 static const char *eBookLibNames[] = {
-    "libebook-1.2.so.9", // evolution-2.8
-    "libebook-1.2.so.5", // evolution-2.4 and 2.6+
-    "libebook-1.2.so.3", // evolution-2.2
-    "libebook.so.8"      // evolution-2.0
+    "libebook-1.2.so.10", // bumped again
+    "libebook-1.2.so.9",  // evolution-2.8
+    "libebook-1.2.so.5",  // evolution-2.4 and 2.6+
+    "libebook-1.2.so.3",  // evolution-2.2
+    "libebook.so.8"       // evolution-2.0
 };
 
 typedef void (*SymbolFunc) (void);
@@ -133,3 +135,4 @@ int main( int argc, char **argv)
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

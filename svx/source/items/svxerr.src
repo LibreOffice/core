@@ -37,26 +37,18 @@ Resource RID_SVXERRCTX
 {
     String ERRCTX_SVX_LINGU_THESAURUS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
         Text [ en-US ] = "$(ERR) executing the thesaurus." ;
     };
     String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
         Text [ en-US ] = "$(ERR) executing the spellcheck." ;
     };
     String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
         Text [ en-US ] = "$(ERR) executing the hyphenation." ;
     };
     String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
-        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
         Text [ en-US ] = "$(ERR) creating a dictionary." ;
     };
     String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
@@ -73,8 +65,6 @@ Resource RID_SVXERRCODE
 {
     String ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
-        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
         Text [ en-US ] = "No thesaurus available for the current language.\nPlease check your installation and install the desired language." ;
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
@@ -83,26 +73,18 @@ Resource RID_SVXERRCODE
     };
     String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
-        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
         Text [ en-US ] = "Spellcheck is not available." ;
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
-        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
         Text [ en-US ] = "Hyphenation not available." ;
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
         Text [ en-US ] = "The custom dictionary $(ARG1) cannot be read." ;
     };
     String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
-        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
         Text [ en-US ] = "The custom dictionary $(ARG1) cannot be created." ;
     };
     String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK

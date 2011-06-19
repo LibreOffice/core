@@ -194,8 +194,6 @@ public class WriterHelper {
 
         xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(new PrintWriter(System.out),xRoot);
-
         XAccessibleAction action = UnoRuntime.queryInterface(XAccessibleAction.class, AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, bName));
 
         try {

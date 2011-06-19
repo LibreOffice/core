@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,8 +93,7 @@ struct ProviderRequest
 
 //---------------------------------------------------------------------------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
-component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
@@ -104,7 +104,7 @@ component_getImplementationEnvironment(
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY( "mozabdrv" )));
 
         // load the dbtools library
         oslModule s_hModule = osl_loadModuleRelative(
@@ -121,7 +121,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
 
             if (NULL == s_pCreationFunc)
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
+                OSL_FAIL("MozabDriver::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(s_hModule);
                 s_hModule = NULL;
             }
@@ -166,3 +166,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
 };
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

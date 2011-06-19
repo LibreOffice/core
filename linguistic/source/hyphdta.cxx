@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,18 +40,16 @@
 #include <svl/lngmisc.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
-//using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
+using ::rtl::OUString;
+
 namespace linguistic
 {
-///////////////////////////////////////////////////////////////////////////
 
 
 HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHPos,
@@ -133,7 +132,6 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PossibleHyphens::PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
@@ -199,7 +197,7 @@ com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens >
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

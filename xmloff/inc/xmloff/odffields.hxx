@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,4 +51,11 @@
 
 #define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
+#define ODF_UNHANDLED "vnd.oasis.opendocument.field.UNHANDLED"
+#define ODF_OLE_PARAM "vnd.oasis.opendocument.field.ole"
+#define ODF_ID_PARAM "vnd.oasis.opendocument.field.id"
+#define ODF_CODE_PARAM "vnd.oasis.opendocument.field.code"
+
 #endif /*  _ODFFIELDS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

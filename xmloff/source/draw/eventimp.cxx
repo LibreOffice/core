@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////
 
-SvXMLEnumMapEntry __READONLY_DATA aXML_EventActions_EnumMap[] =
+SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
 {
     { XML_NONE,             ClickAction_NONE    },
     { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },
@@ -101,9 +102,6 @@ public:
 
     sal_Bool mbValid;
     sal_Bool mbScript;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    sal_Bool mbActionEvent;
-#endif
     ClickAction meClickAction;
     XMLEffect meEffect;
     XMLEffectDirection meDirection;
@@ -115,9 +113,6 @@ public:
     OUString msMacroName;
     OUString msBookmark;
     OUString msLanguage;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    OUString msHyperURL;
-#endif
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -176,18 +171,11 @@ TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
 :   SvXMLImportContext(rImp, nPrfx, rLocalName),
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    mxShape( rxShape ), mbScript( sal_False ), mbActionEvent( sal_False ), meClickAction( ClickAction_NONE ),
-#else
     mxShape( rxShape ), mbScript( sal_False ), meClickAction( ClickAction_NONE ),
-#endif
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), mnVerb(0), mbPlayFull( sal_False )
 {
     static const OUString sXMLClickName( RTL_CONSTASCII_USTRINGPARAM( "click" ) );
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    static const OUString sXMLActionName( RTL_CONSTASCII_USTRINGPARAM( "action" ) );
-#endif
 
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
@@ -258,12 +246,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
                     GetImport().GetNamespaceMap().GetKeyByAttrName( sValue, &sEventName );
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && ( sEventName == sXMLClickName || sEventName == sXMLActionName );
-                mbActionEvent = mbValid && (sEventName == sXMLActionName);
-#else
                 mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == sXMLClickName;
-#endif
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
             {
@@ -279,10 +262,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 msMacroName = sValue;
             }
-//          else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
-//          {
-//              msLibrary = sValue;
-//          }
             break;
 
         case XML_NAMESPACE_XLINK:
@@ -292,12 +271,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 {
                     msMacroName = sValue;
                 }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-                else if ( mbActionEvent )
-                {
-                    msHyperURL = sValue;
-                }
-#endif
                 else
                 {
                     const rtl::OUString &rTmp =
@@ -343,26 +316,6 @@ void SdXMLEventContext::EndElement()
         OUString sAPIEventName;
         uno::Sequence< beans::PropertyValue > aProperties;
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-        if( mbActionEvent )
-        {
-            sAPIEventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAction" ) );
-            aProperties.realloc( 2 );
-            beans::PropertyValue* pProperty = aProperties.getArray();
-
-            pProperty->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
-            pProperty->Handle = -1;
-            pProperty->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) );
-            pProperty->State = beans::PropertyState_DIRECT_VALUE;
-            ++pProperty;
-            pProperty->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-            pProperty->Handle = -1;
-            pProperty->Value <<= msHyperURL;
-            pProperty->State = beans::PropertyState_DIRECT_VALUE;
-        }
-        else
-#endif
-        {
             sAPIEventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
 
             if( mbScript )
@@ -541,14 +494,12 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     break;
                 case ClickAction_MACRO:
-                    DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
+                    OSL_FAIL("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
                     break;
                 default:
                     break;
                 }
             }
-        }
-
         xEvents->replaceByName( sAPIEventName, uno::Any( aProperties ) );
 
     } while(0);
@@ -573,3 +524,5 @@ SvXMLImportContext * SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, c
 {
     return new SdXMLEventContext( GetImport(), nPrfx, rLocalName,  xAttrList, mxShape );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

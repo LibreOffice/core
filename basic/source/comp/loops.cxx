@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ void SbiParser::If()
     TestToken( THEN );
     if( IsEoln( Next() ) )
     {
-        // AB 13.5.1996: #27720# Am Ende jeden Blocks muss ein Jump zu ENDIF
+        // Am Ende jeden Blocks muss ein Jump zu ENDIF
         // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
         // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
 #define JMP_TABLE_SIZE 100
@@ -61,10 +62,9 @@ void SbiParser::If()
                 Error( SbERR_BAD_BLOCK, IF ); bAbort = sal_True; return;
             }
         }
-        // ELSEIF?
         while( eTok == ELSEIF )
         {
-            // #27720# Bei erfolgreichem IF/ELSEIF auf ENDIF springen
+            // Bei erfolgreichem IF/ELSEIF auf ENDIF springen
             if( iJmp >= JMP_TABLE_SIZE )
             {
                 Error( SbERR_PROG_TOO_LARGE );  bAbort = sal_True;  return;
@@ -104,7 +104,7 @@ void SbiParser::If()
         else if( eTok == ENDIF )
             Next();
 
-        // #27720# Jmp-Tabelle abarbeiten
+        // Jmp-Tabelle abarbeiten
         while( iJmp > 0 )
         {
             iJmp--;
@@ -316,8 +316,7 @@ void SbiParser::OnGoto()
     sal_uInt32 nLbl = 0;
     do
     {
-        SbiToken eTok2 = NIL;
-        eTok2 = Next(); // Label holen
+        Next(); // Label holen
         if( MayBeLabel() )
         {
             sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
@@ -473,7 +472,6 @@ void SbiParser::On()
     SbiToken eTok = Peek();
     String aString = SbiTokenizer::Symbol(eTok);
     if (aString.EqualsIgnoreCaseAscii("ERROR"))
-    //if (!aString.ICompare("ERROR"))
         eTok = _ERROR_; // Error kommt als SYMBOL
     if( eTok != _ERROR_ && eTok != LOCAL ) OnGoto();
     else
@@ -556,3 +554,4 @@ void SbiParser::Resume()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

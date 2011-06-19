@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,6 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
     bRefMode        (sal_False)
 {
-    Image aFxHC( ModuleRes( IMG_FX_H ) );
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();
 
@@ -93,11 +93,6 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aSlider.SetSizePixel( aSize );
     aSlider.SetEndScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
     aSlider.SetScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
-
-    aBtnFx1.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx2.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx3.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx4.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
 
     InitArgInput( 0, aFtArg1, aBtnFx1, aEdArg1, aRefBtn1);
     InitArgInput( 1, aFtArg2, aBtnFx2, aEdArg2, aRefBtn2);
@@ -112,7 +107,6 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 
     if ( nArgs > 4 )
         nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
-        //@ nArg += (sal_uInt16)aSlider.GetThumbPos();
 
     if ( (nArgs > 0) && (nArg<nArgs) )
     {
@@ -182,7 +176,6 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
             SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
     }
     if(nArg<nArgs) SetArgVal(i,aParaArray[nArg]);
-    //@ aArgInput[i].SetArgVal( *(pArgArr[nOffset+i]) );
 
 }
 
@@ -416,7 +409,6 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     }
     else
     {
-        //aSlider.SetEndScrollHdl( LINK( this, ScFormulaDlg, ScrollHdl ) );
         aSlider.SetPageSize( 4 );
         aSlider.SetVisibleSize( 4 );
         aSlider.SetLineSize( 1 );
@@ -598,3 +590,5 @@ IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )
 
 
 } // formula
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

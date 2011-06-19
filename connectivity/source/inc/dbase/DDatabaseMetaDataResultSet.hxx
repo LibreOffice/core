@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/proparrhlp.hxx>
-#ifndef _CONNECTIVITY_FILE_ASTATEMENT_HXX_
 #include "file/FStatement.hxx"
-#endif
 #include "connectivity/CommonTools.hxx"
 #include <comphelper/propertycontainer.hxx>
 
@@ -101,7 +100,7 @@ namespace connectivity
             virtual ~ODatabaseMetaDataResultSet();
         public:
             DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSet( );
 
 
@@ -194,3 +193,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_FILE_ADATABASEMETADATARESULTSET_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

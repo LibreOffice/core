@@ -29,7 +29,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxsids.hrc>
-#include "globlmn.hrc"
+#include "globlmn_tmpl.hrc"
 #include "helpid.hrc"
 #include "fmhelp.hrc"
 

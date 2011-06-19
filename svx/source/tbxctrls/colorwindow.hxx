@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //========================================================================
 // class SvxColorWindow_Impl --------------------------------------------------
 //========================================================================
@@ -18,9 +19,10 @@ class SvxColorWindow_Impl : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    const sal_uInt16                                                        theSlotId;
-    ValueSet                                                            aColorSet;
-    rtl::OUString                                                       maCommand;
+    const sal_uInt16 theSlotId;
+    ValueSet       aColorSet;
+    rtl::OUString  maCommand;
+    const Color    mLastColor;
 
 #if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
@@ -35,7 +37,8 @@ public:
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const String& rWndTitle,
-                         Window* pParentWindow );
+                         Window* pParentWindow,
+                         const Color rLastColor = COL_AUTO);
     ~SvxColorWindow_Impl();
     void                StartSelection();
 
@@ -46,3 +49,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

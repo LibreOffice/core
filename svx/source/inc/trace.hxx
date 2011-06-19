@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 #if defined(DBG_UTIL)
 
 #include <tools/string.hxx>
-#include <vos/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
 
 
@@ -39,10 +40,10 @@ class Tracer
 {
     ByteString m_sBlockDescription;
 
-    DECLARE_STL_STDKEY_MAP( ::vos::OThread::TThreadIdentifier, sal_Int32, MapThreadId2Int );
+    DECLARE_STL_STDKEY_MAP( ::oslThreadIdentifier, sal_Int32, MapThreadId2Int );
     static MapThreadId2Int s_aThreadIndents;
 
-    static ::vos::OMutex    s_aMapSafety;
+    static ::osl::Mutex s_aMapSafety;
 
 public:
     Tracer(const char* _pBlockDescription);
@@ -66,3 +67,5 @@ public:
 #endif
 
 #endif // _TRACE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

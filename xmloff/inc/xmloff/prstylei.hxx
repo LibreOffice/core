@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/style/XStyle.hpp>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef _XMLOFF_XMLSTYLE_HXX_
 #include <xmloff/xmlstyle.hxx>
-#endif
 
 struct XMLPropertyState;
 class SvXMLStylesContext;
@@ -107,3 +104,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

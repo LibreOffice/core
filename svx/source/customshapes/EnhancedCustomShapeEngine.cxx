@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include "EnhancedCustomShapeHandle.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <svx/unoshape.hxx>
-#ifndef _SVX_UNOPAGE_HXX
 #include "svx/unopage.hxx"
-#endif
 #include "svx/unoapi.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
@@ -115,9 +114,9 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const SEQ( NMSP_UNO::Any )&
     for ( i = 0; i < aParameter.getLength(); i++ )
     {
         const NMSP_BEANS::PropertyValue& rProp = aParameter[ i ];
-        if ( rProp.Name.equalsAscii( "CustomShape" ) )
+        if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShape" ) ) )
             rProp.Value >>= mxShape;
-        else if ( rProp.Name.equalsAscii( "ForceGroupWithText" ) )
+        else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ForceGroupWithText" ) ) )
             rProp.Value >>= mbForceGroupWithText;
     }
 }
@@ -469,3 +468,5 @@ SEQ( REF( com::sun::star::drawing::XCustomShapeHandle ) ) SAL_CALL EnhancedCusto
         aSeq[ i ] = new EnhancedCustomShapeHandle( mxShape, i );
     return aSeq;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

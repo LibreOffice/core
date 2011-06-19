@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SVDUNDO_HXX
 #define _SVDUNDO_HXX
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <svl/undo.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
@@ -145,9 +144,9 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, FASTBOOL bRepeat=sal_False) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, bool bRepeat = false) const;
 
-    static void GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, FASTBOOL bRepeat = sal_False );
+    static void GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();
@@ -173,8 +172,8 @@ protected:
     SfxStyleSheet*              pUndoStyleSheet;
     SfxStyleSheet*              pRedoStyleSheet;
     SfxStyleSheet*              pRepeatStyleSheet;
-    FASTBOOL                    bStyleSheet;
-    FASTBOOL                    bHaveToTakeRedoSet;
+    bool                        bStyleSheet;
+    bool                        bHaveToTakeRedoSet;
 
     // Bei Zuweisung von TextItems auf ein Zeichenobjekt mit Text:
     OutlinerParaObject*         pTextUndo;
@@ -186,7 +185,7 @@ protected:
     SdrUndoGroup*               pUndoGroup;
 
 public:
-    SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1=sal_False, FASTBOOL bSaveText=sal_False);
+    SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1 = false, bool bSaveText = false);
     virtual ~SdrUndoAttrObj();
     void SetRepeatAttr(const SfxItemSet& rSet);
     virtual void Undo();
@@ -295,7 +294,7 @@ protected:
 class SVX_DLLPUBLIC SdrUndoRemoveObj : public SdrUndoObjList
 {
 public:
-    SdrUndoRemoveObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
+    SdrUndoRemoveObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     : SdrUndoObjList(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -314,7 +313,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoInsertObj : public SdrUndoObjList
 {
 public:
-    SdrUndoInsertObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
+    SdrUndoInsertObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoObjList(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -332,7 +331,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
 public:
-    SdrUndoDelObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
+    SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoRemoveObj(rNewObj,bOrdNumDirect) { SetOwner(sal_True); }
 
     virtual void Undo();
@@ -356,7 +355,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoNewObj : public SdrUndoInsertObj
 {
 public:
-    SdrUndoNewObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
+    SdrUndoNewObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoInsertObj(rNewObj,bOrdNumDirect) {}
 
     virtual void Undo();
@@ -410,7 +409,7 @@ public:
 class SdrUndoCopyObj : public SdrUndoNewObj
 {
 public:
-    SdrUndoCopyObj(SdrObject& rNewObj, FASTBOOL bOrdNumDirect=sal_False)
+    SdrUndoCopyObj(SdrObject& rNewObj, bool bOrdNumDirect = false)
     :   SdrUndoNewObj(rNewObj,bOrdNumDirect) {}
 
     virtual String GetComment() const;
@@ -460,7 +459,7 @@ class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 protected:
     OutlinerParaObject*         pOldText;
     OutlinerParaObject*         pNewText;
-    FASTBOOL                    bNewTextAvailable;
+    bool                        bNewTextAvailable;
     sal_Bool                        bEmptyPresObj;
     sal_Int32                   mnText;
 
@@ -468,7 +467,7 @@ public:
     SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );
     virtual ~SdrUndoObjSetText();
 
-    FASTBOOL IsDifferent() const { return pOldText!=pNewText; }
+    bool IsDifferent() const { return pOldText!=pNewText; }
     void AfterSetText();
 
     virtual void Undo();
@@ -481,7 +480,7 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-// --> OD 2009-07-09 #i73249#
+// Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
 class SdrUndoObjStrAttr : public SdrUndoObj
 {
 public:
@@ -508,7 +507,6 @@ public:
 
     virtual String GetComment() const;
 };
-// <--
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -535,7 +533,7 @@ protected:
     SdrLayer*                   pLayer;
     SdrLayerAdmin*              pLayerAdmin;
     sal_uInt16                      nNum;
-    FASTBOOL                    bItsMine;
+    bool                        bItsMine;
 
 protected:
     SdrUndoLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
@@ -633,7 +631,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 n=0, FASTBOOL bRepeat=sal_False) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 n=0, bool bRepeat = false) const;
 };
 
 //************************************************************
@@ -651,7 +649,7 @@ protected:
 
     // Bei einem Undo/Redo findet moeglicherweise Uebereignung der Page
     // statt. Im Dtor wird die Page deleted, wenn bItsMine==TRUE
-    FASTBOOL                    bItsMine;
+    bool                        bItsMine;
 
 protected:
     SdrUndoPageList(SdrPage& rNewPg);
@@ -853,12 +851,11 @@ public:
     virtual SdrUndoAction* CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
-    // --> OD 2009-07-09 #i73249#
+    // Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
     virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     String sOldStr,
                                                     String sNewStr );
-    // <--
 
     // layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
@@ -880,3 +877,4 @@ public:
 
 #endif //_SVDUNDO_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

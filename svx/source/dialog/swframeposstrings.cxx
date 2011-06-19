@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,23 +51,17 @@ SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     }
     FreeResource();
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwFramePosString::SvxSwFramePosString() :
     pImpl(new SvxSwFramePosString_Impl)
 {
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwFramePosString::~SvxSwFramePosString()
 {
     delete pImpl;
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const String& SvxSwFramePosString::GetString(StringId eId)
 {
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
@@ -74,3 +69,5 @@ const String& SvxSwFramePosString::GetString(StringId eId)
         eId = LEFT;
     return pImpl->aStrings[eId];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

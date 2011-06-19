@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "ado/Awrapado.hxx"
 #include "ado/Awrapadox.hxx"
 #include <comphelper/types.hxx>
@@ -407,7 +409,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
     return eNum;
 }
 
-// gibt den Namen des Feldes zur"ueck
+// returns the name of the field
 ::rtl::OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -483,7 +485,7 @@ WpADOProperties WpADOField::get_Properties()
  sal_Int32 WpADOField::GetActualSize() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
-    sal_Int32 nActualSize=0;
+    ADO_LONGPTR nActualSize=0;
     pInterface->get_ActualSize(&nActualSize);
     return nActualSize;
 }
@@ -507,12 +509,12 @@ sal_Int32 WpADOField::GetStatus() const
 sal_Int32 WpADOField::GetDefinedSize() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    sal_Int32 nDefinedSize=0;
+    ADO_LONGPTR nDefinedSize=0;
     pInterface->get_DefinedSize(&nDefinedSize);
     return nDefinedSize;
 }
 
-// gibt den Namen des Feldes zur"ueck
+// returns the name of the field
 ::rtl::OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -774,10 +776,10 @@ void WpADORecordset::Close()
     return bSupports == VARIANT_TRUE;
 }
 
-PositionEnum WpADORecordset::get_AbsolutePosition()
+PositionEnum_Param WpADORecordset::get_AbsolutePosition()
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    PositionEnum aTemp=adPosUnknown;
+    PositionEnum_Param aTemp=adPosUnknown;
     pInterface->get_AbsolutePosition(&aTemp);
     return aTemp;
 }
@@ -896,19 +898,19 @@ WpADOProperties WpADORecordset::get_Properties() const
     return SUCCEEDED(pInterface->NextRecordset(&RecordsAffected,ppiRset));
 }
 
- sal_Bool WpADORecordset::get_RecordCount(sal_Int32 &_nRet) const
+ sal_Bool WpADORecordset::get_RecordCount(ADO_LONGPTR &_nRet) const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->get_RecordCount(&_nRet));
 }
 
- sal_Bool WpADORecordset::get_MaxRecords(sal_Int32 &_nRet) const
+ sal_Bool WpADORecordset::get_MaxRecords(ADO_LONGPTR &_nRet) const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->get_MaxRecords(&_nRet));
 }
 
- sal_Bool WpADORecordset::put_MaxRecords(sal_Int32 _nRet)
+ sal_Bool WpADORecordset::put_MaxRecords(ADO_LONGPTR _nRet)
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return SUCCEEDED(pInterface->put_MaxRecords(_nRet));
@@ -1640,7 +1642,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1681,7 +1683,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1724,7 +1726,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1765,7 +1767,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1808,7 +1810,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1855,7 +1857,7 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1905,7 +1907,7 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -1947,7 +1949,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2004,7 +2006,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 
     ++nPos;
     ::rtl::OUStringBuffer aTypes;
-    ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    ::rtl::OUString aComma( RTL_CONSTASCII_USTRINGPARAM( "," ));
     const ::rtl::OUString* pIter = types.getConstArray();
     const ::rtl::OUString* pEnd = pIter + types.getLength();
     for( ; pIter != pEnd ; ++pIter)
@@ -2019,7 +2021,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
         varCriteria[nPos].setString(sTypeNames);
 
     // Create SafeArray Bounds and initialize the array
-    const sal_Int32 nCrit = sizeof varCriteria / sizeof varCriteria[0];
+    const sal_Int32 nCrit = SAL_N_ELEMENTS( varCriteria );
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = nCrit;
@@ -2057,7 +2059,7 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2102,7 +2104,7 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
 
     // Create SafeArray Bounds and initialize the array
     rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
+    rgsabound[0].cElements = SAL_N_ELEMENTS( varCriteria );
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
@@ -2137,7 +2139,7 @@ ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 {
     // Create elements used in the array
     OLEVariant varCriteria[2];
-    const int nCrit = sizeof varCriteria / sizeof varCriteria[0];
+    const int nCrit = SAL_N_ELEMENTS( varCriteria );
     // Create SafeArray Bounds and initialize the array
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;
@@ -2199,3 +2201,5 @@ OLEVariant OTools::getValue(const WpADOProperties& _rProps,const OLEVariant &_aP
     WpADOProperty aProp(_rProps.GetItem(_aPosition));
     return aProp.GetValue();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

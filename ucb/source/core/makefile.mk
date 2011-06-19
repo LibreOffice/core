@@ -62,11 +62,7 @@ SHL1LIBS=\
     $(SLB)$/regexp.lib
 SHL1IMPLIB=i$(TARGET)
 
-.IF "$(GUI)" == "OS2"
-DEF1EXPORTFILE=exports2.dxp
-.ELSE
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-.ENDIF
 
 DEF1NAME=$(SHL1TARGET)
 

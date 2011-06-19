@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 #define _SVX_DOCRECOVERY_HXX
 
 #include <vcl/tabpage.hxx>
-#ifndef _SV_TABDIALOG_HXX
 #include <vcl/tabdlg.hxx>
-#endif
 #include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/svtreebx.hxx>
@@ -51,47 +48,47 @@
 //===============================================
 // const
 
-#define RECOVERY_CMDPART_PROTOCOL                       ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:")
+#define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:"))
 
-#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE      ::rtl::OUString::createFromAscii("/doPrepareEmergencySave"  )
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE              ::rtl::OUString::createFromAscii("/doEmergencySave"         )
-#define RECOVERY_CMDPART_DO_RECOVERY                    ::rtl::OUString::createFromAscii("/doAutoRecovery"          )
-#define RECOVERY_CMDPART_DO_CRASHREPORT                 ::rtl::OUString::createFromAscii("/doCrashReport"           )
-#define RECOVERY_CMDPART_DO_ENTRY_BACKUP                ::rtl::OUString::createFromAscii("/doEntryBackup"           )
-#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP               ::rtl::OUString::createFromAscii("/doEntryCleanUp"          )
+#define RECOVERY_CMDPART_DO_PREPARE_EMERGENCY_SAVE  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doPrepareEmergencySave"  ))
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEmergencySave"         ))
+#define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doAutoRecovery"          ))
+#define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doCrashReport"           ))
+#define RECOVERY_CMDPART_DO_ENTRY_BACKUP            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryBackup"           ))
+#define RECOVERY_CMDPART_DO_ENTRY_CLEANUP           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/doEntryCleanUp"          ))
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE          ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doPrepareEmergencySave")
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE                  ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave"       )
-#define RECOVERY_CMD_DO_RECOVERY                        ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery"        )
-#define RECOVERY_CMD_DO_CRASHREPORT                     ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"         )
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                    ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryBackup"         )
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP                   ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEntryCleanUp"        )
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doPrepareEmergencySave"))
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEmergencySave"       ))
+#define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doAutoRecovery"        ))
+#define RECOVERY_CMD_DO_CRASHREPORT                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doCrashReport"         ))
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryBackup"         ))
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
-#define SERVICENAME_PROGRESSFACTORY                     ::rtl::OUString::createFromAscii("com.sun.star.task.StatusIndicatorFactory")
-#define SERVICENAME_URLTRANSFORMER                      ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"        )
-#define SERVICENAME_RECOVERYCORE                        ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery"         )
-#define SERVICENAME_FOLDERPICKER                        ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FolderPicker"    )
-#define SERVICENAME_DESKTOP                             ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"              )
+#define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
+#define SERVICENAME_URLTRANSFORMER                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer"        ))
+#define SERVICENAME_RECOVERYCORE                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.AutoRecovery"         ))
+#define SERVICENAME_FOLDERPICKER                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker"    ))
+#define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))
 
-#define PROP_PARENTWINDOW                               ::rtl::OUString::createFromAscii("Window"           )
-#define PROP_STATUSINDICATOR                            ::rtl::OUString::createFromAscii("StatusIndicator"  )
-#define PROP_DISPATCHASYNCHRON                          ::rtl::OUString::createFromAscii("DispatchAsynchron")
-#define PROP_SAVEPATH                                   ::rtl::OUString::createFromAscii("SavePath"         )
-#define PROP_ENTRYID                                    ::rtl::OUString::createFromAscii("EntryID"          )
-#define PROP_ALLOWPARENTSHOW                            ::rtl::OUString::createFromAscii("AllowParentShow"  )
+#define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
+#define PROP_STATUSINDICATOR                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator"  ))
+#define PROP_DISPATCHASYNCHRON                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DispatchAsynchron"))
+#define PROP_SAVEPATH                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SavePath"         ))
+#define PROP_ENTRYID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EntryID"          ))
+#define PROP_ALLOWPARENTSHOW                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AllowParentShow"  ))
 
-#define STATEPROP_ID                                    ::rtl::OUString::createFromAscii("ID"           )
-#define STATEPROP_STATE                                 ::rtl::OUString::createFromAscii("DocumentState")
-#define STATEPROP_ORGURL                                ::rtl::OUString::createFromAscii("OriginalURL"  )
-#define STATEPROP_TEMPURL                               ::rtl::OUString::createFromAscii("TempURL"      )
-#define STATEPROP_FACTORYURL                            ::rtl::OUString::createFromAscii("FactoryURL"   )
-#define STATEPROP_TEMPLATEURL                           ::rtl::OUString::createFromAscii("TemplateURL"  )
-#define STATEPROP_TITLE                                 ::rtl::OUString::createFromAscii("Title"        )
-#define STATEPROP_MODULE                                ::rtl::OUString::createFromAscii("Module"       )
+#define STATEPROP_ID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID"           ))
+#define STATEPROP_STATE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DocumentState"))
+#define STATEPROP_ORGURL                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OriginalURL"  ))
+#define STATEPROP_TEMPURL                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TempURL"      ))
+#define STATEPROP_FACTORYURL                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FactoryURL"   ))
+#define STATEPROP_TEMPLATEURL                       rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"  ))
+#define STATEPROP_TITLE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title"        ))
+#define STATEPROP_MODULE                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Module"       ))
 
-#define RECOVERY_OPERATIONSTATE_START                   ::rtl::OUString::createFromAscii("start" )
-#define RECOVERY_OPERATIONSTATE_STOP                    ::rtl::OUString::createFromAscii("stop"  )
-#define RECOVERY_OPERATIONSTATE_UPDATE                  ::rtl::OUString::createFromAscii("update")
+#define RECOVERY_OPERATIONSTATE_START               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "start" ))
+#define RECOVERY_OPERATIONSTATE_STOP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stop"  ))
+#define RECOVERY_OPERATIONSTATE_UPDATE              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "update"))
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1
@@ -183,9 +180,6 @@ struct TURLInfo
 
     /// standard icon
     Image StandardImage;
-
-    /// high contrast icon
-    Image HCImage;
 
     public:
 
@@ -612,9 +606,6 @@ class RecovDocList : public SvxSimpleTable
         Image  m_aGreenCheckImg;
         Image  m_aYellowCheckImg;
         Image  m_aRedCrossImg;
-        Image  m_aGreenCheckImgHC;
-        Image  m_aYellowCheckImgHC;
-        Image  m_aRedCrossImgHC;
 
         String m_aSuccessRecovStr;
         String m_aOrigDocRecovStr;
@@ -971,3 +962,5 @@ class BrokenRecoveryDialog : public ModalDialog
 #undef css
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,8 @@
 #include "vbacontrols.hxx"
 #include "vbacontrol.hxx"
 #include <cppuhelper/implbase2.hxx>
-#include <ooo/vba/XControlProvider.hpp>
-#include <hash_map>
+#include <ooo/vba//XControlProvider.hpp>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -47,7 +48,7 @@ using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess > ArrayWrapImpl;
 
-typedef  std::hash_map< rtl::OUString, sal_Int32, ::rtl::OUStringHash,
+typedef  boost::unordered_map< rtl::OUString, sal_Int32, ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString >  > ControlIndexMap;
 typedef  std::vector< uno::Reference< awt::XControl > > ControlVec;
 
@@ -75,7 +76,19 @@ private:
             mIndices[ msNames[ nIndex ] ] = nIndex;
         }
     }
-
+    void getNestedControls( ControlVec& vControls, uno::Reference< awt::XControlContainer >& xContainer )
+    {
+        uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
+        const uno::Reference< awt::XControl >* pCtrl = aControls.getConstArray();
+        const uno::Reference< awt::XControl >* pCtrlsEnd = pCtrl + aControls.getLength();
+        for ( ; pCtrl < pCtrlsEnd; ++pCtrl )
+        {
+            uno::Reference< awt::XControlContainer > xC( *pCtrl, uno::UNO_QUERY );
+            vControls.push_back( *pCtrl );
+            if ( xC.is() )
+                getNestedControls( vControls, xC );
+        }
+    }
 public:
     ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
     {
@@ -498,3 +511,4 @@ ScVbaControls::getElementType() throw (uno::RuntimeException)
 }
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaControls, "ooo.vba.msforms.Controls" )
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

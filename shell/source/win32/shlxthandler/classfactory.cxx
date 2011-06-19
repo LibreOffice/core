@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
+
+#include <osl/diagnose.h>
+
 #include "internal/global.hxx"
 #include "classfactory.hxx"
 #include "internal/infotips.hxx"
@@ -41,13 +45,9 @@ using ::std::min;
 #include "internal/shlxthdl.hxx"
 
 //-----------------------------
-//
-//-----------------------------
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------
-//
 //-----------------------------
 
 CClassFactory::CClassFactory(const CLSID& clsid) :
@@ -57,8 +57,6 @@ CClassFactory::CClassFactory(const CLSID& clsid) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 CClassFactory::~CClassFactory()
@@ -86,16 +84,12 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
-//
 //-----------------------------
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
@@ -134,7 +128,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
     else if (CLSID_THUMBVIEWER_HANDLER == m_Clsid)
         pUnk = static_cast<IExtractImage*>(new CThumbviewer());
 
-    POST_CONDITION(pUnk != 0, "Could not create COM object");
+    OSL_POSTCOND(pUnk != 0, "Could not create COM object");
 
     if (0 == pUnk)
         return E_OUTOFMEMORY;
@@ -148,8 +142,6 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 {
@@ -162,10 +154,10 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 }
 
 //-----------------------------
-//
-//-----------------------------
 
 bool CClassFactory::IsLocked()
 {
     return (s_ServerLocks > 0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

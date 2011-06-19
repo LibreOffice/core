@@ -1,0 +1,15 @@
+LibreOffice Global Menubar Extension for DBusMenu
+=================================================
+
+This library is an extension for LibreOffice that exports the Menubar structure,
+actions and shortcuts through the DBusMenu D-Bus interface. If there is a 
+present DbusMenu client (The Unity panel or the Appmenu applet for GNOME Panel
+for instance), LibreOffice will had its menu structure.
+
+For more information, visit the official website:
+http://launchpad.net/lo-menubar
+
+Known Issues
+------------
+- The menubar is shown briefly before it is hidden.
+- The LibreOffice Start Center does not hide/export its menu structure.

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,9 @@
 #include <comphelper/propertycontainer.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 
-#ifndef _CONNECTIVITY_MAB_CONNECTION_HXX_
 #include <MConnection.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 
 namespace connectivity
 {
@@ -78,3 +75,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_MAB_DATABASEMETADATAHELPER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

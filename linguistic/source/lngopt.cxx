@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
 
+#include <sal/macros.h>
 #include "lngopt.hxx"
 #include "linguistic/lngprops.hxx"
 #include "linguistic/misc.hxx"
@@ -48,7 +50,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
@@ -59,12 +60,13 @@ using namespace linguistic;
 
 using namespace com::sun::star::registry;
 
-///////////////////////////////////////////////////////////////////////////
+using ::rtl::OUString;
+
 
 
 // static member intialization
 SvtLinguOptions *   LinguOptions::pData = NULL;
-vos::ORefCount      LinguOptions::aRefCount;
+oslInterlockedCount LinguOptions::nRefCount;
 
 
 LinguOptions::LinguOptions()
@@ -76,14 +78,14 @@ LinguOptions::LinguOptions()
         aLinguCfg.GetOptions( *pData );
     }
 
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
 LinguOptions::LinguOptions(const LinguOptions & /*rOpt*/)
 {
     DBG_ASSERT( pData, "lng : data missing" );
-    ++aRefCount;
+    osl_incrementInterlockedCount( &nRefCount );
 }
 
 
@@ -91,7 +93,7 @@ LinguOptions::~LinguOptions()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (--aRefCount == 0)
+    if ( osl_decrementInterlockedCount( &nRefCount ) == 0 )
     {
         delete pData;   pData  = NULL;
     }
@@ -190,8 +192,6 @@ sal_Bool LinguOptions::SetValue( Any &rOld, const Any &rVal, sal_Int32 nWID )
         }
     }
 
-//  if (bRes)
-//      pData->SetModified();
 
     return bRes;
 }
@@ -297,23 +297,16 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 
     OUString aRes;
 
-    sal_Int32 nLen = sizeof( aWID_Name ) / sizeof( aWID_Name[0] );
-    if (0 <= nWID  &&  nWID < nLen
-        && aWID_Name[ nWID ].nWID == nWID)
-    {
-        aRes = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                aWID_Name[ nWID ].pPropertyName ) );
-    }
+    sal_Int32 nLen = SAL_N_ELEMENTS( aWID_Name );
+    if (0 <= nWID && nWID < nLen && aWID_Name[ nWID ].nWID == nWID)
+        aRes = OUString::createFromAscii(aWID_Name[nWID].pPropertyName);
     else
-    {
-        DBG_ASSERT( 0,"lng : unknown WID");
-    }
+        OSL_FAIL("lng : unknown WID");
 
     return aRes;
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 //! map must be sorted by first entry in alphabetical increasing order.
 const SfxItemPropertyMapEntry* lcl_GetLinguProps()
@@ -501,7 +494,6 @@ void SAL_CALL LinguProps::addVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 void SAL_CALL LinguProps::removeVetoableChangeListener(
@@ -509,7 +501,6 @@ void SAL_CALL LinguProps::removeVetoableChangeListener(
             const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-//  MutexGuard  aGuard( GetLinguMutex() );
 }
 
 
@@ -620,9 +611,7 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
 
 // XServiceInfo
 OUString SAL_CALL LinguProps::getImplementationName()
@@ -660,7 +649,7 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );    // auch mehr als 1 Service moeglich
+    uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_LINGU_PROPERTIES );
     return aSNS;
 }
@@ -684,5 +673,5 @@ void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

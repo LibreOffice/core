@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,13 +46,9 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>
 
-#ifndef _COM_SUN_STAR_FAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#endif
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -164,3 +161,5 @@ class BackingComp : public  css::lang::XTypeProvider
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

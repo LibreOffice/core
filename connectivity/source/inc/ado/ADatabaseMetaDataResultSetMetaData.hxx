@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace connectivity
             void setTypeInfoMap();
             void setProceduresMap();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
                     :   m_pRecordSet(_pRecordSet),m_vMapping(_pRes->getColumnMapping()),
                         m_nColCount(m_vMapping.size()-1)
@@ -113,3 +114,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_ADO_ADATABASEMETARESULTSETMETADATA_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

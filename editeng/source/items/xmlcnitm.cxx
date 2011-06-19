@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
 
-// ------------------------------------------------------------------------
 
 TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 
@@ -90,15 +90,16 @@ sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/
     return USHRT_MAX;
 }
 
-sal_Bool  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
 
     rVal.setValue( &xContainer, ::getCppuType((Reference<XNameContainer>*)0) );
-    return sal_True;
+    return true;
 }
-sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+
+bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;
@@ -118,7 +119,7 @@ sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal,
     }
     else
     {
-        SvXMLAttrContainerData* pNewImpl = new SvXMLAttrContainerData;
+        std::auto_ptr<SvXMLAttrContainerData> pNewImpl(new SvXMLAttrContainerData);
 
         try
         {
@@ -167,23 +168,16 @@ sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal,
             }
 
             if( nAttr == nCount )
-            {
-                delete pImpl;
-                pImpl = pNewImpl;
-            }
+                pImpl = pNewImpl.release();
             else
-            {
-                delete pNewImpl;
-                return sal_False;
-            }
+                return false;
         }
         catch(...)
         {
-            delete pNewImpl;
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -246,3 +240,4 @@ const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( sal_uInt16 i ) const
     return pImpl->GetPrefix( i );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ void ODBCDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.ODBCDriver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.ODBCDriver"));
         // this name is referenced in the configuration and in the odbc.xml
         // Please take care when changing it.
 }
@@ -78,7 +79,7 @@ typedef Sequence< ::rtl::OUString > SS;
 SS ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     SS aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 
@@ -129,7 +130,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:odbc:"),10));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:")),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
@@ -227,3 +228,4 @@ sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException)
 //-----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

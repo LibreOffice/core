@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,19 +49,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@@ @@@@@ @@   @@ @@@@@@  @@@@  @@@@@  @@@@@@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@     @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@@@    @@@     @@   @@  @@ @@@@@      @@
-//    @@   @@     @@@@@    @@   @@  @@ @@  @@     @@
-//    @@   @@    @@@ @@@   @@   @@  @@ @@  @@ @@  @@
-//    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
-//
-//  Transformationen
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
@@ -84,9 +72,6 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) { // #51139#
             if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
             if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
-            if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
-                NbcResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
-            }
             NbcAdjustTextFrameWidthAndHeight();
         }
         ImpCheckShear();
@@ -112,9 +97,6 @@ void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
     if (bTextFrame) {
         if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
         if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
-        if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
-            NbcResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
-        }
         NbcAdjustTextFrameWidthAndHeight();
     }
     SetRectsDirty();
@@ -125,7 +107,7 @@ long SdrTextObj::GetRotateAngle() const
     return aGeo.nDrehWink;
 }
 
-long SdrTextObj::GetShearAngle(FASTBOOL /*bVertical*/) const
+long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 {
     return aGeo.nShearWink;
 }
@@ -140,14 +122,14 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    FASTBOOL bNoShearMerk=aGeo.nShearWink==0;
-    FASTBOOL bRota90Merk=bNoShearMerk && aGeo.nDrehWink % 9000 ==0;
+    bool bNoShearMerk=aGeo.nShearWink==0;
+    bool bRota90Merk=bNoShearMerk && aGeo.nDrehWink % 9000 ==0;
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
     long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
     long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    FASTBOOL bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    FASTBOOL bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -173,15 +155,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
     else
     {
-        // #100663# aRect is NOT initialized for lines (polgon objects with two
-        // exceptionally handled points). Thus, after this call the text rotaion is
-        // gone. This error must be present since day one of this old drawing layer.
-        // It's astonishing that noone discovered it earlier.
-        // Polygon aPol(Rect2Poly(aRect,aGeo));
-        // Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
-
-        // #101412# go back to old method, side effects are impossible
-        // to calculate.
         Polygon aPol(Rect2Poly(aRect,aGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
@@ -205,7 +178,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     if (bRota90Merk) {
-        FASTBOOL bRota90=aGeo.nDrehWink % 9000 ==0;
+        bool bRota90=aGeo.nDrehWink % 9000 ==0;
         if (!bRota90) { // Scheinbar Rundungsfehler: Korregieren
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
@@ -228,9 +201,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) { // #51139#
         if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
         if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
-        if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
-            NbcResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
-        }
         NbcAdjustTextFrameWidthAndHeight();
     }
     ImpCheckShear();
@@ -261,11 +231,11 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetGlueReallyAbsolute(sal_False);
 }
 
-void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(sal_True);
 
-    // #75889# when this is a SdrPathObj aRect maybe not initialized
+    // when this is a SdrPathObj aRect maybe not initialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
@@ -286,8 +256,8 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVS
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(sal_True);
-    FASTBOOL bNoShearMerk=aGeo.nShearWink==0;
-    FASTBOOL bRota90Merk=sal_False;
+    bool bNoShearMerk=aGeo.nShearWink==0;
+    bool bRota90Merk = false;
     if (bNoShearMerk &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
          Abs(rRef1.X()-rRef2.X())==Abs(rRef1.Y()-rRef2.Y()))) {
@@ -309,7 +279,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     Poly2Rect(aPol,aRect,aGeo);
 
     if (bRota90Merk) {
-        FASTBOOL bRota90=aGeo.nDrehWink % 9000 ==0;
+        bool bRota90=aGeo.nDrehWink % 9000 ==0;
         if (bRota90Merk && !bRota90) { // Scheinbar Rundungsfehler: Korregieren
             long a=NormAngle360(aGeo.nDrehWink);
             if (a<4500) a=0;
@@ -515,7 +485,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     return pPathObj;
 }
 
-SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const
+SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, bool bBezier) const
 {
     if(!ImpCanConvTextToCurve())
     {
@@ -554,5 +524,4 @@ SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) cons
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

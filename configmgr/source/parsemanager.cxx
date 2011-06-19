@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,6 +68,7 @@ ParseManager::ParseManager(
             RTL_CONSTASCII_STRINGPARAM(
                 "http://www.w3.org/2001/XMLSchema-instance")));
     OSL_ASSERT(id == NAMESPACE_XSI);
+    (void)id;
 }
 
 bool ParseManager::parse() {
@@ -98,3 +100,5 @@ bool ParseManager::parse() {
 ParseManager::~ParseManager() {}
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

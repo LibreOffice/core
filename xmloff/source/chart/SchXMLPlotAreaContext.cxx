@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
         if( xProp.is() )
         {
             drawing::CameraGeometry aCamGeo;
-            xProp->getPropertyValue( ::rtl::OUString::createFromAscii("D3DCameraGeometry")) >>= aCamGeo;
+            xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "D3DCameraGeometry" ))) >>= aCamGeo;
             maVRP.setX( aCamGeo.vrp.PositionX );
             maVRP.setY( aCamGeo.vrp.PositionY );
             maVRP.setZ( aCamGeo.vrp.PositionZ );
@@ -131,7 +132,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+        OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -208,40 +209,40 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         try
         {
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasXAxis" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxis" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasXAxisGrid" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxisGrid" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasXAxisDescription" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasXAxisDescription" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasSecondaryXAxis" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxis" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasSecondaryXAxisDescription" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryXAxisDescription" )), aFalseBool );
 
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasYAxis" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxis" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasYAxisGrid" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxisGrid" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasYAxisDescription" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasYAxisDescription" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasSecondaryYAxis" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasSecondaryYAxisDescription" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxisDescription" )), aFalseBool );
 
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasZAxis" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasZAxis" )), aFalseBool );
             xProp->setPropertyValue(
-                rtl::OUString::createFromAscii( "HasZAxisDescription" ), aFalseBool );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasZAxisDescription" )), aFalseBool );
 
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( "DataRowSource" ), aAny );
+            xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
         }
         catch( beans::UnknownPropertyException & )
         {
-            DBG_ERROR( "Property required by service not supported" );
+            OSL_FAIL( "Property required by service not supported" );
         }
     }
 }
@@ -315,12 +316,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 uno::Any aAny;
                 aAny <<= (sal_Bool)(mrColHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstColumn" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstColumn" )),
                     aAny );
 
                 aAny <<= (sal_Bool)(mrRowHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString::createFromAscii( "DataSourceLabelsInFirstRow" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstRow" )),
                     aAny );
             }
             catch( beans::UnknownPropertyException & )
@@ -350,7 +351,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     pPropStyleContext->FillPropertySet( xProp );
 
                     // get the data row source that was set without having data
-                    xProp->getPropertyValue( ::rtl::OUString::createFromAscii("DataRowSource"))
+                    xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )))
                         >>= mrDataRowSource;
 
                     //lines on/off
@@ -436,7 +437,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 #ifdef DBG_UTIL
         String aStr( rEx.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+        OSL_TRACE( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -444,9 +445,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     //
 
     bool bCreateInternalDataProvider = false;
-    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
         bCreateInternalDataProvider = true;
-    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bCreateInternalDataProvider = false;
     else if( m_rXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
         bCreateInternalDataProvider = true;
@@ -460,7 +461,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
+            xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), uno::makeAny(mrDataRowSource) );
     }
 }
 
@@ -588,7 +589,7 @@ void SchXMLPlotAreaContext::EndElement()
     if( xDiaProp.is())
     {
         sal_Bool bIsThreeDim = sal_False;
-        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" ));
+        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Dim3D" )));
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
@@ -613,7 +614,7 @@ void SchXMLPlotAreaContext::EndElement()
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+                OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif
@@ -635,7 +636,7 @@ void SchXMLPlotAreaContext::EndElement()
 #ifdef DBG_UTIL
                 String aStr( rEx.Message );
                 ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR1( "Exception caught for property Volume: %s", aBStr.GetBuffer());
+                OSL_TRACE( "Exception caught for property Volume: %s", aBStr.GetBuffer());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif
@@ -1101,8 +1102,8 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
     OUString sAutoStyleName;
 
-    sal_Bool bShowEquation = sal_True;
-    sal_Bool bShowRSquare = sal_False;
+    bool bShowEquation = true;
+    bool bShowRSquare = false;
     awt::Point aPosition;
     bool bHasXPos = false;
     bool bHasYPos = false;
@@ -1176,3 +1177,5 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

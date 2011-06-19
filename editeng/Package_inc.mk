@@ -83,6 +83,7 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/hangulhanja.hxx,editen
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/hngpnctitem.hxx,editeng/hngpnctitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/hyznitem.hxx,editeng/hyznitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/itemtype.hxx,editeng/itemtype.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/justifyitem.hxx,editeng/justifyitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/keepitem.hxx,editeng/keepitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/kernitem.hxx,editeng/kernitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/langitem.hxx,editeng/langitem.hxx))

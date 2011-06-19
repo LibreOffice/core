@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring>
-#endif
 
 #include <windows.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -88,3 +87,5 @@ void SAL_CALL CheckboxSetState(
 sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

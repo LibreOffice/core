@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwkresid.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/imageproducer.hxx>
@@ -63,27 +62,23 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include <rtl/logfile.hxx>
+#include <svtools/miscopt.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -98,7 +93,6 @@ using namespace ::com::sun::star::ui;
 static const char CONFIGURE_TOOLBARS_CMD[]      = "ConfigureDialog";
 static const char CONFIGURE_TOOLBARS[]          = ".uno:ConfigureDialog";
 static const char CMD_COLORBAR[]                = ".uno:ColorControl";
-static const char CMD_HYPERLINKBAR[]            = ".uno:InsertHyperlink";
 static const char CMD_FORMULABAR[]              = ".uno:InsertFormula";
 static const char CMD_INPUTLINEBAR[]            = ".uno:InputLineVisible";
 static const char CMD_RESTOREVISIBILITY[]       = ".cmd:RestoreVisibility";
@@ -112,7 +106,7 @@ static const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 namespace framework
 {
 
-typedef std::hash_map< rtl::OUString, rtl::OUString, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarHashMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarHashMap;
 
 struct ToolBarEntry
 {
@@ -201,13 +195,13 @@ void ToolbarsMenuController::addCommand(
             m_xPopupMenu->enableItem( nItemId, sal_False );
     }
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     Image                aImage;
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = GetImageFromURL( m_xFrame, rCommandURL, sal_False, rSettings.GetHighContrastMode() );
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, false );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )
@@ -228,7 +222,7 @@ Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const 
     Reference< XFrame >          xFrame;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         xURLTransformer = m_xURLTransformer;
         xFrame = m_xFrame;
     }
@@ -273,7 +267,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
             {
                 for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                 {
-                    if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                    if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                     {
                         aPropSeq[i].Value >>= aStr;
                         break;
@@ -337,7 +331,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
 
                     aToolBarInfo.aToolBarResName = aResName;
 
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow )
@@ -375,7 +369,10 @@ sal_Bool ToolbarsMenuController::isContextSensitiveToolbarNonVisible()
 
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    if( SvtMiscOptions().DisableUICustomization() )
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
     resetPopupMenu( rPopupMenu );
 
     m_aCommandVector.clear();
@@ -476,7 +473,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->checkItem( nIndex, sal_True );
 
             {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( m_xPopupMenu );
                 PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -499,18 +496,17 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         // Create commands for non-toolbars
-        if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.text.TextDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.WebDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
-             m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+        if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ||
+             m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
         {
-            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), aEmptyString );
-            if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
-                 m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+            if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ||
+                 m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), aEmptyString );
-            else if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+            else if ( m_aModuleIdentifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), aEmptyString );
             else
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), aEmptyString );
@@ -588,7 +584,7 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 
     if ( xPopupMenu.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         VCLXPopupMenu* pXPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( xPopupMenu );
         PopupMenu*     pVCLPopupMenu = (PopupMenu *)pXPopupMenu->GetMenu();
 
@@ -644,7 +640,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
         VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
         if ( pPopupMenu )
         {
-            vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarMutexGuard;
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
             rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
@@ -747,7 +743,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
                     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                        UiEventLogHelper(::rtl::OUString::createFromAscii("ToolbarsMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+                        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolbarsMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
                     Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }
@@ -834,7 +830,7 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
         // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         m_xPopupMenu = xPopupMenu;
         m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
@@ -916,3 +912,5 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInf
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

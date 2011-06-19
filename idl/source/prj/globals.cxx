@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
 #include <tools/shl.hxx>
 
 #include <globals.hxx>
 #include <database.hxx>
 
-/****************** G L O B A L S ****************************************/
 IdlDll * GetIdlApp()
 {
     if( !(*(IdlDll**)GetAppData(SHL_IDL)) )
     {
         (*(IdlDll**)GetAppData(SHL_IDL)) = new IdlDll();
-        // Temporaer, sonst nur wenn Compiler
-        //GetIdlApp()->pHashTable      = new SvStringHashTable( 2801 );
-        //GetIdlApp()->pGlobalNames    = new SvGlobalHashNames();
     }
     return (*(IdlDll**)GetAppData(SHL_IDL));
 }
@@ -82,15 +78,6 @@ IdlDll::~IdlDll()
     delete pHashTable;
 }
 
-/*************************************************************************
-|*
-|*    SvGlobalHashNames::SvGlobalHashNames()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.08.91
-|*    Letzte Aenderung  MM 08.08.91
-|*
-*************************************************************************/
 inline SvStringHashEntry * INS( const ByteString & rName )
 {
     sal_uInt32  nIdx;
@@ -119,7 +106,6 @@ SvGlobalHashNames::SvGlobalHashNames()
     , MM_SlotId( INS( "SlotId" ) )
     , MM_HasCoreId( INS( "HasCoreId" ) )
     , MM_Cachable( INS( "Cachable" ) )
-//    , MM_Volatile( INS( "Volatile" ) )
     , MM_Toggle( INS( "Toggle" ) )
     , MM_AutoUpdate( INS( "AutoUpdate" ) )
     , MM_Synchron( INS( "Synchron" ) )
@@ -187,3 +173,4 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(UnoName)
 {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

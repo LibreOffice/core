@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: thessubmenu.cxx,v $
- * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,12 +57,11 @@ using ::rtl::OUString;
 
 SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
 
-////////////////////////////////////////////////////////////
 
 
 /*
-    Ctor; setzt Select-Handler am Menu und traegt Menu
-    in seinen Parent ein.
+    Constructor; sets the Select-Handler for the Menu and inserts it into
+    its Parent.
  */
 SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings )
     : SfxMenuControl( nSlotId, rBindings ),
@@ -85,9 +82,9 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
 
 
 /*
-    Statusbenachrichtigung;
-    Ist die Funktionalit"at disabled, wird der entsprechende
-    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
+    Status notification:
+    If the functionality is disabled, the corresponding
+    menu entry in Parentmenu is disabled, otherwise it is enabled.
  */
 void SfxThesSubMenuControl::StateChanged(
     sal_uInt16 /*nSID*/,
@@ -99,8 +96,8 @@ void SfxThesSubMenuControl::StateChanged(
 
 
 /*
-    Select-Handler des Menus;
-    das selektierte Verb mit ausgef"uhrt,
+    Select-Handler for Menus;
+    run the selected Verb,
  */
 IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
 {
@@ -118,7 +115,6 @@ PopupMenu* SfxThesSubMenuControl::GetPopup() const
 }
 
 
-////////////////////////////////////////////////////////////
 
 OUString SfxThesSubMenuHelper::GetText(
     const String &rLookUpString,
@@ -227,7 +223,7 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     if (m_xLngMgr.is())
     {
         uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
-                OUString::createFromAscii("com.sun.star.linguistic2.Thesaurus"), rLocale );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.Thesaurus")), rLocale );
         // there should be at most one thesaurus configured for each language
         DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
         if (aServiceNames.getLength() == 1)
@@ -236,6 +232,6 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     return aRes;
 }
 
-////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

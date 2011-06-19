@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 // header for class SvtLinguConfigItem
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
-#endif
 
 //disable compiler warning C4355: 'this' : used in base member initializer list
 #ifdef _MSC_VER
@@ -78,18 +77,18 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
+    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )) ) );
     aAny >>= bValue;
     if( bValue )
         m_aRB_To_Simplified.Check();
     else
         m_aRB_To_Traditional.Check();
 
-    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ) );
+    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )) );
     if( aAny >>= bValue )
         m_aCB_Use_Variants.Check( bValue );
 
-    // #117820# (search for other occurences!)
+    // #117820# (search for other occurrences!)
     // disable and hide that checkbox until it is decided if it is needed or not.
     // If it is to be removed later the respective code needs to be removed as
     // well, otherwise we just have to remove the next lines again.
@@ -97,7 +96,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aCB_Use_Variants.Enable( sal_False );
     m_aCB_Use_Variants.Show( sal_False );
 
-    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ) );
+    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )) );
     if( aAny >>= bValue )
         m_aCB_Translate_Commonterms.Check( bValue );
 
@@ -131,7 +130,7 @@ void ChineseTranslationDialog::getSettings( sal_Bool& rbDirectionToSimplified
 
 void ChineseTranslationDialog::impl_UpdateVariantsCheckBox()
 {
-// #117820# (search for other occurences!)
+// #117820# (search for other occurrences!)
 //    m_aCB_Use_Variants.Enable( m_aRB_To_Traditional.IsChecked() );
 }
 
@@ -143,7 +142,7 @@ IMPL_LINK( ChineseTranslationDialog, DirectionHdl, void*, EMPTYARG )
 
 IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
 {
-// #117820# (search for other occurences!)
+// #117820# (search for other occurrences!)
 //    if( m_aCB_Translate_Commonterms.IsChecked() && m_aRB_To_Traditional.IsChecked() )
 //        m_aCB_Use_Variants.Check( true );
     return 0;
@@ -155,11 +154,11 @@ IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
     SvtLinguConfig  aLngCfg;
     Any aAny;
     aAny <<= sal_Bool( !!m_aRB_To_Simplified.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )), aAny );
     aAny <<= sal_Bool( !!m_aCB_Use_Variants.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )), aAny );
     aAny <<= sal_Bool( !!m_aCB_Translate_Commonterms.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )), aAny );
 
     EndDialog( RET_OK );
     return 0;
@@ -199,3 +198,5 @@ IMPL_LINK( ChineseTranslationDialog, DictionaryHdl, void*, EMPTYARG )
 //.............................................................................
 } //end namespace
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@
 
 #include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svx/svdpagv.hxx>
@@ -182,10 +183,6 @@ SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 }
 Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
-    MapUnit aContainerMapUnit( MAP_100TH_MM );
-    uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
-    if ( xParentVis.is() )
-        aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
     Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
     aLogicRect.SetSize( Size( Fraction( aLogicRect.GetWidth() ) * m_aScaleWidth,
@@ -201,7 +198,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const ::com::sun::star
 void SdrLightEmbeddedClient_Impl::Release()
 {
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         mpObj = NULL;
     }
 
@@ -211,7 +208,7 @@ void SdrLightEmbeddedClient_Impl::Release()
 //--------------------------------------------------------------------
 void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
@@ -227,7 +224,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star:
 //--------------------------------------------------------------------
 void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
 }
@@ -237,10 +234,10 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // the code currently makes sence only in case there is no other client
-    if ( mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName.equalsAscii("OnVisAreaChanged")
+    if ( mpObj && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged"))
       && mpObj->GetObjRef().is() && mpObj->GetObjRef()->getClientSite() == uno::Reference< embed::XEmbeddedClient >( this ) )
     {
         try
@@ -260,13 +257,13 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             }
             catch( embed::NoVisualAreaSizeException& )
             {
-                OSL_ENSURE( sal_False, "No visual area size!\n" );
+                OSL_FAIL( "No visual area size!\n" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Unexpected exception!\n" );
+                OSL_FAIL( "Unexpected exception!\n" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
@@ -293,7 +290,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Unexpected exception!\n" );
+            OSL_FAIL( "Unexpected exception!\n" );
         }
     }
 }
@@ -309,7 +306,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
     uno::Reference< util::XModifiable > xModifiable;
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         if ( !mpObj )
             throw embed::ObjectSaveVetoException();
@@ -352,7 +349,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
 {
     uno::Reference< util::XCloseable > xResult;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( mpObj )
         xResult = uno::Reference< util::XCloseable >( mpObj->GetParentXModel(), uno::UNO_QUERY );
 
@@ -364,7 +361,7 @@ sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( mpObj )
     {
         uno::Reference< embed::XEmbeddedObject > xObject = mpObj->GetObjRef();
@@ -388,7 +385,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     uno::Reference < frame::XFrame > xOwnFrame( xFrame,uno::UNO_QUERY);
@@ -426,8 +423,6 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
             }
         }
     } // for(sal_Int32 i = nCount-1 ; i >= 0;--i)
-
-    //m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
 //--------------------------------------------------------------------
@@ -442,7 +437,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
@@ -458,11 +453,11 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
             uno::RuntimeException )
 {
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") ),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ),uno::UNO_QUERY);
     }
     catch ( uno::Exception& )
     {
@@ -477,7 +472,7 @@ uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl:
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return uno::Reference < frame::XDispatchProvider >( lcl_getFrame_throw(mpObj), uno::UNO_QUERY_THROW );
 }
 
@@ -486,7 +481,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !mpObj )
         throw uno::RuntimeException();
 
@@ -528,7 +523,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
             uno::Exception,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !mpObj )
         throw uno::RuntimeException();
 
@@ -578,9 +573,6 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         }
         else
             mpObj->ActionChanged();
-
-        // let the window size be recalculated
-        //SizeHasChanged(); // TODO: OJ
     }
 }
 // XWindowSupplier
@@ -588,7 +580,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
 uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xCurrent = m_xWindow;
     if ( !xCurrent.is() )
     {
@@ -615,8 +607,8 @@ public:
     virtual             ~SdrEmbedObjectLink();
 
     virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
@@ -638,8 +630,8 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
-                                const ::com::sun::star::uno::Any & /*rValue*/ )
+::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
+    const String& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
 {
     if ( !pObj->UpdateLinkURL_Impl() )
     {
@@ -669,6 +661,8 @@ void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
 
     pObj->GetNewReplacement();
     pObj->SetChanged();
+
+    return SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
@@ -689,7 +683,6 @@ public:
     String          aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
-    // #107645#
     // New local var to avoid repeated loading if load of OLE2 fails
     sal_Bool        mbLoadingOLEObjectFailed;
     sal_Bool        mbConnected;
@@ -699,7 +692,7 @@ public:
 
     SdrOle2ObjImpl()
     : pGraphicObject( NULL )
-    // #107645#
+    , pLightClient ( NULL )
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( sal_False )
     , mbConnected( sal_False )
@@ -752,7 +745,7 @@ sdr::contact::ViewContact* SdrOle2Obj::CreateObjectSpecificViewContact()
 
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
 DBG_NAME(SdrOle2Obj)
-SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_) : m_bTypeAsked(false)
+SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 ,m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
@@ -762,7 +755,7 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_) : m_bTypeAsked(false)
 }
 
 // -----------------------------------------------------------------------------
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_)
     : xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
     , m_bChart(false)
@@ -776,14 +769,14 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFram
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
 
 // -----------------------------------------------------------------------------
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubString& rNewObjName, FASTBOOL bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubString& rNewObjName, bool bFrame_)
     : xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
     , m_bChart(false)
@@ -798,14 +791,14 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
 
 // -----------------------------------------------------------------------------
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
     : SdrRectObj(rNewRect)
     , xObjRef( rNewObjRef )
     , m_bTypeAsked(false)
@@ -821,7 +814,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         SetResizeProtect(sal_True);
 
-    // #108759# For math objects, set closed state to transparent
+    // For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
         SetClosedObj( false );
 }
@@ -898,9 +891,6 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
 
     SetChanged();
     BroadcastObjectChange();
-
-    //if ( ppObjRef->Is() && pGrf )
-    //  BroadcastObjectChange();
 }
 
 void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
@@ -911,7 +901,7 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrOle2Obj::IsEmpty() const
+bool SdrOle2Obj::IsEmpty() const
 {
     return !(xObjRef.is());
 }
@@ -925,9 +915,9 @@ void SdrOle2Obj::Connect()
 
     if( mpImpl->mbConnected )
     {
-        // mba: currently there are situations where it seems to be unavoidable to have multiple connects
+        // currently there are situations where it seems to be unavoidable to have multiple connects
         // changing this would need a larger code rewrite, so for now I remove the assertion
-        // DBG_ERROR("Connect() called on connected object!");
+        // OSL_FAIL("Connect() called on connected object!");
         return;
     }
 
@@ -976,7 +966,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                     catch( ::com::sun::star::uno::Exception& e )
                     {
                         (void)e;
-                        DBG_ERROR(
+                        OSL_FAIL(
                             (OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
                                     "exception caught: ") +
                             rtl::OUStringToOString(
@@ -1019,7 +1009,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
             catch( ::com::sun::star::uno::Exception& e )
             {
                 (void)e;
-                DBG_ERROR(
+                OSL_FAIL(
                     (OString("SdrOle2Obj::BreakFileLink_Impl(), "
                             "exception caught: ") +
                     rtl::OUStringToOString(
@@ -1071,7 +1061,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::CheckFileLink_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1156,7 +1146,7 @@ void SdrOle2Obj::Connect_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::Connect_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1216,7 +1206,7 @@ void SdrOle2Obj::Disconnect()
 
     if( !mpImpl->mbConnected )
     {
-        DBG_ERROR("Disconnect() called on disconnected object!");
+        OSL_FAIL("Disconnect() called on disconnected object!");
         return;
     }
 
@@ -1244,7 +1234,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::RemoveListeners_Impl(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1327,7 +1317,7 @@ void SdrOle2Obj::Disconnect_Impl()
     catch( ::com::sun::star::uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR(
+        OSL_FAIL(
             (OString("SdrOle2Obj::Disconnect_Impl(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
@@ -1385,7 +1375,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::SetModel(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -1419,8 +1409,8 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
 void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 {
-    FASTBOOL bRemove=pNewPage==NULL && pPage!=NULL;
-    FASTBOOL bInsert=pNewPage!=NULL && pPage==NULL;
+    bool bRemove=pNewPage==NULL && pPage!=NULL;
+    bool bInsert=pNewPage!=NULL && pPage==NULL;
 
     if (bRemove && mpImpl->mbConnected )
         Disconnect();
@@ -1439,12 +1429,12 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
     if( rNewObjRef == xObjRef.GetObject() )
         return;
 
-    // MBA: the caller of the method is responsible to control the old object, it will not be closed here
+    // the caller of the method is responsible to control the old object, it will not be closed here
     // Otherwise WW8 import crashes because it tranfers control to OLENode by this method
     if ( xObjRef.GetObject().is() )
         xObjRef.Lock( sal_False );
 
-    // MBA: avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
+    // avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
     // This call will try to close the objects; so if anybody else wants to keep it, it must be locked by a CloseListener
     xObjRef.Clear();
 
@@ -1461,7 +1451,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         if ( (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
             SetResizeProtect(sal_True);
 
-        // #108759# For math objects, set closed state to transparent
+        // For math objects, set closed state to transparent
         if( ImplIsMathObj( rNewObjRef ) )
             SetClosedObj( false );
 
@@ -1477,7 +1467,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
 void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 {
     // TODO/LATER: do we still need this hack?
-    // #108759# Allow changes to the closed state of OLE objects
+    // Allow changes to the closed state of OLE objects
     bClosedObj = bIsClosed;
 }
 
@@ -1490,11 +1480,6 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
     SdrObject* pClone = 0;
-
-    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
-    }
 
     if(pOLEGraphic)
     {
@@ -1606,7 +1591,12 @@ void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::operator=(const SdrObject& rObj)
+SdrOle2Obj* SdrOle2Obj::Clone() const
+{
+    return CloneHelper< SdrOle2Obj >();
+}
+
+SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
 {
     //TODO/LATER: who takes over control of my old object?!
     if( &rObj != this )
@@ -1622,7 +1612,7 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
 
         SdrRectObj::operator=( rObj );
 
-        // #108867# Manually copying bClosedObj attribute
+        // Manually copying bClosedObj attribute
         SetClosedObj( rObj.IsClosedObj() );
 
         mpImpl->aPersistName = rOle2Obj.mpImpl->aPersistName;
@@ -1660,33 +1650,10 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
                 }
 
                 Connect();
-
-                /* only needed for MSOLE-Objects, now handled inside implementation of Object
-                if ( xObjRef.is() && rOle2Obj.xObjRef.is() && rOle2Obj.GetAspect() != embed::Aspects::MSOLE_ICON )
-                {
-                    try
-                    {
-                        awt::Size aVisSize = rOle2Obj.xObjRef->getVisualAreaSize( rOle2Obj.GetAspect() );
-                        if( rOle2Obj.xObjRef->getMapUnit( rOle2Obj.GetAspect() ) == xObjRef->getMapUnit( GetAspect() ) )
-                        xObjRef->setVisualAreaSize( GetAspect(), aVisSize );
-                    }
-                    catch ( embed::WrongStateException& )
-                    {
-                        // setting of VisArea not necessary for objects that don't cache it in loaded state
-                    }
-                    catch( embed::NoVisualAreaSizeException& )
-                    {
-                        // objects my not have visual areas
-                    }
-                    catch( uno::Exception& e )
-                    {
-                        (void)e;
-                        DBG_ERROR( "SdrOle2Obj::operator=(), unexcpected exception caught!" );
-                    }
-                }                                                                            */
             }
         }
     }
+    return *this;
 }
 
 // -----------------------------------------------------------------------------
@@ -1767,7 +1734,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
                 // make the new object area known to the client
                 // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
-                // OJ: WHY this -> OSL_ASSERT( pClient );
+                // WHY this -> OSL_ASSERT( pClient );
                 if( pClient )
                     pClient->SetObjArea(aRect);
 
@@ -1966,7 +1933,7 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
         catch( ::com::sun::star::uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (OString("SdrOle2Obj::Unload=(), "
                         "exception caught: ") +
                 rtl::OUStringToOString(
@@ -2012,7 +1979,6 @@ void SdrOle2Obj::GetObjRef_Impl()
 {
     if ( !xObjRef.is() && mpImpl->aPersistName.Len() && pModel && pModel->GetPersist() )
     {
-        // #107645#
         // Only try loading if it did not went wrong up to now
         if(!mpImpl->mbLoadingOLEObjectFailed)
         {
@@ -2020,7 +1986,6 @@ void SdrOle2Obj::GetObjRef_Impl()
             m_bTypeAsked = false;
             CheckFileLink_Impl();
 
-            // #107645#
             // If loading of OLE object failed, remember that to not invoke a endless
             // loop trying to load it again and again.
             if( xObjRef.is() )
@@ -2028,7 +1993,7 @@ void SdrOle2Obj::GetObjRef_Impl()
                 mpImpl->mbLoadingOLEObjectFailed = sal_True;
             }
 
-            // #108759# For math objects, set closed state to transparent
+            // For math objects, set closed state to transparent
             if( ImplIsMathObj( xObjRef.GetObject() ) )
                 SetClosedObj( false );
         }
@@ -2037,14 +2002,14 @@ void SdrOle2Obj::GetObjRef_Impl()
         {
             if( !IsEmptyPresObj() )
             {
-                // #75637# remember modified status of model
+                // remember modified status of model
                 const sal_Bool bWasChanged(pModel ? pModel->IsChanged() : sal_False);
 
                 // perhaps preview not valid anymore
-                // #75637# This line changes the modified state of the model
+                // This line changes the modified state of the model
                 SetGraphic_Impl( NULL );
 
-                // #75637# if status was not set before, force it back
+                // if status was not set before, force it back
                 // to not set, so that SetGraphic(0L) above does not
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
@@ -2114,7 +2079,6 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 // -----------------------------------------------------------------------------
 
-// #109985#
 sal_Bool SdrOle2Obj::IsChart() const
 {
     if ( !m_bTypeAsked )
@@ -2238,5 +2202,4 @@ void SdrOle2Obj::SetWindow(const com::sun::star::uno::Reference < com::sun::star
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

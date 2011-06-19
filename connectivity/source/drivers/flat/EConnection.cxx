@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,11 @@
 #include "flat/EConnection.hxx"
 #include "flat/EDatabaseMetaData.hxx"
 #include "flat/ECatalog.hxx"
-#ifndef _CONNECTIVITY_FLAT_ODRIVER_HXX_
 #include "flat/EDriver.hxx"
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/urlobj.hxx>
 #include "flat/EPreparedStatement.hxx"
-#ifndef _CONNECTIVITY_FLAT_DSTATEMENT_HXX_
 #include "flat/EStatement.hxx"
-#endif
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 
@@ -185,3 +182,4 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const ::r
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

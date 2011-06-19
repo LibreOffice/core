@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,11 +48,11 @@ Pointer SdrHelpLine::GetPointer() const
     } // switch
 }
 
-FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
+bool SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
 {
     Size a1Pix(rOut.PixelToLogic(Size(1,1)));
-    FASTBOOL bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
-    FASTBOOL bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
+    bool bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
+    bool bYHit=rPnt.Y()>=aPos.Y()-nTolLog && rPnt.Y()<=aPos.Y()+nTolLog+a1Pix.Height();
     switch (eKind) {
         case SDRHELPLINE_VERTICAL  : return bXHit;
         case SDRHELPLINE_HORIZONTAL: return bYHit;
@@ -123,13 +124,13 @@ void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 {
-    FASTBOOL bEqual=sal_False;
+    bool bEqual = false;
     sal_uInt16 nAnz=GetCount();
     if (nAnz==rSrcList.GetCount()) {
-        bEqual=sal_True;
+        bEqual = true;
         for (sal_uInt16 i=0; i<nAnz && bEqual; i++) {
             if (*GetObject(i)!=*rSrcList.GetObject(i)) {
-                bEqual=sal_False;
+                bEqual = false;
             }
         }
     }
@@ -147,3 +148,5 @@ sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

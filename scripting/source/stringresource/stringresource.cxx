@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -124,13 +123,13 @@ StringResourceImpl::StringResourceImpl( const Reference< XComponentContext >& rx
 
 StringResourceImpl::~StringResourceImpl()
 {
-    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         delete pLocaleItem;
     }
 
-    for( LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin(); it != m_aDeletedLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aDeletedLocaleItemVector.begin(); it != m_aDeletedLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         delete pLocaleItem;
@@ -209,7 +208,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     }
     if( !bSuccess )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: No entry for ResourceID: " );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceImpl: No entry for ResourceID: "));
         errorMsg.concat( ResourceID );
         throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
     }
@@ -271,7 +270,7 @@ Sequence< ::rtl::OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* 
 
         IdToStringMap::const_iterator it;
         int iTarget = 0;
-        for( it = rHashMap.begin(); it != rHashMap.end(); it++ )
+        for( it = rHashMap.begin(); it != rHashMap.end(); ++it )
         {
             ::rtl::OUString aStr = (*it).first;
             pStrings[iTarget] = aStr;
@@ -327,7 +326,7 @@ Sequence< Locale > StringResourceImpl::getLocales(  )
     Sequence< Locale > aLocalSeq( nSize );
     Locale* pLocales = aLocalSeq.getArray();
     int iTarget = 0;
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         pLocales[iTarget] = pLocaleItem->m_locale;
@@ -457,7 +456,7 @@ void StringResourceImpl::implRemoveId( const ::rtl::OUString& ResourceID, Locale
         IdToStringMap::iterator it = rHashMap.find( ResourceID );
         if( it == rHashMap.end() )
         {
-            ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: No entries for ResourceID: " );
+            ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceImpl: No entries for ResourceID: "));
             errorMsg.concat( ResourceID );
             throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
         }
@@ -492,7 +491,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
 
     if( getItemForLocale( locale, false ) != NULL )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: locale already exists" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceImpl: locale already exists"));
         throw ElementExistException( errorMsg, Reference< XInterface >() );
     }
 
@@ -513,7 +512,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
             const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
             IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
             IdToStringMap::const_iterator it;
-            for( it = rSourceMap.begin(); it != rSourceMap.end(); it++ )
+            for( it = rSourceMap.begin(); it != rSourceMap.end(); ++it )
             {
                 ::rtl::OUString aId  = (*it).first;
                 ::rtl::OUString aStr = (*it).second;
@@ -523,7 +522,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
             const IdToIndexMap& rSourceIndexMap = pCopyFromItem->m_aIdToIndexMap;
             IdToIndexMap& rTargetIndexMap = pLocaleItem->m_aIdToIndexMap;
             IdToIndexMap::const_iterator it_index;
-            for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); it_index++ )
+            for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); ++it_index )
             {
                 ::rtl::OUString aId  = (*it_index).first;
                 sal_Int32 nIndex = (*it_index).second;
@@ -545,7 +544,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
     }
     else
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: Invalid locale" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceImpl: Invalid locale"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 }
@@ -567,7 +566,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
             if( m_pCurrentLocaleItem == pRemoveItem ||
                 m_pDefaultLocaleItem  == pRemoveItem )
             {
-                for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+                for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
                 {
                     LocaleItem* pLocaleItem = *it;
                     if( pLocaleItem != pRemoveItem )
@@ -587,7 +586,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
                 }
             }
         }
-        for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+        for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem == pRemoveItem )
@@ -650,7 +649,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 
     if( m_nNextUniqueNumericId < UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "getUniqueNumericId: Extended sal_Int32 range" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("getUniqueNumericId: Extended sal_Int32 range"));
         throw NoSupportException( errorMsg, Reference< XInterface >() );
     }
     return m_nNextUniqueNumericId;
@@ -667,7 +666,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
     LocaleItem* pRetItem = NULL;
 
     // Search for locale
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem )
@@ -685,7 +684,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 
     if( pRetItem == NULL && bException )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: Invalid locale" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceImpl: Invalid locale"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
     return pRetItem;
@@ -700,7 +699,7 @@ LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& loca
     // Search for locale
     for( sal_Int32 iPass = 0 ; iPass <= 2 ; ++iPass )
     {
-        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem )
@@ -831,7 +830,7 @@ Sequence< ::rtl::OUString > StringResourcePersistenceImpl::getSupportedServiceNa
 // XInitialization base functionality for derived classes
 // -----------------------------------------------------------------------------
 
-static ::rtl::OUString aNameBaseDefaultStr = ::rtl::OUString::createFromAscii( "strings" );
+static ::rtl::OUString aNameBaseDefaultStr(RTL_CONSTASCII_USTRINGPARAM("strings"));
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
     ( const Sequence< Any >& aArguments )
@@ -840,7 +839,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bReadOnlyOk = (aArguments[1] >>= m_bReadOnly);
     if( !bReadOnlyOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "XInitialization::initialize: Expected ReadOnly flag" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: Expected ReadOnly flag"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 1 );
     }
 
@@ -848,14 +847,14 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bLocaleOk = (aArguments[2] >>= aCurrentLocale);
     if( !bLocaleOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "XInitialization::initialize: Expected Locale" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: Expected Locale"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 2 );
     }
 
     bool bNameBaseOk = (aArguments[3] >>= m_aNameBase);
     if( !bNameBaseOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "XInitialization::initialize: Expected NameBase string" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: Expected NameBase string"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 3 );
     }
     if( m_aNameBase.getLength() == 0 )
@@ -864,7 +863,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bCommentOk = (aArguments[4] >>= m_aComment);
     if( !bCommentOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "XInitialization::initialize: Expected Comment string" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: Expected Comment string"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 4 );
     }
 
@@ -1044,7 +1043,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             if( pLocaleItem != NULL )
             {
                 ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += ::rtl::OUString::createFromAscii( ".properties" );
+                aStreamName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".properties"));
 
                 try
                 {
@@ -1059,20 +1058,20 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         }
     }
 
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && (bStoreAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem ) )
         {
             ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
-            aStreamName += ::rtl::OUString::createFromAscii( ".properties" );
+            aStreamName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".properties"));
 
             Reference< io::XStream > xElementStream =
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-            ::rtl::OUString aPropName = ::rtl::OUString::createFromAscii( "MediaType" );
-            ::rtl::OUString aMime = ::rtl::OUString::createFromAscii( "text/plain" );
+            ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+            ::rtl::OUString aMime(RTL_CONSTASCII_USTRINGPARAM("text/plain"));
 
             uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
             OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
@@ -1080,7 +1079,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             {
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
-                aPropName = ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" );
+                aPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption"));
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
             }
 
@@ -1098,13 +1097,13 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     if( bUsedForStore )
     {
         for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
-             it != m_aChangedDefaultLocaleVector.end(); it++ )
+             it != m_aChangedDefaultLocaleVector.end(); ++it )
         {
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem != NULL )
             {
                 ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += ::rtl::OUString::createFromAscii( ".default" );
+                aStreamName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".default"));
 
                 try
                 {
@@ -1123,13 +1122,13 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     if( m_pDefaultLocaleItem != NULL && (bStoreAll || m_bDefaultModified) )
     {
         ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
-        aStreamName += ::rtl::OUString::createFromAscii( ".default" );
+        aStreamName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".default"));
 
         Reference< io::XStream > xElementStream =
                 Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-        ::rtl::OUString aPropName = ::rtl::OUString::createFromAscii( "MediaType" );
-        ::rtl::OUString aMime = ::rtl::OUString::createFromAscii( "text/plain" );
+        ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+        ::rtl::OUString aMime(RTL_CONSTASCII_USTRINGPARAM("text/plain"));
 
         // Only create stream without content
         Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
@@ -1153,7 +1152,7 @@ void StringResourcePersistenceImpl::storeToURL( const ::rtl::OUString& URL,
     Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
     Reference< ucb::XSimpleFileAccess > xFileAccess;
     xFileAccess = Reference< ucb::XSimpleFileAccess >( xMCF->createInstanceWithContext
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
             m_xContext ), UNO_QUERY );
     if( xFileAccess.is() && Handler.is() )
         xFileAccess->setInteractionHandler( Handler );
@@ -1197,7 +1196,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 {
     // Delete files for changed defaults
     for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
-         it != m_aChangedDefaultLocaleVector.end(); it++ )
+         it != m_aChangedDefaultLocaleVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )
@@ -1229,7 +1228,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     if( bUsedForStore || bKillAll )
         implKillRemovedLocaleFiles( Location, aNameBase, xFileAccess );
 
-    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && (bStoreAll || bKillAll || pLocaleItem->m_bModified) &&
@@ -1295,10 +1294,10 @@ public:
     BinaryOutput( Reference< XMultiComponentFactory > xMCF,
         Reference< XComponentContext > xContext );
 
-    Reference< io::XOutputStream > getOutputStream( void )
+    Reference< io::XOutputStream > getOutputStream() const
         { return m_xOutputStream; }
 
-    Sequence< ::sal_Int8 > closeAndGetData( void );
+    Sequence< ::sal_Int8 > closeAndGetData();
 
     // Template to be used with sal_Int16 and sal_Unicode
     template< class T >
@@ -1317,7 +1316,7 @@ BinaryOutput::BinaryOutput( Reference< XMultiComponentFactory > xMCF,
         , m_xContext( xContext )
 {
     m_xTempFile = m_xMCF->createInstanceWithContext
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ), m_xContext );
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), m_xContext );
     if( m_xTempFile.is() )
         m_xOutputStream = Reference< io::XOutputStream >( m_xTempFile, UNO_QUERY );
 }
@@ -1366,7 +1365,7 @@ void BinaryOutput::writeString( const ::rtl::OUString& aStr )
     writeUnicodeChar( 0 );
 }
 
-Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData( void )
+Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 {
     Sequence< ::sal_Int8 > aRetSeq;
     if( !m_xOutputStream.is() )
@@ -1432,7 +1431,7 @@ Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
     sal_Int32 iLocale = 0;
     sal_Int32 iDefault = 0;
     for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin();
-         it != m_aLocaleItemVector.end(); it++,iLocale++ )
+         it != m_aLocaleItemVector.end(); ++it,++iLocale )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
@@ -1519,7 +1518,7 @@ public:
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
 
     void seek( sal_Int32 nPos );
-    sal_Int32 getPosition( void )
+    sal_Int32 getPosition( void ) const
         { return m_nCurPos; }
 
     sal_Int16 readInt16( void );
@@ -1545,7 +1544,7 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
     if( m_nCurPos + nSize <= m_nSize )
     {
         Reference< io::XOutputStream > xTempOut( m_xMCF->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ), m_xContext ), UNO_QUERY );
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), m_xContext ), UNO_QUERY );
         if( xTempOut.is() )
         {
             Sequence< sal_Int8 > aSection( m_pData + m_nCurPos, nSize );
@@ -1559,7 +1558,7 @@ Reference< io::XInputStream > BinaryInput::getInputStreamForSection( sal_Int32 n
         }
     }
     else
-        OSL_ENSURE( false, "BinaryInput::getInputStreamForSection(): Read past end" );
+        OSL_FAIL( "BinaryInput::getInputStreamForSection(): Read past end" );
 
     return xIn;
 }
@@ -1569,7 +1568,7 @@ void BinaryInput::seek( sal_Int32 nPos )
     if( nPos <= m_nSize )
         m_nCurPos = nPos;
     else
-        OSL_ENSURE( false, "BinaryInput::seek(): Position past end" );
+        OSL_FAIL( "BinaryInput::seek(): Position past end" );
 }
 
 
@@ -1582,7 +1581,7 @@ sal_Int16 BinaryInput::readInt16( void )
         nRet += 256 * sal_Int16( sal_uInt8( m_pData[m_nCurPos++] ) );
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readInt16(): Read past end" );
+        OSL_FAIL( "BinaryInput::readInt16(): Read past end" );
 
     return nRet;
 }
@@ -1600,7 +1599,7 @@ sal_Int32 BinaryInput::readInt32( void )
         }
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readInt32(): Read past end" );
+        OSL_FAIL( "BinaryInput::readInt32(): Read past end" );
 
     return nRet;
 }
@@ -1614,7 +1613,7 @@ sal_Unicode BinaryInput::readUnicodeChar( void )
         nRet += 256 * sal_uInt8( m_pData[m_nCurPos++] );
     }
     else
-        OSL_ENSURE( false, "BinaryInput::readUnicodeChar(): Read past end" );
+        OSL_FAIL( "BinaryInput::readUnicodeChar(): Read past end" );
 
     sal_Unicode cRet = nRet;
     return cRet;
@@ -1741,7 +1740,7 @@ bool checkNamingSceme( const ::rtl::OUString& aName, const ::rtl::OUString& aNam
 
 void StringResourcePersistenceImpl::implLoadAllLocales( void )
 {
-    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+    for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
     {
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )
@@ -1771,7 +1770,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
             aExtension = aCompleteName.copy( iDot + 1 );
         }
 
-        if( aExtension.equalsAscii( "properties" ) )
+        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;
@@ -1791,7 +1790,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
                 }
             }
         }
-        else if( !bDefaultFound && aExtension.equalsAscii( "default" ) )
+        else if( !bDefaultFound && aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
         {
             //rtl::OUString aName = aInetObj.getBase();
             Locale aLocale;
@@ -1847,7 +1846,7 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
 
 ::rtl::OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
 {
-    static ::rtl::OUString aUnder = ::rtl::OUString::createFromAscii( "_" );
+    static ::rtl::OUString aUnder(RTL_CONSTASCII_USTRINGPARAM("_"));
 
     OSL_ENSURE( pLocaleItem,
         "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
@@ -2018,7 +2017,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
     bool bSuccess = false;
     Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
     Reference< io::XTextInputStream > xTextInputStream( xMCF->createInstanceWithContext
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TextInputStream" ), m_xContext ), UNO_QUERY );
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TextInputStream")), m_xContext ), UNO_QUERY );
 
     if( xTextInputStream.is() )
     {
@@ -2230,8 +2229,8 @@ void implWriteStringWithEncoding( const ::rtl::OUString& aStr,
 bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocaleItem,
     const Reference< io::XOutputStream >& xOutputStream, const ::rtl::OUString& aComment )
 {
-    static ::rtl::OUString aAssignmentStr = ::rtl::OUString::createFromAscii( "=" );
-    static ::rtl::OUString aLineFeedStr = ::rtl::OUString::createFromAscii( "\n" );
+    static ::rtl::OUString aAssignmentStr(RTL_CONSTASCII_USTRINGPARAM("="));
+    static ::rtl::OUString aLineFeedStr(RTL_CONSTASCII_USTRINGPARAM("\n"));
 
     if( !xOutputStream.is() || pLocaleItem == NULL )
         return false;
@@ -2239,7 +2238,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
     bool bSuccess = false;
     Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
     Reference< io::XTextOutputStream > xTextOutputStream( xMCF->createInstanceWithContext
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ), m_xContext ), UNO_QUERY );
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TextOutputStream")), m_xContext ), UNO_QUERY );
 
     if( xTextOutputStream.is() )
     {
@@ -2265,7 +2264,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 // Find max/min index
                 sal_Int32 nMinIndex = -1;
                 sal_Int32 nMaxIndex = -1;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); it_index++ )
+                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
                 {
                     sal_Int32 nIndex = (*it_index).second;
                     if( nMinIndex > nIndex || nMinIndex == -1 )
@@ -2280,7 +2279,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 sal_Int32 i;
                 for( i = 0 ; i < nTabSize ; i++ )
                     pIdPtrs[i] = NULL;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); it_index++ )
+                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
                 {
                     sal_Int32 nIndex = (*it_index).second;
                     pIdPtrs[nIndex - nMinIndex] = &((*it_index).first);
@@ -2403,7 +2402,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
 
     if( !bOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceWithStorageImpl::initialize: invalid storage" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceWithStorageImpl::initialize: invalid storage"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2594,8 +2593,8 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
     if( !Storage.is() )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii
-            ( "StringResourceWithStorageImpl::setStorage: invalid storage" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM
+            ( "StringResourceWithStorageImpl::setStorage: invalid storage" ));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2745,12 +2744,12 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     else
     {
         if( m_aLocation.getStr()[nLen - 1] != '/' )
-            m_aLocation += ::rtl::OUString::createFromAscii( "/" );
+            m_aLocation += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     if( !bOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "XInitialization::initialize: invalid URL" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: invalid URL"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2758,7 +2757,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     bOk = (aArguments[5] >>= m_xInteractionHandler);
     if( !bOk )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceWithStorageImpl::initialize: invalid type" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("StringResourceWithStorageImpl::initialize: invalid type"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 5 );
     }
 
@@ -2954,8 +2953,8 @@ void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
     sal_Int32 nLen = URL.getLength();
     if( nLen == 0 )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii
-            ( "StringResourceWithLocationImpl::setURL: invalid URL" );
+        ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM
+            ( "StringResourceWithLocationImpl::setURL: invalid URL" ));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -3024,7 +3023,7 @@ const Reference< ucb::XSimpleFileAccess > StringResourceWithLocationImpl::getFil
     {
         Reference< XMultiComponentFactory > xMCF = getMultiComponentFactory();
         m_xSFI = Reference< ucb::XSimpleFileAccess >( xMCF->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext ), UNO_QUERY );
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), m_xContext ), UNO_QUERY );
 
         if( m_xSFI.is() && m_xInteractionHandler.is() )
             m_xSFI->setInteractionHandler( m_xInteractionHandler );
@@ -3072,7 +3071,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-    void SAL_CALL component_getImplementationEnvironment(
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
     {
         (void)ppEnv;
@@ -3080,7 +3079,7 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
@@ -3088,3 +3087,5 @@ extern "C"
             pImplName, pServiceManager, pRegistryKey, ::stringresource::s_component_entries );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

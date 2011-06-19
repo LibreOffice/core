@@ -40,6 +40,9 @@ CXXFILES = \
     object.cxx 		\
     collelem.cxx
 
+EXCEPTIONSFILES= \
+    $(OBJ)$/object.obj 	\
+    $(OBJ)$/collelem.obj
 
 OBJFILES = \
     $(OBJ)$/object.obj 	\

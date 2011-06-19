@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +27,10 @@
  ************************************************************************/
 
 #include "vbacombobox.hxx"
+#include <vector>
+#include <filter/msfilter/msvbahelper.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sbmod.hxx>
 #include "vbanewfont.hxx"
 #include <ooo/vba/msforms/fmStyle.hpp>
 #include <ooo/vba/msforms/fmDropButtonStyle.hpp>
@@ -78,12 +83,18 @@ ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExcepti
     sal_Int16 nIndex = 0;
     if( _value >>= nIndex )
     {
+        sal_Int32 nOldIndex = -1;
+        getListIndex() >>= nOldIndex;
         uno::Sequence< rtl::OUString > sItems;
         m_xProps->getPropertyValue( ITEMS ) >>= sItems;
         if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
         {
             rtl::OUString sText = sItems[ nIndex ];
             m_xProps->setPropertyValue( TEXT, uno::makeAny( sText ) );
+
+            // fire the _Change event
+            if( nOldIndex != nIndex )
+                fireClickEvent();
         }
     }
 }
@@ -118,8 +129,29 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
+    rtl::OUString sOldValue, sNewValue;
     // booleans are converted to uppercase strings
-    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, ::rtl::OUString(), true ) ) );
+    sOldValue =  extractStringFromAny( getValue(), ::rtl::OUString(), true );
+    // booleans are converted to uppercase strings
+    sNewValue =  extractStringFromAny( _value, ::rtl::OUString(), true );
+
+    m_xProps->setPropertyValue( sSourceName, uno::Any( sNewValue ) );
+
+    if ( sNewValue != sOldValue )
+    {
+        // If the new value is in current list, we should fire click event, otherwise fire the change event.
+        sal_Int32 nListIndex = -1;
+        getListIndex() >>= nListIndex;
+        sal_Bool bIsInList = ( nListIndex >= 0 );
+        if ( bIsInList )
+        {
+            fireClickEvent();
+        }
+        else
+        {
+            fireChangeEvent();
+        }
+    }
 }
 
 // see Value
@@ -258,3 +290,5 @@ ScVbaComboBox::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

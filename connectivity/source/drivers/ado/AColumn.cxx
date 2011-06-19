@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,8 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include "ado/ACatalog.hxx"
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::comphelper;
 
@@ -181,7 +184,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( "Autoincrement" ), getBOOL( rValue ) );
+                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Autoincrement" )), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_IM001:
@@ -227,11 +230,11 @@ void OAdoColumn::fillPropertyValues()
             ::comphelper::TStringMixEqualFunctor aCase(sal_False);
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                             ::std::bind2nd(aCase, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VarBinary"))),
-                                                                ::std::compose1(
+                                                                ::o3tl::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                                 )
 
                                                     );
@@ -301,3 +304,4 @@ void SAL_CALL OAdoColumn::release() throw()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,11 +99,9 @@ public:
     void                ResetObject();
     sal_Bool                IsUIActive();
 
-    // used in Writer
-    // Rectangle           PixelObjVisAreaToLogic( const Rectangle & rObjRect ) const;
-    // Rectangle           LogicObjAreaToPixel( const Rectangle & rRect ) const;
     virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

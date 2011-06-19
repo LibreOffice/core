@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,19 +33,13 @@
 //  includes of other projects
 //_______________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
-#ifndef _SALGTKPICKER_HXX_
 #include "SalGtkPicker.hxx"
-#endif
 
 #include <memory>
 
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.hxx>
-#endif
 
 #include <list>
 
@@ -125,11 +120,8 @@ class SalGtkFolderPicker :
     private:
         // to instanciate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
-
-#if 0
-    public:
-         virtual ~SalGtkFolderPicker();
-#endif
 };
 
 #endif // _SALGTKFOLDERPICKER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

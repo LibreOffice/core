@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,8 +74,8 @@ public:
     OUString sExceptionMessage;/// message of original exception (if available)
 
     // XLocator information:
-    sal_Int32 nRow;     /// row number where error occured (or -1 for unknown)
-    sal_Int32 nColumn;  /// column number where error occured (or -1)
+    sal_Int32 nRow;     /// row number where error occurred (or -1 for unknown)
+    sal_Int32 nColumn;  /// column number where error occurred (or -1)
     OUString sPublicId; /// public identifier
     OUString sSystemId; /// public identifier
 
@@ -129,7 +130,7 @@ void XMLErrors::AddRecord(
 
     OUStringBuffer sMessage;
 
-    sMessage.appendAscii( "An error or a warning has occured during XML import/export!\n" );
+    sMessage.appendAscii( "An error or a warning has occurred during XML import/export!\n" );
 
     // ID & flags
     sMessage.appendAscii( "Error-Id: 0x");
@@ -194,7 +195,7 @@ void XMLErrors::AddRecord(
     // convert to byte string and signal the error
     ByteString aError( String( sMessage.makeStringAndClear() ),
                        RTL_TEXTENCODING_ASCII_US );
-    DBG_ERROR( aError.GetBuffer() );
+    OSL_FAIL( aError.GetBuffer() );
 #endif
 }
 
@@ -241,7 +242,7 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
     // search first error/warning that matches the nIdMask
     for( ErrorList::iterator aIter = aErrors.begin();
          aIter != aErrors.end();
-         aIter++ )
+         ++aIter )
     {
         if ( (aIter->nId & nIdMask) != 0 )
         {
@@ -255,3 +256,5 @@ void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

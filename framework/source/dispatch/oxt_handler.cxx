@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,33 +32,19 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_DISPATCH_OXT_HANDLER_HXX_
 #include <dispatch/oxt_handler.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
 
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
-#endif
 
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
-#ifndef __COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -71,13 +58,9 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -222,17 +205,6 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         xListener->dispatchFinished( aEvent );
     }
 
-/*
-    // Try to initialize player.
-    m_xListener = xListener;
-    if (m_aPlayer.SetSoundName(aURL.Complete))
-    {
-        // OK- we can start async playing ...
-        // Count this request and initialize self-holder against dieing by uno ref count ...
-        m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-        m_aPlayer.Play();
-    }
-*/
     // } SAFE
     aLock.unlock();
 }
@@ -286,7 +258,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString::createFromAscii("oxt_OpenOffice_Extension");
+        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxt_OpenOffice_Extension"));
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
@@ -296,3 +268,5 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

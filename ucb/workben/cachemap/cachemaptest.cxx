@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "cachemapobject3.hxx"
 #include "cachemapobjectcontainer2.hxx"
 
-#ifndef _SOL_TIME_H_
 #include "osl/time.h"
-#endif
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
@@ -166,3 +165,5 @@ int main()
 // wntmsci7.pro: Version 1: 3846 ms.
 //               Version 2: 5598 ms.
 //               Version 3: 2704 ms.
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

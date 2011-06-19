@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,43 +163,36 @@ public:
     sal_uIntPtr             GetOrgAlignedSize() const { return GetOrgAlignedWidth() * GetOrgHeight(); }
     sal_uIntPtr             GetDestAlignedSize() const { return GetDestAlignedWidth() * GetDestHeight(); }
 
-    // Farbtiefe des Ausgangsbildes ermitteln und setzen
+    // Get and set the color depth of the origin picture
     SimDepthType        GetDepth() const { return eOrgDepth; }
     void                SetDepth( const SimDepthType eDepth ) { eOrgDepth = eDepth; }
 
-    // Farbtiefen nach Undo und Redo ermitteln und setzen
+    // Get and set the color depth after Undo and Redo
     SimDepthType        GetUndoDepth() const { return eUndoDepth; }
     void                SetUndoDepth(const SimDepthType eDepth) { eUndoDepth = eDepth; }
 
     SimDepthType        GetRedoDepth() const { return eRedoDepth; }
     void                SetRedoDepth(const SimDepthType eDepth) { eRedoDepth = eDepth; }
 
-    // Vor- und Ruecklauf der Bildverarbeitung
     sal_Bool                BeginProcessing( sal_Bool bUndo = sal_True );
     void                EndProcessing();
 
     sal_Bool                BeginProcessingExt(sal_uIntPtr nWidth, sal_uIntPtr nHeight, sal_Bool bUndo = sal_True);
     void                EndProcessingExt() { EndProcessing(); }
 
-    // Zeiger auf Arrays zur Verfuegung stellen
     HPBYTE              GetOrgPointer() { return pOrgArray; }
     HPBYTE              GetDestPointer() { return pDestArray; }
 
-    // DIB-Erzeugung fuer Anzeige
     sal_Bool                CreateOutBitmap( const sal_uIntPtr nColorCount = 256, sal_uIntPtr nLast = 0,
                                          SfxProgress* pProgress = NULL );
 
-    // Undo-Verwaltung
     sal_Bool                DoUndo( SfxProgress* pProgress = NULL );
     sal_Bool                DoRedo( SfxProgress* pProgress = NULL );
 
-    // DIB-Rueckgabe fuer Anzeige
     const Bitmap&       GetOutBitmap() const;
 
-    // DIB-Rueckgabe fuer Speicherung
     Bitmap              GetSaveBitmap();
 
-    // Palette besorgen
     SimPalette*         GetOrgPalette() const { return nWhichOrg == 1 ? pPal1 : pPal2; }
     SimPalette*         GetDestPalette() const { return nWhichOrg == 1 ? pPal2 : pPal1; }
 };
@@ -210,3 +204,5 @@ public:
 sal_Bool DitherBitmap( Bitmap& rBitmap, sal_Bool bDitherAlways = sal_False );
 
 #endif // _SVIMBASE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

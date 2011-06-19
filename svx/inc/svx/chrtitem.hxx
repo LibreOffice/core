@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,8 +241,8 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_uInt16 GetValueCount() const { return CHTXTORDER_COUNT; }
     SvxChartTextOrder GetValue() const
@@ -321,11 +322,8 @@ public:
     SvxDoubleItem(SvStream& rIn, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
-
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-
-
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String GetValueText() const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres,
@@ -349,3 +347,4 @@ public:
 
 #endif   // _SVX_CHRTITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

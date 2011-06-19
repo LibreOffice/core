@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,6 +287,7 @@ public:
 class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -313,6 +315,7 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
 
     //  SfxStatusForwarder          aForward;
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -337,6 +340,8 @@ public:
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
@@ -397,6 +402,8 @@ public:
 class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameLineColorToolBoxControl( sal_uInt16 nSlotId,
@@ -445,3 +452,5 @@ public:
 };
 
 #endif // #ifndef _SVX_TBCONTRL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

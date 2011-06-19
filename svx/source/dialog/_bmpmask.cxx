@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,7 +241,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
     else
         pMask->aBtnExec.Disable();
 
-    // Wenn eine Checkbox gecheckt wurde, wird die Pipette enabled
+    // When a checkbox is checked, the pipette is enabled
     if ( pCbx->IsChecked() )
     {
         MaskSet* pSet = NULL;
@@ -447,8 +448,7 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         pColTab             ( NULL ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
-        maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) ),
-        maImgPipetteH       ( BMP_RESID ( IMG_PIPETTE_H ) )
+        maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) )
 {
     FreeResource();
 
@@ -480,28 +480,24 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     pQSet1->SetStyle( pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     pQSet1->SetColCount( 1 );
     pQSet1->SetLineCount( 1 );
-//  pQSet1->SetExtraSpacing( 1 );
     pQSet1->InsertItem( 1, aPipetteColor );
     pQSet1->SelectItem( 1 );
 
     pQSet2->SetStyle( pQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     pQSet2->SetColCount( 1 );
     pQSet2->SetLineCount( 1 );
-//  pQSet2->SetExtraSpacing( 1 );
     pQSet2->InsertItem( 1, aPipetteColor );
     pQSet2->SelectItem( 0 );
 
     pQSet3->SetStyle( pQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     pQSet3->SetColCount( 1 );
     pQSet3->SetLineCount( 1 );
-//  pQSet3->SetExtraSpacing( 1 );
     pQSet3->InsertItem( 1, aPipetteColor );
     pQSet3->SelectItem( 0 );
 
     pQSet4->SetStyle( pQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     pQSet4->SetColCount( 1 );
     pQSet4->SetLineCount( 1 );
-//  pQSet4->SetExtraSpacing( 1 );
     pQSet4->InsertItem( 1, aPipetteColor );
     pQSet4->SelectItem( 0 );
 
@@ -564,18 +560,6 @@ SvxBmpMask::~SvxBmpMask()
 /** is called by a MaskSet when it is selected */
 void SvxBmpMask::onSelect( MaskSet* pSet )
 {
-    // automaticaly set focus to the corresponding listbox
-/*
-    if( pSet == pQSet1 )
-        aLbColor1.GrabFocus();
-    else if( pSet == pQSet2 )
-        aLbColor2.GrabFocus();
-    else if( pSet == pQSet2 )
-        aLbColor3.GrabFocus();
-    else if( pSet == pQSet2 )
-        aLbColor4.GrabFocus();
-*/
-
     // now deselect all other value sets
     if( pSet != pQSet1 )
         pQSet1->SelectItem( 0 );
@@ -802,7 +786,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
     sal_Bool        pTrans[4];
 
-    // Falls keine Farben ausgewaehlt, kopieren wir nur das Mtf
+    // If no color is selected, we copy only the Mtf
     if( !nCount )
         aMtf = rMtf;
     else
@@ -825,7 +809,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
         aMtf.SetPrefMapMode( rMtf.GetPrefMapMode() );
 
-        // Farbvergleichsarrays vorbereiten
+        // Prepare Color comparison array
         for( i = 0; i < nCount; i++ )
         {
             nTol = ( pTols[i] * 255L ) / 100L;
@@ -845,8 +829,8 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
             pTrans[ i ] = ( pDstCols[ i ] == TRANSP_COL );
         }
 
-        // Actions untersuchen und Farben ggf. ersetzen
-        for( sal_uIntPtr nAct = 0UL, nActCount = rMtf.GetActionCount(); nAct < nActCount; nAct++ )
+        // Investigate actions and if necessary replace colors
+        for( size_t nAct = 0, nActCount = rMtf.GetActionSize(); nAct < nActCount; nAct++ )
         {
             MetaAction* pAction = rMtf.GetAction( nAct );
 
@@ -1100,7 +1084,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();
-    const sal_uIntPtr       nActionCount = rMtf.GetActionCount();
+    const size_t    nActionCount = rMtf.GetActionSize();
 
     aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
@@ -1109,10 +1093,10 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     aVDev.SetLineColor( rColor );
     aVDev.SetFillColor( rColor );
 
-    // Actions nacheinander abspielen; zuerst
-    // den gesamten Bereich auf die Ersatzfarbe setzen
+    // retrieve one action at the time; first
+    // set the whole area to the replacement color.
     aVDev.DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
-    for ( sal_uIntPtr i = 0; i < nActionCount; i++ )
+    for ( size_t i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );
 
@@ -1139,7 +1123,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
         {
             if( rGraphic.IsAnimated() )
             {
-                // Transparenz ersetzen?
+                // Replace transparency?
                 if ( aCbxTrans.IsChecked() )
                     aGraphic = ImpReplaceTransparency( rGraphic.GetAnimation(), aReplColor );
                 else
@@ -1147,7 +1131,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
             }
             else
             {
-                // Transparenz ersetzen?
+                // Replace transparency?
                 if( aCbxTrans.IsChecked() )
                 {
                     if( aGraphic.IsTransparent() )
@@ -1168,10 +1152,10 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
                     if( nCount )
                     {
-                        // erstmal alle Transparent-Farben setzen
+                        // first set all transparent colors
                         for( sal_uInt16 i = 0; i < nCount; i++ )
                         {
-                            // Haben wir eine Transparenzfarbe?
+                            // Do we have a transparent color?
                             if( pDstCols[i] == TRANSP_COL )
                             {
                                 BitmapEx    aBmpEx( ImpMaskTransparent( aGraphic.GetBitmapEx(),
@@ -1183,7 +1167,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                             }
                         }
 
-                        // jetzt noch einmal mit den normalen Farben ersetzen
+                        // now replace it again with the normal colors
                         Bitmap  aBitmap( ImpMask( aGraphic.GetBitmap() ) );
                         Size    aSize( aBitmap.GetSizePixel() );
 
@@ -1204,7 +1188,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
         {
             GDIMetaFile aMtf( aGraphic.GetGDIMetaFile() );
 
-            // Transparenz ersetzen?
+            // Replace transparency?
             if( aCbxTrans.IsChecked() )
                 aMtf = ImpReplaceTransparency( aMtf, aReplColor );
             else
@@ -1249,9 +1233,7 @@ void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBmpMask::ApplyStyle()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
+    aTbxPipette.SetItemImage( TBI_PIPETTE, maImgPipette );
 }
 
 
@@ -1279,3 +1261,5 @@ void SvxBmpMask::SetAccessibleNames (void)
     sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 4"));
     aCbx4.SetAccessibleName (sSourceColorN);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

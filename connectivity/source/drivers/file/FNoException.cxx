@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,18 +89,18 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::scanParameter" );
     DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
-    // Parameter Name-Regel gefunden?
+    // found parameter Name-Rule?
     if (SQL_ISRULE(pParseNode,parameter))
     {
         DBG_ASSERT(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
         DBG_ASSERT(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
 
         _rParaNodes.push_back(pParseNode);
-        // Weiterer Abstieg nicht erforderlich
+        // Further descend not nessesary
         return;
     }
 
-    // Weiter absteigen im Parse Tree
+    // Further descend in Parse Tree
     for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
@@ -122,10 +123,4 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 }
 // -----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,12 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace gvfs;
+
+using ::rtl::OUString;
 
 Stream::Stream( GnomeVFSHandle         *handle,
         const GnomeVFSFileInfo *aInfo ) :
@@ -341,3 +343,5 @@ void Stream::throwOnError( GnomeVFSResult result )
         throw IOException( aMsg, static_cast< cppu::OWeakObject * >( this ) );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

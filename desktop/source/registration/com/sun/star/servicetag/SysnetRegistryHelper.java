@@ -113,7 +113,6 @@ public class SysnetRegistryHelper {
             // $JAVA_HOME/bin/java -cp $TEST_DIR \
             //    -Dstclient.registry.path=$TEST_DIR/registry.xml \
             //    SvcTagClient
-            //
             // On Windows, the JAVA_HOME and TEST_DIR path could contain
             // space e.g. c:\Program Files\Java\jdk1.6.0_05\bin\java.
             // The SVCTAG_STCLIENT_CMD must be set with a list of

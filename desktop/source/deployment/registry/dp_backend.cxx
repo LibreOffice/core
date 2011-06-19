@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -125,7 +126,7 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
-        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); ++i)
             i->second->removeEventListener(this);
         m_bound.clear();
         m_xComponentContext.clear();
@@ -279,10 +280,8 @@ void PackageRegistryBackend::deleteUnusedFolders(
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
-        char tmp[] = ".tmp";
+        const char tmp[] = ".tmp";
 
-        //Check for ".tmp_" can be removed after OOo 4.0
-        char tmp_[] = ".tmp_";
         while (xResultSet->next())
         {
             OUString title(
@@ -290,8 +289,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1)
-                || title.endsWithAsciiL(tmp_, sizeof(tmp_) - 1))
+            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
@@ -315,7 +313,6 @@ void PackageRegistryBackend::deleteUnusedFolders(
 
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 Package::~Package()
@@ -639,7 +636,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("unexpected exception occured!"),
+            OUSTR("unexpected exception occurred!"),
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -681,7 +678,7 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &) {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
             throw;
         }
         catch (CommandFailedException &) {
@@ -774,7 +771,6 @@ sal_Bool Package::isRemoved()
     return m_bRemoved;
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 Package::TypeInfo::~TypeInfo()
@@ -809,15 +805,23 @@ OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+/**************************
+ * Get Icon
+ *
+ * @param highContrast NOTE: disabled the returning of high contrast icons.
+ *                     This bool is a noop now.
+ * @param smallIcon    Return the small version of the icon
+ */
+Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     if (! smallIcon)
         return Any();
-    const sal_uInt16 nIconId = (highContrast ? m_smallIcon_HC : m_smallIcon);
+    const sal_uInt16 nIconId = m_smallIcon;
     return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
 }
 
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

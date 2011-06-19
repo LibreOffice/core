@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 
 #include "fltdlg.hxx"
 
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
 
-#ifndef UUI_FLTDLG_HRC
 #include "fltdlg.hrc"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -45,13 +42,10 @@
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace uui
@@ -99,7 +93,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 *//*-*************************************************************************************************************/
 void FilterDialog::SetURL( const String& sURL )
 {
-    // convert it and use given pure string as fallback if convertion failed
+    // convert it and use given pure string as fallback if conversion failed
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
 }
 
@@ -235,7 +229,7 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
     }
     else
     {
-        // otherwise its realy a url ... build short name by using INetURLObject
+        // otherwise its really a url ... build short name by using INetURLObject
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
         if( xStringCalculator.is() == sal_True )
         {
@@ -249,3 +243,5 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
 }
 
 }   // namespace uui
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

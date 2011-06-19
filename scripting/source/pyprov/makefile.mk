@@ -34,21 +34,18 @@ TARGET=pyprov
 
 .INCLUDE :  settings.mk
 
-# ------------------------------------------------------------------
-
-
 # --- Targets ------------------------------------------------------
+# mailmerge is put in an extra services.rdb
+# simply do not fiddle with that. cws sb123, sb129
 ALL : ALLTAR \
-        $(DLLDEST)$/pythonscript.py	\
     $(DLLDEST)$/officehelper.py	\
-        $(DLLDEST)$/mailmerge.py
+    $(DLLDEST)$/msgbox.py \
+    $(DLLDEST)$/mailmerge.py
 
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
-.INCLUDE :  target.mk
-
-ALLTAR : $(MISC)/mailmerge.component $(MISC)/pythonscript.component
+ALLTAR : $(MISC)/mailmerge.component
 
 $(MISC)/mailmerge.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         mailmerge.component
@@ -56,8 +53,20 @@ $(MISC)/mailmerge.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         '$(COMPONENTPREFIX_BASIS_PYTHON)mailmerge' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt mailmerge.component
 
-$(MISC)/pythonscript.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_PYTHON)pythonscript' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt pythonscript.component
+# scripting provider extension
+.IF "$(L10N_framework)"=="" && "$(ENABLE_SCRIPTING_PYTHON)" == "YES"
+
+EXTENSIONNAME:=ScriptProviderForPython
+EXTENSION_ZIPNAME:=script-provider-for-python
+
+COMPONENT_FILES=$(EXTENSIONDIR)$/pythonscript.py
+
+.INCLUDE : extension_pre.mk
+.INCLUDE : target.mk
+.INCLUDE : extension_post.mk
+
+.ELSE
+
+.INCLUDE : target.mk
+
+.ENDIF

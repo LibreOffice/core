@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,13 @@
 
 #include <svl/documentlockfile.hxx>
 
-using namespace rtl;
+#include <cstdio>
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 namespace desktop
 {
@@ -57,7 +61,7 @@ public:
         m_index(0)
     {
         rtl::OUString url;
-        if (tools::getProcessWorkingDir(&url)) {
+        if (tools::getProcessWorkingDir(url)) {
             m_cwdUrl.reset(url);
         }
     }
@@ -137,8 +141,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     Reference< XExternalUriReferenceTranslator > xTranslator(
         xMS->createInstance(
-        OUString::createFromAscii(
-        "com.sun.star.uri.ExternalUriReferenceTranslator")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.uri.ExternalUriReferenceTranslator"))),
         UNO_QUERY);
 
     // parse command line arguments
@@ -152,6 +156,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
     bool bForceNewEvent(false);
     bool bDisplaySpec(false);
     bool bOpenDoc(false);
+    bool bConversionEvent(false);
+    bool bConversionParamsEvent(false);
+    bool bBatchPrintEvent(false);
+    bool bBatchPrinterNameEvent(false);
+    bool bConversionOutEvent(false);
 
     m_eArgumentCount = NONE;
 
@@ -162,8 +171,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         {
             break;
         }
-        // convert file URLs to internal form #112849#
-        if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
+        // convert file URLs to internal form
+        if (aArg.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("file:"))==0 &&
             xTranslator.is())
         {
             OUString tmp(xTranslator->translateToInternal(aArg));
@@ -171,16 +180,16 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 aArg = tmp;
         }
 
-        String aArgStr = aArg;
         if ( aArg.getLength() > 0 )
         {
             m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
-            if ( !InterpretCommandLineParameter( aArg ))
+            ::rtl::OUString oArg;
+            if ( !InterpretCommandLineParameter( aArg, oArg ))
             {
-                if ( aArgStr.GetChar(0) == '-' )
+                if ( aArg.toChar() == '-' )
                 {
                     // handle this argument as an option
-                    if ( aArgStr.EqualsIgnoreCaseAscii( "-n" ))
+                    if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-n")))
                     {
                         // force new documents based on the following documents
                         bForceNewEvent  = true;
@@ -192,7 +201,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-o" )))
                     {
                         // force open documents regardless if they are templates or not
                         bForceOpenEvent = true;
@@ -204,7 +213,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-pt" )))
                     {
                         // Print to special printer
                         bPrintToEvent   = true;
@@ -217,7 +226,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = false;
                         bForceOpenEvent = false;
                    }
-                   else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
+                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-p" )))
                    {
                         // Print to default printer
                         bPrintEvent     = true;
@@ -229,7 +238,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
+                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-view" )))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -240,9 +249,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bViewEvent      = true;
                         bStartEvent     = false;
                         bDisplaySpec    = false;
-             }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
-                    {
+                   }
+                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-show" )))
+                   {
                         // open in viewmode
                         bOpenEvent      = false;
                         bViewEvent      = false;
@@ -253,7 +262,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceOpenEvent = false;
                         bDisplaySpec    = false;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("display")))
                     {
                         // set display
                         bOpenEvent      = false;
@@ -265,7 +274,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = true;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-language" ))
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language")))
                     {
                         bOpenEvent      = false;
                         bPrintEvent     = false;
@@ -276,79 +285,108 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                     }
-
-                    #ifdef MACOSX
-                    /* #i84053# ignore -psn on Mac
-                       Platform dependent #ifdef here is ugly, however this is currently
-                       the only platform dependent parameter. Should more appear
-                       we should find a better solution
-                    */
-                    else if ( aArgStr.CompareToAscii( "-psn", 4 ) == COMPARE_EQUAL )
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("convert-to")))
                     {
-                        // finder argument from MacOSX
-                        bOpenEvent      = false;
-                           bPrintEvent     = false;
-                        bForceOpenEvent = false;
-                        bPrintToEvent   = false;
-                        bForceNewEvent  = false;
-                        bViewEvent      = false;
-                        bStartEvent     = false;
-                        bDisplaySpec    = false;
+                        bOpenEvent = false;
+                        bConversionEvent = true;
+                        bConversionParamsEvent = true;
                     }
-                    #endif
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("print-to-file")))
+                    {
+                        bOpenEvent = false;
+                        bBatchPrintEvent = true;
+                    }
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("printer-name")) &&
+                              bBatchPrintEvent )
+                    {
+                        bBatchPrinterNameEvent = true;
+                    }
+                    else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("outdir")) &&
+                              (bConversionEvent || bBatchPrintEvent) )
+                    {
+                        bConversionOutEvent = true;
+                    }
                 }
                 else
                 {
                     if ( bPrinterName && bPrintToEvent )
                     {
                         // first argument after "-pt" this must be the printer name
-                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArgStr );
-                        bPrinterName = sal_False;
+                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
+                        bPrinterName = false;
+                    }
+                    else if ( bConversionParamsEvent && bConversionEvent )
+                    {
+                        // first argument must be the the params
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONPARAMS, aArg );
+                        bConversionParamsEvent = false;
+                    }
+                    else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
+                    {
+                        // first argument is the printer name
+                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
+                        bBatchPrinterNameEvent = false;
+                    }
+                    else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
+                    {
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONOUT, aArg );
+                        bConversionOutEvent = false;
                     }
                     else
                     {
+                        if( bOpenEvent || bViewEvent || bForceNewEvent || bForceOpenEvent )
+                        {
+                            if( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("::ODMA")) )
+                            {
+                                ::rtl::OUString sArg(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/"));
+                                sArg += aArg;
+                                aArg = sArg;
+                            }
+                        }
                         // handle this argument as a filename
                         if ( bOpenEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bViewEvent )
-                    {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
+                        {
+                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bStartEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bPrintEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bPrintToEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bForceNewEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bForceOpenEvent )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArg );
                             bOpenDoc = true;
                         }
                         else if ( bDisplaySpec )
                         {
-                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArg );
                             bDisplaySpec = false; // only one display, not a lsit
                             bOpenEvent = true;    // set back to standard
                         }
+                        else if ( bConversionEvent || bBatchPrintEvent )
+                            AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONLIST, aArg );
                     }
                 }
             }
@@ -374,250 +412,245 @@ void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
     m_aBoolParams[eParam] = bValue;
 }
 
-sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg )
+sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
 {
-    String aArgStr( aArg );
+    bool bDeprecated = false;
+    if (aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("--")))
+    {
+        oArg = ::rtl::OUString(aArg.getStr()+2, aArg.getLength()-2);
+    }
+    else if (aArg.toChar() == '-')
+    {
+        bDeprecated = true;
+        oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
+    }
+    else
+    {
+        return sal_False;
+    }
 
-    if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-minimized" )) == sal_True )
+    if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "minimized" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_MINIMIZED, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-invisible" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "invisible" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-norestore" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "norestore" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NORESTORE, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nodefault" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nodefault" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-bean" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bean" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_BEAN, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-plugin" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PLUGIN, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-server" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "server" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_SERVER, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "headless" )) == sal_True )
     {
         // Headless means also invisibile, so set this parameter to true!
         SetBoolParam_Impl( CMD_BOOLPARAM_HEADLESS, sal_True );
         SetBoolParam_Impl( CMD_BOOLPARAM_INVISIBLE, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart" )) == sal_True )
     {
-#if defined(WNT) || defined(OS2) || defined(QUARTZ)
+#if defined(ENABLE_QUICKSTART_APPLET)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
 #endif
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart=no" )))
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "quickstart=no" )))
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_True );
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_False );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-terminate_after_init" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "terminate_after_init" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_TERMINATEAFTERINIT, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nofirststartwizard" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nofirststartwizard" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOFIRSTSTARTWIZARD, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nologo" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nologo" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOGO, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nolockcheck" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "nolockcheck" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
         // Workaround for automated testing
         ::svt::DocumentLockFile::AllowInteraction( sal_False );
-
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-help" ))
-          || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
-          || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "help" ))
+        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
+        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpwriter" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpwriter" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPWRITER, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpcalc" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpcalc" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPCALC, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpdraw" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpdraw" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPDRAW, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpimpress" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpimpress" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPIMPRESS, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbase" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbase" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASE, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbasic" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpbasic" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASIC, sal_True );
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpmath" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "helpmath" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
-        return sal_True;
+    }
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "version" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_VERSION, sal_True );
+    }
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("splash-pipe=")) )
+    {
+        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, oArg.copy(RTL_CONSTASCII_LENGTH("splash-pipe=")) );
     }
 #ifdef MACOSX
-  /* #i84053# ignore -psn on Mac
-     Platform dependent #ifdef here is ugly, however this is currently
-     the only platform dependent parameter. Should more appear
-     we should find a better solution
-  */
-    else if ( aArg.compareToAscii( "-psn", 4 ) == 0 )
+    /* #i84053# ignore -psn on Mac
+       Platform dependent #ifdef here is ugly, however this is currently
+       the only platform dependent parameter. Should more appear
+       we should find a better solution
+    */
+    else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
         return sal_True;
     }
 #endif
-    else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("infilter=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, oArg.copy(RTL_CONSTASCII_LENGTH("infilter=")) );
     }
-    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-unaccept=" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("accept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, aArgStr.Copy( 10 ) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("accept=")) );
     }
-    else if ( aArgStr.CompareIgnoreCaseToAscii( "-portal," ,
-              RTL_CONSTASCII_LENGTH( "-portal," )) == COMPARE_EQUAL )
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("unaccept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, aArgStr.Copy( RTL_CONSTASCII_LENGTH( "-portal," )) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, oArg.copy(RTL_CONSTASCII_LENGTH("unaccept=")) );
     }
-    else if ( aArgStr.Copy( 0, 7 ).EqualsIgnoreCaseAscii( "-userid" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("portal,")))
     {
-        if ( aArgStr.Len() > 8 )
+        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, oArg.copy(RTL_CONSTASCII_LENGTH("portal,")) );
+    }
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("userid")))
     {
-        rtl::OUString aUserDir = aArgStr;
-        AddStringListParam_Impl( CMD_STRINGPARAM_USERDIR,
-                     ::rtl::Uri::decode( aUserDir.copy( 8 ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 ) );
+        if ( oArg.getLength() > RTL_CONSTASCII_LENGTH("userid")+1 )
+        {
+            AddStringListParam_Impl(
+                CMD_STRINGPARAM_USERDIR,
+                ::rtl::Uri::decode( oArg.copy(RTL_CONSTASCII_LENGTH("userid")+1),
+                                    rtl_UriDecodeWithCharset,
+                                    RTL_TEXTENCODING_UTF8 ) );
         }
-        return sal_True;
     }
-    else if ( aArgStr.Copy( 0, 15).EqualsIgnoreCaseAscii( "-clientdisplay=" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("clientdisplay=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, aArgStr.Copy( 15 ) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, oArg.copy(RTL_CONSTASCII_LENGTH("clientdisplay=")) );
     }
-    else if ( aArgStr.Copy(0, 9).EqualsIgnoreCaseAscii( "-version=" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("version=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArgStr.Copy( 9 ) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, oArg.copy(RTL_CONSTASCII_LENGTH("version=")) );
     }
-    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-language=" ))
+    else if ( oArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("language=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, aArgStr.Copy( 10 ) );
-        return sal_True;
+        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, oArg.copy(RTL_CONSTASCII_LENGTH("language=")) );
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "writer" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-calc" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "calc" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-draw" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "draw" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-impress" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "impress" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-base" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "base" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-global" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "global" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-math" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "math" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-web" )) == sal_True )
+    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "web" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
         if ( !bAlreadySet )
-        SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
+            SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
         m_bDocumentArgs = true;
-        return sal_True;
     }
+    else
+        return sal_False;
 
-    return sal_False;
+    if (bDeprecated)
+    {
+        rtl::OString sArg(rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8));
+        fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
+    }
+    return sal_True;
 }
 
 sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nExcludeMember ) const
@@ -650,6 +683,14 @@ void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
 
     OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
     m_aBoolParams[eParam] = bNewValue;
+}
+
+const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
+{
+       osl::MutexGuard  aMutexGuard( m_aMutex );
+
+       OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
+       return m_aStrParams[eParam];
 }
 
 sal_Bool CommandLineArgs::IsMinimized() const
@@ -710,12 +751,6 @@ sal_Bool CommandLineArgs::IsTerminateAfterInit() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_TERMINATEAFTERINIT ];
-}
-
-sal_Bool CommandLineArgs::IsNoFirstStartWizard() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_NOFIRSTSTARTWIZARD ];
 }
 
 sal_Bool CommandLineArgs::IsNoLogo() const
@@ -823,6 +858,12 @@ sal_Bool CommandLineArgs::IsWeb() const
     return m_aBoolParams[ CMD_BOOLPARAM_WEB ];
 }
 
+sal_Bool CommandLineArgs::IsVersion() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_VERSION ];
+}
+
 sal_Bool CommandLineArgs::HasModuleParam() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -913,6 +954,33 @@ sal_Bool CommandLineArgs::GetLanguage( ::rtl::OUString& rPara ) const
     return m_aStrSetParams[ CMD_STRINGPARAM_LANGUAGE ];
 }
 
+sal_Bool CommandLineArgs::GetInFilter( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_INFILTER ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_INFILTER ];
+}
+
+sal_Bool CommandLineArgs::GetConversionList( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONLIST ];
+}
+
+sal_Bool CommandLineArgs::GetConversionParams( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONPARAMS ];
+}
+sal_Bool CommandLineArgs::GetConversionOut( ::rtl::OUString& rPara ) const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
+    return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
+}
+
 sal_Bool CommandLineArgs::IsEmpty() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -924,6 +992,7 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
     return m_eArgumentCount == NONE ||
+           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_SPLASHPIPE ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
 }
@@ -935,3 +1004,5 @@ sal_Bool CommandLineArgs::WantsToLoadDocument() const
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

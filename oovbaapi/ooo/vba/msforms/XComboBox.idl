@@ -28,6 +28,7 @@
 #ifndef __ooo_vba_msforms_XComboBox_idl__
 #define __ooo_vba_msforms_XComboBox_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 #include <ooo/vba/msforms/XNewFont.idl>
 
 //=============================================================================
@@ -54,6 +55,7 @@ interface XComboBox
     void AddItem( [in] any pvargItem, [in] any pvargIndex );
     void removeItem( [in] any index );
     void Clear();
+    any List( [in] any pvargIndex, [in] any pvarColumn );
 };
 
 //=============================================================================

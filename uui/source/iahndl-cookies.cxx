@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,7 @@
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 
-#include "vos/mutex.hxx"
-#include "tools/list.hxx"
+#include "osl/mutex.hxx"
 #include "svl/httpcook.hxx"
 #include "vcl/svapp.hxx"
 
@@ -60,7 +60,7 @@ executeCookieDialog(Window * pParent, CntHTTPCookieRequest & rRequest)
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -207,3 +207,4 @@ UUIInteractionHelper::handleCookiesRequest(
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

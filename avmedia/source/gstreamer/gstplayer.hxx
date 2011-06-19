@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -25,193 +26,89 @@
  *
  ************************************************************************/
 
-#ifndef _GSTPLAYER_HXX
-#define _GSTPLAYER_HXX
+#ifndef _PLAYER_HXX
+#define _PLAYER_HXX
 
+#include <osl/conditn.hxx>
 #include "gstcommon.hxx"
-#include <glib.h>
-#include <glib/gatomic.h>
 
-// necessary for mixed environments with GStreamer-0.10 and GLib versions < 2.8
-#ifndef G_GNUC_NULL_TERMINATED
-#if __GNUC__ >= 4
-#define G_GNUC_NULL_TERMINATED __attribute__((__sentinel__))
-#else
-#define G_GNUC_NULL_TERMINATED
-#endif
-#endif
-
-struct _GOptionGroup;
-typedef struct _GOptionGroup GOptionGroup;
-
-#include <gst/gst.h>
 #include "com/sun/star/media/XPlayer.hdl"
 
-namespace avmedia
-{
-namespace gst
-{
-class Window;
+typedef struct _GstXOverlay GstXOverlay;
 
-// ---------------
-// - Player_Impl -
-// ---------------
+namespace avmedia { namespace gstreamer {
 
-class Player : public ::cppu::WeakImplHelper3< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XComponent,
+// ----------
+// - Player -
+// ----------
+
+class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
                                                ::com::sun::star::lang::XServiceInfo >
 {
 public:
 
-    // static create method instead of public Ctor
-    static Player* create( const ::rtl::OUString& rURL );
-
+    Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Player();
 
+    void preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo );
+    bool create( const ::rtl::OUString& rURL );
+    void processMessage( GstMessage *message );
+    GstBusSyncReply processSyncMessage( GstMessage *message );
+
     // XPlayer
-    virtual void SAL_CALL start()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL stop()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL isPlaying()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual double SAL_CALL getDuration()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setMediaTime( double fTime )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual double SAL_CALL getMediaTime()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setStopTime( double fTime )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual double SAL_CALL getStopTime()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setRate( double fRate )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual double SAL_CALL getRate()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL isPlaybackLoop()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setMute( sal_Bool bSet )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL isMute()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL setVolumeDB( sal_Int16 nVolumeDB )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Int16 SAL_CALL getVolumeDB()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::awt::Size SAL_CALL getPreferredPlayerWindowSize()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > SAL_CALL createPlayerWindow(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    // XComponent
-    virtual void SAL_CALL dispose()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL addEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL removeEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-     throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL stop(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isPlaying(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getDuration(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMediaTime( double fTime ) throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getMediaTime(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setStopTime( double fTime ) throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getStopTime(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRate( double fRate ) throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getRate(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isPlaybackLoop(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMute( sal_Bool bSet ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isMute(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVolumeDB( sal_Int16 nVolumeDB ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getVolumeDB(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getPreferredPlayerWindowSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-// these are public because the C callbacks call them
-    virtual gboolean busCallback( GstBus* pBus,
-                                  GstMessage* pMsg );
-
-    virtual gboolean idle();
-
-    virtual gpointer run();
-
-    virtual GstBusSyncReply handleCreateWindow( GstBus* pBus,
-                                                GstMessage* pMsg );
-
-protected:
-
-    Player( GString* pURI = NULL );
-
-    void implQuitThread();
-
-    bool implInitPlayer();
-
-    bool implIsInitialized() const
-    {
-        return( g_atomic_int_get( &mnInitialized ) > 0 );
-    }
-
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
-    Player( const Player& );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
-    Player& operator=( const Player& );
+    ::rtl::OUString         maURL;
 
-    static void implHandleNewElementFunc( GstBin* pBin,
-                                          GstElement* pElement,
-                                          gpointer pData );
+    // Add elements and pipeline here
+    GstElement*             mpPlaybin;  // the playbin is also a pipeline
+    sal_Bool                mbFakeVideo;
 
-    static void implHandleNewPadFunc( GstElement* pElem,
-                                      GstPad* pPad,
-                                      gpointer pData );
+    gdouble                 mnUnmutedVolume;
+    sal_Bool                mbPlayPending;
+    sal_Bool                mbMuted;
+    sal_Bool                mbLooping;
+    sal_Bool                mbInitialized;
 
-protected:
+    long                    mnWindowID;
+    GstXOverlay*            mpXOverlay;
+    gint64                  mnDuration;
+    int                     mnWidth;
+    int                     mnHeight;
 
-    GMutex* mpMutex;
-    GCond* mpCond;
-    GThread* mpThread;
-    GMainContext* mpContext;
-    GMainLoop* mpLoop;
-    GstElement* mpPlayer;
-    GString* mpURI;
-
-private:
-
-    ::avmedia::gst::Window* mpPlayerWindow;
-    gint mnIsVideoSource;
-    gint mnVideoWidth;
-    gint mnVideoHeight;
-    gint mnInitialized;
-    gint mnVolumeDB;
-    gint mnLooping;
-    gint mnQuit;
-    gint mnVideoWindowSet;
-    gint mnInitFail;
+    osl::Condition          maSizeCondition;
 };
-}     // namespace gst
+
+} // namespace gstreamer
 } // namespace avmedia
 
-#endif // _GSTPLAYER_HXX
+#endif // _PLAYER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

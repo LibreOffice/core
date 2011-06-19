@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <framework/toolboxconfiguration.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 
-#ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
 #include <framework/statusbarconfiguration.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -258,7 +257,7 @@ void UIConfigurationManagerImpl::impl_preloadUIElementTypeList( Layer eLayer, sa
                             aUIElementData.bDefaultNode = false;
                         }
 
-                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -379,7 +378,7 @@ UIConfigurationManagerImpl::UIElementData*  UIConfigurationManagerImpl::impl_fin
     if ( m_bUseDefault )
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-    // first try to look into our user-defined vector/hash_map combination
+    // first try to look into our user-defined vector/boost::unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )
@@ -395,7 +394,7 @@ UIConfigurationManagerImpl::UIElementData*  UIConfigurationManagerImpl::impl_fin
 
     if ( m_bUseDefault )
     {
-        // Not successfull, we have to look into our default vector/hash_map combination
+        // Not successfull, we have to look into our default vector/boost::unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         pIter = rDefaultHashMap.find( aResourceURL );
         if ( pIter != rDefaultHashMap.end() )
@@ -804,8 +803,8 @@ void UIConfigurationManagerImpl::initialize( const Sequence< Any >& aArguments )
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleShortName")), ::rtl::OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -882,8 +881,6 @@ void UIConfigurationManagerImpl::reset() throw (::com::sun::star::uno::RuntimeEx
     if ( m_bDisposed )
         throw DisposedException();
 
-    bool bResetStorage( false );
-
     if ( !isReadOnly() )
     {
         // Remove all elements from our user-defined storage!
@@ -914,8 +911,6 @@ void UIConfigurationManagerImpl::reset() throw (::com::sun::star::uno::RuntimeEx
                     }
                 }
             }
-
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
@@ -1362,7 +1357,6 @@ Reference< XInterface > UIConfigurationManagerImpl::getImageManager() throw (::c
 
     return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
 
-//    return Reference< XInterface >();
 }
 
 Reference< XInterface > UIConfigurationManagerImpl::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
@@ -1387,7 +1381,7 @@ Reference< XInterface > UIConfigurationManagerImpl::getShortCutManager() throw (
     } // if ( m_bUseDefault )
     else
     {
-        aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
+        aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot"));
         aProp.Value <<= xDocumentRoot;
     }
     lArgs[0] <<= aProp;
@@ -1459,14 +1453,12 @@ void UIConfigurationManagerImpl::setStorage( const Reference< XStorage >& Storag
             else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
                 aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
 
-            //if ( aResourceType.getLength() > 0 )
-            {
-                m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
-                m_pStorageHandler[i]->connectToResource( PresetHandler::E_DOCUMENT,
-                                                         rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), // this path wont be used later ... seee next lines!
-                                                         sEmpty,
-                                                         m_xUserConfigStorage);
-            }
+
+            m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
+            m_pStorageHandler[i]->connectToResource( PresetHandler::E_DOCUMENT,
+                                                     rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), // this path wont be used later ... see next lines!
+                                                     sEmpty,
+                                                     m_xUserConfigStorage);
         }
         Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
         if ( xPropSet.is() )
@@ -1541,7 +1533,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         // preload list of element types on demand
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-        // Look into our default vector/hash_map combination
+        // Look into our default vector/boost::unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
         if ( pIter != rDefaultHashMap.end() )
@@ -1708,3 +1700,5 @@ void UIConfigurationManagerImpl::implts_notifyContainerListener( const Configura
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

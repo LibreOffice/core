@@ -2953,33 +2953,6 @@ SfxBoolItem InsertDoc SID_INSERTDOC
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InsertHyperlink SID_HYPERLINK_INSERT
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
 (
     SfxStringItem Name          FN_PARAM_1,
@@ -3830,6 +3803,33 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ApplyCharUnit SID_ATTR_APPLYCHARUNIT
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxBoolItem Modified SID_MODIFIED
 
 [
@@ -3857,7 +3857,7 @@ SfxBoolItem Modified SID_MODIFIED
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem ModifiedStatus SID_DOC_MODIFIED
+SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
 
 [
     /* flags: */
@@ -7264,7 +7264,32 @@ SfxVoidItem UpdateConfiguration SID_UPDATE_CONFIG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem HelpSupport SID_HELP_SUPPORTPAGE
+SfxVoidItem ShowLicense SID_SHOW_LICENSE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ShowCredits SID_SHOW_CREDITS
 ()
 [
     /* flags: */

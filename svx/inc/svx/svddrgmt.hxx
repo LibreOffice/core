@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ class SdrDragStat;
 
 //////////////////////////////////////////////////////////////////////////////
 
-class SdrDragEntry
+class SVX_DLLPUBLIC SdrDragEntry
 {
 private:
     // bitfield
@@ -322,3 +323,5 @@ public:
 #endif //_SVDDRGMT_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

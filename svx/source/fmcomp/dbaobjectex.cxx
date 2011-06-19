@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,16 +33,12 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <comphelper/extract.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 
 //........................................................................
 namespace svx
@@ -185,3 +182,4 @@ namespace svx
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,22 +32,14 @@
 // includes of own project
 #include <loadenv/loadenv.hxx>
 
-#ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
 #include <framework/framelistanalyzer.hxx>
 
-#ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
 #include <constant/frameloader.hxx>
-#endif
 
-#ifndef __FRAMEWORK_CONSTANT_CONTENTHANDLER_HXX_
 #include <constant/contenthandler.hxx>
-#endif
 
-#ifndef __FRAMEWORK_CONSTANT_CONTAINERQUERY_HXX_
 #include <constant/containerquery.hxx>
-#endif
 #include <interaction/quietinteraction.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
@@ -96,9 +89,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/processfactory.hxx>
@@ -158,9 +149,7 @@ class LoadEnvListener : private ThreadHelpBase
             throw(css::uno::RuntimeException);
 };
 
-/*-----------------------------------------------
-    14.10.2003 13:43
------------------------------------------------*/
+
 LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     throw(LoadEnvException, css::uno::RuntimeException)
     : ThreadHelpBase(     )
@@ -170,17 +159,13 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& x
 {
 }
 
-/*-----------------------------------------------
-    14.10.2003 13:43
------------------------------------------------*/
+
 LoadEnv::~LoadEnv()
 {
     m_pCheck = 0;
 }
 
-/*-----------------------------------------------
-    10.09.2003 14:05
------------------------------------------------*/
+
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                            const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                                                                            const ::rtl::OUString&                                        sURL   ,
@@ -214,13 +199,13 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                     throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii("Optional list of arguments seem to be corrupted."),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Optional list of arguments seem to be corrupted.")),
                             xLoader,
                             4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                     throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii("URL seems to be an unsupported one."),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL seems to be an unsupported one.")),
                             xLoader,
                             1);
 
@@ -250,9 +235,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     return lDescriptor;
 }
 
-/*-----------------------------------------------
-    20.08.2003 09:49
------------------------------------------------*/
+
 void LoadEnv::initializeLoading(const ::rtl::OUString&                                           sURL            ,
                                 const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
                                 const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
@@ -335,9 +318,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    22.01.2010
------------------------------------------------*/
+
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
                                     ::comphelper::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
                                     QuietInteraction** o_ppQuietInteraction )
@@ -386,9 +367,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMulti
         io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_UPDATEDOCMODE()] <<= nUpdateMode;
 }
 
-/*-----------------------------------------------
-    15.08.2003 08:16
------------------------------------------------*/
+
 void LoadEnv::startLoading()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -439,7 +418,6 @@ void LoadEnv::startLoading()
 }
 
 /*-----------------------------------------------
-    15.08.2003 09:50
     TODO
         First draft does not implement timeout using [ms].
         Current implementation counts yield calls only ...
@@ -480,9 +458,7 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    20.08.2003 10:00
------------------------------------------------*/
+
 void LoadEnv::cancelLoading()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -524,9 +500,7 @@ void LoadEnv::cancelLoading()
     // <- PARTIAL(!) SAFE ------------------------------
 }
 
-/*-----------------------------------------------
-    14.08.2003 13:33
------------------------------------------------*/
+
 css::uno::Reference< css::frame::XFrame > LoadEnv::getTarget() const
 {
     // SAFE ->
@@ -535,9 +509,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::getTarget() const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    14.08.2003 13:35
------------------------------------------------*/
+
 css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 {
     // SAFE ->
@@ -558,9 +530,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    15.08.2003 11:15
------------------------------------------------*/
+
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException)
 {
@@ -575,9 +545,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    14.10.2003 12:23
------------------------------------------------*/
+
 void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException)
 {
@@ -592,9 +560,7 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    14.10.2003 12:23
------------------------------------------------*/
+
 void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
@@ -624,9 +590,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    14.10.2003 12:24
------------------------------------------------*/
+
 void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
@@ -641,9 +605,7 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    14.10.2003 12:20
------------------------------------------------*/
+
 void LoadEnv::impl_setResult(sal_Bool bResult)
 {
     // SAFE -> ----------------------------------
@@ -663,7 +625,6 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
 }
 
 /*-----------------------------------------------
-    06.02.2004 14:03
     TODO: Is it a good idea to change Sequence<>
           parameter to stl-adapter?
 -----------------------------------------------*/
@@ -752,17 +713,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     css::uno::Reference< css::container::XEnumeration >    xSet        ;
     css::uno::Sequence< ::rtl::OUString >                  lTypesReg(1);
 
-    /*
-    //-------------------------------------------
-    lQuery[0].Name    = ::framework::constant::Filter::PROP_TYPE;
-    lQuery[0].Value <<= sType;
-
-    xContainer = css::uno::Reference< css::container::XContainerQuery >(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY);
-    xSet       = xContainer->createSubSetEnumerationByProperties(lQuery);
-    // at least one registered frame loader is enough!
-    if (xSet->hasMoreElements())
-        return E_CAN_BE_LOADED;
-    */
 
     //-------------------------------------------
     // (iii) If a FrameLoader service (or at least
@@ -820,14 +770,12 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     return E_UNSUPPORTED_CONTENT;
 }
 
-/*-----------------------------------------------
-    03.11.2003 09:31
------------------------------------------------*/
+
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
-    static ::rtl::OUString TYPEPROP_PREFERREDFILTER = ::rtl::OUString::createFromAscii("PreferredFilter");
-    static ::rtl::OUString FILTERPROP_FLAGS         = ::rtl::OUString::createFromAscii("Flags"          );
+    static ::rtl::OUString TYPEPROP_PREFERREDFILTER(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"));
+    static ::rtl::OUString FILTERPROP_FLAGS        (RTL_CONSTASCII_USTRINGPARAM("Flags"));
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -927,9 +875,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     }
 }
 
-/*-----------------------------------------------
-    15.08.2003 09:38
------------------------------------------------*/
+
 sal_Bool LoadEnv::impl_handleContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1011,9 +957,9 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xSMGR,
-                                ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/"),
-                                ::rtl::OUString::createFromAscii("Misc"),
-                                ::rtl::OUString::createFromAscii("MaxOpenDocuments"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc")),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxOpenDocuments")),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -1218,9 +1164,7 @@ sal_Bool LoadEnv::impl_loadContent()
     return sal_False;
 }
 
-/*-----------------------------------------------
-    06.02.2004 14:40
------------------------------------------------*/
+
 css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
@@ -1286,9 +1230,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     return css::uno::Reference< css::uno::XInterface >();
 }
 
-/*-----------------------------------------------
-    24.01.2006 15:11
------------------------------------------------*/
+
 void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
                               const css::util::URL&                            aURL  )
 {
@@ -1306,7 +1248,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = ::rtl::OUString::createFromAscii(".uno:JumpToMark");
+    aCmd.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:JumpToMark"));
 
     css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
     xParser->parseStrict(aCmd);
@@ -1316,13 +1258,11 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     ::comphelper::SequenceAsHashMap lArgs;
-    lArgs[::rtl::OUString::createFromAscii("Bookmark")] <<= aURL.Mark;
+    lArgs[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"))] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
-/*-----------------------------------------------
-    31.07.2003 09:02
------------------------------------------------*/
+
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1468,9 +1408,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     return xResult;
 }
 
-/*-----------------------------------------------
-    30.03.2004 09:12
------------------------------------------------*/
+
 sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const
 {
     css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
@@ -1485,9 +1423,7 @@ sal_Bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< c
     return xLock->isActionLocked();
 }
 
-/*-----------------------------------------------
-    30.03.2004 09:12
------------------------------------------------*/
+
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1619,9 +1555,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     return xTask;
 }
 
-/*-----------------------------------------------
-    15.08.2003 12:39
------------------------------------------------*/
+
 void LoadEnv::impl_reactForLoadingState()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1641,7 +1575,7 @@ void LoadEnv::impl_reactForLoadingState()
 
         if (bMinimized)
         {
-            ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
             // check for system window is neccessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
@@ -1740,9 +1674,7 @@ void LoadEnv::impl_reactForLoadingState()
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    16.01.2005 13:04
------------------------------------------------*/
+
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 sal_Bool bForceToFront)
 {
@@ -1752,16 +1684,16 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( pWindow )
     {
         bool bForceFrontAndFocus(false);
         css::uno::Any a = ::comphelper::ConfigurationHelper::readDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
-            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
-            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
             ::comphelper::ConfigurationHelper::E_READONLY);
         a >>= bForceFrontAndFocus;
 
@@ -1770,41 +1702,12 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         else
             pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
-
-/* #i19976#
-    We tried to prevent a toFront() call in case the user putted the
-    loading document into the background ..
-    But we had several errors trying that. So we decided to
-    rollback these changes and bring the new loaded document to front hardly !
-
-    css::uno::Reference< css::awt::XWindow2 > xWindow2(xWindow, css::uno::UNO_QUERY);
-
-    sal_Bool bIsVisible = sal_False;
-    if (xWindow2.is())
-        bIsVisible = xWindow2->isVisible(); // TODO is parent visible too ? .-)
-
-    if (!bIsVisible)
-    {
-        xWindow->setVisible(sal_True);
-        bForceToFront = sal_True;
-    }
-
-    if (
-        (bForceToFront  ) &&
-        (xTopWindow.is())
-       )
-    {
-        xTopWindow->toFront();
-    }
-*/
 }
 
-/*-----------------------------------------------
-    15.03.2005 11:12
------------------------------------------------*/
+
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static ::rtl::OUString PACKAGE_SETUP_MODULES = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
+    static ::rtl::OUString PACKAGE_SETUP_MODULES(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
 
     // no window -> action not possible
     if (!xWindow.is())
@@ -1820,9 +1723,12 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
        return;
 
     // SOLAR SAFE ->
-    ::vos::OClearableGuard aSolarLock1(Application::GetSolarMutex());
+    SolarMutexClearableGuard aSolarGuard1;
 
     Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
+    if (!pWindow)
+        return;
+
     sal_Bool bSystemWindow = pWindow->IsSystemWindow();
     sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
@@ -1834,7 +1740,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (pWorkWindow->IsMinimized())
         return;
 
-    aSolarLock1.clear();
+    aSolarGuard1.clear();
     // <- SOLAR SAFE
 
     // SAFE ->
@@ -1876,7 +1782,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         if (sWindowState.getLength())
         {
             // SOLAR SAFE ->
-            ::vos::OClearableGuard aSolarLock2(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
 
             // We have to retrieve the window pointer again. Because nobody can guarantee
             // that the XWindow was not disposed inbetween .-)
@@ -1889,8 +1795,6 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
             SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
             pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
-
-            aSolarLock2.clear();
             // <- SOLAR SAFE
         }
     }
@@ -1902,3 +1806,4 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

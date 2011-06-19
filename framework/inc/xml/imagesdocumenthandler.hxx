@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdtypes.h>
 
 
@@ -129,7 +130,7 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ImageHashMap : public ::std::hash_map< ::rtl::OUString        ,
+        class ImageHashMap : public ::boost::unordered_map< ::rtl::OUString     ,
                                                      Image_XML_Entry        ,
                                                      OUStringHashCode       ,
                                                      ::std::equal_to< ::rtl::OUString > >
@@ -200,3 +201,5 @@ class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right i
 } // namespace framework
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

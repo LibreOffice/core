@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,8 +150,6 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL
 PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtensionId )
@@ -217,7 +216,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     }
 
     int nCount = 0;
-    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); i++)
+    for (dp_misc::UpdateInfoMap::iterator i(updateInfoMap.begin()); i != updateInfoMap.end(); ++i)
     {
         dp_misc::UpdateInfo const & info = i->second;
 
@@ -332,8 +331,6 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
 
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<PackageInformationProvider> servicePIP;
@@ -359,7 +356,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }
@@ -368,3 +365,4 @@ bool singleton_entries(
 } // namespace dp_info
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

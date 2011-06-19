@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_XMLITMAP_HXX
-//#include "xmlitmap.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmlprmap.hxx>
@@ -49,14 +47,10 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <xmloff/xmlaustp.hxx>
-#ifndef _XMLOFF_STYLEEXP_HXX
 #include <xmloff/styleexp.hxx>
-#endif
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
@@ -82,7 +76,7 @@ XMLStyleExport::XMLStyleExport(
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
-    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),//#outline level,add by zhaojianwei
+    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),
     sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
@@ -104,7 +98,7 @@ sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
           const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-        const Reference< XNameAccess >& xStyles,        //#outline level,add by zhaojianwei
+        const Reference< XNameAccess >& xStyles,
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
@@ -182,7 +176,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                       XML_TRUE );
     }
 
-    // style:default-outline-level"..." //#outline level, add by zhaojianwei.0802
+    // style:default-outline-level"..."
     sal_Int32 nOutlineLevel = 0;
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
     {
@@ -201,12 +195,11 @@ sal_Bool XMLStyleExport::exportStyle(
             }
             else
             {
-                // --> OD 2009-12-29 #i104889#
-                // empty value for style:default-outline-level does exist
-                // since ODF 1.2. Thus, suppress its export for former versions.
+                /* Empty value for style:default-outline-level does exist
+                   since ODF 1.2. Thus, suppress its export for former versions. (#i104889#)
+                */
                 if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
                      GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
-                // <--
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DEFAULT_OUTLINE_LEVEL,
@@ -214,7 +207,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 }
             }
         }
-    }//<-end,zhaojianwei
+    }
 
     // style:list-style-name="..." (SW paragarph styles only)
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
@@ -229,10 +222,10 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
 
-                // --> OD 2006-09-21 #i69523#
-                // An direct set empty list style has to be written. Otherwise,
-                // this information is lost and causes an error, if the parent
-                // style has a list style set.
+                /* An direct set empty list style has to be written. Otherwise,
+                   this information is lost and causes an error, if the parent
+                   style has a list style set. (#i69523#)
+                */
                 if ( !sListName.getLength() )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
@@ -241,7 +234,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 }
                 else
                 {
-                    // --> OD 2006-09-27 #i69627#
+                    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
                     bool bSuppressListStyle( false );
                     {
                         if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
@@ -270,17 +263,14 @@ sal_Bool XMLStyleExport::exportStyle(
                     }
 
                     if ( sListName.getLength() && !bSuppressListStyle )
-                    // <--
                     {
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_LIST_STYLE_NAME,
                                   GetExport().EncodeStyleName( sListName ) );
                     }
                 }
-                // <--
             }
         }
-        //#outline level, add by zhaojianwei.0802
         else if( nOutlineLevel > 0 )
         {
 
@@ -320,9 +310,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                           XML_LIST_STYLE_NAME,
                                           OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
         }
-        //<-end,zhaojianwei
     }
-
 
     // style:pool-id="..." is not required any longer since we use
     // english style names only
@@ -379,42 +367,13 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
                                   XML_DEFAULT_STYLE,
                                   sal_True, sal_True );
         // <style:properties>
-        //::std::vector< XMLPropertyState > xPropStates =
-        //  rPropMapper->FilterDefaults( xPropSet );
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
                                      XML_EXPORT_FLAG_IGN_WS );
-//      exportStyleContent( rStyle );
     }
     return sal_True;
 }
-
-#if 0
-void XMLStyleExport::exportStyleFamily(
-    const sal_Char *pFamily,
-    const OUString& rXMLFamily,
-    const UniReference < XMLPropertySetMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
-{
-    const OUString sFamily(OUString::createFromAscii(pFamily ));
-    UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
-        new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( sFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
-                       pPrefix);
-}
-
-void XMLStyleExport::exportStyleFamily(
-    const OUString& rFamily, const OUString& rXMLFamily,
-    const UniReference < XMLPropertySetMapper >& rPropMapper,
-    sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
-{
-    UniReference < SvXMLExportPropertyMapper > xExpPropMapper =
-        new SvXMLExportPropertyMapper( rPropMapper );
-    exportStyleFamily( rFamily, rXMLFamily, xExpPropMapper, bUsed, nFamily,
-                       pPrefix);
-}
-#endif
 
 void XMLStyleExport::exportStyleFamily(
     const sal_Char *pFamily,
@@ -564,3 +523,4 @@ void XMLStyleExport::exportStyleFamily(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

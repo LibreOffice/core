@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,26 +35,17 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include "svx/svxdllapi.h"
+#include <vector>
 
 
 #ifndef _GOMISC_HXX
@@ -63,12 +55,12 @@ class ImageMap;
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Float
+|* Derivation from SfxChildWindow as "container" for float
 |*
 \************************************************************************/
 
 class Graphic;
-class TargetList;
+typedef ::std::vector< String* > TargetList;
 
 class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
@@ -135,7 +127,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     ComboBox            maCbbTarget;
     StatusBar           aStbStatus;
     ImageList           maImageList;
-    ImageList           maImageListH;
 
     Size                aLastSize;
     IMapWindow*         pIMapWnd;
@@ -209,3 +200,4 @@ public:
 #endif // _IMAPDLG_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

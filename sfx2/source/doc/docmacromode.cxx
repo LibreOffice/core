@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,8 @@
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -73,8 +76,11 @@ namespace sfx2
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::script::XLibraryContainer;
+    using ::com::sun::star::script::XLibraryQueryExecutable;
+    using ::com::sun::star::script::vba::XVBACompatibility;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 
@@ -205,7 +211,7 @@ namespace sfx2
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
                     break;
                 default:
-                    OSL_ENSURE( sal_False, "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
+                    OSL_FAIL( "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
                     nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
             }
 
@@ -289,7 +295,7 @@ namespace sfx2
                 return disallowMacroExecution();
             }
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
             if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
                 ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
@@ -336,6 +342,8 @@ namespace sfx2
             if ( xScripts.is() )
                 xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
 
+            Reference< XVBACompatibility > xDocVBAMode( xContainer, UNO_QUERY );
+            sal_Bool bIsVBAMode = ( xDocVBAMode.is() && xDocVBAMode->getVBACompatibilityMode() );
             if ( xContainer.is() )
             {
                 // a library container exists; check if it's empty
@@ -348,25 +356,47 @@ namespace sfx2
                 {
                     ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
                     Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
-                    if ( aElements.getLength() )
+                    sal_Int32 nElementCount = aElements.getLength();
+                    if ( nElementCount )
                     {
-                        if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
+                        // old check, if more than 1 library or the first library isn't the expected 'Standard'
+                        // trigger the security 'nag' dialog
+                        if ( !bIsVBAMode && ( nElementCount > 1 || !aElements[0].equals( aStdLibName ) ) )
                             bHasMacroLib = sal_True;
                         else
                         {
-                            // usually a "Standard" library is always present (design)
-                            // for this reason we must check if it's empty
-                            //
-                            // Note: Since #i73229#, this is not true anymore. There's no default
-                            // "Standard" lib anymore. Wouldn't it be time to get completely
-                            // rid of the "Standard" thingie - this shouldn't be necessary
-                            // anymore, should it?
-                            // 2007-01-25 / frank.schoenheit@sun.com
-                            Reference < XNameAccess > xLib;
-                            Any aAny = xContainer->getByName( aStdLibName );
-                            aAny >>= xLib;
+                            // other wise just check all libraries for executeable code
+                            Reference< XLibraryQueryExecutable > xLib( xContainer, UNO_QUERY );
                             if ( xLib.is() )
-                                bHasMacroLib = xLib->hasElements();
+                            {
+                                const ::rtl::OUString* pElementName = aElements.getConstArray();
+                                for ( sal_Int32 index = 0; index < nElementCount; ++index )
+                                {
+                                    bHasMacroLib = xLib->HasExecutableCode( pElementName[index] );
+                                    if ( bHasMacroLib )
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ( bIsVBAMode && !bHasMacroLib && xScripts.is() )
+            {
+                Reference< XLibraryContainer > xDlgContainer( xScripts->getDialogLibraries(), UNO_QUERY );
+                if ( xDlgContainer.is() && xDlgContainer->hasElements() )
+                {
+                    Sequence< ::rtl::OUString > aElements = xDlgContainer->getElementNames();
+                    sal_Int32 nElementCount = aElements.getLength();
+                    const ::rtl::OUString* pElementName = aElements.getConstArray();
+                    for ( sal_Int32 index = 0; index < nElementCount; ++index )
+                    {
+                        Reference< XNameAccess > xNameAccess;
+                        xDlgContainer->getByName( pElementName[index] ) >>= xNameAccess;
+                        if ( xNameAccess.is() && xNameAccess->hasElements() )
+                        {
+                            bHasMacroLib = sal_True;
+                            break;
                         }
                     }
                 }
@@ -434,3 +464,5 @@ namespace sfx2
 //........................................................................
 } // namespace sfx2
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ namespace connectivity
     Sequence< ::rtl::OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ParameterSubstitution");
+        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ParameterSubstitution"));
         return aSNS;
     }
 
@@ -130,3 +131,5 @@ namespace connectivity
 // ==================================
 } // connectivity
 // ==================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

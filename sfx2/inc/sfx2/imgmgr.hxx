@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
 
 class ToolBox;
 class SfxModule;
@@ -55,13 +54,15 @@ public:
 
                     // get images from resources
     void            SetImages( ToolBox& rToolBox );
-    void            SetImages( ToolBox& rToolBox, sal_Bool bHiContrast, sal_Bool bLarge );
-    void            SetImagesForceSize( ToolBox& rToolBox, sal_Bool bHiContrast, sal_Bool bLarge );
+    void            SetImages( ToolBox& rToolBox, bool bLarge );
+    void            SetImagesForceSize( ToolBox& rToolBox, bool bLarge );
 
-    Image           GetImage( sal_uInt16 nId, sal_Bool bLarge, sal_Bool bHiContrast ) const;
-    Image           GetImage( sal_uInt16 nId, sal_Bool bHiContrast ) const;
-    Image           SeekImage( sal_uInt16 nId, sal_Bool bLarge, sal_Bool bHiContrast ) const;
-    Image           SeekImage( sal_uInt16 nId, sal_Bool bHiContrast ) const;
+    Image           GetImage( sal_uInt16 nId, bool bLarge ) const;
+    Image           GetImage( sal_uInt16 nId) const;
+    Image           SeekImage( sal_uInt16 nId, bool bLarge ) const;
+    Image           SeekImage( sal_uInt16 nId ) const;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

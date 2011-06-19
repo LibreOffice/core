@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -272,7 +273,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR("Numberformat not found");
+                OSL_FAIL("Numberformat not found");
             }
         }
     }
@@ -300,7 +301,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR("Numberformat not found");
+                OSL_FAIL("Numberformat not found");
             }
         }
     }
@@ -356,7 +357,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Numberformat not found");
+            OSL_FAIL("Numberformat not found");
         }
     }
     return sal_False;
@@ -384,7 +385,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Numberformat not found");
+            OSL_FAIL("Numberformat not found");
         }
     }
     return 0;
@@ -537,7 +538,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue);
     }
     else {
-        DBG_ERROR("no SvXMLExport given");
+        OSL_FAIL("no SvXMLExport given");
     }
 }
 
@@ -553,6 +554,8 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
             pExport->AddAttribute(sAttrStringValue, rValue);
     }
     else {
-        DBG_ERROR("no SvXMLExport given");
+        OSL_FAIL("no SvXMLExport given");
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

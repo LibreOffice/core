@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,6 +52,8 @@
 #include <stdio.h>
 
 #include "osl/thread.hxx"
+using ::rtl::OUString;
+
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
@@ -60,7 +63,6 @@
 #define USER_CLASS_PATH 2
 
 namespace css = com::sun::star;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -77,7 +79,7 @@ public:
     JavaInfo* pData;
     CJavaInfo();
     ~CJavaInfo();
-    operator JavaInfo* ();
+    operator JavaInfo* () const;
 };
 
 CJavaInfo::CJavaInfo(): pData(NULL)
@@ -89,7 +91,7 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pData);
 }
 
-CJavaInfo::operator JavaInfo*()
+CJavaInfo::operator JavaInfo*() const
 {
     return pData;
 }
@@ -276,7 +278,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
     for(;pIter != pEnd;++pIter)
     {
         *pIter >>= aValue;
-        if (aValue.Name.equalsAscii("OldConfiguration"))
+        if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OldConfiguration")))
         {
             sal_Bool bSuccess = aValue.Value >>= aOldConfigValues;
             OSL_ENSURE(bSuccess == sal_True, "[Service implementation " IMPL_NAME
@@ -287,7 +289,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                 const css::beans::NamedValue* pEnd2 = pIter2 + aOldConfigValues.getLength();
                 for(;pIter2 != pEnd2;++pIter2)
                 {
-                    if ( pIter2->Name.equalsAscii("org.openoffice.Office.Java") )
+                    if ( pIter2->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("org.openoffice.Office.Java")) )
                     {
                         pIter2->Value >>= m_xLayer;
                         break;
@@ -295,12 +297,11 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
                 }
             }
         }
-        else if (aValue.Name.equalsAscii("UserData"))
+        else if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserData")))
         {
             if ( !(aValue.Value >>= m_sUserDir) )
             {
-                OSL_ENSURE(
-                    false,
+                OSL_FAIL(
                     "[Service implementation " IMPL_NAME
                     "] XInitialization::initialize: Argument UserData has wrong type.");
             }
@@ -342,9 +343,9 @@ void JavaMigration::migrateJavarc()
         {
             if (jfw_setSelectedJRE(aInfo) != JFW_E_NONE)
             {
-                OSL_ENSURE(0, "[Service implementation " IMPL_NAME
+                OSL_FAIL("[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");
-                fprintf(stderr, "\nCannot migrate Java. An error occured.\n");
+                fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
             }
         }
         else if (err == JFW_E_FAILED_VERSION)
@@ -419,9 +420,9 @@ void SAL_CALL  JavaMigration::overrideProperty(
         MalformedDataException,
         WrappedTargetException )
 {
-    if (aName.equalsAscii("Enable"))
+    if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Enable")))
         m_aStack.push(TElementStack::value_type(aName,ENABLE_JAVA));
-    else if (aName.equalsAscii("UserClassPath"))
+    else if (aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserClassPath")))
         m_aStack.push(TElementStack::value_type(aName, USER_CLASS_PATH));
 }
 // -----------------------------------------------------------------------------
@@ -527,3 +528,4 @@ void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
 
 } //end namespace jfw
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

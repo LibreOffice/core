@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
@@ -56,7 +53,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/sdgcpitm.hxx>
-//CHINA001 #include "../dialog/grfpage.hxx"
+
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdview.hxx>
@@ -75,7 +72,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 // -----------
 // - Defines -
 // -----------
@@ -151,7 +148,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
 
-    if ( maCommand.equalsAscii( ".uno:GrafGamma" ))
+    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
     {
         SetDecimalDigits( 2 );
 
@@ -163,7 +160,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     }
     else
     {
-        const long nMinVal = ( maCommand.equalsAscii( ".uno:GrafTransparence" )) ? 0 : -100;
+        const long nMinVal = ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) )) ? 0 : -100;
 
         SetUnit( FUNIT_CUSTOM );
         SetCustomUnitText( String::CreateFromAscii(" %") );
@@ -201,14 +198,14 @@ IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, EMPTYARG )
 
     // Convert value to an any to be usable with dispatch API
     Any a;
-    if ( maCommand.equalsAscii( ".uno:GrafRed" ) ||
-         maCommand.equalsAscii( ".uno:GrafGreen" ) ||
-         maCommand.equalsAscii( ".uno:GrafBlue" ) ||
-         maCommand.equalsAscii( ".uno:GrafLuminance" ) ||
-         maCommand.equalsAscii( ".uno:GrafContrast" ))
+    if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafRed" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGreen" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafBlue" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafLuminance" ) ) ||
+         maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafContrast" ) ))
         a = makeAny( sal_Int16( nVal ));
-    else if ( maCommand.equalsAscii( ".uno:GrafGamma" ) ||
-              maCommand.equalsAscii( ".uno:GrafTransparence" ))
+    else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ) ||
+              maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
         a = makeAny( sal_Int32( nVal ));
 
     if ( a.hasValue() )
@@ -235,9 +232,9 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
     {
         long nValue;
 
-        if ( maCommand.equalsAscii( ".uno:GrafTransparence" ))
+        if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) ))
             nValue = ( (SfxUInt16Item*) pItem )->GetValue();
-        else if ( maCommand.equalsAscii( ".uno:GrafGamma" ))
+        else if ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafGamma" ) ))
             nValue = ( (SfxUInt32Item*) pItem )->GetValue();
         else
             nValue = ( (SfxInt16Item*) pItem )->GetValue();
@@ -256,21 +253,20 @@ struct CommandToRID
 {
     const char* pCommand;
     sal_uInt16      nResId;
-    sal_uInt16      nHCResId;
 };
 
-static sal_uInt16 ImplGetRID( const OUString& aCommand, bool bHighContrast )
+static sal_uInt16 ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
-        { ".uno:GrafRed", RID_SVXIMG_GRAF_RED, RID_SVXIMG_GRAF_RED_H },
-        { ".uno:GrafGreen", RID_SVXIMG_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN_H },
-        { ".uno:GrafBlue", RID_SVXIMG_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE_H },
-        { ".uno:GrafLuminance", RID_SVXIMG_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE_H },
-        { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST_H },
-        { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA_H },
-        { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE_H },
-        { 0, 0, 0 }
+        { ".uno:GrafRed",           RID_SVXIMG_GRAF_RED             },
+        { ".uno:GrafGreen",         RID_SVXIMG_GRAF_GREEN           },
+        { ".uno:GrafBlue",          RID_SVXIMG_GRAF_BLUE            },
+        { ".uno:GrafLuminance",     RID_SVXIMG_GRAF_LUMINANCE       },
+        { ".uno:GrafContrast",      RID_SVXIMG_GRAF_CONTRAST        },
+        { ".uno:GrafGamma",         RID_SVXIMG_GRAF_GAMMA           },
+        { ".uno:GrafTransparence",  RID_SVXIMG_GRAF_TRANSPARENCE    },
+        { 0, 0 }
     };
 
     sal_uInt16 nRID = 0;
@@ -280,10 +276,7 @@ static sal_uInt16 ImplGetRID( const OUString& aCommand, bool bHighContrast )
     {
         if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
         {
-            if ( bHighContrast )
-                nRID = aImplCommandToResMap[ i ].nHCResId;
-            else
-                nRID = aImplCommandToResMap[ i ].nResId;
+            nRID = aImplCommandToResMap[ i ].nResId;
             break;
         }
         ++i;
@@ -307,7 +300,7 @@ protected:
 
 public:
 
-                            ImplGrafControl( Window* pParent, sal_uInt16 nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
+                            ImplGrafControl( Window* pParent, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
@@ -316,23 +309,22 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ImplGrafControl::ImplGrafControl( Window* pParent, sal_uInt16, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
-    Control( pParent, WB_TABSTOP ),
-    maImage     ( this ),
-    maField     ( this, rCmd, rFrame )
+ImplGrafControl::ImplGrafControl(
+    Window* pParent,
+    const rtl::OUString& rCmd,
+    const Reference< XFrame >& rFrame
+)   : Control( pParent, WB_TABSTOP )
+    , maImage( this )
+    , maField( this, rCmd, rFrame )
 {
-    ResId   aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
+    ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
-
-    ResId   aResIdHC( ImplGetRID( rCmd, true ), DIALOG_MGR() ) ;
-    Image   aImageHC( aResIdHC );
 
     Size    aImgSize( aImage.GetSizePixel() );
     Size    aFldSize( maField.GetSizePixel() );
     long    nFldY, nImgY;
 
     maImage.SetImage( aImage );
-    maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
     maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
@@ -403,9 +395,9 @@ ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFra
 {
     SetSizePixel( Size( 100, 260 ) );
 
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD  ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS     ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO      ) );
     InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
     Show();
@@ -506,109 +498,6 @@ void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
         SetNoSelection();
 }
 
-// -----------------------
-// - ImplGrafFilterPopup -
-// -----------------------
-/*
-CD!!!
-class ImplGrafFilterPopup : public SfxPopupWindow
-{
-private:
-
-    SvxGrafFilterToolBoxControl*        mpParent;
-    Reference< XConfigurableUIElement > m_xToolBar;
-//  SfxToolBoxManager                   maTbxMgr;
-    ResId                               maResIdWin;
-    ResId                               maResIdTbx;
-    WindowAlign                         meTbxAlign;
-    Link                                maSelectHdl;
-
-                                    DECL_LINK( TbxSelectHdl, void* );
-
-public:
-                                    ImplGrafFilterPopup( sal_uInt16 nId, SvxGrafFilterToolBoxControl* pParent,
-                                                         WindowAlign eAlign,
-                                                         const ResId& rResIdWin, const ResId& rResIdTbx,
-                                                         SfxBindings& rBindings );
-                                    ~ImplGrafFilterPopup();
-
-    virtual SfxPopupWindow*         Clone() const;
-    virtual void                    PopupModeEnd();
-
-    void                            StartSelection() { maTbxMgr.GetToolBox().StartSelection(); }
-    void                            Update();
-};
-
-// -----------------------------------------------------------------------------
-
-ImplGrafFilterPopup::ImplGrafFilterPopup( sal_uInt16 nId, SvxGrafFilterToolBoxControl* pParent,
-                                          WindowAlign eAlign,
-                                          const ResId& rResIdWin, const ResId& rResIdTbx ) :
-    SfxPopupWindow  ( nId, rResIdWin ),
-    mpParent        ( pParent ),
-    maTbxMgr        ( this, GetBindings(), rResIdTbx ),
-    maResIdWin      ( rResIdWin ),
-    maResIdTbx      ( rResIdTbx ),
-    meTbxAlign      ( eAlign )
-{
-    maTbxMgr.UseDefault();
-
-    maSelectHdl = maTbxMgr.GetToolBox().GetSelectHdl();
-    maTbxMgr.GetToolBox().SetSelectHdl( LINK( this, ImplGrafFilterPopup, TbxSelectHdl ) );
-
-    FreeResource();
-
-    const Size aSize( maTbxMgr.CalcWindowSizePixel() );
-    maTbxMgr.SetPosSizePixel( Point(), aSize );
-    SetOutputSizePixel( aSize );
-}
-
-// -----------------------------------------------------------------------------
-
-ImplGrafFilterPopup::~ImplGrafFilterPopup()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-SfxPopupWindow* ImplGrafFilterPopup::Clone() const
-{
-    return( new ImplGrafFilterPopup( GetId(), mpParent, meTbxAlign,
-                                     maResIdWin, maResIdTbx,
-                                     (SfxBindings&) GetBindings() ) );
-}
-
-// -----------------------------------------------------------------------------
-
-void ImplGrafFilterPopup::Update()
-{
-    ToolBox* pBox = &maTbxMgr.GetToolBox();
-    maTbxMgr.Activate( pBox );
-    maTbxMgr.Deactivate( pBox );
-}
-
-// -----------------------------------------------------------------------------
-
-void ImplGrafFilterPopup::PopupModeEnd()
-{
-    maTbxMgr.GetToolBox().EndSelection();
-    SfxPopupWindow::PopupModeEnd();
-}
-
-// -----------------------------------------------------------------------------
-
-IMPL_LINK( ImplGrafFilterPopup, TbxSelectHdl, void*, EMPTYARG )
-{
-    const sal_uInt16 nSlotId = maTbxMgr.GetToolBox().GetCurItemId();
-
-    if( IsInPopupMode() )
-        EndPopupMode();
-
-    GetBindings().GetDispatcher()->Execute( nSlotId, SFX_CALLMODE_ASYNCHRON );
-
-    return 0;
-}
-*/
 // -------------------------------
 // - SvxGrafFilterToolBoxControl -
 // -------------------------------
@@ -704,7 +593,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
 
 Window* SvxGrafToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    return( new ImplGrafControl( pParent, GetSlotId(), m_aCommandURL, m_xFrame ) );
+    return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
 }
 
 // ----------------------------
@@ -1008,13 +897,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                     aCropDlgAttr, 950 );
                     const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
-                    //CHINA001 SfxTabPage*          pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
+
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet error!");//CHINA001
+                    DBG_ASSERT(pFact, "Dialogdiet error!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                    DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
+                    DBG_ASSERT(fnCreatePage, "Dialogdiet error!");
                     SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
-                    //CHINA001 end
+
                     pTabPage->SetText( aCropStr );
                     aCropDialog.SetTabPage( pTabPage );
 
@@ -1326,3 +1215,5 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
         nWhich = aIter.NextWhich();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

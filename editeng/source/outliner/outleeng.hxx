@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _OUTLEENG_HXX
 
 #include <editeng/outliner.hxx>
-#ifndef _EDITENG_HXX
 #include <editeng/editeng.hxx>
-#endif
 
 typedef EENotify* EENotifyPtr;
 SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )
@@ -55,7 +54,6 @@ public:
     virtual void        ParagraphDeleted( sal_uInt16 nDeletedParagraph );
     virtual void        ParagraphConnected( sal_uInt16 nLeftParagraph, sal_uInt16 nRightParagraph );
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
         sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
@@ -65,6 +63,14 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet,
         const ::com::sun::star::lang::Locale* pLocale,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor);
+
+    virtual void DrawingTab(
+        const Point& rStartPos, long nWidth, const String& rChar,
+        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
@@ -91,3 +97,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

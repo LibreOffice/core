@@ -34,9 +34,9 @@ $(eval $(call gb_Library_add_defs,fwi,\
 ))
 
 $(eval $(call gb_Library_set_include,fwi,\
-    -I$(SRCDIR)/framework/inc/pch \
-    -I$(SRCDIR)/framework/source/inc \
-    -I$(SRCDIR)/framework/inc \
+    -I$(realpath $(SRCDIR)/framework/inc/pch) \
+    -I$(realpath $(SRCDIR)/framework/source/inc) \
+    -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
@@ -49,14 +49,12 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     cppuhelper \
     i18nisolang1 \
     sal \
-    stl \
     svl \
     svt \
     tk \
     tl \
     utl \
     vcl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 

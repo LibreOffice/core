@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@ namespace rtl
 
 // class SvxWeightItem ---------------------------------------------------
 
-/* [Beschreibung]
+/* [Description]
 
-    Dieses Item beschreibt die Font-Staerke.
+    This item describes the font weight.
 */
 
 class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem
@@ -54,7 +55,7 @@ public:
     SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
                     const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -66,8 +67,8 @@ public:
     virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16          GetValueCount() const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual int             HasBoolValue() const;
     virtual sal_Bool            GetBoolValue() const;
@@ -87,3 +88,4 @@ public:
 
 #endif // #ifndef _SVX_WGHTITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

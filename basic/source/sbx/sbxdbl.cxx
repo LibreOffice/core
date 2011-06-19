@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ double ImpGetDouble( const SbxValues* p )
         case SbxDOUBLE:
             nRes = p->nDouble; break;
         case SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( p->nLong64 ); break;
+            nRes = ImpCurrencyToDouble( p->nInt64 ); break;
         case SbxSALINT64:
             nRes = static_cast< double >(p->nInt64); break;
         case SbxSALUINT64:
@@ -128,7 +129,7 @@ double ImpGetDouble( const SbxValues* p )
         case SbxBYREF | SbxDOUBLE:
             nRes = *p->pDouble; break;
         case SbxBYREF | SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( *p->pLong64 ); break;
+            nRes = ImpCurrencyToDouble( *p->pnInt64 ); break;
         case SbxBYREF | SbxSALINT64:
             nRes = static_cast< double >(*p->pnInt64); break;
         case SbxBYREF | SbxSALUINT64:
@@ -146,7 +147,7 @@ void ImpPutDouble( SbxValues* p, double n, sal_Bool bCoreString )
 start:
     switch( +p->eType )
     {
-        // Hier sind Tests notwendig
+        // Here are tests necessary
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -155,7 +156,6 @@ start:
         case SbxBOOL:
             aTmp.pInteger = &p->nInteger; goto direct;
         case SbxLONG:
-        case SbxCURRENCY:
             aTmp.pLong = &p->nLong; goto direct;
         case SbxULONG:
             aTmp.pULong = &p->nULong; goto direct;
@@ -176,7 +176,19 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-            // ab hier nicht mehr
+        case SbxCURRENCY:
+            if( n > SbxMAXCURR )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXCURR;
+            }
+            else if( n < SbxMINCURR )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
+            }
+            p->nInt64 = ImpDoubleToCurrency( n );
+            break;
+
+            // from here on no longer
         case SbxSALINT64:
             p->nInt64 = ImpDoubleToSalInt64( n ); break;
         case SbxSALUINT64:
@@ -297,10 +309,11 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
+            *p->pnInt64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

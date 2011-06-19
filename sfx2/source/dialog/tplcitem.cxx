@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,11 +45,12 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-// Konstruktor
+// Constructor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
         sal_uInt16 nSlotId,                 // ID
-        SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
+        SfxCommonTemplateDialog_Impl &rDlg,  // Controller-Instance,
+                                             // which is assigned to this item.
         SfxBindings &rBindings):
     SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
@@ -64,9 +66,8 @@ SfxTemplateControllerItem::~SfxTemplateControllerItem()
 }
 
 // -----------------------------------------------------------------------
-
-// Benachrichtigung "uber Status"anderung; wird an den
-// im Konstruktor "ubergebenen Controller propagiert
+// Notice about change of status, is  propagated through the Controller
+// passed on by the constructor
 
 void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pItem )
@@ -85,11 +86,11 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             else {
                 const SfxTemplateItem *pStateItem = PTR_CAST(
                     SfxTemplateItem, pItem);
-                DBG_ASSERT(pStateItem != 0, "SfxTemplateItem erwartet");
+                DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
             sal_Bool bDisable = eState == SFX_ITEM_DISABLED;
-            // Familie Disablen
+            // Disable Familly
             sal_uInt16 nFamily = 0;
             switch( GetId())
             {
@@ -103,7 +104,8 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                     nFamily = 4; break;
                 case SID_STYLE_FAMILY5:
                     nFamily = 5; break;
-                default: DBG_ERROR("unbekannte StyleFamily"); break;
+
+                default: OSL_FAIL("unknown StyleFamily"); break;
             }
             rTemplateDlg.EnableFamilyItem( nFamily, !bDisable );
             break;
@@ -115,7 +117,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             else if( eState == SFX_ITEM_AVAILABLE )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
-                DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
+                DBG_ASSERT(pStateItem != 0, "BoolItem expected");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
             //not necessary if the last event is still on the way
@@ -139,9 +141,6 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         {
             rTemplateDlg.EnableExample_Impl(
                 GetId(), eState != SFX_ITEM_DISABLED );
-            // Das Select Disabled dann, falls enabled und Style Readonly
-/*          String aStr = rTemplateDlg.GetSelectedEntry();
-            if( aStr.Len() ) rTemplateDlg.SelectStyle( aStr ); */
             break;
         }
         case SID_STYLE_NEW:
@@ -163,9 +162,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         }
     }
 }
-/* -----------------------------05.09.2001 10:48------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                     SfxTemplateControllerItem*, EMPTYARG)
 {
@@ -183,3 +180,4 @@ IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

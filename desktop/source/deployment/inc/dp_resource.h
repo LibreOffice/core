@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( sal_uInt16 id );
 
 template <typename Unique, sal_uInt16 id>
 struct StaticResourceString :
-        public ::rtl::StaticWithInit<const ::rtl::OUString, Unique> {
+        public ::rtl::StaticWithInit< ::rtl::OUString, Unique > {
     const ::rtl::OUString operator () () { return getResourceString(id); }
 };
 
@@ -65,3 +66,5 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,12 +42,11 @@ ENABLE_EXCEPTIONS=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(TARGET)
-
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/dbtools.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
+CDEFS+=-DCONN_SHARED_RESOURCE_FILE=$(TARGET)
 
 # --- Files -------------------------------------
 

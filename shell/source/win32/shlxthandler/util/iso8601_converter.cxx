@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
 
     if ( ws8601DateTime.length() == 19 )
     {
-        //fill in the SYSTEMTIME structure;
         std::string asDateTime = WStringToString( ws8601DateTime );
         SYSTEMTIME DateTime;
         DateTime.wYear         = ( unsigned short )strtol( asDateTime.substr( 0, 4 ).c_str(), NULL, 10 );
@@ -169,14 +169,7 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     return result;
 #undef ADD_AS_PREFILLED
-/*
-#else
-    std::wostringstream oss;
-    oss << std::setw(2) << std::setfill('0') << hours   << L":" <<
-           std::setw(2) << std::setfill('0') << minutes << L":" <<
-           std::setw(2) << std::setfill('0') << seconds;
-    return oss.str();
-*/
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
-#ifndef __COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -132,3 +131,5 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
 }
 
 #endif // __FRAMEWORK_CLASSES_ACTIONTRIGGERPROPERTYSET_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ class KeyMapping
 
         //---------------------------------------
         /** @short  hash structure to map key codes to identifier. */
-        typedef ::std::hash_map< sal_Int16                    ,
+        typedef ::boost::unordered_map< sal_Int16                    ,
                                  ::rtl::OUString              ,
                                  ShortHashCode                ,
                                  ::std::equal_to< sal_Int16 > > Code2IdentifierHash;
@@ -160,3 +161,5 @@ class KeyMapping
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_KEYMAPPING_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,3 +67,5 @@ typedef ComPtr< IFileDialogCustomize, IID_IFileDialogCustomize                  
 #undef css
 
 #endif // FPICKER_WIN32_VISTA_TYPES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

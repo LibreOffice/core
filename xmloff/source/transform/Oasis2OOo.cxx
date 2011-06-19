@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -36,16 +36,12 @@
 #include "DeepTContext.hxx"
 #include "MetaTContext.hxx"
 #include "DocumentTContext.hxx"
-#ifndef _XMLOFF_NOTESCONTEXT_HXX
 #include "NotesTContext.hxx"
-#endif
 #include "StyleOASISTContext.hxx"
 #include "FrameOASISTContext.hxx"
 #include "EventOASISTContext.hxx"
 #include "DlgOASISTContext.hxx"
-#ifndef _XMLOFF_CONTROLOASISTCONTEXT_HXX
 #include "ControlOASISTContext.hxx"
-#endif
 #include "FormPropOASISTContext.hxx"
 #include "ChartOASISTContext.hxx"
 #include "ChartPlotAreaOASISTContext.hxx"
@@ -55,6 +51,7 @@
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
 #include <xmloff/xmluconv.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 
 using ::rtl::OUString;
@@ -387,14 +384,13 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( DRAW, PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
-    // --> OD 2005-01-10 #i40011#, #i40015#
-    // - conversion of attribute <table:style-name> for <table:table-row> and
-    //   <table:table-column>
+    /* Conversion of attribute <table:style-name> for <table:table-row> and
+       <table:table-column> (#i40011#, #i40015#)
+    */
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
                 OASIS_TABLE_STYLE_REF_ACTIONS ),
-    // <--
 
     // rename office:value-* to *:value-*
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
@@ -700,16 +696,13 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// --> OD 2005-01-10 #i40011#, #i40015#
-// action table for OASIS_TABLE_STYLE_REF_ACTIONS
+// action table for OASIS_TABLE_STYLE_REF_ACTIONS (#i40011#, #i40015#)
 static XMLTransformerActionInit aTableStyleRefActionTable[] =
 {
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_END ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
-// <--
-
 
 static XMLTransformerActionInit aFontFaceActionTable[] =
 {
@@ -1205,7 +1198,6 @@ void XMLTableTransformerContext_Impl::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
 
     XMLMutableAttributeList *pMutableAttrList = 0;
-    // <--
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1235,8 +1227,7 @@ void XMLTableTransformerContext_Impl::StartElement(
                 }
                 // OD 2005-07-05 #i50521# - no break here for savety reason.
             }
-            // --> OD 2005-01-10 #i40011#, #i40015#
-            // - convert attribute table:style-name for <table:table>
+            // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
@@ -1252,7 +1243,6 @@ void XMLTableTransformerContext_Impl::StartElement(
                     pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
             }
-            // <--
             else if( IsXMLToken( aLocalName, XML_PRINT ) )
             {
                 if ( !pMutableAttrList )
@@ -1915,12 +1905,11 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_DATETIME_ACTIONS] =
                     new XMLTransformerActions( aDateTimeActionTable );
                 break;
-            // --> OD 2005-01-10 #i40011#, #i40015#
+            // Bugdoc with table won't load correctly (#i40011#, #i40015#)
             case OASIS_TABLE_STYLE_REF_ACTIONS:
                 m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
                     new XMLTransformerActions( aTableStyleRefActionTable );
                 break;
-            // <--
             case OASIS_ANIMATION_ACTIONS:
                 m_aActions[OASIS_ANIMATION_ACTIONS] =
                     new XMLTransformerActions( aAnimationActionTable );
@@ -2016,19 +2005,14 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
 
-::com::sun::star::uno::Sequence< sal_Int8 >  static CreateUnoTunnelId()
+namespace
 {
-    static osl::Mutex aCreateMutex;
-    Guard<osl::Mutex> aGuard( aCreateMutex );
-    Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    return aSeq;
+    class theOasis2OOoTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOasis2OOoTransformerUnoTunnelId> {};
 }
 
 const Sequence< sal_Int8 > & Oasis2OOoTransformer::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel
@@ -2090,3 +2074,5 @@ Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
     OSL_TRACE("Creating Oasis2OOoTransformer");
     return (cppu::OWeakObject*)new Oasis2OOoTransformer;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

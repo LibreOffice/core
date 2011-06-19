@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
+#include <sal/macros.h>
 #include "alienwarn.hxx"
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
@@ -143,7 +145,7 @@ void SfxAlienWarningDialog::InitSize()
         &m_aSaveODFBtn, &m_aKeepCurrentBtn, &m_aMoreInfoBtn, &m_aOptionLine, &m_aWarningOnBox
     };
     Window** pCurrent = pWins;
-    for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+    for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
     {
         Point aNewPos = (*pCurrent)->GetPosPixel();
         aNewPos.Y() -= nDelta;
@@ -175,3 +177,4 @@ void SfxAlienWarningDialog::InitSize()
     m_aSaveODFBtn.SetPosSizePixel( aPos, aNewSize );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

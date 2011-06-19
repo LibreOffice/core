@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include "svx/svdstr.hrc"
@@ -67,7 +68,7 @@ ShapeTypeHandler& ShapeTypeHandler::Instance (void)
     // the shape type handler is instantiated.
     if (instance == NULL)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (instance == NULL)
         {
             // Create the single instance of the shape type handler.
@@ -93,7 +94,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
-        //  long nSlotId = maServiceNameToSlotId[aServiceName];
         return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
     }
     else
@@ -156,7 +156,7 @@ ShapeTypeHandler::ShapeTypeHandler (void)
     // Resize the list, if necessary, so that the new type can be inserted.
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
     maShapeTypeDescriptorList[0].msServiceName =
-        OUString::createFromAscii ("UNKNOWN_SHAPE_TYPE");
+        OUString(RTL_CONSTASCII_USTRINGPARAM("UNKNOWN_SHAPE_TYPE"));
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }
@@ -180,7 +180,7 @@ ShapeTypeHandler::~ShapeTypeHandler (void)
 bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
     ShapeTypeDescriptor aDescriptorList[])
 {
-    ::vos::OGuard aGuard (::Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Determine first id of new type descriptor(s).
     int nFirstId = maShapeTypeDescriptorList.size();
@@ -328,7 +328,7 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
 
     if (nResourceId != -1)
     {
-        ::vos::OGuard aGuard (::Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sName = OUString (SVX_RESSTR((unsigned short)nResourceId));
     }
 
@@ -336,3 +336,5 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
 }
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

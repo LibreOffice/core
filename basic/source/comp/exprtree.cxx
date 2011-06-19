@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -252,7 +253,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 pvMoreParLcl = new SbiExprListVector();
             SbiParameters* pAddPar = new SbiParameters( pParser );
             pvMoreParLcl->push_back( pAddPar );
-            bError |= !pPar->IsValid();
+            bError |= !pAddPar->IsValid();
             eTok = pParser->Peek();
         }
     }
@@ -373,8 +374,12 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         // Typ SbxOBJECT sein
         if( pDef->GetType() != SbxOBJECT && pDef->GetType() != SbxVARIANT )
         {
-            pParser->Error( SbERR_BAD_DECLARATION, aSym );
-            bError = sal_True;
+            // defer error until runtime if in vba mode
+            if ( !pParser->IsVBASupportOn() )
+            {
+                pParser->Error( SbERR_BAD_DECLARATION, aSym );
+                bError = sal_True;
+            }
         }
         if( !bError )
             pNd->aVar.pNext = ObjTerm( *pDef );
@@ -402,13 +407,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             bError = sal_True;
         }
     }
-    /* #118410 Allow type for Class methods and RTL object, e.g. RTL.Chr$(97)
-    else
-    {
-        if( pParser->GetType() != SbxVARIANT )
-            pParser->Error( SbERR_SYNTAX ), bError = sal_True;
-    }
-    */
+
     if( bError )
         return NULL;
 
@@ -468,7 +467,6 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         // Falls wir etwas mit Punkt einscannen, muss der
         // Typ SbxOBJECT sein
 
-        // AB, 3.1.96
         // Es kann sein, dass pDef ein Objekt beschreibt, das bisher
         // nur als SbxVARIANT erkannt wurde, dann Typ von pDef aendern
         if( pDef->GetType() == SbxVARIANT )
@@ -735,6 +733,7 @@ SbiExprNode* SbiExpression::Comp()
     return pNd;
 }
 
+
 SbiExprNode* SbiExpression::VBA_Not()
 {
     SbiExprNode* pNd = NULL;
@@ -752,6 +751,93 @@ SbiExprNode* SbiExpression::VBA_Not()
     return pNd;
 }
 
+SbiExprNode* SbiExpression::VBA_And()
+{
+    SbiExprNode* pNd = VBA_Not();
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != AND )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Not() );
+        }
+    }
+    return pNd;
+}
+
+SbiExprNode* SbiExpression::VBA_Or()
+{
+    SbiExprNode* pNd = VBA_And();
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != OR )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_And() );
+        }
+    }
+    return pNd;
+}
+
+SbiExprNode* SbiExpression::VBA_Xor()
+{
+    SbiExprNode* pNd = VBA_Or();
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != XOR )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Or() );
+        }
+    }
+    return pNd;
+
+}
+
+SbiExprNode* SbiExpression::VBA_Eqv()
+{
+    SbiExprNode* pNd = VBA_Xor();
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != EQV )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Xor() );
+        }
+    }
+    return pNd;
+}
+
+SbiExprNode* SbiExpression::VBA_Imp()
+{
+    SbiExprNode* pNd = VBA_Eqv();
+    if( m_eMode != EXPRMODE_EMPTY_PAREN )
+    {
+        for( ;; )
+        {
+            SbiToken eTok = pParser->Peek();
+            if( eTok != IMP )
+                break;
+            eTok = pParser->Next();
+            pNd = new SbiExprNode( pParser, pNd, eTok, VBA_Eqv() );
+        }
+    }
+    return pNd;
+
+}
+
 SbiExprNode* SbiExpression::Like()
 {
     SbiExprNode* pNd = pParser->IsVBASupportOn() ? VBA_Not() : Comp();
@@ -763,7 +849,7 @@ SbiExprNode* SbiExpression::Like()
             pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
         }
         // Mehrere Operatoren hintereinander gehen nicht
-        if( nCount > 1 )
+        if( nCount > 1 && !pParser->IsVBASupportOn() )
         {
             pParser->Error( SbERR_SYNTAX );
             bError = sal_True;
@@ -825,7 +911,6 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
             // Ist es eine sal_Bool-Konstante?
             sal_Bool bBoolVal = sal_False;
             if( pVarDef->GetName().EqualsIgnoreCaseAscii( "true" ) )
-            //if( pVarDef->GetName().ICompare( "true" ) == COMPARE_EQUAL )
             {
                 bIsBool = sal_True;
                 bBoolVal = sal_True;
@@ -981,8 +1066,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         if( eTok == COMMA )
         {
             pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
-            //if( bConst )
-            //  pParser->Error( SbERR_SYNTAX ), bError = sal_True;
         }
         // Benannte Argumente: entweder .name= oder name:=
         else
@@ -1029,8 +1112,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
             if( bByVal && pExpr->IsLvalue() )
                 pExpr->SetByVal();
 
-            //pExpr = bConst ? new SbiConstExpression( pParser )
-            //              : new SbiExpression( pParser );
             if( !bAssumeArrayMode )
             {
                 if( pParser->Peek() == ASSIGN )
@@ -1041,8 +1122,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
                     delete pExpr;
                     pParser->Next();
                     pExpr = new SbiExpression( pParser );
-                    //if( bConst )
-                    //  pParser->Error( SbERR_SYNTAX ), bError = sal_True;
                 }
                 pExpr->GetName() = aName;
             }
@@ -1161,3 +1240,4 @@ SbiDimList::SbiDimList( SbiParser* p ) : SbiExprList( p )
     else pParser->Next();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

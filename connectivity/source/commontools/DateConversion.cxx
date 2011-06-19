@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -216,7 +217,7 @@ using namespace ::com::sun::star::beans;
         }
         catch ( const Exception&  )
         {
-            OSL_ENSURE(0,"TypeConversion Error");
+            OSL_FAIL("TypeConversion Error");
         }
     }
     else
@@ -233,7 +234,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -252,29 +253,27 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 sal_Int16 nFieldType,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
-    double fValue = 0;
     if (rString.getLength())
     {
-            // Muss der String formatiert werden?
+        // Does the String need to be formatted?
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
         sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
         sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
         sal_Int16 nRealUsedTypeClass = nTypeClass;
-            // bei einem Text-Format muessen wir dem Formatter etwas mehr Freiheiten einraeumen, sonst
-            // wirft convertStringToNumber eine NotNumericException
+        // for a Text-Format the formatter needs some more freedom, otherwise
+        // convertStringToNumber will throw a NotNumericException
         try
         {
-            fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
+            double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
             sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
-            // und noch eine Sonderbehandlung, diesmal fuer Prozent-Formate
+            // and again a special treatment, this time for percent formats
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
-            {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
-                // einfache Nummer dar -> anpassen
+            {   // formatting should be "percent", but the String provides just a simple number -> adjust
                 ::rtl::OUString sExpanded(rString);
-                static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
+                static ::rtl::OUString s_sPercentSymbol( RTL_CONSTASCII_USTRINGPARAM( "%" ));
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
@@ -429,7 +428,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
     }
     catch (const Exception& )
     {
-        OSL_ENSURE(false, "DBTypeConversion::getFormattedValue: caught an exception while asking for the format key!");
+        OSL_FAIL("DBTypeConversion::getValue: caught an exception while asking for the format key!");
     }
 
     if (!nKey)
@@ -519,3 +518,5 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
     return aString;
 }
 //------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

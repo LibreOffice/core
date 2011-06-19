@@ -82,7 +82,7 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< ucb::XSimpleFileAccess > xSFI =
             Reference< ucb::XSimpleFileAccess >( xSMgr->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext ), UNO_QUERY );
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), m_xContext ), UNO_QUERY );
 
         try
         {
@@ -94,7 +94,8 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
                 Any aDialogSourceURLAny;
                 aDialogSourceURLAny <<= sURL;
 
-                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext,xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
+                Reference< frame::XModel > xModel;
+                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
                 m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
             }
         }

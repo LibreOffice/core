@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@ namespace drawinglayer { namespace geometry {
 
 /*************************************************************************
 |*
-|* GeoData relevant fuer Undo-Actions
+|* GeoData relevant for undo actions
 |*
 \************************************************************************/
 
@@ -57,12 +58,11 @@ public:
     E3DSceneGeoData() {}
 };
 
-// #110988#
 class Imp3DDepthRemapper;
 
 /*************************************************************************
 |*
-|* Basisklasse fuer 3D-Szenen
+|* base class for 3D scenes
 |*
 \************************************************************************/
 
@@ -76,11 +76,10 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-    // Transformationen
+    // transformations
     B3dCamera                   aCameraSet;
     Camera3D                    aCamera;
 
-    // #110988#
     Imp3DDepthRemapper*         mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
@@ -96,7 +95,6 @@ protected:
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
 
-    // #110988#
     void ImpCleanup3DDepthMapper();
 
 public:
@@ -112,7 +110,6 @@ public:
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    // #110988#
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 
     // Perspective: enum ProjectionType { PR_PARALLEL, PR_PERSPECTIVE }
@@ -213,7 +210,8 @@ public:
     const Camera3D& GetCamera() const { return aCamera; }
     void removeAllNonSelectedObjects();
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dScene* Clone() const;
+    E3dScene& operator=(const E3dScene&);
 
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -225,28 +223,30 @@ public:
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     void RotateScene(const Point& rRef, long nWink, double sn, double cs);
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    // Transformationen rausgeben
+    // get transformations
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
-    // Aufbrechen
+    // break up
     virtual sal_Bool IsBreakObjPossible();
 
     basegfx::B3DVector GetShadowPlaneDirection() const;
     void SetShadowPlaneDirection(const basegfx::B3DVector& rVec);
 
-    // Polygon das waehrend des Erzeugens aufgezogen wird
+    // polygon which is built during creation
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 
     // create moves
-    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // sal_True=Xor muss repainted werden
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
-    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual bool BegCreate(SdrDragStat& rStat);
+    virtual bool MovCreate(SdrDragStat& rStat); // true=Xor muss repainted werden
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
 };
 
 #endif          // _E3D_SCENE3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

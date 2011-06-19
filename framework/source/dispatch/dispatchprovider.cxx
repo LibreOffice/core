@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -225,7 +226,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
-    return (aURL.Complete.equals(CMD_UNO_SHOWSTARTMODULE));
+    return (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)));
 }
 
 //_________________________________________________________________________________________________________________
@@ -476,8 +477,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         // There exist a hard coded interception for special URLs.
         if (
-            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
-            (aURL.Complete.equalsAscii(".uno:CloseWin"  ))
+            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseDoc"))) ||
+            (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseWin")))
            )
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
@@ -493,7 +494,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             else
                 xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
         }
-        else if (aURL.Complete.equalsAscii(".uno:CloseFrame"))
+        else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:CloseFrame")))
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
 
         if ( ! xDispatcher.is())
@@ -793,3 +794,5 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

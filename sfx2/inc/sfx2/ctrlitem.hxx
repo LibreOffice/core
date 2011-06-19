@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,30 +41,29 @@ class SFX2_DLLPUBLIC SfxControllerItem
 {
 private:
     sal_uInt16              nId;
-    SfxControllerItem*  pNext; // zu benachrichtigendes weiteres ControllerItem
+    SfxControllerItem*  pNext; // to notify next ControllerItem
     SfxBindings*        pBindings;
 
 protected:
-//#if defined( DBG_UTIL ) && defined( _SOLAR__PRIVATE )
 #if defined( DBG_UTIL )
     SAL_DLLPRIVATE void CheckConfigure_Impl( sal_uIntPtr nType );
 #endif
 
 public:
     SfxBindings &       GetBindings() {
-                            DBG_ASSERT(pBindings, "keine Bindings");
+                            DBG_ASSERT(pBindings, "no Bindings");
                             return *pBindings;
                         }
     const SfxBindings & GetBindings() const {
-                            DBG_ASSERT(pBindings, "keine Bindings");
+                            DBG_ASSERT(pBindings, "no Bindings");
                             return *pBindings;
                         }
 
-                        SfxControllerItem(); // fuer arrays
+                        SfxControllerItem(); // for arrays
                         SfxControllerItem( sal_uInt16 nId, SfxBindings & );
     virtual             ~SfxControllerItem();
 
-    void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // in SfxBindings registrieren
+    void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // Register in SfxBindings
     void                UnBind();
     void                ReBind();
     sal_Bool                IsBound() const;
@@ -85,11 +85,9 @@ public:
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool IsBindable_Impl() const
                         { return pBindings != NULL; }
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
-//#endif
 };
 
 //====================================================================
@@ -109,3 +107,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

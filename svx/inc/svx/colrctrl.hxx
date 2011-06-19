@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
+|* Derivation from SfxChildWindow as "container" for Controller
 |*
 \************************************************************************/
 
@@ -109,7 +110,6 @@ private:
     Size                aColorSize;
     Size                aItemSize;
 
-//#if 0 // _SOLAR__PRIVATE
     void                FillValueSet();
     void                SetSize();
                         DECL_LINK( SelectHdl, void * );
@@ -119,7 +119,6 @@ private:
         the keyboard.
     */
     virtual void GetFocus (void);
-//#endif
 
 protected:
     virtual sal_Bool    Close();
@@ -143,3 +142,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
 class SvXMLAttrContainerItem_Impl;
 
@@ -265,3 +264,5 @@ Reference< XPropertySet > PropertySetMerger_CreateInstance( Reference< XProperty
 {
     return new PropertySetMergerImpl( rPropSet1, rPropSet2 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

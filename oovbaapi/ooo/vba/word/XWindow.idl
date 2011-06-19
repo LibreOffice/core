@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_word_XWindow_idl__
 #define __ooo_vba_word_XWindow_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -44,6 +39,7 @@ module ooo {  module vba {  module word {
 interface XWindow : com::sun::star::uno::XInterface
 {
     [attribute] any View;
+    [attribute] any WindowState;
     void Activate();
     void Close([in] any SaveChanges, [in] any RouteDocument);
     any Panes( [in] any Index ); // this is a fake api for it seems not support in Write

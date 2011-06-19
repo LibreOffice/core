@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,28 +47,6 @@ typedef enum {
   GNOME_VFS_OK
 } GnomeVFSResult;
 
-
-/*
- * HACK: avoid error messages caused by not setting a GNOME program name
- */
-
-gchar* gnome_gconf_get_gnome_libs_settings_relative (const gchar *subkey)
-{
-    void* handle = dlopen("libglib-2.0.so.0", RTLD_LAZY);
-
-    (void)subkey; /* avoid warning due to unused parameter */
-
-    if( NULL != handle )
-    {
-        gchar* (* g_strdup)(const gchar*) = (gchar* (*)(const gchar*)) dlsym(handle, "g_strdup");
-
-        if( NULL != g_strdup)
-            return g_strdup("/apps/gnome-settings/gnome-open-url");
-    }
-
-    return NULL;
-}
-
 /*
  * Wrapper function which extracs gnome_url_show from libgnome
  */
@@ -109,6 +88,7 @@ int main(int argc, char *argv[] )
     GError *error = NULL;
     char *fallback;
     char *index;
+    int retcode = -1;
 
     if( argc != 2 )
     {
@@ -136,11 +116,11 @@ int main(int argc, char *argv[] )
         args[0] = fallback;
         args[1] = argv[1];
         args[2] = NULL;
-        return execv(fallback, args);
+        retcode = execv(fallback, args);
     }
+    free(fallback);
 
-    return -1;
+    return retcode;
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

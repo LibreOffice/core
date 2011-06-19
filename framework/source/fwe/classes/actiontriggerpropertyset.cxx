@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -350,7 +351,7 @@ throw ( RuntimeException )
 
 const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor()
 {
-    static const Property pActionTriggerPropertys[] =
+    const Property pActionTriggerPropertys[] =
     {
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"    )), HANDLE_COMMANDURL   , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
         Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"       )), HANDLE_HELPURL      , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
@@ -360,9 +361,9 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
     };
 
     // Use it to initialize sequence!
-    static const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
+    const Sequence< Property > seqActionTriggerPropertyDescriptor( pActionTriggerPropertys, PROPERTYCOUNT );
 
-    // Return static "PropertyDescriptor"
+    // Return "PropertyDescriptor"
     return seqActionTriggerPropertyDescriptor ;
 }
 
@@ -478,3 +479,4 @@ throw( IllegalArgumentException )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

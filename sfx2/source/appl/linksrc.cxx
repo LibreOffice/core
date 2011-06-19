@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <sfx2/linksrc.hxx>
 #include <sfx2/lnkbase.hxx>
-//#include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -46,7 +46,6 @@ namespace sfx2
 
 TYPEINIT0( SvLinkSource )
 
-/************** class SvLinkSourceTimer *********************************/
 class SvLinkSourceTimer : public Timer
 {
     SvLinkSource *  pOwner;
@@ -62,7 +61,7 @@ SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
 
 void SvLinkSourceTimer::Timeout()
 {
-    // sicher gegen zerstoeren im Handler
+    // Secure against beeing destroyed in Handler
     SvLinkSourceRef aAdv( pOwner );
     pOwner->SendDataChanged();
 }
@@ -209,12 +208,11 @@ void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com:
     pImpl->m_bIsReadOnly = bIsReadOnly;
 }
 
-// --> OD 2008-06-18 #i88291#
+// #i88291#
 void SvLinkSource::clearStreamToLoadFrom()
 {
     pImpl->m_xInputStreamToLoadFrom.clear();
 }
-// <--
 
 void  SvLinkSource::Closed()
 {
@@ -277,7 +275,7 @@ void SvLinkSource::SendDataChanged()
 void SvLinkSource::NotifyDataChanged()
 {
     if( pImpl->nTimeout )
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
@@ -316,10 +314,10 @@ void SvLinkSource::DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
-    {   // nur wenn keine Daten mitgegeben wurden
+    {   // only when no data was included
         // fire all data to the sink, independent of the requested format
         pImpl->aDataMimeType = rMimeType;
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
     }
     else
     {
@@ -433,3 +431,4 @@ void SvLinkSource::Edit( Window *, SvBaseLink *, const Link& )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

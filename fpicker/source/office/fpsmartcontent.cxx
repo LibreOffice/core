@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,8 +76,18 @@ namespace svt
     //--------------------------------------------------------------------
     SmartContent::~SmartContent()
     {
-        //Do not delete the content. Because the content will be used by the cache.
-        //DELETEZ( m_pContent );
+        /* This destructor originally contained the following blurb: "Do
+           not delete the content. Because the content will be used by
+           the cache." This is just plain silly, because it relies on
+           the provider caching created contents (which is done by
+           ucbhelper::ContentProviderImplHelper, but we do not actually
+           expect all providers to use that, right?) Otherwise we are
+           just leaking memory.
+
+           TODO: If there is real need for caching the content, it must
+           be done here.
+        */
+        delete m_pContent;
     }
 
     //--------------------------------------------------------------------
@@ -164,7 +175,7 @@ namespace svt
             }
             catch( Exception& )
             {
-                DBG_ERROR( "SmartContent::bindTo: unexpected exception caught!" );
+                OSL_FAIL( "SmartContent::bindTo: unexpected exception caught!" );
             }
         }
         else
@@ -225,7 +236,7 @@ namespace svt
         try
         {
             ::rtl::OUString sTitle;
-            m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= sTitle;
+            m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definately know that the content is valid
@@ -253,8 +264,8 @@ namespace svt
                 Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
                 if ( xParent.is() )
                 {
-                    String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-                    bRet = ( aParentURL.Len() > 0 && aParentURL != (String)(m_pContent->getURL()) );
+                    const ::rtl::OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
+                    bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
 
                     // now we're definately valid
                     m_eState = VALID;
@@ -306,3 +317,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
 #include <ctype.h>
 #include <string.h>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 #include <char.hxx>
 
-/****************** D A T E N ********************************************/
 static unsigned char EqualTab[ 256 ] = {
   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,
  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,
@@ -72,10 +69,6 @@ static unsigned char EqualTab[ 256 ] = {
 |*
 |*    RscChar::GetTable()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.08.91
-|*    Letzte Aenderung  MM 08.08.91
-|*
 *************************************************************************/
 Table *         pCharTable  = NULL;
 unsigned char * pChange     = EqualTab;
@@ -105,3 +98,5 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
 
     return (char *)pSet;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

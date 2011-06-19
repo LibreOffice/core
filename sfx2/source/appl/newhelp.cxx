@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -70,9 +71,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -132,8 +131,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
-
-extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
 // defines ---------------------------------------------------------------
 
@@ -293,13 +290,6 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
     aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
 
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        aOpenBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN_HC ) );
-        aClosedBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED_HC ) );
-        aDocumentImage = Image( SfxResId( IMG_HELP_CONTENT_DOC_HC ) );
-    }
-
     SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
 
     SetEntryHeight( 16 );
@@ -412,7 +402,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
+        OSL_FAIL( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
     }
 }
 
@@ -613,7 +603,7 @@ namespace sfx2 {
         }
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
+    typedef ::boost::unordered_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
@@ -653,7 +643,7 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL += ::rtl::OUString( sFactory );
 
         String aTemp = aURL;
-        AppendConfigToken_Impl( aTemp, sal_True );
+        AppendConfigToken( aTemp, sal_True );
         aURL = aTemp;
 
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -742,7 +732,7 @@ void IndexTabPage_Impl::InitializeIndex()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
+        OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
     aIndexCB.SetUpdateMode( sal_True );
@@ -902,7 +892,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
 }
 
 // -----------------------------------------------------------------------
-//added by BerryJia for fixing Bug98251, 2002-12-11
+
 sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 {
     sal_Bool bRet = sal_False;
@@ -1098,7 +1088,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         if ( !aFullWordsCB.IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL += aSearchText;
-        AppendConfigToken_Impl( aSearchURL, sal_False );
+        AppendConfigToken( aSearchURL, sal_False );
         if ( aScopeCB.IsChecked() )
             aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
         Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
@@ -1315,7 +1305,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                     RemoveEntry( nPos );
                     rtl::OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
-                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL ) );
+                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL, false ) );
                     SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( *pURL ) ) );
                     SelectEntryPos( nPos );
                     delete pURL;
@@ -1488,7 +1478,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
 {
     rtl::OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
-    sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL ) );
+    sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL, false ) );
     aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( rURL ) ) );
 }
 
@@ -1523,7 +1513,7 @@ sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
     String sURL = String(sHelpURL.makeStringAndClear());
-    AppendConfigToken_Impl(sURL, bUseQuestionMark);
+    AppendConfigToken(sURL, bUseQuestionMark);
     if (sAnchor.getLength())
         sURL += String(sAnchor);
     return ::rtl::OUString(sURL);
@@ -1535,7 +1525,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     if (!xLoader.is())
         return;
 
-    // --> PB 2007-03-12 #134037#
     // If a print job runs do not open a new page
     Reference< XFrame >      xTextFrame      = pTextWin->getFrame();
     Reference< XController > xTextController ;
@@ -1546,7 +1535,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
         xTextController->suspend( sal_False );
         return;
     }
-    // <--
 
     // save url to history
     if (bAddToHistory)
@@ -1563,7 +1551,6 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
             if (xContent.is())
             {
                 bSuccess = sal_True;
-//                break;
             }
         }
         catch(const RuntimeException&)
@@ -1644,7 +1631,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     String aHelpURL = HELP_URL;
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     sal_uInt32 i, nCount = aFactories.getLength();
@@ -1786,7 +1773,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl *, EMPTYARG )
 {
     // keyword found on index?
     sal_Bool bIndex = pIPage->HasKeyword();
-    //The following two lines are added by BerryJia for fixing Bug98251, 2002-12-11
+
     if( !bIndex)
         bIndex = pIPage->HasKeywordIgnoreCase();
     // then set index or search page as current.
@@ -2175,34 +2162,35 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
     sal_Bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
-    sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    aIndexOnImage = Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_INDEX_ON : IMG_HELP_TOOLBOX_L_INDEX_ON
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_ON : IMG_HELP_TOOLBOX_INDEX_ON ) );
-    aIndexOffImage = Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_INDEX_OFF : IMG_HELP_TOOLBOX_L_INDEX_OFF
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) );
+    aIndexOnImage  = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_ON  : IMG_HELP_TOOLBOX_INDEX_ON  ) );
+    aIndexOffImage = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) );
+
     aToolBox.SetItemImage( TBI_INDEX, bIsIndexOn ? aIndexOffImage : aIndexOnImage );
 
-    aToolBox.SetItemImage( TBI_BACKWARD, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_PREV : IMG_HELP_TOOLBOX_L_PREV
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_PREV : IMG_HELP_TOOLBOX_PREV ) ) );
-    aToolBox.SetItemImage( TBI_FORWARD, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_NEXT : IMG_HELP_TOOLBOX_L_NEXT
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_NEXT : IMG_HELP_TOOLBOX_NEXT ) ) );
-    aToolBox.SetItemImage( TBI_START, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_START : IMG_HELP_TOOLBOX_L_START
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_START : IMG_HELP_TOOLBOX_START ) ) );
-    aToolBox.SetItemImage( TBI_PRINT, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_PRINT : IMG_HELP_TOOLBOX_L_PRINT
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_PRINT : IMG_HELP_TOOLBOX_PRINT ) ) );
-    aToolBox.SetItemImage( TBI_BOOKMARKS, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_BOOKMARKS : IMG_HELP_TOOLBOX_L_BOOKMARKS
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
-    aToolBox.SetItemImage( TBI_SEARCHDIALOG, Image( SfxResId(
-        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG : IMG_HELP_TOOLBOX_L_SEARCHDIALOG
-               : bHiContrast ? IMG_HELP_TOOLBOX_HC_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
+    aToolBox.SetItemImage( TBI_BACKWARD,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_PREV : IMG_HELP_TOOLBOX_PREV ) )
+    );
+
+    aToolBox.SetItemImage( TBI_FORWARD,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_NEXT : IMG_HELP_TOOLBOX_NEXT ) )
+    );
+
+    aToolBox.SetItemImage( TBI_START,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_START : IMG_HELP_TOOLBOX_START ) )
+    );
+
+    aToolBox.SetItemImage( TBI_PRINT,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_PRINT : IMG_HELP_TOOLBOX_PRINT ) )
+    );
+
+    aToolBox.SetItemImage( TBI_BOOKMARKS,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) )
+    );
+
+    aToolBox.SetItemImage( TBI_SEARCHDIALOG,
+                           Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) )
+    );
 
     Size aSize = aToolBox.CalcWindowSizePixel();
     aSize.Height() += TOOLBOX_OFFSET;
@@ -2353,7 +2341,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
     }
 
     return xCursor;
@@ -2421,7 +2409,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 1;
@@ -2517,7 +2505,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+        OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
 
     return 0;
@@ -2581,7 +2569,6 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
         if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
-            sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             Point aPos;
             if ( pCmdEvt->IsMouseEvent() )
                 aPos = pCmdEvt->GetMousePosPixel();
@@ -2590,33 +2577,44 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aPos.Y() += pTextWin->GetPosPixel().Y();
             PopupMenu aMenu;
             if ( bIsIndexOn )
-                aMenu.InsertItem( TBI_INDEX, aIndexOffText, Image( SfxResId(
-                    bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) ) );
+                aMenu.InsertItem( TBI_INDEX, aIndexOffText, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ) );
             else
-                aMenu.InsertItem( TBI_INDEX, aIndexOnText, Image( SfxResId(
-                    bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_ON : IMG_HELP_TOOLBOX_INDEX_ON ) ) );
+                aMenu.InsertItem( TBI_INDEX, aIndexOnText,  Image( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON  ) ) );
+
             aMenu.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_PREV : IMG_HELP_TOOLBOX_PREV ) ) );
+            aMenu.InsertItem( TBI_BACKWARD,
+                              String( SfxResId( STR_HELP_BUTTON_PREV  ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_PREV ) )
+            );
             aMenu.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
             aMenu.EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
-            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_NEXT : IMG_HELP_TOOLBOX_NEXT ) ) );
+            aMenu.InsertItem( TBI_FORWARD,
+                              String( SfxResId( STR_HELP_BUTTON_NEXT  ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_NEXT ) )
+            );
             aMenu.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
             aMenu.EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
-            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_START : IMG_HELP_TOOLBOX_START ) ) );
+            aMenu.InsertItem( TBI_START,
+                              String( SfxResId( STR_HELP_BUTTON_START  ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_START ) )
+            );
             aMenu.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_PRINT : IMG_HELP_TOOLBOX_PRINT ) ) );
+            aMenu.InsertItem( TBI_PRINT,
+                              String( SfxResId( STR_HELP_BUTTON_PRINT  ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_PRINT ) )
+            );
             aMenu.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-            aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
+            aMenu.InsertItem( TBI_BOOKMARKS,
+                              String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS  ) )
+             );
             aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-            aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
+            aMenu.InsertItem( TBI_SEARCHDIALOG,
+                              String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG  ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) )
+            );
             aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_SELECTIONMODE, String( SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ) ) );
@@ -2638,8 +2636,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aMenu.CheckItem(TBI_SELECTIONMODE, bCheck);
             }
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_COPY, String( SfxResId( STR_HELP_MENU_TEXT_COPY ) ),
-                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );
+            aMenu.InsertItem( TBI_COPY,
+                              String( SfxResId( STR_HELP_MENU_TEXT_COPY ) ),
+                              Image(  SfxResId( IMG_HELP_TOOLBOX_COPY   ) )
+                );
             aMenu.SetHelpId( TBI_COPY, ".uno:Copy" );
             aMenu.EnableItem( TBI_COPY, HasSelection() );
 
@@ -2918,7 +2918,6 @@ void SfxHelpWindow_Impl::MakeLayout()
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)
         */
-//      pScreenWin->Hide();
 
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
@@ -2935,8 +2934,6 @@ void SfxHelpWindow_Impl::MakeLayout()
         }
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
             pScreenWin->SetPosPixel( aWinPos );
-
-//      pScreenWin->Show();
     }
 
     Clear();
@@ -3085,10 +3082,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
     ::rtl::OUString sHelpURL;
 
-//  INetURLObject aObj(aEntry);
-//  sal_Bool bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
-
-    sal_Bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
+    bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 
     if (bComplete)
         sHelpURL = ::rtl::OUString(aEntry);
@@ -3189,7 +3183,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
         }
         catch( Exception& )
         {
-            DBG_ERROR( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
+            OSL_FAIL( "SfxHelpWindow_Impl::OpenDoneHdl(): unexpected exception" );
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
@@ -3400,7 +3394,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
+                    OSL_FAIL( "SfxHelpWindow_Impl::DoAction(): unexpected exception" );
                 }
             }
             break;
@@ -3490,3 +3484,4 @@ void SfxAddHelpBookmarkDialog_Impl::SetTitle( const String& rTitle )
     aTitleED.SetSelection( Selection( 0, rTitle.Len() ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

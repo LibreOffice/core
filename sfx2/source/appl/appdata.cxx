@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,12 @@
 #include "precompiled_sfx2.hxx"
 #include <tools/cachestr.hxx>
 #include <tools/config.hxx>
-#ifndef _INETSTRM_HXX //autogen
 #include <svl/inetstrm.hxx>
-#endif
 #include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
@@ -152,20 +151,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
     delete pBasMgrListener;
 }
 
-void SfxAppData_Impl::UpdateApplicationSettings( sal_Bool bDontHide )
-{
-    AllSettings aAllSet = Application::GetSettings();
-    StyleSettings aStyleSet = aAllSet.GetStyleSettings();
-    sal_uInt32 nStyleOptions = aStyleSet.GetOptions();
-    if ( bDontHide )
-        nStyleOptions &= ~STYLE_OPTION_HIDEDISABLED;
-    else
-        nStyleOptions |= STYLE_OPTION_HIDEDISABLED;
-    aStyleSet.SetOptions( nStyleOptions );
-    aAllSet.SetStyleSettings( aStyleSet );
-    Application::SetSettings( aAllSet );
-}
-
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 {
     if ( !pTemplates )
@@ -184,3 +169,5 @@ void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicMan
     Reference< XInterface > xCurrentComponent = SfxObjectShell::GetCurrentComponent();
     _rBasicManager.SetGlobalUNOConstant( "ThisComponent", makeAny( xCurrentComponent ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

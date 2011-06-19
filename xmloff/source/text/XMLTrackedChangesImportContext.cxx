@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ void XMLTrackedChangesImportContext::StartElement(
         {
             if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
@@ -114,3 +115,5 @@ SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

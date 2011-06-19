@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,6 @@
 #define _OPCODES_HXX
 
 #include "sbintern.hxx"
-
-#ifdef MTW
-#undef _NUMBER
-#endif
 
 // Ein Opcode ist entweder 1, 3 oder 5 Bytes lang, je nach numerischen
 // Wert des Opcodes (s.u.).
@@ -94,7 +91,8 @@ enum SbiOpcode {
     _ERASE_CLEAR,       // Erase array and clear variable
     _ARRAYACCESS,       // Assign parameters to TOS and get value, used for array of arrays
     _BYVAL,             // byref -> byval for lvalue parameter passed in call
-    SbOP0_END,
+
+    SbOP0_END = _BYVAL,
 
     // Alle Opcodes mit einem Operanden
 
@@ -128,7 +126,8 @@ enum SbiOpcode {
     // Typanpassung im Argv
     _ARGTYP,            // Letzten Parameter in Argv konvertieren (+Typ)
     _VBASETCLASS,       // VBA-like Set
-    SbOP1_END,
+
+    SbOP1_END = _VBASETCLASS,
 
     // Alle Opcodes mit zwei Operanden
 
@@ -163,10 +162,9 @@ enum SbiOpcode {
     _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
     _FIND_STATIC,           //  local static var lookup (+StringID+Typ)
 
-    SbOP2_END
-
+    SbOP2_END = _FIND_STATIC
 };
 
-
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

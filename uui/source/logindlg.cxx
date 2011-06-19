@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #include <vcl/msgbox.hxx>
 #include "logindlg.hxx"
 
-#ifndef UUI_LOGINDLG_HRC
 #include "logindlg.hrc"
-#endif
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
 #include <tools/resid.hxx>
 
 #ifdef UNX
@@ -348,3 +345,5 @@ void LoginDialog::ClearAccount()
 
 //............................................................................
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

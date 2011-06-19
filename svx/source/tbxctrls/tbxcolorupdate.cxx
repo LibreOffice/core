@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ namespace svx
                 }
                 else
                 {
-                    DBG_ERROR( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
+                    OSL_FAIL( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
                     // !!! DrawChar( aVirDev, aColor );
                 }
 
@@ -206,3 +207,5 @@ namespace svx
 //........................................................................
 } // namespace svx
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

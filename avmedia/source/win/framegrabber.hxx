@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "wincommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XFRAMEGRABBER_HDL_
 #include "com/sun/star/media/XFrameGrabber.hdl"
-#endif
 
 struct IMediaDet;
 
@@ -72,3 +71,5 @@ private:
 } // namespace avmedia
 
 #endif // _FRAMEGRABBER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

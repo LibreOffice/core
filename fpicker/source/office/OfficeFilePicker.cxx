@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,10 +59,8 @@
 #include <unotools/pathoptions.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "vos/mutex.hxx"
-#ifndef _SV_APP_HXX
+#include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
-#endif
 
 // define ----------------------------------------------------------------
 
@@ -561,7 +560,7 @@ void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( Runt
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_bMultiSelection = bMode;
 }
 
@@ -569,7 +568,7 @@ void SAL_CALL SvtFilePicker::setDefaultName( const rtl::OUString& aName ) throw(
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_aDefaultName = aName;
 }
 
@@ -578,7 +577,7 @@ void SAL_CALL SvtFilePicker::setDisplayDirectory( const rtl::OUString& aDirector
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_aDisplayDirectory = aDirectory;
 }
 
@@ -586,7 +585,7 @@ rtl::OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeExcept
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getDialog() )
     {
         rtl::OUString aPath = getDialog()->GetPath();
@@ -614,7 +613,7 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( ! getDialog() )
     {
         Sequence< rtl::OUString > aEmpty;
@@ -660,7 +659,7 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getDialog() )
     {
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
@@ -704,7 +703,7 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Any      aAny;
 
     // execute() called?
@@ -740,7 +739,7 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const rtl::OUString& 
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getDialog() )
     {
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
@@ -780,7 +779,7 @@ rtl::OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     rtl::OUString aLabel;
 
     if ( getDialog() )
@@ -813,7 +812,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getDialog() )
     {
         ::svt::OControlAccess aAccess( getDialog(), getDialog()->GetView() );
@@ -855,7 +854,7 @@ void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePicker
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener = xListener;
 }
 
@@ -864,7 +863,7 @@ void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePic
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     m_xListener.clear();
 }
 
@@ -877,7 +876,7 @@ Sequence< sal_Int16 > SAL_CALL SvtFilePicker::getSupportedImageFormats()
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Sequence< sal_Int16 > aFormats( 1 );
 
     aFormats[0] = FilePreviewImageFormats::BITMAP;
@@ -890,7 +889,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth() throw ( RuntimeException
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     sal_Int32 nDepth = 0;
 
     if ( getDialog() )
@@ -904,7 +903,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth() throw ( RuntimeException )
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     sal_Int32 nWidth = 0;
 
     if ( getDialog() )
@@ -918,7 +917,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight() throw ( RuntimeException 
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     sal_Int32 nHeigth = 0;
 
     if ( getDialog() )
@@ -933,7 +932,7 @@ void SAL_CALL SvtFilePicker::setImage( sal_Int16 aImageFormat, const Any& rImage
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( getDialog() )
         getDialog()->setImage( aImageFormat, rImage );
 }
@@ -944,7 +943,7 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool bShowState )
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
 
     if ( getDialog() )
@@ -958,7 +957,7 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException )
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
 
     if ( getDialog() )
@@ -977,7 +976,7 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const ::rtl::OUString& sGroupTit
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // check the names
     if ( FilterNameExists( aFilters ) )
@@ -1005,7 +1004,7 @@ void SAL_CALL SvtFilePicker::appendFilter( const rtl::OUString& aTitle,
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     // check the name
     if ( FilterNameExists( aTitle ) )
         // TODO: a more precise exception message
@@ -1024,7 +1023,7 @@ void SAL_CALL SvtFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( ! FilterNameExists( aTitle ) )
         throw IllegalArgumentException();
 
@@ -1040,7 +1039,7 @@ rtl::OUString SAL_CALL SvtFilePicker::getCurrentFilter()
 {
     checkAlive();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     rtl::OUString aFilter = getDialog() ? rtl::OUString( getDialog()->GetCurFilter() ) :
                                             rtl::OUString( m_aCurrentFilter );
     return aFilter;
@@ -1108,19 +1107,19 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 //-------------------------------------------------------------------------
 sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
-    if ( _rName.equalsAscii( "TemplateDescription" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TemplateDescription" ) ) )
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
         return sal_True;
     }
-    if ( _rName.equalsAscii( "StandardDir" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StandardDir" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aStandardDir );
         return sal_True;
     }
 
-    if ( _rName.equalsAscii( "BlackList" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BlackList" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aBlackList );
         return sal_True;
@@ -1167,14 +1166,14 @@ Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< rtl::OUString > seqServiceNames( 1 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFilePicker" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFilePicker" ));
 }
 
 /* Helper for registry */
@@ -1184,3 +1183,5 @@ Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
     return Reference< XInterface >( *new SvtFilePicker( xServiceManager ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

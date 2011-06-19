@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -210,7 +211,7 @@ SdrUnoObj::~SdrUnoObj()
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "SdrUnoObj::~SdrUnoObj: caught an exception!" );
+        OSL_FAIL( "SdrUnoObj::~SdrUnoObj: caught an exception!" );
     }
     delete m_pImpl;
 }
@@ -269,12 +270,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
 namespace
 {
     /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
-
-        OD 08.05.2003 #109432#
-        Restoration of graphics necessary to assure that paint on a window
-
-        @author OD
-    */
+        Restoration of graphics necessary to assure that paint on a window  */
     class RestoreXViewGraphics
     {
         private:
@@ -313,20 +309,25 @@ void SdrUnoObj::TakeObjNamePlural(XubString& rName) const
     rName = ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-void SdrUnoObj::operator = (const SdrObject& rObj)
+SdrUnoObj* SdrUnoObj::Clone() const
 {
-    SdrRectObj::operator = (rObj);
+    return CloneHelper< SdrUnoObj >();
+}
+
+SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    SdrRectObj::operator= (rObj);
 
     // release the reference to the current control model
     SetUnoControlModel( NULL );
 
-    const SdrUnoObj& rUnoObj = dynamic_cast< const SdrUnoObj& >( rObj );
-
-    aUnoControlModelTypeName = rUnoObj.aUnoControlModelTypeName;
-    aUnoControlTypeName = rUnoObj.aUnoControlTypeName;
+    aUnoControlModelTypeName = rObj.aUnoControlModelTypeName;
+    aUnoControlTypeName = rObj.aUnoControlTypeName;
 
     // copy the uno control model
-    const uno::Reference< awt::XControlModel > xSourceControlModel( rUnoObj.GetUnoControlModel(), uno::UNO_QUERY );
+    const uno::Reference< awt::XControlModel > xSourceControlModel( rObj.GetUnoControlModel(), uno::UNO_QUERY );
     if ( xSourceControlModel.is() )
     {
         try
@@ -344,7 +345,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
+        uno::Any aValue( xSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"))) );
         ::rtl::OUString aStr;
 
         if( aValue >>= aStr )
@@ -354,6 +355,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
     if (xComp.is())
         m_pImpl->pEventListener->StartListening(xComp);
+    return *this;
 }
 
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -431,7 +433,6 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     // (relative to a layer. Remember that the visibility of a layer is a view attribute
     // - the same layer can be visible in one view, and invisible in another view, at the
     // same time)
-    // 2003-06-03 - #110592# - fs@openoffice.org
 
     // collect all views in which our old layer is visible
     ::std::set< SdrView* > aPreviouslyVisible;
@@ -618,5 +619,5 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
   return new ::sdr::contact::ViewContactOfUnoControl( *this );
 }
 
-// -----------------------------------------------------------------------------
-// eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

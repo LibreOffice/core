@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ sal_Bool SAL_CALL PluginObject::load(
     const uno::Reference < frame::XFrame >& xFrame )
 throw( uno::RuntimeException )
 {
-    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
+    uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager")) ), uno::UNO_QUERY );
     if (!xPMgr.is() )
         return sal_False;
 
@@ -115,14 +116,13 @@ throw( uno::RuntimeException )
         pWin->SetBackground();
         pWin->Show();
 
-        sal_uIntPtr nCount = maCmdList.Count();
+        size_t nCount = maCmdList.size();
         uno::Sequence < ::rtl::OUString > aCmds( nCount ), aArgs( nCount );
         ::rtl::OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
-        for( sal_uIntPtr i = 0; i < nCount; i++ )
+        for( size_t i = 0; i < nCount; i++ )
         {
-            SvCommand & rCmd = maCmdList.GetObject( i );
-            pCmds[i] = rCmd.GetCommand();
-            pArgs[i] = rCmd.GetArgument();
+            pCmds[i] = maCmdList[ i ].GetCommand();
+            pArgs[i] = maCmdList[ i ].GetArgument();
         }
 
         mxPlugin = xPMgr->createPluginFromURL(
@@ -155,7 +155,7 @@ throw( uno::RuntimeException )
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -205,17 +205,17 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetI
 void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAscii("PluginURL") )
+    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
     {
         aAny >>= maURL;
     }
-    else if ( aPropertyName.equalsAscii("PluginMimeType") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
     {
         aAny >>= maMimeType;
     }
-    else if ( aPropertyName.equalsAscii("PluginCommands") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
     {
-        maCmdList.Clear();
+        maCmdList.clear();
         uno::Sequence < beans::PropertyValue > aCommandSequence;
         if( aAny >>= aCommandSequence )
             maCmdList.FillFromSequence( aCommandSequence );
@@ -228,15 +228,15 @@ uno::Any SAL_CALL PluginObject::getPropertyValue(const ::rtl::OUString& aPropert
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if ( aPropertyName.equalsAscii("PluginURL") )
+    if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginURL")) )
     {
         aAny <<= maURL;
     }
-    else if ( aPropertyName.equalsAscii("PluginMimeType") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginMimeType")) )
     {
         aAny <<= maMimeType;
     }
-    else if ( aPropertyName.equalsAscii("PluginCommands") )
+    else if ( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PluginCommands")) )
     {
         uno::Sequence< beans::PropertyValue > aCommandSequence;
         maCmdList.FillSequence( aCommandSequence );
@@ -264,3 +264,5 @@ void SAL_CALL PluginObject::removeVetoableChangeListener(const ::rtl::OUString&,
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

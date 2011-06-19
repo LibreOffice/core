@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@ void SAL_CALL OPreparedStatement::disposing()
     OCommonStatement::disposing();
 
     m_xMetaData.clear();
-    if(m_aParameterRow.isValid())
+    if(m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
         m_aParameterRow = NULL;
@@ -394,7 +395,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     ::connectivity::checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    if ( !m_aParameterRow.isValid() ) {
+    if ( !m_aParameterRow.is() ) {
         m_aParameterRow = new OValueVector();
         m_aParameterRow->get().push_back(sal_Int32(0));
     }
@@ -417,7 +418,7 @@ ORowSetValue& x)
 sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_UNUSED( pParameter );
-    // Nr. des neu hinzuzufuegenden Parameters:
+    // Nr. of the new added Parameters
     sal_uInt32 nParameter = m_xParamColumns->get().size()+1;
 
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
@@ -429,7 +430,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
 
     ::rtl::OUString sParameterName;
 
-    // Parameter-Column aufsetzen:
+    // set up Parameter-Column:
     sal_Int32 eType = DataType::VARCHAR;
     sal_uInt32 nPrecision = 255;
     sal_Int32 nScale = 0;
@@ -437,9 +438,9 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
 
     if (_xCol.is())
     {
-        // Typ, Precision, Scale ... der angegebenen Column verwenden,
-        // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
-        // Column wird der Wert verglichen.
+        // Type, Precision, Scale ... utilize the selected Columns,
+        // then this Column will get the value assigned or with this
+        // Column will the value be compared.
         eType = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
         nPrecision = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
         nScale = getINT32(_xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
@@ -509,18 +510,18 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
 {
     OSL_ENSURE(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
-    // Parameter Name-Regel gefunden?
+    // Parameter Name-Row found?
     if (SQL_ISRULE(pParseNode,parameter))
     {
         OSL_ENSURE(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
         OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
 
         _rParaNodes.push_back(pParseNode);
-        // Weiterer Abstieg nicht erforderlich
+        // further search isn't necessary
         return;
     }
 
-    // Weiter absteigen im Parse Tree
+    // Search on in Parse Tree
     for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
@@ -542,3 +543,4 @@ sal_Bool SAL_CALL OPreparedStatement::getMoreResults(  ) throw(::com::sun::star:
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

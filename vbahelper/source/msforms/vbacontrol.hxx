@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/script/ScriptEvent.hpp>
 #include <ooo/vba/msforms/XControl.hpp>
 
 #include <vbahelper/vbahelper.hxx>
@@ -48,17 +50,23 @@ class ScVbaControl : public ControlImpl_BASE
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XEventListener > m_xEventListener;
+    com::sun::star::uno::Reference< com::sun::star::awt::XControl > m_xEmptyFormControl;
 protected:
     // awt control has nothing similar to Tag property of Mso controls,
     // whether it is necessary is another question
     ::rtl::OUString m_aControlTag;
 
+    bool bIsDialog;
+    rtl::OUString m_sLibraryAndCodeName;
     std::auto_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
     css::uno::Reference< css::uno::XInterface > m_xControl;
     css::uno::Reference< css::frame::XModel > m_xModel;
 
     virtual css::uno::Reference< css::awt::XWindowPeer > getWindowPeer() throw (css::uno::RuntimeException);
+    void fireChangeEvent();
+    void fireClickEvent();
+    void fireEvent( css::script::ScriptEvent& evt );
 public:
     ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pHelper );
@@ -66,6 +74,10 @@ public:
     // This class will own the helper, so make sure it is allocated from
     // the heap
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
+    // sets the name of the associated library ( used for UserForm controls )
+    void setLibraryAndCodeName( const rtl::OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
+    rtl::OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
+
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException);
@@ -97,6 +109,8 @@ public:
     virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException);
     //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
+    virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
@@ -124,3 +138,5 @@ private:
 };
 
 #endif//SC_VBA_CONTROL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

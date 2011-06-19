@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -173,7 +174,7 @@ public:
                                 MapUnit eDstUnit );
 
     /** convert string to boolean */
-    static sal_Bool convertBool( sal_Bool& rBool,
+    static sal_Bool convertBool( bool& rBool,
                              const ::rtl::OUString& rString );
 
     /** convert boolean to string */
@@ -443,3 +444,5 @@ inline MapUnit SvXMLUnitConverter::getXMLMeasureUnit() const
 }
 
 #endif  //  _XMLOFF_XMLUCONV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

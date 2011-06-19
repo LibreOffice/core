@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 /** === end UNO includes === **/
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 //........................................................................
 namespace svxform
@@ -83,7 +82,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormToolboxes::toggleToolbox: caught an exception!" );
+            OSL_FAIL( "FormToolboxes::toggleToolbox: caught an exception!" );
         }
     }
 
@@ -115,3 +114,4 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

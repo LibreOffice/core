@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwlresid.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -55,21 +54,17 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-//#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -112,7 +107,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -274,3 +269,5 @@ void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::u
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

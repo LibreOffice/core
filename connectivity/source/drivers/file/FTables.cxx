@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "file/FCatalog.hxx"
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
-//#ifndef _CONNECTIVITY_FILE_OEMPTYCOLLECTION_HXX_
-//#include "file/FEmptyCollection.hxx"
-//#endif
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -81,3 +77,5 @@ Any SAL_CALL OTables::queryInterface( const Type & rType ) throw(RuntimeExceptio
     return OTables_BASE::queryInterface(rType);
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -51,9 +50,7 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
@@ -61,14 +58,18 @@
 #include <unotools/historyoptions.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
-//#include <tools/solar.hrc>
+#ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#undef GradientStyle_RECT
+#include <odma_lib.hxx>
+#endif
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -120,7 +121,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -210,6 +211,44 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     else
                         aMenuTitle = aSystemPath;
                 }
+#if 0 // Please don't remove this commented-out code just yet,
+      // we can try to resurrect it later in case somebody complains
+#ifdef WNT
+                else if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_ODMA && ::odma::DMSsAvailable ())
+                {
+                    String aShortTitle = m_aRecentFilesItems.at( i ).aTitle;
+
+                    // This is against all rules for using
+                    // proper abstraction layers and whatnot.
+                    // But figuring out how to do it "right"
+                    // would have taken the whole week.
+                    // So just call the odma_lib functions...
+                    // (odma_lib is a thin layer on
+                    // top of the ODMA32 DLL)
+
+                    static ODMHANDLE handle = NULL;
+                    static sal_Bool beenhere = sal_False;
+                    ODMSTATUS status;
+
+                    if ( ! beenhere )
+                    {
+                        status = NODMRegisterApp( &handle, ODM_API_VERSION, "sodma", NULL, NULL );
+                        beenhere = sal_True;
+                    }
+
+                    if ( handle != NULL )
+                    {
+                        rtl::OUString s = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_MS_1252 );
+                        s = s.copy( strlen ( "vnd.sun.star.odma:/" ) );
+                        char title[47];
+                        status = NODMGetDocInfo( handle, rtl::OUStringToOString( s, RTL_TEXTENCODING_MS_1252 ).pData->buffer, ODM_NAME, title, sizeof ( title ) );
+                        aShortTitle = String::CreateFromAscii( title );
+                    }
+                    aMenuTitle += aShortTitle;
+                    aTipHelpText = aURLString;
+                }
+#endif
+#endif
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
@@ -264,7 +303,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+        aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
@@ -289,7 +328,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0 );
     }
 
     if ( xDispatch.is() )
@@ -302,7 +341,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("RecentFilesMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }
@@ -478,3 +517,5 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRec
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

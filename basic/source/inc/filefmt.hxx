@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,6 @@ class SvStream;
 // sal_uInt16 Anzahl Objekte
 // ....   Objektdaten
 
-////////////////////////////////////////////////////////////////////////////
 
 // Service-Routinen (in IMAGE.CXX)
 
@@ -176,3 +176,5 @@ sal_uIntPtr SbOpenRecord( SvStream&, sal_uInt16 nSignature, sal_uInt16 nElem );
 void  SbCloseRecord( SvStream&, sal_uIntPtr );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

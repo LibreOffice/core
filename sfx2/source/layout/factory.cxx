@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow (VCLXWindow** vcl, OUString const& nam
     {
         ;
     }
-    else if (name.equalsAscii ("sfxmodelessdialog"))
+    else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sfxmodelessdialog")))
     {
         window = new SfxModelessDialog_unprotect (parent, ImplGetWinBits (attributes, 0));
         *vcl = new layoutimpl::VCLXDialog ();
@@ -66,3 +67,5 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow (VCLXWindow** vcl, OUString const& nam
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

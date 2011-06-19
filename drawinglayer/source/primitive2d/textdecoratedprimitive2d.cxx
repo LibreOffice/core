@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -209,7 +210,7 @@ namespace drawinglayer
             if(!xLocalBreakIterator.is())
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))), ::com::sun::star::uno::UNO_QUERY);
             }
 
             if(xLocalBreakIterator.is() && getTextLength())
@@ -235,6 +236,7 @@ namespace drawinglayer
                     getFontAttribute().getSymbol(),
                     getFontAttribute().getVertical(),
                     getFontAttribute().getItalic(),
+                    getFontAttribute().getMonospaced(),
                     false,             // no outline anymore, handled locally
                     getFontAttribute().getRTL(),
                     getFontAttribute().getBiDiStrong());
@@ -604,3 +606,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

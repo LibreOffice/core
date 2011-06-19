@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,17 +57,17 @@ namespace com{namespace sun{ namespace star{
 
 // -----------------------------------------------------------------------
 //Feature-Flags (only sal_uInt16!)
-#define NUM_CONTINUOUS          0x0001 // fortlaufende Numerierung moeglich?
-#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Abstand Symbol<->Text?
-#define NUM_CHAR_STYLE          0x0004 // Zeichenvorlagen?
-#define NUM_BULLET_REL_SIZE     0x0008 // rel. Bulletgroesse?
+#define NUM_CONTINUOUS          0x0001 // consecutive numbers possible?
+#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Distance Symbol<->Text?
+#define NUM_CHAR_STYLE          0x0004 // Character styles?
+#define NUM_BULLET_REL_SIZE     0x0008 // relative bullet size?
 #define NUM_BULLET_COLOR        0x0010 // Bullet color
-#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment soll unter den Optionen angezeigt werden
-#define NUM_NO_NUMBERS          0x0080 // Numberierungen sind nicht erlaubt
+#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment to be shown in the options
+#define NUM_NO_NUMBERS          0x0080 // Numbering are not allowed
 #define NUM_ENABLE_LINKED_BMP   0x0100 // linked bitmaps are available
 #define NUM_ENABLE_EMBEDDED_BMP 0x0200 // embedded bitmaps are available
 
-#define SVX_NO_NUM              200 // Markierung fuer keine Numerierung
+#define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
@@ -76,7 +77,7 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
 
     sal_Int16       nNumType;
-    sal_Bool        bShowSymbol;        // Symbol auch anzeigen?
+    sal_Bool        bShowSymbol;        // Also show Symbol ?
 
 public:
     SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
@@ -103,7 +104,6 @@ public:
 class EDITENG_DLLPUBLIC SvxNumberFormat : public SvxNumberType
 {
 public:
-    // --> OD 2008-01-08 #newlistlevelattrs#
     enum SvxNumPositionAndSpaceMode
     {
         LABEL_WIDTH_AND_POSITION,
@@ -115,7 +115,6 @@ public:
         SPACE,
         NOTHING
     };
-    // <--
 
 private:
     String              sPrefix;
@@ -123,14 +122,13 @@ private:
 
     SvxAdjust           eNumAdjust;
 
-    sal_uInt8               nInclUpperLevels;   //Nummern aus der vorigen Ebenen uebernehmen
-    sal_uInt16              nStart;             //Start der Zaehlung
+    sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
+    sal_uInt16          nStart;             // Start of counting
 
-    sal_Unicode         cBullet;            //Symbol
-    sal_uInt16              nBulletRelSize;     //proz. Groesse des Bullets
-    Color               nBulletColor;       //Bullet color
+    sal_Unicode         cBullet;            // Symbol
+    sal_uInt16          nBulletRelSize;     // percentage size of bullets
+    Color               nBulletColor;       // Bullet color
 
-    // --> OD 2008-01-08 #newlistlevelattrs#
     // mode indicating, if the position and spacing of the list label is
     // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
     // nLSpace and nCharTextDistance) called position and spacing via label
@@ -141,14 +139,12 @@ private:
     // Note 2: The values of the former attributes are treated as 0, if mode
     //         LABEL_ALIGNMENT is active.
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
-    // <--
 
-    short               nFirstLineOffset;   //Erstzeileneinzug
-    short               nAbsLSpace;         //Abstand Rand<->Nummer
-    short               nLSpace;            //relative Einrueckung zum Vorgaenger
-    short               nCharTextDistance;  //Abstand Nummer<->Text
+    short               nFirstLineOffset;   // First line indent
+    short               nAbsLSpace;         // Distance Border<->Number
+    short               nLSpace;            // relative to the previous indentation
+    short               nCharTextDistance;  // Distance Number<->Text
 
-    // --> OD 2008-01-08 #newlistlevelattrs#
     // specifies what follows the list label before the text of the first line
     // of the list item starts
     SvxNumLabelFollowedBy       meLabelFollowedBy;
@@ -158,25 +154,22 @@ private:
     long                        mnFirstLineIndent;
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     long                        mnIndentAt;
-    // <--
 
-    SvxBrushItem*       pGraphicBrush;          //
-    sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
+    SvxBrushItem*       pGraphicBrush;
+    sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
-    Size                aGraphicSize;       // immer! in 1/100 mm
-    Font*               pBulletFont;        // Pointer auf den BulletFont
+    Size                aGraphicSize;       // Always! in 1/100 mm
+    Font*               pBulletFont;        // Pointer to the bullet font
 
-    String              sCharStyleName;     // Zeichenvorlage
+    String              sCharStyleName;     // Character Style
 
     BitmapEx*           pScaledImageCache;  // Image scaled to aGraphicSize, only cached for WINDOW/VDEV
 
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
 public:
-    // --> OD 2008-01-09 #newlistlevelattrs#
     SvxNumberFormat( sal_Int16 nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
-    // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat(SvStream &rStream);
 
@@ -220,29 +213,18 @@ public:
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 
-    // --> OD 2008-01-09 #newlistlevelattrs#
     SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const;
     void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
-    // <--
 
     void            SetLSpace(short nSet) {nLSpace = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetLSpace() const;
-    // <--
     void            SetAbsLSpace(short nSet) {nAbsLSpace = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetAbsLSpace() const;
-    // <--
     void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetFirstLineOffset() const;
-    // <--
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
-    // --> OD 2008-01-09 #newlistlevelattrs#
     short           GetCharTextDistance() const;
-    // <--
 
-    // --> OD 2008-01-09 #newlistlevelattrs#
     void SetLabelFollowedBy( const SvxNumLabelFollowedBy eLabelFollowedBy );
     SvxNumLabelFollowedBy GetLabelFollowedBy() const;
     void SetListtabPos( const long nListtabPos );
@@ -251,7 +233,6 @@ public:
     long GetFirstLineIndent() const;
     void SetIndentAt( const long nIndentAt );
     long GetIndentAt() const;
-    // <--
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static String   CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
@@ -267,18 +248,17 @@ enum SvxNumRuleType
 
 class EDITENG_DLLPUBLIC SvxNumRule
 {
-    sal_uInt16              nLevelCount;            // Anzahl der unterstuetzten Levels
-    sal_uInt32              nFeatureFlags;          // was wird unterstuetzt?
-    SvxNumRuleType      eNumberingType;         // was fuer eine Numerierung
-    sal_Bool                bContinuousNumbering;   // fortlaufende Numerierung
+    sal_uInt16          nLevelCount;            // Number of supported levels
+    sal_uInt32          nFeatureFlags;          // What is supported?
+    SvxNumRuleType      eNumberingType;         // Type of numbering
+    sal_Bool            bContinuousNumbering;   // sequential numbering
 
     SvxNumberFormat*    aFmts[SVX_MAX_NUM];
-    sal_Bool                aFmtsSet[SVX_MAX_NUM]; //Flags ueber Gueltigkeit der Ebenen
+    sal_Bool            aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
-    // --> OD 2008-02-11 #newlistlevelattrs#
     SvxNumRule( sal_uLong nFeatures,
                 sal_uInt16 nLevels,
                 sal_Bool bCont,
@@ -286,7 +266,6 @@ public:
                 SvxNumberFormat::SvxNumPositionAndSpaceMode
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    // <--
     SvxNumRule(const SvxNumRule& rCopy);
     SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();
@@ -321,9 +300,7 @@ public:
 
     sal_Bool                    UnLinkGraphics();
 };
-/* -----------------27.10.98 13:04-------------------
- *
- * --------------------------------------------------*/
+
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
     SvxNumRule*             pNumRule;
@@ -341,18 +318,16 @@ public:
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
-/* -----------------28.10.98 15:21-------------------
- *
- * --------------------------------------------------*/
+
 class SvxNodeNum
 {
-    sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Nummern aller Levels
-    sal_uInt16 nSetValue;                   // vorgegebene Nummer
-    sal_uInt8 nMyLevel;                     // akt. Level
-    sal_Bool bStartNum;                     // Numerierung neu starten
+    sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
+    sal_uInt16 nSetValue;                   // predetermined number
+    sal_uInt8 nMyLevel;                     // Current Level
+    sal_Bool bStartNum;                     // Restart numbering
 
 public:
     inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
@@ -387,10 +362,8 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     return *this;
 }
 
-/* --------------------------------------------------
- *
- * --------------------------------------------------*/
 SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevel, SvxNumRuleType eType );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

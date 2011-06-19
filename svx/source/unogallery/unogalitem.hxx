@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/gallery/XGalleryItem.hpp>
 #include <comphelper/propertysethelper.hxx>
-#ifndef _COMPHELPER_PROPERTYSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
-#endif
 
 class GalleryTheme;
 struct GalleryObject;
@@ -124,3 +123,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

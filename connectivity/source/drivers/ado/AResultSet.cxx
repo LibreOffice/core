@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,14 +65,14 @@ using namespace com::sun::star::sdbc;
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ado.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ado.ResultSet"));
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -111,7 +112,7 @@ void OResultSet::construct()
     osl_incrementInterlockedCount( &m_refCount );
     if (!m_pRecordSet)
     {
-        OSL_ENSURE( sal_False, "OResultSet::construct: no RecordSet!" );
+        OSL_FAIL( "OResultSet::construct: no RecordSet!" );
         Reference< XInterface > xInt( *this );
         osl_decrementInterlockedCount( &m_refCount );
         ::dbtools::throwFunctionSequenceException( xInt );
@@ -278,7 +279,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    PositionEnum aPos;
+    PositionEnum_Param aPos;
     m_pRecordSet->get_AbsolutePosition(&aPos);
     return  (aPos > 0) ? aPos : m_nRowPos;
     // return the rowcount from driver if the driver doesn't support this return our count
@@ -905,7 +906,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
-    WpADOProperty aProp(aProps.GetItem(::rtl::OUString::createFromAscii("Bookmarks Ordered")));
+    WpADOProperty aProp(aProps.GetItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmarks Ordered"))));
     OLEVariant aVar;
     if(aProp.IsValid())
         aVar = aProp.GetValue();
@@ -1171,3 +1172,4 @@ void SAL_CALL OResultSet::release() throw()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -261,7 +262,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     sal_Bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
     if (!bColumnDescriptor && !bFieldDescriptor)
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
+        OSL_FAIL("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
         return DND_ACTION_NONE;
     }
 
@@ -291,7 +292,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             )
         )
     {
-        DBG_ERROR( "FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!" );
+        OSL_FAIL( "FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!" );
         return DND_ACTION_NONE;
     }
 
@@ -310,12 +311,12 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             }
             catch(Exception&)
             {
-                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+                OSL_FAIL("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
             }
 
             if (!xConnection.is())
             {
-                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+                OSL_FAIL("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
                 return DND_ACTION_NONE;
             }
         }
@@ -353,7 +354,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                     // not interested in any results
 
                     Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
-                    xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
+                    xStatProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRows")), makeAny(sal_Int32(0)));
 
                     xResultSet = xStatement->executeQuery();
                     Reference< XColumnsSupplier >  xSupplyCols(xResultSet, UNO_QUERY);
@@ -387,7 +388,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
+        OSL_FAIL("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(xStatement);
         return sal_False;
     }
@@ -448,7 +449,6 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
         Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
-        Point aPos  = OutputToScreenPixel(m_pImpl->aDropPosPixel);
         sal_uInt16 nColId = GetItemId(m_pImpl->aDropPosPixel);
         // EinfuegePosition, immer vor der aktuellen Spalte
         sal_uInt16 nPos = GetModelColumnPos(nColId);
@@ -506,14 +506,13 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occured!");
+            OSL_FAIL("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
 
-        sal_Int32 nPreferedType = -1;
         sal_Bool bDateNTimeCol = sal_False;
         if (aPossibleTypes.Count() != 0)
         {
-            nPreferedType = aPossibleTypes[0];
+            sal_Int32 nPreferedType = aPossibleTypes[0];
             if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
@@ -646,7 +645,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
+        OSL_FAIL("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
         ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
         return 0L;
@@ -893,7 +892,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             if(pFact)
             {
                 AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
                 delete pDlg;
@@ -1099,7 +1098,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
             if (eStatus != xRow->GetStatus())
             {
                 xRow->SetStatus(eStatus);
-                vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 RowModified(GetCurrentPos());
             }
         }
@@ -1172,7 +1171,7 @@ void FmGridControl::DeleteSelectedRows()
         // #100312# ------------
         Reference< ::com::sun::star::util::XURLTransformer > xTransformer(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
         if( xTransformer.is() )
             xTransformer->parseStrict( aUrl );
 
@@ -1208,7 +1207,7 @@ void FmGridControl::DeleteSelectedRows()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception caught while deleting rows!");
+            OSL_FAIL("Exception caught while deleting rows!");
         }
         // An den DatenCursor anpassen
         AdjustDataSource(sal_True);
@@ -1540,7 +1539,7 @@ void FmGridControl::RowHeightChanged()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmGridControl::RowHeightChanged: caught an exception!" );
+            OSL_FAIL( "FmGridControl::RowHeightChanged: caught an exception!" );
         }
     }
 }
@@ -1551,7 +1550,7 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
     DbGridControl::ColumnResized(nId);
 
     // Wert ans model uebergeben
-    DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
+    DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
     Reference< ::com::sun::star::beans::XPropertySet >  xColModel(pCol->getModel());
     if (xColModel.is())
     {
@@ -1597,7 +1596,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
     {
         // suchen der Spalte und verschieben im Model
         // ColumnPos holen
-        DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
+        DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
         // Einfuegen muß sich an den Column Positionen orientieren
@@ -1660,7 +1659,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
             nWidth = LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
 
         AppendColumn(aName, (sal_uInt16)nWidth);
-        DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(i);
+        DbGridColumn* pCol = DbGridControl::GetColumns().at( i );
         pCol->setModel(xCol);
     }
 
@@ -1738,12 +1737,6 @@ void FmGridControl::InitColumnByField(
             _pColumn->SetObject( (sal_Int16)nFieldPos );
             return;
         }
-/*
-        // handle readonly columns
-        sal_Bool bReadOnly = sal_True;
-        xField->getPropertyValue( FM_PROP_ISREADONLY ) >>= bReadOnly;
-        _pColumn->SetReadOnly( bReadOnly );
-*/
     }
 
     // the control type is determined by the ColumnServiceName
@@ -1773,7 +1766,7 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     // Einfuegen muss sich an den Column Positionen orientieren
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
-        DbGridColumn* pCol = GetColumns().GetObject(i);
+        DbGridColumn* pCol = GetColumns().at( i );
         OSL_ENSURE(pCol,"No grid column!");
         if ( pCol )
         {
@@ -1794,7 +1787,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     if (nPos == (sal_uInt16)-1)
         return;
 
-    DbGridColumn* pColumn = GetColumns().GetObject(nPos);
+    DbGridColumn* pColumn = GetColumns().at( nPos );
     if (pColumn->IsHidden())
         GetPeer()->columnHidden(pColumn);
 
@@ -1826,7 +1819,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
     if (nPos == (sal_uInt16)-1)
         return;
 
-    DbGridColumn* pColumn = GetColumns().GetObject(nPos);
+    DbGridColumn* pColumn = GetColumns().at( nPos );
     if (!pColumn->IsHidden())
         GetPeer()->columnVisible(pColumn);
 
@@ -1838,12 +1831,12 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
 //------------------------------------------------------------------------------
 sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
         // need to lock the SolarMutex so that no paint call disturbs us ...
 
     if ( !m_pSeekCursor )
     {
-        DBG_ERROR( "FmGridControl::selectBookmarks: no seek cursor!" );
+        OSL_FAIL( "FmGridControl::selectBookmarks: no seek cursor!" );
         return sal_False;
     }
 
@@ -1866,7 +1859,7 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
     }
     catch(Exception&)
     {
-        DBG_ERROR("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
+        OSL_FAIL("FmGridControl::selectBookmarks: could not move to one of the bookmarks!");
         return sal_False;
     }
 
@@ -1929,7 +1922,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             }
     #ifdef DBG_UTIL
             else
-                DBG_ERROR("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
+                OSL_FAIL("FmGridControl::DeleteSelectedRows : a bookmark could not be determined !");
     #endif
         }
     }
@@ -2127,7 +2120,7 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(0,"exception occured while deleting a column");
+                            OSL_FAIL("exception occurred while deleting a column");
                         }
                     }
                 }
@@ -2142,3 +2135,4 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

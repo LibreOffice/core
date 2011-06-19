@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,45 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "vcl/svapp.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
+
+//TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
+class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star::beans::XPropertyChangeListener>
+{
+    private:
+        com::sun::star::uno::WeakReference<com::sun::star::beans::XPropertyChangeListener> mxOwner;
+
+    public:
+        WeakPropertyChangeListener(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner)
+            : mxOwner(xOwner)
+        {
+        }
+
+        virtual ~WeakPropertyChangeListener()
+        {
+        }
+
+        virtual void SAL_CALL propertyChange(const com::sun::star::beans::PropertyChangeEvent &rEvent )
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->propertyChange(rEvent);
+
+        }
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
+            throw(com::sun::star::uno::RuntimeException)
+        {
+            com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner(mxOwner.get(),
+                com::sun::star::uno::UNO_QUERY);
+            if (xOwner.is())
+                xOwner->disposing(rEvent);
+
+        }
+};
 
 namespace css = com::sun::star;
 
@@ -77,7 +116,7 @@ void ImeStatusWindow::init()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception");
+            OSL_FAIL("com.sun.star.uno.Exception");
             // Degrade gracefully and use the VCL-supplied default if no
             // configuration is available.
         }
@@ -95,7 +134,7 @@ bool ImeStatusWindow::isShowing()
     }
     catch (css::uno::Exception &)
     {
-        OSL_ENSURE(false, "com.sun.star.uno.Exception");
+        OSL_FAIL("com.sun.star.uno.Exception");
         // Degrade gracefully and use the VCL-supplied default if no
         // configuration is available.
     }
@@ -121,7 +160,7 @@ void ImeStatusWindow::show(bool bShow)
     }
     catch (css::uno::Exception &)
     {
-        OSL_ENSURE(false, "com.sun.star.uno.Exception");
+        OSL_FAIL("com.sun.star.uno.Exception");
     }
 }
 
@@ -132,17 +171,17 @@ bool ImeStatusWindow::canToggle() const
 
 ImeStatusWindow::~ImeStatusWindow()
 {
-    if (m_xConfig.is())
+    if (m_xConfig.is() && m_xConfigListener.is())
         // We should never get here, but just in case...
         try
         {
             m_xConfig->removePropertyChangeListener(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowStatusWindow")),
-                this);
+                m_xConfigListener);
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.RuntimeException");
+            OSL_FAIL("com.sun.star.uno.RuntimeException");
         }
 }
 
@@ -158,7 +197,7 @@ void SAL_CALL
 ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
     throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SfxApplication* pApp = SfxApplication::Get();
     if (pApp)
     pApp->Invalidate(SID_SHOW_IME_STATUS_WINDOW);
@@ -220,12 +259,16 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
         xConfig = m_xConfig;
     }
     if (bAdd)
+    {
         // Exceptions here could be handled individually, to support graceful
         // degradation (no update notification mechanism in this case---but also
         // no dispose notifications):
+        m_xConfigListener = new WeakPropertyChangeListener(this);
         xConfig->addPropertyChangeListener(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowStatusWindow")),
-            this);
+            m_xConfigListener);
+    }
     return xConfig;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

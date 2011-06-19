@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <sal/macros.h>
 #include "java/sql/DatabaseMetaData.hxx"
 #include "java/sql/Connection.hxx"
 #include "java/sql/ResultSet.hxx"
@@ -61,7 +63,7 @@ java_sql_DatabaseMetaData::~java_sql_DatabaseMetaData()
 
 jclass java_sql_DatabaseMetaData::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/DatabaseMetaData");
     return theClass;
@@ -128,10 +130,10 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
+        OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv,sal_True),"Exception occurred!");
         jvalue args[4];
 
         args[3].l = 0;
@@ -139,7 +141,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( typeFilterCount )
         {
             jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), 0 ) );
-            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
             const ::rtl::OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
@@ -151,7 +153,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 }
                 jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
                 t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
-                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
             }
 
             if ( bIncludeAllTypes )
@@ -159,7 +161,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 // the SDBC API allows to pass "%" as table type filter, but in JDBC, "all table types"
                 // is represented by the table type being <null/>
                 t.pEnv->DeleteLocalRef( pObjArray );
-                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
             }
             else
             {
@@ -187,23 +189,23 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( aCatalogFilter.hasValue() )
         {
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
         }
         if(args[1].l)
         {
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
-            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
         }
         if(tableNamePattern.getLength())
         {
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
-            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
         }
         //for(INT16 i=0;i<len;i++)
         if ( args[3].l )
         {
             t.pEnv->DeleteLocalRef( (jobjectArray)args[3].l );
-            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
         }
 
         if ( jThrow )
@@ -357,11 +359,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[5];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
@@ -369,7 +371,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
         args[4].z = approximate;
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l,args[2].l,args[3].z,args[4].z );
 
-        // und aufraeumen
+        // and clean up
         if(catalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -398,17 +400,17 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[3];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l,args[2].l,scope,nullable);
 
-        // und aufraeumen
+        // and cleanup
         if(catalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -437,7 +439,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
     if ( xReturn.is() )
     {
         // we have to check the result columns for the tables privleges
-        // #106324#
         Reference< XResultSetMetaDataSupplier > xMetaSup(xReturn,UNO_QUERY);
         if ( xMetaSup.is() )
         {
@@ -461,7 +462,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 for (sal_Int32 i = 1 ; i <= nCount ; ++i)
                 {
                     sColumnName = xMeta->getColumnName(i);
-                    for (sal_uInt32 j = 0 ; j < sizeof(sPrivs)/sizeof(sPrivs[0]); ++j)
+                    for (sal_uInt32 j = 0 ; j < SAL_N_ELEMENTS(sPrivs); ++j)
                     {
                         if ( sPrivs[j] == sColumnName )
                         {
@@ -515,11 +516,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[6];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = primaryCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(primaryCatalog)) : 0;
         args[1].l = primarySchema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,primarySchema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,primaryTable);
@@ -528,7 +529,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
         args[5].l = convertwchar_tToJavaString(t.pEnv,foreignTable);
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[2].l,args[2].l,args[3].l,args[4].l,args[5].l );
 
-        // und aufraeumen
+        // and clean up
         if(primaryCatalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -1430,12 +1431,12 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
 
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getUDTs";
-        // Java-Call absetzen
+        // dismiss Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         {
             jvalue args[4];
-            // temporaere Variable initialisieren
+            // initialize temporary Variable
             args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
             args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
             args[2].l = convertwchar_tToJavaString(t.pEnv,typeNamePattern);
@@ -1460,3 +1461,5 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     return out ? new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection ) : 0;
 }
 // -------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

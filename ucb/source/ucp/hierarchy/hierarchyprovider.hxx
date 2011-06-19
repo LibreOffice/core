@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #define _HIERARCHYPROVIDER_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -88,7 +89,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,  // servcie specifier
     ConfigProviderMapEntry,
@@ -153,3 +154,5 @@ public:
 } // namespace hierarchy_ucp
 
 #endif /* !_HIERARCHYPROVIDER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

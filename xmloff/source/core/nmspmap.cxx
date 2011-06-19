@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 
 #include "xmloff/xmlnmspe.hxx"
@@ -44,7 +43,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 /* The basic idea of this class is that we have two two ways to search our
- * data...by prefix and by key. We use an STL hash_map for fast prefix
+ * data...by prefix and by key. We use an STL boost::unordered_map for fast prefix
  * searching and an STL map for fast key searching.
  *
  * The references to an 'Index' refer to an earlier implementation of the
@@ -82,7 +81,7 @@ SvXMLNamespaceMap::~SvXMLNamespaceMap()
     while ( aIter != aEnd )
     {
         const OUString *pString = (*aIter).first.second;
-        aIter++;
+        ++aIter;
         delete pString;
     }
 }
@@ -107,7 +106,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
         }
         while ( sal_True );
     }
-    ::vos::ORef<NameSpaceEntry> pEntry(new NameSpaceEntry);
+    ::rtl::Reference<NameSpaceEntry> pEntry(new NameSpaceEntry);
     pEntry->sName   = rName;
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
@@ -172,7 +171,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
             nKey = (*aIter).second->nKey;
             break;
         }
-        aIter++;
+        ++aIter;
     }
     return nKey;
 }
@@ -309,7 +308,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         it = aNameCache.end();
     if ( it != aNameCache.end() )
     {
-        const NameSpaceEntry &rEntry = (*it).second.getBody();
+        const NameSpaceEntry &rEntry = *((*it).second);
         if ( pPrefix )
             *pPrefix = rEntry.sPrefix;
         if ( pLocalName )
@@ -323,7 +322,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     }
     else
     {
-    vos::ORef<NameSpaceEntry> xEntry(new NameSpaceEntry());
+    rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry());
 
         sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
         if( -1L == nColonPos )
@@ -361,7 +360,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
 
         if (bCache)
     {
-        typedef std::pair< const rtl::OUString, vos::ORef<NameSpaceEntry> > value_type;
+        typedef std::pair< const rtl::OUString, rtl::Reference<NameSpaceEntry> > value_type;
         (void) const_cast<NameSpaceHash*>(&aNameCache)->insert (value_type (rAttrName, xEntry));
     }
     }
@@ -591,3 +590,5 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

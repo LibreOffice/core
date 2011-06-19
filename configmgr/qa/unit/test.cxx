@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,23 +88,15 @@ void normalize(
 class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp();
-
     virtual void tearDown();
 
     void testKeyFetch();
-
     void testKeySet();
-
     void testKeyReset();
-
     void testSetSetMemberName();
-
     void testReadCommands();
-
     void testThreads();
-
     void testRecursive();
-
     void testCrossThreads();
 
     css::uno::Any getKey(
@@ -676,3 +669,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltest");
 }
 
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

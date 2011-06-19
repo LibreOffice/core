@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,13 @@
 // Global header
 //
 //------------------------------------------------------------------------
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 //------------------------------------------------------------------------
@@ -126,16 +128,15 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
     return pTypeCollection->getTypes() ;
 }
 
+namespace
+{
+    class theSvxAccessibleTextPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxAccessibleTextPropertySetImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
     throw (uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId;
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* > (aId.getArray()), 0, sal_True );
-    }
-    return aId;
+    return theSvxAccessibleTextPropertySetImplementationId::get().getSeq();
 }
 
 // XServiceInfo
@@ -169,3 +170,4 @@ uno::Sequence< ::rtl::OUString> SAL_CALL SvxAccessibleTextPropertySet::getSuppor
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

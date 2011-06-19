@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > xOrigin )
                 : ContentResultSetWrapper( xOrigin )
@@ -50,8 +52,8 @@ CachedContentResultSetStub::CachedContentResultSetStub( Reference< XResultSet > 
                 , m_bFirstFetchSizePropagationDone( sal_False )
                 , m_nLastFetchSize( 1 )//this value is not important at all
                 , m_bLastFetchDirection( sal_True )//this value is not important at all
-                , m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) )
-                , m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) )
+                , m_aPropertyNameForFetchSize( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchSize")) )
+                , m_aPropertyNameForFetchDirection( OUString(RTL_CONSTASCII_USTRINGPARAM("FetchDirection")) )
 {
     impl_init();
 }
@@ -165,73 +167,6 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
         }
     }
     return *pTypes;
-    /*
-    static cppu::OTypeCollection * pCollection = 0;
-    if (!pCollection)
-    {
-        osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
-        if (!pCollection)
-        {
-            static cppu::OTypeCollection
-                aTheCollection(
-                    getCppuType(
-                        static_cast< Reference< XTypeProvider >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XServiceInfo >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XComponent >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XCloseable >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XResultSetMetaDataSupplier >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XPropertySet >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XPropertyChangeListener >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XVetoableChangeListener >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XResultSet >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XContentAccess >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XRow >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XFetchProvider >
-                                         const * >(
-                            0)),
-                    getCppuType(
-                        static_cast< Reference< XFetchProviderForContentAccess >
-                                         const * >(
-                            0))
-                            );
-            pCollection = &aTheCollection;
-        }
-    }
-    return pCollection->getTypes();
-    */
 }
 
 //--------------------------------------------------------------------------
@@ -239,10 +174,10 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
-                        OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
-                        OUString::createFromAscii(
-                        CACHED_CRS_STUB_SERVICE_NAME ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.CachedContentResultSetStub" )),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        CACHED_CRS_STUB_SERVICE_NAME )) );
 
 //-----------------------------------------------------------------
 // XFetchProvider methods.
@@ -252,7 +187,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
 impl_EnsureNotDisposed(); \
 if( !m_xResultSetOrigin.is() ) \
 { \
-    OSL_ENSURE( sal_False, "broadcaster was disposed already" ); \
+    OSL_FAIL( "broadcaster was disposed already" ); \
     throw RuntimeException(); \
 } \
 impl_propagateFetchSizeAndDirection( nRowCount, bDirection ); \
@@ -390,7 +325,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
         }
         catch( SQLException& )
         {
-            OSL_ENSURE( sal_False, "couldn't determine the column count" );
+            OSL_FAIL( "couldn't determine the column count" );
             nCount = 0;
         }
     }
@@ -598,10 +533,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                     OUString::createFromAscii(
-                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
-                     OUString::createFromAscii(
-                     CACHED_CRS_STUB_FACTORY_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     CACHED_CRS_STUB_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.
@@ -629,3 +564,4 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,6 @@ DBG_NAME(XPolyPolygon);
 |*
 |*    ImpXPolygon::ImpXPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 ImpXPolygon::ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 _nResize )
@@ -73,10 +70,6 @@ ImpXPolygon::ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 _nResize )
 /*************************************************************************
 |*
 |*    ImpXPolygon::ImpXPolygon()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -104,10 +97,6 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
 |*
 |*    ImpXPolygon::~ImpXPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 ImpXPolygon::~ImpXPolygon()
@@ -121,9 +110,6 @@ ImpXPolygon::~ImpXPolygon()
 /*************************************************************************
 |*
 |*    ImpXPolygon::operator==()
-|*
-|*    Ersterstellung    Joe 26-09-95
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -147,8 +133,6 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 |*    Damit wird verhindert, dass bei XPoly[n] = XPoly[0] durch ein
 |*    Resize der fuer den rechten Ausdruck verwendete Point-Array
 |*    vorzeitig geloescht wird.
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -207,10 +191,6 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints )
 |*
 |*    ImpXPolygon::InsertSpace()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  29.03.95 ESO
-|*
 *************************************************************************/
 
 void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
@@ -244,10 +224,6 @@ void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
 |*
 |*    ImpXPolygon::Remove()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.94 ESO
-|*
 *************************************************************************/
 
 void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
@@ -275,10 +251,6 @@ void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 |*
 |*    XPolygon::XPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
@@ -290,10 +262,6 @@ XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
 /*************************************************************************
 |*
 |*    XPolygon::XPolygon()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -309,8 +277,6 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 |*    XPolygon::XPolygon()
 |*
 |*    XPolygon aus einem Standardpolygon erstellen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -334,8 +300,6 @@ XPolygon::XPolygon( const Polygon& rPoly )
 |*    XPolygon::XPolygon()
 |*
 |*    Rechteck (auch mit abgerundeten Ecken) als Bezierpolygon erzeugen
-|*    Ersterstellung    09.01.95 ESO
-|*    Letzte Aenderung  09.01.95 ESO
 |*
 *************************************************************************/
 
@@ -404,8 +368,6 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 |*    XPolygon::XPolygon()
 |*
 |*    Ellipsen(bogen) als Bezierpolygon erzeugen
-|*    Ersterstellung    09.01.95
-|*    Letzte Aenderung  09.01.95
 |*
 *************************************************************************/
 
@@ -454,10 +416,6 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 |*
 |*    XPolygon::~XPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 XPolygon::~XPolygon()
@@ -474,8 +432,6 @@ XPolygon::~XPolygon()
 |*    XPolygon::CheckReference()
 |*
 |*    Referenzzaehler desImpXPoly pruefen und ggf. von diesem abkoppeln
-|*    Ersterstellung    17.01.95 ESO
-|*    Letzte Aenderung  17.01.95 ESO
 |*
 *************************************************************************/
 
@@ -492,10 +448,6 @@ void XPolygon::CheckReference()
 |*
 |*    XPolygon::SetSize()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::SetSize( sal_uInt16 nNewSize )
@@ -508,10 +460,6 @@ void XPolygon::SetSize( sal_uInt16 nNewSize )
 |*
 |*    XPolygon::GetSize()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 sal_uInt16 XPolygon::GetSize() const
@@ -523,10 +471,6 @@ sal_uInt16 XPolygon::GetSize() const
 /*************************************************************************
 |*
 |*    XPolygon::SetPointCount()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -551,10 +495,6 @@ void XPolygon::SetPointCount( sal_uInt16 nPoints )
 |*
 |*    XPolygon::GetPointCount()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 sal_uInt16 XPolygon::GetPointCount() const
@@ -566,10 +506,6 @@ sal_uInt16 XPolygon::GetPointCount() const
 /*************************************************************************
 |*
 |*    XPolygon::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -585,10 +521,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags )
 /*************************************************************************
 |*
 |*    XPolygon::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -613,10 +545,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 |*
 |*    XPolygon::Insert()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
@@ -639,10 +567,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
 |*
 |*    XPolygon::Remove()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
@@ -654,10 +578,6 @@ void XPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 /*************************************************************************
 |*
 |*    XPolygon::Move()
-|*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  09.11.94
 |*
 *************************************************************************/
 
@@ -681,10 +601,6 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 /*************************************************************************
 |*
 |*    XPolygon::GetBoundRect()
-|*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -714,10 +630,6 @@ Rectangle XPolygon::GetBoundRect() const
 |*
 |*    XPolygon::operator[]()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95
-|*
 *************************************************************************/
 
 const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
@@ -731,10 +643,6 @@ const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 /*************************************************************************
 |*
 |*    XPolygon::operator[]()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -759,8 +667,6 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
 |*    XPolygon::operator=()
 |*
 |*    Beschreibung      Zuweisungsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -784,8 +690,6 @@ XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 |*    XPolygon::operator==()
 |*
 |*    Beschreibung      Gleichheitsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  Joe 26.09.95
 |*
 *************************************************************************/
 
@@ -801,8 +705,6 @@ sal_Bool XPolygon::operator==( const XPolygon& rXPoly ) const
 |*    XPolygon::operator!=()
 |*
 |*    Beschreibung      Ungleichheitsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  Joe 26.09.95
 |*
 *************************************************************************/
 
@@ -818,8 +720,6 @@ sal_Bool XPolygon::operator!=( const XPolygon& rXPoly ) const
 |*    XPolygon::GetFlags()
 |*
 |*    Flags fuer den Punkt an der Position nPos zurueckgeben
-|*    Ersterstellung    ESO 11.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -834,8 +734,6 @@ XPolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 |*    XPolygon::SetFlags()
 |*
 |*    Flags fuer den Punkt an der Position nPos setzen
-|*    Ersterstellung    ESO 11.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -851,8 +749,6 @@ void XPolygon::SetFlags( sal_uInt16 nPos, XPolyFlags eFlags )
 |*    XPolygon::IsControl()
 |*
 |*    Kurzform zur Abfrage des CONTROL-Flags
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -866,8 +762,6 @@ sal_Bool XPolygon::IsControl(sal_uInt16 nPos) const
 |*    XPolygon::IsSmooth()
 |*
 |*    Kurzform zur Abfrage von SMOOTH- und SYMMTR-Flag
-|*    Ersterstellung    ESO 18.04.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 *************************************************************************/
 
@@ -882,8 +776,6 @@ sal_Bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 |*    XPolygon::CalcDistance()
 |*
 |*    Abstand zwischen zwei Punkten berechnen
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 *************************************************************************/
 
@@ -901,8 +793,6 @@ double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
 |*    XPolygon::SubdivideBezier()
 |*
 |*    Bezierkurve unterteilen
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 *************************************************************************/
 
@@ -1029,8 +919,6 @@ sal_Bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& 
 |*     Pnt    = der zu modifizierende Punkt
 |*    Wenn Center am Anfang bzw. Ende des Polygons liegt, wird Pnt
 |*    auf die entgegengesetzte Seite verlegt
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 \************************************************************************/
 
@@ -1076,8 +964,6 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
 |*     Center = End- bzw. Anfangspunkt der Bezierkurven
 |*     Prev   = vorheriger Zugpunkt
 |*     Next   = naechster Zugpunkt
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 \************************************************************************/
 
@@ -1114,8 +1000,6 @@ void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNex
 |*    XPolygon::PointsToBezier()
 |*
 |*    wandelt vier Polygonpunkte in eine Bezierkurve durch diese Punkte um
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 \************************************************************************/
 
@@ -1192,8 +1076,6 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 |*    XPolygon::Translate()
 |*
 |*    Polygon auf den uebergebenen Punkt verschieben
-|*    Ersterstellung    ESO 17.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1214,8 +1096,6 @@ void XPolygon::Translate(const Point& rTrans)
 |*
 |*    Alle Punkte um den Punkt rCenter drehen, Sinus und Cosinus
 |*    muessen uebergeben werden
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1265,8 +1145,6 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 |*
 |*    Alle Punkte um den Punkt rCenter mit dem Winkel nAngle drehen
 |*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*    Ersterstellung    ESO 17.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1288,8 +1166,6 @@ void XPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
 |*    XPolygon::Scale()
 |*
 |*    XPolygon in X- und/oder Y-Richtung skalieren
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1314,8 +1190,6 @@ void XPolygon::Scale(double fSx, double fSy)
 |*
 |*    XPolygon in X-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-Y-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1341,8 +1215,6 @@ void XPolygon::SlantX(long nYRef, double fSin, double fCos)
 |*
 |*    XPolygon in Y-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-X-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1373,8 +1245,6 @@ void XPolygon::SlantY(long nXRef, double fSin, double fCos)
 |*    1: rechts oben     |    |
 |*    2: rechts unten    3----2
 |*    3: links unten
-|*    Ersterstellung    ESO 07.07.95
-|*    Letzte Aenderung  ESO 07.07.95
 |*
 *************************************************************************/
 
@@ -1384,9 +1254,8 @@ void XPolygon::Distort(const Rectangle& rRefRect,
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    long    Xr, Wr, X1, X2, X3, X4;
-    long    Yr, Hr, Y1, Y2, Y3, Y4;
-    double  fTx, fTy, fUx, fUy;
+    long    Xr, Wr;
+    long    Yr, Hr;
 
     Xr = rRefRect.Left();
     Yr = rRefRect.Top();
@@ -1395,6 +1264,8 @@ void XPolygon::Distort(const Rectangle& rRefRect,
 
     if ( Wr && Hr )
     {
+        long    X1, X2, X3, X4;
+        long    Y1, Y2, Y3, Y4;
         DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
                    "Distort-Rechteck zu klein");
 
@@ -1411,6 +1282,7 @@ void XPolygon::Distort(const Rectangle& rRefRect,
 
         for (sal_uInt16 i = 0; i < nPntCnt; i++)
         {
+            double  fTx, fTy, fUx, fUy;
             Point& rPnt = pImpXPolygon->pPointAry[i];
 
             fTx = (double)(rPnt.X() - Xr) / Wr;
@@ -1443,17 +1315,14 @@ void XPolygon::Rotate20()
     long     nPntCnt = pImpXPolygon->nPoints;
     long     nIndex0 = 0;
 
-    for (long nPoints = 1;
-              nPoints < nPntCnt;
-              nPoints ++)
+    for (long nPoints = 1; nPoints < nPntCnt; ++nPoints)
     {
-        Point &rPnt = pImpXPolygon->pPointAry[nPoints];
+        const Point &rPnt = pImpXPolygon->pPointAry[nPoints];
 
-        if ((rPnt.X () < fMinX) || (fMinX == rPnt.X ()) &&
-                                   (fMinY >= rPnt.Y ()))
+        if ( (rPnt.X() < fMinX) || (fMinX == rPnt.X() && fMinY >= rPnt.Y()) )
         {
-            fMinX   = rPnt.X ();
-            fMinY   = rPnt.Y ();
+            fMinX   = rPnt.X();
+            fMinY   = rPnt.Y();
             nIndex0 = nPoints;
         }
     }
@@ -1507,8 +1376,6 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 |*    ImpXPolyPolygon::ImpXPolyPolygon()
 |*
 |*    Beschreibung      Erzeugt das XPolygon-Array
-|*    Ersterstellung    CL 09.11.94
-|*    Letzte Aenderung  MM 09.11.94
 |*
 *************************************************************************/
 
@@ -1518,12 +1385,8 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
     nRefCount = 1;
 
     // Einzelne Elemente duplizieren
-    XPolygon* pXPoly = aXPolyList.First();
-    while ( pXPoly )
-    {
-        aXPolyList.Replace( new XPolygon( *(aXPolyList.GetCurObject()) ) );
-        pXPoly = aXPolyList.Next();
-    }
+    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
+        aXPolyList[ i ] = new XPolygon( *aXPolyList[ i ] );
 }
 
 
@@ -1532,40 +1395,32 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
 |*    ImpXPolyPolygon::~ImpXPolyPolygon()
 |*
 |*    Beschreibung      Loescht das Polygon-Array
-|*    Ersterstellung    CL 09.06.93
-|*    Letzte Aenderung  CL 09.06.93
 |*
 *************************************************************************/
 
 ImpXPolyPolygon::~ImpXPolyPolygon()
 {
-    XPolygon* pXPoly = aXPolyList.First();
-    while( pXPoly )
-    {
-        delete pXPoly;
-        pXPoly = aXPolyList.Next();
-    }
+    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
+        delete aXPolyList[ i ];
+    aXPolyList.clear();
 }
 
 /*************************************************************************
 |*
 |*    ImpXPolyPolygon::operator==()
 |*
-|*    Ersterstellung    Joe 26-09-95
-|*    Letzte Aenderung
-|*
 *************************************************************************/
-
 
 bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 {
-    sal_uInt16 nAnz=(sal_uInt16)aXPolyList.Count();
-    const XPolygonList& rCmpList=rImpXPolyPoly.aXPolyList;
-    if (nAnz!=(sal_uInt16)rCmpList.Count()) return sal_False;
+    size_t nAnz = aXPolyList.size();
+    const XPolygonList& rCmpList = rImpXPolyPoly.aXPolyList;
+    if ( nAnz != rCmpList.size() ) return false;
     bool bEq=true;
-    for (sal_uInt16 i=nAnz; i>0 && bEq;) {
+    for ( size_t i = nAnz; i > 0 && bEq; )
+    {
         i--;
-        bEq= *aXPolyList.GetObject(i) == *rCmpList.GetObject(i);
+        bEq = ( *aXPolyList[ i ] == *rCmpList[ i ] );
     }
     return bEq;
 }
@@ -1574,43 +1429,31 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 |*
 |*    XPolyPolygon::XPolyPolygon()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
-XPolyPolygon::XPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
+XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon( nInitSize, nResize );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
 }
 
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::XPolyPolygon()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
 XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon;
-    pImpXPolyPolygon->aXPolyList.Insert( new XPolygon( rXPoly ) );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
+    pImpXPolyPolygon->aXPolyList.push_back( new XPolygon( rXPoly ) );
 }
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::XPolyPolygon()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1626,8 +1469,6 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
 |*    XPolyPolygon::XPolyPolygon()
 |*
 |*    XPolyPolygon aus einen Standard-PolyPolygon erzeugen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1637,17 +1478,13 @@ XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
     pImpXPolyPolygon = new ImpXPolyPolygon;
 
     for (sal_uInt16 i = 0; i < rPolyPoly.Count(); i++)
-        pImpXPolyPolygon->aXPolyList.Insert(
+        pImpXPolyPolygon->aXPolyList.push_back(
                                     new XPolygon(rPolyPoly.GetObject(i)) );
 }
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::~XPolyPolygon()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1665,8 +1502,6 @@ XPolyPolygon::~XPolyPolygon()
 |*    XPolygon::CheckReference()
 |*
 |*    Referenzzaehler desImpXPolyPoly pruefen und ggf. von diesem abkoppeln
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1683,17 +1518,20 @@ void XPolyPolygon::CheckReference()
 |*
 |*    XPolyPolygon::Insert()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 void XPolyPolygon::Insert( const XPolygon& rXPoly, sal_uInt16 nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
-    pImpXPolyPolygon->aXPolyList.Insert( pXPoly, nPos );
+    if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
+    {
+        XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+        ::std::advance( it, nPos );
+        pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
+    }
+    else
+        pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
 }
 
 /*************************************************************************
@@ -1701,8 +1539,6 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly, sal_uInt16 nPos )
 |*    XPolyPolygon::Insert()
 |*
 |*    saemtliche XPolygone aus einem XPolyPolygon einfuegen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1710,12 +1546,19 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, sal_uInt16 nPos )
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < rXPolyPoly.Count(); i++)
+    for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
-        XPolygon* pXPoly = new XPolygon(rXPolyPoly[i]);
-        pImpXPolyPolygon->aXPolyList.Insert(pXPoly, nPos);
-        if ( nPos != XPOLYPOLY_APPEND )
+        XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
+
+        if ( nPos < pImpXPolyPolygon->aXPolyList.size() )
+        {
+            XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+            ::std::advance( it, nPos );
+            pImpXPolyPolygon->aXPolyList.insert( it, pXPoly );
             nPos++;
+        }
+        else
+            pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
     }
 }
 
@@ -1723,16 +1566,15 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, sal_uInt16 nPos )
 |*
 |*    XPolyPolygon::Remove()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 {
     CheckReference();
-    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList.Remove( nPos );
+    XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
+    ::std::advance( it, nPos );
+    XPolygon* pTmpXPoly = *it;
+    pImpXPolyPolygon->aXPolyList.erase( it );
     XPolygon  aXPoly( *pTmpXPoly );
     delete pTmpXPoly;
     return aXPoly;
@@ -1743,17 +1585,14 @@ XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 |*
 |*    XPolyPolygon::Replace()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, sal_uInt16 nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
-    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList.Replace( pXPoly, nPos );
+    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList[ nPos ];
+    pImpXPolyPolygon->aXPolyList[ nPos ] = pXPoly;
     XPolygon  aXPoly( *pTmpXPoly );
     delete pTmpXPoly;
     return aXPoly;
@@ -1764,25 +1603,17 @@ XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, sal_uInt16 nPos )
 |*
 |*    XPolyPolygon::GetObject()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
-    return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
+    return *(pImpXPolyPolygon->aXPolyList[ nPos ]);
 }
 
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::Clear()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  TH 17.10.94
 |*
 *************************************************************************/
 
@@ -1795,13 +1626,9 @@ void XPolyPolygon::Clear()
     }
     else
     {
-        XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.First();
-        while( pXPoly )
-        {
-            delete pXPoly;
-            pXPoly = pImpXPolyPolygon->aXPolyList.Next();
-        }
-        pImpXPolyPolygon->aXPolyList.Clear();
+        for( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
+            delete pImpXPolyPolygon->aXPolyList[ i ];
+        pImpXPolyPolygon->aXPolyList.clear();
     }
 }
 
@@ -1810,25 +1637,17 @@ void XPolyPolygon::Clear()
 |*
 |*    XPolyPolygon::Count()
 |*
-|*    Beschreibung
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 sal_uInt16 XPolyPolygon::Count() const
 {
-    return (sal_uInt16)(pImpXPolyPolygon->aXPolyList.Count());
+    return (sal_uInt16)(pImpXPolyPolygon->aXPolyList.size());
 }
 
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::Move()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 04.10.94
-|*    Letzte Aenderung  TH 04.10.94
 |*
 *************************************************************************/
 
@@ -1842,11 +1661,10 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
     CheckReference();
 
     // Punkte verschieben
-    XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.First();
-    while( pXPoly )
+    for ( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
     {
+        XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ i ];
         pXPoly->Move( nHorzMove, nVertMove );
-        pXPoly = pImpXPolyPolygon->aXPolyList.Next();
     }
 }
 
@@ -1854,20 +1672,16 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 |*
 |*    XPolyPolygon::GetBoundRect()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 04.10.94
-|*    Letzte Aenderung  TH 04.10.94
-|*
 *************************************************************************/
 
 Rectangle XPolyPolygon::GetBoundRect() const
 {
-    sal_uInt16    nXPoly = (sal_uInt16)pImpXPolyPolygon->aXPolyList.Count();
+    size_t nXPoly = pImpXPolyPolygon->aXPolyList.size();
     Rectangle aRect;
 
-    for ( sal_uInt16 n = 0; n < nXPoly; n++ )
+    for ( size_t n = 0; n < nXPoly; n++ )
     {
-        const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.GetObject( n );
+        const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ n ];
         aRect.Union( pXPoly->GetBoundRect() );
     }
 
@@ -1879,25 +1693,17 @@ Rectangle XPolyPolygon::GetBoundRect() const
 |*
 |*    XPolyPolygon::operator[]()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 28.10.94
-|*    Letzte Aenderung  TH 28.10.94
-|*
 *************************************************************************/
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
     CheckReference();
-    return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
+    return *( pImpXPolyPolygon->aXPolyList[ nPos ] );
 }
 
 /*************************************************************************
 |*
 |*    XPolyPolygon::operator=()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1919,10 +1725,6 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 |*
 |*    XPolyPolygon::operator==()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL  27.01.93
-|*    Letzte Aenderung  Joe 27.01.93
-|*
 *************************************************************************/
 
 sal_Bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
@@ -1935,10 +1737,6 @@ sal_Bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
 /*************************************************************************
 |*
 |*    XPolyPolygon::operator!=()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL  27.01.93
-|*    Letzte Aenderung  Joe 27.01.93
 |*
 *************************************************************************/
 
@@ -1953,8 +1751,6 @@ sal_Bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
 |*    XPolyPolygon::Translate()
 |*
 |*    Alle Polygone auf den uebergebenen Punkt verschieben
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -1962,8 +1758,8 @@ void XPolyPolygon::Translate(const Point& rTrans)
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Translate(rTrans);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Translate(rTrans);
 }
 
 /*************************************************************************
@@ -1972,8 +1768,6 @@ void XPolyPolygon::Translate(const Point& rTrans)
 |*
 |*    Alle Polygone um den Punkt rCenter drehen, Sinus und Cosinus
 |*    muessen uebergeben werden
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -1981,8 +1775,8 @@ void XPolyPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate(rCenter, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Rotate(rCenter, fSin, fCos);
 }
 
 /*************************************************************************
@@ -1996,8 +1790,8 @@ void XPolyPolygon::Rotate20()
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate20();
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Rotate20();
 }
 
 /*************************************************************************
@@ -2006,8 +1800,6 @@ void XPolyPolygon::Rotate20()
 |*
 |*    Alle Poylgone um den Punkt rCenter mit dem Winkel nAngle drehen
 |*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -2029,8 +1821,6 @@ void XPolyPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
 |*    XPolyPolygon::Scale()
 |*
 |*    Alle Polygone in X- und/oder Y-Richtung skalieren
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2038,8 +1828,8 @@ void XPolyPolygon::Scale(double fSx, double fSy)
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Scale(fSx, fSy);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Scale(fSx, fSy);
 }
 
 /*************************************************************************
@@ -2048,8 +1838,6 @@ void XPolyPolygon::Scale(double fSx, double fSy)
 |*
 |*    Alle Polygone in X-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-Y-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2057,8 +1845,8 @@ void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantX(nYRef, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->SlantX(nYRef, fSin, fCos);
 }
 
 /*************************************************************************
@@ -2067,8 +1855,6 @@ void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
 |*
 |*    Alle Polygone in Y-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-X-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2076,8 +1862,8 @@ void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantY(nXRef, fSin, fCos);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->SlantY(nXRef, fSin, fCos);
 }
 
 /*************************************************************************
@@ -2091,8 +1877,6 @@ void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
 |*    1: rechts oben     |    |
 |*    2: rechts unten    3----2
 |*    3: links unten
-|*    Ersterstellung    ESO 07.07.95
-|*    Letzte Aenderung  ESO 07.07.95
 |*
 *************************************************************************/
 
@@ -2101,9 +1885,8 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
 {
     CheckReference();
 
-    for (sal_uInt16 i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList.GetObject(i)->Distort(rRefRect,
-                                                           rDistortedRect);
+    for (size_t i = 0; i < Count(); i++)
+        pImpXPolyPolygon->aXPolyList[ i ]->Distort(rRefRect, rDistortedRect);
 }
 
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
@@ -2122,7 +1905,7 @@ basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon( 16, 16 );
+    pImpXPolyPolygon = new ImpXPolyPolygon();
 
     for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
     {
@@ -2133,3 +1916,5 @@ XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

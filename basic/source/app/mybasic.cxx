@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,26 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <basic/sbx.hxx>
-
-// AB-Uno-Test
-//#define unotest
-#ifdef unotest
-#ifndef _USR_UNO_HXX
-#include <usr/uno.hxx>
-#endif
-#include <basic/sbuno.hxx>
-#include <sbunoobj.hxx>
-#endif
 
 #include "sbintern.hxx"
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 #include <basic/mybasic.hxx>
 #include "basic.hrc"
 #include "appbased.hxx"
@@ -84,6 +71,7 @@ SbxBase* MyFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCr )
 MyBasic::MyBasic() : StarBASIC()
 {
     nError = 0;
+    CurrentError = 0;
     if( !nInst++ )
     {
         AddFactory( &aFac1 );
@@ -93,21 +81,6 @@ MyBasic::MyBasic() : StarBASIC()
     SbxVariable* p = new SbxCollection( CUniString("MyColl") );
     p->SetName( CUniString("Objects") );
     Insert( p );
-
-    // AB-Uno-Test
-#ifdef unotest
-    // Get Uno-Service-Manager and Reflection Service
-    createAndSetDefaultServiceManager();        // done later
-
-    // Get Uno-Test-Object
-    UsrAny aObjAny = getIntrospectionTestObject();
-
-    // Box object into SbUnoObject
-    String aName( "UnoObject" );
-    SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
-    //SbxObjectRef xSbUnoObj = new SbUnoObject( aName, aObjAny );
-    Insert( (SbxObject*)xSbUnoObj );
-#endif
 
     pTestObject = NULL;
 }
@@ -166,7 +139,7 @@ SbTextType MyBasic::GetSymbolType( const String &rSymbol, sal_Bool bWasTTControl
 
 MyBasic::~MyBasic()
 {
-    aErrors.Clear();
+    Reset();
     if( !--nInst )
     {
         RemoveFactory( &aFac1 );
@@ -177,14 +150,46 @@ MyBasic::~MyBasic()
 
 void MyBasic::Reset()
 {
-    aErrors.Clear();
+    for ( size_t i = 0, n = aErrors.size(); i < n; ++i ) delete aErrors[ i ];
+    aErrors.clear();
     nError = 0;
+    CurrentError = 0;
 }
 
 sal_Bool MyBasic::Compile( SbModule* p )
 {
     Reset();
     return StarBASIC::Compile( p );
+}
+
+BasicError* MyBasic::NextError()
+{
+    if ( CurrentError < ( aErrors.size() - 1 ) )
+    {
+        ++CurrentError;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
+}
+
+BasicError* MyBasic::PrevError()
+{
+    if ( !aErrors.empty() && CurrentError > 0 )
+    {
+        --CurrentError;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
+}
+
+BasicError* MyBasic::FirstError()
+{
+    if ( !aErrors.empty() )
+    {
+        CurrentError = 0;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
 }
 
 sal_Bool MyBasic::ErrorHdl()
@@ -198,12 +203,13 @@ sal_Bool MyBasic::ErrorHdl()
         pWin->ToTop();
     if( IsCompilerError() )
     {
-        aErrors.Insert(
+        aErrors.push_back(
           new BasicError
             ( pWin,
-              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
-              LIST_APPEND );
+              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() )
+            );
         nError++;
+        CurrentError = aErrors.size() - 1;
         return sal_Bool( nError < 20 ); // Cancel after 20 errors
     }
     else
@@ -251,16 +257,7 @@ sal_uInt16 MyBasic::BreakHdl()
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
-    if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
-    {
-//      if ( GetActiveModule()->IsBP(GetLine()) )
-//          GetActiveModule()->ClearBP(GetLine());
-        return aBasicApp.pFrame->BreakHandler();
-    }
-    else
-    {
-        return aBasicApp.pFrame->BreakHandler();
-    }
+    return aBasicApp.pFrame->BreakHandler();
 }
 
 /***************************************************************************
@@ -302,3 +299,4 @@ void BasicError::Show()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

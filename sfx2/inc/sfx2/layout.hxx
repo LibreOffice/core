@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,18 +50,6 @@ public:
     SfxDialog (::Window* parent, char const* xml_file, char const* id, SfxBindings* bindings=0, SfxChildWindow* child=0);
 };
 
-#if 0
-class SFX2_DLLPUBLIC SfxTabDialog
-    : public ::SfxTabDialog
-    , public InPlug
-{
-public:
-    SfxTabDialog (::Window *parent, char const* xml_file, char const* id, ResId const& res_id, SfxItemSet const* set=0);
-    ::Window* GetParent () const;
-    void FreeResource ();
-};
-#endif
-
 class SFX2_DLLPUBLIC SfxTabPage
     : public ::SfxTabPage
     , public InPlug
@@ -76,3 +65,5 @@ public:
 } // end namespace layout
 
 #endif /* _SFX2_LAYOUT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

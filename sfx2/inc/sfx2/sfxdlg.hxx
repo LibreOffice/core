@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,8 +54,6 @@ class TransferableDataHelper;
 struct TransferableObjectDescriptor;
 
 #include <sfx2/tabdlg.hxx>
-//typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-//typedef sal_uInt16*       (*GetTabPageRanges)();
 
 namespace sfx2
 {
@@ -158,3 +157,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

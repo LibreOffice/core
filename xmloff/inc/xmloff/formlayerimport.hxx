@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,11 @@
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
-#include <vos/refernce.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlimppr.hxx>
 
 class SvXMLImport;
@@ -54,7 +55,7 @@ namespace xmloff
     /** allows you to import a &lt;form:form&gt; element
     */
     class XMLOFF_DLLPUBLIC OFormLayerXMLImport
-                :public ::vos::OReference
+                :public ::salhelper::SimpleReferenceObject
     {
         OFormLayerXMLImport_Impl*   m_pImpl;
 
@@ -164,3 +165,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMLAYERIMPORT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

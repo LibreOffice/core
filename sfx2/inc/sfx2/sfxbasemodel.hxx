@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/link.hxx>
@@ -1513,6 +1514,7 @@ protected:
     /* returns true if the document signatures are valid, otherwise false */
     sal_Bool hasValidSignatures() const;
 
+    void setDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& );
 //________________________________________________________________________________________________________
 //  private methods
 //________________________________________________________________________________________________________
@@ -1619,12 +1621,12 @@ public:
     };
 
     SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
-        :m_aGuard( Application::GetSolarMutex() )
+        : m_aGuard()
     {
         i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
     }
     SfxModelGuard( SfxModelSubComponent& i_rSubComponent )
-        :m_aGuard( Application::GetSolarMutex() )
+        :m_aGuard()
     {
         i_rSubComponent.MethodEntryCheck();
     }
@@ -1643,9 +1645,11 @@ public:
     }
 
 private:
-    ::osl::ResettableGuard< ::vos::IMutex >  m_aGuard;
+    SolarMutexResettableGuard  m_aGuard;
 };
 
 #undef css
 
 #endif // _SFX_SFXBASEMODEL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

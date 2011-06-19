@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
-#ifndef _COM_SUN_STAR_XML_CRYPTO_XXSECURITYENVIRONMENT_HPP_
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace cssu = com::sun::star::uno;
@@ -85,3 +84,5 @@ private:
 };
 
 #endif // UUI_UNKNOWNAUTH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

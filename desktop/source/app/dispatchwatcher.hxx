@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 #include "officeipcthread.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 namespace desktop
@@ -55,7 +56,7 @@ struct OUStringHashCode
     }
 };
 
-class DispatchWatcherHashMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+class DispatchWatcherHashMap : public ::boost::unordered_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString >  >
 {
     public:
         inline void free()
@@ -75,7 +76,10 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             REQUEST_PRINT,
             REQUEST_PRINTTO,
             REQUEST_FORCEOPEN,
-            REQUEST_FORCENEW
+            REQUEST_FORCENEW,
+            REQUEST_CONVERSION,
+            REQUEST_INFILTER,
+            REQUEST_BATCHPRINT
         };
 
         struct DispatchRequest
@@ -86,7 +90,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
             RequestType     aRequestType;
             rtl::OUString   aURL;
             boost::optional< rtl::OUString > aCwdUrl;
-            rtl::OUString   aPrinterName;
+            rtl::OUString   aPrinterName;  // also conversion params
             rtl::OUString   aPreselectedFactory;
         };
 
@@ -114,11 +118,11 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
 
         DispatchWatcherHashMap      m_aRequestContainer;
 
-        static ::osl::Mutex*        pWatcherMutex;
-
         sal_Int16                   m_nRequestCount;
 };
 
 }
 
 #endif // _DESKTOP_DISPATCHWATCHER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

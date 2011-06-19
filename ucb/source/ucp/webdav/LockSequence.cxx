@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -173,8 +174,7 @@ extern "C" int LockSequence_chardata_callback(
                 pCtx->hasDepth = true;
             }
             else
-                OSL_ENSURE( sal_False,
-                            "LockSequence_chardata_callback - Unknown depth!" );
+                OSL_FAIL( "LockSequence_chardata_callback - Unknown depth!" );
             break;
 
         case STATE_OWNER:
@@ -221,8 +221,7 @@ extern "C" int LockSequence_chardata_callback(
             {
                 pCtx->pLock->Timeout = sal_Int64( -1 );
                 pCtx->hasTimeout = true;
-                OSL_ENSURE( sal_False,
-                            "LockSequence_chardata_callback - Unknown timeout!" );
+                OSL_FAIL( "LockSequence_chardata_callback - Unknown timeout!" );
             }
             break;
 
@@ -365,3 +364,5 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
 
     return success;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

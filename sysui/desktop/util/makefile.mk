@@ -53,7 +53,7 @@ ALLTAR: $(RPMTARFILES) $(DEBTARFILES)
 
 $(RPMTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.rpm)} | gzip > $@
+    $(GNUTAR) -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.rpm)} | gzip > $@
 
 .ENDIF # "$(TARFILE)" != ""
 
@@ -61,6 +61,6 @@ $(RPMTARFILES) : $(PKGDIR)
 
 $(DEBTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell @cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.deb)} | gzip > $@
+    $(GNUTAR) -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell @cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.deb)} | gzip > $@
     
 .ENDIF

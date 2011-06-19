@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,10 +98,10 @@ int SAL_CALL main(int, char*, char* )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -113,11 +114,11 @@ int SAL_CALL main(int, char*, char* )
     try
     {
         Reference< XProxySettings > xProxySettings(
-            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemProxySettings" ) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemProxySettings")) ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {
-            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
+            OSL_FAIL( "Error creating SystemProxySettings Service" );
             return(-1);
         }
 
@@ -140,11 +141,11 @@ int SAL_CALL main(int, char*, char* )
         printf( "Test of SystemProxySettings successful\n" );
 
         xProxySettings = Reference< XProxySettings >(
-            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SOProxySettings" ) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SOProxySettings")) ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {
-            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
+            OSL_FAIL( "Error creating SystemProxySettings Service" );
             return(-1);
         }
 
@@ -183,10 +184,10 @@ int SAL_CALL main(int, char*, char* )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory
@@ -198,3 +199,5 @@ int SAL_CALL main(int, char*, char* )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

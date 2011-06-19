@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,6 @@
 #include "editeng/editengdllapi.h"
 
 // class SvxNoLinebreakItem ----------------------------------------------
-
-
-/*  [Beschreibung]
-
-    PB: ???
-*/
-
 class EDITENG_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 {
 public:
@@ -49,7 +43,7 @@ public:
     SvxNoLinebreakItem( const sal_Bool bBreak /*= sal_True*/,
                         const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
@@ -71,3 +65,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

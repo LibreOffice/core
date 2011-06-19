@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,21 +28,6 @@
 #ifndef _XATTR_HXX
 #define _XATTR_HXX
 
-// include ---------------------------------------------------------------
-
-#ifndef _XDEF_HXX
-//#include <svx/xdef.hxx>
-#endif
-#ifndef _XENUM_HXX
-//#include <svx/xenum.hxx>
-#endif
-#ifndef _XPOLY_HXX
-//#include <svx/xpoly.hxx>
-#endif
-#ifndef _SVX_RECTENUM_HXX
-//#include <svx/rectenum.hxx>
-#endif
-
 class XColorTable;
 class XDashTable;
 class XLineEndTable;
@@ -65,3 +51,4 @@ class XGradientTable;
 
 #endif      // _XATTR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,9 @@
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/transactionguard.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
 #include <threadhelp/rwlockbase.hxx>
-#endif
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
@@ -54,15 +51,12 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/random.h>
-#include <vos/process.hxx>
-#include <vos/thread.hxx>
+#include <osl/process.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
 
-#ifndef _OSL_INTERLOCK_H_
 #include <osl/interlock.h>
-#endif
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -83,7 +77,6 @@
 
 using namespace ::rtl       ;
 using namespace ::osl       ;
-using namespace ::vos       ;
 using namespace ::framework ;
 
 //_________________________________________________________________________________________________________________
@@ -494,7 +487,7 @@ sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
             Otherwise all threads are sychron after first 2,3...5 calls - I think!
 *//*-*****************************************************************************************************/
 
-class TestThread : public OThread
+class TestThread : public osl::Thread
 {
     public:
 
@@ -698,16 +691,15 @@ void TestApplication::Main()
     // Parse command line.
     // Attention: All parameter are required and must exist!
     // syntax: "threadtest.exe <testcount> <threadcount> <loops> <owner>"
-    OStartupInfo    aInfo       ;
     OUString        sArgument   ;
     sal_Int32       nArgument   ;
-    sal_Int32       nCount      = aInfo.getCommandArgCount();
+    sal_Int32       nCount      = osl_getCommandArgCount();
 
     LOG_ASSERT2( nCount!=4 ,"TestApplication::Main()" , "Wrong argument line detected!")
 
     for( nArgument=0; nArgument<nCount; ++nArgument )
     {
-        aInfo.getCommandArg( nArgument, sArgument );
+        osl_getCommandArg( nArgument, &sArgument.pData );
         if( nArgument== 0 ) nTestCount  =sArgument.toInt32();
         if( nArgument== 1 ) nThreadCount=sArgument.toInt32();
         if( nArgument== 2 ) nLoops      =sArgument.toInt32();
@@ -736,3 +728,5 @@ void TestApplication::Main()
     WRITE_LOGFILE( STATISTICS_FILE, sBuf.makeStringAndClear() );
     LOG_ERROR( "TApplication::Main()", "Test finish successful!" )
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,9 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/prewin.h>
-#include <winreg.h>
-#include <tools/postwin.h>
 #include <tools/urlobj.hxx>
+
+#include <windows.h>
 
 
 #define U2S(STRING)     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -54,7 +54,7 @@ void FATToVFat_Impl( String& aName )
         HANDLE h = FindFirstFile( U2S(aName).getStr(), &aData );
         if ( h )
         {
-            // FAT-Kurzname in VFAT-Langname wandeln
+            // Change FAT short filename into VFAT long filename
             aObj.removeSegment();
             aObj.insertName( String::CreateFromAscii( aData.cFileName ) );
             aName = aObj.PathToFileName();
@@ -67,3 +67,4 @@ void FATToVFat_Impl( String& aName )
 
 #endif // WNT
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

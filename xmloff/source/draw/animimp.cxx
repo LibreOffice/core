@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -660,14 +661,14 @@ void XMLAnimationsEffectContext::EndElement()
                 }
                 else
                 {
-                    DBG_ERROR("XMLAnimationsEffectContext::EndElement - Sound URL without a XPropertySet!");
+                    OSL_FAIL("XMLAnimationsEffectContext::EndElement - Sound URL without a XPropertySet!");
                 }
             }
         }
     }
     catch( Exception e )
     {
-        DBG_ERROR( "exception catched while importing animation information!" );
+        OSL_FAIL( "exception catched while importing animation information!" );
     }
 }
 
@@ -692,3 +693,5 @@ SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefi
 {
     return new XMLAnimationsEffectContext( GetImport(), nPrefix, rLocalName,  xAttrList, mpImpl );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,9 +35,7 @@ INCPRE += ..$/..$/inc
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
+CFLAGS+= $(SYSTEM_DB_CFLAGS)
 
 SRS1NAME = $(TARGET)
 SRC1FILES = \

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,7 @@
 #define PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE (PRIMITIVE2D_ID_RANGE_SVX| 20)
 #define PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D            (PRIMITIVE2D_ID_RANGE_SVX| 21)
 #define PRIMITIVE2D_ID_SDROLECONTENTPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_SVX| 22)
+#define PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D        (PRIMITIVE2D_ID_RANGE_SVX| 23)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -62,3 +64,5 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

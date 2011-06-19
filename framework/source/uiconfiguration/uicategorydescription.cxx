@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,13 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_UICONFIGURATION_UICATEGORYDESCRPTION_HXX_
 #include "uiconfiguration/uicategorydescription.hxx"
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 #include "properties.h"
+
+#include "helper/mischelper.hxx"
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -57,16 +58,13 @@
 #include <unotools/configmgr.hxx>
 #include <tools/string.hxx>
 
-#ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
-#endif
 #include <comphelper/sequence.hxx>
 #include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -77,7 +75,6 @@ using namespace ::com::sun::star::frame;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 struct ModuleToCategory
 {
@@ -138,7 +135,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         sal_Bool                  fillCache();
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > IdToInfoCache;
@@ -151,6 +148,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         sal_Bool                          m_bConfigAccessInitialized;
         sal_Bool                          m_bCacheFilled;
         IdToInfoCache                     m_aIdCache;
@@ -183,7 +181,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
 }
 
 // XNameAccess
@@ -390,7 +388,10 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         return sal_True;
@@ -455,7 +456,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        rtl::OUString::createFromAscii( GENERIC_MODULE_NAME ), aGenericCategories ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GENERIC_MODULE_NAME )), aGenericCategories ));
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )
@@ -474,3 +475,4 @@ Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const ::
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

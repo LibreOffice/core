@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,7 +248,7 @@ sal_Bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, c
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue;
+    bool bValue;
     bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(bValue);
 
@@ -285,7 +286,7 @@ sal_Bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue;
+    bool bValue;
     bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(!bValue);
 
@@ -538,13 +539,13 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
         Sequence< double > aHSL;
         if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
         {
-            aOut.append( OUString::createFromAscii("hsl(") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("hsl(")) );
             aOut.append( aHSL[0] );
-            aOut.append( OUString::createFromAscii(",") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM(",")) );
             aOut.append( aHSL[1] * 100.0 );
-            aOut.append( OUString::createFromAscii("%,") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%,")) );
             aOut.append( aHSL[2] * 100.0 );
-            aOut.append( OUString::createFromAscii("%)") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%)")) );
             rStrExpValue = aOut.makeStringAndClear();
 
             bRet = sal_True;
@@ -808,7 +809,7 @@ XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
 
 sal_Bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue;
+    bool bValue;
 
     // An auto color overrides any other color set!
     sal_Bool bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
@@ -942,3 +943,4 @@ sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue,
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

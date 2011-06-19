@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,6 +104,7 @@ struct ConfigurationValue
     const ConfigurationSetting nSettingId;
     const gchar *GconfItem;
     const char *OOoConfItem;
+    const sal_Int32 nOOoConfItemLen;
     const sal_Bool bNeedsTranslation;
     const ConfigurationSetting nDependsOn;
 };
@@ -117,3 +119,5 @@ com::sun::star::beans::Optional< com::sun::star::uno::Any > getValue(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

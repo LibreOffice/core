@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/servicehelper.hxx>
 
 #include "StyleMap.hxx"
 
@@ -48,23 +49,15 @@ StyleMap::~StyleMap()
 {
 }
 
+namespace
+{
+    class theStyleMapUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theStyleMapUnoTunnelId> {};
+}
 
 // XUnoTunnel & co
 const Sequence< sal_Int8 > & StyleMap::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( reinterpret_cast<sal_uInt8*>( aSeq.getArray() ),
-                            0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theStyleMapUnoTunnelId::get().getSeq();
 }
 
 StyleMap* StyleMap::getImplementation( Reference< XInterface > xInt ) throw()
@@ -92,3 +85,4 @@ sal_Int64 SAL_CALL StyleMap::getSomething(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

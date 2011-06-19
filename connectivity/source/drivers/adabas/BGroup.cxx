@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_GROUP_HXX_
 #include "adabas/BGroup.hxx"
-#endif
 #include "adabas/BUsers.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -40,7 +39,6 @@
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -71,9 +69,9 @@ void OAdabasGroup::refreshUsers()
     TStringVector aVector;
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
 
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '" ));
     aSql += getName( );
-    aSql += ::rtl::OUString::createFromAscii("'");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
 
     Reference< XResultSet >  xResult = xStmt->executeQuery(aSql);
     if(xResult.is())
@@ -92,3 +90,4 @@ void OAdabasGroup::refreshUsers()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

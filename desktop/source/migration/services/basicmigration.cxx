@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,8 @@ namespace migration
 //.........................................................................
 
 
-    static ::rtl::OUString sSourceUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/basic" ) );
-    static ::rtl::OUString sTargetUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/__basic_80" ) );
-
+    #define sSourceUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/basic"))
+    #define sTargetUserBasic ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/user/__basic_80"))
 
     // =============================================================================
     // component operations
@@ -52,35 +52,16 @@ namespace migration
 
     ::rtl::OUString BasicMigration_getImplementationName()
     {
-        static ::rtl::OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.desktop.migration.Basic" ) );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.desktop.migration.Basic"));
     }
 
     // -----------------------------------------------------------------------------
 
     Sequence< ::rtl::OUString > BasicMigration_getSupportedServiceNames()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Basic" ) );
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< ::rtl::OUString > aNames(1);
+        aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.migration.Basic" ) );
+        return aNames;
     }
 
     // =============================================================================
@@ -111,7 +92,7 @@ namespace migration
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
             {
-                ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
+                ::osl::FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
                 if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
                 {
                     if ( aFileStatus.getFileType() == ::osl::FileStatus::Directory )
@@ -176,14 +157,14 @@ namespace migration
                     ::rtl::OString aMsg( "BasicMigration::copyFiles: cannot copy " );
                     aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                          +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                    OSL_ENSURE( sal_False, aMsg.getStr() );
+                    OSL_FAIL( aMsg.getStr() );
                 }
                 ++aI;
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "BasicMigration::copyFiles: no user installation!" );
+            OSL_FAIL( "BasicMigration::copyFiles: no user installation!" );
         }
     }
 
@@ -230,11 +211,11 @@ namespace migration
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAscii( "UserData" ) )
+            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "BasicMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "BasicMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceUserBasic;
                 break;
@@ -272,3 +253,5 @@ namespace migration
 //.........................................................................
 }   // namespace migration
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

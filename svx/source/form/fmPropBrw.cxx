@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
+#include <sal/macros.h>
 
 #include "fmhelp.hrc"
 #include "fmprop.hrc"
@@ -228,20 +231,20 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             // create an intermediate window, which is to be the container window of the frame
             // Do *not* use |this| as container window for the frame, this would result in undefined
             // responsiblity for this window (as soon as we initialize a frame with a window, the frame
             // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
-            // #i34249# - 2004-09-27 - fs@openoffice.org
+            // #i34249#
             Window* pContainerWindow = new Window( this );
             pContainerWindow->Show();
             m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
             m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));
+            m_xMeAsFrame->setName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("form property browser")) );
             if ( _pBindings->GetDispatcher() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
@@ -249,13 +252,13 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 //                if ( xSupp.is() )
 //                    xSupp->getFrames()->append( m_xMeAsFrame );
                 // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
-                // #i31834# - 2004-07-27 - cd@openoffice.org
+                // #i31834#
             }
         }
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
+        OSL_FAIL("FmPropBrw::FmPropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -284,7 +287,7 @@ void FmPropBrw::Resize()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Resize: caught an exception!" );
+            OSL_FAIL( "FmPropBrw::Resize: caught an exception!" );
         }
     }
 }
@@ -306,7 +309,7 @@ FmPropBrw::~FmPropBrw()
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )
                                              , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ) };
-            for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i )
                 xName->removeByName( pProps[i] );
         }
     }
@@ -333,7 +336,7 @@ FmPropBrw::~FmPropBrw()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        OSL_FAIL( "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -353,12 +356,11 @@ void FmPropBrw::implDetachController()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
+            OSL_FAIL( "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
         }
     }
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
-    // 96068 - 09.01.2002 - fs@openoffice.org
     if ( m_xBrowserController.is() )
         m_xBrowserController->attachFrame( NULL );
 
@@ -381,7 +383,7 @@ sal_Bool FmPropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
 
@@ -443,7 +445,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
+            OSL_FAIL( "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
             return;
         }
 
@@ -593,7 +595,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlShapeAccess" ) ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
-        ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+        ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
         xOwnContext ) );
 
     bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
@@ -701,7 +703,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                        OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                     }
                 }
 
@@ -716,7 +718,9 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
+        OSL_FAIL("FmPropBrw::StateChanged: Exception occurred!");
     }
     m_bInStateChange = false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,7 @@
 #include <svx/dialogs.hrc>
 
 
-// ImapDlg-Dialoge
+// ImapDlg dialog
 #define RID_SVX_CONTOURDLG_START    RID_SVX_CONTOUR_START
 
 
@@ -65,7 +65,6 @@
 #define STB_STATUS              1
 
 #define CD_IMAPDLG              1300
-#define CDH_IMAPDLG             1301
 
 
 /******************************************************************************/

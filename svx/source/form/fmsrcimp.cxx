@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"
 #include <tools/debug.hxx>
@@ -50,18 +49,14 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
-#ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <comphelper/processfactory.hxx>
 
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmservs.hxx"
 #include "svx/fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
@@ -72,7 +67,6 @@
 #define EQUAL_BOOKMARKS(a, b) a == b
 
 #define IFACECAST(c)          ((const Reference< XInterface >&)c)
- // SUN C52 has some ambiguities without this cast ....
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -164,7 +158,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = (void*)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        void* pTheCount = (void*)(sal_IntPtr)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
         m_lnkWhoWantsToKnow.Call(pTheCount);
     }
 }
@@ -218,8 +212,8 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return rtl::OUString::createFromAscii("0");
-        case STATE_CHECK: return rtl::OUString::createFromAscii("1");
+        case STATE_NOCHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+        case STATE_CHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
         default: break;
     }
     return rtl::OUString();
@@ -253,31 +247,31 @@ sal_Bool FmSearchEngine::MoveCursor()
             else
                 m_xSearchCursor.previous();
     }
-    catch(::com::sun::star::sdbc::SQLException  e)
+    catch(::com::sun::star::sdbc::SQLException const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
         String sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched a DatabaseException (");
         sDebugMessage += (const sal_Unicode*)e.SQLState;
         sDebugMessage.AppendAscii(") !");
-        DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif
         bSuccess = sal_False;
     }
-    catch(Exception  e)
+    catch(Exception const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
         UniString sDebugMessage;
         sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an Exception (");
         sDebugMessage += (const sal_Unicode*)e.Message;
         sDebugMessage.AppendAscii(") !");
-        DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
 #endif
         bSuccess = sal_False;
     }
     catch(...)
     {
-        DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown Exception !");
+        OSL_FAIL("FmSearchEngine::MoveCursor : catched an unknown Exception !");
         bSuccess = sal_False;
     }
 
@@ -427,7 +421,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -494,7 +488,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001  if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -596,7 +590,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
     sal_Bool bMovedAround(sal_False);
     do
     {
-        if (m_eMode == SM_ALLOWSCHEDULE) //CHINA001   if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
+        if (m_eMode == SM_ALLOWSCHEDULE)
         {
             Application::Reschedule();
             Application::Reschedule();
@@ -685,7 +679,8 @@ DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
             const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)//CHINA001 const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
+            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
+
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
@@ -723,7 +718,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)//CHINA001 const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
+        const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
@@ -851,7 +846,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // - a control in the form is bound to "column" - not the different case
     // In such a scenario, the form and the field would work okay, but we here need to case for the different case
     // explicitly
-    // 2003-01-09 - #i8755# - fs@openoffice.org
+    // #i8755#
 
     // so first of all, check if the database handles identifiers case sensitive
     Reference< XConnection > xConn;
@@ -912,7 +907,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     }
     catch(Exception&)
     {
-        DBG_ERROR("Exception occured!");
+        OSL_FAIL("Exception occurred!");
     }
 
 }
@@ -1010,19 +1005,19 @@ void FmSearchEngine::SearchNextImpl()
             switch (m_nPosition)
             {
                 case MATCHING_ANYWHERE :
-                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression
-                    + ::rtl::OUString::createFromAscii("*");
+                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression
+                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     break;
                 case MATCHING_BEGINNING :
-                    strSearchExpression = strSearchExpression + ::rtl::OUString::createFromAscii("*");
+                    strSearchExpression = strSearchExpression + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     break;
                 case MATCHING_END :
-                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression;
+                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression;
                     break;
                 case MATCHING_WHOLETEXT :
                     break;
                 default :
-                    DBG_ERROR("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
+                    OSL_FAIL("FmSearchEngine::SearchNextImpl() : die Methoden-Listbox duerfte nur 4 Eintraege enthalten ...");
             }
         }
     }
@@ -1182,14 +1177,14 @@ void FmSearchEngine::ImplStartNextSearch()
     m_bCancelAsynchRequest = sal_False;
     m_bSearchingCurrently = sal_True;
 
-    if (m_eMode == SM_USETHREAD)//CHINA001 if (m_eMode == FmSearchDialog::SM_USETHREAD)
+    if (m_eMode == SM_USETHREAD)
     {
         FmSearchThread* pSearcher = new FmSearchThread(this);
             // der loescht sich nach Beendigung selber ...
         pSearcher->setTerminationHandler(LINK(this, FmSearchEngine, OnSearchTerminated));
 
         pSearcher->createSuspended();
-        pSearcher->setPriority(::vos::OThread::TPriority_Lowest);
+        pSearcher->setPriority(osl_Thread_PriorityLowest);
         pSearcher->resume();
     }
     else
@@ -1299,3 +1294,4 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
     InvalidatePreviousLoc();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

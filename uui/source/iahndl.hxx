@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ namespace com { namespace sun { namespace star {
         class XMultiServiceFactory;
     }
     namespace security {
-        class DocumentSignatureInformation;
+        struct DocumentSignatureInformation;
     }
     namespace task {
         class FutureDocumentVersionProductUpdateRequest;
@@ -68,7 +69,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class Window;
 
@@ -88,7 +89,7 @@ typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
 
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
 
 //============================================================================
 class UUIInteractionHelper
@@ -374,3 +375,5 @@ private:
 */
 
 #endif // UUI_IAHNDL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

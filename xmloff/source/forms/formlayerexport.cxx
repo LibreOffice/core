@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,7 +108,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport::examine: could not examine the draw page!");
+            OSL_FAIL("OFormLayerXMLExport::examine: could not examine the draw page!");
         }
     }
 
@@ -179,3 +180,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

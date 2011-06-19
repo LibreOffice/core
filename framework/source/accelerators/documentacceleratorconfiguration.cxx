@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,61 +30,39 @@
 #include "precompiled_framework.hxx"
 #include <accelerators/documentacceleratorconfiguration.hxx>
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 #include <xml/acceleratorconfigurationreader.hxx>
-#endif
 
-#ifndef __FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
 #include <xml/acceleratorconfigurationwriter.hxx>
-#endif
 
-#ifndef __FRAMEWORK_XML_SAXNAMESPACEFILTER_HXX_
 #include <xml/saxnamespacefilter.hxx>
-#endif
 
 //_______________________________________________
 // own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <services.h>
 
 //_______________________________________________
 // interface includes
 
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
 
 //_______________________________________________
 // other includes
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 
 //_______________________________________________
 // const
@@ -142,7 +121,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                        ::rtl::OUString::createFromAscii("DocumentRoot"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot")),
                         css::uno::Reference< css::embed::XStorage >());
 
     aWriteLock.unlock();
@@ -218,15 +197,6 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
         DocumentAcceleratorConfiguration::reload();
         m_aPresetHandler.addStorageListener(this);
     }
-    /*
-
-    Sometimes the configuration seams to be corrupted ..
-    So it would be nice if we dont crash the office then .-)
-    #121559#
-
-    catch(const css::uno::RuntimeException& exRun)
-    { throw exRun; }
-    */
     catch(const css::uno::Exception&)
     {}
 }
@@ -238,3 +208,5 @@ void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

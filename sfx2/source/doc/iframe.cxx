@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,6 @@ IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinB
         SetBorderStyle( WINDOW_BORDER_NOBORDER );
     else
         SetBorderStyle( WINDOW_BORDER_NORMAL );
-    //SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
 void IFrameWindow_Impl::SetBorder( sal_Bool bNewBorder )
@@ -159,7 +159,7 @@ throw( uno::RuntimeException )
         // we must destroy the IFrame before the parent is destroyed
         xWindow->addEventListener( this );
 
-        mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ) ),
+        mxFrame = uno::Reference< frame::XFrame >( mxFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ),
                     uno::UNO_QUERY );
         uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
         mxFrame->initialize( xWin );
@@ -173,15 +173,15 @@ throw( uno::RuntimeException )
 
         util::URL aTargetURL;
         aTargetURL.Complete = ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-        uno::Reference < util::XURLTransformer > xTrans( mxFact->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        uno::Reference < util::XURLTransformer > xTrans( mxFact->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
         uno::Sequence < beans::PropertyValue > aProps(2);
-        aProps[0].Name = ::rtl::OUString::createFromAscii("PluginMode");
+        aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMode"));
         aProps[0].Value <<= (sal_Int16) 2;
-        aProps[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+        aProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
         aProps[1].Value <<= (sal_Bool) sal_True;
-        uno::Reference < frame::XDispatch > xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_self"), 0 );
+        uno::Reference < frame::XDispatch > xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
@@ -384,7 +384,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&,
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (::com::sun::star::uno::RuntimeException)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString::createFromAscii(".uno:InsertObjectFloatingFrame"), mxObj );
+    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:InsertObjectFloatingFrame")), mxObj );
     if ( pDlg )
         pDlg->Execute();
     return 0;
@@ -395,3 +395,5 @@ void SAL_CALL IFrameObject::setTitle( const ::rtl::OUString& ) throw (::com::sun
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

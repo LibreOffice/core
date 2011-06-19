@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
 #include "helpid.hrc"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -88,7 +89,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     VCLXPopupMenu* pVCLPopupMenu = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*     pPopupMenu    = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pVCLPopupMenu )
@@ -148,14 +149,9 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
-        //pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
-//                xDispatch->dispatch( aTargetURL, aArgs );
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacrosMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
         Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
-    }
-    else
-    {
     }
 }
 
@@ -186,10 +182,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
-    const ::rtl::OUString providerKey =
-    ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
-    const ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
+    const ::rtl::OUString providerKey(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.ScriptProviderFor"));
+    const ::rtl::OUString languageProviderName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.LanguageScriptProvider"));
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -230,3 +224,5 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

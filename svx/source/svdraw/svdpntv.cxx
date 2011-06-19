@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,7 +84,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #114409#-3 Migrate Encirclement
 class ImplEncirclementOverlay
 {
     // The OverlayObjects
@@ -145,7 +145,7 @@ void ImplEncirclementOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPos
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
-    for(SdrPaintWindowVector::const_iterator a = maPaintWindows.begin(); a != maPaintWindows.end(); a++)
+    for(SdrPaintWindowVector::const_iterator a = maPaintWindows.begin(); a != maPaintWindows.end(); ++a)
     {
         if(&((*a)->GetOutputDevice()) == &rOut)
         {
@@ -314,13 +314,12 @@ SdrPaintView::~SdrPaintView()
         maPaintWindows.pop_back();
     }
 
-    // #114409#-3 Migrate HelpLine
     BrkEncirclement();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //If the stylesheet has been destroyed
     if (&rBC == pDefaultStyleSheet)
@@ -963,47 +962,7 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
 
         if(pKnownTarget)
         {
-            // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
-            // rReg may be made more granular (fine) with using it. Normally, rReg
-            // does come from Window::Paint() anyways and thus is based on a single
-            // rectangle which was derived from exactly that repaint region
-            Region aOptimizedRepaintRegion(rReg);
-
-            // #i76114# Intersecting the region with the Window's paint region is disabled
-            // for print preview in Calc, because the intersection can be empty (if the paint
-            // region is outside of the table area of the page), and then no clip region
-            // would be set.
-            if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
-            {
-                Window* pWindow = (Window*)pOut;
-
-                if(pWindow->IsInPaint())
-                {
-                    if(!pWindow->GetPaintRegion().IsEmpty())
-                    {
-                        aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
-
-#ifdef DBG_UTIL
-                        // #i74769# test-paint repaint region
-                        static bool bDoPaintForVisualControl(false);
-                        if(bDoPaintForVisualControl)
-                        {
-                            RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
-                            Rectangle aRegionRectangle;
-
-                            while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
-                            {
-                                pWindow->SetLineColor(COL_LIGHTGREEN);
-                                pWindow->SetFillColor();
-                                pWindow->DrawRect(aRegionRectangle);
-                            }
-
-                            aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
-                        }
-#endif
-                    }
-                }
-            }
+            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
 
             // prepare redraw
             pKnownTarget->PrepareRedraw(aOptimizedRepaintRegion);
@@ -1026,6 +985,70 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
         // forget prepared SdrPageWindow
         mpPageView->setPreparedPageWindow(0);
     }
+}
+
+void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+{
+    SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
+    OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
+
+    if(mpPageView)
+    {
+        SdrPageWindow* pKnownTarget = mpPageView->FindPageWindow(*pPaintWindow);
+
+        if(pKnownTarget)
+        {
+            Region aOptimizedRepaintRegion = OptimizeDrawLayersRegion( pOut, rReg, bDisableIntersect );
+            pKnownTarget->GetPaintWindow().SetRedrawRegion(aOptimizedRepaintRegion);
+            mpPageView->setPreparedPageWindow(pKnownTarget); // already set actually
+        }
+    }
+}
+
+Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
+{
+    // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
+    // rReg may be made more granular (fine) with using it. Normally, rReg
+    // does come from Window::Paint() anyways and thus is based on a single
+    // rectangle which was derived from exactly that repaint region
+    Region aOptimizedRepaintRegion(rReg);
+
+    // #i76114# Intersecting the region with the Window's paint region is disabled
+    // for print preview in Calc, because the intersection can be empty (if the paint
+    // region is outside of the table area of the page), and then no clip region
+    // would be set.
+    if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
+    {
+        Window* pWindow = (Window*)pOut;
+
+        if(pWindow->IsInPaint())
+        {
+            if(!pWindow->GetPaintRegion().IsEmpty())
+            {
+                aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
+
+#ifdef DBG_UTIL
+                // #i74769# test-paint repaint region
+                static bool bDoPaintForVisualControl(false);
+                if(bDoPaintForVisualControl)
+                {
+                    RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
+                    Rectangle aRegionRectangle;
+
+                    while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                    {
+                        pWindow->SetLineColor(COL_LIGHTGREEN);
+                        pWindow->SetFillColor();
+                        pWindow->DrawRect(aRegionRectangle);
+                    }
+
+                    aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
+                }
+#endif
+            }
+        }
+    }
+    return aOptimizedRepaintRegion;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1155,14 +1178,12 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
 
 void SdrPaintView::InvalidateOneWin(Window& rWin)
 {
-    // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(INVALIDATE_NOERASE);
 }
 
 void SdrPaintView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 {
-    // #111096#
     // do not erase background, that causes flicker (!)
     rWin.Invalidate(rRect, INVALIDATE_NOERASE);
 }
@@ -1278,7 +1299,6 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDo
 #endif
 }
 
-/* new interface src537 */
 sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     if(bOnlyHardAttr || !pDefaultStyleSheet)
@@ -1301,9 +1321,8 @@ sal_Bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAl
     return sal_True;
 }
 
-SfxStyleSheet* SdrPaintView::GetStyleSheet() const // SfxStyleSheet* SdrPaintView::GetStyleSheet(sal_Bool& rOk) const
+SfxStyleSheet* SdrPaintView::GetStyleSheet() const
 {
-    //rOk=sal_True;
     return GetDefaultStyleSheet();
 }
 
@@ -1470,7 +1489,7 @@ Color SdrPaintView::GetGridColor() const
     return maGridColor;
 }
 
-// #103834# Set background color for svx at SdrPageViews
+// Set background color for svx at SdrPageViews
 void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
 {
     if(mpPageView)
@@ -1479,7 +1498,7 @@ void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)
     }
 }
 
-// #103911# Set document color for svx at SdrPageViews
+// Set document color for svx at SdrPageViews
 void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 {
     if(mpPageView)
@@ -1488,13 +1507,11 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
     }
 }
 
-// #114898#
 bool SdrPaintView::IsBufferedOutputAllowed() const
 {
     return (mbBufferedOutputAllowed && maDrawinglayerOpt.IsPaintBuffer());
 }
 
-// #114898#
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 {
     if(bNew != (bool)mbBufferedOutputAllowed)
@@ -1545,4 +1562,4 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
     }
 }
 
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

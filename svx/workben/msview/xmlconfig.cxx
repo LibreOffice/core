@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -327,7 +328,7 @@ void load_config( const OUString& rPath )
         // get parser
         Reference< XParser > xParser(
             comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
             UNO_QUERY_THROW );
 
         // get filter
@@ -342,7 +343,7 @@ void load_config( const OUString& rPath )
     }
     catch( Exception& r )
     {
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("load_config(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
@@ -573,3 +574,4 @@ rtl::OUString SwitchElementConfig::format( SvStream& rStream, sal_Size& nLength 
     return ElementConfig::dump_hex( rStream, nLength );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

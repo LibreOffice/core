@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "CFStringUtilities.hxx"
 #include "resourceprovider.hxx"
@@ -85,7 +86,7 @@ ControlHelper::~ControlHelper()
         [m_pUserPane release];
     }
 
-    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); control++) {
+    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
         NSControl* pControl = (*control);
         NSString* sLabelName = m_aMapListLabels[pControl];
         if (sLabelName != nil) {
@@ -168,7 +169,7 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bE
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", bEnable);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" preview checkbox cannot be changed");
@@ -196,7 +197,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSControl* pControl = getControl( nControlId );
 
@@ -225,7 +226,7 @@ void ControlHelper::setLabel( sal_Int16 nControlId, const NSString* aLabel )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "label", aLabel);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -257,7 +258,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" value for preview is unchangeable");
@@ -290,7 +291,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "controlAction", nControlAction);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Any aRetval;
 
     NSControl* pControl = getControl( nControlId );
@@ -804,7 +805,7 @@ void ControlHelper::layoutControls()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (nil == m_pUserPane) {
         OSL_TRACE("no user pane to layout");
@@ -1017,3 +1018,5 @@ void ControlHelper::updateFilterUI()
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

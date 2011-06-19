@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 
 #include <MNSInclude.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_XCODEPROXY_HDL_
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#endif
 
 
 using namespace com::sun::star::uno;
@@ -66,3 +65,5 @@ namespace connectivity
     }
 }
 #endif //_CONNECTIVITY_MAB_MOZABHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

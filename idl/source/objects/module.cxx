@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,25 +32,14 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include <attrib.hxx>
 #include <module.hxx>
 #include <globals.hxx>
 #include <database.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>
 
-/****************** SvMetaModule ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 
-/*************************************************************************
-|*
-|*    SvMetaModule::SvMetaModule()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 SvMetaModule::SvMetaModule()
 #ifdef IDL_COMPILER
     : bImported( sal_False )
@@ -66,36 +56,27 @@ SvMetaModule::SvMetaModule( const String & rIdlFileName, sal_Bool bImp )
 }
 #endif
 
-/*************************************************************************
-|*
-|*    SvMetaModule::Load()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 #define MODULE_VER      0x0001
 void SvMetaModule::Load( SvPersistStream & rStm )
 {
-    bImported = sal_True; // immer importiert
+    bImported = sal_True; // import always
     SvMetaExtern::Load( rStm );
 
     sal_uInt16 nVer;
 
-    rStm >> nVer; // Version
+    rStm >> nVer; // version
     DBG_ASSERT( (nVer & ~IDL_WRITE_MASK) == MODULE_VER, "false version" );
 
     rStm >> aClassList;
     rStm >> aTypeList;
     rStm >> aAttrList;
-    // Browser
+    // browser
     rStm.ReadByteString( aIdlFileName );
     rStm.ReadByteString( aHelpFileName );
     rStm.ReadByteString( aSlotIdFile );
     rStm.ReadByteString( aModulePrefix );
 
-    // Compiler Daten lesen
+    // read compiler data
     sal_uInt16 nCmpLen;
     rStm >> nCmpLen;
 #ifdef IDL_COMPILER
@@ -109,15 +90,6 @@ void SvMetaModule::Load( SvPersistStream & rStm )
 #endif
 }
 
-/*************************************************************************
-|*
-|*    SvMetaModule::Save()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 void SvMetaModule::Save( SvPersistStream & rStm )
 {
     SvMetaExtern::Save( rStm );
@@ -127,13 +99,13 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm << aClassList;
     rStm << aTypeList;
     rStm << aAttrList;
-    // Browser
+    // browser
     rStm.WriteByteString( aIdlFileName );
     rStm.WriteByteString( aHelpFileName );
     rStm.WriteByteString( aSlotIdFile );
     rStm.WriteByteString( aModulePrefix );
 
-    // Compiler Daten schreiben
+    // write compiler data
     sal_uInt16 nCmpLen = 0;
     sal_uLong nLenPos = rStm.Tell();
     rStm << nCmpLen;
@@ -141,7 +113,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm << aBeginName;
     rStm << aEndName;
     rStm << aNextName;
-    // Laenge der Compiler Daten schreiben
+    // write length of compiler data
     sal_uLong nPos = rStm.Tell();
     rStm.Seek( nLenPos );
     rStm << (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) );
@@ -149,15 +121,6 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 #endif
 }
 
-/*************************************************************************
-|*
-|*    SvMetaModule::SetName()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 sal_Bool SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 {
     if( pBase )
@@ -169,11 +132,6 @@ sal_Bool SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase 
 }
 
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*    SvMetaModule::GetNextName()
-|*
-|*    Beschreibung
-*************************************************************************/
 sal_Bool SvMetaModule::FillNextName( SvGlobalName * pName )
 {
     *pName = aNextName;
@@ -187,11 +145,6 @@ sal_Bool SvMetaModule::FillNextName( SvGlobalName * pName )
     return sal_False;
 }
 
-/*************************************************************************
-|*    SvMetaModule::ReadSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -215,11 +168,6 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aModulePrefix.ReadSvIdl( SvHash_ModulePrefix(), rInStm );
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                          SvStream & rOutStm,
                                          sal_uInt16 nTab )
@@ -248,11 +196,6 @@ void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::ReadContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
@@ -264,7 +207,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         if( aClass->ReadSvIdl( rBase, rInStm ) )
         {
             aClassList.Append( aClass );
-            // Global bekanntgeben
+            // announce globally
             rBase.GetClassList().Append( aClass );
         }
     }
@@ -274,9 +217,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {
-            // Im Modul deklariert
+            // declared in module
             aTypeList.Append( aEnum );
-            // Global bekanntgeben
+            // announce globally
             rBase.GetTypeList().Append( aEnum );
         }
     }
@@ -288,9 +231,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
         if( xItem->ReadSvIdl( rBase, rInStm ) )
         {
-            // Im Modul deklariert
+            // declared in module
             aTypeList.Append( xItem );
-            // Global bekanntgeben
+            // announce globally
             rBase.GetTypeList().Append( xItem );
         }
     }
@@ -308,12 +251,12 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 SvTokenStream aTokStm( aFullName.GetFull() );
                 if( SVSTREAM_OK == aTokStm.GetStream().GetError() )
                 {
-                    // Fehler aus alter Datei retten
+                    // rescue error from old file
                     SvIdlError aOldErr = rBase.GetError();
-                    // Fehler zuruecksetzen
+                    // reset error
                     rBase.SetError( SvIdlError() );
 
-                    sal_uInt32 nBeginPos = 0xFFFFFFFF; // kann mit Tell nicht vorkommen
+                    sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
                     while( nBeginPos != aTokStm.Tell() )
                     {
                         nBeginPos = aTokStm.Tell();
@@ -325,7 +268,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                     {
                         rBase.WriteError( aTokStm );
                     }
-                    // Fehler aus alter Datei wieder herstellen
+                    // recover error from old file
                     rBase.SetError( aOldErr );
                 }
                 else
@@ -353,20 +296,15 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             if( xSlot->Test( rBase, rInStm ) )
             {
-                // Im Modul deklariert
+                // declared in module
                 aAttrList.Append( xSlot );
-                // Global bekanntgeben
+                // announce globally
                 rBase.AppendAttr( xSlot );
             }
         }
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
                                       SvStream & rOutStm,
                                       sal_uInt16 nTab )
@@ -392,16 +330,9 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*
-|*    SvMetaModule::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    bIsModified = sal_True; // bisher immer wenn Compiler laueft
+    bIsModified = sal_True; // up to now always when compiler running
 
     sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok  = rInStm.GetToken_Next();
@@ -425,28 +356,21 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
     {
         aNextName = aBeginName;
 
-        rBase.Push( this ); // auf den Context Stack
+        rBase.Push( this ); // onto the context stack
 
         if( ReadNameSvIdl( rBase, rInStm ) )
         {
-            // Zeiger auf sich selbst setzen
+            // set pointer to itself
             SetModule( rBase );
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
         }
-        rBase.GetStack().Pop(); // und runter
+        rBase.GetStack().Pop(); // remove from stack
     }
     if( !bOk )
         rInStm.Seek( nTokPos );
     return bOk;
 }
 
-/*************************************************************************
-|*
-|*    SvMetaModule::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                                sal_uInt16 nTab )
 {
@@ -459,9 +383,6 @@ void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteSfx()
-*************************************************************************/
 void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     for( sal_uLong n = 0; n < aClassList.Count(); n++ )
@@ -481,9 +402,6 @@ void SvMetaModule::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteAttributes()
-*************************************************************************/
 void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
                                     SvStream & rOutStm,
                                      sal_uInt16 nTab,
@@ -499,31 +417,6 @@ void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteSbx()
-*************************************************************************/
-/*
-void SvMetaModule::WriteSbx( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                SvNamePosList & rList )
-{
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
-    {
-        SvMetaClass * pClass = aClassList.GetObject( n );
-        if( !pClass->IsShell() && pClass->GetAutomation() )
-        {
-            rList.Insert( new SvNamePos( pClass->GetUUId(), rOutStm.Tell() ),
-                        LIST_APPEND );
-            SbxObjectRef xSbxObj = new SbxObject( pClass->GetName() );
-            pClass->FillSbxObject( rBase, xSbxObj );
-            xSbxObj->Store( rOutStm );
-        }
-    }
-}
- */
-
-/*************************************************************************
-|*    SvMetaModule::Write()
-*************************************************************************/
 void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                               sal_uInt16 nTab,
                              WriteType nT, WriteAttribute nA )
@@ -545,27 +438,6 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << '{' << endl;
         WriteTab( rOutStm, nTab );
         rOutStm << "importlib(\"STDOLE.TLB\");" << endl;
-
-    /*
-        for( sal_uLong n = 0; n < aTypeList.Count(); n++ )
-        {
-            SvMetaType * pType = aTypeList.GetObject( n );
-            if( !pType ->Write( rBase, rOutStm, nTab +1, nT, nA ) )
-                return sal_False;
-        }
-    */
-        /*
-        for( sal_uLong n = 0; n < rBase.GetModuleList().Count(); n++ )
-        {
-            SvMetaModule * pModule = rBase.GetModuleList().GetObject( n );
-            const SvMetaTypeMemberList &rTypeList = pModule->GetTypeList();
-            for( sal_uLong n = 0; n < rTypeList.Count(); n++ )
-            {
-                SvMetaType * pType = rTypeList.GetObject( n );
-                pType->Write( rBase, rOutStm, nTab +1, nT, nA );
-            }
-        }
-        */
 
         for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
@@ -601,7 +473,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 if( pSC )
                     rOutStm << " : " << pSC->GetName().GetBuffer();
 
-                // Importierte Klassen
+                // imported classes
                 const SvClassElementMemberList& rClassList = pClass->GetClassList();
                 if ( rClassList.Count() )
                 {
@@ -623,7 +495,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             }
         }
         rOutStm << "</CLASSES>" << endl << endl;
-        // kein Break!
+        // no break!
     }
 
     case WRITE_C_SOURCE:
@@ -632,7 +504,7 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
-            if( !pClass->IsShell() /* && pClass->GetAutomation() */ )
+            if( !pClass->IsShell() )
                 pClass->Write( rBase, rOutStm, nTab, nT, nA );
         }
     }
@@ -643,13 +515,9 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteSrc()
-*************************************************************************/
 void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-//  rOutStm << "#pragma CHARSET IBMPC" << endl;
     if( aSlotIdFile.Len() )
         rOutStm << "//#include <" << aSlotIdFile.GetBuffer() << '>' << endl;
     for( sal_uLong n = 0; n < aClassList.Count(); n++ )
@@ -658,9 +526,6 @@ void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteHxx()
-*************************************************************************/
 void SvMetaModule::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
                              sal_uInt16 nTab )
 {
@@ -671,9 +536,6 @@ void SvMetaModule::WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaModule::WriteCxx()
-*************************************************************************/
 void SvMetaModule::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
                              sal_uInt16 nTab )
 {
@@ -686,3 +548,4 @@ void SvMetaModule::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
 
 #endif // IDL_COMPILER
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

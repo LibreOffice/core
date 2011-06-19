@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItAuthorItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
 }
@@ -135,7 +136,7 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItDateItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
@@ -184,9 +185,10 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItTextItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItTextItem( *this );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

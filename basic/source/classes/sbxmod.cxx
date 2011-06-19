@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <list>
 
-#include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/brdcst.hxx>
@@ -46,14 +46,11 @@
 #include "runtime.hxx"
 #include "token.hxx"
 #include "sbunoobj.hxx"
-#include "sbtrace.hxx"
 
-
-//#include <basic/hilight.hxx>
 #include <svtools/syntaxhighlight.hxx>
 
 #include <basic/basrdll.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <basic/sbobjmod.hxx>
 #include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -61,6 +58,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/document/XVbaMethodParameter.hpp>
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -72,7 +70,7 @@ using namespace com::sun::star;
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #define CDECL
 #endif
 #ifdef UNX
@@ -91,6 +89,7 @@ using namespace com::sun::star;
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
+using namespace ::com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
@@ -185,7 +184,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                 }
                 catch(  Exception& )
                 {
-                    OSL_ENSURE( false, "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
+                    OSL_FAIL( "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
                 }
             }
 
@@ -306,9 +305,8 @@ DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< 
 
     // call method
     SbxVariableRef xReturn = new SbxVariable;
-    ErrCode nErr = SbxERR_OK;
 
-    nErr = pMethod->Call( xReturn );
+    pMethod->Call( xReturn );
     Any aReturn;
     // get output parameters
     if ( xSbxParams.Is() )
@@ -513,10 +511,22 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+void VBAUnlockDocuments( StarBASIC* pBasic )
+{
+    if ( pBasic && pBasic->IsDocBasic() )
+    {
+        SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ), SbxCLASS_DONTCARE ) );
+        if ( pGlobs )
+        {
+            uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY );
+            ::basic::vba::lockControllersOfAllDocuments( xModel, sal_False );
+            ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, sal_True );
+        }
+    }
+}
 
-// Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
-// Elemente von anderen Modulen aus gefunden werden koennen.
+// A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
+// could be found from other module.
 
 SbModule::SbModule( const String& rName,  sal_Bool bVBACompat )
          : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASICModule") ) ),
@@ -565,7 +575,7 @@ const SbxObject* SbModule::FindType( String aTypeName ) const
 }
 
 
-// Aus dem Codegenerator: Loeschen des Images und Invalidieren der Entries
+// From the code generator: deletion of images and the oposite of validation for entries
 
 void SbModule::StartDefinitions()
 {
@@ -573,8 +583,8 @@ void SbModule::StartDefinitions()
     if( pClassData )
         pClassData->clear();
 
-    // Methoden und Properties bleiben erhalten, sind jedoch ungueltig
-    // schliesslich sind ja u.U. die Infos belegt
+    // methods and properties persist, but they are invalid;
+    // at least are the information under certain conditions clogged
     sal_uInt16 i;
     for( i = 0; i < pMethods->Count(); i++ )
     {
@@ -592,7 +602,7 @@ void SbModule::StartDefinitions()
     }
 }
 
-// Methode anfordern/anlegen
+// request/create method
 
 SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
 {
@@ -608,8 +618,8 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
         pMethods->Put( pMeth, pMethods->Count() );
         StartListening( pMeth->GetBroadcaster(), sal_True );
     }
-    // Per Default ist die Methode GUELTIG, da sie auch vom Compiler
-    // (Codegenerator) erzeugt werden kann
+    // The method is per default valid, because it could be
+    // created from the compiler (code generator) as well.
     pMeth->bInvalid = sal_False;
     pMeth->ResetFlag( SBX_FIXED );
     pMeth->SetFlag( SBX_WRITE );
@@ -620,7 +630,7 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
     return pMeth;
 }
 
-// Property anfordern/anlegen
+// request/create property
 
 SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
 {
@@ -682,7 +692,7 @@ SbIfaceMapperMethod::~SbIfaceMapperMethod()
 TYPEINIT1(SbIfaceMapperMethod,SbMethod)
 
 
-// Aus dem Codegenerator: Ungueltige Eintraege entfernen
+// From the code generator: remove invalid entries
 
 void SbModule::EndDefinitions( sal_Bool bNewState )
 {
@@ -763,12 +773,10 @@ const String& SbModule::GetSource() const
     return aRetStr;
 }
 
-// Parent und BASIC sind eins!
+// Parent and BASIC are one!
 
 void SbModule::SetParent( SbxObject* p )
 {
-    // #118083: Assertion is not valid any more
-    // DBG_ASSERT( !p || p->IsA( TYPE(StarBASIC) ), "SbModules nur in BASIC eintragen" );
     pParent = p;
 }
 
@@ -781,6 +789,82 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         SbxVariable* pVar = pHint->GetVar();
         SbProperty* pProp = PTR_CAST(SbProperty,pVar);
         SbMethod* pMeth = PTR_CAST(SbMethod,pVar);
+        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcProperty )
+        {
+
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                String aProcName;
+                aProcName.AppendAscii( "Property Get " );
+                aProcName += pProcProperty->GetName();
+
+                SbxVariable* pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                if( pMethVar )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    sal_uInt16 nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMethVar, 0 );    // Method as parameter 0
+                        for( sal_uInt16 i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMethVar->SetParameters( xMethParameters );
+                        pMethVar->Get( aVals );
+                        pMethVar->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMethVar->Get( aVals );
+                    }
+
+                    pVar->Put( aVals );
+                }
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                SbxVariable* pMethVar = NULL;
+
+                bool bSet = pProcProperty->isSet();
+                if( bSet )
+                {
+                    pProcProperty->setSet( false );
+
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Set " );
+                    aProcName += pProcProperty->GetName();
+                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                }
+                if( !pMethVar ) // Let
+                {
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Let " );
+                    aProcName += pProcProperty->GetName();
+                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                }
+
+                if( pMethVar )
+                {
+                    // Setup parameters
+                    SbxArrayRef xArray = new SbxArray;
+                    xArray->Put( pMethVar, 0 ); // Method as parameter 0
+                    xArray->Put( pVar, 1 );
+                    pMethVar->SetParameters( xArray );
+
+                    SbxValues aVals;
+                    pMethVar->Get( aVals );
+                    pMethVar->SetParameters( NULL );
+                }
+            }
+        }
         if( pProp )
         {
             if( pProp->GetModule() != this )
@@ -791,11 +875,11 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
                 if( pMeth->bInvalid && !Compile() )
-                    // Auto-Compile hat nicht geklappt!
+                    // auto compile has not worked!
                     StarBASIC::Error( SbERR_BAD_PROP_VALUE );
                 else
                 {
-                    // Aufruf eines Unterprogramms
+                    // Call of a subprogram
                     SbModule* pOld = pMOD;
                     pMOD = this;
                     Run( (SbMethod*) pVar );
@@ -820,8 +904,8 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-// Das Setzen der Source macht das Image ungueltig
-// und scant die Methoden-Definitionen neu ein
+// The setting of the source makes the image invalid
+// and scans the method definitions newly in
 
 void SbModule::SetSource( const String& r )
 {
@@ -835,15 +919,16 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
+        aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
 
-        // Suchen nach SUB oder FUNCTION
+        // Searching for SUB or FUNCTION
         SbiToken eLastTok = NIL;
         while( !aTok.IsEof() )
         {
-            // #32385: Nicht bei declare
+            // #32385: not by declare
             SbiToken eCurTok = aTok.Next();
             if( eLastTok != DECLARE )
             {
@@ -874,7 +959,7 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
             }
             eLastTok = eCurTok;
         }
-        // Definition der Methode
+        // Definition of the method
         SbMethod* pMeth = NULL;
         if( eEndTok != NIL )
         {
@@ -887,13 +972,13 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                     t = SbxVOID;
                 pMeth = GetMethod( aName_, t );
                 pMeth->nLine1 = pMeth->nLine2 = nLine1;
-                // Die Methode ist erst mal GUELTIG
+                // The method is for a start VALID
                 pMeth->bInvalid = sal_False;
             }
             else
                 eEndTok = NIL;
         }
-        // Skip bis END SUB/END FUNCTION
+        // Skip up to END SUB/END FUNCTION
         if( eEndTok != NIL )
         {
             while( !aTok.IsEof() )
@@ -931,14 +1016,14 @@ SbMethod* SbModule::GetFunctionForLine( sal_uInt16 nLine )
     return NULL;
 }
 
-// Ausstrahlen eines Hints an alle Basics
+// Broadcast of a hint to all Basics
 
 static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 {
-    // Selbst ein BASIC?
+    // Self a BASIC?
     if( pObj->IsA( TYPE(StarBASIC) ) && pObj->IsBroadcaster() )
         pObj->GetBroadcaster().Broadcast( SbxHint( nId, p ) );
-    // Dann die Unterobjekte fragen
+    // Then ask for the subobjects
     SbxArray* pObjs = pObj->GetObjects();
     for( sal_uInt16 i = 0; i < pObjs->Count(); i++ )
     {
@@ -955,35 +1040,35 @@ static void SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
     _SendHint( pObj, nId, p );
 }
 
-// #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
-// beim Programm-Ende freigeben, damit nichts gehalten wird.
+// #57841 Clear Uno-Objects, which were helt in RTL functions,
+// at the end of the program, so that nothing were helt.
 void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
-    // return-Wert von CreateUnoService loeschen
+    // delete the return value of CreateUnoService
     static String aName( RTL_CONSTASCII_USTRINGPARAM("CreateUnoService") );
     SbxVariable* pVar = pBasic->GetRtl()->Find( aName, SbxCLASS_METHOD );
     if( pVar )
         pVar->SbxValue::Clear();
 
-    // return-Wert von CreateUnoDialog loeschen
+    // delete the return value of CreateUnoDialog
     static String aName2( RTL_CONSTASCII_USTRINGPARAM("CreateUnoDialog") );
     pVar = pBasic->GetRtl()->Find( aName2, SbxCLASS_METHOD );
     if( pVar )
         pVar->SbxValue::Clear();
 
-    // return-Wert von CDec loeschen
+    // delete the return value of CDec
     static String aName3( RTL_CONSTASCII_USTRINGPARAM("CDec") );
     pVar = pBasic->GetRtl()->Find( aName3, SbxCLASS_METHOD );
     if( pVar )
         pVar->SbxValue::Clear();
 
-    // return-Wert von CreateObject loeschen
+    // delete return value of CreateObject
     static String aName4( RTL_CONSTASCII_USTRINGPARAM("CreateObject") );
     pVar = pBasic->GetRtl()->Find( aName4, SbxCLASS_METHOD );
     if( pVar )
         pVar->SbxValue::Clear();
 
-    // Ueber alle Sub-Basics gehen
+    // Go over all Sub-Basics
     SbxArray* pObjs = pBasic->GetObjects();
     sal_uInt16 nCount = pObjs->Count();
     for( sal_uInt16 i = 0 ; i < nCount ; i++ )
@@ -997,13 +1082,13 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 
 void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 {
-    // #67781 Rueckgabewerte der Uno-Methoden loeschen
+    // #67781 Delete return values of the Uno-methods
     clearUnoMethods();
     clearUnoServiceCtors();
 
     ClearUnoObjectsInRTL_Impl_Rek( pBasic );
 
-    // Oberstes Basic suchen
+    // Search for the topmost Basic
     SbxObject* p = pBasic;
     while( p->GetParent() )
         p = p->GetParent();
@@ -1019,24 +1104,23 @@ void SbModule::SetVBACompat( sal_Bool bCompat )
 {
     mbVBACompat = bCompat;
 }
-// Ausfuehren eines BASIC-Unterprogramms
+// Run a Basic-subprogram
 sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {
+    OSL_TRACE("About to run %s, vba compatmode is %d", rtl::OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mbVBACompat );
     static sal_uInt16 nMaxCallLevel = 0;
     static String aMSOMacroRuntimeLibName = String::CreateFromAscii( "Launcher" );
     static String aMSOMacroRuntimeAppSymbol = String::CreateFromAscii( "Application" );
 
     sal_uInt16 nRes = 0;
     sal_Bool bDelInst = sal_Bool( pINST == NULL );
+        bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
     uno::Reference< script::vba::XVBACompatibility > xVBACompat;
     if( bDelInst )
     {
-#ifdef DBG_TRACE_BASIC
-        dbg_InitTrace();
-#endif
-        // #32779: Basic waehrend der Ausfuehrung festhalten
+        // #32779: Hold Basic during the execution
         xBasic = (StarBASIC*) GetParent();
 
         pINST = new SbiInstance( (StarBASIC*) GetParent() );
@@ -1081,7 +1165,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             }
         }
 
-        // Error-Stack loeschen
+        // Delete the Error-Stack
         SbErrorStack*& rErrStack = GetSbData()->pErrStack;
         delete rErrStack;
         rErrStack = NULL;
@@ -1091,7 +1175,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 #ifdef UNX
           struct rlimit rl;
           getrlimit ( RLIMIT_STACK, &rl );
-          // printf( "RLIMIT_STACK = %ld\n", rl.rlim_cur );
 #endif
 #if defined LINUX
           // Empiric value, 900 = needed bytes/Basic call level
@@ -1109,32 +1192,28 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
         }
     }
 
-    // Rekursion zu tief?
+    // Recursion to deep?
     if( ++pINST->nCallLvl <= nMaxCallLevel )
     {
-        // Globale Variable in allen Mods definieren
+        // Define a globale variable in all Mods
         GlobalRunInit( /* bBasicStart = */ bDelInst );
 
-        // Trat ein Compiler-Fehler auf? Dann starten wir nicht
+        // Appeared a compiler error? Then we don't launch
         if( GetSbData()->bGlobalInitErr == sal_False )
         {
             if( bDelInst )
             {
                 SendHint( GetParent(), SBX_HINT_BASICSTART, pMeth );
 
-                // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
-                // Erklaerung siehe runtime.cxx bei SbiInstance::CalcBreakCallLevel()
-                // BreakCallLevel ermitteln
+                // 1996-10-16: #31460 New concept for StepInto/Over/Out
+                // For an explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
+                // Identify the BreakCallLevel
                 pINST->CalcBreakCallLevel( pMeth->GetDebugFlags() );
             }
 
             SbModule* pOldMod = pMOD;
             pMOD = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
-
-#ifdef DBG_TRACE_BASIC
-            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl );
-#endif
 
             pRt->pNext = pINST->pRun;
             if( pRt->pNext )
@@ -1148,31 +1227,26 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             if( pRt->pNext )
                 pRt->pNext->unblock();
 
-#ifdef DBG_TRACE_BASIC
-            bool bLeave = true;
-            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl, bLeave );
-#endif
-
-            // #63710 Durch ein anderes Thread-Handling bei Events kann es passieren,
-            // dass show-Aufruf an einem Dialog zurueckkehrt (durch schliessen des
-            // Dialogs per UI), BEVOR ein per Event ausgeloester weitergehender Call,
-            // der in Basic weiter oben im Stack steht und auf einen Basic-Breakpoint
-            // gelaufen ist, zurueckkehrt. Dann wird unten die Instanz zerstoert und
-            // wenn das noch im Call stehende Basic weiterlaeuft, gibt es einen GPF.
-            // Daher muss hier gewartet werden, bis andere Call zurueckkehrt.
+            // #63710 It can happen by an another thread handling at events,
+            // that the show call returns to an dialog (by closing the
+            // dialog per UI), before a by an event triggered further call returned,
+            // which stands in Basic more top in the stack and that had been run on
+            // a  Basic-Breakpoint. Then would the instance below destroyed. And if the Basic,
+            // that stand still in the call, further runs, there is a GPF.
+            // Thus here had to be wait until the other call comes back.
             if( bDelInst )
             {
-                // Hier mit 1 statt 0 vergleichen, da vor nCallLvl--
+                // Compare here with 1 instead of 0, because before nCallLvl--
                 while( pINST->nCallLvl != 1 )
                     GetpApp()->Yield();
             }
 
             nRes = sal_True;
             pINST->pRun = pRt->pNext;
-            pINST->nCallLvl--;          // Call-Level wieder runter
+            pINST->nCallLvl--;          // Call-Level down again
 
-            // Gibt es eine uebergeordnete Runtime-Instanz?
-            // Dann SbDEBUG_BREAK uebernehmen, wenn gesetzt
+            // Exist an higher-ranking runtime instance?
+            // Then take over SbDEBUG_BREAK, if set
             SbiRuntime* pRtNext = pRt->pNext;
             if( pRtNext && (pRt->GetDebugFlags() & SbDEBUG_BREAK) )
                 pRtNext->SetDebugFlags( SbDEBUG_BREAK );
@@ -1181,8 +1255,8 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             pMOD = pOldMod;
             if( bDelInst )
             {
-                // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
-                // beim Programm-Ende freigeben, damit nichts gehalten wird.
+                // #57841 Clear Uno-Objects, which were helt in RTL functions,
+                // at the end of the program, so that nothing were helt.
                 ClearUnoObjectsInRTL_Impl( xBasic );
 
                 clearNativeObjectWrapperVector();
@@ -1191,7 +1265,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 delete pINST, pINST = NULL, bDelInst = sal_False;
 
                 // #i30690
-                vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aSolarGuard;
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();
@@ -1221,25 +1295,27 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             }
         }
         else
-               pINST->nCallLvl--;           // Call-Level wieder runter
+               pINST->nCallLvl--;           // Call-Level down again
     }
     else
     {
-        pINST->nCallLvl--;          // Call-Level wieder runter
+        pINST->nCallLvl--;          // Call-Level down again
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
     if( bDelInst )
     {
-        // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
-        // beim Programm-Ende freigeben, damit nichts gehalten wird.
+       // #57841 Clear Uno-Objects, which were helt in RTL functions,
+       // the end of the program, so that nothing were helt.
         ClearUnoObjectsInRTL_Impl( xBasic );
 
         delete pINST;
         pINST = NULL;
     }
     if ( pBasic && pBasic->IsDocBasic() && pBasic->IsQuitApplication() && !pINST )
+            bQuit = true;
+        if ( bQuit )
     {
         Application::PostUserEvent( LINK( &AsyncQuitHandler::instance(), AsyncQuitHandler, OnAsyncQuit ), NULL );
     }
@@ -1247,8 +1323,8 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
     return nRes;
 }
 
-// Ausfuehren der Init-Methode eines Moduls nach dem Laden
-// oder der Compilation
+// Execute of the init method of a module after the loading
+// or the compilation
 
 void SbModule::RunInit()
 {
@@ -1256,44 +1332,30 @@ void SbModule::RunInit()
      && !pImage->bInit
      && pImage->GetFlag( SBIMG_INITCODE ) )
     {
-        // Flag setzen, dass RunInit aktiv ist (Testtool)
+        // Set flag, so that RunInit get activ (Testtool)
         GetSbData()->bRunInit = sal_True;
 
-        // sal_Bool bDelInst = sal_Bool( pINST == NULL );
-        // if( bDelInst )
-            // pINST = new SbiInstance( (StarBASIC*) GetParent() );
         SbModule* pOldMod = pMOD;
         pMOD = this;
-        // Der Init-Code beginnt immer hier
+        // The init code starts always here
         SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
-
-#ifdef DBG_TRACE_BASIC
-        dbg_traceNotifyCall( this, NULL, 0 );
-#endif
 
         pRt->pNext = pINST->pRun;
         pINST->pRun = pRt;
         while( pRt->Step() ) {}
 
-#ifdef DBG_TRACE_BASIC
-        bool bLeave = true;
-        dbg_traceNotifyCall( this, NULL, 0, bLeave );
-#endif
-
         pINST->pRun = pRt->pNext;
         delete pRt;
         pMOD = pOldMod;
-        // if( bDelInst )
-            // delete pINST, pINST = NULL;
         pImage->bInit = sal_True;
         pImage->bFirstInit = sal_False;
 
-        // RunInit ist nicht mehr aktiv
+        // RunInit is not activ anymore
         GetSbData()->bRunInit = sal_False;
     }
 }
 
-// Mit private/dim deklarierte Variablen loeschen
+// Delete with private/dim declared variables
 
 void SbModule::AddVarName( const String& aName )
 {
@@ -1328,7 +1390,7 @@ void SbModule::ClearPrivateVars()
         SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
         if( p )
         {
-            // Arrays nicht loeschen, sondern nur deren Inhalt
+            // Delete not the arrays, only their content
             if( p->GetType() & SbxARRAY )
             {
                 SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
@@ -1338,24 +1400,12 @@ void SbModule::ClearPrivateVars()
                     {
                         SbxVariable* pj = PTR_CAST(SbxVariable,pArray->Get( j ));
                         pj->SbxValue::Clear();
-                        /*
-                        sal_uInt16 nFlags = pj->GetFlags();
-                        pj->SetFlags( (nFlags | SBX_WRITE) & (~SBX_FIXED) );
-                        pj->PutEmpty();
-                        pj->SetFlags( nFlags );
-                        */
                     }
                 }
             }
             else
             {
                 p->SbxValue::Clear();
-                /*
-                sal_uInt16 nFlags = p->GetFlags();
-                p->SetFlags( (nFlags | SBX_WRITE) & (~SBX_FIXED) );
-                p->PutEmpty();
-                p->SetFlags( nFlags );
-                */
             }
         }
     }
@@ -1416,47 +1466,34 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
     }
 }
 
-// Zunaechst in dieses Modul, um 358-faehig zu bleiben
-// (Branch in sb.cxx vermeiden)
 void StarBASIC::ClearAllModuleVars( void )
 {
-    // Eigene Module initialisieren
+    // Initialise the own module
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        // Nur initialisieren, wenn der Startcode schon ausgefuehrt wurde
+        // Initialise only, if the startcode was already executed
         if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->ClearPrivateVars();
     }
 
-    /* #88042 This code can delete already used public vars during runtime!
-    // Alle Objekte ueberpruefen, ob es sich um ein Basic handelt
-    // Wenn ja, auch dort initialisieren
-    for ( sal_uInt16 nObj = 0; nObj < pObjs->Count(); nObj++ )
-    {
-        SbxVariable* pVar = pObjs->Get( nObj );
-        StarBASIC* pBasic = PTR_CAST(StarBASIC,pVar);
-        if( pBasic )
-            pBasic->ClearAllModuleVars();
-    }
-    */
 }
 
-// Ausfuehren des Init-Codes aller Module
+// Execution of the init-code of all module
 void SbModule::GlobalRunInit( sal_Bool bBasicStart )
 {
-    // Wenn kein Basic-Start, nur initialisieren, wenn Modul uninitialisiert
+    // If no Basic-Start, only initialise, if the module is not initialised
     if( !bBasicStart )
         if( !(pImage && !pImage->bInit) )
             return;
 
-    // GlobalInitErr-Flag fuer Compiler-Error initialisieren
-    // Anhand dieses Flags kann in SbModule::Run() nach dem Aufruf
-    // von GlobalRunInit festgestellt werden, ob beim initialisieren
-    // der Module ein Fehler auftrat. Dann wird nicht gestartet.
+    // Initialise GlobalInitErr-Flag for Compiler-Error
+    // With the help of this flags could be located in SbModule::Run() after the call of
+    // GlobalRunInit, if at the intialising of the module
+    // an error occurred. Then it will not be launched.
     GetSbData()->bGlobalInitErr = sal_False;
 
-    // Parent vom Modul ist ein Basic
+    // Parent of the module is a Basic
     StarBASIC *pBasic = PTR_CAST(StarBASIC,GetParent());
     if( pBasic )
     {
@@ -1498,8 +1535,8 @@ void SbModule::GlobalRunDeInit( void )
     }
 }
 
-// Suche nach dem naechsten STMNT-Befehl im Code. Wird vom STMNT-
-// Opcode verwendet, um die Endspalte zu setzen.
+// Search for the next STMNT-Command in the code. This was used from the STMNT-
+// Opcode to set the endcolumn.
 
 const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine, sal_uInt16& nCol ) const
 {
@@ -1544,7 +1581,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
     return NULL;
 }
 
-// Testen, ob eine Zeile STMNT-Opcodes enthaelt
+// Test, if a line contains STMNT-Opcodes
 
 sal_Bool SbModule::IsBreakable( sal_uInt16 nLine ) const
 {
@@ -1604,7 +1641,7 @@ sal_Bool SbModule::SetBP( sal_uInt16 nLine )
     }
     pBreaks->insert( pBreaks->begin() + i, nLine );
 
-    // #38568: Zur Laufzeit auch hier SbDEBUG_BREAK setzen
+    // #38568: Set during runtime as well here SbDEBUG_BREAK
     if( pINST && pINST->pRun )
         pINST->pRun->SetDebugFlags( SbDEBUG_BREAK );
 
@@ -1665,7 +1702,7 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return sal_False;
-    // Precaution...
+    // As a precaution...
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     sal_uInt8 bImage;
     rStrm >> bImage;
@@ -1690,7 +1727,7 @@ sal_Bool SbModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         if( p->GetCodeSize() )
         {
             aOUSource = p->aOUSource;
-            // Alte Version: Image weg
+            // Old version: image away
             if( nVer == 1 )
             {
                 SetSource32( p->aOUSource );
@@ -1753,6 +1790,52 @@ sal_Bool SbModule::ExceedsLegacyModuleSize()
     return false;
 }
 
+class ErrorHdlResetter
+{
+    Link    mErrHandler;
+    bool mbError;
+    public:
+    ErrorHdlResetter() : mbError( false )
+    {
+        // save error handler
+        mErrHandler = StarBASIC::GetGlobalErrorHdl();
+        // set new error handler
+        StarBASIC::SetGlobalErrorHdl( LINK( this, ErrorHdlResetter, BasicErrorHdl ) );
+    }
+    ~ErrorHdlResetter()
+    {
+        // restore error handler
+        StarBASIC::SetGlobalErrorHdl(mErrHandler);
+    }
+    DECL_LINK( BasicErrorHdl, StarBASIC * );
+    bool HasError() { return mbError; }
+};
+IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
+{
+    mbError = true;
+    return 0;
+}
+
+bool SbModule::HasExeCode()
+{
+    // And empty Image always has the Global Chain set up
+    static const unsigned char pEmptyImage[] = { 0x45, 0x0 , 0x0, 0x0, 0x0 };
+    // lets be stricter for the moment than VBA
+
+    if (!IsCompiled())
+    {
+        ErrorHdlResetter aGblErrHdl;
+        Compile();
+        if (aGblErrHdl.HasError()) //assume unsafe on compile error
+            return true;
+    }
+
+    bool bRes = false;
+    if (pImage && !(pImage->GetCodeSize() == 5 && (memcmp(pImage->GetCode(), pEmptyImage, pImage->GetCodeSize()) == 0 )))
+        bRes = true;
+
+    return bRes;
+}
 
 // Store only image, no source
 sal_Bool SbModule::StoreBinaryData( SvStream& rStrm )
@@ -1791,7 +1874,6 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 }
 
 // Called for >= OO 1.0 passwd protected libraries only
-//
 
 sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
 {
@@ -1801,7 +1883,6 @@ sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
     aOUSource = aKeepSource;
     return bRet;
 }
-
 
 sal_Bool SbModule::LoadCompleted()
 {
@@ -1915,7 +1996,6 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 }
 
 
-/////////////////////////////////////////////////////////////////////////
 // Implementation SbJScriptModule (Basic-Modul fuer JavaScript-Sourcen)
 SbJScriptModule::SbJScriptModule( const String& rName )
     :SbModule( rName )
@@ -1930,11 +2010,10 @@ sal_Bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return sal_False;
 
-    // Source-String holen
+    // Get the source string
     String aTmp;
     rStrm.ReadByteString( aTmp, gsl_getSystemTextEncoding() );
     aOUSource = aTmp;
-    //rStrm >> aSource;
     return sal_True;
 }
 
@@ -1943,10 +2022,9 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
     if( !SbxObject::StoreData( rStrm ) )
         return sal_False;
 
-    // Source-String schreiben
+    // Write the source string
     String aTmp = aOUSource;
     rStrm.WriteByteString( aTmp, gsl_getSystemTextEncoding() );
-    //rStrm << aSource;
     return sal_True;
 }
 
@@ -1962,7 +2040,8 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
     nLine1       =
     nLine2       = 0;
     refStatics = new SbxArray;
-    // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
+    mCaller          = 0;
+    // HACK due to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
 }
 
@@ -1976,6 +2055,7 @@ SbMethod::SbMethod( const SbMethod& r )
     nLine1       = r.nLine1;
     nLine2       = r.nLine2;
         refStatics = r.refStatics;
+    mCaller          = r.mCaller;
     SetFlag( SBX_NO_MODIFY );
 }
 
@@ -2008,10 +2088,9 @@ sal_Bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Int16 n;
     rStrm >> n;
     sal_Int16 nTempStart = (sal_Int16)nStart;
-    // nDebugFlags = n;     // AB 16.1.96: Nicht mehr uebernehmen
     if( nVer == 2 )
         rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;
-    // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
+    // HACK ue to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
     nStart = nTempStart;
     return sal_True;
@@ -2034,27 +2113,32 @@ void SbMethod::GetLineRange( sal_uInt16& l1, sal_uInt16& l2 )
     l1 = nLine1; l2 = nLine2;
 }
 
-// Kann spaeter mal weg
+// Could later be deleted
 
 SbxInfo* SbMethod::GetInfo()
 {
     return pInfo;
 }
 
-// Schnittstelle zum Ausfuehren einer Methode aus den Applikationen
-// #34191# Mit speziellem RefCounting, damit das Basic nicht durch CloseDocument()
-// abgeschossen werden kann. Rueckgabewert wird als String geliefert.
-ErrCode SbMethod::Call( SbxValue* pRet )
+// Interface to execute a method of the applications
+// With special RefCounting, so that the Basic was not fired of by CloseDocument()
+// The return value will be delivered as string.
+ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 {
+    if ( pCaller )
+    {
+        OSL_TRACE("SbMethod::Call Have been passed a caller 0x%x", pCaller );
+        mCaller = pCaller;
+    }
     // RefCount vom Modul hochzaehlen
     SbModule* pMod_ = (SbModule*)GetParent();
     pMod_->AddRef();
 
-    // RefCount vom Basic hochzaehlen
+    // Increment the RefCount of the Basic
     StarBASIC* pBasic = (StarBASIC*)pMod_->GetParent();
     pBasic->AddRef();
 
-    // Values anlegen, um Return-Wert zu erhalten
+    // Establish the values to get the return value
     SbxValues aVals;
     aVals.eType = SbxVARIANT;
 
@@ -2066,14 +2150,14 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     if ( pRet )
         pRet->Put( aVals );
 
-    // Gab es einen Error
+    // Was there an error
     ErrCode nErr = SbxBase::GetError();
     SbxBase::ResetError();
 
-    // Objekte freigeben
+    // Release objects
     pMod_->ReleaseRef();
     pBasic->ReleaseRef();
-
+    mCaller = 0;
     return nErr;
 }
 
@@ -2083,8 +2167,8 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
 {
     if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
     {
-        // Da die Methode von aussen aufrufbar ist, hier noch einmal
-        // die Berechtigung testen
+        // Because the method could be called from outside, test here once again
+        // the authorisation
         if( nHintId & SBX_HINT_DATAWANTED )
             if( !CanRead() )
                 return;
@@ -2102,7 +2186,7 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
         SbMethodRef xHolder = pThisCopy;
         if( mpPar.Is() )
         {
-            // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
+            // Enrigister this as element 0, but don't reset the parent!
             if( GetType() != SbxVOID )
                 mpPar->PutDirect( pThisCopy, 0 );
                SetParameters( NULL );
@@ -2120,9 +2204,8 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
 
-// Implementation SbJScriptMethod (Method-Klasse als Wrapper fuer JavaScript-Funktionen)
+// Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
 SbJScriptMethod::SbJScriptMethod( const String& r, SbxDataType t, SbModule* p )
         : SbMethod( r, t, p )
@@ -2133,14 +2216,13 @@ SbJScriptMethod::~SbJScriptMethod()
 {}
 
 
-/////////////////////////////////////////////////////////////////////////
 SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
     : SbModule( rName, bIsVbaCompatible )
 {
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Form" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Form" )) );
     }
     else if ( mInfo.ModuleObject.is() )
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
@@ -2159,13 +2241,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+    if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Worksheet" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Worksheet" )) );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Workbook" ) ) )
+    else if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Workbook" )) ) )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Workbook" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Workbook" )) );
     }
 }
 
@@ -2177,7 +2259,6 @@ SbObjModule::GetObject()
 SbxVariable*
 SbObjModule::Find( const XubString& rName, SbxClassType t )
 {
-    //OSL_TRACE("SbObjectModule find for %s", rtl::OUStringToOString(  rName, RTL_TEXTENCODING_UTF8 ).getStr() );
     SbxVariable* pVar = NULL;
     if ( pDocObject)
         pVar = pDocObject->Find( rName, t );
@@ -2291,10 +2372,9 @@ public:
         }
     }
 
-    //liuchen 2009-7-21, support Excel VBA Form_QueryClose event
-    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+
+    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
     {
-#if IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
         if ( xDialog.is() )
         {
@@ -2304,7 +2384,6 @@ public:
                 uno::Reference< document::XVbaMethodParameter > xVbaMethodParameter( xControl->getPeer(), uno::UNO_QUERY );
                 if ( xVbaMethodParameter.is() )
                 {
-#endif
                     sal_Int8 nCancel = 0;
                     sal_Int8 nCloseMode = ::ooo::vba::VbQueryClose::vbFormControlMenu;
 
@@ -2315,16 +2394,16 @@ public:
 
                     mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ),
                                                 aParams);
-#if IN_THE_FUTURE
                     xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cancel")), aParams[0]);
                     return;
 
                 }
             }
         }
-#endif
+
+        mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ) );
     }
-    //liuchen 2009-7-21
+
 
     virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
@@ -2551,7 +2630,7 @@ void SbUserFormModule::Load()
         InitObject();
 }
 
-//liuchen 2009-7-21 change to accmordate VBA's beheavior
+
 void SbUserFormModule::Unload()
 {
     OSL_TRACE("** Unload() ");
@@ -2567,7 +2646,10 @@ void SbUserFormModule::Unload()
     triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ), aParams);
 
     aParams[0] >>= nCancel;
-    if (nCancel != 0)  // Basic returns -1 for "True"
+    // basic boolean ( and what the user might use ) can be ambiguous ( e.g. basic true = -1 )
+    // test agains 0 ( false ) and assume anything else is true
+    // ( Note: ) this used to work ( something changes somewhere )
+    if (nCancel != 0)
     {
         return;
     }
@@ -2598,7 +2680,7 @@ void SbUserFormModule::Unload()
         OSL_TRACE("UnloadObject completed ( we hope )");
     }
 }
-//liuchen
+
 
 void registerComponentToBeDisposedForBasic( Reference< XComponent > xComponent, StarBASIC* pBasic );
 
@@ -2620,8 +2702,15 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] <<= m_xModel;
             rtl::OUString sDialogUrl( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:" ) );
             rtl::OUString sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
-            if ( this->GetParent()->GetName().Len() )
-                sProjectName = this->GetParent()->GetName();
+
+            try
+            {
+                Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+                sProjectName = xVBAMode->getProjectName();
+            }
+            catch( Exception& /*e*/) {}
+
             sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
 
             uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")), aArgs  ), uno::UNO_QUERY_THROW );
@@ -2632,7 +2721,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] = uno::Any();
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
-            aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
+            aArgs[ 3 ] <<= sProjectName;
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
@@ -2672,7 +2761,6 @@ SbUserFormModule::Find( const XubString& rName, SbxClassType t )
         InitObject();
     return SbObjModule::Find( rName, t );
 }
-/////////////////////////////////////////////////////////////////////////
 
 SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
         : SbxProperty( r, t ), pMod( p )
@@ -2683,8 +2771,8 @@ SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
 SbProperty::~SbProperty()
 {}
 
-/////////////////////////////////////////////////////////////////////////
 
 SbProcedureProperty::~SbProcedureProperty()
 {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

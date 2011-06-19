@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,10 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// fails silently
-void
-VbaDialogBase::Show() throw(uno::RuntimeException)
+sal_Bool SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException )
 {
     rtl::OUString aURL;
+    sal_Bool bSuccess = sal_False;
     if ( m_xModel.is() )
     {
         aURL = mapIndexToName( mnIndex );
@@ -42,7 +42,27 @@ VbaDialogBase::Show() throw(uno::RuntimeException)
             throw uno::RuntimeException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Unable to open the specified dialog " ) ),
                 uno::Reference< XInterface > () );
-        dispatchRequests( m_xModel, aURL );
-    }
-}
 
+        uno::Sequence< beans::PropertyValue > dispatchProps(0);
+        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:PrinterSetup")) )
+        {
+            dispatchProps.realloc(1);
+            dispatchProps[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADialogResultRequest" ) );
+            dispatchProps[0].Value <<= (sal_Bool) sal_True;
+        }
+
+        VBADispatchListener *pNotificationListener = new VBADispatchListener();
+        uno::Reference< frame::XDispatchResultListener > rListener = pNotificationListener;
+        dispatchRequests( m_xModel, aURL, dispatchProps, rListener, sal_False );
+
+        bSuccess = pNotificationListener->getState();
+        uno::Any aResult = pNotificationListener->getResult();
+        if ( bSuccess )
+        {
+            if ( aResult.getValueTypeClass() == uno::TypeClass_BOOLEAN )
+                aResult >>= bSuccess;
+        }
+    }
+    return bSuccess;
+}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

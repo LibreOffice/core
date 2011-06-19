@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,6 @@
 #include "precompiled_sfx2.hxx"
 #include <vcl/status.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/process.hxx>
-#include <vos/xception.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -46,7 +45,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <tools/config.hxx>
 #include <tools/rcid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <unotools/ucbstreamhelper.hxx>
@@ -86,7 +85,6 @@
 #include <sfx2/objface.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -156,13 +154,12 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 //--------------------------------------------------------------------
 SfxProgress* SfxApplication::GetProgress() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Liefert den f"ur die gesamte Applikation laufenden SfxProgress
-    oder 0, falls keiner f"ur die gesamte Applikation l"auft.
+    Returns the running SfxProgress for the entire application or 0 if
+    none is running for the entire application.
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxProgress::GetActiveProgress(SfxViewFrame*)>
     <SfxViewFrame::GetProgress()const>
@@ -180,7 +177,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
     SvUShorts* pList = pAppData_Impl->pDisabledSlotList;
     if ( !pList )
     {
-        // Gibt es eine Slotdatei ?
+        // Is there a slot file?
         INetURLObject aUserObj( SvtPathOptions().GetUserConfigPath() );
         aUserObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
@@ -196,7 +193,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
         sal_Bool bSlots = ( pStream && !pStream->GetError() );
         if( bSlots && bSlotsEnabled )
         {
-            // SlotDatei einlesen
+            // Read Slot file
             String aTitle;
             pStream->ReadByteString(aTitle);
             if ( aTitle.CompareToAscii("SfxSlotFile" ) == COMPARE_EQUAL )
@@ -216,21 +213,20 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
                 pStream->ReadByteString(aTitle);
                 if ( aTitle.CompareToAscii("END" ) != COMPARE_EQUAL || pStream->GetError() )
                 {
-                    // Lesen schief gegangen
+                    // Read failed
                     DELETEZ( pList );
                     bError = sal_True;
                 }
             }
             else
             {
-                // Streamerkennung  fehlgeschlagen
+                // Stream detection failure
                 bError = sal_True;
             }
         }
         else if ( bSlots != bSlotsEnabled )
         {
-            // Wenn kein Slotlist-Eintrag, dann darf auch keine SlotDatei
-            // vorhanden sein
+            // If no slot list entry, then no slot file shall exist
             bError = sal_True;
         }
 
@@ -246,9 +242,9 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
     if ( bError )
     {
-        // Wenn ein Sloteintrag vorhanden ist, aber keine oder eine fehlerhafte
-        // SlotDatei, oder aber eine Slotdatei, aber kein Sloteintrag, dann
-        // gilt dies als fehlerhafte Konfiguration
+        // If an entry slot is present, but no or faulty slot file, or a slot
+        // file, but no slot entry, then this is considered to be a
+        // misconfiguration
         new SfxSpecialConfigError_Impl( String( SfxResId( RID_SPECIALCONFIG_ERROR ) ) );
     }
 
@@ -265,7 +261,7 @@ SfxModule* SfxApplication::GetModule_Impl()
         return pModule;
     else
     {
-        DBG_ERROR( "No module!" );
+        OSL_FAIL( "No module!" );
         return NULL;
     }
 }
@@ -285,8 +281,6 @@ SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppDat
 sal_Bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
-//SfxOptions&  SfxApplication::GetOptions() { return *pAppData_Impl->pOptions; }
-//const SfxOptions& SfxApplication::GetOptions() const { return *pAppData_Impl->pOptions; }
 
 static bool impl_loadBitmap(
     const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
@@ -302,8 +296,8 @@ static bool impl_loadBitmap(
         // Use graphic class to also support more graphic formats (bmp,png,...)
         Graphic aGraphic;
 
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+        rGF.ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
 
         // Default case, we load the intro bitmap from a seperate file
         // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
@@ -325,7 +319,7 @@ Image SfxApplication::GetApplicationLogo()
     do
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
             aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
     }
     while ( !bLoaded && ( nIndex >= 0 ) );
@@ -334,25 +328,26 @@ Image SfxApplication::GetApplicationLogo()
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
         if ( !bLoaded )
             bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
     }
 
     if ( !bLoaded )
     {
         bLoaded = impl_loadBitmap(
-            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.png")), aAppLogo );
         if ( !bLoaded )
             bLoaded = impl_loadBitmap(
-                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
-                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about.bmp")), aAppLogo );
     }
 
     return aAppLogo;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

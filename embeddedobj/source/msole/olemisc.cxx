@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -386,14 +387,9 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not loaded!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
-
-    // if ( m_bWaitSaveCompleted )
-    //  throw embed::WrongStateException(
-    //              ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_pOleComponent )
     {
@@ -667,7 +663,6 @@ void SAL_CALL OleEmbeddedObject::translateAccelerators(
     }
     // end wrapping related part ====================
 
-    // throw embed::WrongStateException();
 }
 
 // XChild
@@ -702,3 +697,4 @@ void SAL_CALL OleEmbeddedObject::setParent( const com::sun::star::uno::Reference
     m_xParent = xParent;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

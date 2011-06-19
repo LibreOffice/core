@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
 #include "errobject.hxx"
+#include "basegfx/numeric/ftools.hxx"
 
 
 // Properties und Methoden legen beim Get (bWrite = sal_False) den Returnwert
@@ -774,3 +776,4 @@ RTLFUNC(TYP_JUMPEDITFLD)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

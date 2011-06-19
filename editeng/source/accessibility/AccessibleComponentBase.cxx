@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -199,7 +200,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("");
+    return ::rtl::OUString ();
 }
 
 
@@ -208,7 +209,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("");
+    return ::rtl::OUString ();
 }
 
 
@@ -235,3 +236,5 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 } // end of namespace accessibility
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

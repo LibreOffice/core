@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,6 @@
 #include <clonelist.hxx>
 #include <vcl/virdev.hxx>
 
-// b4967543
 #include <svl/style.hxx>
 
 // #i72535#
@@ -222,7 +222,7 @@ sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObj
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
     pObj->SetModel(pMod);
     pObj->SetLayer(nLayer);
-    pObj->NbcSetText(rStr); // #32424# SetText vor SetAttr, weil SetAttr sonst unwirksam!
+    pObj->NbcSetText(rStr); // SetText vor SetAttr, weil SetAttr sonst unwirksam!
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
     pObj->SetMergedItemSet(aDefaultAttr);
@@ -355,14 +355,13 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
 
-        // #104148# Use SnapRect, not BoundRect here
+        // Use SnapRect, not BoundRect here
         Rectangle aR=pSrcPg->GetAllObjSnapRect();
 
         if (bResize)
             ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
-        //sal_uIntPtr nDstObjAnz0=pDstLst->GetObjCount();
         sal_uIntPtr nCloneErrCnt=0;
         sal_uIntPtr nOb,nObAnz=pSrcPg->GetObjCount();
         sal_Bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
@@ -375,16 +374,15 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
-            // #116235#
             SdrObject* pNeuObj = pSrcOb->Clone();
 
             if (pNeuObj!=NULL)
             {
                 if(bResize)
                 {
-                    pNeuObj->GetModel()->SetPasteResize(sal_True); // #51139#
+                    pNeuObj->GetModel()->SetPasteResize(sal_True);
                     pNeuObj->NbcResize(aPt0,xResize,yResize);
-                    pNeuObj->GetModel()->SetPasteResize(sal_False); // #51139#
+                    pNeuObj->GetModel()->SetPasteResize(sal_False);
                 }
 
                 // #i39861#
@@ -462,7 +460,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            DBG_ERROR(aStr.GetBuffer());
+            OSL_FAIL(aStr.GetBuffer());
 #endif
         }
     }
@@ -602,7 +600,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarke
             }
         }
 
-        if( !aMtf.GetActionCount() )
+        if( !aMtf.GetActionSize() )
         {
             VirtualDevice   aOut;
             Size            aDummySize( 2, 2 );
@@ -669,7 +667,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
         if(pSdrGrafObj)
         {
-            // #110981# Make behaviour coherent with metafile
+            // Make behaviour coherent with metafile
             // recording below (which of course also takes
             // view-transformed objects)
             aRet = pSdrGrafObj->GetTransformedGraphic();
@@ -707,7 +705,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundRect.GetSize() );
 
-            if( aMtf.GetActionCount() )
+            if( aMtf.GetActionSize() )
                 aRet = aMtf;
         }
      }
@@ -806,8 +804,6 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 }
                 else
                 {
-                    // #116235#
-                    // pNeuObj = pObj->Clone( pNeuPag, pNeuMod );
                     pNeuObj = pObj->Clone();
                     pNeuObj->SetPage( pNeuPag );
                     pNeuObj->SetModel( pNeuMod );
@@ -848,7 +844,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
             aStr += " Objektverbindungen werden nicht mitkopiert.";
 
-            DBG_ERROR(aStr.GetBuffer());
+            OSL_FAIL(aStr.GetBuffer());
 #endif
         }
     }
@@ -859,7 +855,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
 
 sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 {
-    DBG_ERROR( "SdrExchangeView::Cut: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Cut: Not supported anymore" );
     return sal_False;
 }
 
@@ -867,14 +863,14 @@ sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 
 void SdrExchangeView::CutMarked( sal_uIntPtr /*nFormat */)
 {
-    DBG_ERROR( "SdrExchangeView::CutMarked: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::CutMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 {
-    DBG_ERROR( "SdrExchangeView::Yank: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Yank: Not supported anymore" );
     return sal_False;
 }
 
@@ -882,13 +878,15 @@ sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 
 void SdrExchangeView::YankMarked(sal_uIntPtr /*nFormat*/)
 {
-    DBG_ERROR( "YankMarked: Not supported anymore" );
+    OSL_FAIL( "YankMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool SdrExchangeView::Paste(Window* /*pWin*/, sal_uIntPtr /*nFormat*/)
 {
-    DBG_ERROR( "SdrExchangeView::Paste: Not supported anymore" );
+    OSL_FAIL( "SdrExchangeView::Paste: Not supported anymore" );
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

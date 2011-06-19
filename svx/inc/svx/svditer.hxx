@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,9 @@
 #ifndef _SVDITER_HXX
 #define _SVDITER_HXX
 
+#include <vector>
+
 #include <sal/types.h>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
 class SdrObjList;
@@ -37,23 +39,23 @@ class SdrObject;
 class SdrMarkList;
 
 // SdrObjListIter methods:
-// IM_FLAT              : Flach ueber die Liste
-// IM_DEEPWITHGROUPS    : Mit rekursivem Abstieg, Next() liefert auch Gruppenobjekte
-// IM_DEEPNOGROUPS      : Mit rekursivem Abstieg, Next() liefert keine Gruppenobjekte
+// IM_FLAT              : Flat over the list
+// IM_DEEPWITHGROUPS    : With recursive descent parser, Next() also returns group objects
+// IM_DEEPNOGROUPS      : With recursive descent parser, Next() returns no group objects
 enum SdrIterMode { IM_FLAT, IM_DEEPWITHGROUPS, IM_DEEPNOGROUPS};
 
 class SVX_DLLPUBLIC SdrObjListIter
 {
-    List                        maObjList;
+    std::vector<SdrObject*>     maObjList;
     sal_uInt32                  mnIndex;
-    sal_Bool                        mbReverse;
+    bool                        mbReverse;
 
-    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bUseZOrder);
+    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder);
     void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
-    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool bUseZOrder);
+    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder);
 
 public:
-    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
@@ -61,21 +63,26 @@ public:
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, sal_Bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrObjList& rObjList, bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
     /** Iterates over a list of marked objects received from the SdrMarkView. */
-    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
+    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
-    void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
-    sal_Bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
-    SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
+    void Reset() { mnIndex = (mbReverse ? maObjList.size() : 0L); }
+    bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.size())); }
+    SdrObject* Next()
+    {
+        sal_uInt32 idx = (mbReverse ? --mnIndex : mnIndex++);
+        return idx < maObjList.size() ? maObjList[idx] : NULL;
+    }
 
-    sal_uInt32 Count() { return maObjList.Count(); }
+    sal_uInt32 Count() { return maObjList.size(); }
 };
 
 #endif //_SVDITER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

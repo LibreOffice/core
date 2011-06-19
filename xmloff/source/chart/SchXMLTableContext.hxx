@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include "SchXMLImport.hxx"
-// #include "SchXMLChartContext.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -227,3 +227,5 @@ public:
 };
 
 #endif  // _SCH_XMLTABLECONTEXT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

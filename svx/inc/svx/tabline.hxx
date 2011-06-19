@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xlineit0.hxx>
@@ -64,3 +61,4 @@ class SdrObject;
 
 #endif // _SVX_TAB_LINE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

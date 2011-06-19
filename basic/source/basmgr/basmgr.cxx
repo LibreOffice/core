@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,6 +53,7 @@
 #include "sbintern.hxx"
 #include <sb.hrc>
 
+#include <vector>
 
 #define LIB_SEP         0x01
 #define LIBINFO_SEP     0x02
@@ -75,6 +77,8 @@
 #include <cppuhelper/implbase1.hxx>
 
 using com::sun::star::uno::Reference;
+using ::std::vector;
+using ::std::advance;
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -86,7 +90,7 @@ typedef WeakImplHelper1< XStarBasicModuleInfo > ModuleInfoHelper;
 typedef WeakImplHelper1< XStarBasicDialogInfo > DialogInfoHelper;
 typedef WeakImplHelper1< XStarBasicLibraryInfo > LibraryInfoHelper;
 typedef WeakImplHelper1< XStarBasicAccess > StarBasicAccessHelper;
-
+typedef vector< BasicError* > BasErrorLst;
 
 
 #define CURR_VER        2
@@ -115,8 +119,6 @@ DBG_NAME( BasicManager );
 
 StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
 StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
-
-DECLARE_LIST( BasErrorLst, BasicError* )
 
 //----------------------------------------------------------------------------
 // BasicManager impl data
@@ -389,18 +391,24 @@ class BasicErrorManager
 {
 private:
     BasErrorLst aErrorList;
+    size_t CurrentError;
 
 public:
+                BasicErrorManager();
                 ~BasicErrorManager();
 
     void        Reset();
     void        InsertError( const BasicError& rError );
 
-    sal_Bool        HasErrors()         { return (sal_Bool)aErrorList.Count(); }
-    BasicError* GetFirstError()     { return aErrorList.First(); }
-    BasicError* GetNextError()      { return aErrorList.Next(); }
+    bool        HasErrors()         { return !aErrorList.empty(); }
+    BasicError* GetFirstError();
+    BasicError* GetNextError();
 };
 
+BasicErrorManager::BasicErrorManager()
+    : CurrentError( 0 )
+{
+}
 
 BasicErrorManager::~BasicErrorManager()
 {
@@ -409,20 +417,36 @@ BasicErrorManager::~BasicErrorManager()
 
 void BasicErrorManager::Reset()
 {
-    BasicError* pError = (BasicError*)aErrorList.First();
-    while ( pError )
-    {
-        delete pError;
-        pError = (BasicError*)aErrorList.Next();
-    }
-    aErrorList.Clear();
+    for ( size_t i = 0, n = aErrorList.size(); i < n; ++i )
+        delete aErrorList[ i ];
+    aErrorList.clear();
 }
 
 void BasicErrorManager::InsertError( const BasicError& rError )
 {
-    aErrorList.Insert( new BasicError( rError ), LIST_APPEND );
+    aErrorList.push_back( new BasicError( rError ) );
 }
 
+BasicError* BasicErrorManager::GetFirstError()
+{
+    CurrentError = 0;
+    return aErrorList.empty() ? NULL : aErrorList[ CurrentError ];
+}
+
+BasicError* BasicErrorManager::GetNextError()
+{
+    if (  !aErrorList.empty()
+       && CurrentError < ( aErrorList.size() - 1)
+       )
+    {
+        ++CurrentError;
+        return aErrorList[ CurrentError ];
+    }
+    return NULL;
+}
+
+
+//=====================================================================
 
 BasicError::BasicError()
 {
@@ -444,6 +468,8 @@ BasicError::BasicError( const BasicError& rErr ) :
     nReason     = rErr.nReason;
 }
 
+
+//=====================================================================
 
 class BasicLibInfo
 {
@@ -513,13 +539,110 @@ public:
         { mxScriptCont = xScriptCont; }
 };
 
-DECLARE_LIST( BasicLibsBase, BasicLibInfo* )
 
-class BasicLibs : public BasicLibsBase
+//=====================================================================
+
+class BasicLibs
 {
+private:
+    vector< BasicLibInfo* > aList;
+    size_t CurrentLib;
+
 public:
-    String  aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
+    ~BasicLibs();
+    String          aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
+    BasicLibInfo*   GetObject( size_t i );
+    BasicLibInfo*   First();
+    BasicLibInfo*   Last();
+    BasicLibInfo*   Prev();
+    BasicLibInfo*   Next();
+    size_t          GetPos( BasicLibInfo* LibInfo );
+    size_t          Count() const { return aList.size(); };
+    size_t          GetCurPos() const { return CurrentLib; };
+    void            Insert( BasicLibInfo* LibInfo );
+    BasicLibInfo*   Remove( BasicLibInfo* LibInfo );
 };
+
+BasicLibs::~BasicLibs() {
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+        delete aList[ i ];
+    aList.clear();
+}
+
+BasicLibInfo* BasicLibs::GetObject( size_t i )
+{
+    if (  aList.empty()
+       || aList.size()  <= i
+       )
+        return NULL;
+    CurrentLib = i;
+    return aList[ CurrentLib ];
+}
+
+BasicLibInfo* BasicLibs::First()
+{
+    if ( aList.empty() )
+        return NULL;
+    CurrentLib = 0;
+    return aList[ CurrentLib ];
+}
+
+BasicLibInfo* BasicLibs::Last()
+{
+    if ( aList.empty() )
+        return NULL;
+    CurrentLib = aList.size() - 1;
+    return aList[ CurrentLib ];
+}
+
+BasicLibInfo* BasicLibs::Prev()
+{
+    if (  aList.empty()
+       || CurrentLib == 0
+       )
+        return NULL;
+    --CurrentLib;
+    return aList[ CurrentLib ];
+}
+
+BasicLibInfo* BasicLibs::Next()
+{
+    if (  aList.empty()
+       || CurrentLib >= ( aList.size() - 1 )
+       )
+        return NULL;
+    ++CurrentLib;
+    return aList[ CurrentLib ];
+}
+
+size_t BasicLibs::GetPos( BasicLibInfo* LibInfo )
+{
+    for ( size_t i = 0, n = aList.size(); i < n; ++i )
+        if ( aList[ i ] == LibInfo )
+            return i;
+    return size_t( -1 );
+}
+
+void BasicLibs::Insert( BasicLibInfo* LibInfo )
+{
+    aList.push_back( LibInfo );
+    CurrentLib = aList.size() - 1;
+}
+
+BasicLibInfo* BasicLibs::Remove( BasicLibInfo* LibInfo )
+{
+    size_t i = GetPos( LibInfo );
+    if ( i < aList.size() )
+    {
+        vector< BasicLibInfo* >::iterator it = aList.begin();
+        advance( it , i );
+        it = aList.erase( it );
+    }
+    return LibInfo;
+}
+
+
+//=====================================================================
 
 BasicLibInfo::BasicLibInfo()
 {
@@ -681,11 +804,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     String aStorName( rStorage.GetName() );
     maStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
 
-    // #91251: Storage name not longer available for documents < 5.0
-    // Should be no real problem, because only relative storage names
-    // (links) can be affected.
-    // DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
-    // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     // If there is no Manager Stream, no further actions are necessary
     if ( rStorage.IsStream( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)) ) )
@@ -717,7 +835,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
                 StarBASIC* pBasic = GetLib( nBasic );
                 if ( pBasic )
                 {
-//                  pBasic->SetParent( pStdLib );
                     pStdLib->Insert( pBasic );
                     pBasic->SetFlag( SBX_EXTSEARCH );
                 }
@@ -832,7 +949,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
             {
                 Any aLibAny = xScriptCont->getByName( *pScriptLibName );
 
-                if ( pScriptLibName->equalsAscii( "Standard" ) )
+                if ( pScriptLibName->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Standard")) )
                     xScriptCont->loadLibrary( *pScriptLibName );
 
                 BasMgrContainerListenerImpl::insertLibraryImpl
@@ -940,7 +1057,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-//  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
         ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
@@ -959,8 +1075,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 
     String aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
 
-    // If loaded from template, only BaseURL is used:
-    //String aBaseURL = INetURLObject::GetBaseURL();
     if ( rBaseURL.Len() )
     {
         INetURLObject aObj( rBaseURL );
@@ -976,7 +1090,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 
     sal_uInt16 nLibs;
     *xManagerStream >> nLibs;
-    // Plausi!
+    // Plausibility!
     if( nLibs & 0xF000 )
     {
         DBG_ASSERT( !this, "BasicManager-Stream defect!" );
@@ -996,9 +1110,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
             aObj = aObj.smartRel2Abs( pInfo->GetRelStorageName(), bWasAbsolute );
 
             //*** TODO: Replace if still necessary
-            /* if ( SfxContentHelper::Exists( aObj.GetMainURL() ) )
-                pInfo->SetStorageName( aObj.GetMainURL() );
-            else */
             //*** TODO-End
             if ( pLibs->aBasicLibPath.Len() )
             {
@@ -1013,7 +1124,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
             }
         }
 
-        pLibs->Insert( pInfo, LIST_APPEND );
+        pLibs->Insert( pInfo );
         // Libs from external files should be loaded only when necessary.
         // But references are loaded at once, otherwise some big customers get into trouble
         if ( bLoadLibs && pInfo->DoLoad() &&
@@ -1032,7 +1143,6 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-//  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
         ( String::CreateFromAscii(szOldManagerStream), eStreamReadMode );
@@ -1057,11 +1167,9 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->Seek( nBasicStartOff );
     if( !ImplLoadBasic( *xManagerStream, pLibs->GetObject(0)->GetLibRef() ) )
     {
-//      String aErrorText( BasicResId( IDS_SBERR_MGROPEN ) );
-//      aErrorText.SearchAndReplace( "XX", aStorName );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, aStorName, ERRCODE_BUTTON_OK );
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENMGRSTREAM, aStorName ) );
-        // und es geht weiter...
+        // and it proceeds ...
     }
     xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
     String aLibs;
@@ -1105,8 +1213,6 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
                 AddLib( *xStorageRef, aLibName, sal_False );
             else
             {
-//              String aErrorText( BasicResId( IDS_SBERR_LIBLOAD ) );
-//              aErrorText.SearchAndReplace( "XX", aLibName );
                 StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, ERRCODE_BUTTON_OK );
                 pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_STORAGENOTFOUND, aStorName ) );
             }
@@ -1123,13 +1229,6 @@ BasicManager::~BasicManager()
 
     // Destroy Basic-Infos...
     // In reverse order
-    BasicLibInfo* pInf = pLibs->Last();
-    while ( pInf )
-    {
-        delete pInf;
-        pInf = pLibs->Prev();
-    }
-    pLibs->Clear();
     delete pLibs;
     delete pErrorMgr;
     delete mpImpl;
@@ -1139,6 +1238,25 @@ void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
 {
     delete _rpManager;
     _rpManager = NULL;
+}
+
+
+bool BasicManager::HasExeCode( const String& sLib )
+{
+    StarBASIC* pLib = GetLib(sLib);
+    if ( pLib )
+    {
+        SbxArray* pMods = pLib->GetModules();
+        sal_uInt16 nMods = pMods ? pMods->Count() : 0;
+        for( sal_uInt16 i = 0; i < nMods; i++ )
+        {
+            SbModule* p = (SbModule*) pMods->Get( i );
+            if ( p )
+                if ( p->HasExeCode() )
+                    return true;
+        }
+    }
+    return false;
 }
 
 void BasicManager::Init()
@@ -1156,7 +1274,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     DBG_CHKTHIS( BasicManager, 0 );
 
     BasicLibInfo* pInf = new BasicLibInfo;
-    pLibs->Insert( pInf, LIST_APPEND );
+    pLibs->Insert( pInf );
     return pInf;
 }
 
@@ -1242,7 +1360,7 @@ sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurSt
             else
             {
                 // Perhaps there are additional information in the stream...
-                xBasicStream->SetKey( szCryptingKey );
+                xBasicStream->SetCryptMaskKey(szCryptingKey);
                 xBasicStream->RefreshBuffer();
                 sal_uInt32 nPasswordMarker = 0;
                 *xBasicStream >> nPasswordMarker;
@@ -1252,7 +1370,7 @@ sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurSt
                     xBasicStream->ReadByteString(aPassword);
                     pLibInfo->SetPassword( aPassword );
                 }
-                xBasicStream->SetKey( ByteString() );
+                xBasicStream->SetCryptMaskKey(rtl::OString());
                 CheckModules( pLibInfo->GetLib(), pLibInfo->IsReference() );
             }
             return bLoaded;
@@ -1272,7 +1390,7 @@ sal_Bool BasicManager::ImplEncryptStream( SvStream& rStrm ) const
     {
         // Should only be the case for encrypted Streams
         bProtected = sal_True;
-        rStrm.SetKey( szCryptingKey );
+        rStrm.SetCryptMaskKey(szCryptingKey);
         rStrm.RefreshBuffer();
     }
     return bProtected;
@@ -1303,19 +1421,12 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
             // Fill new libray container (5.2 -> 6.0)
             copyToLibraryContainer( pNew, mpImpl->maContainerInfo );
 
-/*
-            if( rOldBasic->GetParent() )
-            {
-                rOldBasic->GetParent()->Insert( rOldBasic );
-                rOldBasic->SetFlag( SBX_EXTSEARCH );
-            }
-*/
             pNew->SetModified( sal_False );
             bLoaded = sal_True;
         }
     }
     if ( bProtected )
-        rStrm.SetKey( ByteString() );
+        rStrm.SetCryptMaskKey(rtl::OString());
     return bLoaded;
 }
 
@@ -1338,7 +1449,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, sal_Bool bReference ) const
     // cause modified
     if( !bModified && bReference )
     {
-        DBG_ERROR( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
+        OSL_FAIL( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
         pLib->SetModified( sal_False );
     }
 }
@@ -1361,7 +1472,6 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
     // Use original name otherwise ImpLoadLibary failes...
     pLibInfo->SetLibName( rLibName );
     // Funktioniert so aber nicht, wenn Name doppelt
-//  sal_uInt16 nLibId = GetLibId( rLibName );
     sal_uInt16 nLibId = (sal_uInt16) pLibs->GetPos( pLibInfo );
 
     // Set StorageName before load because it is compared with pCurStorage
@@ -1377,7 +1487,6 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
         {
             pLibInfo->GetLib()->SetModified( sal_False );   // Don't save in this case
             pLibInfo->SetRelStorageName( String() );
-//          pLibInfo->CalcRelStorageName( GetStorageName() );
             pLibInfo->IsReference() = sal_True;
         }
         else
@@ -1427,7 +1536,6 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
 
     if ( !pLibInfo || !nLib )
     {
-//      String aErrorText( BasicResId( IDS_SBERR_REMOVELIB ) );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, String(), ERRCODE_BUTTON_OK );
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_STDLIB, pLibInfo->GetLibName() ) );
         return sal_False;
@@ -1451,7 +1559,6 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
 
             if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
             {
-//              String aErrorText( BasicResId( IDS_SBERR_REMOVELIB ) );
                 StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, String(), ERRCODE_BUTTON_OK );
                 pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENLIBSTORAGE, pLibInfo->GetLibName() ) );
             }
@@ -1462,18 +1569,18 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
 
                 // If no further stream available,
                 // delete the SubStorage.
-                SvStorageInfoList aInfoList( 0, 4 );
+                SvStorageInfoList aInfoList;
                 xBasicStorage->FillInfoList( &aInfoList );
-                if ( !aInfoList.Count() )
+                if ( aInfoList.empty() )
                 {
                     xBasicStorage.Clear();
                     xStorage->Remove( String(RTL_CONSTASCII_USTRINGPARAM(szBasicStorage)) );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
                     // delete the Storage, too.
-                    aInfoList.Clear();
+                    aInfoList.clear();
                     xStorage->FillInfoList( &aInfoList );
-                    if ( !aInfoList.Count() )
+                    if ( aInfoList.empty() )
                     {
                         String aName_( xStorage->GetName() );
                         xStorage.Clear();
@@ -1614,7 +1721,6 @@ sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
             StarBASIC* pLib = GetLib( nLib );
             if ( pLib )
             {
-    //          pLib->SetParent( GetStdLib() );
                 GetStdLib()->Insert( pLib );
                 pLib->SetFlag( SBX_EXTSEARCH );
             }
@@ -1622,8 +1728,6 @@ sal_Bool BasicManager::LoadLib( sal_uInt16 nLib )
     }
     else
     {
-//      String aErrorText( BasicResId( IDS_SBERR_LIBLOAD ) );
-//      aErrorText.SearchAndReplace( "XX", "" );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, String(), ERRCODE_BUTTON_OK );
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_LIBNOTFOUND, String::CreateFromInt32(nLib) ) );
     }
@@ -1660,16 +1764,7 @@ StarBASIC* BasicManager::CreateLib
             if( !xStorage->GetError() )
             {
                 pLib = AddLib( *xStorage, rLibName, sal_True );
-
-                //if( !pLibInfo )
-                    //pLibInfo = FindLibInfo( pLib );
-                //pLibInfo->SetStorageName( LinkTargetURL );
-                //pLibInfo->GetLib()->SetModified( sal_False ); // Dann nicht speichern
-                //pLibInfo->SetRelStorageName( String() );
-                //pLibInfo->IsReference() = sal_True;
             }
-            //else
-                //Message?
 
             DBG_ASSERT( pLib, "XML Import: Linked basic library could not be loaded");
         }
@@ -1832,7 +1927,7 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequen
         const ::rtl::OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for ( ; pNames != pNamesEnd; ++pNames )
         {
-            if( /*pLib->mbSharedIndexFile ||*/ !xPassword->isLibraryPasswordProtected( *pNames ) )
+            if( !xPassword->isLibraryPasswordProtected( *pNames ) )
                 continue;
 
             StarBASIC* pBasicLib = GetLib( *pNames );
@@ -2600,3 +2695,4 @@ Reference< XStarBasicAccess > getStarBasicAccess( BasicManager* pMgr )
     return xRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

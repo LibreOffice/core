@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XMap.hpp>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -170,3 +170,4 @@ private:
 
 #endif // _SVX_FMUNOPGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
-#include "sbtrace.hxx"
 
 
 static const char* pOp1[] = {
@@ -228,7 +228,7 @@ static const Func pOperand3[] = {
 // TODO: Why as method? Isn't a simple define sufficient?
 static const char* _crlf()
 {
-#if defined (UNX) || defined( PM2 )
+#if defined (UNX)
     return "\n";
 #else
     return "\r\n";
@@ -363,10 +363,6 @@ sal_Bool SbiDisas::DisasLine( String& rText )
     if( !Fetch() )
         return sal_False;
 
-#ifdef DBG_TRACE_BASIC
-    String aTraceStr_STMNT;
-#endif
-
     // New line?
     if( eOp == _STMNT && nOp1 != nLine )
     {
@@ -394,15 +390,9 @@ sal_Bool SbiDisas::DisasLine( String& rText )
                 n = s.Search( '\n' );
                 if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
             } while( !bDone );
-//          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
-//          rText += cBuf;
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
-
-#ifdef DBG_TRACE_BASIC
-            aTraceStr_STMNT = s;
-#endif
         }
     }
 
@@ -461,10 +451,6 @@ sal_Bool SbiDisas::DisasLine( String& rText )
     }
 
     rText += aPCodeStr;
-
-#ifdef DBG_TRACE_BASIC
-    dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
-#endif
 
     return sal_True;
 }
@@ -610,29 +596,21 @@ void SbiDisas::OffOp( String& rText )
 }
 
 // Data type
-#ifdef HP9000 // TODO: remove this!
-static char* SbiDisas_TypeOp_pTypes[13] = {
-    "Empty","Null","Integer","Long","Single","Double",
-    "Currency","Date","String","Object","Error","Boolean",
-    "Variant" };
-#define pTypes SbiDisas_TypeOp_pTypes
-#endif
 void SbiDisas::TypeOp( String& rText )
 {
-    // AB 19.1.96: Typ kann Flag für BYVAL enthalten (StepARGTYP)
+    // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
     if( nOp1 & 0x8000 )
     {
-        nOp1 &= 0x7FFF;     // Flag wegfiltern
+        nOp1 &= 0x7FFF;     // filter away the flag
         rText.AppendAscii( "BYVAL " );
     }
     if( nOp1 < 13 )
     {
-#ifndef HP9000
         static char pTypes[][13] = {
             "Empty","Null","Integer","Long","Single","Double",
             "Currency","Date","String","Object","Error","Boolean",
             "Variant" };
-#endif
+
         rText.AppendAscii( pTypes[ nOp1 ] );
     }
     else
@@ -641,9 +619,6 @@ void SbiDisas::TypeOp( String& rText )
         rText += (sal_uInt16)nOp1;
     }
 }
-#ifdef HP9000
-#undef pTypes
-#endif
 
 // sal_True-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )
@@ -685,3 +660,4 @@ void SbiDisas::StrmOp( String& rText )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

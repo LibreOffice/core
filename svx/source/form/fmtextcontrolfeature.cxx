@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -91,7 +92,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::dispatch: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::dispatch: caught an exception!" );
         }
     }
 
@@ -121,7 +122,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::dispose: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::dispose: caught an exception!" );
         }
     }
 
@@ -129,3 +130,4 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

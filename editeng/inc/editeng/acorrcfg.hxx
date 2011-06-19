@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include "editeng/editengdllapi.h"
 #include <unotools/configitem.hxx>
-/* -----------------------------12.10.00 11:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SvxAutoCorrect;
 class SvxAutoCorrCfg;
 class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
@@ -50,9 +49,7 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
 };
-/* -----------------------------12.10.00 11:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
@@ -68,7 +65,7 @@ public:
     void                    SetModified() {ConfigItem::SetModified();}
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Konfiguration fuer Auto Correction
+    Description:   Configuration for Auto Correction
  --------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxAutoCorrCfg
 {
@@ -80,10 +77,10 @@ class EDITENG_DLLPUBLIC SvxAutoCorrCfg
     SvxBaseAutoCorrCfg      aBaseConfig;
     SvxSwAutoCorrCfg        aSwConfig;
 
-    // Flags f"ur Autotext:
+    // Flags for Autotext:
     sal_Bool    bFileRel;
     sal_Bool    bNetRel;
-    // Tiphilfe f"ur Autotext w"ahrend der Eingabe
+    // Help tip for Autotext as you type
     sal_Bool    bAutoTextTip;
     sal_Bool    bAutoTextPreview;
     sal_Bool    bAutoFmtByInput;
@@ -103,7 +100,7 @@ public:
 
           SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
     const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
-    // der Pointer geht in den Besitz des ConfigItems!
+    // the pointer is transfered to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
     sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }
@@ -126,8 +123,10 @@ public:
 
     SvxAutoCorrCfg();
     virtual ~SvxAutoCorrCfg();
-    static SvxAutoCorrCfg*      Get();
+    static SvxAutoCorrCfg& Get();
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

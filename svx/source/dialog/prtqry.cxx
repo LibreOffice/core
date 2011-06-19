@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/prtqry.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 
-/* -----------------------------01.02.00 13:57--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     MessBox(pParent, 0,
             String(SVX_RES(RID_SVXSTR_QRY_PRINT_TITLE)),
@@ -52,11 +48,10 @@ SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     AddButton(BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
     SetButtonHelpText( RET_OK, String() );
 }
-/* -----------------------------01.02.00 13:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxPrtQryBox::~SvxPrtQryBox()
 {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,8 +103,7 @@ const char s_usingText [] =
 " -V, --version           version information\n"
 " -v, --verbose           verbose output to stdout\n"
 " -f, --force             force overwriting existing extensions\n"
-" -s, --suppress-license  prevents showing the license provided that\n"
-"                         the extension allows it\n"
+" -s, --suppress-license  prevents showing the license\n"
 " --log-file <file>       custom log file; default: <cache-dir>/log.txt\n"
 " --shared                expert feature: operate on shared installation\n"
 "                                         deployment context;\n"
@@ -222,7 +222,6 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     }
 }
 
-//##############################################################################
 extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
@@ -427,7 +426,7 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose) );
+                          option_force, option_verbose, option_suppressLicense) );
 
         //synchronize bundled/shared extensions
         //Do not synchronize when command is "reinstall". This could add types and services to UNO and
@@ -517,10 +516,9 @@ extern "C" int unopkg_main()
                 //Now prepare the vector which tells what extension has an
                 //unaccepted license
                 vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
-                ::std::vector<bool>::iterator i_unaccepted =
-                      ::std::fill_n(vecUnaccepted.begin(),
-                                    vecExtUnaccepted.size(), true);
-                ::std::fill_n(i_unaccepted, vec_packages.size(), false);
+                ::std::fill_n(vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
+                ::std::fill_n(vecUnaccepted.begin() + vecExtUnaccepted.size(),
+                      vec_packages.size(), false);
 
                 dp_misc::writeConsole(
                     OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
@@ -709,3 +707,4 @@ extern "C" int unopkg_main()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

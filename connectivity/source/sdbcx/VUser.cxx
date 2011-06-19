@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ void SAL_CALL OUser::revokePrivileges( const ::rtl::OUString& /*objName*/, sal_I
 // -----------------------------------------------------------------------------
 void SAL_CALL OUser::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( false, "OUser::setName: not implemented!" );
+    OSL_FAIL( "OUser::setName: not implemented!" );
         // not allowed to throw an SQLException here ...
 }
 // -----------------------------------------------------------------------------
@@ -192,3 +193,4 @@ void SAL_CALL OUser::release() throw()
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

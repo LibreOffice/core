@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,18 +42,10 @@
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-// #110094#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 
-// #110094#
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/svapp.hxx>
-
-/*************************************************************************
-|*
-|* Ctor SvxXConnectionPreview
-|*
-*************************************************************************/
 
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :
@@ -66,26 +59,14 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
     SetStyles();
 }
 
-/*************************************************************************
-|*
-|* Dtor SvxXConnectionPreview
-|*
-*************************************************************************/
-
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
     delete pObjList;
 }
 
-/*************************************************************************
-|*
-|* Dtor SvxXConnectionPreview
-|*
-*************************************************************************/
-
 void SvxXConnectionPreview::Construct()
 {
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
+    DBG_ASSERT( pView, "No valid view is passed on! ");
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
@@ -116,7 +97,6 @@ void SvxXConnectionPreview::Construct()
                 SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
                 SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
 
-                // #110094#
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
                 if(!pObjList)
@@ -144,7 +124,7 @@ void SvxXConnectionPreview::Construct()
     if( !pEdgeObj )
         pEdgeObj = new SdrEdgeObj();
 
-    // Groesse anpassen
+    // Adapt size
     if( pObjList )
     {
         OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
@@ -163,7 +143,7 @@ void SvxXConnectionPreview::Construct()
         double          fRectWH = (double) aRect.GetWidth() / aRect.GetHeight();
         double          fWinWH = (double) nWidth / nHeight;
 
-        // Bitmap an Thumbgroesse anpassen (hier nicht!)
+        // Adapt bitmap to Thumb size (not here!)
         if ( fRectWH < fWinWH)
         {
             aNewSize.Width() = (long) ( (double) nHeight * fRectWH );
@@ -179,18 +159,18 @@ void SvxXConnectionPreview::Construct()
         Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
         Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
 
-        // MapMode umsetzen
+        // Implement MapMode
         aDisplayMap.SetScaleX( aMinFrac );
         aDisplayMap.SetScaleY( aMinFrac );
 
-        // Zentrierung
+        // Centering
         aNewPos.X() = ( nWidth - aNewSize.Width() )  >> 1;
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
         aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
         SetMapMode( aDisplayMap );
 
-        // Ursprung
+        // Origin
         aNewPos = aDisplayMap.GetOrigin();
         aNewPos -= Point( aRect.TopLeft().X(), aRect.TopLeft().Y() );
         aDisplayMap.SetOrigin( aNewPos );
@@ -200,52 +180,8 @@ void SvxXConnectionPreview::Construct()
         Point aPos;
         MouseEvent aMEvt( aPos, 1, 0, MOUSE_RIGHT );
         MouseButtonDown( aMEvt );
-        /*
-        Point aPt( -aRect.TopLeft().X(), -aRect.TopLeft().Y() );
-        aMapMode.SetOrigin( aPt );
-
-        // Skalierung
-        Size aSize = GetOutputSize();
-        Fraction aFrac1( aSize.Width(), aRect.GetWidth() );
-        Fraction aFrac2( aSize.Height(), aRect.GetHeight() );
-        Fraction aMaxFrac( aFrac1 > aFrac2 ? aFrac1 : aFrac2 );
-        Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
-        sal_Bool bChange = (sal_Bool) ( (double)aMinFrac > 1.0 );
-        aMapMode.SetScaleX( aMinFrac );
-        aMapMode.SetScaleY( aMinFrac );
-
-        // zentrieren
-        long nXXL = aSize.Width() > aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
-        long nXS = aSize.Width() <= aRect.GetWidth() ? aSize.Width() : aRect.GetWidth();
-        if( bChange )
-        {
-            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
-        }
-        long nX = (long) ( (double)aMinFrac * (double)nXXL );
-        nX = (long) ( (double)labs( nXS - nX ) / (double)aMinFrac / 2.0 );
-
-        long nYXL = aSize.Height() > aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
-        long nYS = aSize.Height() <= aRect.GetHeight() ? aSize.Height() : aRect.GetHeight();
-        if( bChange )
-        {
-            long nTmp = nXXL; nXXL = nXS; nXS = nTmp;
-        }
-        long nY = (long) ( (double)aMinFrac * (double)nYXL );
-        nY = (long) ( (double)labs( nYS - nY ) / (double)aMinFrac / 2.0 );
-
-        aPt += Point( nX, nY );
-        aMapMode.SetOrigin( aPt );
-
-        SetMapMode( aMapMode );
-        */
     }
 }
-
-/*************************************************************************
-|*
-|* SvxXConnectionPreview: Paint()
-|*
-*************************************************************************/
 
 void SvxXConnectionPreview::Paint( const Rectangle& )
 {
@@ -277,25 +213,15 @@ void SvxXConnectionPreview::Paint( const Rectangle& )
     }
 }
 
-/*************************************************************************
-|*
-|* SvxXConnectionPreview: SetAttributes()
-|*
-*************************************************************************/
-
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-    //pEdgeObj->SetItemSetAndBroadcast(rInAttrs);
     pEdgeObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
 
-/*************************************************************************
-|*
-|* Ermittelt die Anzahl der Linienversaetze anhand des Preview-Objektes
-|*
-*************************************************************************/
+
+// Get number of lines which are offset based on the preview object
 
 sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 {
@@ -307,12 +233,6 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 
     return nCount;
 }
-
-/*************************************************************************
-|*
-|* SvxXConnectionPreview: MouseButtonDown()
-|*
-*************************************************************************/
 
 void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -385,3 +305,4 @@ void SvxXConnectionPreview::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

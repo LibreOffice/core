@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/string.hxx>
 
-#ifndef CHAOS_UCBDEMO_SRCHARG_HXX
 #include <srcharg.hxx>
-#endif
 
 namespace unnamed_chaos_ucbdemo_srcharg {}
 using namespace unnamed_chaos_ucbdemo_srcharg;
@@ -488,3 +487,4 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
     return p == pEnd;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

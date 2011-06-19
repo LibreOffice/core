@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,13 +58,13 @@
 #include <editeng/editstat.hxx>
 
 
-// Breite der Randzonen innerhalb derer beim D&D gescrollt wird
+// Width of the border zones within which is scrolled during Drag and Drop
 #define OL_SCROLL_LRBORDERWIDTHPIX  10
 #define OL_SCROLL_TBBORDERWIDTHPIX  10
 
-// Wert, um den Fensterinhalt beim D&D gescrollt wird
-#define OL_SCROLL_HOROFFSET         20  /* in % von VisibleSize.Width */
-#define OL_SCROLL_VEROFFSET         20  /* in % von VisibleSize.Height */
+// Value to the window content when scrolling during Drag and Drop
+#define OL_SCROLL_HOROFFSET         20  /* in % of VisibleSize.Width */
+#define OL_SCROLL_VEROFFSET         20  /* in % of VisibleSize.Height */
 
 using namespace ::com::sun::star;
 
@@ -95,20 +96,20 @@ void OutlinerView::Paint( const Rectangle& rRect )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
-    // beim ersten Paint/KeyInput/Drop wird aus einem leeren Outliner ein
-    // Outliner mit genau einem Absatz
+    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
+    // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( String() );
 
     pEditView->Paint( rRect );
 }
 
-sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
+sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
 {
     DBG_CHKTHIS( OutlinerView, 0 );
 
-    // beim ersten Paint/KeyInput/Drop wird aus einem leeren Outliner ein
-    // Outliner mit genau einem Absatz
+    // For the first Paint/KeyInput/Drop an emty Outliner is turned into
+    // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
         pOwner->Insert( String() );
 
@@ -171,7 +172,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
                 }
             }
             break;
-            default:    // wird dann evtl. unten bearbeitet.
+            default:    // is then possibly edited below.
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -219,13 +220,13 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( !bReadOnly )
                 {
-                    // Sonderbehandlung: Hartes Return am Ende eines Absatzes,
-                    // der eingeklappte Unterabsaetze besitzt
+                    // Special treatment: hard return at the end of a paragraph,
+                    // which has collapsed subparagraphs.
                     Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
 
                     if( !aKeyCode.IsShift() )
                     {
-                        // Nochmal ImpGetCursor ???
+                        // ImpGetCursor again???
                         if( !bSelection &&
                                 aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                         {
@@ -235,9 +236,9 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
                                 pOwner->UndoActionStart( OLUNDO_INSERT );
                                 sal_uLong nTemp = aSel.nEndPara;
                                 nTemp += nChilds;
-                                nTemp++; // einfuegen ueber naechstem Non-Child
+                                nTemp++; // insert above next Non-Child
                                 pOwner->Insert( String(),nTemp,pPara->GetDepth());
-                                // Cursor positionieren
+                                // Position the cursor
                                 ESelection aTmpSel((sal_uInt16)nTemp,0,(sal_uInt16)nTemp,0);
                                 pEditView->SetSelection( aTmpSel );
                                 pEditView->ShowCursor( sal_True, sal_True );
@@ -255,7 +256,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
                         nTemp++;
                         pOwner->Insert( String(), nTemp, pPara->GetDepth()+1 );
 
-                        // Cursor positionieren
+                        // Position the cursor
                         ESelection aTmpSel((sal_uInt16)nTemp,0,(sal_uInt16)nTemp,0);
                         pEditView->SetSelection( aTmpSel );
                         pEditView->ShowCursor( sal_True, sal_True );
@@ -268,7 +269,8 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
         }
     }
 
-    return bKeyProcessed ? sal_True : pEditView->PostKeyEvent( rKEvt );
+    return bKeyProcessed ? sal_True : pEditView->PostKeyEvent( rKEvt, pFrameWin );
+
 }
 
 
@@ -316,7 +318,7 @@ sal_uLong OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
     return nPara;
 }
 
-sal_Bool __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
+sal_Bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -333,7 +335,7 @@ sal_Bool __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
@@ -357,7 +359,7 @@ sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
             sal_uLong nEndPara = nPara;
             if ( bHasChilds && pOwner->pParaList->HasVisibleChilds(pPara) )
                 nEndPara += pOwner->pParaList->GetChildCount( pPara );
-            // umgekehrt rum selektieren, damit EditEngine nicht scrollt
+            // The selection is inverted, so that EditEngine does not scroll
             ESelection aSel((sal_uInt16)nEndPara, 0xffff,(sal_uInt16)nPara, 0 );
             pEditView->SetSelection( aSel );
         }
@@ -384,7 +386,7 @@ sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-sal_Bool __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
@@ -433,7 +435,6 @@ void OutlinerView::ImpPaintDDCursor()
 
     Point aStartPointWin, aEndPointWin;
     Rectangle aOutputArWin = pEditView->GetOutputArea();
-    Rectangle aVisAreaRef = pEditView->GetVisArea();
 
     if( bDDChangingDepth )
     {
@@ -467,7 +468,7 @@ void OutlinerView::ImpPaintDDCursor()
     pWindow->SetRasterOp( eOldOp );
 }
 
-// Berechnet, ueber welchem Absatz eingefuegt werden muss
+// Calculates above which paragraph must it must be inserted
 
 sal_uLong OutlinerView::ImpGetInsertionPara( const Point& rPosPixel  )
 {
@@ -549,7 +550,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 
     pEditView->SetAttribs( rAttrs );
 
-    // Bullet-Texte aktualisieren
+    // Update Bullet text
     for( sal_uInt16 nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         pOwner->ImplCheckNumBulletItem( nPara );
@@ -573,7 +574,7 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds 
     ParaRange aParas( aSel.nStartPara, aSel.nEndPara );
     aParas.Adjust();
 
-    // unsichtbare Childs des letzten Parents in Selektion mit aufnehmen
+    // Record the  invisible Children of the last Parents in the selection
     if ( bIncludeHiddenChilds )
     {
         Paragraph* pLast = pOwner->pParaList->GetParagraph( aParas.nEndPara );
@@ -586,7 +587,7 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds 
     return aParas;
 }
 
-// MT: Name sollte mal geaendert werden!
+// TODO: Name should be changed!
 void OutlinerView::AdjustDepth( short nDX )
 {
     Indent( nDX );
@@ -608,7 +609,7 @@ void OutlinerView::Indent( short nDiff )
     if( bUndo )
         pOwner->UndoActionStart( OLUNDO_DEPTH );
 
-    sal_Int16 nMinDepth = -1;   // Optimierung: Nicht unnoetig viele Absatze neu berechnen
+    sal_Int16 nMinDepth = -1;   // Optimization: Not to recalculate to manny parargaphs when not really needed.
 
     ParaRange aSel = ImpGetSelectedParagraphs( sal_True );
     for ( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -623,7 +624,7 @@ void OutlinerView::Indent( short nDiff )
             const bool bPage = pPara->HasFlag(PARAFLAG_ISPAGE);
             if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
             {
-                // App benachrichtigen
+                            // Notify App
                 pOwner->nDepthChangedHdlPrevDepth = (sal_Int16)nOldDepth;
                 pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
                 pOwner->pHdlParagraph = pPara;
@@ -665,10 +666,10 @@ void OutlinerView::Indent( short nDiff )
         {
             if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ))
             {
-                // Sonderfall: Der Vorgaenger eines eingerueckten Absatzes ist
-                // unsichtbar und steht jetzt auf der gleichen Ebene wie der
-                // sichtbare Absatz. In diesem Fall wird der naechste sichtbare
-                // Absatz gesucht und aufgeplustert.
+                // Special case: the predecessor of an indented paragraph is
+                // invisible and is now on the same level as the visible
+                // paragraph. In this case, the next visible paragraph is
+                // searched for and fluffed.
 #ifdef DBG_UTIL
                 Paragraph* _pPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
                 DBG_ASSERT(_pPara->IsVisible(),"Selected Paragraph invisible ?!");
@@ -677,8 +678,8 @@ void OutlinerView::Indent( short nDiff )
 
                 if( !pPrev->IsVisible() && ( pPrev->GetDepth() == nNewDepth ) )
                 {
-                    // Vorgaenger ist eingeklappt und steht auf gleicher Ebene
-                    // => naechsten sichtbaren Absatz suchen und expandieren
+                    // Predecessor is collapsed and is on the same level
+                    // => find next visible paragraph and expand it
                     pPrev = pOwner->pParaList->GetParent( pPrev );
                     while( !pPrev->IsVisible() )
                         pPrev = pOwner->pParaList->GetParent( pPrev );
@@ -698,7 +699,7 @@ void OutlinerView::Indent( short nDiff )
             if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
 
-            // App benachrichtigen
+            // Notify App
             pOwner->DepthChangedHdl();
         }
         else
@@ -708,12 +709,6 @@ void OutlinerView::Indent( short nDiff )
         }
     }
 
-    // MT 19.08.99: War mal fuer Optimierung (outliner.cxx#1.193),
-    // hat aber zu zuviel Wartungsaufwand / doppelten Funktionen gefuehrt
-    // und zu wenig gebracht:
-    // pOwner->ImpSetBulletTextsFrom( aSel.nStartPara+1, nMinDepth );
-    // Wird jetzt direkt in Schleife mit ImplCalcBulletText() erledigt.
-    // Jetzt fehlen nur noch die folgenden Ansaetze, die davon betroffen sind.
     sal_uInt16 nParas = (sal_uInt16)pOwner->pParaList->GetParagraphCount();
     for ( sal_uInt16 n = aSel.nEndPara+1; n < nParas; n++ )
     {
@@ -776,15 +771,13 @@ Point OutlinerView::ImpGetDocPos( const Point& rPosPixel )
 {
     DBG_CHKTHIS(OutlinerView,0);
     Rectangle aOutArWin = GetOutputArea();
-    // Position in der OutputArea berechnen
+    // Calculate position in the OutputArea
     Point aCurPosDoc( rPosPixel );
     aCurPosDoc = pEditView->GetWindow()->PixelToLogic( aCurPosDoc );
     aCurPosDoc -= aOutArWin.TopLeft();
     aCurPosDoc += pEditView->GetVisArea().TopLeft();
     return aCurPosDoc;
 }
-
-// MT 05/00: Wofuer dies ImpXXXScroll, sollte das nicht die EditEngine machen???
 
 void OutlinerView::ImpDragScroll( const Point& rPosPix )
 {
@@ -945,7 +938,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_uInt16 nStartPara, sal_uInt16 nEndPa
         sal_Bool bDone = bExpand ? pOwner->Expand( pPara ) : pOwner->Collapse( pPara );
         if( bDone )
         {
-            // Der Strich unter dem Absatz muss verschwinden...
+            // The line under the paragraph should disappear ...
             pOwner->pEditEngine->QuickMarkToBeRepainted( nPara );
         }
     }
@@ -976,16 +969,14 @@ void OutlinerView::Collapse( Paragraph* pPara)
 
 void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 {
-    // MT: Wie Paste, nur EditView::Insert, statt EditView::Paste.
-    // Eigentlich nicht ganz richtig, das evtl. Einrueckungen
-    // korrigiert werden muessen, aber das kommt spaeter durch ein
-    // allgemeingueltiges Import.
-    // Dann wird im Inserted gleich ermittelt, was f�r eine Einrueckebene
-    // Moegliche Struktur:
-    // pImportInfo mit DestPara, DestPos, nFormat, pParaObj...
-    // Evtl. Problematisch:
-    // EditEngine, RTF => Absplittung des Bereichs, spaeter
-    // zusammenfuehrung
+    // Like Paste, only EditView::Insert, instead of EditView::Paste.
+    // Actually not quite true that possible indentations must be corrected,
+    // but that comes later by a universal import. The indentation level is
+    // then determined right in the Inserted method.
+    // Possible structure:
+    // pImportInfo with DestPara, DestPos, nFormat, pParaObj...
+    // Possibly problematic:
+    // EditEngine, RTF => Splitting the area, later join together.
 
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -1019,7 +1010,7 @@ void OutlinerView::Cut()
 void OutlinerView::Paste()
 {
     DBG_CHKTHIS(OutlinerView,0);
-    PasteSpecial(); // HACK(SD ruft nicht PasteSpecial auf)
+    PasteSpecial(); // HACK(SD does not call PasteSpecial)
 }
 
 void OutlinerView::PasteSpecial()
@@ -1047,18 +1038,17 @@ void OutlinerView::PasteSpecial()
     }
 }
 
-List* OutlinerView::CreateSelectionList()
+void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
 {
     DBG_CHKTHIS( OutlinerView, 0 );
 
     ParaRange aParas = ImpGetSelectedParagraphs( sal_True );
-    List* pSelList = new List;
+
     for ( sal_uInt16 nPara = aParas.nStartPara; nPara <= aParas.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        pSelList->Insert( pPara, LIST_APPEND );
+        aSelList.push_back(pPara);
     }
-    return pSelList;
 }
 
 SfxStyleSheet* OutlinerView::GetStyleSheet() const
@@ -1162,11 +1152,11 @@ sal_uInt16 OutlinerView::ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected )
     sal_uInt16 nFirstPage = 0xFFFF;
     sal_uInt16 nStartPara = aSel.nStartPara;
     if ( !bIncludeFirstSelected )
-        nStartPara++;   // alle nach StartPara kommenden Absaetze werden geloescht
+        nStartPara++;   // All paragraphs after StartPara will be deleted
     for ( sal_uInt16 nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "ImpCalcSelectedPages: ungueltige Selection? ");
+        DBG_ASSERT(pPara, "ImpCalcSelectedPages: invalid Selection? ");
         if( pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             nPages++;
@@ -1223,11 +1213,10 @@ void OutlinerView::ToggleBullets()
         }
     }
 
-    // --> OD 2009-03-10 #i100014#
+    // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-    // <--
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 
@@ -1257,11 +1246,11 @@ void OutlinerView::EnableBullets()
         }
     }
 
-    // --> OD 2009-03-10 #i100014#
+    // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-    // <--
+
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 
@@ -1288,7 +1277,7 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
         pEditView->RemoveAttribs( bRemoveParaAttribs, nWhich );
     if ( bRemoveParaAttribs )
     {
-        // Ueber alle Absaetze, und Einrueckung und Level einstellen
+        // Loop through all paragraphs and set indentation and level
         ESelection aSel = pEditView->GetSelection();
         aSel.Adjust();
         for ( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -1303,8 +1292,8 @@ void OutlinerView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich
 
 
 
-// =====================================================================
-// ======================   Einfache Durchreicher =======================
+// ======================================================================
+// ======================   Simple pass-through   =======================
 // ======================================================================
 
 
@@ -1440,7 +1429,7 @@ void OutlinerView::StartTextConversion(
     }
     else
     {
-        DBG_ERROR( "unexpected language" );
+        OSL_FAIL( "unexpected language" );
     }
 }
 
@@ -1606,9 +1595,6 @@ sal_uLong OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextF
 
     sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, bSelect, pHTTPHeaderAttrs );
 
-    // MT 08/00: Hier sollte eigentlich das gleiche wie in PasteSpecial passieren!
-    // Mal anpassen, wenn dieses ImplInitPaste und ImpPasted-Geraffel ueberarbeitet ist.
-
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_uInt16 nChangesStart = aOldSel.nStartPara;
     sal_uInt16 nChangesEnd = sal::static_int_cast< sal_uInt16 >(nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara));
@@ -1732,3 +1718,4 @@ void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

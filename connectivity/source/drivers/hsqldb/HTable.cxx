@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -326,7 +327,7 @@ void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OHSQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
@@ -339,7 +340,7 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
@@ -425,3 +426,4 @@ Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

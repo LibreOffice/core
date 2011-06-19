@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#ifndef _COM_SUN_STAR_AWT_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "svx/svxdllapi.h"
 #include <svx/svdorect.hxx>
@@ -88,7 +87,8 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual void operator = (const SdrObject& rObj);
+    virtual SdrUnoObj* Clone() const;
+    SdrUnoObj& operator= (const SdrUnoObj& rObj);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLayer(SdrLayerID nLayer);
 
@@ -161,3 +161,4 @@ private:
 
 #endif          // _SVDOUNO_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

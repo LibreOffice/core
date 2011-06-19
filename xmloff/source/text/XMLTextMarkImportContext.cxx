@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,6 +65,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+using rtl::OUString;
+
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
     SvXMLImport& rImport,
@@ -125,7 +128,7 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
                   };
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
+static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 {
     { XML_REFERENCE_MARK,           TypeReference },
     { XML_REFERENCE_MARK_START,     TypeReferenceStart },
@@ -144,11 +147,13 @@ static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
 {
     static const char sCheckbox[]=ODF_FORMCHECKBOX;
     static const char sFormDropDown[]=ODF_FORMDROPDOWN;
-    if (name.compareToAscii("msoffice.field.FORMCHECKBOX")==0)
+    if (name.compareToAscii("msoffice.field.FORMCHECKBOX")==0 ||
+            name.compareToAscii("ecma.office-open-xml.field.FORMCHECKBOX")==0)
         return sCheckbox;
     else if (name.compareToAscii(ODF_FORMCHECKBOX)==0)
         return sCheckbox;
-    if (name.compareToAscii(ODF_FORMDROPDOWN)==0)
+    if (name.compareToAscii(ODF_FORMDROPDOWN)==0 ||
+            name.compareToAscii("ecma.office-open-xml.field.FORMDROPDOWN")==0)
         return sFormDropDown;
     else
         return NULL;
@@ -157,7 +162,8 @@ static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
 static rtl::OUString lcl_getFieldmarkName(rtl::OUString &name)
 {
     static const char sFormtext[]=ODF_FORMTEXT;
-    if (name.compareToAscii("msoffice.field.FORMTEXT")==0)
+    if (name.compareToAscii("msoffice.field.FORMTEXT")==0 ||
+            name.compareToAscii("ecma.office-open-xml.field.FORMTEXT")==0)
         return rtl::OUString::createFromAscii(sFormtext);
     else if (name.compareToAscii(ODF_FORMTEXT)==0)
         return rtl::OUString::createFromAscii(sFormtext);
@@ -183,7 +189,7 @@ void XMLTextMarkImportContext::StartElement(
     {
         if (m_sBookmarkName.getLength() == 0)
         {
-            m_sBookmarkName = ::rtl::OUString::createFromAscii("Unknown");
+            m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
@@ -343,11 +349,11 @@ void XMLTextMarkImportContext::EndElement()
 
                 case TypeReferenceStart:
                 case TypeReferenceEnd:
-                    DBG_ERROR("reference start/end are handled in txtparai !");
+                    OSL_FAIL("reference start/end are handled in txtparai !");
                     break;
 
                 default:
-                    DBG_ERROR("unknown mark type");
+                    OSL_FAIL("unknown mark type");
                     break;
             }
         }
@@ -381,7 +387,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 
         if (!xIfc.is())
         {
-            OSL_ENSURE(false, "CreateAndInsertMark: cannot create service?");
+            OSL_FAIL("CreateAndInsertMark: cannot create service?");
             return 0;
         }
 
@@ -395,7 +401,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         {
             if (sMarkName.getLength())
             {
-                OSL_ENSURE(false, "name given, but XNamed not supported?");
+                OSL_FAIL("name given, but XNamed not supported?");
                 return 0;
             }
         }
@@ -418,7 +424,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             }
             catch (com::sun::star::lang::IllegalArgumentException &)
             {
-                OSL_ENSURE(false, "CreateAndInsertMark: cannot insert?");
+                OSL_FAIL("CreateAndInsertMark: cannot insert?");
                 return 0;
             }
         }
@@ -483,3 +489,4 @@ sal_Bool XMLTextMarkImportContext::FindName(
     return bNameOK;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

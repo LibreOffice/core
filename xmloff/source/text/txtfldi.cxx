@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -209,7 +210,7 @@ const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 const sal_Char sAPI_is_visible[]        = "IsVisible";
 const sal_Char sAPI_TextRange[]         = "TextRange";
 
-const sal_Char sAPI_true[] = "sal_True";
+const sal_Char sAPI_true[] = "TRUE";
 
 
 TYPEINIT1( XMLTextFieldImportContext, SvXMLImportContext);
@@ -622,7 +623,7 @@ void XMLTextFieldImportContext::ForceUpdate(
     }
     else
     {
-        DBG_ERROR("Expected XUpdatable support!");
+        OSL_FAIL("Expected XUpdatable support!");
     }
 }
 
@@ -713,8 +714,8 @@ void XMLSenderFieldImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken) {
 
         // set bVal
-        sal_Bool bVal;
-        sal_Bool bRet = GetImport().GetMM100UnitConverter().
+        bool bVal;
+        bool bRet = GetImport().GetMM100UnitConverter().
             convertBool(bVal, sAttrValue);
 
         // set bFixed if successfull
@@ -821,7 +822,7 @@ void XMLAuthorFieldImportContext::PrepareField(
 
 TYPEINIT1( XMLPageContinuationImportContext, XMLTextFieldImportContext );
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aSelectPageAttrMap[] =
+static SvXMLEnumMapEntry const lcl_aSelectPageAttrMap[] =
 {
     { XML_PREVIOUS,     PageNumberType_PREV },
     { XML_CURRENT,      PageNumberType_CURRENT },
@@ -1132,7 +1133,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         }
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
@@ -1683,7 +1684,7 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
 {
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken)
     {
-        sal_Bool bTmp;
+        bool bTmp;
         if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
         {
             bFixed = bTmp;
@@ -1790,7 +1791,7 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
             break;
 
         default:
-            DBG_ERROR("no docinfo field token");
+            OSL_FAIL("no docinfo field token");
             pServiceName = NULL;
             break;
     }
@@ -1885,7 +1886,7 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
             bHasDateTime = sal_False;
             break;
         default:
-            DBG_ERROR(
+            OSL_FAIL(
                 "XMLDateTimeDocInfoImportContext needs date/time doc. fields");
             bValid = sal_False;
             break;
@@ -1994,7 +1995,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
         {
             if (!bValid)
             {
-                SetServiceName(OUString::createFromAscii( sAPI_docinfo_custom ) );
+                SetServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_docinfo_custom )) );
                 aName = sAttrValue;
                 bValid = sal_True;
             }
@@ -2076,7 +2077,7 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
     }
     else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
     {
-        sal_Bool bTmp;
+        bool bTmp;
         if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
         {
             bIsHidden = bTmp;
@@ -2150,7 +2151,7 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_CURRENT_VALUE:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bCurrentValue = bTmp;
@@ -2231,7 +2232,7 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_IS_HIDDEN:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bIsHidden = bTmp;
@@ -2298,7 +2299,7 @@ void XMLFileNameImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
@@ -2581,7 +2582,7 @@ const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
             break;
         default:
             pServiceName = NULL;
-            DBG_ERROR("unknown count field!");
+            OSL_FAIL("unknown count field!");
             break;
     }
 
@@ -2680,7 +2681,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_ACTIVE:
         {
-            sal_Bool bTmp;
+            bool bTmp;
             if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
             {
                 bActive = bTmp;
@@ -2799,23 +2800,19 @@ void XMLMacroFieldImportContext::PrepareField(
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
-            if ( aValues[i].Name.equalsAsciiL( "ScriptType",
-                                               sizeof("ScriptType")-1 ) )
+            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ScriptType")) )
             {
                 // ignore ScriptType
             }
-            else if ( aValues[i].Name.equalsAsciiL( "Library",
-                                                    sizeof("Library")-1 ) )
+            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Library")) )
             {
                 aValues[i].Value >>= sLibraryName;
             }
-            else if ( aValues[i].Name.equalsAsciiL( "MacroName",
-                                                    sizeof("MacroName")-1 ) )
+            else if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MacroName")) )
             {
                 aValues[i].Value >>= sMacroName;
             }
-            if ( aValues[i].Name.equalsAsciiL( "Script",
-                                               sizeof("Script")-1 ) )
+            if ( aValues[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) )
             {
                 aValues[i].Value >>= sScriptURL;
             }
@@ -2877,7 +2874,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 {
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
 {
     { XML_PAGE,         ReferenceFieldPart::PAGE},
     { XML_CHAPTER,      ReferenceFieldPart::CHAPTER },
@@ -2886,11 +2883,10 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
     { XML_CATEGORY_AND_VALUE, ReferenceFieldPart::CATEGORY_AND_NUMBER },
     { XML_CAPTION,      ReferenceFieldPart::ONLY_CAPTION },
     { XML_VALUE,        ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
-    // --> OD 2007-09-14 #i81002#
+    // Core implementation for direct cross-references (#i81002#)
     { XML_NUMBER,               ReferenceFieldPart::NUMBER },
     { XML_NUMBER_NO_SUPERIOR,   ReferenceFieldPart::NUMBER_NO_CONTEXT },
     { XML_NUMBER_ALL_SUPERIOR,  ReferenceFieldPart::NUMBER_FULL_CONTEXT },
-    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -2914,7 +2910,7 @@ void XMLReferenceFieldImportContext::StartElement(
             break;
         default:
             bTypeOK = sal_False;
-            DBG_ERROR("unknown reference field");
+            OSL_FAIL("unknown reference field");
             break;
     }
 
@@ -3009,7 +3005,7 @@ enum DdeFieldDeclAttrs
     XML_TOK_DDEFIELD_UPDATE
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
+static SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_DDEFIELD_NAME },
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, XML_TOK_DDEFIELD_APPLICATION },
@@ -3113,7 +3109,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if ( SvXMLUnitConverter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
@@ -3137,7 +3133,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                                                  UNO_QUERY);
         if( xFactory.is() )
         {
-            /* #i6432# There might be multiple occurances of one DDE
+            /* #i6432# There might be multiple occurrences of one DDE
                declaration if it is used in more than one of
                header/footer/body. createInstance will throw an exception if we
                try to create the second, third, etc. instance of such a
@@ -3382,7 +3378,7 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 }
 
 // TODO: this is the same map as is used in the text field export
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },
@@ -3464,7 +3460,7 @@ void XMLBibliographyFieldImportContext::ProcessAttribute(
     const OUString& )
 {
     // attributes are handled in StartElement
-    DBG_ERROR("This should not have happened.");
+    OSL_FAIL("This should not have happened.");
 }
 
 
@@ -3618,7 +3614,7 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     }
     else
     {
-        DBG_ERROR("Unknown bibliography info data");
+        OSL_FAIL("Unknown bibliography info data");
         pName = NULL;
     }
 
@@ -3902,7 +3898,7 @@ void XMLMeasureFieldImportContext::PrepareField(
 {
     Any aAny;
     aAny <<= mnKind;
-    xPropertySet->setPropertyValue(OUString::createFromAscii("Kind"), aAny);
+    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Kind")), aAny);
 }
 
 
@@ -3959,7 +3955,7 @@ bool lcl_ProcessLabel( const SvXMLImport& rImport,
             }
             else if( IsXMLToken( sLocalName, XML_CURRENT_SELECTED ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool( bTmp, sValue ) )
                     rIsSelected = bTmp;
             }
@@ -4062,7 +4058,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_header, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 
@@ -4086,7 +4082,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 
@@ -4111,7 +4107,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 
@@ -4127,3 +4123,5 @@ void XMLDateTimeFieldImportContext::PrepareField(
         ::com::sun::star::beans::XPropertySet> &)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

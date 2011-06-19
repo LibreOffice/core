@@ -114,11 +114,11 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     {
         try
         {
-            xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), uno::makeAny( sal_True ) );
+            xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )), uno::makeAny( sal_True ) );
         }
         catch( beans::UnknownPropertyException )
         {
-            DBG_ERROR( "Property HasLegend not found" );
+            OSL_TRACE( "Property HasLegend not found" );
         }
     }
 
@@ -126,7 +126,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     uno::Reference< beans::XPropertySet > xLegendProps( xLegendShape, uno::UNO_QUERY );
     if( !xLegendShape.is() || !xLegendProps.is() )
     {
-        DBG_ERROR( "legend could not be created" );
+        OSL_TRACE( "legend could not be created" );
         return;
     }
 
@@ -160,11 +160,11 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     try
                     {
                         if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
-                            xLegendProps->setPropertyValue( rtl::OUString::createFromAscii( "Alignment" ), aAny );
+                            xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Alignment" )), aAny );
                     }
                     catch( beans::UnknownPropertyException )
                     {
-                        DBG_ERROR( "Property Alignment (legend) not found" );
+                        OSL_TRACE( "Property Alignment (legend) not found" );
                     }
                 }
                 break;
@@ -205,7 +205,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         xLegendShape->setPosition( aLegendPos );
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue( rtl::OUString::createFromAscii( "Expansion" ), uno::makeAny(nLegendExpansion) );
+        xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Expansion" )), uno::makeAny(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 

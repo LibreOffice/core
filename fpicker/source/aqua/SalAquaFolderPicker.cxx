@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <FPServiceInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalAquaFolderPicker.hxx"
 
@@ -49,9 +50,7 @@
 
 #include "resourceprovider.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.hxx>
-#endif
 
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
@@ -81,8 +80,8 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFolderPicker" );
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFolderPicker" ));
         return aRet;
     }
 }
@@ -108,7 +107,7 @@ void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     implsetTitle(aTitle);
 
@@ -119,7 +118,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 retVal = 0;
 
@@ -138,7 +137,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
         break;
 
     default:
-        throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog returned with an unknown result!"), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFolderPicker* >( this ));
         break;
     }
 
@@ -155,7 +154,7 @@ void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDi
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "directory", aDirectory);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     implsetDisplayDirectory(aDirectory);
 
@@ -166,7 +165,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDisplayDirectory() throw( uno::Ru
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OUString aDirectory = implgetDisplayDirectory();
 
@@ -179,7 +178,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     NSArray *files = nil;
     if (m_nDialogType == NAVIGATIONSERVICES_DIRECTORY) {
@@ -190,7 +189,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     OSL_TRACE("# of items: %d", nFiles);
 
     if (nFiles < 1) {
-        throw uno::RuntimeException(rtl::OUString::createFromAscii("no directory selected"), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no directory selected")), static_cast< XFolderPicker* >( this ));
     }
 
     rtl::OUString aDirectory;
@@ -227,7 +226,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal = rtl::OUString::createFromAscii( FOLDER_PICKER_IMPL_NAME );
+    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_IMPL_NAME ));
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
@@ -270,7 +269,7 @@ void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     [m_pDialog cancel:nil];
 
@@ -287,3 +286,5 @@ void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

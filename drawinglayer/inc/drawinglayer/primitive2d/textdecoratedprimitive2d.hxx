@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTDECORATEDPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTDECORATEDPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
@@ -55,7 +58,7 @@ namespace drawinglayer
             a TextSimplePortionPrimitive2D and all the contained decorations (if used)
             as geometry.
          */
-        class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
             /// decoration definitions
@@ -155,3 +158,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

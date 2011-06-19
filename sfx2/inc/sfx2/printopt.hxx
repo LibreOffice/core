@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,10 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. FixedText
 #include <vcl/button.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/print.hxx>
 
@@ -104,9 +101,8 @@ private:
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );
 
-    // --> OD 2008-06-25 #i63982#
+    // #i63982#
     SAL_DLLPRIVATE void ImplSetAccessibleNames();
-    // <--
 
 protected:
 
@@ -125,10 +121,6 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
-
-// -------------------------------
-// - TransparencyPrintWarningBox -
-// -------------------------------
 
 class TransparencyPrintWarningBox : public ModalDialog
 {
@@ -153,3 +145,4 @@ public:
 
 #endif // #ifndef _SFX_PRINTOPT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

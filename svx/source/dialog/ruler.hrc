@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//!! Abhaegigkeit zu sv.hxx
+//!! Dependence on sv.hxx
 #define ID_MM 1
 #define ID_CM 2
 #define ID_M 3
@@ -34,4 +34,5 @@
 #define ID_MILE 10
 #define ID_POINT 6
 #define ID_PICA 7
-
+#define ID_CHAR 11
+#define ID_LINE 12

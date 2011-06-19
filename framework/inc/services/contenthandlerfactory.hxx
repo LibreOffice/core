@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <macros/xserviceinfo.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <general.h>
 
 //_________________________________________________________________________________________________________________
@@ -233,10 +232,11 @@ class ContentHandlerFactory :   // interfaces
 
         css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory              ;
         FilterCache                                                 m_aCache                ;
-//      ::cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer    ;
 
 };      //  class ContentHandlerFactory
 
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

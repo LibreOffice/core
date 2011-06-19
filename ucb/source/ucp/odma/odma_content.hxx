@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ namespace odma
 
 // UNO service name for the content.
 #define ODMA_CONTENT_SERVICE_NAME \
-                            "com.sun.star.ucb.OdmaContent"
+                            "com.sun.star.ucb.ODMAContent"
 
 //=========================================================================
 class ContentProvider;
@@ -194,3 +195,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,11 +101,11 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
 }
 
 // -------------------------------------------------------------------------
-::vos::ORef< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
+::rtl::Reference< OSQLColumns > OParseColumn::createColumnsForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData,const Reference< XNameAccess>& i_xQueryColumns )
 {
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
-    ::vos::ORef< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
+    ::rtl::Reference< OSQLColumns > aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
 
     StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
@@ -288,8 +289,10 @@ void OOrderColumn::construct()
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderColumn");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OrderColumn"));
 
     return aSupported;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,16 +34,12 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <comphelper/extract.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include <tools/urlobj.hxx>
 
 //........................................................................
@@ -126,7 +123,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OColumnTransferable::OColumnTransferable: could not collect essential data source attributes !");
+            OSL_FAIL("OColumnTransferable::OColumnTransferable: could not collect essential data source attributes !");
         }
 
         // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
@@ -154,7 +151,7 @@ namespace svx
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OColumnTransferable::OColumnTransferable: could not collect essential data source attributes (part two) !");
+                OSL_FAIL("OColumnTransferable::OColumnTransferable: could not collect essential data source attributes (part two) !");
             }
         }
 
@@ -439,7 +436,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
+            OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
             return;
         }
 
@@ -453,7 +450,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
+            OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
             return;
         }
 
@@ -564,7 +561,7 @@ namespace svx
             return ODataAccessDescriptor(aDescriptorProps);
         }
 
-        OSL_ENSURE( sal_False, "OColumnTransferable::extractColumnDescriptor: unsupported formats only!" );
+        OSL_FAIL( "OColumnTransferable::extractColumnDescriptor: unsupported formats only!" );
         return ODataAccessDescriptor();
     }
 
@@ -730,3 +727,4 @@ namespace svx
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,9 +76,9 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
     {   // special handling for parameters
-        /* we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å" */
+        /* we recusive replace all occurrences of ? in the statement and replace them with name like "æ¬å" */
         sal_Int32 nParameterCount = 0;
-        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        ::rtl::OUString sDefaultName( RTL_CONSTASCII_USTRINGPARAM( "parame" ));
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
         pNode->parseNodeToStr( sNewSql, _pConnection );
         delete pNode;
@@ -98,7 +99,7 @@ OPreparedStatement::~OPreparedStatement()
 {
     if (m_pParameters)
     {
-        OSL_ENSURE( sal_False, "OPreparedStatement::~OPreparedStatement: not disposed!" );
+        OSL_FAIL( "OPreparedStatement::~OPreparedStatement: not disposed!" );
         m_pParameters->Release();
         m_pParameters = NULL;
     }
@@ -224,7 +225,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     m_pParameters->get_Count(&nCount);
     if(nCount < (parameterIndex-1))
     {
-        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        ::rtl::OUString sDefaultName( RTL_CONSTASCII_USTRINGPARAM( "parame" ));
         sDefaultName += ::rtl::OUString::valueOf(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
@@ -547,7 +548,7 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
         OSQLParseNode* pChildNode = _pNode->getChild(i);
         if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() == 1)
         {
-            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString::createFromAscii(":") ,SQL_NODE_PUNCTUATION,0);
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")) ,SQL_NODE_PUNCTUATION,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
             ::rtl::OUString sParameterName = _sDefaultName;
             sParameterName += ::rtl::OUString::valueOf(++_rParameterCount);
@@ -562,3 +563,4 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

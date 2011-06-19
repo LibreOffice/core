@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,4 +40,7 @@ const sal_Int16 BORDER_SIMPLE_COLOR = 3;
 
 }
 
+#define XMLSCRIPT_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,8 +111,8 @@ namespace svxform
             OSL_ENSURE(NULL == s_hDbtoolsModule, "ODbtoolsClient::registerClient: inconsistence: already have a module!");
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
-            const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-                SVLIBRARY( "dbtools" )
+            const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(
+                SVLIBRARY( "dbtools" ))
             );
 
             // load the dbtools library
@@ -121,14 +122,14 @@ namespace svxform
             if (NULL != s_hDbtoolsModule)
             {
                 // get the symbol for the method creating the factory
-                const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
+                const ::rtl::OUString sFactoryCreationFunc( RTL_CONSTASCII_USTRINGPARAM("createDataAccessToolsFactory") );
                 //  reinterpret_cast<createDataAccessToolsFactoryFunction>
                 s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)
                 {   // did not find the symbol
-                    OSL_ENSURE(sal_False, "ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                    OSL_FAIL("ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                     osl_unloadModule(s_hDbtoolsModule);
                     s_hDbtoolsModule = NULL;
                 }
@@ -160,7 +161,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+
     bool OStaticDataAccessTools::ensureLoaded() const
     {
         if ( !ODbtoolsClient::ensureLoaded() )
@@ -364,3 +365,4 @@ namespace svxform
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

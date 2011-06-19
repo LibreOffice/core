@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,169 +34,47 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
 
-#ifndef __SBX_64
-#define __SBX_64
-
-struct SbxINT64
-{
-    sal_Int32 nHigh; sal_uInt32 nLow;
-
-#if FALSE
-    SbxINT64()           : nHigh( 0 ), nLow( 0 ) {}
-    SbxINT64( sal_uInt8  n ) : nHigh( 0 ), nLow( n ) {}
-    SbxINT64( sal_uInt16 n ) : nHigh( 0 ), nLow( n ) {}
-    SbxINT64( sal_uInt32 n ) : nHigh( 0 ), nLow( n ) {}
-    SbxINT64( unsigned int n ) : nHigh( 0 ), nLow( n ) {}
-    SbxINT64( sal_Int8   n ) : nHigh( n < 0 ? -1 : 0 ), nLow( n ) {}
-    SbxINT64( sal_Int16  n ) : nHigh( n < 0 ? -1 : 0 ), nLow( n ) {}
-    SbxINT64( sal_Int32  n ) : nHigh( n < 0 ? -1 : 0 ), nLow( n ) {}
-    SbxINT64( int    n ) : nHigh( n < 0 ? -1 : 0 ), nLow( n ) {}
-    SbxINT64( SbxINT64 &r ) : nHigh( r.nHigh ), nLow( r.nLow ) {}
-
-    SbxINT64( BigInt &r );
-    SbxINT64( double n );
-#endif
-    void CHS()
-    {
-        nLow  ^= (sal_uInt32)-1;
-        nHigh ^= -1;
-        nLow++;
-        if( !nLow )
-            nHigh++;
-    }
-
-    // blc/os2i do not like operator =
-    void Set(double n)
-    {
-        if( n >= 0 )
-        {
-            nHigh = (sal_Int32)(n / (double)4294967296.0);
-            nLow  = (sal_uInt32)(n - ((double)nHigh * (double)4294967296.0) + 0.5);
-        }
-        else {
-            nHigh = (sal_Int32)(-n / (double)4294967296.0);
-            nLow  = (sal_uInt32)(-n - ((double)nHigh * (double)4294967296.0) + 0.5);
-            CHS();
-        }
-    }
-    void Set(sal_Int32 n) { nHigh = n < 0 ? -1 : 0; nLow = n; }
-
-    void SetMax()  { nHigh = 0x7FFFFFFF; nLow = 0xFFFFFFFF; }
-    void SetMin()  { nHigh = 0x80000000; nLow = 0x00000000; }
-    void SetNull() { nHigh = 0x00000000; nLow = 0x00000000; }
-
-    int operator ! () const { return !nHigh && !nLow; }
-
-    SbxINT64 &operator -= ( const SbxINT64 &r );
-    SbxINT64 &operator += ( const SbxINT64 &r );
-    SbxINT64 &operator /= ( const SbxINT64 &r );
-    SbxINT64 &operator %= ( const SbxINT64 &r );
-    SbxINT64 &operator *= ( const SbxINT64 &r );
-    SbxINT64 &operator &= ( const SbxINT64 &r );
-    SbxINT64 &operator |= ( const SbxINT64 &r );
-    SbxINT64 &operator ^= ( const SbxINT64 &r );
-
-    friend SbxINT64 operator - ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator + ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator / ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator % ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator * ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator & ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator | ( const SbxINT64 &l, const SbxINT64 &r );
-    friend SbxINT64 operator ^ ( const SbxINT64 &l, const SbxINT64 &r );
-
-    friend SbxINT64 operator - ( const SbxINT64 &r );
-    friend SbxINT64 operator ~ ( const SbxINT64 &r );
-
-    static double GetMin() { return ((double)0x7FFFFFFF*(double)4294967296.0
-                                     + (double)0xFFFFFFFF)
-                                    / CURRENCY_FACTOR; }
-    static double GetMax() { return ((double)0x80000000*(double)4294967296.0
-                                     + (double)0xFFFFFFFF)
-                                    / CURRENCY_FACTOR; }
-};
-
-struct SbxUINT64
-{
-    sal_uInt32 nHigh; sal_uInt32 nLow;
-    void Set(double n)
-    {
-        nHigh = (sal_uInt32)(n / (double)4294967296.0);
-        nLow  = (sal_uInt32)(n - ((double)nHigh * (double)4294967296.0));
-    }
-
-    void Set(sal_uInt32 n) { nHigh = 0; nLow = n; }
-
-    void SetMax()  { nHigh = 0xFFFFFFFF; nLow = 0xFFFFFFFF; }
-    void SetMin()  { nHigh = 0x00000000; nLow = 0x00000000; }
-    void SetNull() { nHigh = 0x00000000; nLow = 0x00000000; }
-
-    int operator ! () const { return !nHigh && !nLow; }
-
-    SbxUINT64 &operator -= ( const SbxUINT64 &r );
-    SbxUINT64 &operator += ( const SbxUINT64 &r );
-    SbxUINT64 &operator /= ( const SbxUINT64 &r );
-    SbxUINT64 &operator %= ( const SbxUINT64 &r );
-    SbxUINT64 &operator *= ( const SbxUINT64 &r );
-    SbxUINT64 &operator &= ( const SbxUINT64 &r );
-    SbxUINT64 &operator |= ( const SbxUINT64 &r );
-    SbxUINT64 &operator ^= ( const SbxUINT64 &r );
-
-    friend SbxUINT64 operator - ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator + ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator / ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator % ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator * ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator & ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator | ( const SbxUINT64 &l, const SbxUINT64 &r );
-    friend SbxUINT64 operator ^ ( const SbxUINT64 &l, const SbxUINT64 &r );
-
-    friend SbxUINT64 operator ~ ( const SbxUINT64 &r );
-};
-
-#endif
-
 #ifndef __SBX_SBXVALUES_HXX
 #define __SBX_SBXVALUES_HXX
 
-class BigInt;
 class SbxDecimal;
 
 struct SbxValues
 {
     union {
+        sal_uInt8       nByte;
+        sal_uInt16      nUShort;
         sal_Unicode     nChar;
-        sal_uInt8           nByte;
-        sal_Int16           nInteger;
-        sal_Int32           nLong;
-        sal_uInt16          nUShort;
-        sal_uInt32          nULong;
+        sal_Int16       nInteger;
+        sal_uInt32      nULong;
+        sal_Int32       nLong;
+        unsigned int    nUInt;
+        int             nInt;
+        sal_uInt64      uInt64;
+        sal_Int64       nInt64;
+
         float           nSingle;
         double          nDouble;
-        SbxINT64        nLong64;
-        SbxUINT64       nULong64;
-        sal_Int64       nInt64;
-        sal_uInt64      uInt64;
-        int             nInt;
-        unsigned int    nUInt;
-        ::rtl::OUString* pOUString;
+
+        rtl::OUString*  pOUString;
         SbxDecimal*     pDecimal;
 
         SbxBase*        pObj;
+
+        sal_uInt8*      pByte;
+        sal_uInt16*     pUShort;
         sal_Unicode*    pChar;
-        sal_uInt8*          pByte;
-        sal_Int16*          pInteger;
-        sal_Int32*          pLong;
-        sal_uInt16*         pUShort;
-        sal_uInt32*         pULong;
+        sal_Int16*      pInteger;
+        sal_uInt32*     pULong;
+        sal_Int32*      pLong;
+        unsigned int*   pUInt;
+        int*            pInt;
+        sal_uInt64*     puInt64;
+        sal_Int64*      pnInt64;
+
         float*          pSingle;
         double*         pDouble;
-        SbxINT64*       pLong64;
-        SbxUINT64*      pULong64;
-        sal_Int64*      pnInt64;
-        sal_uInt64*     puInt64;
-        int*            pInt;
-        unsigned int*   pUInt;
+
         void*           pData;
     };
     SbxDataType  eType;
@@ -208,15 +87,15 @@ struct SbxValues
     SbxValues( long _nLong ): nLong( _nLong ), eType(SbxLONG) {}
     SbxValues( sal_uInt16 _nUShort ): nUShort( _nUShort ), eType(SbxUSHORT) {}
     SbxValues( sal_uIntPtr _nULong ): nULong( _nULong ), eType(SbxULONG) {}
-    SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
-    SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
     SbxValues( int _nInt ): nInt( _nInt ), eType(SbxINT) {}
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
+    SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
+    SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
     SbxValues( const ::rtl::OUString* _pString ): pOUString( (::rtl::OUString*)_pString ), eType(SbxSTRING) {}
     SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
     SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
-    SbxValues( const BigInt &rBig );
+
 };
 
 #endif
@@ -290,36 +169,33 @@ public:
 
     inline SbxValues * data() { return &aData; }
 
-    SbxINT64 GetCurrency() const;
-    SbxINT64 GetLong64() const;
-    SbxUINT64 GetULong64() const;
-    sal_Int64  GetInt64() const;
-    sal_uInt64 GetUInt64() const;
-    sal_Int16  GetInteger() const;
-    sal_Int32  GetLong() const;
-    float  GetSingle() const;
-    double GetDouble() const;
-    double GetDate() const;
+    sal_Unicode GetChar() const;
+    sal_Int16   GetInteger() const;
+    sal_Int32   GetLong() const;
+    sal_Int64   GetInt64() const;
+    sal_uInt64  GetUInt64() const;
+
+    sal_Int64   GetCurrency() const;
+    SbxDecimal* GetDecimal() const;
+
+    float       GetSingle() const;
+    double      GetDouble() const;
+    double      GetDate() const;
+
     sal_Bool   GetBool() const;
     sal_uInt16 GetErr() const;
-    const  String& GetString() const;
-    const  String& GetCoreString() const;
-    ::rtl::OUString GetOUString() const;
-    SbxDecimal* GetDecimal() const;
-    SbxBase* GetObject() const;
-    sal_Bool     HasObject() const;
-    void*  GetData() const;
-    sal_Unicode GetChar() const;
+    const String&   GetString() const;
+    const String&   GetCoreString() const;
+    rtl::OUString   GetOUString() const;
+
+    SbxBase*    GetObject() const;
+    sal_Bool    HasObject() const;
+    void*       GetData() const;
     sal_uInt8   GetByte() const;
     sal_uInt16 GetUShort() const;
     sal_uInt32 GetULong() const;
     int    GetInt() const;
 
-    sal_Bool PutCurrency( const SbxINT64& );
-    sal_Bool PutLong64( const SbxINT64& );
-    sal_Bool PutULong64( const SbxUINT64& );
-    sal_Bool PutInt64( sal_Int64 );
-    sal_Bool PutUInt64( sal_uInt64 );
     sal_Bool PutInteger( sal_Int16 );
     sal_Bool PutLong( sal_Int32 );
     sal_Bool PutSingle( float );
@@ -328,12 +204,11 @@ public:
     sal_Bool PutBool( sal_Bool );
     sal_Bool PutErr( sal_uInt16 );
     sal_Bool PutStringExt( const ::rtl::OUString& );     // with extended analysis (International, "sal_True"/"sal_False")
+    sal_Bool PutInt64( sal_Int64 );
+    sal_Bool PutUInt64( sal_uInt64 );
     sal_Bool PutString( const ::rtl::OUString& );
     sal_Bool PutString( const sal_Unicode* );   // Type = SbxSTRING
     sal_Bool PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
-    sal_Bool PutDecimal( SbxDecimal* pDecimal );
-    sal_Bool PutObject( SbxBase* );
-    sal_Bool PutData( void* );
     sal_Bool PutChar( sal_Unicode );
     sal_Bool PutByte( sal_uInt8 );
     sal_Bool PutUShort( sal_uInt16 );
@@ -342,9 +217,16 @@ public:
     sal_Bool PutEmpty();
     sal_Bool PutNull();
 
-    // Special decimal methods
+            // Special methods
     sal_Bool PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
     sal_Bool fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    sal_Bool PutDecimal( SbxDecimal* pDecimal );
+    sal_Bool PutCurrency( const sal_Int64& );
+            // Interface for CDbl in Basic
+    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle = sal_False );
+
+    sal_Bool PutObject( SbxBase* );
+    sal_Bool PutData( void* );
 
     virtual sal_Bool Convert( SbxDataType );
     virtual sal_Bool Compute( SbxOperator, const SbxValue& );
@@ -352,12 +234,9 @@ public:
     sal_Bool Scan( const String&, sal_uInt16* = NULL );
     void Format( String&, const String* = NULL ) const;
 
-    // Interface for CDbl in Basic
-    static SbxError ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSingle=sal_False );
-
     // The following operators are definied for easier handling.
-    // Error conditions (overflow, conversions) are not
-    // taken into consideration.
+    // TODO: Ensure error conditions (overflow, conversions)
+    // are taken into consideration in Compute and Compare
 
     inline int operator ==( const SbxValue& ) const;
     inline int operator !=( const SbxValue& ) const;
@@ -446,7 +325,7 @@ class SbxVariable : public SbxValue
     friend class SbMethod;
 
     SbxVariableImpl* mpSbxVariableImpl; // Impl data
-    SfxBroadcaster*  pCst;      // Broadcaster, if needed
+    SfxBroadcaster*  pCst;              // Broadcaster, if needed
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16           nHash;             // Hash-ID for search
@@ -515,3 +394,5 @@ SV_DECL_REF(SbxVariable)
 #endif
 
 #endif  // _SBXVAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

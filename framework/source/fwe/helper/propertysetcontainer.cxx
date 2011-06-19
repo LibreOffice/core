@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,7 @@
 
 #define WRONG_TYPE_EXCEPTION    "Only XPropertSet allowed!"
 
-using namespace rtl;
-using namespace vos;
+using ::rtl::OUString;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -194,3 +194,5 @@ sal_Bool SAL_CALL PropertySetContainer::hasElements()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

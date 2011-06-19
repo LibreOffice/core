@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <sal/types.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -50,7 +53,7 @@ namespace drawinglayer
             This attribute class is able to hold all parameters needed/used
             to completely define the parametrisation of a text portion.
          */
-        class FontAttribute
+        class DRAWINGLAYER_DLLPUBLIC FontAttribute
         {
         private:
             ImpFontAttribute*               mpFontAttribute;
@@ -100,3 +103,5 @@ namespace drawinglayer
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FONTATTRIBUTE_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

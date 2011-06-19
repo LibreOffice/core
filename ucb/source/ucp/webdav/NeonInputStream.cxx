@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,9 @@
 #include <rtl/memory.h>
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace webdav_ucp;
-
 
 // -------------------------------------------------------------------
 // Constructor
@@ -193,3 +192,5 @@ sal_Int64 SAL_CALL NeonInputStream::getLength()
 {
     return mLen;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

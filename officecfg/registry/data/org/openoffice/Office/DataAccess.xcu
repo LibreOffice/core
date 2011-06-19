@@ -153,6 +153,14 @@
     </node>
   </node>
   <node oor:name="RegisteredNames">
+    <node oor:name="EvolutionLocal" oor:op="replace" install:module="evoab2">
+        <prop oor:name="Location" oor:type="xs:string">
+            <value>$(userurl)/database/evolocal.odb</value>
+        </prop>
+        <prop oor:name="Name" oor:type="xs:string">
+            <value>EvolutionLocal</value>
+        </prop>
+    </node>
     <node oor:name="org.openoffice.Bibliography" oor:op="replace">
         <prop oor:name="Location" oor:type="xs:string">
             <value>$(userurl)/database/biblio.odb</value>

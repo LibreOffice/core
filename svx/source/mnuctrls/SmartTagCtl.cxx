@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,22 +31,16 @@
 
 #include <svx/SmartTagCtl.hxx>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSTRINGKEYMAP_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 #include <svtools/stdmenu.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 #include <svx/SmartTagItem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -121,7 +116,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + C2U(": ") + aRangeText;
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
         pSbMenu->InsertSeparator( nSubMenuPos++ );
@@ -223,3 +218,4 @@ PopupMenu* SvxSmartTagsControl::GetPopup() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

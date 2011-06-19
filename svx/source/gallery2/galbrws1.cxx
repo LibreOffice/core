@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,8 +45,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-//CHINA001 #include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
 
 // --------------
 // - Namespaces -
@@ -240,7 +240,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
         util::DateTime  aDateTimeModified;
         DateTime        aDateTime;
 
-        aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTimeModified;
+        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
@@ -410,17 +410,17 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         case( MN_ACTUALIZE ):
         {
             GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            //CHINA001 ActualizeProgress    aActualizeProgress( this, pTheme );
+
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
                 VclAbstractRefreshableDialog* aActualizeProgress = pFact->CreateActualizeProgressDialog( this, pTheme );
-                DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(aActualizeProgress, "Dialogdiet fail!");
 
-                aActualizeProgress->Update();  //CHINA001 aActualizeProgress.Update();
-                aActualizeProgress->Execute(); //CHINA001 aActualizeProgress.Execute();
+                aActualizeProgress->Update();
+                aActualizeProgress->Execute();
                 mpGallery->ReleaseTheme( pTheme, *this );
-                delete aActualizeProgress;      //add CHINA001
+                delete aActualizeProgress;
             }
         }
         break;
@@ -436,15 +436,15 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         {
             GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
             const String    aOldName( pTheme->GetName() );
-            //CHINA001 TitleDialog      aDlg( this, aOldName );
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName );
-            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
 
-            if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldName );
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");
+
+            if( aDlg->Execute() == RET_OK )
             {
-                const String aNewName( aDlg->GetTitle() ); //CHINA001 aDlg.GetTitle() );
+                const String aNewName( aDlg->GetTitle() );
 
                 if( aNewName.Len() && ( aNewName != aOldName ) )
                 {
@@ -462,7 +462,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                 }
             }
             mpGallery->ReleaseTheme( pTheme, *this );
-            delete aDlg; //add CHINA001
+            delete aDlg;
         }
         break;
 
@@ -472,16 +472,16 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
             if( pTheme && !pTheme->IsReadOnly() && !pTheme->IsImported() )
             {
-                //CHINA001 GalleryIdDialog aDlg( this, pTheme );
+
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
                     AbstractGalleryIdDialog* aDlg = pFact->CreateGalleryIdDialog( this, pTheme );
-                    DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(aDlg, "Dialogdiet fail!");
 
-                    if( aDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
-                        pTheme->SetId( aDlg->GetId(), sal_True ); //CHINA001 pTheme->SetId( aDlg.GetId(), sal_True );
-                    delete aDlg; //add CHINA001
+                    if( aDlg->Execute() == RET_OK )
+                        pTheme->SetId( aDlg->GetId(), sal_True );
+                    delete aDlg;
                 }
             }
 
@@ -716,3 +716,4 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, EMPTYARG )
     return 0L;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

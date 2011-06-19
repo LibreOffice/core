@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,9 @@
 
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
 
 ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& sModules )
 {
@@ -66,3 +68,4 @@ ModuleSizeExceeded::isApprove() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

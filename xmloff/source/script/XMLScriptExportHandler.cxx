@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "XMLScriptExportHandler.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -86,3 +85,5 @@ void XMLScriptExportHandler::Export(
                                    XML_EVENT_LISTENER,
                                    bUseWhitespace, sal_False);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

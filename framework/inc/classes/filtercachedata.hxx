@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <iterator>
 
@@ -469,7 +470,7 @@ struct ContentHandler
 // and could be used in a generic way
 //*****************************************************************************************************************
 template< class HashType >
-class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
+class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString                    ,
                                             HashType                           ,
                                             OUStringHashCode                   ,
                                             ::std::equal_to< ::rtl::OUString > >
@@ -510,7 +511,7 @@ class SetNodeHash : public ::std::hash_map< ::rtl::OUString                    ,
 // It's an optimism to find registered services faster!
 // The preferred hash maps file extensions to preferred types to find these ones faster.
 //*****************************************************************************************************************
-class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString                     ,
+class PerformanceHash   :   public  ::boost::unordered_map<    ::rtl::OUString                     ,
                                                         OUStringList                        ,
                                                         OUStringHashCode                    ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -798,62 +799,9 @@ class FilterCFGAccess : public ::utl::ConfigItem
         ::rtl::OUString m_sProductName                 ;
         ::rtl::OUString m_sFormatVersion               ;
 };
-/*DRAFT
-class FilterCFGListener : public  css::util::XChangesListener
-                        , private ThreadHelpBase
-                        , public  ::cppu::OWeakObject
-{
-    public:
-
-        enum ECFGType
-        {
-            E_TYPE          ,
-            E_FILTER        ,
-            E_LOADER        ,
-            E_DETECTOR      ,
-            E_CONTENTHANDLER
-        };
-
-    private:
-
-        // read only access to the configuration, where we are regsieterd as changes listener.
-        css::uno::Reference< css::uno::XInterface > m_xCFG;
-
-        // indicates, for which type of configuration item we listen.
-        ECFGType m_eType;
-
-        DataContainer* m_pData;
-
-        // we must know, if we are already registered as listener or not.
-        //    That can be usefull to supress double registration calls ...
-        //    which may will force double call backs in our disposing method!
-        //    Such superflous calls can be dangerous.
-        sal_Bool m_bListening;
-
-    public:
-
-        DECLARE_XINTERFACE
-
-        FilterCFGListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                                 ECFGType                                                eType ,
-                                 DataContainer*                                          pData );
-
-        void startListening();
-        void stopListening ();
-
-        virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& aEvent ) throw(css::uno::RuntimeException);
-        virtual void SAL_CALL disposing      ( const css::lang::EventObject&  aEvent ) throw(css::uno::RuntimeException);
-
-    private:
-
-        FileType       impl_readType    ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Filter         impl_readFilter  ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Detector       impl_readDetector( const css::uno::Reference< css::uno::XInterface >& xNode );
-        Loader         impl_readLoader  ( const css::uno::Reference< css::uno::XInterface >& xNode );
-        ContentHandler impl_readHandler ( const css::uno::Reference< css::uno::XInterface >& xNode );
-};
-*/
 
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_CLASSES_FILTERCACHEDATA_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

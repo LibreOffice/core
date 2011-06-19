@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ void ProgressLogImpl::disposing()
     }
     catch (Exception & exc) {
         (void) exc;
-        OSL_ENSURE( 0, OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
@@ -152,7 +153,7 @@ void ProgressLogImpl::log_write( OString const & text )
     }
     catch (io::IOException & exc) {
         (void) exc;
-        OSL_ENSURE( 0, OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
@@ -209,3 +210,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 
 } // namespace dp_log
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

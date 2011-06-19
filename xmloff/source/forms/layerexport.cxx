@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix = ::rtl::OUString::createFromAscii("C");
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix(RTL_CONSTASCII_USTRINGPARAM("C"));
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -99,13 +100,13 @@ namespace xmloff
 
         // add our style family to the export context's style pool
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr() );
-        m_xStyleExportMapper = new OFormComponentStyleExportMapper( xStylePropertiesMapper.getBodyPtr() );
+        ::rtl::Reference< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper( getControlStylePropertyMap(), m_xPropertyHandlerFactory.get() );
+        m_xStyleExportMapper = new OFormComponentStyleExportMapper( xStylePropertiesMapper.get() );
 
         // our style family
         m_rContext.GetAutoStylePool()->AddFamily(
             XML_STYLE_FAMILY_CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
-            m_xStyleExportMapper.getBodyPtr(),
+            m_xStyleExportMapper.get(),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_CONTROL_PREFIX) )
         );
 
@@ -139,7 +140,7 @@ namespace xmloff
 
         if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
+            OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
             return sal_False;
         }
@@ -183,7 +184,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
+    ::rtl::Reference< SvXMLExportPropertyMapper > OFormLayerXMLExport_Impl::getStylePropertyMapper()
     {
         return m_xStyleExportMapper;
     }
@@ -244,7 +245,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
+                OSL_FAIL("OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
                 continue;
             }
         }
@@ -346,6 +347,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OFormLayerXMLExport_Impl::implMoveIterators(const Reference< XDrawPage >& _rxDrawPage, sal_Bool _bClear)
     {
+        if (!_rxDrawPage.is())
+            return false;
+
         sal_Bool bKnownPage = sal_False;
 
         // the one for the ids
@@ -405,7 +409,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
-        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLExport_Impl::getControlId: invalid current page!");
+        if (m_aCurrentPageIds == m_aControlIds.end())
+            return ::rtl::OUString();
+
         OSL_ENSURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
         return m_aCurrentPageIds->second[_rxControl];
@@ -775,16 +781,11 @@ namespace xmloff
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
                 Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString::createFromAscii("en"),
-                                                ::rtl::OUString::createFromAscii("US"),
+                aSupplierArgs[0] <<= Locale (   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
                                                 ::rtl::OUString()
                                             );
-                // #110680#
-                //Reference< XInterface > xFormatsSupplierUntyped =
-                //  ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                //      SERVICE_NUMBERFORMATSSUPPLIER,
-                //      aSupplierArgs
-                //  );
+
                 Reference< XInterface > xFormatsSupplierUntyped =
                     m_rContext.getServiceFactory()->createInstanceWithArguments(
                         SERVICE_NUMBERFORMATSSUPPLIER,
@@ -831,3 +832,4 @@ namespace xmloff
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

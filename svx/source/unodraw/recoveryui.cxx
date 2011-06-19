@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,11 +42,13 @@
 
 #include <vcl/svapp.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //===============================================
 // const
 
-#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI")
-#define SERVICENAME_RECOVERYUI              ::rtl::OUString::createFromAscii("com.sun.star.dialog.RecoveryUI")
+#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"))
+#define SERVICENAME_RECOVERYUI              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.dialog.RecoveryUI"))
 
 //===============================================
 // namespace
@@ -109,7 +112,7 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 {
     // Internaly we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.
-    ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+    ::SolarMutexGuard aSolarLock;
 
     css::uno::Any aRet;
     RecoveryUI::EJob eJob = impl_classifyJob(aURL);
@@ -152,7 +155,7 @@ void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                        
 void SAL_CALL RecoveryUI::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& ) throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::addStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::addStatusListener()\nNot implemented yet!");
 }
 
 //===============================================
@@ -160,7 +163,7 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
     throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::removeStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
 }
 
 //===============================================
@@ -189,24 +192,24 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstan
 static OUString GetCrashConfigDir()
 {
 
-#if defined(WNT) || defined(OS2)
-    OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+#if defined(WNT)
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined(MACOSX)
-    OUString    ustrValue = OUString::createFromAscii("~");
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
 #else
-    OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
 #endif
     Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT) || defined(OS2)
-    ustrValue += OUString::createFromAscii("/user/crashdata");
+#if defined(WNT)
+    ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
     return ustrValue;
 }
 
 //===============================================
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define LCKFILE "crashdat.lck"
 #else
 #define LCKFILE ".crash_report_unsent"
@@ -230,7 +233,7 @@ static bool new_crash_pending()
     OUString    aUnsentURL = GetUnsentURL();
     File    aFile( aUnsentURL );
 
-    if ( FileBase::E_None == aFile.open( OpenFlag_Read ) )
+    if ( FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
     {
         aFile.close();
         return true;
@@ -311,29 +314,28 @@ void RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery   (m_pParentWindow);
-    svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog       (pWizard, pCore );
+    boost::scoped_ptr<svxdr::TabDialog4Recovery> xWizard(new svxdr::TabDialog4Recovery(m_pParentWindow));
+    svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog(xWizard.get(), pCore );
     svxdr::IExtendedTabPage*   pPage2  = 0;
     svxdr::IExtendedTabPage*   pPage3  = 0;
 
-    pWizard->addTabPage(pPage1);
+    xWizard->addTabPage(pPage1);
     if ( !bRecoveryOnly && new_crash_pending() )
     {
-        pPage2 = new svxdr::ErrorRepWelcomeDialog(pWizard        );
-        pPage3 = new svxdr::ErrorRepSendDialog   (pWizard        );
-        pWizard->addTabPage(pPage2);
-        pWizard->addTabPage(pPage3);
+        pPage2 = new svxdr::ErrorRepWelcomeDialog(xWizard.get());
+        pPage3 = new svxdr::ErrorRepSendDialog(xWizard.get());
+        xWizard->addTabPage(pPage2);
+        xWizard->addTabPage(pPage3);
     }
 
     // start the wizard
-    pWizard->Execute();
+    xWizard->Execute();
 
     impl_showAllRecoveredDocs();
 
     delete pPage3 ;
     delete pPage2 ;
     delete pPage1 ;
-    delete pWizard;
 
     delete_pending_crash();
 }
@@ -397,3 +399,5 @@ void RecoveryUI::impl_showAllRecoveredDocs()
 }
 
 } // namespace svx
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

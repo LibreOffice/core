@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,36 +64,6 @@ namespace editeng
     using namespace ::com::sun::star::i18n::TextConversionOption;
     using namespace ::com::sun::star::i18n::TextConversionType;
     using namespace ::com::sun::star::lang;
-/*
-    using HangulHanjaConversion::ReplacementAction;
-    using HangulHanjaConversion::eExchange;
-    using HangulHanjaConversion::eReplacementBracketed;
-    using HangulHanjaConversion::eOriginalBracketed;
-    using HangulHanjaConversion::eReplacementAbove;
-    using HangulHanjaConversion::eOriginalAbove;
-    using HangulHanjaConversion::eReplacementBelow;
-    using HangulHanjaConversion::eOriginalBelow;
-
-    using HangulHanjaConversion::eHangulToHanja;
-    using HangulHanjaConversion::eHanjaToHangul;
-
-    using HangulHanjaConversion::eSimpleConversion;
-    using HangulHanjaConversion::eHangulBracketed;
-    using HangulHanjaConversion::eHanjaBracketed;
-    using HangulHanjaConversion::eRubyHanjaAbove;
-    using HangulHanjaConversion::eRubyHanjaBelow;
-    using HangulHanjaConversion::eRubyHangulAbove;
-    using HangulHanjaConversion::eRubyHangulBelow;
-
-    using ::com::sun::star::i18n::TextConversionType::TO_HANJA;
-    using ::com::sun::star::i18n::TextConversionType::TO_HANGUL;
-    using ::com::sun::star::i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-    using ::com::sun::star::i18n::TextConversionOption::NONE;
-*/
-    //=========================================================================
-    //= HangulHanjaConversion_Impl
-    //=========================================================================
-    //using HangulHanjaConversion::ConversionFormat;
 
     class HangulHanjaConversion_Impl
     {
@@ -106,7 +77,7 @@ namespace editeng
         static StringMap        m_aRecentlyUsedList;
 
         // general
-        AbstractHangulHanjaConversionDialog* //CHINA001 HangulHanjaConversionDialog*
+        AbstractHangulHanjaConversionDialog*
                                 m_pConversionDialog;    // the dialog to display for user interaction
         Window*                 m_pUIParent;            // the parent window for any UI we raise
         Reference< XMultiServiceFactory >
@@ -269,14 +240,8 @@ namespace editeng
         sal_Int16 implGetConversionType( bool bSwitchDirection=false ) const;
     };
 
-    //=========================================================================
-    //= HangulHanjaConversion_Impl
-    //=========================================================================
-    //-------------------------------------------------------------------------
-    // static member initialization
     HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
 
-    //-------------------------------------------------------------------------
     HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( Window* _pUIParent,
         const Reference< XMultiServiceFactory >& _rxORB,
         const Locale& _rSourceLocale,
@@ -314,7 +279,7 @@ namespace editeng
             m_eConvType = HHC::eConvSimplifiedTraditional;
         else
         {
-            DBG_ERROR( "failed to determine conversion type from languages" );
+            OSL_FAIL( "failed to determine conversion type from languages" );
         }
 
         // set remaining conversion parameters to their default values
@@ -334,7 +299,6 @@ namespace editeng
 
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::createDialog()
     {
         DBG_ASSERT( m_bIsInteractive, "createDialog when the conversion should not be interactive?" );
@@ -344,7 +308,7 @@ namespace editeng
             if(pFact)
             {
                 m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection );
-                DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");
 
                 m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
 
@@ -365,7 +329,6 @@ namespace editeng
         }
     }
 
-    //-------------------------------------------------------------------------
     sal_Int16 HangulHanjaConversion_Impl::implGetConversionType( bool bSwitchDirection ) const
     {
         sal_Int16 nConversionType = -1;
@@ -377,7 +340,6 @@ namespace editeng
         return nConversionType;
     }
 
-    //-------------------------------------------------------------------------
     bool HangulHanjaConversion_Impl::implUpdateSuggestions( bool _bAllowSearchNextConvertibleText, const sal_Int32 _nStartAt )
     {
         // parameters for the converter
@@ -488,7 +450,7 @@ namespace editeng
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
+            OSL_FAIL( "HangulHanjaConversion_Impl::implNextConvertibleUnit: caught an exception!" );
 
             //!!! at least we want to move on in the text in order
             //!!! to avoid an endless loop...
@@ -497,7 +459,6 @@ namespace editeng
         return bFoundAny;
     }
 
-    //-------------------------------------------------------------------------
     bool HangulHanjaConversion_Impl::implNextConvertibleUnit( const sal_Int32 _nStartAt )
     {
         m_aCurrentSuggestions.realloc( 0 );
@@ -527,7 +488,6 @@ namespace editeng
                 (m_nCurrentStartIndex < m_sCurrentPortion.getLength());
     }
 
-    //-------------------------------------------------------------------------
     bool HangulHanjaConversion_Impl::implRetrieveNextPortion( )
     {
         sal_Bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
@@ -546,7 +506,6 @@ namespace editeng
         return bRet;
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion_Impl::implNextConvertible( bool _bRepeatUnit )
     {
         if ( _bRepeatUnit || ( m_nCurrentEndIndex < m_sCurrentPortion.getLength() ) )
@@ -577,7 +536,6 @@ namespace editeng
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------
     ::rtl::OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
     {
         DBG_ASSERT( m_nCurrentStartIndex < m_sCurrentPortion.getLength(),
@@ -591,7 +549,6 @@ namespace editeng
         return sCurrentUnit;
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
     {
         sal_Bool bNeedUserInteraction = sal_False;  // when we leave here, do we need user interaction?
@@ -641,19 +598,9 @@ namespace editeng
             }
         }
 
-        /*
-        if ( bDocumentDone )
-            return sal_True;            // we explicitly know that the complete document is done
-        else if ( bNeedUserInteraction )
-            return sal_False;           // the doc is not done, we found a convertible, but need the user to decide
-        else
-            return sal_True;            // we did not find a next convertible, so the document is implicitly done
-        */
-
         return  bDocumentDone || !bNeedUserInteraction;
     }
 
-    //-------------------------------------------------------------------------
     bool HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion( HHC::ConversionDirection& rDirection )
     {
         // - For eConvHangulHanja the direction is determined by
@@ -705,14 +652,13 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::implGetConversionDirectionForCurrentPortion: caught an exception!" );
             }
         }
 
         return bSuccess;
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::DoDocumentConversion( )
     {
         // clear the change-all list - it's to be re-initialized for every single document
@@ -774,7 +720,6 @@ namespace editeng
         }
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::implProceed( bool _bRepeatCurrentUnit )
     {
         if ( ContinueConversion( _bRepeatCurrentUnit ) )
@@ -785,7 +730,6 @@ namespace editeng
         }
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::implChange( const ::rtl::OUString& _rChangeInto )
     {
         if( !_rChangeInto.getLength() )
@@ -811,7 +755,7 @@ namespace editeng
                 case HHC::eRubyHangulAbove:  eAction = bOriginalIsHangul ? HHC::eOriginalAbove : HHC::eReplacementAbove; break;
                 case HHC::eRubyHangulBelow:  eAction = bOriginalIsHangul ? HHC::eOriginalBelow : HHC::eReplacementBelow; break;
                 default:
-                    DBG_ERROR( "HangulHanjaConversion_Impl::implChange: invalid/unexpected conversion format!" );
+                    OSL_FAIL( "HangulHanjaConversion_Impl::implChange: invalid/unexpected conversion format!" );
             }
         }
 
@@ -864,7 +808,7 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
                 aOffsets.realloc(0);
             }
         }
@@ -878,7 +822,6 @@ namespace editeng
         m_nReplacementBaseIndex = m_nCurrentEndIndex;
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::implReadOptionsFromConfiguration()
     {
         SvtLinguConfig  aLngCfg;
@@ -887,7 +830,6 @@ namespace editeng
         aLngCfg.GetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES ) >>= m_bAutoReplaceUnique;
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion_Impl::implUpdateData()
     {
         implReadOptionsFromConfiguration();
@@ -904,7 +846,6 @@ namespace editeng
         m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnOptionsChanged, void*, EMPTYARG )
     {
         //options and dictionaries might have been changed
@@ -914,7 +855,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnIgnore, void*, EMPTYARG )
     {
         // simply ignore, and proceed
@@ -922,7 +862,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnIgnoreAll, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnIgnoreAll: no dialog! How this?" );
@@ -943,7 +882,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnChange, void*, EMPTYARG )
     {
         // change
@@ -956,7 +894,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnChangeAll, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
@@ -967,7 +904,7 @@ namespace editeng
 
             if( sChangeInto.getLength() )
             {
-                // change the current occurence
+                // change the current occurrence
                 implChange( sChangeInto );
 
                 // put into the "change all" list
@@ -981,7 +918,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnByCharClicked, CheckBox*, _pBox )
     {
         m_bByCharacter = _pBox->IsChecked();
@@ -991,7 +927,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnConversionTypeChanged, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
@@ -1000,7 +935,6 @@ namespace editeng
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( HangulHanjaConversion_Impl, OnFind, void*, EMPTYARG )
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnFind: where did this come from?" );
@@ -1054,23 +988,16 @@ namespace editeng
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
+                OSL_FAIL( "HangulHanjaConversion_Impl::OnFind: caught an exception!" );
             }
         }
         return 0L;
     }
 
-    //=========================================================================
-    //= HangulHanjaConversion
-    //=========================================================================
-    //-------------------------------------------------------------------------
-
-    // static member initialization
     sal_Bool    HangulHanjaConversion::m_bUseSavedValues        = sal_False;
     sal_Bool    HangulHanjaConversion::m_bTryBothDirectionsSave = sal_False;
     HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
 
-    //-------------------------------------------------------------------------
     HangulHanjaConversion::HangulHanjaConversion( Window* _pUIParent,
         const Reference< XMultiServiceFactory >& _rxORB,
         const Locale& _rSourceLocale, const Locale& _rTargetLocale,
@@ -1080,66 +1007,55 @@ namespace editeng
     {
     }
 
-    //-------------------------------------------------------------------------
     HangulHanjaConversion::~HangulHanjaConversion( )
     {
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_Bool bVal )
     {
         m_bUseSavedValues = bVal;
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion::IsUseSavedConversionDirectionState()
     {
         return m_bUseSavedValues;
     }
 
-    //-------------------------------------------------------------------------
     LanguageType HangulHanjaConversion::GetSourceLanguage( ) const
     {
         return m_pImpl->GetSourceLang();
     }
 
-    //-------------------------------------------------------------------------
     LanguageType HangulHanjaConversion::GetTargetLanguage( ) const
     {
         return m_pImpl->GetTargetLang();
     }
 
-    //-------------------------------------------------------------------------
     const Font * HangulHanjaConversion::GetTargetFont( ) const
     {
         return m_pImpl->GetTargetFont();
     }
 
-    //-------------------------------------------------------------------------
     sal_Int32 HangulHanjaConversion::GetConversionOptions( ) const
     {
         return m_pImpl->GetConvOptions();
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion::IsInteractive( ) const
     {
         return m_pImpl->IsInteractive();
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion::HandleNewUnit( const sal_Int32, const sal_Int32 )
     {
         // nothing to do, only derived classes need this.
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion::GetNextPortion( ::rtl::OUString&, LanguageType&, sal_Bool )
     {
-        DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion::ReplaceUnit(
             const sal_Int32, const sal_Int32,
             const ::rtl::OUString&,
@@ -1148,24 +1064,21 @@ namespace editeng
             ReplacementAction,
             LanguageType * )
     {
-        DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool HangulHanjaConversion::HasRubySupport() const
     {
-        DBG_ERROR( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
+        OSL_FAIL( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------
     void HangulHanjaConversion::ConvertDocument()
     {
         if ( m_pImpl->IsValid() )
             m_pImpl->DoDocumentConversion( );
     }
 
-//.............................................................................
 }   // namespace svx
-//.............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

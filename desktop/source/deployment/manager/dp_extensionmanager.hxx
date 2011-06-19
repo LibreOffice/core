@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #if ! defined INCLUDED_DP_EXTENSIONMANAGER_H
 #define INCLUDED_DP_EXTENSIONMANAGER_H
 
@@ -41,16 +41,14 @@
 #include "osl/mutex.hxx"
 #include <list>
 
-
 namespace css = ::com::sun::star;
 
 namespace dp_manager {
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     ::rtl::OUString,
     ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
     ::rtl::OUStringHash > id2extensions;
-
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
         public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
@@ -128,7 +126,6 @@ public:
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
 
-
     virtual sal_Int32 SAL_CALL checkPrerequisitesAndEnable(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
@@ -138,7 +135,6 @@ public:
             css::ucb::CommandAbortedException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-
 
     virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
         SAL_CALL getDeployedExtensions(
@@ -183,7 +179,6 @@ public:
             css::ucb::CommandAbortedException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException);
-
 
     virtual void SAL_CALL reinstallDeployedExtensions(
         ::rtl::OUString const & repository,
@@ -269,7 +264,6 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
-
     ::std::list<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(::rtl::OUString  const & identifier,
                             ::rtl::OUString const & fileName,
@@ -296,7 +290,6 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
-
     void addExtensionsToMap(
         id2extensions & mapExt,
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
@@ -319,13 +312,10 @@ private:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-
 };
 
 }
 
-
-
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

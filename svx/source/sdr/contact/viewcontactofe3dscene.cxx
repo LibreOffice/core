@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -385,7 +386,7 @@ namespace sdr
                 {
                     // empty scene, no 3d action should be necessary. Prepare some
                     // fallback size
-                    OSL_ENSURE(false, "No need to get ViewInformation3D from an empty scene (!)");
+                    OSL_FAIL("No need to get ViewInformation3D from an empty scene (!)");
                     aContentRange.expand(basegfx::B3DPoint(-100.0, -100.0, -100.0));
                     aContentRange.expand(basegfx::B3DPoint( 100.0,  100.0,  100.0));
                 }
@@ -476,3 +477,5 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

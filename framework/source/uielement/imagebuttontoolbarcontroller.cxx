@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_IMAGEBUTTONTOOLBARCONTROLLER_HXX
 #include "uielement/imagebuttontoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 #include <framework/addonsoptions.hxx>
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,7 +53,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
@@ -93,7 +90,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
     uno::Reference< util::XMacroExpander > xMacroExpander( m_xMacroExpander );
     if ( !xMacroExpander.is() )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !xMacroExpander.is() )
         {
@@ -139,9 +136,8 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Bool bHiContrast( pToolbar->GetSettings().GetStyleSettings().GetHighContrastMode() );
 
-    Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, bHiContrast, sal_True );
+    Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, sal_True );
 
     // Height will be controlled by scaling according to button height
     m_pToolbar->SetItemImage( m_nID, aImage );
@@ -158,7 +154,7 @@ ImageButtonToolbarController::~ImageButtonToolbarController()
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
 }
 
@@ -166,7 +162,7 @@ throw ( RuntimeException )
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
     if (( rControlCommand.Command.equalsAsciiL( "SetImag", 7 )) ||
         ( rControlCommand.Command.equalsAsciiL( "SetImage", 8 )) )
@@ -209,8 +205,8 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
         // Use graphic class to also support more graphic formats (bmp,png,...)
         Graphic aGraphic;
 
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( aGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW );
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+        rGF.ImportGraphic( aGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW );
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 
@@ -233,3 +229,4 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ using ::rtl::OUString;
     {
         (void)ex; // avoid warning for pro build
 
-        OSL_ENSURE( false, OUStringToOString( OUString(
+        OSL_FAIL( OUStringToOString( OUString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -206,7 +207,7 @@ Reference< chart2::XDataSeries > SchXMLSeriesHelper::getFirstCandleStickSeries(
             for( sal_Int32 nCTIdx=0; !xResult.is() && nCTIdx<aCTSeq.getLength(); ++nCTIdx )
             {
                 if( aCTSeq[nCTIdx]->getChartType().equals(
-                        ::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")))
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" ))))
                 {
                     Reference< chart2::XDataSeriesContainer > xSeriesCnt( aCTSeq[nCTIdx], uno::UNO_QUERY_THROW );
                     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
@@ -219,7 +220,7 @@ Reference< chart2::XDataSeries > SchXMLSeriesHelper::getFirstCandleStickSeries(
     }
     catch( const uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught" );
+        OSL_FAIL( "Exception caught" );
     }
     return xResult;
 }
@@ -239,7 +240,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.DataSeriesWrapper" )) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -252,7 +253,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
         catch( uno::Exception & rEx )
         {
             (void)rEx; // avoid warning for pro build
-            DBG_ERROR1( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
+            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
@@ -276,7 +277,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.DataSeriesWrapper" )) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -291,7 +292,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
         {
             (void)rEx; // avoid warning for pro build
 
-            DBG_ERROR1( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
+            OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPIDataPointPropertySet: %s",
                         OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
@@ -299,3 +300,4 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
     return xRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,6 +97,10 @@ namespace framework
     class ToolbarLayoutManager;
     class PanelManager;
     class GlobalSettings;
+    namespace detail
+    {
+        class InfoHelperBuilder;
+    }
     typedef ::cppu::WeakImplHelper8 <   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::frame::XLayoutManager
                                     ,   ::com::sun::star::awt::XWindowListener
@@ -369,8 +374,12 @@ namespace framework
             PanelManager*                                                               m_pPanelManager;
             ToolbarLayoutManager*                                                       m_pToolbarManager;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
+
+        friend class detail::InfoHelperBuilder;
     };
 
 } // namespace framework
 
 #endif // __FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <tools/stream.hxx>
 #include <tools/color.hxx>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -102,12 +102,10 @@ struct ImageListsDescriptor
 class ImagesConfiguration
 {
     public:
-        // #110897#
         static sal_Bool LoadImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, ImageListsDescriptor& aItems );
 
-        // #110897#
         static sal_Bool StoreImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const ImageListsDescriptor& aItems );
@@ -126,3 +124,5 @@ class ImagesConfiguration
 } // namespace framework
 
 #endif // __FRAMEWORK_CLASSES_IMAGES
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

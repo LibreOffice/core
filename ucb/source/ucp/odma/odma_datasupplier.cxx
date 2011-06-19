@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <vector>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
@@ -41,7 +39,6 @@
 #include "odma_content.hxx"
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
-#include "odma_lib.hxx"
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -115,7 +112,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 }
 
@@ -284,12 +281,15 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     ODMSTATUS odm = NODMGetDMS(ODMA_ODMA_REGNAME, lpszDMSList);
     lpszDMSList[strlen(lpszDMSList)+1] = '\0';
 
-    ::rtl::OString sQuery("SELECT ODM_DOCID, ODM_NAME");
+    ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME");
 
     DWORD dwFlags = ODM_SPECIFIC;
     odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
-    if(odm != ODM_SUCCESS)
+    if(odm != ODM_SUCCESS) {
+        delete[] pQueryId;
+        delete[] lpszDMSList;
         return sal_False;
+    }
 
     sal_uInt16 nCount       = 10;
     sal_uInt16 nMaxCount    = 10;
@@ -453,3 +453,5 @@ void DataSupplier::validate()
     throw( ResultSetException )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

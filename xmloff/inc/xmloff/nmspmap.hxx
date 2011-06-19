@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,11 +33,9 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
-#include <hash_map>
-#ifndef __SGI_STL_MAP
+#include <boost/unordered_map.hpp>
 #include <map>
-#endif
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <limits.h>
@@ -92,9 +91,9 @@ struct QNamePairEq
     }
 };
 
-typedef ::std::hash_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
-typedef ::std::hash_map < ::rtl::OUString, ::vos::ORef <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
-typedef ::std::map < sal_uInt16, ::vos::ORef < NameSpaceEntry >, uInt32lt > NameSpaceMap;
+typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
+typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
@@ -183,3 +182,5 @@ public:
 };
 
 #endif  //  _XMLOFF_NMSPMAP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

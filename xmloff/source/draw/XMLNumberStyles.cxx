@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,9 @@
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 
-using namespace rtl;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
 
 struct SdXMLDataStyleNumber
 {
@@ -326,8 +328,6 @@ const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
 ///////////////////////////////////////////////////////////////////////
 // export
 
-#ifndef SVX_LIGHT
-
 static void SdXMLExportDataStyleNumber( SdXMLExport& rExport, SdXMLDataStyleNumber& rElement )
 {
     if( rElement.mbDecimal02 )
@@ -489,8 +489,6 @@ OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat
         return OUString();
     }
 }
-
-#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -741,3 +739,5 @@ SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uIn
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

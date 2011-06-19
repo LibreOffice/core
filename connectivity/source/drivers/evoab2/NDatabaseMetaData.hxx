@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
 #define _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
 
-#ifndef _CONNECTIVITY_EVOAB_DEBUG_HXX_
 #include "NDebug.hxx"
-#endif
 #include "NConnection.hxx"
 #include "TDatabaseMetaDataBase.hxx"
 #include "FDatabaseMetaDataResultSet.hxx"
@@ -234,3 +233,5 @@ namespace connectivity
 }
 
 #endif // _CONNECTIVITY_EVOAB_DATABASEMETADATA_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

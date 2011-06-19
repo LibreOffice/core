@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,6 @@ bool Player::create( const ::rtl::OUString& rURL )
 
         NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
         NSURL* aURL = [NSURL URLWithString:aNSStr ];
-
 
         NSError* pErr = nil;
         mpMovie = [QTMovie movieWithURL:aURL error:&pErr];
@@ -422,7 +422,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     return aSize;
 }
 
-
 // ------------------------------------------------------------------------------
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
@@ -499,3 +498,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
 
 } // namespace quicktime
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

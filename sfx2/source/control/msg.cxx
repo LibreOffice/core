@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ SfxSlotKind SfxSlot::GetKind() const
             return (SfxSlotKind) SFX_KIND_ENUM;
         else
         {
-            DBG_ERROR( "invalid slot kind detected" );
+            OSL_FAIL( "invalid slot kind detected" );
             return SFX_KIND_ENUM;
         }
     }
@@ -73,3 +74,4 @@ sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
     return rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

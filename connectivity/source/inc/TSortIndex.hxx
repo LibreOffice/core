@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ namespace connectivity
             CreateKeySet creates the keyset which vaalues could be used to travel in your table/result
             The returned keyset is frozen.
         */
-        ::vos::ORef<OKeySet> CreateKeySet();
+        ::rtl::Reference<OKeySet> CreateKeySet();
 
 
 
@@ -137,3 +138,5 @@ namespace connectivity
     };
 }
 #endif // CONNECTIVITY_TSORTINDEX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

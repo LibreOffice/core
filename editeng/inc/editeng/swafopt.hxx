@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 class SvStringsISortDtor;
 class SmartTagMgr;
 
-// Klasse fuer Optionen vom Autoformat
+// Class of options for AutoFormat
 struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 {
     Font aBulletFont;
@@ -79,7 +80,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     sal_Bool bAutoCompleteWords : 1;
     sal_Bool bAutoCmpltCollectWords : 1;
     sal_Bool bAutoCmpltEndless : 1;
-// -- under NT hier starts a new long
+// -- under NT here starts a new long
     sal_Bool bAutoCmpltAppendBlanc : 1;
     sal_Bool bAutoCmpltShowAsTip : 1;
 
@@ -103,3 +104,4 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

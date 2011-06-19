@@ -28,7 +28,6 @@
 PRJ=..$/..$/..$/..
 PRJNAME=shell
 TARGET=util
-#LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 
@@ -46,14 +45,12 @@ CDEFS_X64+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=$(SLO)$/dbgmacros.obj\
-    $(SLO)$/fileextensions.obj\
+SLOFILES=$(SLO)$/fileextensions.obj\
     $(SLO)$/registry.obj\
     $(SLO)$/utilities.obj\
     $(SLO)$/iso8601_converter.obj
 
-SLOFILES_X64=$(SLO_X64)$/dbgmacros.obj\
-    $(SLO_X64)$/fileextensions.obj\
+SLOFILES_X64=$(SLO_X64)$/fileextensions.obj\
     $(SLO_X64)$/registry.obj\
     $(SLO_X64)$/utilities.obj\
     $(SLO_X64)$/iso8601_converter.obj

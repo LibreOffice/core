@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,9 @@
 #include <tools/errcode.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbx.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 
-//#include <osl/thread.h>
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "processw.hxx"
 
@@ -204,8 +200,7 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
 SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 {
     Methods* p = &pMethods[ nIdx ];
-    // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pResultInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
+    // In case there is a help file available:
     SbxInfo* pResultInfo = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
@@ -221,10 +216,8 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////////////////////
 
 // Properties and methods save the return value in argv[0] (Get, bPut = sal_False)
 // and store the value from argv[0] (Put, bPut = sal_True)
@@ -280,3 +273,4 @@ SbxObject* ProcessFactory::CreateObject( const String& rClass )
     return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

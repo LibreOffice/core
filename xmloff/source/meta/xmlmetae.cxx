@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -350,7 +351,6 @@ SvXMLMetaExport::~SvXMLMetaExport()
 
 void SvXMLMetaExport::Export()
 {
-//    exportDom(xDOM, mrExport); // this would not work (root node, namespaces)
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
     if (xSAXable.is()) {
@@ -365,7 +365,7 @@ void SvXMLMetaExport::Export()
             } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
                 // default initialized empty string
             } else {
-            DBG_ERROR("namespace attribute not starting with xmlns unexpected");
+            OSL_FAIL("namespace attribute not starting with xmlns unexpected");
             }
             ns.Second = rNsMap.GetNameByKey(key);
             namespaces.push_back(ns);
@@ -526,3 +526,4 @@ SvXMLMetaExport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>&)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

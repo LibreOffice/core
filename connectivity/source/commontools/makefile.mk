@@ -86,12 +86,12 @@ EXCEPTIONSFILES=\
         $(SLO)$/DriversConfig.obj                       \
         $(SLO)$/formattedcolumnvalue.obj                \
         $(SLO)$/BlobHelper.obj							\
-        $(SLO)$/warningscontainer.obj
+        $(SLO)$/warningscontainer.obj                   \
+        $(SLO)$/dbconversion.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)								\
         $(SLO)$/AutoRetrievingBase.obj					\
-        $(SLO)$/dbconversion.obj
 
 
 

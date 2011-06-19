@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,13 @@
 #define SVX_TAB_DEFCOUNT    10
 #define SVX_TAB_DEFDIST     1134            // 2cm in twips
 #define SVX_TAB_NOTFOUND    USHRT_MAX
-#define cDfltDecimalChar    (sal_Unicode(0x00)) // aus IntlWrapper besorgen
+#define cDfltDecimalChar    (sal_Unicode(0x00)) // Get from IntlWrapper
 #define cDfltFillChar       (sal_Unicode(' '))
 
 class EDITENG_DLLPUBLIC SvxTabStop
 {
 private:
-    long            nTabPos;
+    sal_Int32 nTabPos;
 
     SvxTabAdjust    eAdjustment;
     mutable sal_Unicode     m_cDecimal;
@@ -56,20 +57,13 @@ private:
 
 public:
     SvxTabStop();
-#if (_MSC_VER < 1300)
-    SvxTabStop( const long nPos,
+    SvxTabStop( const sal_Int32 nPos,
                 const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
                 const sal_Unicode cDec = cDfltDecimalChar,
                 const sal_Unicode cFil = cDfltFillChar );
-#else
-    SvxTabStop::SvxTabStop( const long nPos,
-                const SvxTabAdjust eAdjst = SVX_TAB_ADJUST_LEFT,
-                const sal_Unicode cDec = cDfltDecimalChar,
-                const sal_Unicode cFil = cDfltFillChar );
-#endif
 
-    long&           GetTabPos() { return nTabPos; }
-    long            GetTabPos() const { return nTabPos; }
+    sal_Int32& GetTabPos() { return nTabPos; }
+    sal_Int32 GetTabPos() const { return nTabPos; }
 
     SvxTabAdjust&   GetAdjustment() { return eAdjustment; }
     SvxTabAdjust    GetAdjustment() const { return eAdjustment; }
@@ -82,7 +76,7 @@ public:
 
     String          GetValueString() const;
 
-    // das "alte" operator==()
+    // the "old" operator==()
     sal_Bool            IsEqual( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
@@ -91,7 +85,7 @@ public:
                                      cFill       == rTS.cFill );
                         }
 
-    // Fuer das SortedArray:
+    // For the SortedArray:
     sal_Bool            operator==( const SvxTabStop& rTS ) const
                         { return nTabPos == rTS.nTabPos; }
     sal_Bool            operator <( const SvxTabStop& rTS ) const
@@ -111,9 +105,9 @@ public:
 
 SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, 1, EDITENG_DLLPUBLIC )
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine Liste von TabStops.
+/*  [Description]
+
+    This item describes a list of TabStops.
 */
 
 class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopArr
@@ -130,13 +124,13 @@ public:
                     sal_uInt16 nWhich  );
     SvxTabStopItem( const SvxTabStopItem& rTSI );
 
-    // Liefert Index-Position des Tabs zurueck oder TAB_NOTFOUND
+    // Returns index of the tab or TAB_NOTFOUND
     sal_uInt16          GetPos( const SvxTabStop& rTab ) const;
 
-    // Liefert Index-Position des Tabs an nPos zurueck oder TAB_NOTFOUND
-    sal_uInt16          GetPos( const long nPos ) const;
+    // Returns index of the tab at nPos, or TAB_NOTFOUND
+    sal_uInt16          GetPos( const sal_Int32 nPos ) const;
 
-    // entprivatisiert:
+    // unprivatized:
     sal_uInt16          Count() const { return SvxTabStopArr::Count(); }
     sal_Bool            Insert( const SvxTabStop& rTab );
     void            Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
@@ -146,14 +140,14 @@ public:
     void            Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
                         { SvxTabStopArr::Remove( nPos, nLen ); }
 
-    // Zuweisungsoperator, Gleichheitsoperator (vorsicht: teuer!)
+    // Assignment operator, equality operator (caution: expensive!)
     SvxTabStopItem& operator=( const SvxTabStopItem& rTSI );
 
     // this is already included in SfxPoolItem declaration
     //int             operator!=( const SvxTabStopItem& rTSI ) const
     //                  { return !( operator==( rTSI ) ); }
 
-    // SortedArrays liefern nur Stackobjekte zurueck!
+    // SortedArrays returns only Stackobjects!
     const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
                         {
                             DBG_ASSERT( GetStart() &&
@@ -163,10 +157,10 @@ public:
     const SvxTabStop*  GetStart() const
                         {   return SvxTabStopArr::GetData(); }
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -183,3 +177,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

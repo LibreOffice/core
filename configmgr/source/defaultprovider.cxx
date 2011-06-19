@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,16 +43,12 @@
 
 namespace configmgr { namespace default_provider {
 
-namespace {
-
 namespace css = com::sun::star;
-
-}
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    osl::MutexGuard guard(lock);
+    osl::MutexGuard guard(*lock());
     static css::uno::Reference< css::uno::XInterface > singleton(
         configuration_provider::createDefault(context));
     return singleton;
@@ -71,3 +68,5 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

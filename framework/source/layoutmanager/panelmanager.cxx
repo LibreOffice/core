@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ bool PanelManager::createPanels()
 {
     if ( m_xFrame.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
         if ( xWindow.is() )
         {
@@ -181,3 +182,5 @@ throw (uno::RuntimeException)
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

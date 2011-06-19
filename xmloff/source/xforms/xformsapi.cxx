@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,6 +117,7 @@ void lcl_addXFormsModel(
 
     // TODO: implement proper error handling
     DBG_ASSERT( bSuccess, "can't import model" );
+    (void)bSuccess;
 }
 
 Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
@@ -342,7 +344,9 @@ rtl::OUString lcl_getBasicTypeName(
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     return sTypeName;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

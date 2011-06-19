@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
 
 //------------------------------------------------------------------------
 
-sal_Bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     uno::Sequence< uno::Any > aSeq( 9 );
 
@@ -143,10 +144,10 @@ sal_Bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) cons
 
 //------------------------------------------------------------------------
 
-sal_Bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     uno::Sequence< uno::Any >   aSeq;
-    sal_Bool                        bRet = false;
+    bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
     {
@@ -327,3 +328,5 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

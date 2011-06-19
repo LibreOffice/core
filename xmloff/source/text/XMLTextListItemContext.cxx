@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,14 +37,10 @@
 #include "txtlists.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include <xmloff/txtimp.hxx>
-// --> OD 2008-05-08 #refactorlists#
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <xmloff/xmlnumi.hxx>
-// <--
-
 #include "XMLTextListItemContext.hxx"
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -64,10 +61,8 @@ XMLTextListItemContext::XMLTextListItemContext(
     : SvXMLImportContext( rImport, nPrfx, rLName ),
       rTxtImport( rTxtImp ),
       nStartValue( -1 ),
-      // --> OD 2008-05-07 #refactorlists#
       mnSubListCount( 0 ),
       mxNumRulesOverride()
-      // <--
 {
     static ::rtl::OUString s_NumberingRules(
         RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
@@ -88,7 +83,6 @@ XMLTextListItemContext::XMLTextListItemContext(
             if( nTmp >= 0 && nTmp <= SHRT_MAX )
                 nStartValue = (sal_Int16)nTmp;
         }
-        // --> OD 2008-05-08 #refactorlists#
         else if ( nPrefix == XML_NAMESPACE_TEXT &&
                   IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
         {
@@ -126,7 +120,6 @@ XMLTextListItemContext::XMLTextListItemContext(
                 }
             }
         }
-        // <--
         else if ( (XML_NAMESPACE_XML == nPrefix) &&
              IsXMLToken(aLocalName, XML_ID)   )
         {
@@ -175,16 +168,11 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
 
         break;
     case XML_TOK_TEXT_LIST:
-        // --> OD 2008-05-07 #refactorlists#
-//        pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
-//                                            nPrefix, rLocalName,
-//                                            xAttrList );
         ++mnSubListCount;
         pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
                                                 nPrefix, rLocalName,
                                                 xAttrList,
                                                 (mnSubListCount > 1) );
-        // <--
         break;
     }
 
@@ -194,4 +182,4 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
     return pContext;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

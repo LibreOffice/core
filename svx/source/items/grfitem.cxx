@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,7 +118,7 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
 
 
 
-sal_Bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -137,17 +138,17 @@ sal_Bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
 
     rVal <<= aRet;
-    return   sal_True;
+    return true;
 }
 
-sal_Bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aVal;
 
     if(!(rVal >>= aVal))
-        return sal_False;
+        return false;
     if( bConvert )
     {
        aVal.Right   = MM100_TO_TWIP(aVal.Right );
@@ -160,7 +161,7 @@ sal_Bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     nRight  = aVal.Right ;
     nTop    = aVal.Top   ;
     nBottom = aVal.Bottom;
-    return  sal_True;
+    return  true;
 }
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(
@@ -195,3 +196,4 @@ SfxItemPresentation SvxGrfCrop::GetPresentation(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -173,14 +174,8 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
     }
 }
 
-::std::list<OUString> ConfigurationBackendDb::getAllIniEntries()
-{
-    return getOneChildFromAllEntries(OUSTR("ini-entry"));
-}
-
-
-
 } // namespace configuration
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

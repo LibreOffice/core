@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "xmlehelp.hxx"
 
-#ifndef _XMLOFF_XMTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -403,7 +402,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                 break;
             }
             default:
-                DBG_ERROR("xmloff::SvXMLExportHelper::GetConversionFactor(), illegal eCoreUnit value!");
+                OSL_FAIL("xmloff::SvXMLExportHelper::GetConversionFactor(), illegal eCoreUnit value!");
                 break;
         }
 
@@ -498,3 +497,5 @@ MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, Map
 
     return eRetUnit;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SVX_FILLITEM_HXX
 #define _SVX_FILLITEM_HXX
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 #include <svx/xcolit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
@@ -49,3 +48,5 @@ class XGradient;
 class XOBitmap;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -243,8 +244,8 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     catch (ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
-        OSL_ENSURE(
-            0, ::rtl::OUStringToOString(
+        OSL_FAIL(
+            ::rtl::OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return -1;
     }
@@ -267,13 +268,13 @@ static const ::cppu::ImplementationEntry s_entries [] =
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )
@@ -283,3 +284,5 @@ void * SAL_CALL component_getFactory(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

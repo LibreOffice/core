@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ struct DeploymentGuiResMgr :
     }
 };
 
-struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName> {
+struct BrandName : public ::rtl::StaticWithInit< ::rtl::OUString, BrandName > {
     const ::rtl::OUString operator () () {
         return ::utl::ConfigManager::GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME ).get< ::rtl::OUString >();
@@ -60,3 +61,5 @@ public:
 } // namespace dp_gui
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

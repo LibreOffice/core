@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#include "odma_inputstream.hxx"
 #include "com/sun/star/io/IOException.hpp"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <cppuhelper/implbase1.hxx>
+#ifdef WNT
+#include <windows.h>
+#endif
+#include "odma_inputstream.hxx"
 #include "odma_contentprops.hxx"
 #include "odma_provider.hxx"
 
@@ -76,11 +80,11 @@ OOdmaStream::~OOdmaStream()
     }
     catch (io::IOException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
 }
 // -----------------------------------------------------------------------------
@@ -284,3 +288,5 @@ sal_Int64 SAL_CALL OOdmaStream::getLength()
     return m_xInputSeek.is() ? m_xInputSeek->getLength() : sal_Int64(0);
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -102,7 +102,13 @@ IDLFILES= XGlobals.idl\
      XVPageBreak.idl \
      XVPageBreaks.idl \
      TextFrame.idl \
-
+    XMenuBar.idl \
+    XMenuBars.idl \
+    XMenu.idl \
+    XMenus.idl \
+    XMenuItem.idl \
+    XMenuItems.idl \
+    XQueryTable.idl
 
 # ------------------------------------------------------------------
 

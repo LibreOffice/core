@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,7 @@
     #include <rtl/strbuf.hxx>
     #endif
 
-    #ifndef __SGI_STL_VECTOR
     #include <vector>
-    #endif
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_MEMORYMEASURE
@@ -221,3 +220,5 @@
 //*****************************************************************************************************************
 
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_MEMORYMEASURE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

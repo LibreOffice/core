@@ -34,8 +34,9 @@
 #include "tools/urlobj.hxx"
 #include "osl/file.h"
 #include "comphelper/sequenceashashmap.hxx"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "sfx2/app.hxx"
+#include <sal/macros.h>
 #include "app.hrc"
 #define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
@@ -386,7 +387,7 @@ extern "C"
 
 void aqua_init_systray()
 {
-	::vos::OGuard aGuard( Application::GetSolarMutex() );
+	SolarMutexGuard aGuard;
 
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
     if( ! pShutdownIcon )
@@ -450,12 +451,12 @@ void aqua_init_systray()
                 if( [NSApp respondsToSelector: @selector(setDockIconClickHandler:)] )
                     [NSApp performSelector:@selector(setDockIconClickHandler:) withObject: pExecute];
                 else
-                    DBG_ERROR( "setDockIconClickHandler selector failed on NSApp\n" );
+                    OSL_FAIL( "setDockIconClickHandler selector failed on NSApp\n" );
 
             }
             
             // insert the menu entries for launching the applications
-            for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
+            for ( size_t i = 0; i < SAL_N_ELEMENTS( aMenuItems ); ++i )
             {
                 if ( !aModuleOptions.IsModuleInstalled( aMenuItems[i].eModuleIdentifier ) )
                     // the complete application is not even installed
@@ -497,10 +498,10 @@ void aqua_init_systray()
                 [NSApp performSelector:@selector(addDockMenuItem:) withObject: pDockSubMenu];
             }
             else
-                DBG_ERROR( "addDockMenuItem selector failed on NSApp\n" );
+                OSL_FAIL( "addDockMenuItem selector failed on NSApp\n" );
         }
         else
-            DBG_ERROR( "addFallbackMenuItem selector failed on NSApp\n" );
+            OSL_FAIL( "addFallbackMenuItem selector failed on NSApp\n" );
     }
 }
 

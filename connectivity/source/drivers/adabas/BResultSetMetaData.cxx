@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_BRESULTSETMETADATA_HXX_
 #include "adabas/BResultSetMetaData.hxx"
-#endif
 #include "adabas/BCatalog.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -40,7 +39,7 @@ using namespace com::sun::star::uno;
 using namespace connectivity::adabas;
 using namespace connectivity;
 
-OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt,const ::vos::ORef<OSQLColumns>& _rSelectColumns )
+OAdabasResultSetMetaData::OAdabasResultSetMetaData(odbc::OConnection*   _pConnection, SQLHANDLE _pStmt,const ::rtl::Reference<OSQLColumns>& _rSelectColumns )
 : OAdabasResultSetMetaData_BASE(_pConnection,_pStmt)
 ,m_aSelectColumns(_rSelectColumns)
 {
@@ -64,7 +63,7 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
 {
     sal_Int32 nValue = 0;
     sal_Bool bFound = sal_False;
-    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
+    if ( m_aSelectColumns.is() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
         bFound = (m_aSelectColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)) >>= nValue;
 
     if ( !bFound )
@@ -74,7 +73,7 @@ sal_Int32 SAL_CALL OAdabasResultSetMetaData::isNullable( sal_Int32 column ) thro
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OAdabasResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    if ( m_aSelectColumns.isValid() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
+    if ( m_aSelectColumns.is() && column > 0 && column <= (sal_Int32)m_aSelectColumns->get().size() )
     {
         sal_Bool bAutoIncrement = sal_False;
         (m_aSelectColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
@@ -85,3 +84,4 @@ sal_Bool SAL_CALL OAdabasResultSetMetaData::isAutoIncrement( sal_Int32 column ) 
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

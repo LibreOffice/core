@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,7 @@ namespace utl{
     class ConfigManager;
 }
 
-/* -----------------------------05.09.00 16:42--------------------------------
-    appdata.cxx
- ---------------------------------------------------------------------------*/
 utl::ConfigManager*         GetUtlConfigManager();
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,15 +33,11 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _WINDIRBROWSEIMPL_HXX_
 #include "WinFOPImpl.hxx"
-#endif
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/EventObject.hpp>
 
-#ifndef _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
 #include "FopEvtDisp.hxx"
 #include <osl/file.hxx>
 #include "FolderPicker.hxx"
@@ -61,7 +58,7 @@ using osl::FileBase;
 //
 //------------------------------------------------------------------------
 
-const OUString BACKSLASH = OUString::createFromAscii( "\\" );
+const OUString BACKSLASH(RTL_CONSTASCII_USTRINGPARAM( "\\" ));
 
 //------------------------------------------------------------------------
 // ctor
@@ -97,7 +94,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 
         if ( ::osl::FileBase::E_None != rc )
             throw IllegalArgumentException(
-                OUString::createFromAscii( "directory is not a valid file url" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "directory is not a valid file url" )),
                 static_cast< XFolderPicker* >( m_pFolderPicker ),
                 1 );
 
@@ -166,3 +163,5 @@ void CWinFolderPickerImpl::onSelChanged( const OUString& aNewPath )
 {
     setStatusText( aNewPath );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

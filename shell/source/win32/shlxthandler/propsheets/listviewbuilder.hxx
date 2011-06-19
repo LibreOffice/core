@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,8 +46,6 @@
 #include "document_statistic.hxx"
 
 //------------------------------------
-//
-//------------------------------------
 
 class list_view_builder;
 typedef std::auto_ptr<list_view_builder> list_view_builder_ptr;
@@ -55,8 +54,6 @@ typedef std::auto_ptr<list_view_builder> list_view_builder_ptr;
 list_view_builder_ptr create_list_view_builder(
     HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2);
 
-//------------------------------------
-//
 //------------------------------------
 
 class list_view_builder
@@ -90,8 +87,6 @@ private:
 };
 
 //------------------------------------
-//
-//------------------------------------
 
 class winxp_list_view_builder : public list_view_builder
 {
@@ -113,3 +108,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

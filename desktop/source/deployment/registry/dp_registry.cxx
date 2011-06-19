@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,9 +50,9 @@
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/container/XContentEnumerationAccess.hpp"
 #include "com/sun/star/deployment/PackageRegistryBackend.hpp"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <memory>
 
 using namespace ::dp_misc;
@@ -90,10 +91,10 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
             return str1.equalsIgnoreAsciiCase( str2 );
         }
     };
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString, Reference<deployment::XPackageRegistry>,
         ci_string_hash, ci_string_equals > t_string2registry;
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString, OUString,
         ci_string_hash, ci_string_equals > t_string2string;
     typedef ::std::set<
@@ -207,7 +208,7 @@ void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
     m_allBackends.insert( xBackend );
-    typedef ::std::hash_set<OUString, ::rtl::OUStringHash> t_stringset;
+    typedef ::boost::unordered_set<OUString, ::rtl::OUStringHash> t_stringset;
     t_stringset ambiguousFilters;
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
@@ -296,7 +297,7 @@ void PackageRegistryImpl::insertBackend(
                             xBackend, UNO_QUERY_THROW )->
                         getImplementationName() );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             buf.makeStringAndClear(),
                             RTL_TEXTENCODING_UTF8 ) );
         }
@@ -574,3 +575,4 @@ Reference<deployment::XPackageRegistry> SAL_CALL create(
 
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

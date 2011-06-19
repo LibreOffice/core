@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,7 +127,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aFTPProxy = KProtocolManager::proxyForUrl( KUrl("ftp://ftp.openoffice.org") );
+            aFTPProxy = KProtocolManager::proxyForUrl( KUrl("ftp://ftp.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -153,7 +154,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aFTPProxy = KProtocolManager::proxyForUrl( KUrl("ftp://ftp.openoffice.org") );
+            aFTPProxy = KProtocolManager::proxyForUrl( KUrl("ftp://ftp.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -180,7 +181,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aHTTPProxy = KProtocolManager::proxyForUrl( KUrl("http://http.openoffice.org") );
+            aHTTPProxy = KProtocolManager::proxyForUrl( KUrl("http://http.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -207,7 +208,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aHTTPProxy = KProtocolManager::proxyForUrl( KUrl("http://http.openoffice.org") );
+            aHTTPProxy = KProtocolManager::proxyForUrl( KUrl("http://http.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -234,7 +235,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aHTTPSProxy = KProtocolManager::proxyForUrl( KUrl("https://https.openoffice.org") );
+            aHTTPSProxy = KProtocolManager::proxyForUrl( KUrl("https://https.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -261,7 +262,7 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 // In such cases, the proxy address is not stored in KDE, but determined dynamically.
 // The proxy address may depend on the requested address, on the time of the day, on the speed of the wind...
 // The best we can do here is to ask the current value for a given address.
-            aHTTPSProxy = KProtocolManager::proxyForUrl( KUrl("https://https.openoffice.org") );
+            aHTTPSProxy = KProtocolManager::proxyForUrl( KUrl("https://https.libreoffice.org") );
             break;
         default:                            // No proxy is used
             break;
@@ -317,3 +318,5 @@ css::beans::Optional< css::uno::Any > getValue(rtl::OUString const & id) {
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

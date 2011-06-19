@@ -42,13 +42,12 @@ OBJFILES=       $(OBJ)$/main.obj
 
 
 APPSTDLIBS=$(SALLIB) \
-        $(VOSLIB) \
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(UCBHELPERLIB)	\
     $(DBTOOLSLIB)	\
     $(COMPHELPERLIB)
-            
+
 
 # ... cfgapi ..............................
 

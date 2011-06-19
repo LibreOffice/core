@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,9 @@ class SvUShorts;
 // SvtFileDialogFilter_Impl
 //*****************************************************************************
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Instanzen dieser Klasse repr"asentieren einen Filter
+    Instances of this class represent a filter.
 */
 
 class SvtFileDialogFilter_Impl
@@ -230,21 +231,21 @@ public:
 
     String                          _aStdDir;
 
-    // beim traveln der Filterbox erst Zeitversetzt filtern
+    // delay filter when traveling the filterbox
     Timer                           _aFilterTimer;
 
-    // Zeigt der OpenHdl_Imp(), ob das Open durch einen Doppelclick ausgel"ost wurde
+    // shows OpenHdl_Imp() if the open was triggered by a double click
     sal_Bool                        _bDoubleClick;
     sal_Bool                        m_bNeedDelayedFilterExecute;
 
-    // Liste mit den 5 zuletzt genutzten Filtern
-    // Defaultfilter fuer <Alle> oder <Alle ...>
+    // list of the 5 most recently used filters
+    // Defaultfilter for <All> oder <All ...>
     const SvtFileDialogFilter_Impl* _pDefaultFilter;
 
-    // Multiselektion?
+    // MultiSelection?
     sal_Bool                        _bMultiSelection;
 
-    // Fixgr"ossen f"ur Resize merken
+    // remember fixsizes for resize
     long                            _nFixDeltaHeight;
     Size                            _a6Size;
     Size                            _aDlgSize;
@@ -337,3 +338,4 @@ inline  void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter
 #endif // #ifndef _IODLGIMP_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

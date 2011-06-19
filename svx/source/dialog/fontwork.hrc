@@ -40,7 +40,6 @@
 #define CLB_SHADOW_COLOR 1
 
 #define IL_FONTWORK     1200
-#define ILH_FONTWORK    1201
 
 // the following ids are also used to identify the
 // bitmaps for the image list

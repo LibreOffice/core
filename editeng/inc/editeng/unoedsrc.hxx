@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/string.hxx>
-#ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
-#endif
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
 #include "editeng/editengdllapi.h"
@@ -550,3 +549,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

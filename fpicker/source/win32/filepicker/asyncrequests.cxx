@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 #include "asyncrequests.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -66,7 +67,7 @@ void Request::wait(::sal_Int32 nMilliSeconds)
 
 void Request::waitProcessMessages()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     while (!m_aJoiner.check())
         Application::Yield();
 }
@@ -226,3 +227,5 @@ void SAL_CALL AsyncRequests::run()
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

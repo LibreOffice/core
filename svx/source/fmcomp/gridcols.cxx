@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,14 +58,7 @@ const ::comphelper::StringSequence& getColumnTypes()
 
 //------------------------------------------------------------------
 // Vergleichen von PropertyInfo
-extern "C" int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    NameCompare(const void* pFirst, const void* pSecond)
+extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
     return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
 }
@@ -88,8 +82,8 @@ namespace
 //------------------------------------------------------------------------------
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix = ::rtl::OUString::createFromAscii("com.sun.star.form.component.");
-    const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
+    const ::rtl::OUString aModelPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component."));
+    const ::rtl::OUString aCompatibleModelPrefix(RTL_CONSTASCII_USTRINGPARAM("stardiv.one.form.component."));
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FM_COMPONENT_EDIT)
@@ -112,3 +106,4 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     return nTypeId;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

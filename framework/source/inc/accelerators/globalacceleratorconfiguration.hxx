@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,18 +35,14 @@
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
 
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/interface.hxx>
-#endif
+#include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
 //__________________________________________
 // interface includes
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
 
 //__________________________________________
 // other includes
@@ -99,6 +96,9 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
 
         ::rtl::OUString m_sLocale;
 
+        /** helper to listen for configuration changes without ownership cycle problems */
+        css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
+
         //----------------------------------
         /** read all data into the cache. */
         void impl_ts_fillCache();
@@ -107,3 +107,5 @@ class GlobalAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_GLOBALACCELERATORCONFIGURATION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
             return implCreateControlWrapper(_nPrefix, _rLocalName);
         else
         {
-            OSL_ENSURE(sal_False, "OContainerImport::CreateChildContext: don't have an element!");
+            OSL_FAIL("OContainerImport::CreateChildContext: don't have an element!");
             return NULL;
         }
     }
@@ -72,7 +73,7 @@ inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
     m_xMeAsContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xReturn, ::com::sun::star::uno::UNO_QUERY);
     if (!m_xMeAsContainer.is())
     {
-        OSL_ENSURE(sal_False, "OContainerImport::createElement: invalid element (no XNameContainer) created!");
+        OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
         xReturn.clear();
     }
 
@@ -121,3 +122,4 @@ template <class BASE>
     return xReturn;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,11 +37,9 @@
 #include "svx/tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
-#ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>
-#endif
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <sfx2/app.hxx>
 #include <vcl/toolbox.hxx>
@@ -85,7 +84,7 @@ SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 
 SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( GetSlotId() == SID_OBJECT_ALIGN )
         createAndPositionSubToolBar( m_aSubTbResName );
     return NULL;
@@ -105,7 +104,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {
     // Provide the controlled sub-toolbar name, so we are notified whenever
     // this toolbar executes a function.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return m_aSubTbName;
 }
 
@@ -113,13 +112,13 @@ void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand 
 {
     // Our sub-toolbar wants to executes a function. We have to change
     // the image of our toolbar button to reflect the new function.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( !m_bDisposed )
     {
         if ( aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -130,12 +129,14 @@ void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::Runtim
 {
     // We should update the button image of our parent (toolbar). Use the stored
     // command to set the correct current image.
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXTENDEDFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include "FilterContainer.hxx"
@@ -232,3 +231,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

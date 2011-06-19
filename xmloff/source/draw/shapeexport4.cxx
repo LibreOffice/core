@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -58,9 +57,7 @@
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARI_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
@@ -1143,7 +1140,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                             }
                             catch( uno::Exception& )
                             {
-                                DBG_ERROR("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                            OSL_FAIL("XMLShapeExport::ImpExportTableShape(), exception caught!");
                             }
                         }
                     }
@@ -1229,7 +1226,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             }
             catch( uno::Exception& )
             {
-                DBG_ERROR("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
+                OSL_FAIL("xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!");
             }
         }
 
@@ -1239,6 +1236,8 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
+        OSL_FAIL( "xmloff::XMLShapeExport::ImpExportTableShape(), exception caught!" );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

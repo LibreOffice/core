@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,10 +52,10 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 {
 }
 // -------------------------------------------------------------------------
-void MacabResultSetMetaData::setMacabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
+    static const ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Name"));
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 
@@ -222,3 +223,5 @@ sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32) throw(SQLExcepti
     return sal_False;
 }
 // -------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,11 +1,14 @@
-fp	fpicker	: LIBXSLT:libxslt L10N:l10n rdbmaker svtools NULL
+fp	fpicker	: LIBXSLT:libxslt TRANSLATIONS:translations rdbmaker svtools NULL
 fp	fpicker\inc							nmake	-	all	fp_inc NULL
 fp	fpicker\source\generic				nmake	-	all	fp_generic fp_inc NULL
 fp	fpicker\source\office				nmake	-	all	fp_office fp_inc NULL
+fp	fpicker\source\odma				nmake	-	w	fp_odma NULL
 fp	fpicker\source\unx\gnome			nmake	-	u	fp_gnome_filepicker fp_inc NULL
 fp	fpicker\source\unx\kde4			nmake	-	u	fp_kde4_filepicker fp_inc NULL
+fp	fpicker\source\unx\kde_unx			nmake	-	u	fp_unx_common fp_inc NULL
+fp	fpicker\source\unx\kde				nmake	-	u	fp_unx_kde_filepicker fp_inc NULL
 fp	fpicker\source\aqua					nmake	-	u	fp_macosx_filepicker NULL
 fp	fpicker\source\win32\filepicker		nmake	-	w	fp_win32_filepicker fp_inc NULL
 fp	fpicker\source\win32\folderpicker	nmake	-	w	fp_win32_folderpicker fp_inc NULL
 fp  fpicker\source\win32\misc			nmake	-	w	fp_win32_misc fp_win32_filepicker.w fp_win32_folderpicker.w fp_inc NULL
-fp	fpicker\util				nmake	-	all	fp_util fp_win32_filepicker.w fp_win32_misc.w fp_win32_folderpicker.w NULL
+fp	fpicker\util				nmake	-	all	fp_util fp_gnome_filepicker.u fp_unx_common.u fp_unx_kde_filepicker.u fp_win32_filepicker.w fp_win32_misc.w fp_win32_folderpicker.w NULL

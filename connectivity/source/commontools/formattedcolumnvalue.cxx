@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 /** === end UNO includes === **/
 
-//#include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 #include <i18npool/mslangid.hxx>
 #include <comphelper/numbers.hxx>
@@ -185,7 +185,7 @@ namespace dbtools
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
-                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "NullDate" ) ) >>= _rData.m_aNullDate );
+                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) ) >>= _rData.m_aNullDate );
 
                 // remember the formatter
                 _rData.m_xFormatter = i_rNumberFormatter;
@@ -343,3 +343,5 @@ namespace dbtools
 //........................................................................
 } // namespace dbtools
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -237,7 +237,6 @@
 #define SID_BASICIDE_MODULEDLG              ( SID_BASICIDE_START +  5 )
 #define SID_BASICIDE_OBJCAT                 ( SID_BASICIDE_START +  6 )
 #define SID_BASICIDE_REMOVEWATCH            ( SID_BASICIDE_START +  7 )
-#define SID_BASICIDE_GOTOCALL               ( SID_BASICIDE_START +  8 )
 #define SID_BASICIDE_SHOWSBX                ( SID_BASICIDE_START +  9 )
 #define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
 #define SID_BASICIDE_NAMECHANGEDONTAB       ( SID_BASICIDE_START + 11 )
@@ -591,8 +590,8 @@
 #define SID_ATTR_POSITION                               ( SID_SVX_START + 223 )
 #define SID_ATTR_SIZE                                   ( SID_SVX_START + 224 )
 #define SID_TABLE_CELL                                  ( SID_SVX_START + 225 )
-#define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_SVX_START + 226 )
-#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_SVX_START + 227 )
+//#define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_SVX_START + 226 )
+//#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_SVX_START + 227 )
 #define SID_ATTR_ALIGN_MARGIN                           ( SID_SVX_START + 228 )
 #define SID_ATTR_ALIGN_STACKED                          ( SID_SVX_START + 229 )
 #define SID_ATTR_ALIGN_LINEBREAK                        ( SID_SVX_START + 230 )
@@ -701,7 +700,6 @@
 #define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
 #define SID_BMPMASK_BMPSELECT                           ( SID_SVX_START + 352 )
 #define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
-//#define SID_HYPERLINK_INSERT                            ( SID_SVX_START + 360 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_GETLINK                           ( SID_SVX_START + 361 )   -> sfxsids.hrc
 //#define SID_HYPERLINK_SETLINK                           ( SID_SVX_START + 362 )   -> sfxsids.hrc
 #define SID_NO_GRAPHICS                                 ( SID_SVX_START + 364 )
@@ -745,11 +743,11 @@
 //#define SID_ZOOM_PREV                                   ( SID_SVX_START + 403 )   -> sfxsids.hrc
 #define SID_BACKGRND_DESTINATION                        ( SID_SVX_START + 404 )
 #define SID_ATTR_FLASH                                  ( SID_SVX_START + 406 )
-#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
 #define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
-#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
-#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
-#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
+#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* Slots mit --> koennen demnaechst entfallen */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
 
@@ -1261,9 +1259,10 @@
 #define SID_TRANSLITERATE_SENTENCE_CASE                 (SID_SVX_START+1102)
 #define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
 #define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
+#define SID_TRANSLITERATE_ROTATE_CASE                   (SID_SVX_START+1105)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_TOGGLE_CASE + 1)
+#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_ROTATE_CASE + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

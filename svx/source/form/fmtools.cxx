@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,10 +153,10 @@ void displayException(const Any& _rExcept, Window* _pParent)
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
         Sequence< Any > aArgs(2);
-        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rExcept, PropertyState_DIRECT_VALUE);
-        aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
+        aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException")), 0, _rExcept, PropertyState_DIRECT_VALUE);
+        aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
 
-        static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+        static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
         Reference< XExecutableDialog > xErrorDialog(
             ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
         if (xErrorDialog.is())
@@ -165,7 +166,7 @@ void displayException(const Any& _rExcept, Window* _pParent)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "displayException: could not display the error message!");
+        OSL_FAIL("displayException: could not display the error message!");
     }
 }
 
@@ -219,7 +220,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
             }
             catch(Exception&)
             {
-                DBG_ERROR( "getElementPos: caught an exception!" );
+                OSL_FAIL( "getElementPos: caught an exception!" );
             }
 
         }
@@ -445,7 +446,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_IMAGECONTROL;
     if (sPersistentServiceName.equals(FM_COMPONENT_FORMATTEDFIELD))
     {
-        DBG_ERROR("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
+        OSL_FAIL("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
             // objects with that service name should exist as they aren't compatible with older versions
         return OBJ_FM_FORMATTEDFIELD;
     }
@@ -456,7 +457,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     if (sPersistentServiceName.equals(FM_SUN_COMPONENT_NAVIGATIONBAR))
         return OBJ_FM_NAVIGATIONBAR;
 
-    DBG_ERROR("::getControlTypeByObject : unknown object type !");
+    OSL_FAIL("::getControlTypeByObject : unknown object type !");
     return OBJ_FM_CONTROL;
 }
 
@@ -474,7 +475,7 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         }
         catch(Exception&)
         {
-            DBG_ERROR("::setConnection : could not set the connection !");
+            OSL_FAIL("::setConnection : could not set the connection !");
         }
 
     }
@@ -494,3 +495,4 @@ sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
     return bIsAlive;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

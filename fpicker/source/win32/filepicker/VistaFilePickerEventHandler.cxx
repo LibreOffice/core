@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_fpicker.hxx"
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include "VistaFilePickerEventHandler.hxx"
 #include "asyncrequests.hxx"
 
@@ -44,8 +41,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-//#include <tools/urlobj.hxx>
-//#include <unotools/ucbhelper.hxx>
 
 #include <osl/file.hxx>
 
@@ -169,7 +164,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*
 //-----------------------------------------------------------------------------------------
 void lcl_updateVersionListDirectly(IFileDialog* pDialog)
 {
-    static const ::rtl::OUString SERVICENAME_REVISIONPERSISTENCE = ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence");
+    static const ::rtl::OUString SERVICENAME_REVISIONPERSISTENCE(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence"));
     static const ::sal_Int16     CONTROL_VERSIONLIST             = css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION;
 
     TFileDialog          iDialog   (pDialog);
@@ -370,8 +365,8 @@ void VistaFilePickerEventHandler::stopListening()
     }
 }
 
-static const ::rtl::OUString PROP_CONTROL_ID      = ::rtl::OUString::createFromAscii("control_id");
-static const ::rtl::OUString PROP_PICKER_LISTENER = ::rtl::OUString::createFromAscii("picker_listener");
+static const ::rtl::OUString PROP_CONTROL_ID(RTL_CONSTASCII_USTRINGPARAM("control_id"));
+static const ::rtl::OUString PROP_PICKER_LISTENER(RTL_CONSTASCII_USTRINGPARAM("picker_listener"));
 
 //-----------------------------------------------------------------------------------------
 class AsyncPickerEvents : public RequestHandler
@@ -465,3 +460,5 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

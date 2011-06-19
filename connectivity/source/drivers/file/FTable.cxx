@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,7 +103,7 @@ void OFileTable::refreshColumns()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshColumns" );
     TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
+                                                    m_SchemaName,m_Name,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
 
     if(xResult.is())
     {
@@ -225,13 +226,13 @@ sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRo
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::addColumn" );
-    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
+    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::dropColumn" );
-    OSL_ENSURE( false, "OFileTable::addColumn: not implemented!" );
+    OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -255,3 +256,4 @@ void OFileTable::refreshHeader()
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

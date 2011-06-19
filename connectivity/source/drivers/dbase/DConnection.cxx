@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_DBASE_OCONNECTION_HXX_
 #include "dbase/DConnection.hxx"
-#endif
 #include "dbase/DDatabaseMetaData.hxx"
 #include "dbase/DCatalog.hxx"
-#ifndef _CONNECTIVITY_DBASE_ODRIVER_HXX_
 #include "dbase/DDriver.hxx"
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/urlobj.hxx>
 #include "dbase/DPreparedStatement.hxx"
@@ -133,3 +130,4 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

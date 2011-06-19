@@ -1,12 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 namespace desktop
 {
     void displayCmdlineHelp( void );
+    void displayVersion();
 #ifndef UNX
     class CmdlineHelpDialog : public ModalDialog
     {
@@ -21,3 +21,5 @@ namespace desktop
     };
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

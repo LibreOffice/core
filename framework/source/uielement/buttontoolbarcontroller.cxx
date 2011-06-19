@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 
-#ifndef __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX
 #include "uielement/buttontoolbarcontroller.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_TOOLBAR_HXX_
 #include "uielement/toolbar.hxx"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,7 +53,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
@@ -137,7 +134,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     bool bInitialized( true );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -147,7 +144,7 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
 
     if ( !bInitialized )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
 
         PropertyValue aPropValue;
@@ -155,11 +152,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ))
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ServiceManager" ) ))
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
             }
         }
@@ -172,7 +169,7 @@ void SAL_CALL ButtonToolbarController::dispose() throw (::com::sun::star::uno::R
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
 
@@ -202,7 +199,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::update()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 }
@@ -214,7 +211,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -243,7 +240,7 @@ throw (::com::sun::star::uno::RuntimeException)
     ::com::sun::star::util::URL             aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -285,7 +282,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Value  <<= KeyModifier;
 
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+                UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )
@@ -297,7 +294,7 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL ButtonToolbarController::click()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -335,3 +332,4 @@ throw (::com::sun::star::uno::RuntimeException)
 
 } // namespace
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

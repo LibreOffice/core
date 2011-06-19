@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ void OMetaConnection::disposing()
             Reference< XInterface > xStatement( i->get() );
             ::comphelper::disposeComponent( xStatement );
         }
-        catch (DisposedException)
+        catch (const DisposedException&)
         {
         }
     }
@@ -104,3 +105,4 @@ void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,con
     ::dbtools::throwGenericSQLException( sErrorMessage, xContext);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,22 @@
 namespace framework
 {
 
-typedef Image ( *pfunc_getImage)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast );
+typedef Image ( *pfunc_getImage)(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& aURL,
+    bool bBig
+);
 
 pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast );
+Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& aURL,
+    bool bBig
+);
 
 }
 
-#endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

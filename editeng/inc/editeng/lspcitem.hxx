@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,8 @@ namespace rtl
 
 // class SvxLineSpacingItem ----------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt den Abstand zwischen den Zeilen.
+/*  [Description]
+    This item describes the distance between the lines.
 */
 
 #define LINE_SPACE_DEFAULT_HEIGHT 200
@@ -60,18 +60,17 @@ class EDITENG_DLLPUBLIC SvxLineSpacingItem : public SfxEnumItemInterface
 public:
     TYPEINFO();
 
-    // Der Writer verlaesst sich auf eine Default-Hoehe von 200!
-    // Eigentlich wuerde ich alle Werte mit 0 initialisieren, aber wer kann
-    // die Folgen beim Writer absehen ?
-    // => lieber einen krummen Wert als Default, aber der Programmierer
-    // sieht, dass dort etwas besonderes passiert.
+    // The writer relies on a default height of 200! Actually, I would
+    // initialize all values to 0, but who can ignore the consequences in
+    // writer? => Rather have a crooked vales as the default, but the
+    // programmer sees that there's something special happening.
 
     SvxLineSpacingItem( sal_uInt16 nHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -82,8 +81,7 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
-    // Methoden zum Abfragen und Aendern
-    // Interlinespace wird zur Hoehe addiert.
+    // Methods to query and edit. InterlineSpace is added to the height.
     inline short GetInterLineSpace() const { return nInterLineSpace; }
     inline void SetInterLineSpace( const short nSpace )
     {
@@ -91,7 +89,7 @@ public:
         eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
     }
 
-    // Bestimmt absolute oder minimale Zeilenhoehe.
+    // Determines the absolute or minimum row height.
     inline sal_uInt16 GetLineHeight() const { return nLineHeight; }
     inline void SetLineHeight( const sal_uInt16 nHeight )
     {
@@ -99,7 +97,7 @@ public:
         eLineSpace = SVX_LINE_SPACE_MIN;
     }
 
-    // Vergroessert oder verkleinert die Zeilenhoehe.
+    // To increase or decrease the row height.
     sal_uInt8 GetPropLineSpace() const { return nPropLineSpace; }
     inline void SetPropLineSpace( const sal_uInt8 nProp )
     {
@@ -121,3 +119,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

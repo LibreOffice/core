@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,8 @@ namespace rtl
 // class SvxBlinkItem -------------------------------------------------
 
 /*
-    [Beschreibung]
-    Dieses Item beschreibt, ob geblinkt werden soll.
+    [Description]
+    This item describes, whether to flash.
 */
 
 class EDITENG_DLLPUBLIC SvxBlinkItem : public SfxBoolItem
@@ -53,7 +54,7 @@ public:
 
     SvxBlinkItem( const sal_Bool bBlink /*= sal_False*/, const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
@@ -70,3 +71,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

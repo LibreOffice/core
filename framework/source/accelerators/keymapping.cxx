@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,6 +155,9 @@ KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::DECIMAL       , "KEY_DECIMAL"    },
     {css::awt::Key::TILDE         , "KEY_TILDE"      },
     {css::awt::Key::QUOTELEFT     , "KEY_QUOTELEFT"  },
+    {css::awt::Key::BRACKETLEFT   , "KEY_BRACKETLEFT" },
+    {css::awt::Key::BRACKETRIGHT  , "KEY_BRACKETRIGHT" },
+    {css::awt::Key::SEMICOLON     , "KEY_SEMICOLON" },
     {0                            , ""               } // mark the end of this array!
 };
 
@@ -223,7 +227,9 @@ sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUStr
     // 0 is normaly an error of the called method toInt32() ...
     // But we must be aware, that the identifier is "0"!
     rCode = 0;
-    return sIdentifier.equalsAscii("0");
+    return sIdentifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0"));
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 class LocaleDataWrapper;
 
-///////////////////////////////////////////////////////////////////////////
+
 #define SN_GRAMMARCHECKER           "com.sun.star.linguistic2.Proofreader"
 #define SN_GRAMMARCHECKINGITERATOR  "com.sun.star.linguistic2.ProofreadingIterator"
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
@@ -76,7 +77,7 @@ namespace linguistic
 {
 
 // ascii to OUString conversion
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
+#define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 /// Flags to be used with the multi-path related functions
 /// @see GetDictionaryPaths, GetLinguisticPaths
@@ -93,13 +94,10 @@ namespace linguistic
 #define DIC_ERR_UNKNOWN     3
 #define DIC_ERR_NOT_EXISTS  4
 
-///////////////////////////////////////////////////////////////////////////
 
 LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
-
-///////////////////////////////////////////////////////////////////////////
 
 rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage );
 
@@ -115,11 +113,7 @@ inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
 
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar );
 
-///////////////////////////////////////////////////////////////////////////
-
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
-
-///////////////////////////////////////////////////////////////////////////
 
 ::com::sun::star::lang::Locale
     CreateLocale( LanguageType eLang );
@@ -137,8 +131,6 @@ LNG_DLLPUBLIC LanguageType
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );
 
-///////////////////////////////////////////////////////////////////////////
-
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
 sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
@@ -146,15 +138,6 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
 // checks if a file with the given URL exists
 sal_Bool    FileExists( const String &rURL );
 
-#ifdef TL_OUTDATED
-// returns complete file URL for given filename that is to be searched in
-// the specified path
-String  GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName );
-
-String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim = sal_True );
-#endif
-
-///////////////////////////////////////////////////////////////////////////
 
 ::rtl::OUString     GetDictionaryWriteablePath();
 ::com::sun::star::uno::Sequence< ::rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
@@ -165,11 +148,9 @@ String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim = 
 LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
 
 // looks for the specified file in the list of paths.
-// In case of multiple occurences only the first found is returned.
+// In case of multiple occurrences only the first found is returned.
 String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rPaths );
 
-
-///////////////////////////////////////////////////////////////////////////
 
 LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
 
@@ -179,7 +160,6 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int3
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
-///////////////////////////////////////////////////////////////////////////
 
 LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 LNG_DLLPUBLIC sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
@@ -195,7 +175,6 @@ sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage );
 LNG_DLLPUBLIC sal_Bool      HasDigits( const ::rtl::OUString &rText );
 LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 
-///////////////////////////////////////////////////////////////////////////
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
 LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
@@ -203,7 +182,6 @@ LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XProper
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 
-///////////////////////////////////////////////////////////////////////////
 
 sal_Bool IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
@@ -228,12 +206,9 @@ LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
 
 LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
 
-///////////////////////////////////////////////////////////////////////////
-//
 // AppExitLstnr:
 // virtual base class that calls it AtExit function when the application
 // (ie the Desktop) is about to terminate
-//
 
 class AppExitListener :
     public cppu::WeakImplHelper1
@@ -261,9 +236,8 @@ public:
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-///////////////////////////////////////////////////////////////////////////
-
 }   // namespace linguistic
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,10 @@
 #include <xmloff/xmltoken.hxx>
 #include "PageMasterPropHdl.hxx"
 #include "PagePropertySetContext.hxx"
-#ifndef _XMLOFF_PAGEPHEADERFOOTERCONTEXT_HXX
 #include "PageHeaderFooterContext.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
-#endif
 #include "PageMasterImportPropMapper.hxx"
-#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
@@ -199,3 +194,4 @@ void PageStyleContext::SetDefaults( )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

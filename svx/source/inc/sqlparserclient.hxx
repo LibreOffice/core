@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ namespace svxform
                             ,public ::svxform::OParseContextClient
     {
     private:
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     protected:
@@ -77,3 +78,4 @@ namespace svxform
 #endif // SVX_SQLPARSERCLIENT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

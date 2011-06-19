@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -25,50 +26,42 @@
  *
  ************************************************************************/
 
-#ifndef _GSTMANAGER_HXX
-#define _GSTMANAGER_HXX
+#ifndef _MANAGER_HXX
+#define _MANAGER_HXX
 
 #include "gstcommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HDL_
 #include "com/sun/star/media/XManager.hdl"
-#endif
 
 // -----------
 // - Manager -
 // -----------
 
-namespace avmedia
+namespace avmedia { namespace gstreamer {
+
+class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
+                                                 ::com::sun::star::lang::XServiceInfo >
 {
-namespace gst
-{
-class Manager : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XManager,
-                                                ::com::sun::star::lang::XServiceInfo >
-{
-public: Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+public:
+
+    Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Manager();
 
     // XManager
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer(
-        const ::rtl::OUString& aURL )
-     throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const ::rtl::OUString& aURL ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 };
-} // namespace gst
+
+} // namespace gstreamer
 } // namespace avmedia
 
-#endif // _GSTMANAGER_HXX
+#endif // _MANAGER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

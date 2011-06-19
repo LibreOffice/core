@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,13 +66,11 @@ class XMLTextListsHelper : private boost::noncopyable
 
 
         // keeping track of processed lists for import and export
-        // --> OD 2008-08-15 #i92811#
-        // - add optional parameter <sListStyleDefaultListId>
+        // Add optional parameter <sListStyleDefaultListId> (#i92811#)
         void KeepListAsProcessed( ::rtl::OUString sListId,
                                   ::rtl::OUString sListStyleName,
                                   ::rtl::OUString sContinueListId,
                                   ::rtl::OUString sListStyleDefaultListId = ::rtl::OUString() );
-        // <--
 
         sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
         ::rtl::OUString GetListStyleOfProcessedList(
@@ -83,11 +82,8 @@ class XMLTextListsHelper : private boost::noncopyable
 
         ::rtl::OUString GenerateNewListId() const;
 
-        // --> OD 2008-08-15 #i92811#
-        // provide list id for a certain list block for import
+        // Provide list id for a certain list block for import (#i92811#)
         ::rtl::OUString GetListIdForListBlock( XMLTextListBlockContext& rListBlock );
-        // <--
-
 
         // keep track of continue list chain for export
         void StoreLastContinuingList( ::rtl::OUString sListId,
@@ -157,12 +153,11 @@ class XMLTextListsHelper : private boost::noncopyable
         ::rtl::OUString msLastProcessedListId;
         ::rtl::OUString msListStyleOfLastProcessedList;
 
-        // --> OD 2008-08-15 #i92811#
-        // additional container for processed lists.
-        // map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
-        // as value.
+        /* additional container for processed lists.
+           map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
+           as value. (#i92811#)
+        */
         tMapForLists* mpMapListIdToListStyleDefaultListId;
-        // <--
 
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list
@@ -192,3 +187,5 @@ class XMLTextListsHelper : private boost::noncopyable
 
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

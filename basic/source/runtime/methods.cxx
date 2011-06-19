@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
-#ifndef _VOS_PROCESS_HXX
-#include <vos/process.hxx>
-#endif
+#include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
@@ -48,22 +47,17 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/wldcrd.hxx>
 #include <i18npool/lang.h>
+#include <rtl/string.hxx>
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef WNT
-#include <tools/prewin.h>
-#include "winbase.h"
-#include <tools/postwin.h>
-#ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
-#endif
 #else
 #include <osl/file.hxx>
 #endif
 #include "errobject.hxx"
 
-#ifdef _USE_UNO
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -75,18 +69,17 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
+#include <com/sun/star/script/XErrorQuery.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
+using namespace com::sun::star::script;
 using namespace com::sun::star::frame;
-
-#endif /* _USE_UNO */
-
-//#define _ENABLE_CUR_DIR
 
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
@@ -105,7 +98,9 @@ using namespace com::sun::star::frame;
 #include <stdlib.h>
 #include <ctype.h>
 
-#if defined (WNT) || defined (OS2)
+SbxVariable* getDefaultProp( SbxVariable* pRef );
+
+#if defined (WNT)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
 #endif
 
@@ -114,11 +109,15 @@ using namespace com::sun::star::frame;
 #include <unistd.h>
 #endif
 
-#ifdef WNT
-#include <io.h>
-#endif
-
 #include <basic/sbobjmod.hxx>
+
+#ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#include <io.h>
+#undef GetObject
+#undef GradientSyle_RECT
+#endif
 
 // from source/classes/sbxmod.cxx
 Reference< XModel > getDocumentModel( StarBASIC* );
@@ -217,7 +216,7 @@ static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void 
         if( xSMgr.is() )
         {
             xSFI = com::sun::star::uno::Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -445,8 +444,7 @@ RTLFUNC(CurDir)
     // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
-//  rPar.Get(0)->PutEmpty();
-#if defined (WNT) || defined (OS2)
+#if defined (WNT)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -469,10 +467,6 @@ RTLFUNC(CurDir)
         }
     }
     char* pBuffer = new char[ _MAX_PATH ];
-#ifdef OS2
-    if( !nCurDir )
-        nCurDir = _getdrive();
-#endif
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
@@ -510,30 +504,13 @@ RTLFUNC(CurDir)
 #endif
 }
 
-RTLFUNC(ChDir) // JSM
+RTLFUNC(ChDir)
 {
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
-#ifdef _ENABLE_CUR_DIR
-        String aPath = rPar.Get(1)->GetString();
-        sal_Bool bError = sal_False;
-#ifdef WNT
-        // #55997 Laut MI hilft es bei File-URLs einen DirEntry zwischenzuschalten
-        // #40996 Harmoniert bei Verwendung der WIN32-Funktion nicht mit getdir
-        DirEntry aEntry( aPath );
-        ByteString aFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
-        if( chdir( aFullPath.GetBuffer()) )
-            bError = sal_True;
-#else
-        if (!DirEntry(aPath).SetCWD())
-            bError = sal_True;
-#endif
-        if( bError )
-            StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#endif
         // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
         if( SbiRuntime::isVBAEnabled() )
             ::basic::vba::registerCurrentDirectory( getDocumentModel( pBasic ), rPar.Get(1)->GetString() );
@@ -542,40 +519,13 @@ RTLFUNC(ChDir) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(ChDrive) // JSM
+RTLFUNC(ChDrive)
 {
     (void)pBasic;
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
-    {
-#ifdef _ENABLE_CUR_DIR
-        // Keine Laufwerke in Unix
-#ifndef UNX
-        String aPar1 = rPar.Get(1)->GetString();
-
-#if defined (WNT) || defined (OS2)
-        if (aPar1.Len() > 0)
-        {
-            int nCurDrive = (int)aPar1.GetBuffer()[0]; ;
-            if ( !isalpha( nCurDrive ) )
-            {
-                StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                return;
-            }
-            else
-                nCurDrive -= ( 'A' - 1 );
-            if (_chdrive(nCurDrive))
-                StarBASIC::Error( SbERR_NO_DEVICE );
-        }
-#endif
-
-#endif
-        // #ifndef UNX
-#endif
-    }
-    else
+    if (rPar.Count() != 2)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
@@ -618,7 +568,7 @@ void implStepRenameOSL( const String& aSource, const String& aDest )
     }
 }
 
-RTLFUNC(FileCopy) // JSM
+RTLFUNC(FileCopy)
 {
     (void)pBasic;
     (void)bWrite;
@@ -628,7 +578,6 @@ RTLFUNC(FileCopy) // JSM
     {
         String aSource = rPar.Get(1)->GetString();
         String aDest = rPar.Get(2)->GetString();
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -645,31 +594,19 @@ RTLFUNC(FileCopy) // JSM
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aSourceDirEntry(aSource);
-            if (aSourceDirEntry.Exists())
-            {
-                if (aSourceDirEntry.CopyTo(DirEntry(aDest),FSYS_ACTION_COPYFILE) != FSYS_ERR_OK)
-                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-            }
-            else
-                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             FileBase::RC nRet = File::copy( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
             if( nRet != FileBase::E_None )
             {
                 StarBASIC::Error( SbERR_PATH_NOT_FOUND );
             }
-#endif
         }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(Kill) // JSM
+RTLFUNC(Kill)
 {
     (void)pBasic;
     (void)bWrite;
@@ -679,7 +616,6 @@ RTLFUNC(Kill) // JSM
     {
         String aFileSpec = rPar.Get(1)->GetString();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -702,21 +638,15 @@ RTLFUNC(Kill) // JSM
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            if(DirEntry(aFileSpec).Kill() != FSYS_ERR_OK)
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             File::remove( getFullPathUNC( aFileSpec ) );
-#endif
         }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(MkDir) // JSM
+RTLFUNC(MkDir)
 {
     (void)pBasic;
     (void)bWrite;
@@ -726,7 +656,6 @@ RTLFUNC(MkDir) // JSM
     {
         String aPath = rPar.Get(1)->GetString();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -734,6 +663,36 @@ RTLFUNC(MkDir) // JSM
             {
                 try
                 {
+                    if ( SbiRuntime::isVBAEnabled() )
+                    {
+                        // If aPath is the folder name, not a path, then create the folder under current directory.
+                        INetURLObject aTryPathURL( aPath );
+                        ::rtl::OUString sPathURL = aTryPathURL.GetMainURL( INetURLObject::NO_DECODE );
+                        if ( !sPathURL.getLength() )
+                        {
+                            File::getFileURLFromSystemPath( aPath, sPathURL );
+                        }
+                        INetURLObject aPathURL( sPathURL );
+                        if ( !aPathURL.GetPath().getLength() )
+                        {
+                            ::rtl::OUString sCurDirURL;
+                            SbxArrayRef pPar = new SbxArray;
+                            SbxVariableRef pVar = new SbxVariable();
+                            pPar->Put( pVar, 0 );
+                            SbRtl_CurDir( pBasic, *pPar, sal_False );
+                            String aCurPath = pPar->Get(0)->GetString();
+
+                            File::getFileURLFromSystemPath( aCurPath, sCurDirURL );
+                            INetURLObject aDirURL( sCurDirURL );
+                            aDirURL.Append( aPath );
+                            ::rtl::OUString aTmpPath = aDirURL.GetMainURL( INetURLObject::NO_DECODE );
+                            if ( aTmpPath.getLength() > 0 )
+                            {
+                                aPath = aTmpPath;
+                            }
+                        }
+                    }
+
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
                 catch( Exception & )
@@ -743,22 +702,14 @@ RTLFUNC(MkDir) // JSM
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            if (!DirEntry(aPath).MakeDir())
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             Directory::create( getFullPathUNC( aPath ) );
-#endif
         }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-
-#ifndef _OLD_FILE_IMPL
 
 // In OSL only empty directories can be deleted
 // so we have to delete all files recursively
@@ -768,7 +719,7 @@ void implRemoveDirRecursive( const String& aDirPath )
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
     sal_Bool bExists = (nRet == FileBase::E_None);
 
-    FileStatus aFileStatus( FileStatusMask_Type );
+    FileStatus aFileStatus( osl_FileStatus_Mask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
     sal_Bool bFolder = isFolder( aType );
@@ -795,7 +746,7 @@ void implRemoveDirRecursive( const String& aDirPath )
             break;
 
         // Handle flags
-        FileStatus aFileStatus2( FileStatusMask_Type | FileStatusMask_FileURL );
+        FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
         ::rtl::OUString aPath = aFileStatus2.getFileURL();
 
@@ -815,10 +766,9 @@ void implRemoveDirRecursive( const String& aDirPath )
 
     nRet = Directory::remove( aDirPath );
 }
-#endif
 
 
-RTLFUNC(RmDir) // JSM
+RTLFUNC(RmDir)
 {
     (void)pBasic;
     (void)bWrite;
@@ -827,7 +777,6 @@ RTLFUNC(RmDir) // JSM
     if (rPar.Count() == 2)
     {
         String aPath = rPar.Get(1)->GetString();
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -862,22 +811,15 @@ RTLFUNC(RmDir) // JSM
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aDirEntry(aPath);
-            if (aDirEntry.Kill() != FSYS_ERR_OK)
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             implRemoveDirRecursive( getFullPathUNC( aPath ) );
-#endif
         }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(SendKeys) // JSM
+RTLFUNC(SendKeys)
 {
     (void)pBasic;
     (void)bWrite;
@@ -914,7 +856,6 @@ RTLFUNC(FileLen)
         SbxVariableRef pArg = rPar.Get( 1 );
         String aStr( pArg->GetString() );
         sal_Int32 nLen = 0;
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -931,18 +872,12 @@ RTLFUNC(FileLen)
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            FileStat aStat = DirEntry( aStr );
-            nLen = aStat.GetSize();
-#else
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
-            FileStatus aFileStatus( FileStatusMask_FileSize );
-            nRet = aItem.getFileStatus( aFileStatus );
+            DirectoryItem::get( getFullPathUNC( aStr ), aItem );
+            FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
+            aItem.getFileStatus( aFileStatus );
             nLen = (sal_Int32)aFileStatus.getFileSize();
-#endif
         }
         rPar.Get(0)->PutLong( (long)nLen );
     }
@@ -968,6 +903,26 @@ RTLFUNC(Hex)
     }
 }
 
+RTLFUNC(FuncCaller)
+{
+    (void)pBasic;
+    (void)bWrite;
+    if ( SbiRuntime::isVBAEnabled() &&  pINST && pINST->pRun )
+    {
+        if ( pINST->pRun->GetExternalCaller() )
+            *rPar.Get(0) =  *pINST->pRun->GetExternalCaller();
+        else
+        {
+            SbxVariableRef pVar = new SbxVariable(SbxVARIANT);
+            *rPar.Get(0) = *pVar;
+        }
+    }
+    else
+    {
+        StarBASIC::Error( SbERR_NOT_IMPLEMENTED );
+    }
+
+}
 // InStr( [start],string,string,[compare] )
 
 RTLFUNC(InStr)
@@ -1760,9 +1715,6 @@ RTLFUNC(Val)
         char* pEndPtr;
 
         String aStr( rPar.Get(1)->GetString() );
-// lt. Mikkysoft bei Kommas abbrechen!
-//      for( sal_uInt16 n=0; n < aStr.Len(); n++ )
-//          if( aStr[n] == ',' ) aStr[n] = '.';
 
         FilterWhiteSpace( aStr );
         if ( aStr.GetBuffer()[0] == '&' && aStr.Len() > 1 )
@@ -1785,7 +1737,6 @@ RTLFUNC(Val)
             // #57844 Lokalisierte Funktion benutzen
             nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
             checkArithmeticOverflow( nResult );
-            // ATL: nResult = strtod( aStr.GetStr(), &pEndPtr );
         }
 
         rPar.Get(0)->PutDouble( nResult );
@@ -2033,8 +1984,7 @@ RTLFUNC(DateValue)
                 else
                     fResult = ceil( fResult );
             }
-            // fResult += 2.0; // Anpassung  StarCalcFormatter
-            rPar.Get(0)->PutDate( fResult ); // JSM
+            rPar.Get(0)->PutDate( fResult );
         }
         else
             StarBASIC::Error( SbERR_CONVERSION );
@@ -2074,7 +2024,7 @@ RTLFUNC(TimeValue)
             if ( nType == NUMBERFORMAT_DATETIME )
                 // Tage abschneiden
                 fResult = fmod( fResult, 1 );
-            rPar.Get(0)->PutDate( fResult ); // JSM
+            rPar.Get(0)->PutDate( fResult );
         }
         else
             StarBASIC::Error( SbERR_CONVERSION );
@@ -2439,7 +2389,18 @@ RTLFUNC(IsEmpty)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        rPar.Get( 0 )->PutBool( rPar.Get(1)->IsEmpty() );
+    {
+        SbxVariable* pVar = NULL;
+        if( SbiRuntime::isVBAEnabled() )
+            pVar = getDefaultProp( rPar.Get(1) );
+        if ( pVar )
+        {
+            pVar->Broadcast( SBX_HINT_DATAWANTED );
+            rPar.Get( 0 )->PutBool( pVar->IsEmpty() );
+        }
+        else
+            rPar.Get( 0 )->PutBool( rPar.Get(1)->IsEmpty() );
+    }
 }
 
 RTLFUNC(IsError)
@@ -2450,7 +2411,22 @@ RTLFUNC(IsError)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
+    {
+        SbxVariable* pVar =rPar.Get( 1 );
+        SbUnoObject* pObj = PTR_CAST(SbUnoObject,pVar );
+                if ( !pObj )
+                {
+                    if ( SbxBase* pBaseObj = pVar->GetObject() )
+                        pObj = PTR_CAST(SbUnoObject, pBaseObj );
+                }
+        Reference< XErrorQuery > xError;
+        if ( pObj )
+            xError.set( pObj->getUnoAny(), UNO_QUERY );
+        if ( xError.is() )
+            rPar.Get( 0 )->PutBool( xError->hasError() );
+        else
+            rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
+    }
 }
 
 RTLFUNC(IsNull)
@@ -2499,39 +2475,6 @@ RTLFUNC(IsMissing)
     else
         // #57915 Missing wird durch Error angezeigt
         rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
-}
-
-// Dir( [Maske] [,Attrs] )
-// ToDo: Library-globaler Datenbereich fuer Dir-Objekt und Flags
-
-
-String getDirectoryPath( String aPathStr )
-{
-    String aRetStr;
-
-    DirectoryItem aItem;
-    FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
-    if( nRet == FileBase::E_None )
-    {
-        FileStatus aFileStatus( FileStatusMask_Type );
-        nRet = aItem.getFileStatus( aFileStatus );
-        if( nRet == FileBase::E_None )
-        {
-            FileStatus::Type aType = aFileStatus.getFileType();
-            if( isFolder( aType ) )
-            {
-                aRetStr = aPathStr;
-            }
-            else if( aType == FileStatus::Link )
-            {
-                FileStatus aFileStatus2( FileStatusMask_LinkTargetURL );
-                nRet = aItem.getFileStatus( aFileStatus2 );
-                if( nRet == FileBase::E_None )
-                    aRetStr = getDirectoryPath( aFileStatus2.getLinkTargetURL() );
-            }
-        }
-    }
-    return aRetStr;
 }
 
 // Function looks for wildcards, removes them and always returns the pure path
@@ -2657,7 +2600,6 @@ RTLFUNC(Dir)
         if( !pRTLData )
             return;
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -2728,7 +2670,6 @@ RTLFUNC(Dir)
                     }
                     catch( Exception & )
                     {
-                        //StarBASIC::Error( ERRCODE_IO_GENERAL );
                     }
                 }
 
@@ -2745,11 +2686,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = ::rtl::OUString::createFromAscii( "." );
+                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = ::rtl::OUString::createFromAscii( ".." );
+                                aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -2799,62 +2740,7 @@ RTLFUNC(Dir)
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            if ( nParCount >= 2 )
-            {
-                delete pRTLData->pDir;
-                pRTLData->pDir = 0; // wg. Sonderbehandlung Sb_ATTR_VOLUME
-                DirEntry aEntry( rPar.Get(1)->GetString() );
-                FileStat aStat( aEntry );
-                if(!aStat.GetError() && (aStat.GetKind() & FSYS_KIND_FILE))
-                {
-                    // ah ja, ist nur ein dateiname
-                    // Pfad abschneiden (wg. VB4)
-                    rPar.Get(0)->PutString( aEntry.GetName() );
-                    return;
-                }
-                sal_uInt16 nFlags = 0;
-                if ( nParCount > 2 )
-                    pRTLData->nDirFlags = nFlags = rPar.Get(2)->GetInteger();
-                else
-                    pRTLData->nDirFlags = 0;
-
-                // Sb_ATTR_VOLUME wird getrennt gehandelt
-                if( pRTLData->nDirFlags & Sb_ATTR_VOLUME )
-                    aPath = aEntry.GetVolume();
-                else
-                {
-                    // Die richtige Auswahl treffen
-                    sal_uInt16 nMode = FSYS_KIND_FILE;
-                    if( nFlags & Sb_ATTR_DIRECTORY )
-                        nMode |= FSYS_KIND_DIR;
-                    if( nFlags == Sb_ATTR_DIRECTORY )
-                        nMode = FSYS_KIND_DIR;
-                    pRTLData->pDir = new Dir( aEntry, (DirEntryKind) nMode );
-                    pRTLData->nCurDirPos = 0;
-                }
-            }
-
-            if( pRTLData->pDir )
-            {
-                for( ;; )
-                {
-                    if( pRTLData->nCurDirPos >= pRTLData->pDir->Count() )
-                    {
-                        delete pRTLData->pDir;
-                        pRTLData->pDir = 0;
-                        aPath.Erase();
-                        break;
-                    }
-                    DirEntry aNextEntry=(*(pRTLData->pDir))[pRTLData->nCurDirPos++];
-                    aPath = aNextEntry.GetName(); //Full();
-                    break;
-                }
-            }
-            rPar.Get(0)->PutString( aPath );
-#else
             // TODO: OSL
             if ( nParCount >= 2 )
             {
@@ -2907,11 +2793,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = ::rtl::OUString::createFromAscii( "." );
+                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "." ));
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = ::rtl::OUString::createFromAscii( ".." );
+                            aPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".." ));
                         }
                         pRTLData->nCurDirPos++;
                     }
@@ -2928,7 +2814,7 @@ RTLFUNC(Dir)
                         }
 
                         // Handle flags
-                        FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileName );
+                        FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                         nRet = aItem.getFileStatus( aFileStatus );
 
                         // Only directories?
@@ -2951,7 +2837,6 @@ RTLFUNC(Dir)
                 }
             }
             rPar.Get(0)->PutString( aPath );
-#endif
         }
     }
 }
@@ -2992,7 +2877,6 @@ RTLFUNC(GetAttr)
         }
     #endif
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -3027,14 +2911,13 @@ RTLFUNC(GetAttr)
             }
         }
         else
-        // --> UCB
         {
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
-            FileStatus aFileStatus( FileStatusMask_Attributes | FileStatusMask_Type );
-            nRet = aItem.getFileStatus( aFileStatus );
+            DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
+            FileStatus aFileStatus( osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type );
+            aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
-            sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
+            sal_Bool bReadOnly = (nAttributes & osl_File_Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
             sal_Bool bDirectory = isFolder( aType );
@@ -3059,7 +2942,6 @@ RTLFUNC(FileDateTime)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // <-- UCB
         String aPath = rPar.Get(1)->GetString();
         Time aTime;
         Date aDate;
@@ -3081,25 +2963,17 @@ RTLFUNC(FileDateTime)
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aEntry( aPath );
-            FileStat aStat( aEntry );
-            aTime = Time( aStat.TimeModified() );
-            aDate = Date( aStat.DateModified() );
-#else
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aPath ), aItem );
-            FileStatus aFileStatus( FileStatusMask_ModifyTime );
-            nRet = aItem.getFileStatus( aFileStatus );
+            DirectoryItem::get( getFullPathUNC( aPath ), aItem );
+            FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
+            aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
             oslDateTime aDT;
             osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
 
             aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, 10000000*aDT.NanoSeconds );
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
-#endif
         }
 
         double fSerial = (double)GetDayDiff( aDate );
@@ -3142,13 +3016,12 @@ RTLFUNC(EOF)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        // nChannel--;  // macht MD beim Oeffnen auch nicht
         SbiIoSystem* pIO = pINST->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
@@ -3177,8 +3050,7 @@ RTLFUNC(FileAttr)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
-
+    // No changes for UCB
     // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
     // der Anpassung an virtuelle URLs nich betroffen, da sie nur auf bereits
     // geoeffneten Dateien arbeitet und der Name hier keine Rolle spielt.
@@ -3188,7 +3060,6 @@ RTLFUNC(FileAttr)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-//      nChannel--;
         SbiIoSystem* pIO = pINST->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
@@ -3210,7 +3081,7 @@ RTLFUNC(Loc)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3248,7 +3119,7 @@ RTLFUNC(Lof)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3275,7 +3146,7 @@ RTLFUNC(Seek)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     int nArgs = (int)rPar.Count();
     if ( nArgs < 2 || nArgs > 3 )
     {
@@ -3283,7 +3154,6 @@ RTLFUNC(Seek)
         return;
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-//  nChannel--;
     SbiIoSystem* pIO = pINST->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nChannel );
     if ( !pSbStrm )
@@ -3365,23 +3235,19 @@ RTLFUNC(Rnd)
     else
     {
         double nRand = (double)rand();
-        nRand = ( nRand / (double)RAND_MAX );
+        nRand = ( nRand / ((double)RAND_MAX + 1.0));
         rPar.Get(0)->PutDouble( nRand );
     }
 }
 
 
-//
 //  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = sal_False ]]])
-//
 //  WindowStyles (VBA-kompatibel):
 //      2 == Minimized
 //      3 == Maximized
 //     10 == Full-Screen (Textmodus-Anwendungen OS/2, WIN95, WNT)
-//
 // !!!HACK der WindowStyle wird im Creator an Application::StartApp
 //         uebergeben. Format: "xxxx2"
-//
 
 
 RTLFUNC(Shell)
@@ -3404,8 +3270,8 @@ RTLFUNC(Shell)
     }
     else
     {
-        sal_uInt16 nOptions = vos::OProcess::TOption_SearchPath|
-                          vos::OProcess::TOption_Detached;
+        oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
+
         String aCmdLine = rPar.Get(1)->GetString();
         // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
         if( nArgCount >= 4 )
@@ -3482,81 +3348,80 @@ RTLFUNC(Shell)
             nWinStyle = rPar.Get(2)->GetInteger();
             switch( nWinStyle )
             {
-                case 2:
-                    nOptions |= vos::OProcess::TOption_Minimized;
-                    break;
-                case 3:
-                    nOptions |= vos::OProcess::TOption_Maximized;
-                    break;
-                case 10:
-                    nOptions |= vos::OProcess::TOption_FullScreen;
-                    break;
+            case 2:
+                nOptions |= osl_Process_MINIMIZED;
+                break;
+            case 3:
+                nOptions |= osl_Process_MAXIMIZED;
+                break;
+            case 10:
+                nOptions |= osl_Process_FULLSCREEN;
+                break;
             }
 
             sal_Bool bSync = sal_False;
             if( nArgCount >= 5 )
                 bSync = rPar.Get(4)->GetBool();
             if( bSync )
-                nOptions |= vos::OProcess::TOption_Wait;
+                nOptions |= osl_Process_WAIT;
         }
-        vos::OProcess::TProcessOption eOptions =
-            (vos::OProcess::TProcessOption)nOptions;
-
 
         // #72471 Parameter aufbereiten
         std::list<String>::const_iterator iter = aTokenList.begin();
         const String& rStr = *iter;
         ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
-        String aOUStrProgUNC = getFullPathUNC( aOUStrProg );
+        ::rtl::OUString aOUStrProgUNC = getFullPathUNC( aOUStrProg );
 
-        iter++;
+        ++iter;
 
         sal_uInt16 nParamCount = sal::static_int_cast< sal_uInt16 >(
             aTokenList.size() - 1 );
-        ::rtl::OUString* pArgumentList = NULL;
-        //const char** pParamList = NULL;
+        rtl_uString** pParamList = NULL;
         if( nParamCount )
         {
-            pArgumentList = new ::rtl::OUString[ nParamCount ];
-            //pParamList = new const char*[ nParamCount ];
-            sal_uInt16 iList = 0;
-            while( iter != aTokenList.end() )
+            pParamList = new rtl_uString*[nParamCount];
+            for(int iList = 0; iter != aTokenList.end(); ++iList, ++iter)
             {
                 const String& rParamStr = (*iter);
-                pArgumentList[iList++] = ::rtl::OUString( rParamStr.GetBuffer(), rParamStr.Len() );
-                //pParamList[iList++] = (*iter).GetStr();
-                iter++;
+                const ::rtl::OUString aTempStr( rParamStr.GetBuffer(), rParamStr.Len());
+                pParamList[iList] = NULL;
+                rtl_uString_assign(&(pParamList[iList]), aTempStr.pData);
             }
         }
 
-        //const char* pParams = aParams.Len() ? aParams.GetStr() : 0;
-        vos::OProcess* pApp;
-        pApp = new vos::OProcess( aOUStrProgUNC );
-        sal_Bool bSucc;
-        if( nParamCount == 0 )
+        oslProcess pApp;
+        sal_Bool bSucc = osl_executeProcess(
+                    aOUStrProgUNC.pData,
+                    pParamList,
+                    nParamCount,
+                    nOptions,
+                    NULL,
+                    NULL,
+                    NULL, 0,
+                    &pApp ) == osl_Process_E_None;
+
+        osl_freeProcessHandle( pApp );
+
+        for(int j = 0; i < nParamCount; i++)
         {
-            bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
-        }
-        else
-        {
-            vos::OArgumentList aArgList( pArgumentList, nParamCount );
-            bSucc = pApp->execute( eOptions, aArgList ) == vos::OProcess::E_None;
+            rtl_uString_release(pParamList[j]);
+            pParamList[j] = NULL;
         }
 
-        /*
-        if( nParamCount == 0 )
-            pApp = new vos::OProcess( pProg );
-        else
-            pApp = new vos::OProcess( pProg, pParamList, nParamCount );
-        sal_Bool bSucc = pApp->execute( eOptions ) == vos::OProcess::E_None;
-        */
+        long nResult = 0;
+        // We should return the identifier of the executing process when is running VBA, because method Shell(...) returns it in Excel.
+        if ( bSucc && SbiRuntime::isVBAEnabled())
+        {
+            oslProcessInfo aInfo;
+            aInfo.Size = sizeof(oslProcessInfo);
+            osl_getProcessInfo( pApp, osl_Process_IDENTIFIER, &aInfo );
+            nResult = aInfo.Ident;
+        }
 
-        delete pApp;
-        delete[] pArgumentList;
         if( !bSucc )
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         else
-            rPar.Get(0)->PutLong( 0 );
+            rPar.Get(0)->PutLong( nResult );
     }
 }
 
@@ -3627,6 +3492,65 @@ String getBasicTypeName( SbxDataType eType )
     return aRetStr;
 }
 
+String getObjectTypeName( SbxVariable* pVar )
+{
+    rtl::OUString sRet( RTL_CONSTASCII_USTRINGPARAM("Object") );
+    if ( pVar )
+    {
+        SbxBase* pObj = pVar->GetObject();
+        if( !pObj )
+           sRet = String( RTL_CONSTASCII_USTRINGPARAM("Nothing") );
+        else
+        {
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pVar );
+            if ( !pUnoObj )
+            {
+                if ( SbxBase* pBaseObj = pVar->GetObject() )
+                    pUnoObj = PTR_CAST(SbUnoObject, pBaseObj );
+            }
+            if ( pUnoObj )
+            {
+                Any aObj = pUnoObj->getUnoAny();
+                // For upstreaming unless we start to build oovbaapi by default
+                // we need to get detect the vba-ness of the object in some
+                // other way
+                // note: Automation objects do not support XServiceInfo
+                Reference< XServiceInfo > xServInfo( aObj, UNO_QUERY );
+                if ( xServInfo.is() )
+                {
+                    // is this a VBA object ?
+                    Reference< ooo::vba::XHelperInterface > xVBA( aObj, UNO_QUERY );
+                    Sequence< rtl::OUString > sServices = xServInfo->getSupportedServiceNames();
+                    if ( sServices.getLength() )
+                        sRet = sServices[ 0 ];
+                }
+                else
+                {
+                    Reference< com::sun::star::bridge::oleautomation::XAutomationObject > xAutoMation( aObj, UNO_QUERY );
+                    if ( xAutoMation.is() )
+                    {
+                        Reference< XInvocation > xInv( aObj, UNO_QUERY );
+                        if ( xInv.is() )
+                        {
+                            try
+                            {
+                                xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sRet;
+                            }
+                            catch( Exception& )
+                            {
+                            }
+                        }
+                    }
+                }
+                sal_Int32 nDot = sRet.lastIndexOf( '.' );
+                if ( nDot != -1 && nDot < sRet.getLength() )
+                       sRet = sRet.copy( nDot + 1 );
+            }
+        }
+    }
+    return sRet;
+}
+
 RTLFUNC(TypeName)
 {
     (void)pBasic;
@@ -3638,7 +3562,12 @@ RTLFUNC(TypeName)
     {
         SbxDataType eType = rPar.Get(1)->GetType();
         sal_Bool bIsArray = ( ( eType & SbxARRAY ) != 0 );
-        String aRetStr = getBasicTypeName( eType );
+
+        String aRetStr;
+        if ( SbiRuntime::isVBAEnabled() && eType == SbxOBJECT )
+            aRetStr = getObjectTypeName( rPar.Get(1) );
+        else
+            aRetStr = getBasicTypeName( eType );
         if( bIsArray )
             aRetStr.AppendAscii( "()" );
         rPar.Get(0)->PutString( aRetStr );
@@ -3992,11 +3921,6 @@ RTLFUNC(StrConv)
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
 
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
-    if( nArgCount == 3 )
-    {
-        // LCID not supported now
-        //nLanguage = rPar.Get(3)->GetInteger();
-    }
 
     sal_uInt16 nOldLen = aOldStr.Len();
     if( nOldLen == 0 )
@@ -4051,6 +3975,7 @@ RTLFUNC(StrConv)
         }
         pChar[nSize] = '\0';
         ::rtl::OString aOStr(pChar);
+        delete[] pChar;
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         ::rtl::OUString aOUStr = ::rtl::OStringToOUString(aOStr, osl_getThreadTextEncoding());
@@ -4343,7 +4268,7 @@ RTLFUNC(MsgBox)
     delete pBox;
 }
 
-RTLFUNC(SetAttr) // JSM
+RTLFUNC(SetAttr)
 {
     (void)pBasic;
     (void)bWrite;
@@ -4354,7 +4279,6 @@ RTLFUNC(SetAttr) // JSM
         String aStr = rPar.Get(1)->GetString();
         sal_Int16 nFlags = rPar.Get(2)->GetInteger();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -4373,46 +4297,12 @@ RTLFUNC(SetAttr) // JSM
                 }
             }
         }
-        else
-        // --> UCB
-        {
-#ifdef _OLD_FILE_IMPL
-            // #57064 Bei virtuellen URLs den Real-Path extrahieren
-            DirEntry aEntry( aStr );
-            String aFile = aEntry.GetFull();
-            ByteString aByteFile( aFile, gsl_getSystemTextEncoding() );
-    #ifdef WNT
-            if (!SetFileAttributes (aByteFile.GetBuffer(),(DWORD)nFlags))
-                StarBASIC::Error(SbERR_FILE_NOT_FOUND);
-    #endif
-    #ifdef OS2
-            FILESTATUS3 aFileStatus;
-            APIRET rc = DosQueryPathInfo(aByteFile.GetBuffer(),1,
-                                         &aFileStatus,sizeof(FILESTATUS3));
-            if (!rc)
-            {
-                if (aFileStatus.attrFile != nFlags)
-                {
-                    aFileStatus.attrFile = nFlags;
-                    rc = DosSetPathInfo(aFile.GetStr(),1,
-                                        &aFileStatus,sizeof(FILESTATUS3),0);
-                    if (rc)
-                        StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-                }
-            }
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #endif
-#else
-            // Not implemented
-#endif
-        }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(Reset)  // JSM
+RTLFUNC(Reset)
 {
     (void)pBasic;
     (void)bWrite;
@@ -4458,7 +4348,6 @@ RTLFUNC(FileExists)
         String aStr = rPar.Get(1)->GetString();
         sal_Bool bExists = sal_False;
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -4475,16 +4364,10 @@ RTLFUNC(FileExists)
             }
         }
         else
-        // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aEntry( aStr );
-            bExists = aEntry.Exists();
-#else
             DirectoryItem aItem;
             FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
             bExists = (nRet == FileBase::E_None);
-#endif
         }
         rPar.Get(0)->PutBool( bExists );
     }
@@ -4571,3 +4454,5 @@ RTLFUNC(Partition)
     aRetStr.append( aUpperValue );
     rPar.Get(0)->PutString( String(aRetStr.makeStringAndClear()) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

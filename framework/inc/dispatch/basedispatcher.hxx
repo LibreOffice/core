@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/debug.hxx>
@@ -389,3 +388,5 @@ class BaseDispatcher    :   // interfaces
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_BASEDISPATCHER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

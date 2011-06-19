@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -224,7 +225,7 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
     if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFilePath, aFileURL ) )
         aFileURL = rFilePath;
 
-    ::osl::FileStatus aStatus( FileStatusMask_FileURL );
+    ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
     ::osl::DirectoryItem aItem;
     if( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aFileURL, aItem ) &&
         ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
@@ -252,3 +253,4 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

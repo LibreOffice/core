@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,6 @@
 // other includes
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
 #include <toolkit/unohlp.hxx>
 
 // namespace
@@ -132,7 +132,7 @@ ToolBox* getToolboxPtr( Window* pWindow )
 
 Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElement )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xWindow;
     if ( xUIElement.is() )
         xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
@@ -169,7 +169,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     bool bRet = xUIElement.is();
     if ( bRet )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         _xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
@@ -340,12 +340,11 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
     uno::Reference< awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), uno::UNO_QUERY); // dont use _THROW here ... its a check only
     if (xWindowCheck.is())
     {
-        // --> PB 2007-06-18 #i76867# top and system window is required.
-        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        // #i76867# top and system window is required.
+        SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );
-        // <--
     }
 
     return sal_False;
@@ -382,7 +381,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::lang::XMul
         xDispatcher->executeDispatch(
             xProvider,
             aDockWinCommand,
-            ::rtl::OUString::createFromAscii("_self"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
             0,
             aArgs);
     }
@@ -413,3 +412,5 @@ void impl_addWindowListeners(
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

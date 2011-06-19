@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 #include "precompiled_drawinglayer.hxx"
 
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/scoped_disposing_ptr.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
@@ -42,14 +45,33 @@
 
 namespace
 {
+    class ImpTimedRefDev;
+
+    //the scoped_timed_RefDev owns a ImpTimeRefDev and releases it on dtor
+    //or disposing of the default XComponentContext which causes the underlying
+    //OutputDevice to get released
+    //
+    //The ImpTimerRefDev itself, if the timeout ever gets hit, will call
+    //reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
+    //if its unused for a few minutes
+    class scoped_timed_RefDev : public comphelper::scoped_disposing_ptr<ImpTimedRefDev>
+    {
+    public:
+        scoped_timed_RefDev() : comphelper::scoped_disposing_ptr<ImpTimedRefDev>((::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW)))
+        {
+        }
+    };
+
+    class the_scoped_timed_RefDev : public rtl::Static<scoped_timed_RefDev, the_scoped_timed_RefDev> {};
+
     class ImpTimedRefDev : public Timer
     {
-        ImpTimedRefDev**                    mppStaticPointerOnMe;
+        scoped_timed_RefDev&                mrOwnerOfMe;
         VirtualDevice*                      mpVirDev;
         sal_uInt32                          mnUseCount;
 
     public:
-        ImpTimedRefDev(ImpTimedRefDev** ppStaticPointerOnMe);
+        ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
         ~ImpTimedRefDev();
         virtual void Timeout();
 
@@ -57,8 +79,8 @@ namespace
         void releaseVirtualDevice();
     };
 
-    ImpTimedRefDev::ImpTimedRefDev(ImpTimedRefDev** ppStaticPointerOnMe)
-    :   mppStaticPointerOnMe(ppStaticPointerOnMe),
+    ImpTimedRefDev::ImpTimedRefDev(scoped_timed_RefDev& rOwnerOfMe)
+    :   mrOwnerOfMe(rOwnerOfMe),
         mpVirDev(0L),
         mnUseCount(0L)
     {
@@ -69,22 +91,13 @@ namespace
     ImpTimedRefDev::~ImpTimedRefDev()
     {
         OSL_ENSURE(0L == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
-
-        if(mppStaticPointerOnMe && *mppStaticPointerOnMe)
-        {
-            *mppStaticPointerOnMe = 0L;
-        }
-
-        if(mpVirDev)
-        {
-            delete mpVirDev;
-        }
+        delete mpVirDev;
     }
 
     void ImpTimedRefDev::Timeout()
     {
         // for obvious reasons, do not call anything after this
-        delete (this);
+        mrOwnerOfMe.reset();
     }
 
     VirtualDevice& ImpTimedRefDev::acquireVirtualDevice()
@@ -124,24 +137,23 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // static pointer here
-        static ImpTimedRefDev* pImpGlobalRefDev = 0L;
-
         // static methods here
         VirtualDevice& acquireGlobalVirtualDevice()
         {
-            if(!pImpGlobalRefDev)
-            {
-                pImpGlobalRefDev = new ImpTimedRefDev(&pImpGlobalRefDev);
-            }
+            scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
 
-            return pImpGlobalRefDev->acquireVirtualDevice();
+            if(!rStdRefDevice)
+                rStdRefDevice.reset(new ImpTimedRefDev(rStdRefDevice));
+
+            return rStdRefDevice->acquireVirtualDevice();
         }
 
         void releaseGlobalVirtualDevice()
         {
-            OSL_ENSURE(pImpGlobalRefDev, "releaseGlobalVirtualDevice() without prior acquireGlobalVirtualDevice() call(!)");
-            pImpGlobalRefDev->releaseVirtualDevice();
+            scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
+
+            OSL_ENSURE(rStdRefDevice, "releaseGlobalVirtualDevice() without prior acquireGlobalVirtualDevice() call(!)");
+            rStdRefDevice->releaseVirtualDevice();
         }
 
         TextLayouterDevice::TextLayouterDevice()
@@ -346,13 +358,9 @@ namespace drawinglayer
             if(nTextLength)
             {
                 aRetval.reserve(nTextLength);
-                sal_Int32* pArray = new sal_Int32[nTextLength];
-                mrDevice.GetTextArray(rText, pArray, nIndex, nLength);
-
-                for(sal_uInt32 a(0); a < nTextLength; a++)
-                {
-                    aRetval.push_back(pArray[a]);
-                }
+                ::std::vector<sal_Int32> aArray(nTextLength);
+                mrDevice.GetTextArray(rText, &aArray[0], nIndex, nLength);
+                aRetval.assign(aArray.begin(), aArray.end());
             }
 
             return aRetval;
@@ -491,3 +499,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

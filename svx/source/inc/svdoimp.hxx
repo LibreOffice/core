@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,17 +31,8 @@
 
 #include <vcl/mapmod.hxx>
 
-//#include <svl/lstner.hxx>
-//#include <vcl/timer.hxx>
-//#include <svx/svdsob.hxx>
-//#include <svx/svdtypes.hxx> // fuer SdrLayerID
-//#include <svx/svdglue.hxx> // Klebepunkte
-//#include <svx/xdash.hxx>
-//#include <svx/xpoly.hxx>
-//#include <svx/xenum.hxx>
-//#include <basegfx/vector/b2dvector.hxx>
 #include <svx/rectenum.hxx>
-//#include <basegfx/polygon/b2dpolypolygon.hxx>
+
 
 class Bitmap;
 
@@ -109,3 +101,5 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
 #endif // _SVX_SVDOIMP_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,17 +35,12 @@ TARGET=comp
 .INCLUDE :  settings.mk
 
 SLOFILES= \
-    $(SLO)$/buffer.obj      \
-    $(SLO)$/codegen.obj		\
-    $(SLO)$/dim.obj			\
+    $(EXCEPTIONSFILES)		\
+    $(SLO)$/buffer.obj		\
     $(SLO)$/exprgen.obj		\
     $(SLO)$/exprnode.obj	\
-    $(SLO)$/exprtree.obj	\
-    $(SLO)$/io.obj			\
+    $(SLO)$/io.obj		\
     $(SLO)$/loops.obj		\
-    $(SLO)$/parser.obj		\
-    $(SLO)$/sbcomp.obj		\
-    $(SLO)$/scanner.obj		\
     $(SLO)$/symtbl.obj		\
     $(SLO)$/token.obj
 
@@ -54,6 +49,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dim.obj         \
     $(SLO)$/exprtree.obj    \
     $(SLO)$/parser.obj      \
+    $(SLO)$/scanner.obj     \
     $(SLO)$/sbcomp.obj
 
 # --- Targets --------------------------------------------------------------

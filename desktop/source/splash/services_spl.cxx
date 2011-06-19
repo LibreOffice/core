@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,27 +36,24 @@
 #include <unotools/configmgr.hxx>
 
 #include "splash.hxx"
-#include "firststart.hxx"
 
-
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::desktop;
 
+using ::rtl::OUString;
+
 static const char* pServices[] =
 {
     SplashScreen::serviceName,
-    FirstStart::serviceName,
     NULL
 };
 
 static const char* pImplementations[] =
 {
     SplashScreen::implementationName,
-    FirstStart::implementationName,
     NULL
 };
 
@@ -64,15 +62,12 @@ typedef Reference<XInterface>(* fProvider)(const Reference<XMultiServiceFactory>
 static const fProvider pInstanceProviders[] =
 {
     SplashScreen::getInstance,
-    FirstStart::CreateInstance,
     NULL
 };
-
 
 static const char** pSupportedServices[] =
 {
     SplashScreen::interfaces,
-    FirstStart::interfaces,
     NULL
 };
 
@@ -89,16 +84,14 @@ getSupportedServiceNames(int p) {
 
 extern "C"
 {
-void SAL_CALL
-component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char** ppEnvironmentTypeName,
     uno_Environment**)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-void* SAL_CALL
-component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName,
     void* pServiceManager,
     void*)
@@ -129,3 +122,5 @@ component_getFactory(
     return NULL;
 }
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

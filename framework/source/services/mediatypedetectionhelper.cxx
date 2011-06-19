@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,6 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
 //   XStringMapping
 //*****************************************************************************************************************
 
-//virtual
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
         uno::Sequence< OUString >& rSeq )
         throw(uno::RuntimeException)
@@ -109,3 +109,4 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
 
 }   // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

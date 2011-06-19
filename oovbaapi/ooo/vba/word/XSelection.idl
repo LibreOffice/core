@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_word_XSelection_idl__
 #define __ooo_vba_word_XSelection_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 
 module ooo {  module vba {  module word {
@@ -52,7 +47,7 @@ interface XSelection
     [attribute, readonly] XRange Range;
     [attribute] XParagraphFormat ParagraphFormat;
     [attribute, readonly] XFind Find;
-    [attribute] XStyle Style;
+    [attribute] any Style;
     [attribute, readonly] XFont Font;
     [attribute, readonly] XHeaderFooter HeaderFooter;
     [attribute] long LanguageID;
@@ -68,6 +63,7 @@ interface XSelection
     void MoveRight( [in] any Unit, [in] any Count, [in] any Extend );
     void MoveLeft( [in] any Unit, [in] any Count, [in] any Extend );
     void MoveDown( [in] any Unit, [in] any Count, [in] any Extend );
+    void MoveUp( [in] any Unit, [in] any Count, [in] any Extend );
     void TypeParagraph();
     void InsertParagraph();
     void InsertParagraphBefore();
@@ -77,6 +73,19 @@ interface XSelection
     any Information( [in] long Type );
     void InsertBreak( [in] any Type );
     any ShapeRange();
+    void SelectColumn();
+    void SelectRow();
+    any Rows( [in] any aIndex );
+    any Columns( [in] any aIndex );
+    any Cells( [in] any aIndex );
+    void Copy();
+    void CopyAsPicture();
+    void Paste();
+    void Collapse([in] any Direction);
+    void WholeStory();
+    boolean InRange( [in] XRange Range );
+    void SplitTable();
+    any Paragraphs( [in] any aIndex );
 };
 
 }; }; };

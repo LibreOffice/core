@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "FormPropOASISTContext.hxx"
 
 using ::rtl::OUString;
@@ -223,3 +222,5 @@ void XMLFormPropOASISTransformerContext::EndElement()
     if( !m_bIsListValue )
         XMLRenameElemTransformerContext::EndElement();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

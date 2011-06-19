@@ -27,17 +27,9 @@
 #ifndef __ooo_vba_word_XRange_idl__
 #define __ooo_vba_word_XRange_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextRange_idl__
 #include <com/sun/star/text/XTextRange.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 
 module ooo {  module vba {  module word {
@@ -45,13 +37,14 @@ module ooo {  module vba {  module word {
 interface XParagraphFormat;
 interface XStyle;
 interface XFont;
+interface XListFormat;
 interface XRange
 {
     interface ooo::vba::XHelperInterface;
 
     [attribute] string Text;
     [attribute] XParagraphFormat ParagraphFormat;
-    [attribute] XStyle Style;
+    [attribute] any Style;
     [attribute,readonly] ::com::sun::star::text::XTextRange XTextRange;
     // Of course Font is NOT readonly, #FIXME #TODO
     // readonly though will force an error attempting to write
@@ -59,6 +52,7 @@ interface XRange
     [attribute] long LanguageID;
     [attribute] long Start;
     [attribute] long End;
+    [attribute, readonly] XListFormat ListFormat;
 
     void InsertBreak( [in] any Type );
     void Select();
@@ -66,6 +60,10 @@ interface XRange
     void InsertParagraphBefore();
     void InsertParagraphAfter();
     any PageSetup();
+    boolean InRange( [in] XRange Range );
+    any Revisions( [in] any index );
+    any Sections( [in] any index );
+    any Fields( [in] any index );
 };
 
 }; }; };

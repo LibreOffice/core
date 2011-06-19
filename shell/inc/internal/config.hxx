@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #pragma warning (disable : 4786 4503 4917)
 #endif
 
-#ifndef OS2
 #include <tchar.h>
-#endif
 
 #ifdef _AMD64_
 #define MODULE_NAME TEXT("shlxthdl_x64.dll")
@@ -102,3 +101,5 @@
 #define CONTENT_STYLE_PROPERTIES_COUNTRYASIAN    L"country-asian"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

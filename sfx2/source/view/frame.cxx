@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,28 +38,17 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <svl/intitem.hxx>
-#ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <com/sun/star/awt/PosSize.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 
-#ifndef GCC
-#endif
-
-// wg. pTopFrames
+// due to pTopFrames
 #include "appdata.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
@@ -135,7 +125,7 @@ SfxFrame::~SfxFrame()
 
     if ( pChildArr )
     {
-        DBG_ASSERT( !pChildArr->Count(), "Childs nicht entfernt!" );
+        DBG_ASSERT( !pChildArr->Count(), "Children are not removed!" );
         delete pChildArr;
     }
 
@@ -144,7 +134,7 @@ SfxFrame::~SfxFrame()
 
 sal_Bool SfxFrame::DoClose()
 {
-    // Eigentlich wird noch ein PrepareClose gebraucht !!!
+    // Actually, one more PrepareClose is still needed!
     sal_Bool bRet = sal_False;
     if ( !pImp->bClosing )
     {
@@ -187,7 +177,7 @@ sal_Bool SfxFrame::DoClose_Impl()
     if ( pImp->pCurrentViewFrame )
         pBindings = &pImp->pCurrentViewFrame->GetBindings();
 
-    // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
+    // For internal tasks Controllers and Tools must be cleared
     if ( pImp->pWorkWin )
         pImp->pWorkWin->DeleteControllers_Impl();
 
@@ -267,7 +257,7 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 {
     if ( pChildArr && pChildArr->Count() > nPos )
     {
-        DBG_ASSERT( nPos < pChildArr->Count(), "Falscher Index!");
+        DBG_ASSERT( nPos < pChildArr->Count(), "Wrong Index!");
         return (*pChildArr)[nPos];
     }
 
@@ -276,7 +266,7 @@ SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
 
 void SfxFrame::RemoveChildFrame_Impl( SfxFrame* pFrame )
 {
-    DBG_ASSERT( pChildArr, "Unbekannter Frame!");
+    DBG_ASSERT( pChildArr, "Unknown Frame!");
     sal_uInt16 nPos = pChildArr->GetPos(pFrame);
     pChildArr->Remove( nPos );
 };
@@ -316,7 +306,7 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
             for( pFrm = SfxViewFrame::GetFirst( pObj );
                  pFrm && &pFrm->GetFrame() == this;
                  pFrm = SfxViewFrame::GetNext( *pFrm, pObj ) ) ;
-            // Keine anderer Frame mehr auf Doc -> Cancel
+            // No more Frame in Document -> Cancel
             if( !pFrm )
             {
                 pObj->CancelTransfers();
@@ -324,12 +314,12 @@ void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
             }
         }
 
-        // zuerst Nachladende Frames stoppen
+        // First stop multiload Frames
         sal_uInt16 nCount = GetChildFrameCount();
         for( sal_uInt16 n = 0; n<nCount; n++ )
             GetChildFrame( n )->CancelTransfers();
 
-        //  ggf. StarOne-Loader canceln
+        //  Check if StarOne-Loader should be canceled
         SfxFrameWeak wFrame( this );
         if (wFrame.Is())
             pImp->bInCancelTransfers = sal_False;
@@ -372,9 +362,10 @@ void SfxFrame::SetFrameType_Impl( sal_uInt32 n )
 
 void SfxFrame::GetViewData_Impl()
 {
-    // Alle zwischen Laden und Entfernen "anderbaren Daten aktualisieren; die
-    // festen Daten werden nur einmal ( nach PrepareForDoc_Impl in UpdateDescriptor )
-    // geholt, um Zeit zu sparen.
+    // Update all modifiable data between load and unload, the
+    // fixed data is only processed once (after PrepareForDoc_Impl in
+    // updateDescriptor) to save time.
+
     SfxViewFrame* pViewFrame = GetCurrentViewFrame();
     if( pViewFrame && pViewFrame->GetViewShell() )
     {
@@ -395,7 +386,7 @@ void SfxFrame::GetViewData_Impl()
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, pViewFrame->GetCurViewId() ) );
         if ( pChildArr )
         {
-            // Bei Framesets m"ussen auch die Daten der ChildViews geholt werden
+            // For Framesets also the data from the ChildViews hace to be processed
             sal_uInt16 nCount = pChildArr->Count();
             for ( sal_uInt16 n=nCount; n>0; n--)
             {
@@ -410,15 +401,15 @@ void SfxFrame::GetViewData_Impl()
 
 void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 {
-    // Beim PrepareForDoc_Impl wird der Descriptor des Frames aktualisiert
-    // und sein ItemSet neu initialisiert. Alle Daten, die f"ur ein sp"ateres
-    // Restaurieren der View n"otig sind, sind damit festgehalten.
-    // Soll das Dokument ersetzt werden, wird durch GetViewData_Impl (s.o.)
-    // die neueste Information hinzugef"ugt. Alles zusammen wird dann in der
-    // Browse-History gesichert. Beim Aktivieren eines solchen FramePickEntry
-    // wird das komplette ItemSet und der Descriptor im OpenDoc mitgeschickt.
-    // Hier werden nur die festen Eigenschaften gesichert; die "anderbaren werden
-    // durch GetViewData geholt ( spart Zeit ).
+    // For PrepareForDoc_Impl frames, the descriptor of the updated
+    // and new itemset to be initialized. All data fir restoring the view
+    // are thus saved. If the document be replaced, GetViewData_Impl (so)
+    // the latest information hinzugef by "added. All together then the
+    // browser-history saved in. When you activate such frame pick entry
+    // is complete itemsets and the descriptor in the OpenDoc sent;.
+    // Here only the fixed properties identified "other adjustable, the
+    // retrieved by GetViewData (saves time).
+
     DBG_ASSERT( pDoc, "NULL-Document inserted ?!" );
 
     GetParentFrame();
@@ -430,7 +421,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     GetDescriptor()->SetEditable( bEditable );
 
-    // FileOpen-Parameter merken
+    // Mark FileOpen parameter
     SfxItemSet* pItemSet = pMed->GetItemSet();
     String aMedName( pMed->GetName() );
 
@@ -445,7 +436,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 
-    // Alle alten Items l"oschen
+    // Delete all old Items
     pSet->ClearItem();
 
     if ( pRefererItem )
@@ -466,13 +457,13 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
 void SfxFrame::SetDescriptor( SfxFrameDescriptor *pD )
 {
-    DBG_ASSERT( pD, "Kein Descriptor!" );
-    DBG_ASSERT( pD != pImp->pDescr, "Descriptor ist schon gesetzt!" );
+    DBG_ASSERT( pD, "No Descriptor!" );
+    DBG_ASSERT( pD != pImp->pDescr, "Descriptor is already set!" );
 
     if ( pImp->pDescr )
     {
-        // Nur TopLevel-Frames verwalten ihren Descriptor selbst, bei den
-        // anderen tut es das Frameset
+        // Only TopLevel-Frames handels their Descriptor, for the others
+        // this is done by the Frameset
         if ( !pParentFrame )
             delete pImp->pDescr;
     }
@@ -483,12 +474,12 @@ void SfxFrame::SetDescriptor( SfxFrameDescriptor *pD )
 
 SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 {
-    // On Demand einen FrameDescriptor anlegen; wenn es kein TopLevel-Frame
-    // ist, f"uhrt es zu Fehlern, da keine g"ulige Verkettung hergestellt wird
+    // Create a FrameDescriptor On Demand; if there is no TopLevel-Frame
+    // will result in an error, as no valid link is created.
 
     if ( !pImp->pDescr )
     {
-        DBG_ASSERT( !GetParentFrame(), "Kein TopLevel-Frame, aber kein Descriptor!" );
+        DBG_ASSERT( !GetParentFrame(), "No TopLevel-Frame, but no Descriptor!" );
         pImp->pDescr = new SfxFrameDescriptor;
         if ( GetCurrentDocument() )
             pImp->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
@@ -502,12 +493,12 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
 {
     if ( !GetParentFrame() )
     {
-        // Einen Leerstring f"ur 'Kein Target'
-        rList.Insert( new String() );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_top" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_parent" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_blank" ) ) );
-        rList.Insert( new String( DEFINE_CONST_UNICODE( "_self" ) ) );
+        // An empty string for 'No Target'
+        rList.push_back( new String() );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_top" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_parent" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_blank" ) ) );
+        rList.push_back( new String( DEFINE_CONST_UNICODE( "_self" ) ) );
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();
@@ -592,7 +583,7 @@ SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
     return pNew;
 }
 
-sal_Bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( wFrame )
     {
@@ -603,7 +594,7 @@ sal_Bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) c
     return sal_False;
 }
 
-sal_Bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     Reference < XFrame > xFrame;
     if ( (rVal >>= xFrame) && xFrame.is() )
@@ -634,7 +625,6 @@ SfxUsrAnyItem::SfxUsrAnyItem( sal_uInt16 nWhichId, const ::com::sun::star::uno::
 
 int SfxUsrAnyItem::operator==( const SfxPoolItem& /*rItem*/ ) const
 {
-//   return rItem.ISA( SfxUsrAnyItem ) && ((SfxUsrAnyItem&)rItem).aValue == aValue;
     return sal_False;
 }
 
@@ -643,13 +633,13 @@ SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
     return new SfxUsrAnyItem( Which(), aValue );
 }
 
-sal_Bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal = aValue;
     return sal_True;
 }
 
-sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     aValue = rVal;
     return sal_True;
@@ -677,13 +667,13 @@ SfxPoolItem* SfxUnoFrameItem::Clone( SfxItemPool* ) const
     return new SfxUnoFrameItem( Which(), m_xFrame );
 }
 
-sal_Bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SfxUnoFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= m_xFrame;
     return sal_True;
 }
 
-sal_Bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     return ( rVal >>= m_xFrame );
 }
@@ -695,19 +685,19 @@ SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecur )
 
 SfxFrame* SfxFrameIterator::FirstFrame()
 {
-    // GetFirst beginnt die Iteration beim ersten ChildFrame
+    // GetFirst starts the iteration at the first child frame
     return pFrame->GetChildFrame( 0 );
 }
 
 SfxFrame* SfxFrameIterator::NextFrame( SfxFrame& rPrev )
 {
-    // Zuerst auf Kinder testen, wenn Rekursion erw"unscht
+    // If recursion is requested testing is done first on Children.
     SfxFrame *pRet = NULL;
     if ( bRecursive )
         pRet = rPrev.GetChildFrame( 0 );
     if ( !pRet )
     {
-        // Anderenfalls mit den Geschwistern von rPrev weitermachen
+        // In other case continue with the siblings of rPrev
         pRet = NextSibling_Impl( rPrev );
     }
 
@@ -883,7 +873,7 @@ void SfxFrame::CreateWorkWindow_Impl()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
+            OSL_FAIL("SfxFrame::CreateWorkWindow_Impl: Exception cachted. Please try to submit a repoducable bug !");
         }
     }
 
@@ -992,3 +982,4 @@ const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Ref
     return SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

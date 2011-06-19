@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,3 +61,4 @@ enum XBitmapType        { XBITMAP_IMPORT, XBITMAP_8X8, XBITMAP_NONE,
 
 #endif      // _XENUM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,21 +27,11 @@
 #ifndef __ooo_vba_excel_XWorksheet_idl__
 #define __ooo_vba_excel_XWorksheet_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
+#include <com/sun/star/lang/XUnoTunnel.idl>
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __com_sun_star_script_XInvocation_idl__
 #include <com/sun/star/script/XInvocation.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
+
 //=============================================================================
 
 module ooo {  module vba {  module excel {
@@ -59,6 +49,7 @@ interface XWorksheet
     interface ::ooo::vba::XHelperInterface;
     interface ::com::sun::star::script::XInvocation;
     interface ::com::sun::star::container::XNamed;
+    interface ::com::sun::star::lang::XUnoTunnel;
 
     [attribute] long Visible;
     [attribute, readonly] long StandardHeight;
@@ -77,7 +68,7 @@ interface XWorksheet
 
     void Activate();
     void Calculate( );
-    void Select();
+    void Select([in] any Replace);
     void Move([in] any Before,[in] any After );
     void Copy([in] any Before,[in] any After );
     void Paste([in] any Destination,[in] any Link);

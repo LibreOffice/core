@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/eventcfg.hxx>
@@ -271,3 +272,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

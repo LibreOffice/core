@@ -33,8 +33,8 @@ $(eval $(call gb_Library_add_precompiled_header,editeng,$(SRCDIR)/editeng/inc/pc
 
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/editeng/inc/pch \
-    -I$(SRCDIR)/editeng/inc \
+    -I$(realpath $(SRCDIR)/editeng/inc/pch) \
+    -I$(realpath $(SRCDIR)/editeng/inc) \
     -I$(OUTDIR)/inc/offuh \
 ))
 
@@ -80,11 +80,13 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/impedit4 \
     editeng/source/editeng/impedit5 \
     editeng/source/editeng/textconv \
+    editeng/source/items/borderline \
     editeng/source/items/bulitem \
     editeng/source/items/charhiddenitem \
     editeng/source/items/flditem \
     editeng/source/items/frmitems \
     editeng/source/items/itemtype \
+    editeng/source/items/justifyitem \
     editeng/source/items/numitem \
     editeng/source/items/optitems \
     editeng/source/items/paperinf \
@@ -145,7 +147,6 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     tk \
     vcl \
     svl \
-    stl \
     sot \
     utl \
     tl \
@@ -153,8 +154,8 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     ucbhelper \
     cppuhelper \
     cppu \
-    vos3 \
     sal \
+    salhelper \
     i18nisolang1 \
     i18npaper \
     $(gb_STDLIBS) \

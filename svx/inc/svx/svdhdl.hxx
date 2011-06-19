@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 
 #include <tools/gen.hxx>
 
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/contnr.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
@@ -153,7 +150,7 @@ class SVX_DLLPUBLIC SdrHdl
     friend class                SdrHdlList;
 
     // #101928#
-    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast);
+    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine );
 
 protected:
     SdrObject*                  pObj;      // Gehoert das Handle zu einem Objekt?
@@ -527,8 +524,9 @@ protected:
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
 
-    static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
+    static BitmapEx GetHandlesBitmap( bool bIsFineHdl );
 };
 
 #endif //_SVDHDL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_ADABAS_INDEXCOLUMNS_HXX_
 #include "adabas/BIndexColumns.hxx"
-#endif
 #include "connectivity/sdbcx/VIndexColumn.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -45,7 +44,6 @@ using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -60,7 +58,7 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aD(::rtl::OUString::createFromAscii("D"));
+        ::rtl::OUString aD(RTL_CONSTASCII_USTRINGPARAM("D"));
         while(xResult->next())
         {
             if(xRow->getString(9) == _rName)
@@ -122,3 +120,4 @@ ObjectType OIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, co
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

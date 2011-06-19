@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include "MacabHeader.hxx"
 #include <list>
 #include "connectivity/sqliterator.hxx"
-#ifndef _CONNECTIVITY_PARSE_SQLPARSE_HXX_
 #include "connectivity/sqlparse.hxx"
-#endif
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase4.hxx>
@@ -174,3 +173,5 @@ namespace connectivity
 }
 
 #endif // _CONNECTIVITY_MACAB_STATEMENT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

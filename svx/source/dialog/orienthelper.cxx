@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <vector>
 #include <utility>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include "svx/dialcontrol.hxx"
 
 namespace svx {
@@ -204,3 +203,4 @@ void OrientStackedWrapper::SetControlValue( bool bValue )
 
 } // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

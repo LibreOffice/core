@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -450,7 +451,6 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/inetdef.hxx"
-#include "tools/list.hxx"
 #include "tools/ref.hxx"
 #include "tools/rtti.hxx"
 #include "tools/solar.h"
@@ -470,11 +470,13 @@
 #include "unotools/fontcvt.hxx"
 #include "tools/mapunit.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
-#include "vos/refernce.hxx"
+#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "xmloff/dllapi.h"
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,13 +43,9 @@
 #include "MutableAttrList.hxx"
 #include "TransformerActions.hxx"
 #include "PropertyActionsOOo.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 
-#ifndef _XMLOFF_STYLEOASISTCONTEXT_HXX
 #include "StyleOOoTContext.hxx"
-#endif
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -432,15 +429,15 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
-    // --> OD 2005-05-13 #i49139# - attribute <style:mirror> has to be priority
-    // over attribute <style:draw>. The filter from OpenDocument file format
-    // to OpenOffice.org file format produces styles with both attributes.
+    /* Attribute <style:mirror> has to be priority over attribute <style:draw>.
+       The filter from OpenDocument file format to OpenOffice.org file format
+       produces styles with both attributes. (#i49139#)
+    */
     sal_Bool bExistStyleMirror( sal_False );
     OUString aStyleMirrorAttrValue;
     sal_Bool bExistDrawMirror( sal_False );
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
-    // <--
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -612,7 +609,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     bDouble = sal_False;
                     break;
                 default:
-                    OSL_ENSURE( false, "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
+                    OSL_FAIL( "xmloff::XMLPropertiesOOoTContext_Impl::StartElement(), unknown underline token!" );
                     break;
                 }
                 pContext->AddAttribute(
@@ -715,7 +712,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         break;
 
                     default:
-                        OSL_ENSURE( false, "invalid spline type" );
+                        OSL_FAIL( "invalid spline type" );
                         pContext->AddAttribute(
                             aNewAttrName, GetXMLToken( XML_NONE ));
                         break;
@@ -776,7 +773,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             eToken = XML_HOURGLASS;
                             break;
                         default:
-                            OSL_ENSURE( false, "invalid named symbol" );
+                            OSL_FAIL( "invalid named symbol" );
                             break;
                     }
 
@@ -807,7 +804,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 aNewAttrName, GetXMLToken( XML_IMAGE ));
                             break;
                         default:
-                            OSL_ENSURE( false, "invalid symbol type" );
+                            OSL_FAIL( "invalid symbol type" );
                             pContext->AddAttribute(
                                 aNewAttrName, GetXMLToken( XML_NONE ));
                             break;
@@ -892,16 +889,15 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
             {
-                // --> OD 2005-05-13 #i49139#
+                // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
                 aDrawMirrorAttrValue =
                                 GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
                                              ? XML_HORIZONTAL : XML_NONE );
                 bExistDrawMirror = sal_True;
                 pMirrorContext = pContext;
-                // <--
             }
             break;
-        // --> OD 2005-05-12 #i49139#
+        // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
         case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
             {
                 SvXMLTokenEnumerator aTokenEnum( sAttrValue );
@@ -910,7 +906,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( aStyleMirrorAttrValue.getLength() > 0 )
                     {
-                        aStyleMirrorAttrValue += rtl::OUString::createFromAscii( " " );
+                        aStyleMirrorAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
@@ -930,7 +926,6 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pMirrorContext = pContext;
             }
             break;
-        // <--
         case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
             {
                 double fValue = sAttrValue.toDouble();
@@ -966,7 +961,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
     }
 
-    // --> OD 2005-05-13 #i49139#
+    // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
     if ( bExistStyleMirror )
     {
         pMirrorContext->AddAttribute(
@@ -981,7 +976,6 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
                         aDrawMirrorAttrValue);
     }
-    // <--
 
     if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
     {
@@ -1375,3 +1369,5 @@ XMLTransformerActions *XMLStyleOOoTContext::CreateTransformerActions(
 
     return pActions;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

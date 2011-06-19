@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,9 +77,7 @@ protected:
     virtual sal_Bool        Close();
     virtual void        Move();
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }
-//#endif
 
 public:
                         SfxDockingWindow( SfxBindings *pBindings,
@@ -113,7 +112,6 @@ public:
     void                AutoShow( sal_Bool bShow = sal_True );
     DECL_LINK( TimerHdl, Timer* );
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Initialize_Impl();
     SAL_DLLPRIVATE sal_uInt16 GetWinBits_Impl() const;
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
@@ -125,7 +123,6 @@ public:
     SAL_DLLPRIVATE void Pin_Impl( sal_Bool bPinned );
     SAL_DLLPRIVATE SfxSplitWindow* GetSplitWindow_Impl() const;
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
-//#endif
 };
 
 class SfxDockingWrapper : public SfxChildWindow
@@ -140,3 +137,5 @@ class SfxDockingWrapper : public SfxChildWindow
 };
 
 #endif // #ifndef _SFXDOCKWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

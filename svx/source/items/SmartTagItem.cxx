@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-// include ---------------------------------------------------------------
-
 #include <svx/SmartTagItem.hxx>
 
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 
-
-//#include <svl/memberid.hrc>
-//#include "svxids.hrc"
-//#include "svxitems.hrc"
 
 using namespace ::com::sun::star;
 
@@ -72,14 +65,14 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
+bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
 {
-    return sal_False;
+    return false;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)
+bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -121,3 +114,5 @@ SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
 {
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 
 #include "xmloff/table/XMLTableImport.hxx"
 #include <basegfx/vector/b3dvector.hxx>
+#include <vector>
 
 class SvXMLImport;
 class SvXMLImportContext;
@@ -189,8 +191,8 @@ class SdXML3DLightContext: public SvXMLImportContext
     // local parameters which need to be read
     Color                       maDiffuseColor;
     ::basegfx::B3DVector        maDirection;
-    sal_Bool                        mbEnabled;
-    sal_Bool                        mbSpecular;
+    bool                        mbEnabled;
+    bool                        mbSpecular;
 
 public:
     SdXML3DLightContext(
@@ -208,7 +210,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DECLARE_LIST(Imp3DLightList, SdXML3DLightContext*)
+typedef ::std::vector< SdXML3DLightContext* > Imp3DLightList;
 
 class SdXML3DSceneAttributesHelper
 {
@@ -228,7 +230,7 @@ protected:
     sal_Int32                   mnShadowSlant;
     com::sun::star::drawing::ShadeMode mxShadeMode;
     Color                       maAmbientColor;
-    sal_Bool                        mbLightingMode;
+    bool                        mbLightingMode;
 
     ::basegfx::B3DVector        maVRP;
     ::basegfx::B3DVector        maVPN;
@@ -437,3 +439,5 @@ public:
 };
 
 #endif // _XMLOFF_SHAPEIMPORT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

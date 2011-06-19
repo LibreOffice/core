@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,9 @@
 #include <tools/ref.hxx>
 #include <basobj.hxx>
 
-class SvSlotElementList;
 struct SvSlotElement;
+typedef std::vector< SvSlotElement* > SvSlotElementList;
 
-/******************** class SvMetaAttribute *****************************/
 SV_DECL_REF(SvMetaType)
 SV_DECL_REF(SvMetaAttribute)
 SV_DECL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
@@ -104,8 +104,6 @@ public:
     virtual sal_Bool        IsVariable() const;
     virtual ByteString      GetMangleName( sal_Bool bVariable ) const;
 
-//    void                FillSbxObject( SbxInfo * pInfo, sal_uInt16 nSbxFlags = 0 );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj, sal_Bool bVariable );
 
 #ifdef IDL_COMPILER
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -134,14 +132,13 @@ SV_IMPL_REF(SvMetaAttribute)
 SV_IMPL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
 
 
-/******************** class SvType *********************************/
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
-    SvBOOL                      aIn;    // Eingangsparameter
-    SvBOOL                      aOut;   // Returnparameter
+    SvBOOL                      aIn;    // input parameter
+    SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
     Svint                       aSbxDataType;
     SvIdentifier                aSvName;
@@ -185,7 +182,7 @@ public:
             SvMetaType( const ByteString & rTypeName, const ByteString & rSbxName,
                         const ByteString & rOdlName, char cParserChar,
                         const ByteString & rCName, const ByteString & rBasicName,
-                        const ByteString & rBasicPostfix/*, SbxDataType nT = SbxEMPTY */);
+                        const ByteString & rBasicPostfix );
 
     SvMetaAttributeMemberList & GetAttrList() const;
     sal_uLong               GetAttrCount() const
@@ -203,10 +200,6 @@ public:
     SvMetaType *        GetReturnType() const;
     sal_Bool                IsItem() const { return bIsItem; }
     sal_Bool                IsShell() const { return bIsShell; }
-
-//    void                SetSbxDataType( SbxDataType nT )
-//                        { aSbxDataType = (int)nT; }
-//    SbxDataType         GetSbxDataType() const;
 
     void                SetIn( sal_Bool b ) { aIn = b; }
     sal_Bool                GetIn() const;
@@ -233,7 +226,6 @@ public:
 
     virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
 
-//    void                FillSbxObject( SbxVariable * pObj, sal_Bool bVariable );
 
 #ifdef IDL_COMPILER
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -248,7 +240,6 @@ public:
 
     sal_uLong               MakeSfx( ByteString * pAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
-    //sal_Bool              ReadTypePrefix( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
     void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
@@ -260,11 +251,9 @@ public:
 #endif
 };
 SV_IMPL_REF(SvMetaType)
-DECLARE_LIST(SvMetaTypeList,SvMetaType *)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
 
 
-/******************** class SvTypeString *********************************/
 class SvMetaTypeString : public SvMetaType
 {
 public:
@@ -275,7 +264,6 @@ SV_DECL_IMPL_REF(SvMetaTypeString)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeString,SvMetaTypeString *)
 
 
-/******************** class SvMetaEnumValue **********************************/
 class SvMetaEnumValue : public SvMetaName
 {
     ByteString      aEnumValue;
@@ -294,7 +282,6 @@ SV_DECL_IMPL_REF(SvMetaEnumValue)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaEnumValue,SvMetaEnumValue *)
 
 
-/******************** class SvTypeEnum *********************************/
 class SvMetaTypeEnum : public SvMetaType
 {
     SvMetaEnumValueMemberList   aEnumValueList;
@@ -330,7 +317,6 @@ SV_DECL_IMPL_REF(SvMetaTypeEnum)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeEnum,SvMetaTypeEnum *)
 
 
-/******************** class SvTypeVoid ***********************************/
 class SvMetaTypevoid : public SvMetaType
 {
 public:
@@ -343,3 +329,4 @@ SV_DECL_IMPL_PERSIST_LIST(SvMetaTypevoid,SvMetaTypevoid *)
 
 #endif // _TYPES_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

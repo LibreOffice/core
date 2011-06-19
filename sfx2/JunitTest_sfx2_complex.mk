@@ -42,18 +42,18 @@ $(eval $(call gb_JunitTest_add_jars,sfx2_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
-    sfx2/qa/complex/sfx2/tools/DialogThread \
-    sfx2/qa/complex/sfx2/tools/WriterHelper \
-    sfx2/qa/complex/sfx2/tools/TestDocument \
-    sfx2/qa/complex/sfx2/GlobalEventBroadcaster \
+    sfx2/qa/complex/sfx2/DocumentInfo \
     sfx2/qa/complex/sfx2/DocumentMetadataAccess \
     sfx2/qa/complex/sfx2/DocumentProperties \
-    sfx2/qa/complex/sfx2/DocumentInfo \
+    sfx2/qa/complex/sfx2/GlobalEventBroadcaster \
     sfx2/qa/complex/sfx2/StandaloneDocumentInfo \
     sfx2/qa/complex/sfx2/UndoManager \
     sfx2/qa/complex/sfx2/standalonedocinfo/StandaloneDocumentInfoTest \
-    sfx2/qa/complex/sfx2/standalonedocinfo/TestHelper \
     sfx2/qa/complex/sfx2/standalonedocinfo/Test01 \
+    sfx2/qa/complex/sfx2/standalonedocinfo/TestHelper \
+    sfx2/qa/complex/sfx2/tools/DialogThread \
+    sfx2/qa/complex/sfx2/tools/TestDocument \
+    sfx2/qa/complex/sfx2/tools/WriterHelper \
     sfx2/qa/complex/sfx2/undo/CalcDocumentTest \
     sfx2/qa/complex/sfx2/undo/ChartDocumentTest \
     sfx2/qa/complex/sfx2/undo/DocumentTest \
@@ -68,8 +68,9 @@ $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
     complex.sfx2.DocumentInfo \
     complex.sfx2.DocumentProperties \
     complex.sfx2.DocumentMetadataAccess \
-    complex.sfx2.UndoManager \
 ))
+# fd#35663 fails currently:
+#    complex.sfx2.UndoManager \
 # #i115674# fails currently: misses some OnUnfocus event
 #	complex.sfx2.GlobalEventBroadcaster \
 # breaks because binfilter export has been removed

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <connectivity/FValue.hxx>
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
 
 namespace connectivity
 {
@@ -76,9 +75,9 @@ namespace connectivity
             MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:
-            sal_Bool   isUnknown( ) { return m_eNodeType == Unknown; }
-            sal_Bool   isStringExpr( ) { return m_eNodeType == StringExpr; }
-            sal_Bool   isExpr( ) { return m_eNodeType == Expr; }
+            sal_Bool   isUnknown( ) const { return m_eNodeType == Unknown; }
+            sal_Bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
+            sal_Bool   isExpr( ) const { return m_eNodeType == Expr; }
         };
 
         class MQueryExpressionString : public MQueryExpressionBase {
@@ -138,7 +137,7 @@ namespace connectivity
                             { return m_aExprVector; }
 
             // All expressions on a peer level use same condition operator
-            bool_cond getExpressionCondition( )
+            bool_cond getExpressionCondition( ) const
                             { return m_aExprCondType; }
 
             MQueryExpression() : MQueryExpressionBase( MQueryExpressionBase::Expr ),
@@ -280,3 +279,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_MAB_QUERY_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

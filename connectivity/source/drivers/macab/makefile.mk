@@ -60,6 +60,7 @@ SHL1STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(DBTOOLSLIB)               \
+    $(SALHELPERLIB)             \
     $(SALLIB)
 
 SHL1DEPN=
@@ -101,7 +102,7 @@ SHL2OBJS=$(SLO2FILES)
 SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(VOSLIB)                   \
+    $(SALHELPERLIB)             \
     $(SALLIB)                   \
     $(DBTOOLSLIB)               \
     $(COMPHELPERLIB)            \

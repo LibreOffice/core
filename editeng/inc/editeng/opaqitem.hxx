@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,9 @@ namespace rtl
 // class SvxOpaqueItem ---------------------------------------------------
 
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Undurchsichtig ja oder nein".
+/*  [Description]
+
+    This item describes a logical variable "Opaque yes or no."
 */
 
 class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
@@ -54,7 +55,7 @@ public:
     SvxOpaqueItem( const sal_uInt16 nId , const sal_Bool bOpa = sal_True );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
@@ -79,3 +80,4 @@ inline SvxOpaqueItem &SvxOpaqueItem::operator=( const SvxOpaqueItem &rCpy )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

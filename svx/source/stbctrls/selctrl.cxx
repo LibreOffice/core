@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
@@ -124,7 +123,7 @@ void SvxSelectionModeControl::DrawItemText_Impl()
         case 3:
             _nId = RID_SVXSTR_SELMODE_BLK;
             break;
-        default: DBG_ERROR( "invalid selection mode!" );
+        default: OSL_FAIL( "invalid selection mode!" );
     }
 
     if ( _nId )
@@ -152,3 +151,4 @@ sal_uIntPtr SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,9 +149,9 @@ namespace sfx2
         {
             static bool isSpecialArgumentName( const ::rtl::OUString& _rValueName )
             {
-                return  _rValueName.equalsAscii( "EmbeddedObject" )
-                    ||  _rValueName.equalsAscii( "EmbeddedScriptSupport" )
-                    ||  _rValueName.equalsAscii( "DocumentRecoverySupport" );
+                return  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedObject" ) )
+                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EmbeddedScriptSupport" ) )
+                    ||  _rValueName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DocumentRecoverySupport" ) );
             }
 
             bool operator()( const Any& _rArgument ) const
@@ -237,3 +238,5 @@ namespace sfx2
 //........................................................................
 } // namespace sfx2
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

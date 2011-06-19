@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ class MenuDispatcher   :   // interfaces
             @seealso    method loadCancelled()
 
             @param      "xControl"  , css::uno::Reference to a valid listener for state events.
-            @param      "aURL"      , URL about listener will be informed, if something occured.
+            @param      "aURL"      , URL about listener will be informed, if something occurred.
             @return     -
 
             @onerror    -
@@ -334,3 +335,5 @@ class MenuDispatcher   :   // interfaces
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

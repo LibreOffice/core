@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,7 @@ void SetOfByte::QueryValue( com::sun::star::uno::Any & rAny ) const
 // SdrLayer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrLayer::SetStandardLayer(FASTBOOL bStd)
+void SdrLayer::SetStandardLayer(bool bStd)
 {
     nType=(sal_uInt16)bStd;
     if (bStd) {
@@ -242,8 +243,7 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLSets(1024,16,16),
     pModel(NULL)
 {
-    sal_Char aTextControls[] = "Controls";
-    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
+    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
     pParent=pNewParent;
 }
 
@@ -253,8 +253,7 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     pParent(NULL),
     pModel(NULL)
 {
-    sal_Char aTextControls[] = "Controls";
-    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
+    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
     *this = rSrcLayerAdmin;
 }
 
@@ -291,7 +290,7 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
     if (pParent!=rCmpLayerAdmin.pParent ||
         aLayer.Count()!=rCmpLayerAdmin.aLayer.Count() ||
         aLSets.Count()!=rCmpLayerAdmin.aLSets.Count()) return sal_False;
-    FASTBOOL bOk=sal_True;
+    bool bOk = true;
     sal_uInt16 nAnz=GetLayerCount();
     sal_uInt16 i=0;
     while (bOk && i<nAnz) {
@@ -383,7 +382,7 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return sal_uInt16(nRet);
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInherited*/) const
+const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, bool /*bInherited*/) const
 {
     sal_uInt16 i(0);
     const SdrLayer* pLay = NULL;
@@ -404,7 +403,7 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const XubString& rName, FASTBOOL /*bInhe
     return pLay;
 }
 
-SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, FASTBOOL bInherited) const
+SdrLayerID SdrLayerAdmin::GetLayerID(const XubString& rName, bool bInherited) const
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
     const SdrLayer* pLay=GetLayer(rName,bInherited);
@@ -456,3 +455,4 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     return i;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

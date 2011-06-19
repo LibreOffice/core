@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -299,7 +300,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
         }
         else {
             // Should never see this...
-            OSL_ASSERT("Unknown Expression Type!");
+            OSL_FAIL("Unknown Expression Type!");
             return( NS_ERROR_UNEXPECTED );
         }
     }
@@ -696,7 +697,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
             xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ), rValue.getString() );
             break;
         default:
-            OSL_ENSURE( sal_False, "invalid data type!" );
+            OSL_FAIL( "invalid data type!" );
             break;
     }
 
@@ -821,3 +822,5 @@ sal_Bool MQuery::isWritable(OConnection* _pCon)
     sal_Bool bWritable = ( isWriteable & nsIAbDirectory::opWrite ) == nsIAbDirectory::opWrite;
     return  bWritable;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

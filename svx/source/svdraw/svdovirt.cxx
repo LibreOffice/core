@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// AW, OD 2004-05-03 #i27224#
+// #i27224#
 sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfVirtObj(*this);
@@ -91,14 +92,13 @@ SdrObject& SdrVirtObj::ReferencedObj()
     return rRefObj;
 }
 
-void __EXPORT SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
     SetRectsDirty(); // hier noch Optimieren.
 
     // Only a repaint here, rRefObj may have changed and broadcasts
     ActionChanged();
-    // BroadcastObjectChange();
 }
 
 void SdrVirtObj::NbcSetAnchorPos(const Point& rAnchorPos)
@@ -159,16 +159,16 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-SdrObject* SdrVirtObj::Clone() const
+SdrVirtObj* SdrVirtObj::Clone() const
 {
-    SdrObject* pObj=new SdrVirtObj(((SdrVirtObj*)this)->rRefObj); // Nur eine weitere Referenz
-    return pObj;
+    return new SdrVirtObj(this->rRefObj); // Nur eine weitere Referenz
 }
 
-void SdrVirtObj::operator=(const SdrObject& rObj)
+SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)
 {   // ???anderes Objekt referenzieren???
     SdrObject::operator=(rObj);
-    aAnchor=((SdrVirtObj&)rObj).aAnchor;
+    aAnchor=rObj.aAnchor;
+    return *this;
 }
 
 void SdrVirtObj::TakeObjNameSingul(XubString& rName) const
@@ -347,22 +347,22 @@ String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::BegCreate(SdrDragStat& rStat)
+bool SdrVirtObj::BegCreate(SdrDragStat& rStat)
 {
     return rRefObj.BegCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::MovCreate(SdrDragStat& rStat)
+bool SdrVirtObj::MovCreate(SdrDragStat& rStat)
 {
     return rRefObj.MovCreate(rStat);
 }
 
-FASTBOOL SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool SdrVirtObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     return rRefObj.EndCreate(rStat,eCmd);
 }
 
-FASTBOOL SdrVirtObj::BckCreate(SdrDragStat& rStat)
+bool SdrVirtObj::BckCreate(SdrDragStat& rStat)
 {
     return rRefObj.BckCreate(rStat);
 }
@@ -404,7 +404,7 @@ void SdrVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef-aAnchor,nWink,tn,bVShear);
     SetRectsDirty();
@@ -416,7 +416,6 @@ void SdrVirtObj::Move(const Size& rSiz)
 {
     if (rSiz.Width()!=0 || rSiz.Height()!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        // #110094#-14 SendRepaintBroadcast();
         NbcMove(rSiz);
         SetChanged();
         BroadcastObjectChange();
@@ -452,7 +451,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
+void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     if (nWink!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
@@ -531,7 +530,7 @@ long SdrVirtObj::GetRotateAngle() const
     return rRefObj.GetRotateAngle();
 }
 
-long SdrVirtObj::GetShearAngle(FASTBOOL bVertical) const
+long SdrVirtObj::GetShearAngle(bool bVertical) const
 {
     return rRefObj.GetShearAngle(bVertical);
 }
@@ -620,7 +619,7 @@ void SdrVirtObj::ReformatText()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrVirtObj::HasMacro() const
+bool SdrVirtObj::HasMacro() const
 {
     return rRefObj.HasMacro();
 }
@@ -640,7 +639,7 @@ void SdrVirtObj::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, con
     rRefObj.PaintMacro(rOut,rDirtyRect,rRec); // Todo: Positionsversatz
 }
 
-FASTBOOL SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return rRefObj.DoMacro(rRec); // Todo: Positionsversatz
 }
@@ -657,3 +656,5 @@ const Point SdrVirtObj::GetOffset() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

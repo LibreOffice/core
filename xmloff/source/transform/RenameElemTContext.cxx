@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "RenameElemTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include <xmloff/nmspmap.hxx>
 
 using ::rtl::OUString;
@@ -91,3 +90,5 @@ void XMLRenameElemTransformerContext::EndElement()
 {
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

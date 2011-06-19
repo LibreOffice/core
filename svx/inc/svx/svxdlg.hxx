@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,7 @@ class SdrView;
 #include <com/sun/star/container/XIndexContainer.hpp> //add for FmShowColsDialog
 #include <com/sun/star/container/XNameReplace.hpp> //add for SvxMacroAssignDlg
 #include "svx/svxdllapi.h"
+#include <vector>
 
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
@@ -55,13 +57,14 @@ typedef sal_uInt16*     (*DialogGetRanges)();
 struct ExchangeData;
 class INetURLObject;
 class GalleryTheme;
-class TargetList;
 class SvxHyperlinkTabPageBase;
 class SearchAttrItemList;
 class FmFormShell;
 class Graphic;
 class SdrObject;
 class SvxSpellWrapper;
+
+typedef ::std::vector< String* > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
 
@@ -346,7 +349,7 @@ public:
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( Window* pParent,
                                         const SdrView* pView,
-                                        sal_uInt16 nAnchorTypes = 0 ) = 0;      //add for SvxCaptionTabDialog CHINA001
+                                        sal_uInt16 nAnchorTypes = 0 ) = 0; //add for SvxCaptionTabDialog
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
@@ -505,3 +508,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

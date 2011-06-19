@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 /** Simple command line abstraction
 */
 
-//################################
 // Creation
-//################################
 
 
 CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix) :
@@ -49,9 +48,7 @@ CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix
 }
 
 
-//################################
 // Query
-//################################
 
 
 /** Return the argument count
@@ -143,9 +140,7 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 }
 
 
-//################################
 // Command
-//################################
 
 
 /** Set the prefix used to identify arguments in
@@ -173,3 +168,5 @@ bool CommandLine::is_arg_name(const std::string& Argument) const
 {
     return (0 == Argument.compare(0, m_argprefix.length(), m_argprefix));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

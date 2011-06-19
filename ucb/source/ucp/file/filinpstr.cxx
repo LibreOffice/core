@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 #include "filinpstr.hxx"
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 #include "shell.hxx"
 #include "prov.hxx"
 
@@ -49,9 +48,9 @@ XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncP
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    sal_uInt32 nFlags = OpenFlag_Read;
+    sal_uInt32 nFlags = osl_File_OpenFlag_Read;
     if ( !bLock )
-        nFlags |= OpenFlag_NoLock;
+        nFlags |= osl_File_OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
     if( err != osl::FileBase::E_None )
@@ -75,11 +74,11 @@ XInputStream_impl::~XInputStream_impl()
     }
     catch (io::IOException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
 }
 
@@ -231,7 +230,7 @@ XInputStream_impl::seek(
 {
     if( location < 0 )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
-    if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
+    if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
@@ -260,3 +259,5 @@ XInputStream_impl::getLength(
     else
         return sal_Int64( uEndPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,14 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <xmloff/xmltoken.hxx>
-#ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
-#endif
 
 
 
 class XMLTransformerTokenMap :
-    public ::std::hash_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
+    public ::boost::unordered_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
@@ -48,3 +47,5 @@ public:
 };
 
 #endif  //  _XMLOFF_TRANSFORMERTOKENMAPS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

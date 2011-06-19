@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -150,8 +151,8 @@ bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::
         pCall = pIsDockingWindowVisible;
     }
 
-    if ( pIsDockingWindowVisible )
-        return (*pIsDockingWindowVisible)( rFrame, rResourceURL );
+    if ( pCall )
+        return (*pCall)( rFrame, rResourceURL );
     else
         return false;
 }
@@ -177,3 +178,5 @@ void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

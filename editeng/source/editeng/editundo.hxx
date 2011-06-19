@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,8 +50,8 @@ class EditUndoDelContent : public EditUndo
 private:
     sal_Bool            bDelObject;
     sal_uInt16          nNode;
-    ContentNode*    pContentNode;   // Zeigt auf das gueltige,
-                                    // nicht zerstoerte Objekt!
+    ContentNode*    pContentNode;   // Points to the valid,
+                                    // undestroyed object!
 
 public:
                     TYPEINFO();
@@ -72,7 +73,7 @@ private:
     SfxItemSet      aLeftParaAttribs;
     SfxItemSet      aRightParaAttribs;
 
-    // 2 Pointer waeren schoener, aber dann muesste es ein SfxListener sein.
+    // 2 Pointers would be nicer but then it would have to be a SfxListener.
     String          aLeftStyleName;
     String          aRightStyleName;
     SfxStyleFamily  eLeftStyleFamily;
@@ -313,3 +314,5 @@ public:
 
 
 #endif // _EDITUNDO_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

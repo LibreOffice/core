@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ namespace connectivity
         class OSQLAnalyzer;
         typedef::std::vector<OCode*> OCodeList;
 
-        class OPredicateCompiler : public ::vos::OReference
+        class OPredicateCompiler : public ::salhelper::SimpleReferenceObject
         {
             friend class OPredicateInterpreter;
             friend class OSQLAnalyzer;
@@ -90,13 +91,13 @@ namespace connectivity
 
 
         class OPredicateInterpreter :
-            public ::vos::OReference
+            public ::salhelper::SimpleReferenceObject
         {
             OCodeStack          m_aStack;
-            ::vos::ORef<OPredicateCompiler> m_rCompiler;
+            ::rtl::Reference<OPredicateCompiler> m_rCompiler;
 
         public:
-            OPredicateInterpreter(const ::vos::ORef<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
+            OPredicateInterpreter(const ::rtl::Reference<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
             virtual ~OPredicateInterpreter();
 
             sal_Bool    evaluate(OCodeList& rCodeList);
@@ -118,3 +119,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_FILE_FCOMP_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

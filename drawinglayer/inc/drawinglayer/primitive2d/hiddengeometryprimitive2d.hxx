@@ -1,12 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: hittestprimitive3d.hxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: aw $ $Date: 2008/09/24 14:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +31,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_HIDDENGEOMETRYPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_HIDDENGEOMETRYPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -52,7 +49,7 @@ namespace drawinglayer
         // filled nor lines' creation criteria. The whole primitive decomposes to nothing,
         // so no one not knowing it will be influenced. Only helper processors for hit test
         // (and maybe BoundRect extractors) will use it and it's children subcontent.
-        class HiddenGeometryPrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC HiddenGeometryPrimitive2D : public GroupPrimitive2D
         {
         public:
             HiddenGeometryPrimitive2D(const Primitive2DSequence& rChildren);
@@ -77,3 +74,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

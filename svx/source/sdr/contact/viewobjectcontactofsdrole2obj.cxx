@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -194,7 +195,7 @@ namespace sdr
 
                     // create OLE primitive stuff directly at VC with HC as parameter
                     const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-                    xRetval = rVC.createPrimitive2DSequenceWithParameters(GetObjectContact().isDrawModeHighContrast());
+                    xRetval = rVC.createPrimitive2DSequenceWithParameters();
                 }
 
                 if(bIsOutplaceActive)
@@ -241,3 +242,5 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

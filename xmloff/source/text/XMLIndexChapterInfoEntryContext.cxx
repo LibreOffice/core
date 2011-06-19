@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,6 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
     //---> i89791
     // enabled for ODF 1.2, full index support in 3.0
     { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
-    //<---
     { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
 };
@@ -144,7 +144,9 @@ void XMLIndexChapterInfoEntryContext::StartElement(
     if (bChapterInfoOK)
     {
         nValues++;
-        // --> OD 2008-06-26 #i89791#
+        /* Some of the index chapter information attributes written to ODF 1.1
+           and 1.2 don't reflect the displaying (#i89791#)
+        */
         if ( !bTOC )
         {
             bool bConvert( false );
@@ -171,7 +173,6 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 }
             }
         }
-        // <--
     }
     if (bOutlineLevelOK)
         nValues++;
@@ -203,3 +204,5 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
         rValues[nIndex].Value = aAny;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

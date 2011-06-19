@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
 #include <svx/svdoashp.hxx>
@@ -639,3 +638,5 @@ void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
             SetFontWorkShapeTypeState( pSdrView, rSet );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

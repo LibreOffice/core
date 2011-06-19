@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
  *************************************************************************/
 
-#ifndef _TEST_ACTIVEDATASINK_HXX_
 #include "test_activedatasink.hxx"
-#endif
 
 
 using namespace test_ftp;
@@ -62,3 +61,5 @@ void SAL_CALL Test_ActiveDataSink::acquire( void ) throw() {
 void SAL_CALL Test_ActiveDataSink::release( void ) throw() {
     OWeakObject::release();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

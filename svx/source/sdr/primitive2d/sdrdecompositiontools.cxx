@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -281,6 +282,11 @@ namespace drawinglayer
                         aAnchorTransform,
                         rText.isFixedCellHeight());
                 }
+                else if(rText.isAutoFit())
+                {
+                    // isotrophically scaled text in range
+                    pNew = new SdrAutoFitTextPrimitive2D(&rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, bWordWrap);
+                }
                 else // text in range
                 {
                     // build new primitive
@@ -484,3 +490,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

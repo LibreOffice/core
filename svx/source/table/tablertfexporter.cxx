@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,6 @@
 #include "editeng/editeng.hxx"
 #include "editeng/outlobj.hxx"
 
-//#include <tablertfexporter.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -119,7 +119,7 @@ sal_uLong SdrTableRtfExporter::Write()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("SdrTableRtfExporter::Write(), exception caught!");
+        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
     // export rows
@@ -134,7 +134,7 @@ sal_uLong SdrTableRtfExporter::Write()
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("SdrTableRtfExporter::Write(), exception caught!");
+        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
     mrStrm << '}' << RTFOutFuncs::sNewLine;
@@ -282,3 +282,4 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

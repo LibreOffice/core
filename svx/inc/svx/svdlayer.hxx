@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,8 +70,8 @@ public:
     // Einem SdrLayer kann man sagen dass er ein (der) Standardlayer sein soll.
     // Es wird dann laenderspeziefisch der passende Name gesetzt. SetName()
     // setzt das Flag "StandardLayer" ggf. zurueck auf "Userdefined".
-    void          SetStandardLayer(FASTBOOL bStd=sal_True);
-    FASTBOOL      IsStandardLayer() const                     { return nType==1; }
+    void          SetStandardLayer(bool bStd = true);
+    bool          IsStandardLayer() const                     { return nType==1; }
 };
 
 // Beim Aendern von Layerdaten muss man derzeit
@@ -124,9 +125,9 @@ public:
 
     sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
 
-    SdrLayer*          GetLayer(const String& rName, FASTBOOL bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
-    const SdrLayer*    GetLayer(const String& rName, FASTBOOL bInherited) const;
-          SdrLayerID   GetLayerID(const String& rName, FASTBOOL bInherited) const;
+    SdrLayer*          GetLayer(const String& rName, bool bInherited)            { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayer(rName,bInherited)); }
+    const SdrLayer*    GetLayer(const String& rName, bool bInherited) const;
+          SdrLayerID   GetLayerID(const String& rName, bool bInherited) const;
           SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return (SdrLayer*)(((const SdrLayerAdmin*)this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 
@@ -152,9 +153,10 @@ bInherited:
     TRUE: Wird der Layer/LayerSet nicht gefunden, so wird im Parent-LayerAdmin
           nachgesehen, ob es dort einen entsprechende Definition gibt.
     FALSE: Es wird nur dieser LayerAdmin durchsucht.
-    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, nämlich den des
+    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, nï¿½mlich den des
     Model. Das Model selbst hat keinen Parent.
 */
 
 #endif //_SVDLAYER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,7 +166,9 @@ void Access::initBroadcaster(
 
 Access::Access(Components & components):
     components_(components), disposed_(false)
-{}
+{
+    lock_ = lock();
+}
 
 Access::~Access() {}
 
@@ -850,7 +853,7 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::uno::Type > types;
     types.push_back(cppu::UnoType< css::uno::XInterface >::get());
@@ -899,7 +902,7 @@ css::uno::Sequence< sal_Int8 > Access::getImplementationId()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return css::uno::Sequence< sal_Int8 >();
 }
@@ -907,7 +910,7 @@ css::uno::Sequence< sal_Int8 > Access::getImplementationId()
 rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice-configmgr::Access"));
@@ -917,7 +920,7 @@ sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
     for (sal_Int32 i = 0; i < names.getLength(); ++i) {
@@ -932,7 +935,7 @@ css::uno::Sequence< rtl::OUString > Access::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< rtl::OUString > services;
     services.push_back(
@@ -996,7 +999,7 @@ void Access::dispose() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (getParentAccess().is()) {
             throw css::uno::RuntimeException(
@@ -1021,7 +1024,7 @@ void Access::addEventListener(
 {
     OSL_ASSERT(thisIs(IS_ANY));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
@@ -1044,7 +1047,7 @@ void Access::removeEventListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     DisposeListeners::iterator i(disposeListeners_.find(aListener));
     if (i != disposeListeners_.end()) {
@@ -1054,7 +1057,7 @@ void Access::removeEventListener(
 
 css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     rtl::Reference< Node > p(getNode());
     switch (p->kind()) {
@@ -1078,7 +1081,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
 
 sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return !getAllChildren().empty(); //TODO: optimize
 }
@@ -1089,7 +1092,7 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
@@ -1103,7 +1106,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
     comphelper::SequenceAsVector< rtl::OUString > names;
@@ -1120,7 +1123,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return getChild(aName).is();
 }
@@ -1129,7 +1132,7 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
     throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getSubChild(aName));
     if (!child.is()) {
@@ -1143,7 +1146,7 @@ sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return getSubChild(aName).is();
 }
@@ -1154,7 +1157,7 @@ void Access::addContainerListener(
 {
     OSL_ASSERT(thisIs(IS_ANY));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
@@ -1177,7 +1180,7 @@ void Access::removeContainerListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     ContainerListeners::iterator i(containerListeners_.find(xListener));
     if (i != containerListeners_.end()) {
@@ -1189,7 +1192,7 @@ rtl::OUString Access::getExactName(rtl::OUString const & aApproximateName)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aApproximateName;
 }
@@ -1198,7 +1201,7 @@ css::uno::Sequence< css::beans::Property > Access::getProperties()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
     comphelper::SequenceAsVector< css::beans::Property > properties;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
@@ -1214,7 +1217,7 @@ css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
@@ -1227,13 +1230,13 @@ sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     return getChild(Name).is();
 }
 
 rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     // For backwards compatibility, return an absolute path representation where
     // available:
@@ -1257,7 +1260,7 @@ rtl::OUString Access::composeHierarchicalName(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     if (aRelativeName.getLength() == 0 || aRelativeName[0] == '/') {
         throw css::lang::IllegalArgumentException(
@@ -1277,7 +1280,7 @@ rtl::OUString Access::composeHierarchicalName(
 
 rtl::OUString Access::getName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return getNameInternal();
 }
@@ -1288,7 +1291,7 @@ void Access::setName(rtl::OUString const & aName)
     OSL_ASSERT(thisIs(IS_ANY));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         checkFinalized();
         Modifications localMods;
@@ -1352,7 +1355,7 @@ void Access::setName(rtl::OUString const & aName)
 css::beans::Property Access::getAsProperty() throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return asProperty();
 }
@@ -1374,7 +1377,7 @@ void Access::setPropertyValue(
     OSL_ASSERT(thisIs(IS_GROUP));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
@@ -1398,7 +1401,7 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     rtl::Reference< ChildAccess > child(getChild(PropertyName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
@@ -1417,7 +1420,7 @@ void Access::addPropertyChangeListener(
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
@@ -1444,7 +1447,7 @@ void Access::removePropertyChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkKnownProperty(aPropertyName);
     PropertyChangeListeners::iterator i(
         propertyChangeListeners_.find(aPropertyName));
@@ -1469,7 +1472,7 @@ void Access::addVetoableChangeListener(
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
@@ -1497,7 +1500,7 @@ void Access::removeVetoableChangeListener(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkKnownProperty(PropertyName);
     VetoableChangeListeners::iterator i(
         vetoableChangeListeners_.find(PropertyName));
@@ -1522,7 +1525,7 @@ void Access::setPropertyValues(
     OSL_ASSERT(thisIs(IS_GROUP));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
@@ -1559,7 +1562,7 @@ css::uno::Sequence< css::uno::Any > Access::getPropertyValues(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     css::uno::Sequence< css::uno::Any > vals(aPropertyNames.getLength());
     for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i) {
         rtl::Reference< ChildAccess > child(getChild(aPropertyNames[i]));
@@ -1584,7 +1587,7 @@ void Access::addPropertiesChangeListener(
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!xListener.is()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("null listener")),
@@ -1607,7 +1610,7 @@ void Access::removePropertiesChangeListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     PropertiesChangeListeners::iterator i(
         propertiesChangeListeners_.find(xListener));
     if (i != propertiesChangeListeners_.end()) {
@@ -1650,7 +1653,7 @@ void Access::setHierarchicalPropertyValue(
     OSL_ASSERT(thisIs(IS_GROUP));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
@@ -1682,7 +1685,7 @@ css::uno::Any Access::getHierarchicalPropertyValue(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalPropertyName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
@@ -1702,7 +1705,7 @@ void Access::setHierarchicalPropertyValues(
     OSL_ASSERT(thisIs(IS_GROUP));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         if (!getRootAccess()->isUpdate()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
@@ -1746,7 +1749,7 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     css::uno::Sequence< css::uno::Any > vals(
         aHierarchicalPropertyNames.getLength());
     for (sal_Int32 i = 0; i < aHierarchicalPropertyNames.getLength(); ++i) {
@@ -1770,7 +1773,7 @@ css::beans::Property Access::getPropertyByHierarchicalName(
     throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalName));
     if (!child.is()) {
         throw css::beans::UnknownPropertyException(
@@ -1784,7 +1787,7 @@ sal_Bool Access::hasPropertyByHierarchicalName(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     return getSubChild(aHierarchicalName).is();
 }
 
@@ -1798,7 +1801,7 @@ void Access::replaceByName(
     OSL_ASSERT(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         rtl::Reference< ChildAccess > child(getChild(aName));
         if (!child.is()) {
@@ -1842,7 +1845,7 @@ void Access::insertByName(
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         checkFinalized();
         if (getChild(aName).is()) {
@@ -1892,7 +1895,7 @@ void Access::removeByName(rtl::OUString const & aName)
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         rtl::Reference< ChildAccess > child(getChild(aName));
         if (!child.is() || child->isFinalized() ||
@@ -2224,16 +2227,16 @@ rtl::Reference< Access > Access::getNotificationRoot() {
 
 #if OSL_DEBUG_LEVEL > 0
 bool Access::thisIs(int what) {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     rtl::Reference< Node > p(getNode());
     Node::Kind k(p->kind());
-    return k != Node::KIND_PROPERTY && k != Node::KIND_LOCALIZED_VALUE &&
+    return (k != Node::KIND_PROPERTY && k != Node::KIND_LOCALIZED_VALUE &&
         ((what & IS_GROUP) == 0 || k == Node::KIND_GROUP) &&
         ((what & IS_SET) == 0 || k == Node::KIND_SET) &&
         ((what & IS_EXTENSIBLE) == 0 || k != Node::KIND_GROUP ||
          dynamic_cast< GroupNode * >(p.get())->isExtensible()) &&
         ((what & IS_GROUP_MEMBER) == 0 ||
-         getParentNode()->kind() == Node::KIND_GROUP) ||
+         getParentNode()->kind() == Node::KIND_GROUP)) ||
         ((what & IS_SET_MEMBER) == 0 ||
          getParentNode()->kind() == Node::KIND_SET) ||
         ((what & IS_UPDATE) == 0 || getRootAccess()->isUpdate());
@@ -2241,3 +2244,5 @@ bool Access::thisIs(int what) {
 #endif
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

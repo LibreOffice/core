@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,6 @@ SetupApp::SetupApp()
 
     m_nOSVersion    = sInfoOS.dwMajorVersion;
     m_nMinorVersion = sInfoOS.dwMinorVersion;
-    m_bIsWin9x      = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
     m_bNeedReboot   = false;
     m_bAdministrative = false;
 }
@@ -74,8 +74,6 @@ SetupApp::~SetupApp()
 {
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
 extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
@@ -88,14 +86,9 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 
     GetVersionEx( &sInfoOS );
 
-    boolean bIsWin9x = ( VER_PLATFORM_WIN32_NT != sInfoOS.dwPlatformId );
-
     SetupApp *pSetup;
 
-    if ( bIsWin9x )
-        pSetup = Create_SetupAppA();
-    else
-        pSetup = Create_SetupAppW();
+    pSetup = Create_SetupAppW();
 
     try
     {
@@ -134,7 +127,7 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     {
         pSetup->DisplayError( ERROR_OUTOFMEMORY );
     }
-    catch ( UINT nErr )
+    catch ( UINT &nErr )
     {
         pSetup->DisplayError( nErr );
     }
@@ -145,3 +138,5 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,6 +70,7 @@
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
+#include <sal/macros.h>
 
 #include <stdio.h>
 #include <algorithm>
@@ -179,7 +181,7 @@ namespace xmloff
         Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
         if (!xPersistence.is())
         {
-            OSL_ENSURE(sal_False, "OElementExport::exportServiceNameAttribute: no XPersistObject!");
+            OSL_FAIL("OElementExport::exportServiceNameAttribute: no XPersistObject!");
             return;
         }
 
@@ -387,7 +389,7 @@ namespace xmloff
             // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
-            // 2004-04-14 - #i27729# - fs@openoffice.org
+            // #i27729#
             exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
 
@@ -416,7 +418,7 @@ namespace xmloff
             case LISTBOX:
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                     exportListSourceAsElements();
                 break;
@@ -434,7 +436,7 @@ namespace xmloff
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                 {
                     // get the item list
@@ -581,11 +583,10 @@ namespace xmloff
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
-            OSL_ENSURE( sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
-                        sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
+            OSL_ENSURE( SAL_N_ELEMENTS(aStringPropertyNames) == SAL_N_ELEMENTS(nStringPropertyAttributeIds),
                         "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (1)!");
 
-            for (i=0; i<sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]); ++i)
+            for (i=0; i < SAL_N_ELEMENTS(nStringPropertyAttributeIds); ++i)
                 if (nStringPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportStringPropertyAttribute(
@@ -616,13 +617,13 @@ namespace xmloff
                 BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
             };
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
-            sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
-            sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(nBooleanPropertyAttributeIds);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(pBooleanPropertyNames);
+            sal_Int32 nFlagsCount = SAL_N_ELEMENTS(nBooleanPropertyAttrFlags);
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
                 "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (2)!");
         #endif
-            for (i=0; i<sizeof(nBooleanPropertyAttributeIds)/sizeof(nBooleanPropertyAttributeIds[0]); ++i)
+            for (i=0; i < SAL_N_ELEMENTS(nBooleanPropertyAttributeIds); ++i)
                 if (nBooleanPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportBooleanPropertyAttribute(
@@ -659,13 +660,13 @@ namespace xmloff
                 exportedProperty(PROPERTY_MAXTEXTLENGTH);
 
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nIdCount = sizeof(nIntegerPropertyAttributeIds) / sizeof(nIntegerPropertyAttributeIds[0]);
-            sal_Int32 nNameCount = sizeof(pIntegerPropertyNames) / sizeof(pIntegerPropertyNames[0]);
-            sal_Int32 nDefaultCount = sizeof(nIntegerPropertyAttrDefaults) / sizeof(nIntegerPropertyAttrDefaults[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(nIntegerPropertyAttributeIds);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(pIntegerPropertyNames);
+            sal_Int32 nDefaultCount = SAL_N_ELEMENTS(nIntegerPropertyAttrDefaults);
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount),
                 "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (3)!");
         #endif
-            for (i=0; i<sizeof(nIntegerPropertyAttributeIds)/sizeof(nIntegerPropertyAttributeIds[0]); ++i)
+            for (i=0; i < SAL_N_ELEMENTS(nIntegerPropertyAttributeIds); ++i)
                 if (nIntegerPropertyAttributeIds[i] & m_nIncludeCommon)
                 {
                     exportInt16PropertyAttribute(
@@ -824,7 +825,7 @@ namespace xmloff
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
             {
                 // don't export the current-value if this value originates from a data binding
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasActiveDataBinding() )
                     exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
                 else
@@ -1014,9 +1015,9 @@ namespace xmloff
                 &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE,
                 &PROPERTY_TOGGLE, &PROPERTY_FOCUS_ON_CLICK
             };
-            sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(nBooleanPropertyAttributeIds);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(pBooleanPropertyNames);
             OSL_ENSURE((nIdCount == nNameCount),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (1)!");
         #endif
@@ -1056,12 +1057,12 @@ namespace xmloff
                 10
             };
 
-            sal_Int32 nIdCount = sizeof( nIntegerPropertyAttributeIds ) / sizeof( nIntegerPropertyAttributeIds[0] );
+            sal_Int32 nIdCount = SAL_N_ELEMENTS( nIntegerPropertyAttributeIds );
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nNameCount = sizeof( pIntegerPropertyNames ) / sizeof( pIntegerPropertyNames[0] );
+            sal_Int32 nNameCount = SAL_N_ELEMENTS( pIntegerPropertyNames );
             OSL_ENSURE( ( nIdCount == nNameCount ),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
-            sal_Int32 nDefaultCount = sizeof( nIntegerPropertyAttrDefaults ) / sizeof( nIntegerPropertyAttrDefaults[0] );
+            sal_Int32 nDefaultCount = SAL_N_ELEMENTS( nIntegerPropertyAttrDefaults );
             OSL_ENSURE( ( nIdCount == nDefaultCount ),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (3)!" );
         #endif
@@ -1088,7 +1089,7 @@ namespace xmloff
                 else if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
                     sPropertyName = PROPERTY_SPIN_INCREMENT;
                 else
-                    OSL_ENSURE( sal_False, "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
+                    OSL_FAIL( "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
 
                 if ( sPropertyName.getLength() )
                     exportInt32PropertyAttribute(
@@ -1186,6 +1187,39 @@ namespace xmloff
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_ECHO_CHAR;
             #endif
             }
+        }
+
+        // ----------------------------------
+        // the string properties
+        {
+            static sal_Int32 nStringPropertyAttributeIds[] =
+            {   // attribute flags
+                SCA_GROUP_NAME
+            };
+            static const ::rtl::OUString* pStringPropertyNames[] =
+            {   // property names
+                &PROPERTY_GROUP_NAME
+            };
+
+            sal_Int32 nIdCount = SAL_N_ELEMENTS( nStringPropertyAttributeIds );
+        #if OSL_DEBUG_LEVEL > 0
+            sal_Int32 nNameCount = SAL_N_ELEMENTS( pStringPropertyNames );
+            OSL_ENSURE( ( nIdCount == nNameCount ),
+                "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
+        #endif
+            for ( i = 0; i < nIdCount; ++i )
+                if ( nStringPropertyAttributeIds[i] & m_nIncludeSpecial )
+                {
+                    exportStringPropertyAttribute(
+                        OAttributeMetaData::getSpecialAttributeNamespace( nStringPropertyAttributeIds[i] ),
+                        OAttributeMetaData::getSpecialAttributeName( nStringPropertyAttributeIds[i] ),
+                        *( pStringPropertyNames[i] )
+                    );
+            #if OSL_DEBUG_LEVEL > 0
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~nStringPropertyAttributeIds[i];
+            #endif
+                }
         }
 
         // ----------------------------------
@@ -1671,6 +1705,8 @@ namespace xmloff
                 }
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_IMAGE_POSITION ) )
                     m_nIncludeSpecial |= SCA_IMAGE_POSITION;
+                if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_GROUP_NAME ) )
+                    m_nIncludeSpecial |= SCA_GROUP_NAME;
                 m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
@@ -1721,7 +1757,7 @@ namespace xmloff
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
+                OSL_FAIL("OControlExport::examineControl: unknown control type (class id)!");
                 // NO break!
 
             case FormComponentType::NAVIGATIONBAR:
@@ -1822,7 +1858,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::exportCellBindingAttributes: caught an exception!" );
+            OSL_FAIL( "OControlExport::exportCellBindingAttributes: caught an exception!" );
         }
     }
 
@@ -1867,7 +1903,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
+            OSL_FAIL( "OControlExport::exportCellListSourceRange: caught an exception!" );
         }
     }
 
@@ -1941,7 +1977,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
+            OSL_FAIL( "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
         }
 
         return false;
@@ -1972,10 +2008,10 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
+            OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
         }
 
-        OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
+        OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
             // this method should be called for list and combo boxes only
         return true;
     }
@@ -2129,9 +2165,9 @@ namespace xmloff
             {
                 PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
-            sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(eStringPropertyIds);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nNameCount = sizeof(aStringPropertyNames) / sizeof(aStringPropertyNames[0]);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(aStringPropertyNames);
             OSL_ENSURE((nIdCount == nNameCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (1)!");
         #endif
@@ -2178,10 +2214,10 @@ namespace xmloff
             {
                 BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE
             };
-            sal_Int32 nIdCount = sizeof(eBooleanPropertyIds) / sizeof(eBooleanPropertyIds[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(eBooleanPropertyIds);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
-            sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(pBooleanPropertyNames);
+            sal_Int32 nFlagsCount = SAL_N_ELEMENTS(nBooleanPropertyAttrFlags);
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (2)!");
         #endif
@@ -2217,12 +2253,12 @@ namespace xmloff
             {
                 sal_False, sal_False, sal_False, sal_False, sal_True
             };
-            sal_Int32 nIdCount = sizeof(eEnumPropertyIds) / sizeof(eEnumPropertyIds[0]);
+            sal_Int32 nIdCount = SAL_N_ELEMENTS(eEnumPropertyIds);
         #if OSL_DEBUG_LEVEL > 0
-            sal_Int32 nNameCount = sizeof(pEnumPropertyNames) / sizeof(pEnumPropertyNames[0]);
-            sal_Int32 nDefaultCount = sizeof(nEnumPropertyAttrDefaults) / sizeof(nEnumPropertyAttrDefaults[0]);
-            sal_Int32 nDefaultFlagCount = sizeof(nEnumPropertyAttrDefaultFlags) / sizeof(nEnumPropertyAttrDefaultFlags[0]);
-            sal_Int32 nMapCount = sizeof(eEnumPropertyMaps) / sizeof(eEnumPropertyMaps[0]);
+            sal_Int32 nNameCount = SAL_N_ELEMENTS(pEnumPropertyNames);
+            sal_Int32 nDefaultCount = SAL_N_ELEMENTS(nEnumPropertyAttrDefaults);
+            sal_Int32 nDefaultFlagCount = SAL_N_ELEMENTS(nEnumPropertyAttrDefaultFlags);
+            sal_Int32 nMapCount = SAL_N_ELEMENTS(eEnumPropertyMaps);
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount) && (nDefaultCount == nDefaultFlagCount) && (nDefaultFlagCount == nMapCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (3)!");
         #endif
@@ -2258,3 +2294,5 @@ namespace xmloff
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

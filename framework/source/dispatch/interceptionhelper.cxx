@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 //_______________________________________________
 //  my own includes
 
-#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
-#endif
 
 //_______________________________________________
 //  interface includes
@@ -173,7 +172,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     else
     {
         aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = ::rtl::OUString::createFromAscii("*");
+        aInfo.lURLPattern[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
     }
 
     // SAFE {
@@ -331,7 +330,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // SAFE ->
     aReadLock.lock();
     if (!m_lInterceptionRegs.empty() )
-        OSL_ENSURE(sal_False, "There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
+        OSL_FAIL("There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
     aReadLock.unlock();
     // <- SAFE
     #endif // ODL_DEBUG_LEVEL>0
@@ -340,3 +339,5 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

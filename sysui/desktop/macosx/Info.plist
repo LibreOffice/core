@@ -1390,7 +1390,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>${ABOUTBOXPRODUCTVERSION}</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.openoffice.script</string>
+	<string>org.libreoffice.script</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -1398,7 +1398,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>OOo2</string>
+	<string>LibO</string>
 	<key>LSRequiresCarbon</key>
 	<string>1</string>
 	<key>NSPrincipalClass</key>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <xmloff/prhdlfac.hxx>
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
@@ -141,3 +142,4 @@ namespace xmloff
 
 #endif // _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

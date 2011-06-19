@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@ namespace rtl
 // class SvxAdjustItem ---------------------------------------------------
 
 /*
-[Beschreibung]
-Dieses Item beschreibt die Zeilenausrichtung.
+[Description]
+This item describes the row orientation.
 */
 #define ADJUST_LASTBLOCK_VERSION        ((sal_uInt16)0x0001)
 
@@ -55,7 +56,7 @@ class EDITENG_DLLPUBLIC SvxAdjustItem : public SfxEnumItemInterface
     sal_Bool    bCenter    : 1;
     sal_Bool    bBlock     : 1;
 
-    // nur aktiv, wenn bBlock
+    // only activ when bBlock
     sal_Bool    bOneBlock : 1;
     sal_Bool    bLastCenter : 1;
     sal_Bool    bLastBlock : 1;
@@ -67,11 +68,11 @@ public:
     SvxAdjustItem( const SvxAdjust eAdjst /*= SVX_ADJUST_LEFT*/,
                    const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -141,3 +142,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ public:
     SvxTextLineItem( const FontUnderline eSt,
                      const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                             SfxMapUnit eCoreMetric,
                             SfxMapUnit ePresMetric,
@@ -65,12 +66,10 @@ public:
     virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16          GetValueCount() const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal,
-                                        sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // MS VC4.0 kommt durcheinander
+    // MS VC4.0 messes things up
     void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     virtual int             HasBoolValue() const;
@@ -131,3 +130,5 @@ public:
 };
 
 #endif // #ifndef _SVX_UDLNITEM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

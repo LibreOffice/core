@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
 
@@ -148,7 +149,7 @@ struct TransformerAction_Impl
 // -----------------------------------------------------------------------------
 
 class XMLTransformerActions :
-    public ::std::hash_map< NameKey_Impl, TransformerAction_Impl,
+    public ::boost::unordered_map< NameKey_Impl, TransformerAction_Impl,
                             NameHash_Impl, NameHash_Impl >
 {
 public:
@@ -159,3 +160,5 @@ public:
 };
 
 #endif  //  _XMLOFF_TRANSFORMERACTIONS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

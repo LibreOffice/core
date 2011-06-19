@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,7 +136,6 @@ using namespace ::com::sun::star::io;
 #include <ownsubfilterservice.hxx>
 #include "SfxDocumentMetaData.hxx"
 
-#define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
@@ -145,6 +145,7 @@ static char const sOpenNewView[] = "OpenNewView";
 static char const sViewId[] = "ViewId";
 static char const sPluginMode[] = "PluginMode";
 static char const sReadOnly[] = "ReadOnly";
+static char const sDdeReconnect[] = "DDEReconnect";
 static char const sStartPresentation[] = "StartPresentation";
 static char const sFrameName[] = "FrameName";
 static char const sMediaType[] = "MediaType";
@@ -219,7 +220,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
             ByteString aStr( "No creator method for item: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
 #endif
             return;
         }
@@ -243,7 +244,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             {
                 ByteString aStr( "Property not convertable: ");
                 aStr += pSlot->pUnoName;
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
 #endif
         }
@@ -253,7 +254,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             // for a simple property there can be only one parameter and its name *must* match
             ByteString aStr( "Property name does not match: ");
             aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
 #endif
         else
@@ -296,7 +297,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aDbgStr( "Property not convertable: ");
                             aDbgStr += pSlot->pUnoName;
-                            DBG_ERROR( aDbgStr.GetBuffer() );
+                            OSL_FAIL( aDbgStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -309,7 +310,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     // there was a parameter with a name that didn't match to any of the members
                     ByteString aStr( "Property name does not match: ");
                     aStr += ByteString( String(rPropValue.Name), RTL_TEXTENCODING_UTF8 );
-                    DBG_ERROR( aStr.GetBuffer() );
+                    OSL_FAIL( aStr.GetBuffer() );
                 }
 #endif
             }
@@ -337,7 +338,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                 ByteString aStr( "No creator method for argument: ");
                 aStr += rArg.pName;
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
 #endif
                 return;
             }
@@ -367,7 +368,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -396,7 +397,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         {
                             ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
 #endif
                     }
@@ -435,7 +436,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                                     ByteString aDbgStr( "Property not convertable: ");
                                     aDbgStr += rArg.pName;
-                                    DBG_ERROR( aDbgStr.GetBuffer() );
+                                    OSL_FAIL( aDbgStr.GetBuffer() );
 #endif
                                 }
 
@@ -607,6 +608,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type for ReadOnly" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDdeReconnect)) )
+                {
+                    sal_Bool bVal = sal_True;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for DDEReconnect" );
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_DDE_RECONNECT_ONLOAD, bVal ) );
                 }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStartPresentation)) )
                 {
@@ -875,7 +884,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
         }
-        // --> PB 2007-12-09 #i83757#
+        // API to raise options dialog with a specified options ab page (#i83757#)
         else
         {
             // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
@@ -897,7 +906,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
-        // <--
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {
@@ -953,7 +961,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             // we will not rely on the "toggle" ability of some property slots
             ByteString aStr( "Processing property slot without argument: ");
             aStr += ByteString::CreateFromInt32( nSlotId );
-            DBG_ERROR( aStr.GetBuffer() );
+            OSL_FAIL( aStr.GetBuffer() );
         }
 #endif
 
@@ -1026,6 +1034,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION ) == SFX_ITEM_SET )
                 nAdditional++;
@@ -1266,13 +1276,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
-                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                 pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                 if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
                     ByteString aStr( "Item not convertable: ");
                     aStr += ByteString::CreateFromInt32(nSlotId);
-                    DBG_ERROR( aStr.GetBuffer() );
+                    OSL_FAIL( aStr.GetBuffer() );
                 }
             }
             else
@@ -1280,7 +1289,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 // complex type, add a property value for every member of the struct
                 for ( sal_uInt16 n=1; n<=nSubCount; ++n )
                 {
-                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[n-1].nAID;
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
@@ -1296,7 +1304,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
                         aStr += " not convertable in slot: ";
                         aStr += ByteString::CreateFromInt32(nSlotId);
-                        DBG_ERROR( aStr.GetBuffer() );
+                        OSL_FAIL( aStr.GetBuffer() );
                     }
                 }
             }
@@ -1317,13 +1325,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( !nSubCount )
                 {
-                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
                         ByteString aStr( "Item not convertable: ");
                         aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                        DBG_ERROR( aStr.GetBuffer() );
+                        OSL_FAIL( aStr.GetBuffer() );
                     }
                 }
                 else
@@ -1331,7 +1338,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     // complex type, add a property value for every member of the struct
                     for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
                     {
-                        //rPool.FillVariable( rItem, *pVar, eUserMetric );
                         sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
@@ -1347,7 +1353,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                             aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
                             aStr += " not convertable in slot: ";
                             aStr += ByteString::CreateFromInt32(rArg.nSlotId);
-                            DBG_ERROR( aStr.GetBuffer() );
+                            OSL_FAIL( aStr.GetBuffer() );
                         }
                     }
                 }
@@ -1423,13 +1429,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFrame));
                 if ( pItem->ISA( SfxUsrAnyItem ) )
                 {
-                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    OSL_FAIL( "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
                     pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
                 }
                 else if ( pItem->ISA( SfxUnoFrameItem ) )
                     pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
                 else
-                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
+                    OSL_FAIL( "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
@@ -1454,6 +1460,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sReadOnly));
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sDdeReconnect));
                 pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1688,7 +1699,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1733,7 +1744,7 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
                                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
               throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nPropertyCount = lArgs.getLength();
     ::rtl::OUString aReferer;
@@ -1980,7 +1991,7 @@ throw( RuntimeException )
 Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
@@ -2015,7 +2026,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
 
     if ( pAppSlotPool )
@@ -2159,7 +2170,6 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
 
         //=============================================================================
         //  Add new macro line to handle new service.
-        //
         //  !!! ATTENTION !!!
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
@@ -2177,13 +2187,6 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
-        #if 0
-        if ( ::sfx2::AppletObject::impl_getStaticImplementationName().equals(
-                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
-        {
-            xFactory = ::sfx2::AppletObject::impl_createFactory();
-        }
-        #endif
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )
@@ -2195,6 +2198,16 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
             ::comp_SfxDocumentMetaData::_getImplementationName(),
             ::comp_SfxDocumentMetaData::_getSupportedServiceNames());
         }
+        if ( ::comp_CompatWriterDocProps::_getImplementationName().equals(
+                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = ::cppu::createSingleComponentFactory(
+            ::comp_CompatWriterDocProps::_create,
+            ::comp_CompatWriterDocProps::_getImplementationName(),
+            ::comp_CompatWriterDocProps::_getSupportedServiceNames());
+        }
+
+        // Factory is valid - service was found.
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
@@ -2396,3 +2409,4 @@ com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > N
     return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <svl/stritem.hxx>
-#ifndef GCC
-#endif
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -57,9 +56,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/helper/convert.hxx>
 
 using namespace ::com::sun::star;
@@ -88,12 +85,12 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     unsigned short nID,
     const ::rtl::OUString& aCommandURL )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     util::URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
     uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-        rtl::OUString::createFromAscii( "com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
     SfxObjectShell* pObjShell = NULL;
@@ -147,24 +144,26 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
 SfxStatusBarControl::SfxStatusBarControl
 (
-    sal_uInt16      nSlotID,            /* Slot-Id, mit der diese Instanz
-                                       verbunden wird. Wurde bei der
-                                       Registrierung eine Slot-Id != 0
-                                       angegeben, ist dies immer die dort
-                                       angegebene. */
+    sal_uInt16      nSlotID,            /* Slot-Id which is connected to this
+                                       instance. If a Slot-Id is set to != 0 at
+                                       registration it will always be set there.
+                                    */
+
+
     sal_uInt16      nCtrlID,            /* ID of this controller in the status bar */
 
-    StatusBar&  rBar                /* Referenz auf die StatusBar, f"ur die
-                                       dieses Control erzeugt wurde. */
+    StatusBar&  rBar                /* Reference to the StatusBar,for which
+                                       this Control was created. */
 )
 
-/*  [Beschreibung]
 
-    Konstruktor der Klasse SfxStatusBarControl. Die Subclasses werden
-    bei Bedarf per Factory vom SFx erzeugt.
+/*  [Description]
 
-    Instanzen dieser Basisklasse werden f"ur alle StatusBar-Felder
-    erzeugt, f"ur die keine speziellen registriert wurden.
+    Constructor of the SfxStatusBarControl Class. The Subclasses are
+    created at the Factory if necessary.
+
+    Instances of this base class are created for all StatusBar-fields
+    for which no specific ones have been registered.
 */
 
 :   svt::StatusbarController(),
@@ -178,10 +177,10 @@ SfxStatusBarControl::SfxStatusBarControl
 
 SfxStatusBarControl::~SfxStatusBarControl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Destruktor der Klasse SfxStatusBarControl. Die Instanzen dieser
-    Klasse und deren Subklassen werden vom SFx zerst"ort.
+    Destructor of the SfxStatusBarControl Class. The Class and its Subclasses
+    are destroyed by SFx.
 */
 
 {}
@@ -228,7 +227,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     SfxViewFrame* pViewFrame = NULL;
     uno::Reference < frame::XController > xController;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_xFrame.is() )
         xController = m_xFrame->getController();
 
@@ -333,7 +332,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     const awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -351,7 +350,7 @@ throw ( uno::RuntimeException )
     const awt::MouseEvent& rMouseEvent )
 throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -368,7 +367,7 @@ throw (uno::RuntimeException)
     const ::awt::MouseEvent& rMouseEvent )
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
@@ -388,7 +387,7 @@ void SAL_CALL SfxStatusBarControl::command(
     const ::com::sun::star::uno::Any& /*aData*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::Point aPos( rPos.X, rPos.Y );
     CommandEvent aCmdEvent( aPos, (sal_uInt16)nCommand, sal_True, NULL );
 
@@ -404,7 +403,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     ::sal_Int32 nStyle )
 throw ( ::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );;
     if ( pOutDev )
@@ -420,7 +419,7 @@ throw ( ::uno::RuntimeException )
 void SAL_CALL SfxStatusBarControl::click()
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Click();
 }
 
@@ -429,7 +428,7 @@ throw ( uno::RuntimeException )
 void SAL_CALL SfxStatusBarControl::doubleClick()
 throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DoubleClick();
 }
 
@@ -441,20 +440,20 @@ void SfxStatusBarControl::StateChanged
 (
     sal_uInt16              nSID,
     SfxItemState        eState,
-    const SfxPoolItem*  pState  /* Zeiger auf ein SfxPoolItem, welches nur
-                                   innerhalb dieses Methodenaufrufs g"ultig
-                                   ist. Es kann ein 0-Pointer, ein Pointer
-                                   auf ein SfxVoidItem oder auf den Typ, f"ur
-                                   den die Subclass von SfxStatusBarControl
-                                   registriert ist vorkommen. */
+    const SfxPoolItem*  pState  /* Pointer to SfxPoolItem, is only valid
+                                   withih this Method call. This can be a
+                                   Null-Pointer, a Pointer to SfxVoidItem
+                                   or of this Type found registered by the
+                                   Subclass of SfxStatusBarControl.
+                                */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die Basisimplementation versteht Items vom Type SfxStringItem, bei
-    denen der Text in das Status-Zeilen-Feld eingetragen wird und
-    SfxVoidItem, bei denen das Feld geleert wird. Die Basisimplementierng
-    sollte in "uberladenen Methoden nicht gerufen werden.
+    The base implementation includes items of type SfxStringItem
+    where the text is entered in the status row field and
+    SfxVoidItem, where the field is emptied. The base implementation
+    should not be called in overloaded methods.
 */
 
 {
@@ -476,25 +475,23 @@ void SfxStatusBarControl::StateChanged
 
 sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseButtonDown() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseButtonDown() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     sal_Bool                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -505,25 +502,23 @@ sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseMove() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseMove() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     sal_Bool                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -534,25 +529,23 @@ sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode ist eine Weiterleitung des Events
-    MouseButtonUp() der StatusBar, falls die Maus-Position innerhalb
-    des Bereichs des betreffenden Items ist, oder die Maus von diesem
-    Control mit <SfxStatusBarControl::CaptureMouse()> gecaptured wurde.
+    This virtual method forwards the Event MouseButtonUp() of the
+    StatusBar if the mouse position is within the range of the items,
+    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
 
-    Die Defaultimplementierung ist leer und gibt FALSE zur"uck.
+    The default implementation is empty and returns FALSE.
 
-
-    [Rueckgabewert]
+    [Return value]
 
     sal_Bool                TRUE
-                        das Event wurde bearbeitet und soll nicht an
-                        die StatusBar weitergeleitet werden
+           The event has been processed and is not intended to
+           be forwarded to StatusBar
 
                         FALSE
-                        das Event wurde nicht bearbeitet und soll an
-                        die StatusBar weitergeleitet werden
+           The event was not processed and is to be
+           be forwarded to StatusBar
 */
 
 {
@@ -563,12 +556,12 @@ sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 void SfxStatusBarControl::Command( const CommandEvent& )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn f"ur dieses SfxStatusBarControl
-    ein CommandEvent f"ur erkannt wurde.
+    This virtual method is called when a CommandEvent is recived by
+    SfxStatusBarControl.
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {
@@ -578,12 +571,12 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 
 void SfxStatusBarControl::Click()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn der Anwender mit der Maus
-    in das zu diesem Control geh"orige Feld der Statuszeile klickt.
+    This virtual method is called when the user clicks on the
+    field in the status row that belongs to this control.
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {
@@ -593,10 +586,10 @@ void SfxStatusBarControl::Click()
 
 void SfxStatusBarControl::DoubleClick()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, wenn der Anwender mit der Maus
-    in das zu diesem Control geh"orige Feld der Statuszeile doppel-klickt.
+    This virtual method is called when the user double-clicks on the
+    field in the status row that belongs to this control.
 */
 
 {
@@ -608,18 +601,17 @@ void SfxStatusBarControl::DoubleClick()
 
 void SfxStatusBarControl::Paint
 (
-    const UserDrawEvent& /* Referenz auf einen UserDrawEvent */
+    const UserDrawEvent& /* Reference to an UserDrawEvent */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird gerufen, falls das betreffende Feld
-    mit SIB_USERDRAW gekennzeichnet ist, um den Inhalt zu zeichnen.
-    Die Ausgabe mu"s auf dem in durch rUDEvt.GetDevice() erh"altlichen
-    OutputDevice innerhalb des durch rUDEvt.GetRect() angegebenenen
-    Rechtecks erfolgen.
+    This virtual method is called to paint the contents if the field
+    at hand is marked with SIB_USERDRAW. The output must be obtained
+    within the Rectangle of rUDEvt.GetRect() by the OutputDevice
+    given by rUDEvt.GetDevice().
 
-    Die Defaultimplementierung ist leer.
+    The default implementation is empty.
 */
 
 {
@@ -647,7 +639,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     SfxModule* pMod
 )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxApplication *pApp = SFX_APP();
 
     SfxSlotPool *pSlotPool;
@@ -690,3 +682,5 @@ void SfxStatusBarControl::RegisterStatusBarControl(SfxModule* pMod, SfxStbCtrlFa
     SFX_APP()->RegisterStatusBarControl_Impl( pMod, pFact );
 }
 //--------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

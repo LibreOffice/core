@@ -47,9 +47,6 @@ CFLAGS_X64+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS_X64+=-D_WIN32_IE=0x501
 .ENDIF # "$(BUILD_X64)"!=""
 .ENDIF
-.IF "$(GUI)" == "OS2"
-CFLAGS+=-DISOLATION_AWARE_ENABLED -DXML_UNICODE -DXML_UNICODE_WCHAR_T -DUNICODE -D_UNICODE
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -58,7 +55,7 @@ CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
 SLOFILES=$(SLO)$/xml_parser.obj
-          
+
 .IF "$(BUILD_X64)"!=""
 SLOFILES_X64=$(SLO_X64)$/xml_parser.obj
 .ENDIF # "$(BUILD_X64)"!=""

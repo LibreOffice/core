@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,8 +70,7 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_XMENUBAR( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ));
 const rtl::OUString UIELEMENT_PROPNAME_NOCLOSE( RTL_CONSTASCII_USTRINGPARAM( "NoClose" ));
-
-//using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
@@ -472,14 +472,14 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CA
 
 const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
 {
-    // Create a new static property array to initialize sequence!
+    // Create property array to initialize sequence!
     // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
     // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
     // It's necessary for methods of OPropertySetHelper.
     // ATTENTION:
     //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
 
-    static const com::sun::star::beans::Property pProperties[] =
+    const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGLISTENER, UIELEMENT_PROPHANDLE_CONFIGLISTENER , ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_CONFIGSOURCE  , UIELEMENT_PROPHANDLE_CONFIGSOURCE   , ::getCppuType((const Reference< ::com::sun::star::ui::XUIConfigurationManager >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
@@ -491,16 +491,14 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
         com::sun::star::beans::Property( UIELEMENT_PROPNAME_XMENUBAR      , UIELEMENT_PROPHANDLE_XMENUBAR       , ::getCppuType((const Reference< com::sun::star::awt::XMenuBar >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY )
     };
     // Use it to initialize sequence!
-    static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
-    // Return static "PropertyDescriptor"
+    const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, UIELEMENT_PROPCOUNT );
+    // Return "PropertyDescriptor"
     return lPropertyDescriptor;
 }
 void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( xSettings.is() )
     {
@@ -540,8 +538,6 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( bWriteable )
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
@@ -569,3 +565,5 @@ Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (Runti
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

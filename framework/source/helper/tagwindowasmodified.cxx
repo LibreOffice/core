@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,7 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICXEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
@@ -54,9 +53,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
@@ -144,7 +141,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     ::sal_Bool bModified = xModel->isModified ();
 
     // SYNCHRONIZED ->
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( ! pWindow)
@@ -159,8 +156,6 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         pWindow->SetExtendedStyle(WB_EXT_DOCMODIFIED);
     else
         pWindow->SetExtendedStyle( ! WB_EXT_DOCMODIFIED);
-
-    aSolarGuard.clear();
     // <- SYNCHRONIZED
 }
 
@@ -254,3 +249,5 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

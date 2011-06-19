@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -58,7 +57,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -178,11 +176,11 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAscii( "ConfigurationData" ))
+        if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
             Args[n].Value >>= aConfigData;
-        else if ( Args[n].Name.equalsAscii( "Frame" ))
+        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
+        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
             Args[n].Value >>= aResourceURL;
     }
 
@@ -207,7 +205,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         aPropValue.Value <<= aResourceURL;
         aPropSeq[2] <<= aPropValue;
 
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         AddonsToolBarWrapper* pToolBarWrapper = new AddonsToolBarWrapper( m_xServiceManager );
         xToolBar = Reference< ::com::sun::star::ui::XUIElement >( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
         Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
@@ -219,3 +217,4 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

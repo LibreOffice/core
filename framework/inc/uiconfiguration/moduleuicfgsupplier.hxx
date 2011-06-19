@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -97,7 +98,7 @@ namespace framework
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::std::hash_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
+            typedef ::boost::unordered_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHashCode, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 
@@ -117,3 +118,5 @@ namespace framework
 }
 
 #endif // __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

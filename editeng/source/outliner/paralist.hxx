@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,27 +29,33 @@
 #ifndef _PARALIST_HXX
 #define _PARALIST_HXX
 
-class Paragraph;
+#include <vector>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 
-class ParagraphList : private List
-{
-private:
-    Link            aVisibleStateChangedHdl;
+class Paragraph;
 
+class ParagraphList
+{
 public:
     void            Clear( sal_Bool bDestroyParagraphs );
 
-    sal_uLong           GetParagraphCount() const           { return List::Count(); }
-    Paragraph*      GetParagraph( sal_uLong nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
+    sal_uInt32      GetParagraphCount() const
+    {
+        return maEntries.size();
+    }
 
-    sal_uLong           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
-    sal_uLong           GetVisPos( Paragraph* pParagraph );
+    Paragraph*      GetParagraph( sal_uLong nPos ) const
+    {
+        return nPos < maEntries.size() ? maEntries[nPos] : NULL;
+    }
 
-    void            Insert( Paragraph* pPara, sal_uLong nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
-    void            Remove( sal_uLong nPara ) { List::Remove( nPara ); }
+    sal_uLong           GetAbsPos( Paragraph* pParent ) const;
+    sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
+
+    void            Append( Paragraph *pPara);
+    void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
+    void            Remove( sal_uLong nPara );
     void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
@@ -66,6 +73,13 @@ public:
 
     void            SetVisibleStateChangedHdl( const Link& rLink ) { aVisibleStateChangedHdl = rLink; }
     Link            GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
+
+private:
+
+    Link aVisibleStateChangedHdl;
+    std::vector<Paragraph*> maEntries;
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

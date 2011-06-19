@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "NTable.hxx"
 #include "NTables.hxx"
 #include "NColumns.hxx"
-#ifndef _CONNECTIVITY_EVOAB_CATALOG_HXX__
 #include "NCatalog.hxx"
-#endif
 
 using namespace connectivity;
 using namespace ::comphelper;
@@ -87,3 +86,5 @@ void OEvoabTable::refreshColumns()
     else
         m_pColumns  = new OEvoabColumns(this,m_aMutex,aVector);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

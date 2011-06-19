@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,8 @@
 //_________________________________________________________________________________________________________________
 
 
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBAR_HXX
 #include <uielement/toolbar.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include <uielement/generictoolbarcontroller.hxx>
-#endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include "general.h"
@@ -47,9 +44,7 @@
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
-#ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 #include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 #include <framework/acceleratorinfo.hxx>
@@ -62,9 +57,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
-#endif
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -84,9 +77,7 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/imageitm.hxx>
@@ -132,19 +123,18 @@ static const char   ITEM_DESCRIPTOR_VISIBLE[]       = "IsVisible";
 static const char   ITEM_DESCRIPTOR_WIDTH[]         = "Width";
 static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
 
-static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = 10;
-static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = 23;
-static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = 4;
-static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = 9;
-static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
+static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_COMMANDURL);
+static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_HELPURL);
+static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TOOLTIP);
+static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_CONTAINER);
+static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_LABEL);
+static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TYPE);
+static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_VISIBLE);
+static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_WIDTH);
+static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_STYLE);
 
 static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-//static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 #define MENUPREFIX "private:resource/menubar/"
@@ -185,13 +175,11 @@ throw ( RuntimeException )
 
 //*****************************************************************************************************************
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
+static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
         n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
-    if ( bHighContrast )
-        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -248,7 +236,6 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( sal_False ),
-    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -256,7 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_bUpdateControllers( sal_False ),
     m_bImageOrientationRegistered( sal_False ),
     m_bImageMirrored( sal_False ),
-    m_bCanBeCustomized( sal_True ),
+    m_bCanBeCustomized( !SvtMiscOptions().DisableUICustomization() ),
     m_lImageRotation( 0 ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
@@ -297,7 +284,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString::createFromAscii( "CreateDialog" )))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -327,6 +314,7 @@ ToolBarManager::~ToolBarManager()
 
 void ToolBarManager::Destroy()
 {
+    OSL_ASSERT( m_pToolBar != 0 );
     ResetableGuard aGuard( m_aLock );
     if ( m_bAddedToTaskPaneList )
     {
@@ -362,8 +350,8 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDoubleClickHdl( aEmpty );
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
+    m_pToolBar->SetCommandHdl( aEmpty );
 
-//    delete m_pToolBar;
     m_pToolBar = 0;
 }
 
@@ -377,21 +365,6 @@ void ToolBarManager::CheckAndUpdateImages()
 {
     ResetableGuard aGuard( m_aLock );
     sal_Bool bRefreshImages = sal_False;
-
-    // Check if high contrast/normal mode have changed
-    if ( m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        if ( !m_bIsHiContrast )
-        {
-            bRefreshImages = sal_True;
-            m_bIsHiContrast = sal_True;
-        }
-    }
-    else if ( m_bIsHiContrast )
-    {
-        bRefreshImages = sal_True;
-        m_bIsHiContrast = sal_False;
-    }
 
     SvtMiscOptions aMiscOptions;
     bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
@@ -425,11 +398,11 @@ void ToolBarManager::RefreshImages()
         if ( nId > 0 )
         {
             ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages, m_bIsHiContrast );
+            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCommandURL, bBigImages, m_bIsHiContrast );
+                aImage = QueryAddonsImage( aCommandURL, bBigImages );
             m_pToolBar->SetItemImage( nId, aImage );
         }
     }
@@ -496,6 +469,24 @@ void ToolBarManager::UpdateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::UpdateControllers" );
 
+    if( !m_bCanBeCustomized )
+    {
+        Any a;
+        Reference< XLayoutManager > xLayoutManager;
+        Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
+        if ( xFramePropSet.is() )
+            a = xFramePropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        a >>= xLayoutManager;
+        Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
+        if ( xLayoutManager.is() && xDockable.is() )
+        {
+            ::com::sun::star::awt::Point aPoint;
+            aPoint.X = aPoint.Y = SAL_MAX_INT32;
+            xLayoutManager->dockWindow( m_aResourceName, DockingArea_DOCKINGAREA_DEFAULT, aPoint );
+            xLayoutManager->lockWindow( m_aResourceName );
+        }
+    }
+
     if ( !m_bUpdateControllers )
     {
         m_bUpdateControllers = sal_True;
@@ -537,22 +528,6 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
          {
          }
 
-       /* m_bUpdateControllers = sal_True;
-        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
-
-        while ( pIter != m_aControllerMap.end() )
-        {
-            try
-            {
-                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
-                if ( xUpdatable.is() )
-                    xUpdatable->update();
-            }
-            catch ( Exception& )
-            {
-            }
-            ++pIter;
-        }*/
 
     }
     m_bUpdateControllers = sal_False;
@@ -573,7 +548,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     if ( m_bDisposed )
         return;
 
-    if ( Event.FeatureURL.Complete.equalsAscii( ".uno:ImageOrientation" ))
+    if ( Event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ImageOrientation")) )
     {
         SfxImageItem aItem( 1, 0 );
         aItem.PutValue( Event.State );
@@ -755,8 +730,8 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType = sal_Int16();
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
-                                                    m_bIsHiContrast );
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge()
+                                                    );
 
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
@@ -898,7 +873,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
         {
             aPropSeq[i].Value >>= aLabel;
             break;
@@ -916,7 +891,7 @@ sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const ::rtl::OUString& 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Properties" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Properties")) )
         {
             aPropSeq[i].Value >>= nProperties;
             break;
@@ -1115,7 +1090,6 @@ void ToolBarManager::CreateControllers()
                 //for Support Visiblitly by shizhoubo
                 if (pController)
                 {
-                //  rtl::OUString aCommandURL = pController->m_aCommandURL;
                     if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||
@@ -1309,7 +1283,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             {
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
-                    if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
+                    if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                     {
                         aProp[i].Value >>= aCommandURL;
                         if ( aCommandURL.compareToAscii(MENUPREFIX, RTL_CONSTASCII_LENGTH(MENUPREFIX) ) == 0  )
@@ -1330,7 +1304,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     xMenuContainer->getByIndex(0) >>= aProps;
                                     for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
                                     {
-                                        if ( aProps[ index ].Name.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, ITEM_DESCRIPTOR_CONTAINER_LEN ))
+                                        if ( aProps[ index ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
 
                                         {
                                             aProps[ index ].Value >>= aMenuDesc;
@@ -1344,19 +1318,19 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             }
                         }
                     }
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
                         aProp[i].Value >>= aHelpURL;
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TOOLTIP, ITEM_DESCRIPTOR_TOOLTIP_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TOOLTIP)) )
                         aProp[i].Value >>= aTooltip;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
                         aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, ITEM_DESCRIPTOR_TYPE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
                         aProp[i].Value >>= nType;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_VISIBLE, ITEM_DESCRIPTOR_VISIBLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_WIDTH, ITEM_DESCRIPTOR_WIDTH_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_WIDTH)) )
                         aProp[i].Value >>= nWidth;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
                         aProp[i].Value >>= nStyle;
                 }
 
@@ -1548,8 +1522,7 @@ void ToolBarManager::RequestImages()
     }
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode();
-    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
+    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
 
     if ( m_xDocImageManager.is() )
         aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
@@ -1570,7 +1543,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages, m_bIsHiContrast );
+                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages );
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }
@@ -1752,8 +1725,11 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 }
 
 //added for i33668 by shizhoubo : 200804
-PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
+PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
 {
+    // update the list of hidden tool items first
+    pToolBar->UpdateCustomMenu();
+
     PopupMenu *pMenu = pToolBar->GetMenu();
     // remove all entries before inserting new ones
     ImplClearPopupMenu( pToolBar );
@@ -1803,6 +1779,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
             // Non-configurable toolbars should disable configuration menu items
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
@@ -1824,10 +1801,8 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
-                                         GetImageFromURL( m_xFrame,
-                                                          aCommandURL,
-                                                          sal_False,
-                                                          m_bIsHiContrast ));
+                                         GetImageFromURL( m_xFrame, aCommandURL, sal_False )
+                                       );
             }
             else
             {
@@ -1885,7 +1860,7 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
     if ( pCmdEvt->GetCommand() != COMMAND_CONTEXTMENU )
         return 0;
 
-    PopupMenu * pMenu = GetToolBarCustomMeun(m_pToolBar);
+    PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
     if (pMenu)
     {
         // make sure all disabled entries will be shown
@@ -1905,7 +1880,7 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
     if ( m_bDisposed )
         return 1;
     //modify for i33668 by shizhoubo:2008:04
-    GetToolBarCustomMeun(pToolBar);
+    GetToolBarCustomMenu(pToolBar);
     //end
      return 0;
  }
@@ -2030,11 +2005,11 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                 {
                                     for ( sal_Int32 j = 0; j < aProp.getLength(); j++ )
                                     {
-                                        if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                                        if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                                         {
                                             aProp[j].Value >>= aCommandURL;
                                         }
-                                        else if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+                                        else if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                                         {
                                             aProp[j].Value >>= bVisible;
                                             nVisibleIndex = j;
@@ -2123,7 +2098,6 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
@@ -2144,7 +2118,6 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 
@@ -2229,9 +2202,9 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
     return 0;
 }
 
-Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast )
+Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages )
 {
-    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages, bHiContrast );
+    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
     return aImage;
 }
 
@@ -2354,3 +2327,4 @@ bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OU
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

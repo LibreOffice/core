@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ public:
     virtual void SAL_CALL Close( const css::uno::Any &bSaveChanges,
                                  const css::uno::Any &aFileName,
                                  const css::uno::Any &bRouteWorkbook ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Protect( const css::uno::Any & aPassword ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Protect( const css::uno::Any &aPassword ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Unprotect( const css::uno::Any &aPassword ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Save() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
@@ -70,3 +71,5 @@ public:
 };
 
 #endif /* VBA_DOCUMENTBASE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

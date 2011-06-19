@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );
-    osl::FileStatus   fs(FileStatusMask_Type | FileStatusMask_FileURL);
+    osl::FileStatus   fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
     osl::FileBase::RC nRetCode = aScanRootDir.open();
     if ( nRetCode == osl::Directory::E_None )
     {
@@ -186,7 +187,7 @@ OO3ExtensionMigration::ScanResult OO3ExtensionMigration::scanExtensionFolder( co
     {
         // work through directory contents...
         osl::DirectoryItem item;
-        osl::FileStatus fs(FileStatusMask_Type | FileStatusMask_FileURL);
+        osl::FileStatus fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
         TStringVector aDirectories;
         while ((aDir.getNextItem(item) == osl::FileBase::E_None ) &&
                ( aResult == SCANRESULT_NOTFOUND ))
@@ -414,14 +415,14 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
     {
         beans::NamedValue aValue;
         *pIter >>= aValue;
-        if ( aValue.Name.equalsAscii( "UserData" ) )
+        if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
         {
             if ( !(aValue.Value >>= m_sSourceDir) )
             {
-                OSL_ENSURE( false, "ExtensionMigration::initialize: argument UserData has wrong type!" );
+                OSL_FAIL( "ExtensionMigration::initialize: argument UserData has wrong type!" );
             }
         }
-        else if ( aValue.Name.equalsAscii( "ExtensionBlackList" ) )
+        else if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtensionBlackList" ) ) )
         {
             Sequence< ::rtl::OUString > aBlackList;
             if ( (aValue.Value >>= aBlackList ) && ( aBlackList.getLength() > 0 ))
@@ -431,28 +432,6 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
             }
         }
     }
-}
-
-// -----------------------------------------------------------------------------
-
-TStringVectorPtr getContent( const ::rtl::OUString& rBaseURL )
-{
-    TStringVectorPtr aResult( new TStringVector );
-    ::osl::Directory aDir( rBaseURL);
-    if ( aDir.open() == ::osl::FileBase::E_None )
-    {
-        // iterate over directory content
-        TStringVector aSubDirs;
-        ::osl::DirectoryItem aItem;
-        while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
-        {
-            ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
-            if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
-                aResult->push_back( aFileStatus.getFileURL() );
-        }
-    }
-
-    return aResult;
 }
 
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
@@ -581,3 +560,5 @@ Reference< XInterface > SAL_CALL OO3ExtensionMigration_create(
 // -----------------------------------------------------------------------------
 
 }   // namespace migration
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

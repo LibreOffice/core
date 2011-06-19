@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,9 @@
 #include <uno/lbnames.h>
 #include "xmloff/xmlreg.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 #define SERVICE( className )                                        \
 extern OUString SAL_CALL className##_getImplementationName() throw();   \
@@ -281,3 +283,4 @@ XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplNam
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

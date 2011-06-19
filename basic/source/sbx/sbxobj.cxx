@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <tools/stream.hxx>
 #include <vcl/sound.hxx>
 #include <basic/sbx.hxx>
-#include <basic/sbxbase.hxx>
 #include "sbxres.hxx"
 #include <svl/brdcst.hxx>
 
@@ -43,9 +43,7 @@ static const char* pParentProp;             // Parent-Property
 
 static sal_uInt16 nNameHash = 0, nParentHash = 0;
 
-/////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////
 
 SbxObject::SbxObject( const XubString& rClass )
          : SbxVariable( SbxOBJECT ), aClassName( rClass )
@@ -78,11 +76,11 @@ SbxObject& SbxObject::operator=( const SbxObject& r )
         pMethods   = new SbxArray;
         pProps     = new SbxArray;
         pObjs      = new SbxArray( SbxOBJECT );
-        // Die Arrays werden kopiert, die Inhalte uebernommen
+        // The arrays were copied, the content taken over
         *pMethods  = *r.pMethods;
         *pProps    = *r.pProps;
         *pObjs     = *r.pObjs;
-        // Da die Variablen uebernommen wurden, ist dies OK
+        // Because the variables were taken over, this is OK
         pDfltProp  = r.pDfltProp;
         SetName( r.GetName() );
         SetFlags( r.GetFlags() );
@@ -98,7 +96,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         SbxVariableRef& rRef = p->GetRef( i );
         if( rRef->IsBroadcaster() )
             pObj->EndListening( rRef->GetBroadcaster(), sal_True );
-        // Hat das Element mehr als eine Referenz und noch einen Listener?
+        // Did the element have more then one reference and still a Listener?
         if( rRef->GetRefCount() > 1 )
         {
             rRef->SetParent( NULL );
@@ -191,16 +189,16 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
         pRes = pProps->FindUserData( nData );
     if( !pRes )
         pRes = pObjs->FindUserData( nData );
-    // Search in den Parents?
+    // Search in the parents?
     if( !pRes && IsSet( SBX_GBLSEARCH ) )
     {
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
-            // Ich selbst bin schon durchsucht worden!
+            // I myself was already searched through!
             sal_uInt16 nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
-            // Ich suche bereits global!
+            // I search already global!
             sal_uInt16 nPar = pCur->pParent->GetFlags();
             pCur->pParent->ResetFlag( SBX_GBLSEARCH );
             pRes = pCur->pParent->FindUserData( nData );
@@ -253,21 +251,21 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
         if( pArray )
             pRes = pArray->Find( rName, t );
     }
-    // Extended Search im Objekt-Array?
-    // Fuer Objekte und DontCare ist das Objektarray bereits
-    // durchsucht worden
+    // ExtendedsSearch in the Object-Array?
+    // For objects and DontCare is the Objektarray already
+    // searched through
     if( !pRes && ( t == SbxCLASS_METHOD || t == SbxCLASS_PROPERTY ) )
         pRes = pObjs->Find( rName, t );
-    // Search in den Parents?
+    // Search in the parents?
     if( !pRes && IsSet( SBX_GBLSEARCH ) )
     {
         SbxObject* pCur = this;
         while( !pRes && pCur->pParent )
         {
-            // Ich selbst bin schon durchsucht worden!
+            // I myself was already searched through!
             sal_uInt16 nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
-            // Ich suche bereits global!
+            // I search already global!
             sal_uInt16 nPar = pCur->pParent->GetFlags();
             pCur->pParent->ResetFlag( SBX_GBLSEARCH );
             pRes = pCur->pParent->Find( rName, t );
@@ -289,16 +287,16 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
     return pRes;
 }
 
-// Kurzform: Die Parent-Kette wird durchsucht
-// Das ganze rekursiv, da Call() ueberladen sein kann
-// Qualified Names sind zugelassen
+// Abbreviated version: The parent-string will be searched through
+// The whole thing recursive, because Call() might be overloaded
+// Qualified names are allowed
 
 sal_Bool SbxObject::Call( const XubString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
     if( pMeth && pMeth->ISA(SbxMethod) )
     {
-        // FindQualified() koennte schon zugeschlagen haben!
+        // FindQualified() might have been stroked!
         if( pParam )
             pMeth->SetParameters( pParam );
         pMeth->Broadcast( SBX_HINT_DATAWANTED );
@@ -342,9 +340,9 @@ void SbxObject::SetDfltProperty( SbxProperty* p )
     SetModified( sal_True );
 }
 
-// Suchen einer bereits vorhandenen Variablen. Falls sie gefunden wurde,
-// wird der Index gesetzt, sonst wird der Count des Arrays geliefert.
-// In jedem Fall wird das korrekte Array geliefert.
+// Search of a already available variable. If she was located,
+// the index will be set, elsewise will be delivered the Count of the Array.
+// In any case it will be delivered the correct Array.
 
 SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 {
@@ -361,7 +359,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     if( pArray )
     {
         nArrayIdx = pArray->Count();
-        // ist die Variable per Name vorhanden?
+        // Is the variable per name available?
         pArray->ResetFlag( SBX_EXTSEARCH );
         SbxVariable* pOld = pArray->Find( pVar->GetName(), pVar->GetClass() );
         if( pOld )
@@ -377,12 +375,12 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     return pArray;
 }
 
-// Falls ein neues Objekt eingerichtet wird, wird es, falls es bereits
-// eines mit diesem Namen gibt, indiziert.
+// If a new object will be established, this object will be indexed,
+// if an object of this name exists already.
 
 SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataType dt )
 {
-    // Ist das Objekt bereits vorhanden?
+    // Is the object already available?
     SbxArray* pArray = NULL;
     switch( ct )
     {
@@ -395,26 +393,12 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     }
     if( !pArray )
         return NULL;
-    // Collections duerfen gleichnamige Objekte enthalten
+    // Collections may contain objects of the same name
     if( !( ct == SbxCLASS_OBJECT && ISA(SbxCollection) ) )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
         {
-/* Wegen haeufiger Probleme (z.B. #67000) erstmal ganz raus
-#ifdef DBG_UTIL
-            if( pRes->GetHashCode() != nNameHash
-             && pRes->GetHashCode() != nParentHash )
-            {
-                XubString aMsg( "SBX-Element \"" );
-                aMsg += pRes->GetName();
-                aMsg += "\"\n in Objekt \"";
-                aMsg += GetName();
-                aMsg += "\" bereits vorhanden";
-                DbgError( (const char*)aMsg.GetStr() );
-            }
-#endif
-*/
             return pRes;
         }
     }
@@ -436,7 +420,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
     pVar->SetParent( this );
     pArray->Put( pVar, pArray->Count() );
     SetModified( sal_True );
-    // Das Objekt lauscht immer
+    // The object listen always
     StartListening( pVar->GetBroadcaster(), sal_True );
     Broadcast( SBX_HINT_OBJECTCHANGED );
     return pVar;
@@ -444,26 +428,12 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
 
 SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClass )
 {
-    // Ist das Objekt bereits vorhanden?
+    // Is the object already available?
     if( !ISA(SbxCollection) )
     {
         SbxVariable* pRes = pObjs->Find( rName, SbxCLASS_OBJECT );
         if( pRes )
         {
-/* Wegen haeufiger Probleme (z.B. #67000) erstmal ganz raus
-#ifdef DBG_UTIL
-            if( pRes->GetHashCode() != nNameHash
-             && pRes->GetHashCode() != nParentHash )
-            {
-                XubString aMsg( "SBX-Objekt \"" );
-                aMsg += pRes->GetName();
-                aMsg += "\"\n in Objekt \"";
-                aMsg += GetName();
-                aMsg += "\" bereits vorhanden";
-                DbgError( (const char*)aMsg.GetStr() );
-            }
-#endif
-*/
             return PTR_CAST(SbxObject,pRes);
         }
     }
@@ -474,7 +444,7 @@ SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClas
         pVar->SetParent( this );
         pObjs->Put( pVar, pObjs->Count() );
         SetModified( sal_True );
-        // Das Objekt lauscht immer
+        // The object listen always
         StartListening( pVar->GetBroadcaster(), sal_True );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
@@ -487,34 +457,20 @@ void SbxObject::Insert( SbxVariable* pVar )
     SbxArray* pArray = FindVar( pVar, nIdx );
     if( pArray )
     {
-        // Hinein damit. Man sollte allerdings auf die Pointer aufpassen!
+        // Into with it. But you should pay attention at the Pointer!
         if( nIdx < pArray->Count() )
         {
-            // dann gibt es dieses Element bereits
-            // Bei Collections duerfen gleichnamige Objekte hinein
+            // Then this element exists already
+            // There are objects of the same name allowed at collections
             if( pArray == pObjs && ISA(SbxCollection) )
                 nIdx = pArray->Count();
             else
             {
                 SbxVariable* pOld = pArray->Get( nIdx );
-                // schon drin: ueberschreiben
+                // already inside: overwrite
                 if( pOld == pVar )
                     return;
 
-/* Wegen haeufiger Probleme (z.B. #67000) erstmal ganz raus
-#ifdef DBG_UTIL
-                if( pOld->GetHashCode() != nNameHash
-                 && pOld->GetHashCode() != nParentHash )
-                {
-                    XubString aMsg( "SBX-Element \"" );
-                    aMsg += pVar->GetName();
-                    aMsg += "\"\n in Objekt \"";
-                    aMsg += GetName();
-                    aMsg += "\" bereits vorhanden";
-                    DbgError( (const char*)aMsg.GetStr() );
-                }
-#endif
-*/
                 EndListening( pOld->GetBroadcaster(), sal_True );
                 if( pVar->GetClass() == SbxCLASS_PROPERTY )
                 {
@@ -545,8 +501,8 @@ void SbxObject::Insert( SbxVariable* pVar )
     }
 }
 
-// AB 23.4.1997, Optimierung, Einfuegen ohne Ueberpruefung auf doppelte
-// Eintraege und ohne Broadcasts, wird nur in SO2/auto.cxx genutzt
+// Optimisation, Insertion without checking about
+// double entry and without broadcasts, will only be used in SO2/auto.cxx
 void SbxObject::QuickInsert( SbxVariable* pVar )
 {
     SbxArray* pArray = NULL;
@@ -585,7 +541,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
 }
 
-// AB 23.3.1997, Spezial-Methode, gleichnamige Controls zulassen
+// special method, allow controls of the same name
 void SbxObject::VCPtrInsert( SbxVariable* pVar )
 {
     SbxArray* pArray = NULL;
@@ -643,11 +599,11 @@ void SbxObject::Remove( SbxVariable* pVar )
     }
 }
 
-// AB 23.3.1997, Loeschen per Pointer fuer Controls (doppelte Namen!)
+// cleanup per Pointer for Controls (double names!)
 void SbxObject::VCPtrRemove( SbxVariable* pVar )
 {
     sal_uInt16 nIdx;
-    // Neu FindVar-Methode, sonst identisch mit normaler Methode
+    // New FindVar-Method, otherwise identical with the normal method
     SbxArray* pArray = VCPtrFindVar( pVar, nIdx );
     if( pArray && nIdx < pArray->Count() )
     {
@@ -664,7 +620,7 @@ void SbxObject::VCPtrRemove( SbxVariable* pVar )
     }
 }
 
-// AB 23.3.1997, Zugehoerige Spezial-Methode, nur ueber Pointer suchen
+// associated special method, search only by Pointer
 SbxArray* SbxObject::VCPtrFindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 {
     SbxArray* pArray = NULL;
@@ -709,8 +665,6 @@ void SbxObject::SetPos( SbxVariable* pVar, sal_uInt16 nPos )
             pArray->Insert( refVar, nPos );
         }
     }
-//  SetModified( sal_True );
-//  Broadcast( SBX_HINT_OBJECTCHANGED );
 }
 
 static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
@@ -732,19 +686,19 @@ static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
     return sal_True;
 }
 
-// Der Load eines Objekts ist additiv!
+// The load of an object is additive!
 
 sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    // Hilfe fuer das Einlesen alter Objekte: einfach sal_True zurueck,
-    // LoadPrivateData() muss Default-Zustand herstellen
+    // Help for the read in of old objects: just TRUE back,
+    // LoadPrivateData() had to set the default status up
     if( !nVer )
         return sal_True;
 
     pDfltProp = NULL;
     if( !SbxVariable::LoadData( rStrm, nVer ) )
         return sal_False;
-    // Wenn kein fremdes Objekt enthalten ist, uns selbst eintragen
+    // If  it contains no alien object, insert ourselves
     if( aData.eType == SbxOBJECT && !aData.pObj )
         aData.pObj = this;
     sal_uInt32 nSize;
@@ -764,7 +718,7 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
      || !LoadArray( rStrm, this, pProps )
      || !LoadArray( rStrm, this, pObjs ) )
         return sal_False;
-    // Properties setzen
+    // Set properties
     if( aDfltProp.Len() )
         pDfltProp = (SbxProperty*) pProps->Find( aDfltProp, SbxCLASS_PROPERTY );
     SetModified( sal_False );
@@ -801,7 +755,7 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
 XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
                                   const SbxObject* )
 {
-    // Properties in einem String einsammeln
+    // Collect the properties in a String
     XubString aSource;
     SbxArrayRef xProps( GetProperties() );
     bool bLineFeed = false;
@@ -813,7 +767,7 @@ XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
          && !( xProp->GetHashCode() == nNameHash
             && aPropName.EqualsIgnoreCaseAscii( pNameProp ) ) )
         {
-            // ausser vor dem ersten Property immer einen Umbruch einfuegen
+            // Insert a break except in front of the first property
             if ( bLineFeed )
                 aSource.AppendAscii( "\n" );
             else
@@ -824,17 +778,17 @@ XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
             aSource += aPropName;
             aSource.AppendAscii( " = " );
 
-            // den Property-Wert textuell darstellen
+            // Display the property value textual
             switch ( xProp->GetType() )
             {
                 case SbxEMPTY:
                 case SbxNULL:
-                    // kein Wert
+                    // no value
                     break;
 
                 case SbxSTRING:
                 {
-                    // Strings in Anf"uhrungszeichen
+                    // Strings in quotation mark
                     aSource.AppendAscii( "\"" );
                     aSource += xProp->GetString();
                     aSource.AppendAscii( "\"" );
@@ -843,7 +797,7 @@ XubString SbxObject::GenerateSource( const XubString &rLinePrefix,
 
                 default:
                 {
-                    // sonstiges wie z.B. Zahlen direkt
+                    // miscellaneous, such as e.g.numerary directly
                     aSource += xProp->GetString();
                     break;
                 }
@@ -892,7 +846,7 @@ static sal_Bool CollectAttrs( const SbxBase* p, XubString& rRes )
 
 void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
 {
-    // Einr"uckung
+    // Shifting
     static sal_uInt16 nLevel = 0;
     if ( nLevel > 10 )
     {
@@ -904,11 +858,11 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     for ( sal_uInt16 n = 1; n < nLevel; ++n )
         aIndent.AppendAscii( "    " );
 
-    // ggf. Objekt vervollst"andigen
+    // if necessary complete the object
     if ( bFill )
         GetAll( SbxCLASS_DONTCARE );
 
-    // Daten des Objekts selbst ausgeben
+    // Output the data of the object itself
     ByteString aNameStr( (const UniString&)GetName(), RTL_TEXTENCODING_ASCII_US );
     ByteString aClassNameStr( (const UniString&)aClassName, RTL_TEXTENCODING_ASCII_US );
     rStrm << "Object( "
@@ -957,7 +911,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                 aLine.AppendAscii( "  !! Not a Method !!" );
             rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
 
-            // bei Object-Methods auch das Object ausgeben
+            // Output also the object at object-methods
             if ( pVar->GetValues_Impl().eType == SbxOBJECT &&
                     pVar->GetValues_Impl().pObj &&
                     pVar->GetValues_Impl().pObj != this &&
@@ -990,7 +944,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                     aLine.AppendAscii( "  !! Not a Property !!" );
                 rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
 
-                // bei Object-Properties auch das Object ausgeben
+                // output also the object at object properties
                 if ( pVar->GetValues_Impl().eType == SbxOBJECT &&
                         pVar->GetValues_Impl().pObj &&
                         pVar->GetValues_Impl().pObj != this &&
@@ -1051,98 +1005,18 @@ SbxClassType SbxProperty::GetClass() const
     return SbxCLASS_PROPERTY;
 }
 
-void SbxObject::GarbageCollection( sal_uIntPtr nObjects )
+void SbxObject::GarbageCollection( sal_uIntPtr /* nObjects */ )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese statische Methode durchsucht die n"achsten 'nObjects' der zur Zeit
-    existierenden <SbxObject>-Instanzen nach zyklischen Referenzen, die sich
-    nur noch selbst am Leben erhalten. Ist 'nObjects==0', dann werden
-    alle existierenden durchsucht.
+    This statistic method browse the next 'nObjects' of the currently existing
+    <SbxObject>-Instances for cyclic references, which keep only themselfes alive
+    If there is 'nObjects==0', then all existing will be browsed.
 
-    zur Zeit nur implementiert: Object -> Parent-Property -> Parent -> Object
+    currently only implemented: Object -> Parent-Property -> Parent -> Object
 */
 
 {
-    (void)nObjects;
-
-    static sal_Bool bInGarbageCollection = sal_False;
-    if ( bInGarbageCollection )
-        return;
-    bInGarbageCollection = sal_True;
-
-#if 0
-    // erstes Object dieser Runde anspringen
-    sal_Bool bAll = !nObjects;
-    if ( bAll )
-        rObjects.First();
-    SbxObject *pObj = rObjects.GetCurObject();
-    if ( !pObj )
-        pObj = rObjects.First();
-
-    while ( pObj && 0 != nObjects-- )
-    {
-        // hat der Parent nur noch 1 Ref-Count?
-        SbxObject *pParent = PTR_CAST( SbxObject, pObj->GetParent() );
-        if ( pParent && 1 == pParent->GetRefCount() )
-        {
-            // dann alle Properies des Objects durchsuchen
-            SbxArray *pProps = pObj->GetProperties();
-            for ( sal_uInt16 n = 0; n < pProps->Count(); ++n )
-            {
-                // verweist die Property auf den Parent des Object?
-                SbxVariable *pProp = pProps->Get(n);
-                const SbxValues &rValues = pProp->GetValues_Impl();
-                if ( SbxOBJECT == rValues.eType &&
-                     pParent == rValues.pObj )
-                {
-#ifdef DBG_UTIL
-                    DbgOutf( "SBX: %s.%s with Object %s was garbage",
-                             pObj->GetName().GetStr(),
-                             pProp->GetName().GetStr(),
-                             pParent->GetName().GetStr() );
-#endif
-                    // dann freigeben
-                    pProp->SbxValue::Clear();
-                    Sound::Beep();
-                    break;
-                }
-            }
-        }
-
-        // zum n"achsten
-        pObj = rObjects.Next();
-        if ( !bAll && !pObj )
-            pObj = rObjects.First();
-    }
-#endif
-
-// AB 28.10. Zur 507a vorerst raus, da SfxBroadcaster::Enable() wegfaellt
-#if 0
-#ifdef DBG_UTIL
-    SbxVarList_Impl &rVars = GetSbxData_Impl()->aVars;
-    DbgOutf( "SBX: garbage collector done, %lu objects remainding",
-             rVars.Count() );
-    if ( rVars.Count() > 200 && rVars.Count() < 210 )
-    {
-        SvFileStream aStream( "d:\\tmp\\dump.sbx", STREAM_STD_WRITE );
-        SfxBroadcaster::Enable(sal_False);
-        for ( sal_uIntPtr n = 0; n < rVars.Count(); ++n )
-        {
-            SbxVariable *pVar = rVars.GetObject(n);
-            SbxObject *pObj = PTR_CAST(SbxObject, pVar);
-            sal_uInt16 nFlags = pVar->GetFlags();
-            pVar->SetFlag(SBX_NO_BROADCAST);
-            if ( pObj )
-                pObj->Dump(aStream);
-            else if ( !pVar->GetParent() || !pVar->GetParent()->ISA(SbxObject) )
-                pVar->Dump(aStream);
-            pVar->SetFlags(nFlags);
-        }
-        SfxBroadcaster::Enable(sal_True);
-    }
-#endif
-#endif
-    bInGarbageCollection = sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

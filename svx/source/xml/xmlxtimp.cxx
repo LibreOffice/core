@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HDL_
 #include <com/sun/star/io/XSeekable.hdl>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -76,12 +75,12 @@ using namespace ::rtl;
 using namespace ::xmloff::token;
 using namespace cppu;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "__office";
-sal_Char __READONLY_DATA sXML_np__office_ooo[] = "___office";
-sal_Char __READONLY_DATA sXML_np__draw[] = "__draw";
-sal_Char __READONLY_DATA sXML_np__draw_ooo[] = "___draw";
-sal_Char __READONLY_DATA sXML_np__ooo[] = "__ooo";
-sal_Char __READONLY_DATA sXML_np__xlink[] = "__xlink";
+sal_Char const sXML_np__office[] = "__office";
+sal_Char const sXML_np__office_ooo[] = "___office";
+sal_Char const sXML_np__draw[] = "__draw";
+sal_Char const sXML_np__draw_ooo[] = "___draw";
+sal_Char const sXML_np__ooo[] = "__ooo";
+sal_Char const sXML_np__xlink[] = "__xlink";
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -264,7 +263,7 @@ void SvxXMLTableImportContext::importMarker( sal_uInt16 nPrfx, const OUString& r
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importMarker(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importMarker(), exception caught!");
     }
 }
 
@@ -280,7 +279,7 @@ void SvxXMLTableImportContext::importDash( sal_uInt16 nPrfx, const OUString& rLo
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importDash(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importDash(), exception caught!");
     }
 }
 
@@ -296,7 +295,7 @@ void SvxXMLTableImportContext::importHatch( sal_uInt16 nPrfx, const OUString& rL
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importHatch(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importHatch(), exception caught!");
     }
 }
 
@@ -312,7 +311,7 @@ void SvxXMLTableImportContext::importGradient( sal_uInt16 nPrfx, const OUString&
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importGradient(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importGradient(), exception caught!");
     }
 }
 
@@ -328,7 +327,7 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
     }
     catch( Exception& )
     {
-        DBG_ERROR("SvxXMLTableImportContext::importBitmap(), exception caught!");
+        OSL_FAIL("SvxXMLTableImportContext::importBitmap(), exception caught!");
     }
 }
 
@@ -378,7 +377,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "SvxXMLXTableImport::load: got no service manager" );
+                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
                 break;
             }
 
@@ -397,7 +396,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
                 xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
                 if( !xIStm.is() )
                 {
-                    DBG_ERROR( "could not open Content stream" );
+                    OSL_FAIL( "could not open Content stream" );
                     break;
                 }
 
@@ -436,7 +435,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
 //          each time you load a document with property tables that are not
 //          on the current machine. Maybe a better fix would be to place
 //          a file exists check before importing...
-//      DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
+//      OSL_FAIL("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 
@@ -486,3 +485,4 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
     return new SvXMLImportContext( *this, nPrefix, rLocalName );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

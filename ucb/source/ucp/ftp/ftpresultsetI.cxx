@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,8 +72,8 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
             const rtl::OUString& Name = seqProp[i].Name;
             if(Name.compareToAscii("ContentType") == 0 )
                 xRow->appendString(seqProp[i],
-                                   rtl::OUString::createFromAscii(
-                                       "application/ftp" ));
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "application/ftp" )));
             else if(Name.compareToAscii("Title") == 0)
                 xRow->appendString(seqProp[i],dirvec[n].m_aName);
             else if(Name.compareToAscii("IsReadOnly") == 0)
@@ -103,3 +104,5 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
         m_aItems[n] = Reference<XRow>(xRow.get());
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

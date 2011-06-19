@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>
 #include <map>
-#include <tools/shl.hxx> //add CHINA001
-#include <tools/debug.hxx> //add CHINA001
+#include <tools/shl.hxx>
+#include <tools/debug.hxx>
 #include "svx/svxdllapi.h"
 
 // define ----------------------------------------------------------------
@@ -138,3 +139,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

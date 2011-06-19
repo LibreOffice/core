@@ -29,30 +29,12 @@ PRJ=..$/..
 
 PRJNAME=desktop
 TARGET=pagein
-TARGETTYPE=CUI
-LIBTARGET=NO
-
-NO_DEFAULT_STL=TRUE
-LIBSALCPPRT=$(0)
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 .INCLUDE .IGNORE : icuversion.mk
-
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/pagein.obj \
-    $(OBJ)$/file_image_unx.obj
-
-APP1TARGET=$(TARGET)
-APP1OBJS=$(OBJFILES)
-APP1CODETYPE=C
-
-# depends on libc only.
-STDLIB=
 
 # --- Targets ------------------------------------------------------
 
@@ -72,28 +54,33 @@ UNODLLPOST=.uno$(DLLPOST)
 DFTDLLPOST=$(DLLPOSTFIX)$(DLLPOST) # Default 
 
 URELIBPATH=..$/ure-link$/lib
+UREMISCPATH=..$/ure-link$/share$/misc
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sc$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)scui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)sdui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)sdui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sw$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)swui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
@@ -105,7 +92,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)icui18n$(ICUDLLPOST) >> $@
     @-echo $(DLLPRE)icule$(ICUDLLPOST)   >> $@
     @-echo $(DLLPRE)icuuc$(ICUDLLPOST)   >> $@
-    @-echo $(DLLPRE)icudata$(ICUDLLPOST) >> $@
+#   @-echo $(DLLPRE)icudata$(ICUDLLPOST) >> $@ - a huge dll, almost none of it used
 .ENDIF # SYSTEM_ICU
 #
     @-echo $(DLLPRE)lng$(DFTDLLPOST)   >> $@
@@ -119,9 +106,8 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)package2$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucb1$(DLLPOST)     >> $@
-    @-echo $(DLLPRE)configmgr$(DLLPOST) >> $@
+    @-echo configmgr$(UNODLLPOST)      >> $@
 #
-    @-echo $(DLLPRE)dtrans$(DLLPOST)   >> $@
     @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST) >> $@
 .IF "$(ENABLE_GTK)" != ""
     @-echo $(DLLPRE)vclplug_gtk$(DFTDLLPOST) >> $@
@@ -141,14 +127,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(URELIBPATH)$/bootstrap$(UNODLLPOST)            >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)reg$(UDKDLLPOST)         >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)store$(UDKDLLPOST)       >> $@
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
-    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
-.ENDIF # gcc
-.IF "$(COMNAME)" == "sunpro5"
-    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
-.ENDIF # sunpro5
-.ENDIF # SYSTEM_STL
+    @-echo $(URELIBPATH)$/reflection$(UNODLLPOST)           >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST) >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppu$(UDKDLLPOST)               >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)uno_sal$(UDKDLLPOST)                >> $@
@@ -160,6 +139,31 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)svl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)vcl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)tk$(DFTDLLPOST)    >> $@
-    @-echo $(DLLPRE)svt$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)sofficeapp$(DLLPOST) >> $@
+    @-echo $(UREMISCPATH)$/types.rdb   >> $@
+    @-echo services.rdb                >> $@
+    @-echo oovbaapi.rdb                          >> $@
+    @-echo deployment$(DLLPOSTFIX)$(UNODLLPOST)  >> $@
+    @-echo $(DLLPRE)deploymentmisc$(DFTDLLPOST)  >> $@
+    @-echo $(DLLPRE)ucb1$(DLLPOST)               >> $@
+    @-echo $(DLLPRE)xstor$(DLLPOST)              >> $@
+    @-echo $(DLLPRE)package2$(DLLPOST)           >> $@
+    @-echo $(DLLPRE)filterconfig1$(DLLPOST)      >> $@
+    @-echo $(DLLPRE)uui$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)lng$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)svt$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)spl$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)basegfx$(DFTDLLPOST)         >> $@
+    @-echo $(DLLPRE)avmedia$(DFTDLLPOST)         >> $@
+    @-echo $(DLLPRE)helplinker$(DFTDLLPOST)      >> $@
+    @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST)     >> $@
+    @-echo $(DLLPRE)icule$(ICUDLLPOST)           >> $@
+    @-echo sax$(UNODLLPOST)                      >> $@
+    @-echo gconfbe1$(UNODLLPOST)                 >> $@
+    @-echo fsstorage$(UNODLLPOST)                >> $@
+    @-echo desktopbe1$(UNODLLPOST)               >> $@
+    @-echo localebe1$(UNODLLPOST)                >> $@
+    @-echo ucpexpand1$(UNODLLPOST)               >> $@
+# stoc bits
+    @-echo $(DLLPRE)sfx$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)sofficeapp$(DLLPOST)         >> $@
+

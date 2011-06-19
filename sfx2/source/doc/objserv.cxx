@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,7 @@
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -63,8 +65,9 @@
 #include <basic/sbx.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/asynclink.hxx>
 #include <unotools/saveopt.hxx>
+#include <svtools/asynclink.hxx>
+#include <svtools/miscopt.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <sfx2/app.hxx>
@@ -83,7 +86,6 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
-//#include "interno.hxx"
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "versdlg.hxx"
@@ -226,7 +228,7 @@ sal_Bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XClo
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Could not register close listener!\n" );
+            OSL_FAIL( "Could not register close listener!\n" );
         }
     }
 
@@ -452,7 +454,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
                 aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
 
-                // creating dialog is done via virtual method; application will add its own statistics page
+                // creating dialog is done via virtual method; application will
+                // add its own statistics page
                 SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
                 if ( RET_OK == pDlg->Execute() )
                 {
@@ -496,7 +499,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            //!! detaillierte Auswertung eines Fehlercodes
+            //!! detailed analysis of an error code
             SfxObjectShellRef xLock( this );
 
             // the model can not be closed till the end of this method
@@ -722,9 +725,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxViewFrame *pFrame = GetFrame();
             if ( pFrame && pFrame->GetFrame().GetParentFrame() )
             {
-                // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
-                // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
-                // das FrameSetDocument geclosed werden
+                // If SID_CLOSEDOC is excecuted through menu and so on, but
+                // the current document is in a frame, then the
+                // FrameSetDocument should actually be closed.
                 pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
                 rReq.Done();
                 return;
@@ -737,8 +740,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 if ( pFrame->GetFrame().GetParentFrame() )
                 {
-                    // Auf dieses Dokument existiert noch eine Sicht, die
-                    // in einem FrameSet liegt; diese darf nat"urlich nicht
+                    // In this document there still exists a view that is
+                    // in a FrameSet , which of course may not be closed
                     // geclosed werden
                     bInFrameSet = sal_True;
                 }
@@ -750,7 +753,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( bInFrameSet )
             {
-                // Alle Sichten, die nicht in einem FrameSet liegen, closen
+                // Close all views that are not in a FrameSet.
                 pFrame = SfxViewFrame::GetFirst( this );
                 while ( pFrame )
                 {
@@ -760,7 +763,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
             }
 
-            // Parameter auswerten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pSaveItem, SfxBoolItem, SID_CLOSEDOC_SAVE, sal_False);
             SFX_REQUEST_ARG(rReq, pNameItem, SfxStringItem, SID_CLOSEDOC_FILENAME, sal_False);
             if ( pSaveItem )
@@ -788,7 +791,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SetModified(sal_False);
             }
 
-            // Benutzer bricht ab?
+            // Cancelled by the user?
             if ( !PrepareClose( 2 ) )
             {
                 rReq.SetReturnValue( SfxBoolItem(0, sal_False) );
@@ -802,7 +805,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             rReq.SetReturnValue( SfxBoolItem(0, sal_True) );
             rReq.Done();
-            rReq.ReleaseArgs(); // da der Pool in Close zerst"ort wird
+            rReq.ReleaseArgs(); // because the pool is destroyed in Close
             DoClose();
             return;
         }
@@ -810,7 +813,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCTEMPLATE:
         {
-            // speichern als Dokumentvorlagen
+            // save as document templates
             SfxDocumentTemplateDlg *pDlg = 0;
             SfxErrorContext aEc(ERRCTX_SFX_DOCTEMPLATE,GetTitle());
             SfxDocumentTemplates *pTemplates =  new SfxDocumentTemplates;
@@ -874,7 +877,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
             if ( bOk )
             {
-                // update the Organizer runtime cache from the template component if the cache has already been created
+                // update the Organizer runtime cache from the template
+                // component if the cache has already been created
                 // TODO/LATER: get rid of this cache duplication
                 SfxDocumentTemplates aTemplates;
                 aTemplates.ReInitFromComponent();
@@ -889,7 +893,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
     }
 
-    // Picklisten-Eintrag verhindern
+    // Prevent entry in the Pick-lists
     if ( rReq.IsAPI() )
         GetMedium()->SetUpdatePickList( sal_False );
     else if ( rReq.GetArgs() )
@@ -899,7 +903,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             GetMedium()->SetUpdatePickList( pPicklistItem->GetValue() );
     }
 
-    // Ignore()-Zweige haben schon returnt
+    // Ignore()-branches have already returned
     rReq.Done();
 }
 
@@ -938,14 +942,16 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                     if ( !pFrame || !pDoc->HasName() ||
                         !IsOwnStorageFormat_Impl( *pDoc->GetMedium() ) )
-//REMOVE                            || pDoc->GetMedium()->GetStorage()->GetVersion() < SOFFICE_FILEFORMAT_50 )
                         rSet.DisableItem( nWhich );
                     break;
                 }
             case SID_SAVEDOC:
                 {
-                    sal_Bool bMediumRO = IsReadOnlyMedium();
-                    if ( !bMediumRO && GetMedium() && IsModified() )
+                    SvtMiscOptions aMiscOptions;
+                    bool bAlwaysAllowSave = aMiscOptions.IsSaveAlwaysAllowed();
+                    bool bAllowSave = (bAlwaysAllowSave || IsModified());
+                    bool bMediumRO = IsReadOnlyMedium();
+                    if ( !bMediumRO && GetMedium() && bAllowSave )
                         rSet.Put(SfxStringItem(
                             nWhich, String(SfxResId(STR_SAVEDOC))));
                     else
@@ -964,9 +970,10 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 SfxViewFrame *pFrame = GetFrame();
                 if ( pFrame && pFrame->GetFrame().GetParentFrame() )
                 {
-                    // Wenn SID_CLOSEDOC "uber Menue etc. ausgef"uhrt wird, das
-                    // aktuelle Dokument aber in einem Frame liegt, soll eigentlich
-                    // das FrameSetDocument geclosed werden
+
+                    // If SID_CLOSEDOC is excecuted through menu and so on, but
+                    // the current document is in a frame, then the
+                    // FrameSetDocument should actually be closed.
                     pDoc = pFrame->GetTopViewFrame()->GetObjectShell();
                 }
 
@@ -984,18 +991,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                     break;
                 }
-/*
-                const SfxFilter* pCombinedFilters = NULL;
-                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
-
-                if ( pFilterContainer )
-                {
-                    SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
-                    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED | SFX_FILTER_INTERNAL;
-
-                    pCombinedFilters = pFilterContainer->GetAnyFilter( nMust, nDont );
-                }
-*/
                 if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
                 else
@@ -1006,31 +1001,12 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             {
-                /*
-
-                 search for filter cant work correctly ...
-                 Because it's not clear, which export filter for which office module
-                 must be searched. On the other side it can be very expensive doing so.
-                 The best solution would be: on installation time we should know if pdf feature
-                 was installed or not!!! (e.g. by writing a bool inside cfg)
-
-                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
-                if ( pFilterContainer )
-                {
-                    String aPDFExtension = String::CreateFromAscii( "pdf" );
-                    const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
-                    if ( pFilter != NULL )
-                        break;
-                }
-
-                rSet.DisableItem( nWhich );
-                */
                 break;
             }
 
             case SID_DOC_MODIFIED:
             {
-                rSet.Put( SfxStringItem( SID_DOC_MODIFIED, IsModified() ? '*' : ' ' ) );
+                rSet.Put( SfxBoolItem( SID_DOC_MODIFIED, IsModified() ) );
                 break;
             }
 
@@ -1145,7 +1121,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
 
             case SID_DOCPATH:
             {
-                DBG_ERROR( "Not supported anymore!" );
+                OSL_FAIL( "Not supported anymore!" );
                 break;
             }
 
@@ -1404,8 +1380,9 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
             }
             else
             {
-                //When the document is modified then we must not show the digital signatures dialog
-                //If we have come here then the user denied to save.
+                // When the document is modified then we must not show the
+                // digital signatures dialog
+                // If we have come here then the user denied to save.
                 if (!bHasSign)
                     bNoSig = true;
             }
@@ -1490,19 +1467,14 @@ void SfxObjectShell::SignScriptingContent()
     ImplSign( sal_True );
 }
 
-// static
+namespace
+{
+    class theSfxObjectShellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSfxObjectShellUnoTunnelId > {};
+}
+
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSfxObjectShellUnoTunnelId::get().getSeq();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

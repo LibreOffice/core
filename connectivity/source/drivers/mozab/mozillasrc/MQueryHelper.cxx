@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -208,7 +209,7 @@ MQueryHelper::next( )
     index = m_nIndex;
     m_aMutex.release();
 
-    result = getByIndex( m_nIndex + 1) ; // Add 1 as Row is numbered from 1 to N
+    result = getByIndex( index + 1) ; // Add 1 as Row is numbered from 1 to N
 
     if ( result ) {
         m_aMutex.acquire();
@@ -633,3 +634,4 @@ sal_Int32 MQueryHelper::createNewCard()
     return static_cast<sal_Int32>(m_aResults.size());
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,16 @@
 #include <svl/poolitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/editengdllapi.h>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 namespace rtl { class OUString; }
 
 // class SvxBoxItem ------------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt ein Umrandungsattribut (alle vier Kanten und
-Abstand nach innen.
+/*  [Description]
+
+    This item describes a border attribute
+    (all four edges and the inward distance)
 */
 
 #define BOX_LINE_TOP    ((sal_uInt16)0)
@@ -51,10 +52,10 @@ Abstand nach innen.
 
 class EDITENG_DLLPUBLIC SvxBoxItem : public SfxPoolItem
 {
-    SvxBorderLine  *pTop,
-                   *pBottom,
-                   *pLeft,
-                   *pRight;
+    editeng::SvxBorderLine  *pTop,
+                            *pBottom,
+                            *pLeft,
+                            *pRight;
     sal_uInt16          nTopDist,
                     nBottomDist,
                     nLeftDist,
@@ -68,10 +69,10 @@ public:
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -83,18 +84,18 @@ public:
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
 
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
-    const   SvxBorderLine* GetTop()    const { return pTop; }
-    const   SvxBorderLine* GetBottom() const { return pBottom; }
-    const   SvxBorderLine* GetLeft()   const { return pLeft; }
-    const   SvxBorderLine* GetRight()  const { return pRight; }
+    const   editeng::SvxBorderLine* GetTop()    const { return pTop; }
+    const   editeng::SvxBorderLine* GetBottom() const { return pBottom; }
+    const   editeng::SvxBorderLine* GetLeft()   const { return pLeft; }
+    const   editeng::SvxBorderLine* GetRight()  const { return pRight; }
 
-    const   SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
+    const   editeng::SvxBorderLine* GetLine( sal_uInt16 nLine ) const;
 
-        //Die Pointer werden kopiert!
-    void    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
+        //The Pointers are being copied!
+    void    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
 
     sal_uInt16  GetDistance( sal_uInt16 nLine ) const;
     sal_uInt16  GetDistance() const;
@@ -102,12 +103,12 @@ public:
     void    SetDistance( sal_uInt16 nNew, sal_uInt16 nLine );
     inline void SetDistance( sal_uInt16 nNew );
 
-        //Breite der Linien plus Zwischenraum plus Abstand nach innen.
-        //JP 09.06.99: bIgnoreLine = sal_True -> Distance auch returnen, wenn
-        //                          keine Line gesetzt ist
+        // Line width plus Space plus inward distance
+        //bIgnoreLine = TRUE -> Also return distance, when no Line is set
     sal_uInt16  CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine = sal_False ) const;
-    static com::sun::star::table::BorderLine SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
-    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, sal_Bool bConvert );
+    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
 };
 
 inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
@@ -117,13 +118,12 @@ inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
 
 // class SvxBoxInfoItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Noch ein Item fuer die Umrandung. Dieses Item hat lediglich SS-Funktionalitaet.
-Einerseits wird dem allgemeinen Dialog mit diesem Item mitgeteilt, welche
-Moeglichkeiten er anbieten soll.
-Andererseits werden ueber dieses Attribut ggf. die BorderLines fuer die
-horizontalen und vertikalen innerern Linien transportiert.
+/*  [Description]
+
+    Another item for the border. This item has only limited functionality.
+    On one hand, the general Dialog is told by the item which options it
+    should offer. On the other hand, this attribute  may be used to
+    transported the borderline for the inner horizontal and vertical lines.
 */
 
 #define BOXINFO_LINE_HORI   ((sal_uInt16)0)
@@ -140,36 +140,36 @@ horizontalen und vertikalen innerern Linien transportiert.
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
-    SvxBorderLine* pHori;   //innere horizontale Linie
-    SvxBorderLine* pVert;   //innere vertikale Linie
+    editeng::SvxBorderLine* pHori;   //inner horizontal Line
+    editeng::SvxBorderLine* pVert;   //inner vertical Line
 
-    bool                mbEnableHor;   /// true = Enable inner horizonal line.
+    bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.
 
     /*
-     z.Z. nur fuer StarWriter: Abstand nach innen von SvxBoxItem.
-     Wenn der Abstand gewuenscht ist, so muss das Feld fuer den Abstand vom
-     Dialog freigeschaltet werden. nDefDist ist als Defaultwert anzusehen.
-     Wenn irgendeine    Linie eingeschalt ist oder wird, so muss dieser
-     Abstand defaultet werden. bMinDist gibt an, ob der Wert durch den
-     Anwender unterschritten werden darf. Mit nDist wird der aktuelle
-     Abstand von der App zum Dialog und zurueck transportiert.
+     Currently only for StarWriter: distance inward from SvxBoxItem. If the
+     distance is requested, then the field for the distance from the dialog be
+     activated. nDefDist is regarded as a default value. If any line is
+     turned on or will be turned on it must this distance be set to default.
+     bMinDist indicates whether the user can go below this value or not.
+     With NDIST is the current distance from the app transported back and
+     forth to the dialogue.
     */
 
-    sal_Bool    bDist      :1;  // sal_True, Abstand freischalten.
-    sal_Bool    bMinDist   :1;  // sal_True, Abstand darf nicht unterschritten werden.
+    sal_Bool    bDist      :1;  // TRUE, Unlock Distance.
+    sal_Bool    bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
 
     sal_uInt8   nValidFlags;    // 0000 0000
-                            // ³³³³ ³³³ÀÄ VALID_TOP
-                            // ³³³³ ³³ÀÄÄ VALID_BOTTOM
-                            // ³³³³ ³ÀÄÄÄ VALID_LEFT
-                            // ³³³³ ÀÄÄÄÄ VALID_RIGHT
-                            // ³³³ÀÄÄÄÄÄÄ VALID_HORI
-                            // ³³ÀÄÄÄÄÄÄÄ VALID_VERT
-                            // ³ÀÄÄÄÄÄÄÄÄ VALID_DIST
-                            // ÀÄÄÄÄÄÄÄÄÄ VALID_DISABLE
+                            // Â³Â³Â³Â³ Â³Â³Â³Ã€Ã„ VALID_TOP
+                            // Â³Â³Â³Â³ Â³Â³Ã€Ã„Ã„ VALID_BOTTOM
+                            // Â³Â³Â³Â³ Â³Ã€Ã„Ã„Ã„ VALID_LEFT
+                            // Â³Â³Â³Â³ Ã€Ã„Ã„Ã„Ã„ VALID_RIGHT
+                            // Â³Â³Â³Ã€Ã„Ã„Ã„Ã„Ã„Ã„ VALID_HORI
+                            // Â³Â³Ã€Ã„Ã„Ã„Ã„Ã„Ã„Ã„ VALID_VERT
+                            // Â³Ã€Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„ VALID_DIST
+                            // Ã€Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„Ã„ VALID_DISABLE
 
-    sal_uInt16  nDefDist;       // Der Default- bzw. Minimalabstand.
+    sal_uInt16  nDefDist;       // The default or minimum distance.
 
 public:
     TYPEINFO();
@@ -179,26 +179,26 @@ public:
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
-    virtual int              ScaleMetrics( long nMult, long nDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long nMult, long nDiv );
+    virtual bool             HasMetrics() const;
 
-    const SvxBorderLine*    GetHori() const { return pHori; }
-    const SvxBorderLine*    GetVert() const { return pVert; }
+    const editeng::SvxBorderLine*   GetHori() const { return pHori; }
+    const editeng::SvxBorderLine*   GetVert() const { return pVert; }
 
-    //Die Pointer werden kopiert!
-    void                    SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine );
+        //The Pointers are being copied!
+    void                    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
 
     sal_Bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
     void    SetTable( sal_Bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
@@ -224,3 +224,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

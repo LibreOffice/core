@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_ENSURE( 0, ::rtl::OUStringToOString(
+    OSL_FAIL( ::rtl::OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }
@@ -176,11 +177,10 @@ bool readArgument(
     return false;
 }
 
-//##############################################################################
 
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
-    const OUString, ExecutableDir> {
+    OUString, ExecutableDir> {
     const OUString operator () () {
         OUString path;
         if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
@@ -191,10 +191,10 @@ struct ExecutableDir : public rtl::StaticWithInit<
     }
 };
 struct ProcessWorkingDir : public rtl::StaticWithInit<
-    const OUString, ProcessWorkingDir> {
+    OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        tools::getProcessWorkingDir(&workingDir);
+        tools::getProcessWorkingDir(workingDir);
         return workingDir;
     }
 };
@@ -255,7 +255,6 @@ OUString makeAbsoluteFileUrl(
         ? abs.copy( 0, abs.getLength() -1 ) : abs;
 }
 
-//##############################################################################
 
 namespace {
 
@@ -356,7 +355,7 @@ void printf_packages(
     {
         typedef ::std::vector< Reference<deployment::XPackage> >::const_iterator I_EXT;
         int index = 0;
-        for (I_EXT i = allExtensions.begin(); i != allExtensions.end(); i++, index++)
+        for (I_EXT i = allExtensions.begin(); i != allExtensions.end(); ++i, ++index)
         {
             if (vecUnaccepted[index])
                 printf_unaccepted_licenses(*i);
@@ -368,7 +367,6 @@ void printf_packages(
 }
 
 
-//##############################################################################
 
 namespace {
 
@@ -546,7 +544,7 @@ bool hasNoFolder(OUString const & folderUrl)
         osl::File::RC rcNext = osl::File::E_None;
         while ( (rcNext = dir.getNextItem(i)) == osl::File::E_None)
         {
-            osl::FileStatus stat(FileStatusMask_Type);
+            osl::FileStatus stat(osl_FileStatus_Mask_Type);
             if (i.getFileStatus(stat) == osl::File::E_None)
             {
                 if (stat.getFileType() == osl::FileStatus::Directory)
@@ -598,7 +596,7 @@ void removeFolder(OUString const & folderUrl)
         ::osl::File::RC rcNext = ::osl::File::E_None;
         while ( (rcNext = dir.getNextItem(i)) == ::osl::File::E_None)
         {
-            ::osl::FileStatus stat(FileStatusMask_Type | FileStatusMask_FileURL);
+            ::osl::FileStatus stat(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
             if (i.getFileStatus(stat) == ::osl::File::E_None)
             {
                 ::osl::FileStatus::Type t = stat.getFileType();
@@ -636,3 +634,5 @@ void removeFolder(OUString const & folderUrl)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

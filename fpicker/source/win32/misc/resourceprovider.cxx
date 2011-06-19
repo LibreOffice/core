@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,10 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef _TOOLS_SIMPLERESMGR_HXX
 #include <tools/simplerm.hxx>
-#endif
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
@@ -86,7 +85,7 @@ _Entry CtrlIdToResIdTable[] = {
     { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION }
 };
 
-const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
+const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
 //------------------------------------------------------------
 //
@@ -122,7 +121,7 @@ public:
 
     CResourceProvider_Impl( )
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
         m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( fps_office ), aLoc );
@@ -192,3 +191,5 @@ OUString CResourceProvider::getResString( sal_Int16 aId )
 {
    return m_pImpl->getResString( aId );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

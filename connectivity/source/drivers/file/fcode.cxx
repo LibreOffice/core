@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,13 +43,8 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
-//using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::sdbcx;
 
 TYPEINIT0(OCode);
 TYPEINIT1(OOperand, OCode);
@@ -101,23 +97,23 @@ OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
 void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::OOperandRow" );
-    OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
+    OSL_ENSURE(_pRow.is(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (m_pRow->get())[m_nRowPos]->setBound(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::setValue" );
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (*(m_pRow->get())[m_nRowPos]) = _rVal;
 }
 //------------------------------------------------------------------
 const ORowSetValue& OOperandRow::getValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::getValue" );
-    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     return (m_pRow->get())[m_nRowPos]->getValue();
 }
 
@@ -134,7 +130,7 @@ sal_Bool OOperandAttr::isIndexed() const
 }
 //------------------------------------------------------------------
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
-    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Typ
+    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
@@ -147,20 +143,18 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
-        OSL_ASSERT("Fehler im Parse Tree");
+        OSL_FAIL("Fehler im Parse Tree");
     }
 
-    // Parameter-Column aufsetzen mit defult typ, kann zu einem spaeteren Zeitpunkt ueber DescribeParameter
-    // genauer spezifiziert werden
+    // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
 
-    // Identitaet merken (hier eigentlich nicht erforderlich, aber aus
-    // Symmetriegruenden ...)
+    // save Identity (not escpecially necessary here, just for the sake of symmetry)
 
     // todo
     //  OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
     //  rParamColumns->AddColumn(pColumn);
 
-    // der Wert wird erst kurz vor der Auswertung gesetzt
+    // the value will be set just before the evaluation
 }
 
 
@@ -206,7 +200,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     }
     else
     {
-        OSL_ASSERT("Parse Error");
+        OSL_FAIL("Parse Error");
     }
     m_aValue.setBound(sal_True);
 }
@@ -347,7 +341,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
     sal_Bool bResult = sal_False;
     sal_Int32 eDBType = pLeft->getDBType();
 
-    // Vergleich (je nach Datentyp):
+    // Comparison (depending on Data-type):
     switch (eDBType)
     {
         case DataType::CHAR:
@@ -517,3 +511,4 @@ sal_uInt16 OUnaryOperator::getRequestedOperands() const {return 1;}
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

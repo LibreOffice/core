@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,9 @@ namespace rtl
 
 // class SvxFmtKeepItem ------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Absaetze zusammenhalten?".
+/*  [Description]
+
+    This item describes a logical variable "keep paragraphs together?".
 */
 
 class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
@@ -53,7 +54,7 @@ public:
                            const sal_uInt16 _nWhich  );
     inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 ) const;
     virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
@@ -76,3 +77,4 @@ inline SvxFmtKeepItem& SvxFmtKeepItem::operator=( const SvxFmtKeepItem& rKeep )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ public:
 
         virtual                     ~SdrMediaObj();
 
-        virtual FASTBOOL            HasTextEdit() const;
+        virtual bool                HasTextEdit() const;
 
         virtual void                TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
         virtual sal_uInt16              GetObjIdentifier() const;
@@ -61,7 +62,8 @@ public:
         virtual void                TakeObjNameSingul(String& rName) const;
         virtual void                TakeObjNamePlural(String& rName) const;
 
-        virtual void                operator=(const SdrObject& rObj);
+        virtual SdrMediaObj*            Clone() const;
+        SdrMediaObj&                operator=(const SdrMediaObj& rObj);
 
         virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 
@@ -91,3 +93,5 @@ private:
 };
 
 #endif //_SVDOMEDIA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

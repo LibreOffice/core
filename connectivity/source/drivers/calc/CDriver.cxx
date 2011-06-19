@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ using namespace ::com::sun::star::lang;
 
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.calc.ODriver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.calc.ODriver"));
 }
 
 ::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
@@ -88,7 +89,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url,
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
-    return url.compareTo(::rtl::OUString::createFromAscii("sdbc:calc:"),10) == 0;
+    return url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:calc:")),10) == 0;
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
@@ -103,3 +104,4 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::O
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             bDocRet = sal_False;
         }
 
@@ -89,7 +90,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
             if( !xWriter.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
                 bDocRet = sal_False;
             }
 
@@ -120,7 +121,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
                 uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pExportService ), aArgs ), uno::UNO_QUERY );
                 if( !xFilter.is() )
                 {
-                    DBG_ERROR( "com.sun.star.comp.Draw.XMLExporter service missing" );
+                    OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
                     bDocRet = sal_False;
                 }
 
@@ -138,7 +139,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             }
         }
     }
-    catch(uno::Exception e)
+    catch(uno::Exception const& e)
     {
         DBG_UNHANDLED_EXCEPTION();
         bDocRet = sal_False;
@@ -227,7 +228,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             aParserInput.aInputStream = xInputStream;
 
             // get parser
-            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") ), UNO_QUERY );
+            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ), UNO_QUERY );
             DBG_ASSERT( xParser.is(), "Can't create parser" );
 
             // prepare filter arguments
@@ -281,3 +282,5 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
     Reference< lang::XComponent > xComponent;
     return SvxDrawingLayerImport( pModel, xInputStream, xComponent );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 #ifndef SVX_UNOMODEL_HXX
 #define SVX_UNOMODEL_HXX
-
-#ifndef SVX_LIGHT
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -108,5 +107,4 @@ SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com
 
 #endif
 
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

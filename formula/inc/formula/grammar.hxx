@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,6 +128,16 @@ public:
         GRAM_NATIVE_XL_R1C1 = ::com::sun::star::sheet::FormulaLanguage::NATIVE  |
                                 ((CONV_XL_R1C1       +
                                   kConventionOffset) << kConventionShift),
+        /// English with Excel A1 reference style.
+        GRAM_ENGLISH_XL_A1   = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+                                ((CONV_XL_A1         +
+                                  kConventionOffset) << kConventionShift)            |
+                                kEnglishBit,
+        /// English with Excel R1C1 reference style.
+        GRAM_ENGLISH_XL_R1C1 = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+                                ((CONV_XL_R1C1       +
+                                  kConventionOffset) << kConventionShift)            |
+                                kEnglishBit,
         /// Central definition of the default grammar to be used.
         GRAM_DEFAULT        = GRAM_NATIVE_UI,
 
@@ -177,6 +188,8 @@ public:
             case GRAM_NATIVE_ODF     :
             case GRAM_NATIVE_XL_A1   :
             case GRAM_NATIVE_XL_R1C1 :
+            case GRAM_ENGLISH_XL_A1  :
+            case GRAM_ENGLISH_XL_R1C1:
                 return true;
             default:
                 return extractFormulaLanguage( eGrammar) == GRAM_EXTERNAL;
@@ -234,3 +247,5 @@ public:
 // =============================================================================
 
 #endif // FORMULA_GRAMMAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

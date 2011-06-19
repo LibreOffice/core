@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,10 @@
  *
  ************************************************************************/
 
-#include <tools/prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <control.h>
@@ -38,7 +37,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postwin.h>
 #include <com/sun/star/awt/SystemPointer.hdl>
 
 #include "window.hxx"
@@ -341,33 +339,6 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         {
             ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
 
-#ifdef DDRAW_TEST_OUTPUT
-            IDirectDraw7*           pDDraw;
-            IDirectDrawSurface7*    pDDSurface;
-            IDirectDrawClipper*     pDDClipper;
-
-            if( DD_OK == DirectDrawCreateEx( NULL, (void**) &pDDraw, IID_IDirectDraw7, NULL ) )
-            {
-                if( DD_OK == pDDraw->SetCooperativeLevel( (HWND) mnParentWnd, DDSCL_NORMAL ) )
-                {
-                    DDSURFACEDESC2 aDDDesc;
-
-                    memset( &aDDDesc, 0, sizeof( aDDDesc ) );
-                    aDDDesc.dwSize = sizeof( aDDDesc );
-                    aDDDesc.dwFlags = DDSD_CAPS;
-                    aDDDesc.ddsCaps.dwCaps |= DDSCAPS_PRIMARYSURFACE;
-
-                    if( DD_OK == pDDraw->CreateSurface( &aDDDesc, &pDDSurface, NULL ) )
-                    {
-                        if( DD_OK == pDDraw->CreateClipper( 0, &pDDClipper, NULL ) )
-                        {
-                            pDDClipper->SetHWnd( 0, (HWND) mnFrameWnd );
-                            pDDSurface->SetClipper( pDDClipper );
-                        }
-
-                        mrPlayer.setDDrawParams( (IDirectDraw*) pDDraw, (IDirectDrawSurface*) pDDSurface );
-#endif
-
                         pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
@@ -376,11 +347,6 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
                         meZoomLevel = media::ZoomLevel_ORIGINAL;
                         ImplLayoutVideoWindow();
-#ifdef DDRAW_TEST_OUTPUT
-                    }
-                }
-            }
-#endif
         }
     }
 
@@ -403,7 +369,6 @@ void Window::updatePointer()
     switch( mnPointerType )
     {
         case( awt::SystemPointer::CROSS ): pCursorName = IDC_CROSS; break;
-        //case( awt::SystemPointer::HAND ): pCursorName = IDC_HAND; break;
         case( awt::SystemPointer::MOVE ): pCursorName = IDC_SIZEALL; break;
         case( awt::SystemPointer::WAIT ): pCursorName = IDC_WAIT; break;
 
@@ -738,3 +703,5 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
 
 } // namespace win
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

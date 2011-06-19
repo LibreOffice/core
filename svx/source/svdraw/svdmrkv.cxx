@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,7 +194,7 @@ SdrMarkView::~SdrMarkView()
     delete mpSdrViewSelection;
 }
 
-void __EXPORT SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
     if (pSdrHint!=NULL)
@@ -2175,3 +2176,4 @@ void SdrMarkView::SetDesignMode( sal_Bool _bOn )
 // In diesem Fall bekomme ich kein Notify und beim Aufruf des
 // PaintHandlers->CompleteRedraw() sind auch die SolidHandles sichtbar.
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

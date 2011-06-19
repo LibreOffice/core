@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ public:
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als 'Beh"alter' f"ur Float
+|* Derivative from SfxChildWindow as 'container' for Float
 |*
 \************************************************************************/
 
@@ -128,7 +129,6 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     SvxBmpMaskSelectItem aSelItem;
 
     Image               maImgPipette;
-    Image               maImgPipetteH;
 
     virtual sal_Bool        Close();
 
@@ -199,3 +199,4 @@ private:
 
 #endif // _BMPMASK_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 #include <com/sun/star/ui/dialogs/ListBoxControlActions.hpp>
 #include "..\misc\WinImplHelper.hxx"
 
-#ifndef _FILEPICKER_HXX_
 #include "filepicker.hxx"
-#endif
 #include "controlaccess.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
@@ -135,7 +134,7 @@ void CWinFileOpenImpl::setDisplayDirectory(const rtl::OUString& aDirectory)
         if ( ::osl::FileBase::E_None !=
              ::osl::FileBase::getSystemPathFromFileURL(aDirectory,aSysDirectory))
             throw IllegalArgumentException(
-                rtl::OUString::createFromAscii("Invalid directory"),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid directory")),
                 static_cast<XFilePicker2*>(m_FilePicker), 1);
 
         // we ensure that there is a trailing '/' at the end of
@@ -206,7 +205,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
         rc = ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
     else
         throw uno::RuntimeException(
-            rtl::OUString::createFromAscii("Error executing dialog"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error executing dialog")),
             static_cast<XFilePicker2*>(m_FilePicker));
 
     return rc;
@@ -225,7 +224,7 @@ void SAL_CALL CWinFileOpenImpl::appendFilter(const rtl::OUString& aTitle, const 
 
     if (!bRet)
         throw IllegalArgumentException(
-            rtl::OUString::createFromAscii("filter already exists"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("filter already exists")),
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // #95345# see MSDN OPENFILENAME
@@ -250,7 +249,7 @@ void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const rtl::OUString& aTitle)
 
     if (filterPos < 0)
         throw IllegalArgumentException(
-            rtl::OUString::createFromAscii("filter doesn't exist"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("filter doesn't exist")),
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // filter index of the base class starts with 1
@@ -557,8 +556,8 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
 
     case WM_NCDESTROY:
         // restore the old window proc
-        SetWindowLong(hWnd, GWL_WNDPROC,
-            reinterpret_cast<LONG>(pImpl->m_pfnOldDlgProc));
+        SetWindowLongPtr(hWnd, GWLP_WNDPROC,
+            reinterpret_cast<LONG_PTR>(pImpl->m_pfnOldDlgProc));
 
         lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
@@ -909,8 +908,8 @@ void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg)
     // subclass the dialog window
     m_pfnOldDlgProc =
         reinterpret_cast<WNDPROC>(
-            SetWindowLong( hwndDlg, GWL_WNDPROC,
-            reinterpret_cast<LONG>(SubClassFunc)));
+            SetWindowLongPtr( hwndDlg, GWLP_WNDPROC,
+            reinterpret_cast<LONG_PTR>(SubClassFunc)));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -1017,3 +1016,5 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
 
     m_bInitialSelChanged = sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

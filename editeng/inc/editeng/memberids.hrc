@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: unomid.hxx,v $
- * $Revision: 1.3.212.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -41,6 +38,8 @@
 #define MID_OUTER_WIDTH         0x41
 #define MID_INNER_WIDTH         0x35
 #define MID_LINESPACE           0x3b
+#define MID_LINE_STYLE          0x90
+
 
 //NameOrIndex
 #define MID_NAME                16
@@ -191,6 +190,8 @@
 #define MID_CASEMAP_VARIANT     0
 #define MID_CASEMAP_TRANS       1
 
-
+// SvxHorJustifyItem
+#define MID_HORJUST_HORJUST     0
+#define MID_HORJUST_ADJUST      1
 
 #endif

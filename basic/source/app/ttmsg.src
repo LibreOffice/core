@@ -27,18 +27,17 @@
 #include "basic/ttmsg.hrc"
 
 
-// Hier sind die Messages aus dem Verzeichnis /basic/source/testtool enhalten
+// Here are included the messages of the folder /basic/source/testtool
 
 
-///////////////////////////////
-// Fehlermeldungen, die in das Resultfile gelangen.
+// Error messages which go to the result file.
 // *********************
-// ***  !!ACHTUNG!!  ***
+// ***  !!ATTENTION!!  ***
 // *********************
-// Die Nummern dürfen sich NIE! ändern,
-// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
-// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
-///////////////////////////////
+// The numbers must NEVER(!) change,
+// because they are saved in the result files and a renewed display
+// would display new strings or no strings.
+
 String S_NAME_NOT_THERE
 {
     Text[ en-US ] = "Name doesn't exist: #($Arg1)";
@@ -139,22 +138,4 @@ String S_UNKNOWN_METHOD
 {
     Text[ en-US ] = "Unknown method on object :($Arg1).($Arg2)";
 };
-/*
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-*/
 

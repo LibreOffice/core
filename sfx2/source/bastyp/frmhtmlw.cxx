@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _INETDEF_HXX
 #include <svl/inetdef.hxx>
-#endif
 #include "svtools/htmlkywd.hxx"
 
-//!(dv) #include <chaos2/cntapi.hxx>
 #include <rtl/tencinfo.h>
 
 #include <unotools/configmgr.hxx>
@@ -57,31 +55,22 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
+#include <rtl/bootstrap.hxx>
+
 
 // -----------------------------------------------------------------------
 
 using namespace ::com::sun::star;
 
-static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
-static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
-static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
-static sal_Char __READONLY_DATA sHTML_MIME_text_html[] =    "text/html; charset=";
-
-/* not used anymore?
-static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
-{
-    { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
-    { sHTML_O_SDonunload,   sHTML_O_onunload,   SFX_EVENT_PREPARECLOSEDOC   },
-    { sHTML_O_SDonfocus,    sHTML_O_onfocus,    SFX_EVENT_ACTIVATEDOC   },
-    { sHTML_O_SDonblur,     sHTML_O_onblur,     SFX_EVENT_DEACTIVATEDOC },
-    { 0,                    0,                  0                   }
-};
-*/
+static sal_Char const sHTML_SC_yes[] =  "YES";
+static sal_Char const sHTML_SC_no[] =       "NO";
+static sal_Char const sHTML_SC_auto[] = "AUTO";
+static sal_Char const sHTML_MIME_text_html[] =  "text/html; charset=";
 
 #if defined(UNX)
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
 #else
-const sal_Char __FAR_DATA SfxFrameHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
@@ -158,14 +147,16 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     // Who we are
     String sGenerator( SfxResId( STR_HTML_GENERATOR ) );
-    sGenerator.SearchAndReplaceAscii( "%1", String( DEFINE_CONST_UNICODE( TOOLS_INETDEF_OS ) ) );
+    ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+    ::rtl::Bootstrap::expandMacros(os);
+    sGenerator.SearchAndReplaceAscii( "%1", os );
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, sal_False, eDestEnc, pNonConvertableChars );
 
     if( i_xDocProps.is() )
     {
         // Reload
         if( (i_xDocProps->getAutoloadSecs() != 0) ||
-            !i_xDocProps->getAutoloadURL().equalsAscii("") )
+            i_xDocProps->getAutoloadURL().getLength() )
         {
             String sContent = String::CreateFromInt32(
                                 i_xDocProps->getAutoloadSecs() );
@@ -236,7 +227,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
         uno::Reference < script::XTypeConverter > xConverter(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                 uno::UNO_QUERY_THROW );
         uno::Reference<beans::XPropertySet> xUserDefinedProps(
             i_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
@@ -264,23 +255,6 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         }
     }
 }
-/*
-void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
-{
-    // <HTML>
-    // <HEAD>
-    // <TITLE>Titel</TITLE>
-    // </HEAD>
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html ) << sNewLine;
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head );
-
-    Out_DocInfo( Strm(), &pDoc->GetDocInfo(), "\t", eDestEnc );
-    Strm() << sNewLine;
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head, sal_False ) << sNewLine;
-
-//! OutScript();            // Hier fehlen noch die Scripten im Header
-}
-*/
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
     SvStream& rOut, const String& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
@@ -290,7 +264,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     {
         ByteString sOut;
         ::rtl::OUString aStr;
-        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
+        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
         if ( (aAny >>= aStr) && aStr.getLength() )
         {
             String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
@@ -305,7 +279,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
         if ( (aAny >>= aStr) && aStr.getLength() )
         {
             ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
@@ -315,18 +289,18 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         sal_Int32 nVal = SIZE_NOT_SET;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth") );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")) );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
             (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginwidth) += '=') += ByteString::CreateFromInt32( nVal );
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight") );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")) );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
             (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_marginheight) += '=') += ByteString::CreateFromInt32( nVal );
 
         sal_Bool bVal = sal_True;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")) );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")) );
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
@@ -334,30 +308,17 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        // frame border (MS+Netscape-Erweiterung)
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder") );
+        // frame border (MS+Netscape-Extension)
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")) );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")) );
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
                 (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_frameborder) += '=') += pStr;
             }
         }
-
-        // TODO/LATER: currently not supported attributes
-        // resize
-        //if( !pFrame->IsResizable() )
-        //    (sOut += ' ') += sHTML_O_noresize;
-        //
-        //if ( pFrame->GetWallpaper() )
-        //{
-        //    ((sOut += ' ') += sHTML_O_bordercolor) += '=';
-        //    rOut << sOut.GetBuffer();
-        //    HTMLOutFuncs::Out_Color( rOut, pFrame->GetWallpaper()->GetColor(), eDestEnc );
-        //}
-        //else
             rOut << sOut.GetBuffer();
     }
     catch ( uno::Exception& )
@@ -372,10 +333,10 @@ String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
     if( !aRet.Len() && pShell )
     {
         aRet = pShell->GetMedium()->GetName();
-//!(dv)     CntAnchor::ToPresentationURL( aRet );
     }
 
     return aRet;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

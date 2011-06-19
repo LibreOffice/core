@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,9 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <vcl/timer.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -61,7 +56,6 @@ class SfxUnoControllerItem;
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 
-//typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nId, ToolBox &rTbx, SfxBindings & );
 typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 
 struct SfxTbxCtrlFactory
@@ -110,9 +104,9 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 
 //------------------------------------------------------------------
 
-/*  FloatingWindows, die aus ToolBoxen abgerissen werden k"onnen, sollten
-    dieser Klasse abgeleitet werden. Da sie ebenfalls von SfxControllerItem
-    abgeleitet ist, erhalten ihre Instanzen auch die StateChanged Aufrufe.
+/* Floating windows that can be torn from tool boxes should be derived from
+   this class. Since it is also derived from SfxControllerItem, its instances
+   will also receive the StateChanged calls.
 */
 
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
@@ -133,10 +127,7 @@ private:
 
     SAL_DLLPRIVATE SfxPopupWindow(SfxPopupWindow &); // not defined
     SAL_DLLPRIVATE void operator =(SfxPopupWindow &); // not defined
-
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( Delete, void * );
-//#endif
 
 protected:
     virtual void            PopupModeEnd();
@@ -187,20 +178,18 @@ public:
 };
 
 //------------------------------------------------------------------
-//------------------------------------------------------------------
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
-/*  F"ur spezielle ToolBox-Controls, z.B. eine Font-Auswahl-Box oder
-    aus ToolBoxen abrei"sbare FloatingWindows mu"s passend zur Item-Subclass
-    eine Subclass von SfxTooBoxControl implementiert werden.
+/*  For special ToolBox controls, such as a font selection box or toolbox
+    tear-off floating windows, an appropriate Item-Subclass of SfxTooBoxControl
+    has to be implemented.
 
-    Diese Klasse mu"s in SfxApplication::Init() mit der statischen Methode
-    RegisterControl() registriert werden. Der SFx erzeugt dann automatisch
-    diese Controls in ToolBoxen, wenn die dazugeh"origen Slots von dem
-    angegebenen Typ sind.
+    This class has to be registered in SfxApplication:Init() with the static
+    control method RegisterControl(). The SFx then automatically creates these
+    controls in the toolbox, if the associated slots are of the specific type.
  */
 
 struct SfxToolBoxControl_Impl;
@@ -307,14 +296,14 @@ public:
 };
 
 #define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
@@ -322,7 +311,6 @@ public:
 
 //=========================================================================
 
-//#if 0 // _SOLAR__PRIVATE
 
 class SfxDragButton_Impl : public FixedImage
 {
@@ -335,10 +323,6 @@ public:
 };
 
 class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
-/*  [Beschreibung]
-
-*/
-
 {
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
@@ -352,10 +336,10 @@ public:
 
 class SfxAppToolBoxControl_Impl : public SfxToolBoxControl
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Hilfsklasse f"ur um das Popup-Menu <AppMenu_Impl> unter Neu
-    im SDT zu starten.
+    Internal helper class for the pop-up menu <AppMenu_Impl> under new
+    start in the SDT.
 */
 
 {
@@ -380,13 +364,12 @@ protected:
     virtual void            Select( sal_Bool );
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual SfxPopupWindow* CreatePopupWindow();
-                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+                            DECL_LINK( Activate, Menu * );
 private:
     String                  aLastURL;
     sal_Bool                    bBigImages;
     PopupMenu*              pMenu;
     sal_uIntPtr                   m_nSymbolsStyle;
-    sal_Bool                    m_bWasHiContrastMode;
     sal_Bool                    m_bShowMenuImages;
 };
 
@@ -430,7 +413,6 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 {
     sal_Bool        bBigImages;
     PopupMenu*  pMenu;
-    sal_Bool        m_bWasHiContrastMode;
     sal_Bool        m_bShowMenuImages;
 
 protected:
@@ -438,7 +420,7 @@ protected:
     using SfxToolBoxControl::Select;
     virtual void            Select( sal_Bool );
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+                            DECL_LINK( Activate, Menu * );
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
@@ -447,6 +429,6 @@ public:
                             void RefreshMenuImages( Menu* pMenu );
 };
 
-//#endif
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

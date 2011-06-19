@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,11 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/process.hxx>
 #include <tools/debug.hxx>
 #include "NDebug.hxx"
 #include <comphelper/sequence.hxx>
 
 using namespace connectivity::evoab;
-using namespace vos;
 using namespace dbtools;
 
 //------------------------------------------------------------------------------
@@ -58,7 +57,7 @@ using namespace ::com::sun::star::lang;
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
      if( aExceptionType.getLength() == 0 )
-         aExceptionType =  ::rtl::OUString::createFromAscii("Unknown" ) ;
+         aExceptionType =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown")) ;
 
      ::rtl::OUString aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: " ) );
      aTypeLine += aExceptionType;
@@ -126,9 +125,9 @@ void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< Pro
                 }
         }
 
-    if (url.equalsAscii("sdbc:address:evolution:groupwise"))
+    if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:groupwise")))
         setSDBCAddressType(SDBCAddress::EVO_GWISE);
-    else if (url.equalsAscii("sdbc:address:evolution:ldap"))
+    else if (url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdbc:address:evolution:ldap")))
         setSDBCAddressType(SDBCAddress::EVO_LDAP);
     else
         setSDBCAddressType(SDBCAddress::EVO_LOCAL);
@@ -290,3 +289,5 @@ void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::c
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,7 +120,7 @@ namespace xmlsearch {
             {
                 if( arrayL_ <= index_ )
                     throw  xmlsearch::excep::XmlSearchException(
-                        rtl::OUString::createFromAscii( "ByteArrayDecompressor->getNextByte()" ) );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ByteArrayDecompressor->getNextByte()" )) );
                 return array_[index_++] & 0xFF;
             }
 
@@ -149,3 +150,5 @@ namespace xmlsearch {
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

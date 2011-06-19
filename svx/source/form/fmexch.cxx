@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
 
-#ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
-#endif
 #include <sot/formats.hxx>
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>
@@ -164,7 +163,7 @@ namespace svxform
             }
             else
             {
-                DBG_ERROR( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
+                OSL_FAIL( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
             }
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )
@@ -441,3 +440,4 @@ namespace svxform
 }
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

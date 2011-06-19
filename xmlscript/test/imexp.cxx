@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ Reference< XComponentContext > createInitialComponentContext(
     catch( Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 
     return xContext;
@@ -177,7 +178,7 @@ void MyApp::Main()
 {
     if (GetCommandLineParamCount() < 2)
     {
-        OSL_ENSURE( 0, "usage: imexp inst_dir inputfile [outputfile]\n" );
+        OSL_FAIL( "usage: imexp inst_dir inputfile [outputfile]\n" );
         return;
     }
 
@@ -225,12 +226,12 @@ void MyApp::Main()
             aStr += OString( " >>> " );
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
     catch (uno::Exception & rExc)
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 
     Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
@@ -240,3 +241,4 @@ void MyApp::Main()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,20 +48,14 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 
-#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UI_FILEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 #include <stdio.h>
 
-#ifndef _FPSERVICEINFO_HXX_
 #include "..\FOPServiceInfo.hxx"
-#endif
 
 #include <osl/file.hxx>
 
@@ -91,27 +86,6 @@ using namespace std                     ;
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-/*
-void CreateDeepDirectory( )
-{
-    // create a deep directory
-
-    OUString aPathURL( L"file:///d|/Deep" );
-    OUString normalizedPath;
-
-    OSL_ASSERT( ::osl::FileBase::E_None == \
-        ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
-
-    while( ::osl::FileBase::E_None == osl::Directory::create( normalizedPath ) )
-    {
-        aPathURL += L"/Deep";
-        OSL_ASSERT( ::osl::FileBase::E_None == \
-            ::osl::FileBase::getNormalizedPathFromFileURL( aPathURL, normalizedPath ) );
-    }
-
-}
-*/
-
 //--------------------------------------------------------------
 //  main
 //--------------------------------------------------------------
@@ -133,10 +107,10 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -153,7 +127,7 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     if ( xFolderPicker.is() == sal_False )
     {
-        OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
+        OSL_FAIL( "Error creating FolderPicker Service" );
         return(-1);
     }
 
@@ -184,10 +158,10 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory
@@ -201,3 +175,5 @@ int SAL_CALL main(int /*nArgc*/, char* /*Argv[]*/, char* /*Env[]*/  )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

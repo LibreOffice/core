@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 
 /*************************************************************************
 |*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Float
+|* Derivation from SfxChildWindow as "container" for Float
 |*
 \************************************************************************/
 
@@ -59,12 +60,6 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 
 class SvxSuperContourDlg;
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SvxContourDlgItem : public SfxControllerItem
 {
     SvxSuperContourDlg& rDlg;
@@ -78,25 +73,16 @@ public:
                         SvxContourDlgItem( sal_uInt16 nId, SvxSuperContourDlg& rDlg, SfxBindings& rBindings );
 };
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SVX_DLLPUBLIC SvxContourDlg : public SfxFloatingWindow
 {
     using Window::Update;
 
     SvxSuperContourDlg* pSuperClass;
 
-//#if 0 // _SOLAR__PRIVATE
 
 protected:
 
     void                SetSuperClass( SvxSuperContourDlg& rSuperClass ) { pSuperClass = &rSuperClass; }
-
-//#endif // __PRIVATE
 
 public:
 
@@ -140,3 +126,4 @@ public:
 #endif // _REDUCED_CONTDLG_HXX_
 #endif // _CONTDLG_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

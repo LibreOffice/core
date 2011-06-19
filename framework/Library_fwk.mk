@@ -32,9 +32,9 @@ $(eval $(call gb_Library_add_precompiled_header,fwk,$(SRCDIR)/framework/inc/pch/
 $(eval $(call gb_Library_set_componentfile,fwk,framework/util/fwk))
 
 $(eval $(call gb_Library_set_include,fwk,\
-    -I$(SRCDIR)/framework/inc/pch \
-    -I$(SRCDIR)/framework/source/inc \
-    -I$(SRCDIR)/framework/inc \
+    -I$(realpath $(SRCDIR)/framework/inc/pch) \
+    -I$(realpath $(SRCDIR)/framework/source/inc) \
+    -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
@@ -50,7 +50,6 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     i18nisolang1 \
     sal \
     sot \
-    stl \
     svl \
     svt \
     tk \
@@ -128,7 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/substitutepathvars \
     framework/source/services/tabwindowservice \
     framework/source/services/taskcreatorsrv \
-    framework/source/services/uriabbreviation \
     framework/source/services/urltransformer \
     framework/source/uiconfiguration/globalsettings \
     framework/source/uiconfiguration/graphicnameaccess \

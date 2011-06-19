@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -361,7 +362,7 @@ public:
     ::rtl::OUString GetODFVersion() const;
 
     /**
-     * Record an error condition that occured during import. The
+     * Record an error condition that occurred during import. The
      * behavior of SetError can be modified using the error flag
      * constants.
      */
@@ -408,13 +409,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     GetComponentContext() const;
 
-    // --> OD 2004-08-10 #i28749#
+    // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)
     sal_Bool IsShapePositionInHoriL2R() const;
-    // <--
 
-    // --> OD 2007-12-19 #152540#
     sal_Bool IsTextDocInOOoFileFormat() const;
-    // <--
 
     String GetBaseURL() const;
     String GetDocumentBase() const;
@@ -534,3 +532,5 @@ inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 
 
 #endif  //  _XMLOFF_XMLIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

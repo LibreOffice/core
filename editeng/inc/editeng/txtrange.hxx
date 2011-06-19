@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,49 +29,48 @@
 #ifndef _MyTXTRANGE_HXX
 #define _MyTXTRANGE_HXX
 
-#ifndef _TXTRANGE_HXX
-#define _SVSTDARR_sal_BoolS
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include "editeng/editengdllapi.h"
+#include "tools/solar.h"
+#include "tools/gen.hxx"
+
+#include <deque>
 
 class PolyPolygon;
-class Range;
 class Rectangle;
 
 namespace basegfx {
     class B2DPolyPolygon;
 }
 
-typedef SvLongs* SvLongsPtr;
+typedef std::deque<long>* LongDqPtr;
 
 /*************************************************************************
 |*
 |*    class TextRanger
 |*
-|*    Beschreibung
-|*    Ersterstellung       20.01.97
-|*    Letzte Aenderung AMA 20.01.97
-|*
 *************************************************************************/
 class EDITENG_DLLPUBLIC TextRanger
 {
-    Range *pRangeArr;
-    SvLongsPtr *pCache;
-    PolyPolygon *mpPolyPolygon; // Flaechenpolygon
-    PolyPolygon *mpLinePolyPolygon; // Linienpolygon
-    Rectangle *pBound;  // Umfassendes Rechteck
+    //! The RangeCache class is used to cache the result of a single range calculation.
+    struct RangeCache
+    {
+        Range range;        //!< Range for which we calculated results.
+        std::deque<long> results;  //!< Calculated results for the range.
+        RangeCache(const Range& rng) : range(rng) {};
+    };
+    std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
+    PolyPolygon *mpPolyPolygon; // Surface polygon
+    PolyPolygon *mpLinePolyPolygon; // Line polygon
+    Rectangle *pBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
-    sal_uInt16 nCacheIdx;   // Cache-Index
-    sal_uInt16 nRight;      // Abstand Kontur-Text
-    sal_uInt16 nLeft;       // Abstand Text-Kontur
-    sal_uInt16 nUpper;      // Abstand Kontur-Text
-    sal_uInt16 nLower;      // Abstand Text-Kontur
-    sal_uInt32 nPointCount; // Anzahl der Polygonpunkte
-    sal_Bool bSimple : 1;   // Nur Aussenkante
-    sal_Bool bInner  : 1;   // sal_True: Objekt beschriften (EditEngine);
-                        // sal_False: Objekt umfliessen (StarWriter);
+    sal_uInt16 nRight;      // Distance Contour-Text
+    sal_uInt16 nLeft;       // Distance Text-Contour
+    sal_uInt16 nUpper;      // Distance Contour-Text
+    sal_uInt16 nLower;      // Distance Text-Contour
+    sal_uInt32 nPointCount; // Number of polygon points
+    sal_Bool bSimple : 1;   // Just outside edge
+    sal_Bool bInner  : 1;   // TRUE: Objekt inline (EditEngine);
+                        // FALSE: Objekt flow (StarWriter);
     sal_Bool bVertical :1;  // for vertical writing mode
     sal_Bool bFlag3 :1;
     sal_Bool bFlag4 :1;
@@ -80,11 +80,12 @@ class EDITENG_DLLPUBLIC TextRanger
     TextRanger( const TextRanger& ); // not implemented
     const Rectangle& _GetBoundRect();
 public:
-    TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
+    TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                 sal_uInt16 nCacheSize, sal_uInt16 nLeft, sal_uInt16 nRight,
                 sal_Bool bSimple, sal_Bool bInner, sal_Bool bVert = sal_False );
     ~TextRanger();
-    SvLongsPtr GetTextRanges( const Range& rRange );
+    LongDqPtr GetTextRanges( const Range& rRange );
     sal_uInt16 GetRight() const { return nRight; }
     sal_uInt16 GetLeft() const { return nLeft; }
     sal_uInt16 GetUpper() const { return nUpper; }
@@ -116,3 +117,5 @@ public:
 
 
 #endif      // _TXTRANGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

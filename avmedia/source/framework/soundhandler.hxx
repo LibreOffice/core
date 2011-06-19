@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@
 #include <vcl/timer.hxx>
 #include <tools/link.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -74,7 +75,7 @@ namespace avmedia{
 struct ThreadHelpBase
 {
     public:
-        mutable ::vos::OMutex m_aLock;
+        mutable ::osl::Mutex m_aLock;
 };
 
 /*-************************************************************************************************************//**
@@ -117,7 +118,6 @@ class SoundHandler  :   // interfaces
         virtual void SAL_CALL release() throw();
         virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes () throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( css::uno::RuntimeException );
-
 
     /* interface XServiceInfo */
        virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
@@ -185,3 +185,5 @@ class SoundHandler  :   // interfaces
 }       //  namespace avmedia
 
 #endif  //  #ifndef __FRAMEWORK_HANDLER_SOUNDHANDLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

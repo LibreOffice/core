@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_UILEMENT_TOOLBARMANAGER_HXX_
 #include <uielement/toolbarmanager.hxx>
-#endif
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -98,3 +97,5 @@ class AddonsToolBarManager : public ToolBarManager
 }
 
 #endif // __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -57,7 +57,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-///////////////////////////////////////////////////////////////////////////
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 
 HyphenatorDispatcher::HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr ) :
     rMgr    (rLngSvcMgr)
@@ -338,7 +340,6 @@ Reference< XHyphenatedWord > SAL_CALL
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
             // instantiate services and try it
             {
-//                const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
@@ -347,9 +348,6 @@ Reference< XHyphenatedWord > SAL_CALL
                     // build service initialization argument
                     Sequence< Any > aArgs(2);
                     aArgs.getArray()[0] <<= GetPropSet();
-                    //! The dispatcher searches the dictionary-list
-                    //! thus the service needs not to now about it
-                    //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
                     try
@@ -477,7 +475,6 @@ Reference< XHyphenatedWord > SAL_CALL
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
             // instantiate services and try it
             {
-//                const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
@@ -486,9 +483,6 @@ Reference< XHyphenatedWord > SAL_CALL
                     // build service initialization argument
                     Sequence< Any > aArgs(2);
                     aArgs.getArray()[0] <<= GetPropSet();
-                    //! The dispatcher searches the dictionary-list
-                    //! thus the service needs not to now about it
-                    //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
                     try
@@ -611,7 +605,6 @@ Reference< XPossibleHyphens > SAL_CALL
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
             // instantiate services and try it
             {
-//                const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
@@ -620,9 +613,6 @@ Reference< XPossibleHyphens > SAL_CALL
                     // build service initialization argument
                     Sequence< Any > aArgs(2);
                     aArgs.getArray()[0] <<= GetPropSet();
-                    //! The dispatcher searches the dictionary-list
-                    //! thus the service needs not to now about it
-                    //aArgs.getArray()[1] <<= GetDicList();
 
                     // create specific service via it's implementation name
                     try
@@ -684,8 +674,6 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
     {
         // modify/add entry
         LangSvcEntries_Hyph *pEntry = aSvcMap[ nLanguage ].get();
-        // only one hypenator can be in use for a language...
-        //const OUString &rSvcImplName = rSvcImplNames.getConstArray()[0];
         if (pEntry)
         {
             pEntry->Clear();
@@ -732,5 +720,5 @@ LinguDispatcher::DspType HyphenatorDispatcher::GetDspType() const
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

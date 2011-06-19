@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 #include <types.hxx>
 #include <command.hxx>
 
-/******************** class SvMetaSlot **********************************/
-//class SbxObject;
 class SvMetaSlotMemberList;
 class SvMetaSlot : public SvMetaAttribute
 {
@@ -48,15 +47,15 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aGet;
     SvBOOL          aSet;
 
-    SvBOOL          aCachable;  // exclusiv
+    SvBOOL          aCachable;  // exclusive
     SvBOOL          aVolatile;
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
 
-    SvBOOL          aSynchron;  // exclusiv
+    SvBOOL          aSynchron;  // exclusive
     SvBOOL          aAsynchron;
 
-    SvBOOL          aRecordPerItem;// exclusiv
+    SvBOOL          aRecordPerItem;// exclusive
     SvBOOL          aRecordPerSet;
     SvBOOL          aRecordManual;
     SvBOOL          aNoRecord;
@@ -83,6 +82,7 @@ class SvMetaSlot : public SvMetaAttribute
     void            WriteSlot( const ByteString & rShellName,
                             sal_uInt16 nCount, const ByteString & rSlotId,
                             SvSlotElementList &rList,
+                            size_t nStart,
                             const ByteString & rPrefix,
                                SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
@@ -201,10 +201,6 @@ public:
     const ByteString &      GetDefault() const;
     const ByteString &      GetDisableFlags() const;
     sal_Bool                GetPseudoSlots() const;
-    /*
-    sal_Bool                GetGet() const;
-    sal_Bool                GetSet() const;
-    */
     sal_Bool                GetCachable() const;
     sal_Bool                GetVolatile() const;
     sal_Bool                GetToggle() const;
@@ -241,7 +237,6 @@ public:
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
-//    void                FillSbxObject( SvIdlDataBase & rBase, SbxObject *, sal_Bool bProp );
 #ifdef IDL_COMPILER
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }
@@ -261,6 +256,7 @@ public:
     sal_uInt16              WriteSlotMap( const ByteString & rShellName,
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
+                                    size_t nStart,
                                     const ByteString &,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
@@ -277,3 +273,5 @@ SV_DECL_IMPL_REF(SvMetaSlot)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaSlot,SvMetaSlot *)
 
 #endif // _SLOT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

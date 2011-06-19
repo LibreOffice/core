@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XNameContainer.hpp>
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HXX_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 namespace framework
@@ -72,3 +71,5 @@ namespace framework
 }
 
 #endif // __FRAMEWORK_UICONFIGURATION_GRAPHICNAMEACCESS_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -259,7 +260,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 break;
             default:
                 (*this) = getAny();
-                OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
         }
     }
 
@@ -894,7 +895,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             break;
         default:
             bRet = false;
-            OSL_ENSURE(0,"ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
+            OSL_FAIL("ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
             break;
     }
     return bRet;
@@ -987,7 +988,7 @@ Any ORowSetValue::makeAny() const
                 }
                 break;
             default:
-                OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
                 rValue = getAny();
                 break;
         }
@@ -1036,7 +1037,7 @@ Any ORowSetValue::makeAny() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 {
-                    ::rtl::OUStringBuffer sVal = ::rtl::OUString::createFromAscii("0x");
+                    ::rtl::OUStringBuffer sVal(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0x")));
                     Sequence<sal_Int8> aSeq(getSequence());
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
@@ -2200,7 +2201,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const
         setTypeKind(DataType::OTHER);
         break;
     default:
-        OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
+        OSL_FAIL( "ORowSetValue::fill: unsupported type!" );
         (*this) = _rValueSource.getObject();
         break;
     }
@@ -2318,7 +2319,7 @@ void ORowSetValue::fill(const Any& _rValue)
             if ( _rValue >>= aDummy )
                 (*this) = aDummy;
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported sequence type!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported sequence type!" );
             break;
         }
 
@@ -2340,7 +2341,7 @@ void ORowSetValue::fill(const Any& _rValue)
                 (*this) = aDateTime;
             }
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported structure!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported structure!" );
 
             break;
         }
@@ -2369,9 +2370,11 @@ void ORowSetValue::fill(const Any& _rValue)
             break;
 
         default:
-            OSL_ENSURE(0,"Unknown type");
+            OSL_FAIL("Unknown type");
             break;
     }
 }
 
 }   // namespace connectivity
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

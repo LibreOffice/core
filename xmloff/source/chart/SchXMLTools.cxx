@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,12 @@
 
 #include "SchXMLTools.hxx"
 
-/*
-#include <tools/debug.hxx>
-*/
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
 // header for class SvXMLUnitConverter
 #include <xmloff/xmluconv.hxx>
 // header for struct SvXMLEnumMapEntry
 #include <xmloff/xmlement.hxx>
-// header for define __FAR_DATA
 #include <tools/solar.h>
 
 // header for class SvXMLImportPropertyMapper
@@ -84,7 +81,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
+            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -163,7 +160,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
+static SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
     { XML_LINE,         XML_CHART_CLASS_LINE    },
     { XML_AREA,         XML_CHART_CLASS_AREA    },
@@ -196,35 +193,35 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
     //shape property -- chart model object property
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.LineDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.LineChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.LineDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.LineChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.AreaDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.AreaChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.AreaDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.AreaChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BarDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BarDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.PieDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.PieChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.PieDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.DonutDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DonutChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.DonutDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DonutChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.XYDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.ScatterChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.XYDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ScatterChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.NetDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.NetChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.NetDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.NetChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.FilledNetDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.FilledNetChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.FilledNetDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.FilledNetChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.StockDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.CandleStickChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.StockDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.CandleStickChartType" )) )
 
-        ( ::rtl::OUString::createFromAscii( "com.sun.star.chart.BubbleDiagram" )
-        , ::rtl::OUString::createFromAscii( "com.sun.star.chart2.BubbleChartType" ) )
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.BubbleDiagram" ))
+        , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.BubbleChartType" )) )
 
         ;
     return g_aChartTypeNameMap;
@@ -346,28 +343,28 @@ XMLTokenEnum getTokenByChartType(
         {
             OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
 
-            if( aServiceName.equalsAscii("Line"))
+            if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Line")))
                 eResult = XML_LINE;
-            else if( aServiceName.equalsAscii("Area"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Area")))
                 eResult = XML_AREA;
-            else if( aServiceName.equalsAscii("Bar") ||
-                     (!bUseOldNames && aServiceName.equalsAscii("Column")))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bar")) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Column"))))
                 eResult = XML_BAR;
-            else if( aServiceName.equalsAscii("Pie"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pie")))
                 eResult = XML_CIRCLE;
-            else if( aServiceName.equalsAscii("Donut"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Donut")))
                 eResult = XML_RING;
-            else if( (bUseOldNames && aServiceName.equalsAscii("XY")) ||
-                     (!bUseOldNames && aServiceName.equalsAscii("Scatter")))
+            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("XY"))) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Scatter"))))
                 eResult = XML_SCATTER;
-            else if( aServiceName.equalsAscii("Bubble"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bubble")))
                 eResult = XML_BUBBLE;
-            else if( aServiceName.equalsAscii("Net"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Net")))
                 eResult = XML_RADAR;
-            else if( aServiceName.equalsAscii("FilledNet"))
+            else if( aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilledNet")))
                 eResult = XML_FILLED_RADAR;
-            else if( (bUseOldNames && aServiceName.equalsAscii("Stock")) ||
-                     (!bUseOldNames && aServiceName.equalsAscii("CandleStick")))
+            else if( (bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stock"))) ||
+                     (!bUseOldNames && aServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CandleStick"))))
                 eResult = XML_STOCK;
         }
     }
@@ -385,7 +382,7 @@ Reference< chart2::data::XLabeledDataSequence > GetNewLabeledDataSequence()
     if( xContext.is() )
         xResult.set(
             xContext->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.chart2.data.LabeledDataSequence"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.data.LabeledDataSequence" )),
                 xContext ), uno::UNO_QUERY_THROW );
     return xResult;
 }
@@ -398,14 +395,14 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
 
     if( !xChartDoc.is() )
     {
-        DBG_ERROR( "need a chart document" );
+        OSL_FAIL( "need a chart document" );
         return xRet;
     }
 
     Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
     if( !xDataProvider.is() )
     {
-        DBG_ERROR( "need a data provider" );
+        OSL_FAIL( "need a data provider" );
         return xRet;
     }
 
@@ -416,7 +413,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
     }
     catch( const lang::IllegalArgumentException & )
     {
-        DBG_ERROR( "could not create data sequence" );
+        OSL_FAIL( "could not create data sequence" );
     }
 
     if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && rRange.getLength() )
@@ -431,7 +428,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch( const lang::IllegalArgumentException & )
         {
-            DBG_ERROR( "could not create data sequence" );
+            OSL_FAIL( "could not create data sequence" );
         }
     }
     return xRet;
@@ -496,7 +493,7 @@ void CreateCategories(
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
                                     (void)ex; // avoid warning for pro build
-                                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                                    OSL_FAIL( ::rtl::OUStringToOString(
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
                                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
@@ -518,7 +515,7 @@ void CreateCategories(
     }
     catch( uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught while creating Categories" );
+        OSL_FAIL( "Exception caught while creating Categories" );
     }
 }
 
@@ -673,7 +670,7 @@ void setXMLRangePropertyAtDataSequence(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
@@ -703,7 +700,7 @@ bool getXMLRangePropertyFromDataSequence(
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -738,7 +735,7 @@ void copyProperties(
     }
     catch( const uno::Exception & )
     {
-        OSL_ENSURE( false, "Copying property sets failed!" );
+        OSL_FAIL( "Copying property sets failed!" );
     }
 }
 
@@ -895,3 +892,5 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
 }
 
 } // namespace SchXMLTools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

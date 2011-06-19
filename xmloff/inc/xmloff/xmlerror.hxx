@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,8 +91,8 @@
 // SvXMLExport/SvXMLImport error flags
 #define ERROR_NO                0x0000
 #define ERROR_DO_NOTHING        0x0001
-#define ERROR_ERROR_OCCURED     0x0002
-#define ERROR_WARNING_OCCURED   0x0004
+#define ERROR_ERROR_OCCURRED     0x0002
+#define ERROR_WARNING_OCCURRED   0x0004
 
 
 
@@ -164,3 +165,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

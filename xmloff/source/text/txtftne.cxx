@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,7 @@
 #include <xmloff/xmlnume.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <xmloff/XMLEventExport.hxx>
-#ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -391,3 +390,5 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

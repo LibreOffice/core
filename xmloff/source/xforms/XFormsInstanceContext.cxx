@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,7 +143,7 @@ void XFormsInstanceContext::HandleAttribute(
         msId = rValue;
         break;
     default:
-        DBG_ERROR( "should not happen" );
+        OSL_FAIL( "should not happen" );
         break;
     }
 }
@@ -153,6 +154,8 @@ SvXMLImportContext* XFormsInstanceContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "to be handled by CreateChildContext" );
+    OSL_FAIL( "to be handled by CreateChildContext" );
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

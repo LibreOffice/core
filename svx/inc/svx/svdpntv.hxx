@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -399,6 +400,8 @@ public:
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
+    // used when the region passed to BeginDrawLayers needs to be changed
+    void UpdateDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
@@ -410,6 +413,8 @@ protected:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
     void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
+
+    Region OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect);
 
 public:
     sal_Bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
@@ -578,3 +583,4 @@ public:
 
 #endif //_SVDPNTV_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

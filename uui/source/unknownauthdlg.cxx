@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HRC
 #include <unknownauthdlg.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HXX
 #include <unknownauthdlg.hxx>
-#endif
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
@@ -61,7 +56,7 @@ IMPL_LINK( UnknownAuthDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
+                    getServiceFactory().get()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.security.DocumentDigitalSignatures" ))), uno::UNO_QUERY );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -92,7 +87,6 @@ UnknownAuthDialog::UnknownAuthDialog
     m_rXCert ( rXCert ),
     pResourceMgr ( pResMgr )
 {
-    //SetMapMode( MapMode( MAP_APPFONT ) );
     FreeResource();
 
     m_aWarnImage.SetImage( WarningBox::GetStandardImage() );
@@ -101,3 +95,4 @@ UnknownAuthDialog::UnknownAuthDialog
     m_aCommandButtonOK.SetClickHdl( LINK( this, UnknownAuthDialog, OKHdl_Impl ) );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

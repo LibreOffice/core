@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,12 +42,12 @@ using namespace ::com::sun::star;
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
@@ -83,41 +84,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     return pRet;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
-            uno::Reference< registry::XRegistryKey >  xNewKey;
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        OleEmbeddedObjectFactory::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-            uno::Sequence< ::rtl::OUString > rServices = OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-                xNewKey->createKey( rServices.getConstArray()[ind] );
-
-#ifdef WNT
-        // the following service makes sence only on windows
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        MSOLEDialogObjectCreator::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-            rServices = MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-                xNewKey->createKey( rServices.getConstArray()[ind] );
-#endif
-
-            return sal_True;
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
 } // extern "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

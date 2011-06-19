@@ -2,7 +2,7 @@
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -746,6 +746,17 @@
 		</group>
 	</templates>
 	<component>
+        <group oor:name="GlobalTemplateList">
+            <info>
+               <desc>Contains the most recently opened documents.</desc>
+            </info>
+            <prop oor:name="Paths" oor:type="oor:string-list">
+                <info>
+                    <desc>Lists the file global templates loaded when importing writer documents.</desc>
+                </info>
+                <value oor:separator=";"></value>
+            </prop>
+        </group>
         <group oor:name="MailMergeWizard">
             <info>
                 <desc>Settings of the mail merge wizard.</desc>
@@ -1290,8 +1301,8 @@
 					<!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
 					<info>
 						<author>OS</author>
-						<desc>Displays guides around the frames when frames are moved.</desc>
-						<label>Guides</label>
+						<desc>Displays helplines around the frames when frames are moved.</desc>
+						<label>Helplines</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1597,6 +1608,18 @@
 					</info>
 					<value>true</value>
 				</prop>
+                <!-- added for apply char unit 2006-12-1 -->
+                <prop oor:name="ApplyCharUnit" oor:type="xs:boolean">
+                    <!-- OldPath: Writer/Layout -->
+                    <!-- OldLocation: Soffice.cfg -->
+                    <!-- UIHints: Tools - Options - Text document - Layout - [Section] Apply char unit -->
+                    <info>
+                        <author>OS</author>
+                        <desc>apply char unit to calculate the paragraph's indent</desc>
+                        <label>apply char unit</label>
+                    </info>
+                    <value>true</value>
+                </prop>
 			</group>
 			<group oor:name="Zoom">
 				<info>
@@ -2400,7 +2423,7 @@
 						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label>Number recognition</label>
 					</info>
-                    <value>true</value>
+                    <value>false</value>
 				</prop>
 				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
@@ -2411,7 +2434,7 @@
 						<desc>Specifies if only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
 						<label>Number format recognition</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Alignment" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
@@ -6018,6 +6041,14 @@
 						</info>
 						<value>true</value>
 					</prop>
+                    <prop oor:name="Executable" oor:type="xs:boolean">
+                        <info>
+                            <author>pflin</author>
+                            <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
+                             <label>Executable code</label>
+                         </info>
+                        <value>true</value>
+                    </prop>
 					<prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Word -->
 						<!-- OldLocation: soffice.cfg -->

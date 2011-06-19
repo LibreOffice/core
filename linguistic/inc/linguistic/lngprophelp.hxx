@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 // PropertyChgHelper
 // Base class for all XPropertyChangeListener members of the
 // various lingu services.
@@ -58,7 +58,6 @@ namespace linguistic
 // Flags for type of events allowed to be launched
 #define AE_SPELLCHECKER 1
 #define AE_HYPHENATOR   2
-//#define   AE_THESAURUS    4
 
 typedef cppu::WeakImplHelper2
 <
@@ -159,7 +158,6 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
 class PropertyHelper_Thes :
     public PropertyChgHelper
 {
@@ -202,8 +200,6 @@ public:
     void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
 };
 
-
-///////////////////////////////////////////////////////////////////////////
 
 class PropertyHelper_Spell :
     public PropertyChgHelper
@@ -289,7 +285,6 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class PropertyHelper_Hyphen :
     public PropertyChgHelper
@@ -368,9 +363,8 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 };
 
-///////////////////////////////////////////////////////////////////////////
-
 }   // namespace linguistic
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

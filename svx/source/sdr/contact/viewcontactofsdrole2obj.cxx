@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,8 +69,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
-            bool bHighContrast) const
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
         {
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
@@ -101,9 +101,8 @@ namespace sdr
 
                     // #i104867# add GraphicVersion number to be able to check for
                     // content change in the primitive later
-                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
-
-                    bHighContrast));
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()
+                ));
 
             // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
             // be used soon anyways. Always create primitives to allow the decomposition of
@@ -120,11 +119,12 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
         {
-            // do as if no HC and call standard creator
-            return createPrimitive2DSequenceWithParameters(false);
+            return createPrimitive2DSequenceWithParameters();
         }
     } // end of namespace contact
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

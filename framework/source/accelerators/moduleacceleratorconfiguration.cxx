@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,9 @@
 // own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
+#include "helper/mischelper.hxx"
 
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <services.h>
 
 //_______________________________________________
@@ -48,26 +48,16 @@
 //_______________________________________________
 // other includes
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
 #include <vcl/svapp.hxx>
 
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.h>
-#endif
 
 //_______________________________________________
 // const
@@ -112,7 +102,6 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::R
 //-----------------------------------------------
 ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 {
-   // m_aPresetHandler.removeStorageListener(this);
 }
 
 //-----------------------------------------------
@@ -125,12 +114,12 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     WriteGuard aWriteLock(m_aLock);
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
-    m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
-    m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("Locale")          , ::rtl::OUString::createFromAscii("x-default"));
+    m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
+    m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))          , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x-default")));
 
     if (!m_sModule.getLength())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The module dependend accelerator configuration service was initialized with an empty module identifier!")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     aWriteLock.unlock();
@@ -163,7 +152,8 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
         XCUBasedAcceleratorConfiguration::reload();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        m_xCfgListener = new WeakChangesListener(this);
+        xBroadcaster->addChangesListener(m_xCfgListener);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -173,3 +163,4 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

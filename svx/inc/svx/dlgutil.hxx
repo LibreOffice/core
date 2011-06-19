@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,11 @@
 class SfxItemSet;
 
 SVX_DLLPUBLIC FieldUnit GetModuleFieldUnit( const SfxItemSet& );
+SVX_DLLPUBLIC bool GetApplyCharUnit( const SfxItemSet& );
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

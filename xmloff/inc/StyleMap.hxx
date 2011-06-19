@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 struct StyleNameKey_Impl
 {
@@ -72,7 +73,7 @@ inline bool StyleNameHash_Impl::operator()(
 
 class StyleMap :
     public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XUnoTunnel>,
-    public ::std::hash_map< StyleNameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< StyleNameKey_Impl, ::rtl::OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {
 
@@ -93,3 +94,4 @@ public:
 
 #endif  //  _XMLOFF_STYLEMAP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 // own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
+#include "helper/mischelper.hxx"
 
 #include <acceleratorconst.h>
 #include <services.h>
@@ -116,7 +118,8 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
         XCUBasedAcceleratorConfiguration::reload();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        m_xCfgListener = new WeakChangesListener(this);
+        xBroadcaster->addChangesListener(m_xCfgListener);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -125,3 +128,5 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

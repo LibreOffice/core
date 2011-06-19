@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #define VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
 #include <deque>
-#include <hash_map>
 #include <map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -134,7 +135,7 @@ protected:
         const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException) = 0;
 
     /** Derived classes may do additional postprocessing. Called even if the
-        event handler does not exist, or if an error occured during execution. */
+        event handler does not exist, or if an error occurred during execution. */
     virtual void implPostProcessEvent(
         EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo,
@@ -176,7 +177,7 @@ protected:
 
 private:
     typedef ::std::map< sal_Int32, EventHandlerInfo > EventHandlerInfoMap;
-    typedef ::std::hash_map< ::rtl::OUString, ModulePathMap, ::rtl::OUStringHash > EventHandlerPathMap;
+    typedef boost::unordered_map< ::rtl::OUString, ModulePathMap, ::rtl::OUStringHash > EventHandlerPathMap;
 
     EventHandlerInfoMap maEventInfos;
     EventHandlerPathMap maEventPaths;
@@ -188,3 +189,5 @@ private:
 // ============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

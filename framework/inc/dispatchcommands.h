@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,11 +43,10 @@ namespace framework{
 
 //_________________________________________________________________________________________________________________
 
-static ::rtl::OUString CMD_UNO_SHOWSTARTMODULE = ::rtl::OUString::createFromAscii(".uno:ShowStartModule");
-static ::rtl::OUString CMD_UNO_CLOSEDOC        = ::rtl::OUString::createFromAscii(".uno:CloseDoc"       );
-static ::rtl::OUString CMD_UNO_CLOSEWIN        = ::rtl::OUString::createFromAscii(".uno:CloseWin"       );
-static ::rtl::OUString CMD_UNO_CLOSEFRAME      = ::rtl::OUString::createFromAscii(".uno:CloseFrame"     );
+#define CMD_UNO_SHOWSTARTMODULE ".uno:ShowStartModule"
 
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_DISPATCHCOMMANDS_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

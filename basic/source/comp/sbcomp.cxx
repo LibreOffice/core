@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,23 +32,16 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 #include "image.hxx"
-#include "sbtrace.hxx"
 #include <basic/sbobjmod.hxx>
 #include <stdio.h>
 
-//==========================================================================
-// Tracing, for debugging only
-
 // To activate tracing enable in sbtrace.hxx
 #ifdef DBG_TRACE_BASIC
-
-#include <hash_map>
 
 // Trace ini file (set NULL to ignore)
 // can be overridden with the environment variable OOO_BASICTRACEINI
 static char     GpTraceIniFile[] = "~/BasicTrace.ini";
 //static char*  GpTraceIniFile = NULL;
-
 
 // Trace Settings, used if no ini file / not found in ini file
 static char     GpTraceFileNameDefault[] = "~/BasicTrace.txt";
@@ -909,75 +903,6 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
 #endif
 
-
-//==========================================================================
-// For debugging only
-//#define DBG_SAVE_DISASSEMBLY
-
-#ifdef DBG_SAVE_DISASSEMBLY
-static bool dbg_bDisassemble = true;
-#include <comphelper/processfactory.hxx>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <com/sun/star/io/XTextOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-
-using namespace comphelper;
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::io;
-
-void dbg_SaveDisassembly( SbModule* pModule )
-{
-    bool bDisassemble = dbg_bDisassemble;
-    if( bDisassemble )
-    {
-        Reference< XSimpleFileAccess3 > xSFI;
-        Reference< XTextOutputStream > xTextOut;
-        Reference< XOutputStream > xOut;
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( xSMgr.is() )
-        {
-            Reference< XSimpleFileAccess3 > xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
-            if( xSFI.is() )
-            {
-                String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/zBasic.Asm/Asm_") );
-                StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
-                if( pBasic )
-                {
-                    aFile += pBasic->GetName();
-                    aFile.AppendAscii( "_" );
-                }
-                aFile += pModule->GetName();
-                aFile.AppendAscii( ".txt" );
-
-                // String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm.txt") );
-                if( xSFI->exists( aFile ) )
-                    xSFI->kill( aFile );
-                xOut = xSFI->openFileWrite( aFile );
-                Reference< XInterface > x = xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ) );
-                Reference< XActiveDataSource > xADS( x, UNO_QUERY );
-                xADS->setOutputStream( xOut );
-                xTextOut = Reference< XTextOutputStream >( x, UNO_QUERY );
-            }
-        }
-
-        if( xTextOut.is() )
-        {
-            String aDisassemblyStr;
-            pModule->Disassemble( aDisassemblyStr );
-            xTextOut->writeString( aDisassemblyStr );
-        }
-        xOut->closeOutput();
-    }
-}
-#endif
-
-
 // Diese Routine ist hier definiert, damit der Compiler als eigenes Segment
 // geladen werden kann.
 
@@ -1031,14 +956,6 @@ sal_Bool SbModule::Compile()
         }
     }
 
-#ifdef DBG_SAVE_DISASSEMBLY
-    dbg_SaveDisassembly( this );
-#endif
-
-#ifdef DBG_TRACE_BASIC
-    lcl_PrepareTraceForModule( this );
-#endif
-
     return bRet;
 }
 
@@ -1054,3 +971,4 @@ void StarBASIC::Highlight( const String& rSrc, SbTextPortions& rList )
     aTok.Hilite( rList );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

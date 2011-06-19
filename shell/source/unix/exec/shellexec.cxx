@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _RTL_URI_H_
 #include <rtl/uri.hxx>
-#endif
 #include "shellexec.hxx"
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
@@ -82,7 +81,7 @@ namespace // private
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SystemShellExecute"));
         return aRet;
     }
 }
@@ -94,17 +93,13 @@ void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
     {
         // escape every non alpha numeric characters (excluding a few "known good") by prepending a '\'
         sal_Char c = rURL[n];
-#ifndef OS2 // YD shell does not support escaped chars
         if( ( c < 'A' || c > 'Z' ) && ( c < 'a' || c > 'z' ) && ( c < '0' || c > '9' )  && c != '/' && c != '.' )
             rBuffer.append( '\\' );
-#endif
 
         rBuffer.append( c );
     }
 }
 
-//-----------------------------------------------------------------------------------------
-//
 //-----------------------------------------------------------------------------------------
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
@@ -129,8 +124,6 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
     }
 }
 
-//-------------------------------------------------
-//
 //-------------------------------------------------
 
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
@@ -205,19 +198,6 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
-#ifdef OS2
-        OStringBuffer aProg = OUStringToOString(aProgram, osl_getThreadTextEncoding());
-        aProg.append("open-url.exe");
-        OString aUrl = OUStringToOString(aURL, osl_getThreadTextEncoding());
-        if ( -1 == spawnl(P_NOWAIT, aProg.getStr(), aProg.getStr(), aUrl.getStr() , NULL) )
-        {
-            int nerr = errno;
-            throw SystemShellExecuteException(OUString::createFromAscii( strerror( nerr ) ),
-                static_cast < XSystemShellExecute * > (this), nerr );
-        }
-        return;
-#endif
-
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
         escapeForShell(aBuffer, aTmp);
 
@@ -283,7 +263,13 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         pDesktopLaunch = NULL;
     }
 
-    OString cmd = aBuffer.makeStringAndClear();
+    OString cmd =
+#ifdef LINUX
+        // avoid blocking (call it in background)
+        OStringBuffer().append( "( " ).append( aBuffer ).append( " ) &" ).makeStringAndClear();
+#else
+        aBuffer.makeStringAndClear();
+#endif
     if ( 0 != pclose(popen(cmd.getStr(), "w")) )
     {
         int nerr = errno;
@@ -300,7 +286,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 OUString SAL_CALL ShellExec::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( SHELLEXEC_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -329,3 +315,4 @@ Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
     return ShellExec_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

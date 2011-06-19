@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ namespace drawinglayer
             Primitive2DSequence xRetval;
             const GDIMetaFile& rSubstituteContent = getMetaFile();
 
-            if(rSubstituteContent.GetActionCount())
+            if( rSubstituteContent.GetActionSize() )
             {
                 // the default decomposition will use the Metafile replacement visualisation.
                 // To really use the Eps data, a renderer has to know and interpret this primitive
@@ -101,3 +102,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

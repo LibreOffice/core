@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,3 +42,4 @@ OResultSet* OFlatStatement::createResultSet()
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OFlatStatement,"com.sun.star.sdbc.driver.flat.Statement","com.sun.star.sdbc.Statement");
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

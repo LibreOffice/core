@@ -1359,6 +1359,15 @@
 				</info>
 				<value>false</value>
 			</prop>
+            <prop oor:name="CorrectAccidentalCapsLock" oor:type="xs:boolean">
+                <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Correct accidental use of cAPS LOCK key -->
+                <info>
+                    <author>Kohei Yoshida</author>
+                    <desc>Specifies whether or not to correct accidental use of CAPS lock key.</desc>
+                    <label>Correct accidental use of cAPS LOCK key</label>
+                </info>
+                <value>true</value>
+            </prop>
 			<prop oor:name="ReplaceSingleQuote" oor:type="xs:boolean">
 				<!-- OldPath: AutoCorrect/Options/All -->
 				<!-- OldLocation: Soffice.cfg -->
@@ -1616,7 +1625,7 @@
 						<author>TL</author>
 						<desc>Contains the provided dictionaries.</desc>
 					</info>
-					<value>$(insturl)/share/wordbook/$(vlang)</value>
+					<value>$(insturl)/share/wordbook</value>
 				</prop>
 				<prop oor:name="Favorite" oor:type="xs:string">
 					<info>
@@ -1702,7 +1711,7 @@
 						<author>MBA</author>
 						<desc>Specifies the templates originate from these folders and sub-folders.</desc>
 					</info>
-					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(userurl)/template</value>
+					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(insturl)/share/template/common:$(userurl)/template</value>
 				</prop>
 				<prop oor:name="UIConfig" oor:type="oor:string-list">
 					<info>
@@ -1850,7 +1859,7 @@
 					<info>
 						<desc>Specifies the default directory where all provided templates are located in folders and sub-folders.</desc>
 					</info>
-					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(userurl)/template</value>
+					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(insturl)/share/template/common:$(userurl)/template</value>
 				</prop>
 				<prop oor:name="UIConfig" oor:type="oor:string-list">
 					<info>
@@ -4204,25 +4213,25 @@
 						<info>
 							<desc>Specifies if convertible MathType OLE objects are converted into Math objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="WinWordToWriter" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible WinWord OLE objects are converted into Writer objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ExcelToCalc" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible Excel OLE objects are converted into Calc objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if convertible PowerPoint OLE objects are converted into Impress objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean">
 						<info>
@@ -4239,25 +4248,25 @@
 						<info>
 							<desc>Specifies if embedded Math objects are converted into MathType objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="WriterToWinWord" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Writer objects are converted into WinWord objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="CalcToExcel" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Calc objects are converted into Excel objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
 					<prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean">
 						<info>
 							<desc>Specifies if embedded Impress objects are converted into PowerPoint objects.</desc>
 						</info>
-						<value>false</value>
+                        <value>true</value>
 					</prop>
                     <prop oor:name="EnablePowerPointPreview" oor:type="xs:boolean">
                         <info>
@@ -5630,6 +5639,15 @@
 				</info>
 				<value>true</value>
 			</prop>
+            <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean">
+                <info>
+                    <author>THB</author>
+                    <desc>Determines if a warning dialog should be
+                    displayed when a user checks the link checkbox in
+                    the insert graphics dialog.</desc>
+                </info>
+                <value>true</value>
+            </prop>
 			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
 				<info>
 					<author>PL</author>
@@ -5637,6 +5655,34 @@
 				</info>
 				<value>false</value>
 			</prop>
+            <prop oor:name="TryODMADialog" oor:type="xs:boolean">
+                <info>
+                    <author>tml</author>
+                    <desc>Determines whether to show the document creation and selection of the machine's default ODMA (Open Document Management Architecture) DMS (Document Management System). If true, and the machine has a DMS available, the DMS's dialog will be displayed. That dialog then gives the opportunity to use the application's dialog instead, which means the normal system file and folder pickers will be displayed. Relevant only on Windows.</desc>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="DisableUICustomization" oor:type="xs:boolean">
+                <info>
+                    <author>RSiddhartha</author>
+                    <desc>Disables the customization of the UI elements.</desc>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AlwaysAllowSave" oor:type="xs:boolean">
+                <info>
+                    <author>kohei</author>
+                    <desc>Determines if the user can save the document even when it's not modified.</desc>
+                </info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="ExperimentalMode" oor:type="xs:boolean">
+                <info>
+                    <author>mmeeks</author>
+                    <desc>Determins if various experimental, and potentially unstable features should be enabled in the user interface.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="SymbolSet" oor:type="xs:short">
 				<!-- UIHints: Tools  Options General View -->
 				<info>
@@ -5651,11 +5697,11 @@
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc>32x32 pixel icons</desc>
+							<desc>larger icons</desc>
 						</info>
 					</enumeration>
 				</constraints>
-				<value>0</value>
+				<value>2</value>
 			</prop>
 			<prop oor:name="SymbolStyle" oor:type="xs:string">
 				<!-- UIHints: Tools  Options General View -->
@@ -5697,6 +5743,11 @@
 					<enumeration oor:value="classic">
 						<info>
 							<desc>Classic - the OpenOffice.org 2.0 default theme</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="human">
+						<info>
+							<desc>Human - the Gnome default theme for Ubuntu</desc>
 						</info>
 					</enumeration>
 				</constraints>

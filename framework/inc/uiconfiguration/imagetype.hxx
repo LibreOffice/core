@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef __FRAMEWORK_UICONFIGURATION_IMAGETYPE_HXX_
 #define __FRAMEWORK_UICONFIGURATION_IMAGETYPE_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 namespace framework
@@ -38,16 +39,14 @@ enum ImageType
 {
     ImageType_Color = 0,
     ImageType_Color_Large,
-    ImageType_HC,
-    ImageType_HC_Large,
     ImageType_COUNT
 };
 
-typedef std::hash_map< rtl::OUString,
+typedef boost::unordered_map< rtl::OUString,
                        rtl::OUString,
                        OUStringHashCode,
                        ::std::equal_to< ::rtl::OUString > > CommandToImageNameMap;
-typedef std::hash_map< rtl::OUString,
+typedef boost::unordered_map< rtl::OUString,
                        bool,
                        OUStringHashCode,
                        ::std::equal_to< ::rtl::OUString > > CommandMap;
@@ -55,3 +54,5 @@ typedef std::hash_map< rtl::OUString,
 }
 
 #endif // __FRAMEWORK_UICONFIGURATION_IMAGETYPE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,19 +28,7 @@
 #ifndef ODMA_LIB_HXX
 #define ODMA_LIB_HXX
 
-typedef void                *LPVOID;
-typedef char                *LPSTR,
-                            *PSTR;
-typedef const char          *LPCSTR;
-typedef unsigned long       DWORD;
-typedef unsigned short      WORD;
-typedef unsigned short      *LPWORD;
-typedef DWORD               *LPDWORD;
-
-#define WINAPI              __stdcall
-#define FAR
-
-#include "odma.h"
+#include <odma.h>
 
 namespace odma
 {
@@ -205,37 +194,37 @@ namespace odma
 
     // now we define some macros
 
-    #define NODMRegisterApp(a,b,c,d,e)          (*(pODMRegisterApp))(a,b,c,d,e)
-    #define NODMUnRegisterApp(a)                (*(pODMUnRegisterApp))(a)
-    #define NODMSelectDoc(a,b,c)                (*(pODMSelectDoc))(a,b,c)
-    #define NODMOpenDoc(a,b,c,d)                (*(pODMOpenDoc))(a,b,c,d)
-    #define NODMSaveDoc(a,b,c)                  (*(pODMSaveDoc))(a,b,c)
-    #define NODMCloseDoc(a,b,c,d,e,f)           (*(pODMCloseDoc))(a,b,c,d,e,f)
-    #define NODMNewDoc(a,b,c,d,e)               (*(pODMNewDoc))(a,b,c,d,e)
-    #define NODMSaveAs(a,b,c,d,e,f)             (*(pODMSaveAs))(a,b,c,d,e,f)
-    #define NODMActivate(a,b,c)                 (*(pODMActivate))(a,b,c)
-    #define NODMGetDocInfo(a,b,c,d,e)           (*(pODMGetDocInfo))(a,b,c,d,e)
-    #define NODMSetDocInfo(a,b,c,d)             (*(pODMSetDocInfo))(a,b,c,d)
-    #define NODMGetDMSInfo(a,b,c,d)             (*(pODMGetDMSInfo))(a,b,c,d)
-    #define NODMGetDMSCount()                   (*(pODMGetDMSCount))()
-    #define NODMGetDMSList(a,b)                 (*(pODMGetDMSList))(a,b)
-    #define NODMGetDMS(a,b)                     (*(pODMGetDMS))(a,b)
-    #define NODMSetDMS(a,b)                     (*(pODMSetDMS))(a,b)
-    #define NODMQueryExecute(a,b,c,d,e)         (*(pODMQueryExecute))(a,b,c,d,e)
-    #define NODMQueryGetResults(a,b,c,d,e,f)    (*(pODMQueryGetResults))(a,b,c,d,e,f)
-    #define NODMQueryClose(a,b)                 (*(pODMQueryClose))(a,b)
-    #define NODMCloseDocEx(a,b,c,d,e,f,g)       (*(pODMCloseDocEx))(a,b,c,d,e,f,g)
-    #define NODMSaveAsEx(a,b,c,d,e,f,g)         (*(pODMSaveAsEx))(a,b,c,d,e,f,g)
-    #define NODMSaveDocEx(a,b,c,d)              (*(pODMSaveDocEx))(a,b,c,d)
-    #define NODMSelectDocEx(a,b,c,d,e,f)        (*(pODMSelectDocEx))(a,b,c,d,e,f)
-    #define NODMQueryCapability(a,b,c,d,e)      (*(pODMQueryCapability))(a,b,c,d,e)
-    #define NODMSetDocEvent(a,b,c,d,e,f,g)      (*(pODMSetDocEvent))(a,b,c,d,e,f,g)
-    #define NODMGetAlternateContent(a,b,c,d,e)  (*(pODMGetAlternateContent))(a,b,c,d,e)
-    #define NODMSetAlternateContent(a,b,c,d,e)  (*(pODMSetAlternateContent))(a,b,c,d,e)
-    #define NODMGetDocRelation(a,b,c,d,e,f)     (*(pODMGetDocRelation))(a,b,c,d,e,f)
-    #define NODMSetDocRelation(a,b,c,d,e,f)     (*(pODMSetDocRelation))(a,b,c,d,e,f)
+    #define NODMRegisterApp(a,b,c,d,e)          (*(::odma::pODMRegisterApp))(a,b,c,d,e)
+    #define NODMUnRegisterApp(a)                (*(::odma::pODMUnRegisterApp))(a)
+    #define NODMSelectDoc(a,b,c)                (*(::odma::pODMSelectDoc))(a,b,c)
+    #define NODMOpenDoc(a,b,c,d)                (*(::odma::pODMOpenDoc))(a,b,c,d)
+    #define NODMSaveDoc(a,b,c)                  (*(::odma::pODMSaveDoc))(a,b,c)
+    #define NODMCloseDoc(a,b,c,d,e,f)           (*(::odma::pODMCloseDoc))(a,b,c,d,e,f)
+    #define NODMNewDoc(a,b,c,d,e)               (*(::odma::pODMNewDoc))(a,b,c,d,e)
+    #define NODMSaveAs(a,b,c,d,e,f)             (*(::odma::pODMSaveAs))(a,b,c,d,e,f)
+    #define NODMActivate(a,b,c)                 (*(::odma::pODMActivate))(a,b,c)
+    #define NODMGetDocInfo(a,b,c,d,e)           (*(::odma::pODMGetDocInfo))(a,b,c,d,e)
+    #define NODMSetDocInfo(a,b,c,d)             (*(::odma::pODMSetDocInfo))(a,b,c,d)
+    #define NODMGetDMSInfo(a,b,c,d)             (*(::odma::pODMGetDMSInfo))(a,b,c,d)
+    #define NODMGetDMSCount()                   (*(::odma::pODMGetDMSCount))()
+    #define NODMGetDMSList(a,b)                 (*(::odma::pODMGetDMSList))(a,b)
+    #define NODMGetDMS(a,b)                     (*(::odma::pODMGetDMS))(a,b)
+    #define NODMSetDMS(a,b)                     (*(::odma::pODMSetDMS))(a,b)
+    #define NODMQueryExecute(a,b,c,d,e)         (*(::odma::pODMQueryExecute))(a,b,c,d,e)
+    #define NODMQueryGetResults(a,b,c,d,e,f)    (*(::odma::pODMQueryGetResults))(a,b,c,d,e,f)
+    #define NODMQueryClose(a,b)                 (*(::odma::pODMQueryClose))(a,b)
+    #define NODMCloseDocEx(a,b,c,d,e,f,g)       (*(::odma::pODMCloseDocEx))(a,b,c,d,e,f,g)
+    #define NODMSaveAsEx(a,b,c,d,e,f,g)         (*(::odma::pODMSaveAsEx))(a,b,c,d,e,f,g)
+    #define NODMSaveDocEx(a,b,c,d)              (*(::odma::pODMSaveDocEx))(a,b,c,d)
+    #define NODMSelectDocEx(a,b,c,d,e,f)        (*(::odma::pODMSelectDocEx))(a,b,c,d,e,f)
+    #define NODMQueryCapability(a,b,c,d,e)      (*(::odma::pODMQueryCapability))(a,b,c,d,e)
+    #define NODMSetDocEvent(a,b,c,d,e,f,g)      (*(::odma::pODMSetDocEvent))(a,b,c,d,e,f,g)
+    #define NODMGetAlternateContent(a,b,c,d,e)  (*(::odma::pODMGetAlternateContent))(a,b,c,d,e)
+    #define NODMSetAlternateContent(a,b,c,d,e)  (*(::odma::pODMSetAlternateContent))(a,b,c,d,e)
+    #define NODMGetDocRelation(a,b,c,d,e,f)     (*(::odma::pODMGetDocRelation))(a,b,c,d,e,f)
+    #define NODMSetDocRelation(a,b,c,d,e,f)     (*(::odma::pODMSetDocRelation))(a,b,c,d,e,f)
 
-    sal_Bool LoadLibrary();
+    sal_Bool DMSsAvailable();
 
     extern TODMRegisterApp          pODMRegisterApp;
     extern TODMUnRegisterApp        pODMUnRegisterApp;
@@ -270,3 +259,5 @@ namespace odma
 }
 
 #endif // ODMA_LIB_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

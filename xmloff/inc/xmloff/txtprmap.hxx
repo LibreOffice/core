@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,9 +158,10 @@
 #define CTF_FRAMEWIDTH_REL                  (XML_TEXT_CTF_START + 126)
 #define CTF_FRAMEWIDTH_TYPE                 (XML_TEXT_CTF_START + 127)
 #define CTF_BORDER_MODEL                    (XML_TEXT_CTF_START + 128)
-// --> OD 2004-08-09 #i28749# - define CTF ids for positioning properties of
-// shapes, because on export to OpenOffice.org file format these have to
-// be handled special, if shape isn't anchored as-character.
+/* Define CTF ids for positioning properties of
+   shapes, because on export to OpenOffice.org file format these have to
+   be handled special, if shape isn't anchored as-character. (#i28749#)
+*/
 #define CTF_SHAPE_HORIZONTALPOS             (XML_TEXT_CTF_START + 129)
 #define CTF_SHAPE_HORIZONTALPOS_MIRRORED    (XML_TEXT_CTF_START + 130)
 #define CTF_SHAPE_HORIZONTALREL             (XML_TEXT_CTF_START + 131)
@@ -170,7 +172,6 @@
 #define CTF_SHAPE_VERTICALREL               (XML_TEXT_CTF_START + 136)
 #define CTF_SHAPE_VERTICALREL_PAGE          (XML_TEXT_CTF_START + 137)
 #define CTF_SHAPE_VERTICALREL_FRAME         (XML_TEXT_CTF_START + 138)
-// <--
 #define CTF_PARA_ADJUSTLAST                 (XML_TEXT_CTF_START + 139)
 #define CTF_DEFAULT_OUTLINE_LEVEL           (XML_TEXT_CTF_START + 140)
 #define CTF_OLD_FLOW_WITH_TEXT              (XML_TEXT_CTF_START + 141)
@@ -208,3 +209,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

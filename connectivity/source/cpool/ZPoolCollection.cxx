@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,31 +49,31 @@ using namespace connectivity;
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getConnectionPoolNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/ConnectionPool");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/ConnectionPool" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getEnablePoolingNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("EnablePooling");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "EnablePooling" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getDriverNameNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverName");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverName" ));
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 static const ::rtl::OUString& getDriverSettingsNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverSettings");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverSettings" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------------
 static const ::rtl::OUString& getEnableNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Enable");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "Enable" ));
     return s_sNodeName;
 }
 
@@ -81,13 +82,13 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     :m_xServiceFactory(_rxFactory)
 {
     // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
+    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ), UNO_QUERY);
     m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
     OSL_ENSURE(m_xDriverAccess.is(), "have no (or an invalid) driver manager!");
 
     m_xProxyFactory = Reference< XProxyFactory >(
         m_xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.reflection.ProxyFactory")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),
         UNO_QUERY);
     OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 
@@ -98,7 +99,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     osl_incrementInterlockedCount( &m_refCount );
     {
 
-        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), UNO_QUERY);
+        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY);
         if ( m_xDesktop.is() )
             m_xDesktop->addTerminateListener(this);
 
@@ -181,14 +182,14 @@ Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbc.OConnectionPool");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.OConnectionPool"));
 }
 
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ConnectionPool"));
     return aSupported;
 }
 // -----------------------------------------------------------------------------
@@ -232,7 +233,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
                 xDriver = new ODriverWrapper(xDriverProxy, pConnectionPool);
             }
             else
-                OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+                OSL_FAIL("OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
         }
     }
 
@@ -362,7 +363,7 @@ Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::O
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "createWithServiceFactory: error while instantiating the provider service!");
+        OSL_FAIL("createWithServiceFactory: error while instantiating the provider service!");
     }
     return xInterface;
 }
@@ -381,17 +382,17 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             Reference< XServiceInfo > xSI(_rxConfProvider, UNO_QUERY);
             if (!xSI.is())
             {
-                OSL_ENSURE(sal_False, "::createWithProvider: no XServiceInfo interface on the provider!");
+                OSL_FAIL("::createWithProvider: no XServiceInfo interface on the provider!");
             }
             else
             {
-                OSL_ENSURE(xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+                OSL_ENSURE(xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
                     "::createWithProvider: sure this is a provider? Missing the ConfigurationProvider service!");
             }
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "::createWithProvider: unable to check the service conformance of the provider given!");
+            OSL_FAIL("::createWithProvider: unable to check the service conformance of the provider given!");
         }
     }
 #endif
@@ -405,14 +406,14 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             aCreationArgs[1] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0, makeAny((sal_Int32)-1), PropertyState_DIRECT_VALUE));
             aCreationArgs[2] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")), 0, makeAny(sal_True), PropertyState_DIRECT_VALUE));
 
-            static ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+            static ::rtl::OUString sAccessService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
 
             xInterface = _rxConfProvider->createInstanceWithArguments(sAccessService, aCreationArgs);
             OSL_ENSURE(xInterface.is(), "::createWithProvider: could not create the node access!");
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
+            OSL_FAIL("OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
         }
     }
     return xInterface;
@@ -429,25 +430,24 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
         if (xDirectAccess.is() && xDirectAccess->hasByName(_rPath))
         {
             if (!::cppu::extractInterface(xNode, xDirectAccess->getByName(_rPath)))
-                OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
         }
         else if (xHierarchyAccess.is())
         {
             if (!::cppu::extractInterface(xNode, xHierarchyAccess->getByHierarchicalName(_rPath)))
-                OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
         }
 
     }
     catch(const NoSuchElementException&)
     {
-        OSL_ENSURE(sal_False,
-                    ::rtl::OString("::openNode: there is no element named ")
+        OSL_FAIL(::rtl::OString("::openNode: there is no element named ")
                 +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
                 +=  ::rtl::OString("!"));
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OConfigurationNode::openNode: caught an exception while retrieving the node!");
+        OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
     }
     return xNode;
 }
@@ -471,8 +471,7 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     catch(NoSuchElementException& e)
     {
         OSL_UNUSED( e );    // make compiler happy
-        OSL_ENSURE(sal_False,
-            ::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
+        OSL_FAIL(::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
         +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
         +=  ::rtl::OString("!"));
     }
@@ -511,7 +510,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception caught");
+            OSL_FAIL("Exception caught");
         }
     }
 }
@@ -579,3 +578,4 @@ m_xDesktop.clear();
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

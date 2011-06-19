@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #define _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP
 #include <com/sun/star/text/XTextFrame.hpp>
-#endif
 #include <xmloff/xmlictxt.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -73,13 +70,16 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;
+
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > GetTextContent() const;
-    // --> OD 2004-08-24 #i33242#
+
+    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     ::com::sun::star::uno::Reference <
         ::com::sun::star::drawing::XShape > GetShape() const;
-    // <--
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <osl/file.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
@@ -89,10 +90,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
 
-// #110897#
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -175,7 +173,7 @@ SfxClipboardChangeListener::~SfxClipboardChangeListener()
 
 void SfxClipboardChangeListener::ChangedContents()
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if( m_pViewShell )
     {
         SfxBindings& rBind = m_pViewShell->GetViewFrame()->GetBindings();
@@ -283,7 +281,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
         {
             for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
             {
-                if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                 {
                     aPropSeq[i].Value >>= aStr;
                     break;
@@ -350,11 +348,11 @@ static ::rtl::OUString impl_retrieveFilterNameFromTypeAndModule(
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
         ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString::createFromAscii( "Name" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                     ::rtl::OUString() );
 
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString::createFromAscii( "Flags" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),
                                     sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
@@ -380,7 +378,7 @@ enum ETypeFamily
 ::rtl::OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
 
     try
     {
@@ -394,32 +392,32 @@ enum ETypeFamily
         {
             case E_MS_DOC:
                  {
-                    if (sModule.equalsAscii( "com.sun.star.text.TextDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_MS_Word_97" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_MS_Excel_97" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress_MS_PowerPoint_97" ));
                  }
                  break;
 
             case E_OOO_DOC:
                  {
-                    if (sModule.equalsAscii( "com.sun.star.text.TextDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer8" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc8" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.drawing.DrawingDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "draw8" ));
                     else
-                    if (sModule.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
+                    if (sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
                         sType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "impress8" ));
                  }
                  break;
@@ -434,6 +432,24 @@ enum ETypeFamily
 
     return ::rtl::OUString();
 }
+
+//--------------------------------------------------------------------
+
+SAL_DLLPRIVATE void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
+{
+    SfxInPlaceClientList* pClientList = GetIPClientList_Impl(sal_True);
+
+    for( SfxInPlaceClientList::iterator it = pClientList->begin(); it < pClientList->end(); ++it )
+    {
+        if ( *it == pIPClient )
+        {
+            pClientList->erase( it );
+            break;
+        }
+    }
+}
+
+
 
 //--------------------------------------------------------------------
 
@@ -714,7 +730,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
 
                 ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute( xSMGR->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
                     css::uno::UNO_QUERY );
 
                         sal_Bool bRet( sal_True );
@@ -727,7 +743,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     }
                     catch ( uno::Exception& )
                     {
-                                            vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         Window *pParent = SFX_APP()->GetTopWindow();
                                             ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
                         bRet = sal_False;
@@ -788,9 +804,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                                         SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(sal_False);
                                                         if ( pClients )
                                                         {
-                                                                for (sal_uInt16 n=0; n < pClients->Count(); n++)
+                                                                for ( size_t n = 0; n < pClients->size(); n++)
                                                                 {
-                                                                        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+                                                                        SfxInPlaceClient* pIPClient = pClients->at( n );
                                                                         if ( pIPClient )
                                                                                 pView->CheckIPClient_Impl( pIPClient, aVisArea );
                                                                 }
@@ -819,100 +835,78 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
         SfxWhichIter aIter( rSet );
         for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
         {
-                switch ( nSID )
-                {
-                        case SID_STYLE_CATALOG:
-                        {
-                if ( !GetViewFrame()->KnowsChildWindow( SID_STYLE_DESIGNER ) )
-                                        rSet.DisableItem( nSID );
-                                break;
-                        }
-
-                        // Printer-Funktionen
-                        case SID_PRINTDOC:
-                        case SID_PRINTDOCDIRECT:
-                        case SID_SETUPPRINTER:
-                        case SID_PRINTER_NAME:
-                        {
-                bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks;
-                                bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
-                if ( bEnabled )
-                {
-                    SfxPrinter *pPrinter = GetPrinter(sal_False);
-
-                    if ( SID_PRINTDOCDIRECT == nSID )
+            switch ( nSID )
+            {
+                case SID_STYLE_CATALOG:
                     {
-                        rtl::OUString aPrinterName;
-                        if ( pPrinter != NULL )
-                            aPrinterName = pPrinter->GetName();
-                        else
-                            aPrinterName = Printer::GetDefaultPrinterName();
-                        if ( aPrinterName.getLength() > 0 )
-                        {
-                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
+                        if ( !GetViewFrame()->KnowsChildWindow( SID_STYLE_DESIGNER ) )
+                            rSet.DisableItem( nSID );
+                        break;
+                    }
 
-                            ::rtl::OUStringBuffer aBuffer( 60 );
-                            aBuffer.append( RetrieveLabelFromCommand(
+                    // Printer functions
+                case SID_PRINTDOC:
+                case SID_PRINTDOCDIRECT:
+                case SID_SETUPPRINTER:
+                case SID_PRINTER_NAME:
+                    {
+                        bool bEnabled = pImp->m_bCanPrint && !pImp->m_nPrinterLocks;
+                        bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
+                        if ( bEnabled )
+                        {
+                            SfxPrinter *pPrinter = GetPrinter(sal_False);
+
+                            if ( SID_PRINTDOCDIRECT == nSID )
+                            {
+                                rtl::OUString aPrinterName;
+                                if ( pPrinter != NULL )
+                                    aPrinterName = pPrinter->GetName();
+                                else
+                                    aPrinterName = Printer::GetDefaultPrinterName();
+                                if ( aPrinterName.getLength() > 0 )
+                                {
+                                    uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
+
+                                    ::rtl::OUStringBuffer aBuffer( 60 );
+                                    aBuffer.append( RetrieveLabelFromCommand(
                                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintDefault" )),
                                                 xFrame ));
-                            aBuffer.appendAscii( " (" );
-                            aBuffer.append( aPrinterName );
-                            aBuffer.appendAscii( ")" );
+                                    aBuffer.appendAscii( " (" );
+                                    aBuffer.append( aPrinterName );
+                                    aBuffer.appendAscii( ")" );
 
-                            rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
-                        }
-                    }
-                    bEnabled = !pPrinter || !pPrinter->IsPrinting();
-                }
-                                if ( !bEnabled )
-                                {
-                                        // will now be handled by requeing the request
-                                /*      rSet.DisableItem( SID_PRINTDOC );
-                                        rSet.DisableItem( SID_PRINTDOCDIRECT );
-                                        rSet.DisableItem( SID_SETUPPRINTER ); */
+                                    rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
                                 }
-                                break;
+                            }
+                            bEnabled = !pPrinter || !pPrinter->IsPrinting();
                         }
+                        break;
+                    }
 
-                        // Mail-Funktionen
-                        case SID_MAIL_SENDDOCASPDF:
-                        case SID_MAIL_SENDDOC:
-            case SID_MAIL_SENDDOCASFORMAT:
-                        {
-                sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
-                                if ( !bEnable )
-                                        rSet.DisableItem( nSID );
-                                break;
-                        }
+                    // Mail functions
+                case SID_MAIL_SENDDOCASPDF:
+                case SID_MAIL_SENDDOC:
+                case SID_MAIL_SENDDOCASFORMAT:
+                    {
+                        sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
+                        if ( !bEnable )
+                            rSet.DisableItem( nSID );
+                        break;
+                    }
 
-                        // PlugIns running
-                        case SID_PLUGINS_ACTIVE:
-                        {
-                rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE,
-                                        !pImp->m_bPlugInsActive) );
-                                break;
-                        }
-/*
-                        // SelectionText
-                        case SID_SELECTION_TEXT:
-                        {
-                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT, GetSelectionText() ) );
-                                break;
-                        }
-
-                        // SelectionTextExt
-                        case SID_SELECTION_TEXT_EXT:
-                        {
-                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(sal_True) ) );
-                                break;
-                        }
-*/
-                        case SID_STYLE_FAMILY :
-                        {
-                rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
-                                break;
-                        }
-                }
+                    // PlugIns running
+                case SID_PLUGINS_ACTIVE:
+                    {
+                        rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE,
+                                    !pImp->m_bPlugInsActive) );
+                        break;
+                    }
+                case SID_STYLE_FAMILY :
+                    {
+                        rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->m_nFamily ) );
+                        break;
+                    }
+            }
         }
 }
 
@@ -931,12 +925,11 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
 //--------------------------------------------------------------------
 ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muss DoVerb
-    dort "uberschrieben werden.
-
+    Virtual Method used to perform a Verb on a selected Object.
+    Since this Object is just known by the derived classes, DoVerb
+    must be overloaded.
 */
 
 {
@@ -988,10 +981,6 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
             pFrame->GetDispatcher()->Update_Impl( sal_True );
     pFrame->GetBindings().HidePopups(sal_False);
 
-    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
-    // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
-    // if ( xParentFrame.is() )
-    //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
 }
 
 //--------------------------------------------------------------------
@@ -1008,14 +997,14 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
 
         if( !pObjParentWin )
                 pObjParentWin = GetWindow();
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
-        {
-                SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
+    for ( size_t n = 0; n < pClients->size(); n++)
+    {
+        SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->at( n );
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
-                        return pIPClient;
-        }
+            return pIPClient;
+    }
 
-        return 0;
+    return 0;
 }
 
 //--------------------------------------------------------------------
@@ -1034,12 +1023,12 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
         if ( !pClients )
                 return 0;
 
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
-        {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+    for ( size_t n = 0; n < pClients->size(); n++)
+    {
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsUIActive() )
             return pIPClient;
-        }
+    }
 
     return NULL;
 }
@@ -1050,9 +1039,9 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
         if ( !pClients )
                 return 0;
 
-        for (sal_uInt16 n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
         {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectUIActive() )
             return pIPClient;
         }
@@ -1086,8 +1075,8 @@ void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
 
 void SfxViewShell::AdjustPosSizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
 {
@@ -1098,20 +1087,19 @@ void SfxViewShell::AdjustPosSizePixel
 
 void SfxViewShell::Move()
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese virtuelle Methode wird gerufen, wenn das Fenster, in dem die
-        SfxViewShell dargestellt wird eine StarView-Move() Nachricht erh"alt.
+    This virtual Method is called when the window displayed in the
+    SfxViewShell gets a StarView-Move() notification.
 
-        Die Basisimplementierung braucht nicht gerufen zu werden.
+    This base implementation does not have to be called.     .
 
+    [Note]
 
-        [Anmerkung]
+    This Method can be used to cancel a selection, in order to catch the
+    mouse movement which is due to moving a window.
 
-        Diese Methode kann dazu verwendet werden, eine Selektion abzubrechen,
-        um durch das Moven des Fensters erzeugte Maus-Bewegungen anzufangen.
-
-        Zur Zeit funktioniert die Benachrichtigung nicht In-Place.
+    For now the notification does not work In-Place.
 */
 
 {
@@ -1121,48 +1109,45 @@ void SfxViewShell::Move()
 
 void SfxViewShell::OuterResizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // gesamte zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
-        der View zu reagieren. Dabei definieren wir die View als das Edit-Window
-        zuz"uglich der um das Edit-Window angeordnenten Tools (z.B. Lineale).
+    This Method has to be overloaded to be able to react to the size-change of
+    the View. Thus the View is defined as the Edit window and also the
+    attached Tools are defined (for example the ruler).
 
-        Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
+    The Edit window must not be changed either in size or position.
 
-        Die Vis-Area der SfxObjectShell, dessen Skalierung und Position
-        d"urfen hier ver"andert werden. Der Hauptanwendungsfall ist dabei,
-        das Ver"andern der Gr"o\se der Vis-Area.
+    The Vis-Area of SfxObjectShell, its scale and position can be changed
+    here. The mainuse is to change the size of the Vis-Area.
 
-        "Andert sich durch die neue Berechnung der Border, so mu\s dieser
-        mit <SfxViewShell::SetBorderPixel(const SvBorder&)> gesetzt werden.
-        Erst nach Aufruf von 'SetBorderPixel' ist das Positionieren von
-        Tools erlaubt.
+    If the Border is changed due to the new calculation then this has to be set
+    by <SfxViewShell::SetBorderPixel(const SvBorder&)>. The Postioning of Tools
+    is only allowed after the calling of 'SetBorderPixel'.
 
+    [Example]
 
-        [Beispiel]
+    void AppViewSh::OuterViewResizePixel( const Point &rOfs, const Size &rSz )
 
-        void AppViewSh::OuterViewResizePixel( const Point &rOfs, const Size &rSz )
-        {
-                // Tool-Positionen und Gr"o\sen von au\sen berechnen, NICHT setzen!
-                // (wegen folgender Border-Berechnung)
-                Point aHLinPos...; Size aHLinSz...;
-                ...
+{
+        // Calculate Tool position and size externally, do not set!
+        // (due to the following Border calculation)
+        Point aHLinPos...; Size aHLinSz...;
+        ...
 
-                // Border f"ur Tools passend zu rSize berechnen und setzen
-                SvBorder aBorder...
-                SetBorderPixel( aBorder ); // ab jetzt sind Positionierungen erlaubt
+        // Calculate and Set a Border of Tools which matches rSize.
+        SvBorder aBorder...
+        SetBorderPixel( aBorder ); // Allow Positioning from here on.
 
-                // Tools anordnen
-                pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
-                ...
-        }
+        // Arrange Tools
+        pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
+        ...
+    }
 
-
-        [Querverweise]
+    [Cross-reference]
 
         <SfxViewShell::InnerResizePixel(const Point&,const Size& rSize)>
 */
@@ -1176,45 +1161,44 @@ void SfxViewShell::OuterResizePixel
 
 void SfxViewShell::InnerResizePixel
 (
-        const Point&    /*rToolOffset*/,// linke obere Ecke der Tools im Frame-Window
-        const Size&     /*rSize*/       // dem Edit-Win zur Verf"ugung stehende Gr"o\se
+    const Point&    /*rToolOffset*/,// Upper left corner Tools in Frame-Window
+    const Size&     /*rSize*/       // All available sizes.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
-        des Edit-Windows zu reagieren.
+    This Method has to be overloaded to be able to react to the size-change of
+    the Edit window.
 
-        Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
-        Weder die Vis-Area der SfxObjectShell noch dessen Skalierung oder
-        Position d"urfen ver"andert werden.
+    The Edit window must not be changed either in size or position.
+    Neither the Vis-Area of SfxObjectShell nor its scale or position are
+    allowed to be changed
 
-        "Andert sich durch die neue Berechnung der Border, so mu\s dieser
-        mit <SfxViewShell::SetBorderPixel(const SvBorder&)> gesetzt werden.
-        Erst nach Aufruf von 'SetBorderPixel' ist das Positionieren von
-        Tools erlaubt.
-
-
-        [Beispiel]
-
-        void AppViewSh::InnerViewResizePixel( const Point &rOfs, const Size &rSz )
-        {
-                // Tool-Positionen und Gr"o\sen von innen berechnen, NICHT setzen!
-                // (wegen folgender Border-Berechnung)
-                Point aHLinPos...; Size aHLinSz...;
-                ...
-
-                // Border f"ur Tools passend zu rSz berechnen und setzen
-                SvBorder aBorder...
-                SetBorderPixel( aBorder ); // ab jetzt sind Positionierungen erlaubt
-
-                // Tools anordnen
-                pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
-                ...
-        }
+    If the Border is changed due to the new calculation then is has to be set
+    by <SfxViewShell::SetBorderPixel(const SvBorder&)>.
+    The Postioning of Tools is only allowed after the calling of
+    'SetBorderPixel'.
 
 
-        [Querverweise]
+    [Note]
+
+    void AppViewSh::InnerViewResizePixel( const Point &rOfs, const Size &rSz )
+    {
+        // Calculate Tool position and size internally, do not set!
+        // (due to the following Border calculation)
+        Point aHLinPos...; Size aHLinSz...;
+        ...
+
+        // Calculate and Set a Border of Tools which matches rSize.
+        SvBorder aBorder...
+        SetBorderPixel( aBorder ); // Allow Positioning from here on.
+
+        // Arrange Tools
+        pHLin->SetPosSizePixel( aHLinPos, aHLinSz );
+        ...
+    }
+
+    [Cross-reference]
 
         <SfxViewShell::OuterResizePixel(const Point&,const Size& rSize)>
 */
@@ -1245,7 +1229,6 @@ void SfxViewShell::SetBorderPixel( const SvBorder &rBorder )
     DBG_CHKTHIS(SfxViewShell, 0);
     DBG_ASSERT( GetViewFrame(), "SfxViewShell without SfxViewFrame" );
 
-    //if ( rBorder != GetBorderPixel())
     {
         GetViewFrame()->SetBorderPixelImpl( this, rBorder );
 
@@ -1271,29 +1254,28 @@ const SvBorder& SfxViewShell::GetBorderPixel() const
 
 void SfxViewShell::SetWindow
 (
-    Window*     pViewPort   // Pointer auf das Datenfenster bzw. 0 im Destruktor
+    Window*     pViewPort   // For example Null pointer in the Destructor.
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Mit dieser Methode wird der SfxViewShell das Datenfenster mitgeteilt.
-        Dieses wird f"ur den In-Place-Container und f"ur das korrekte
-        Wiederherstellen des Focus ben"otigt.
+    With this method the SfxViewShell is set in the data window. This is
+    needed for the in-place container and for restoring the proper focus.
 
-        Selbst In-Place-aktiv ist das Umsetzen des ViewPort-Windows verboten.
+    Even in-place-active the conversion of the ViewPort Windows is forbidden.
 */
 
 {
     if( pWindow == pViewPort )
         return;
 
-    // ggf. vorhandene IP-Clients disconnecten
+    // Disconnect existing IP-Clients if possible
     DisconnectAllClients();
 
     //TODO: should we have a "ReconnectAllClients" method?
     DiscardClients_Impl();
 
-    // View-Port austauschen
+    // Switch View-Port
     sal_Bool bHadFocus = pWindow ? pWindow->HasChildPathFocus( sal_True ) : sal_False;
     pWindow = pViewPort;
 
@@ -1306,7 +1288,7 @@ void SfxViewShell::SetWindow
     if ( bHadFocus && pWindow )
         pWindow->GrabFocus();
     //TODO/CLEANUP
-    //brauchen wir die Methode doch noch?!
+    //Do we still need this Method?!
     //SFX_APP()->GrabFocus( pWindow );
 }
 
@@ -1314,7 +1296,7 @@ void SfxViewShell::SetWindow
 
 Size SfxViewShell::GetOptimalSizePixel() const
 {
-    DBG_ERROR( "Useless call!" );
+    OSL_FAIL( "Useless call!" );
     return Size();
 }
 
@@ -1322,8 +1304,9 @@ Size SfxViewShell::GetOptimalSizePixel() const
 
 SfxViewShell::SfxViewShell
 (
-    SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, in dem diese View dargestellt wird */
-    sal_uInt16          nFlags          /*  siehe <SfxViewShell-Flags> */
+    SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, which will be
+                                        displayed in this View */
+    sal_uInt16          nFlags          /*  See <SfxViewShell-Flags> */
 )
 
 :   SfxShell(this)
@@ -1336,8 +1319,6 @@ SfxViewShell::SfxViewShell
 {
     DBG_CTOR(SfxViewShell, 0);
 
-    //pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
-
     if ( pViewFrame->GetParentViewFrame() )
     {
         pImp->m_bPlugInsActive = pViewFrame->GetParentViewFrame()
@@ -1348,8 +1329,8 @@ SfxViewShell::SfxViewShell
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
     StartListening(*pViewFrame->GetObjectShell());
 
-    // in Liste eintragen
-    const SfxViewShell *pThis = this; // wegen der kranken Array-Syntax
+    // Insert into list
+    const SfxViewShell *pThis = this; // due to the sick Array syntax
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Insert(pThis, rViewArr.Count() );
 }
@@ -1360,7 +1341,7 @@ SfxViewShell::~SfxViewShell()
 {
     DBG_DTOR(SfxViewShell, 0);
 
-    // aus Liste austragen
+    // Remove from list
     const SfxViewShell *pThis = this;
     SfxViewShellArr_Impl &rViewArr = SFX_APP()->GetViewShells_Impl();
     rViewArr.Remove( rViewArr.GetPos(pThis) );
@@ -1377,7 +1358,6 @@ SfxViewShell::~SfxViewShell()
         pImp->m_pController.clear();
     }
 
-    //DELETEZ( pImp->pPrinterCommandQueue );
     DELETEZ( pImp );
     DELETEZ( pIPClientList );
 }
@@ -1386,7 +1366,7 @@ SfxViewShell::~SfxViewShell()
 
 sal_uInt16 SfxViewShell::PrepareClose
 (
-    sal_Bool bUI,     // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool bUI,     // TRUE: Allow Dialog and so on, FALSE: silent-mode
     sal_Bool /*bForBrowsing*/
 )
 {
@@ -1441,12 +1421,12 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 
 SdrView* SfxViewShell::GetDrawView() const
 
-/*      [Beschreibung]
+/*  [Description]
 
-        Diese virtuelle Methode mu\s von den Subklassen "uberladen werden, wenn
-        der Property-Editor zur Verf"ugung stehen soll.
+    This virtual Method has to be overloded by the sub classes, to be able
+    make the Property-Editor available.
 
-        Die Default-Implementierung liefert immer 0.
+    The default implementation does always return zero.
 */
 
 {
@@ -1457,27 +1437,26 @@ SdrView* SfxViewShell::GetDrawView() const
 
 String SfxViewShell::GetSelectionText
 (
-    sal_Bool /*bCompleteWords*/         /*      sal_False (default)
-                                                                Nur der tats"achlich selektierte Text wird
-                                                                zur"uckgegeben.
+    sal_Bool /*bCompleteWords*/     /*  FALSE (default)
+                                Only the actual selected text is returned.
 
-                                                                TRUE
-                                                                Der selektierte Text wird soweit erweitert,
-                                                                da\s nur ganze W"orter zur"uckgegeben werden.
-                                                                Als Worttrenner gelten White-Spaces und die
-                                Satzzeichen ".,;" sowie einfache und doppelte
-                                                                Anf"uhrungszeichen.
-                                                        */
+                                TRUE
+                                The selected text is expanded so that only
+                                whole words are returned. As word separators
+                                these are used: white spaces and punctuation
+                                ".,;" and single and double quotes.
+                            */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese Methode kann von Anwendungsprogrammierer "uberladen werden,
-        um einen Text zur"uckzuliefern, der in der aktuellen Selektion
-        steht. Dieser wird z.B. beim Versenden (email) verwendet.
+    This Method can be overloaded by the programmers to return a text that
+    is included in the current selection. This is for example used when
+    sending emails.
 
-    Mit "CompleteWords == TRUE" ger"ufen, reicht z.B. auch der Cursor,
-        der in einer URL steht, um die gesamte URL zu liefern.
+    When called with "CompleteWords == TRUE", it is for example sufficent
+    with having the Cursor positioned somewhere within an URL in-order
+    to have the entire URL returned.
 */
 
 {
@@ -1488,11 +1467,11 @@ String SfxViewShell::GetSelectionText
 
 sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Mit dieser virtuellen Methode kann z.B. ein Dialog abfragen, ob in der
-        aktuellen View etwas selektiert ist. Wenn der Parameter <sal_Bool> sal_True ist,
-        wird abgefragt, ob Text selektiert ist.
+    With this virtual Method can a for example a Dialog be queried, to
+    check if something is selected in the current view. If the Parameter
+    is <BOOL> TRUE then it is checked wether some text is selected.
 */
 
 {
@@ -1503,26 +1482,25 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
 void SfxViewShell::SetSubShell( SfxShell *pShell )
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Mit dieser Methode kann eine Selektions- oder Cursor-Shell angemeldet
-        werden, die automatisch unmittelbar nach der SfxViewShell auf den
-        SfxDispatcher gepusht wird, und automatisch umittelbar vor ihr
-        gepoppt wird.
+    With this method a selection or cursor Shell can be registered, which are
+    automatically pushed to SfxDispatcher immediately after SfxViewShell, and
+    and automatically popped immediately before SfxViewShell.
 
-        Ist die SfxViewShell-Instanz bereits gepusht, dann wird pShell
-        sofort ebenfalls gepusht. Wird mit SetSubShell eine andere SfxShell
-        Instanz angemeldet, als vorher angemeldet war, wird die zuvor angemeldete
-        ggf. automatisch gepoppt. Mit pShell==0 kann daher die aktuelle
-        Sub-Shell abgemeldet werden.
+    If the SfxViewShell instance is already pushed, then pShell will be
+    immediately pushed as well. Is another SfxShell instance registered by
+    using SetSubShell, which was previously registered, the previously
+    registered shell is popped automatically if possible. With pShell==0
+    the current sub-shell be can thus be unregistered.
 */
 
 {
-    // ist diese ViewShell "uberhaupt aktiv?
+    // Is this ViewShell even active?
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( pDisp->IsActive(*this) )
     {
-        // Dispatcher updaten
+        // Update Dispatcher
         if ( pSubShell )
             pDisp->Pop(*pSubShell);
         if ( pShell )
@@ -1758,28 +1736,27 @@ sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese Methode f"uhrt das KeyEvent 'rKeyEvent' "uber die an dieser
-        SfxViewShell direkt oder indirekt (z.B. via Applikation) konfigurierten
-        Tasten (Accelerator) aus.
+    This Method executes the KeyEvent 'rKeyEvent' of the Keys (Accelerator)
+    configured either direct or indirect (for example by the Application)
+    in the SfxViewShell.
 
+    [Return value]
 
-        [R"uckgabewert]
+    bool                    TRUE
+                            The Key (Accelerator) is configured and the
+                            the associated Handler was called
 
-        FASTBOOL                sal_True
-                                                        die Taste ist konfiguriert, der betreffende
-                                                        Handler wurde gerufen
+                            FALSE
+                            The Key (Accelerator) is not configured and
+                            subsequently no Handler was called
 
-                                                        FALSE
-                                                        die Taste ist nicht konfiguriert, es konnte
-                                                        also kein Handler gerufen werden
+    [Cross-reference]
 
-
-        [Querverweise]
-        <SfxApplication::KeyInput(const KeyEvent&)>
+    <SfxApplication::KeyInput(const KeyEvent&)>
 */
 {
     return ExecKey_Impl(rKeyEvent);
@@ -1792,13 +1769,13 @@ bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
+void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese Methode mu\s von Subklassen "uberladen werden, damit vom SFx
-        aus der Cursor ein- und ausgeschaltet werden kann. Dies geschieht
-        z.B. bei laufendem <SfxProgress>.
+    This Method has to be overloaded by the subclasses so that SFx from
+    the Cursor can be switched on and off. This happes for example with
+    with the running <SfxProgress>.
 */
 
 {
@@ -1808,17 +1785,16 @@ void SfxViewShell::ShowCursor( FASTBOOL /*bOn*/ )
 
 void SfxViewShell::GotFocus() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese Methode mu\s vom Applikationsentwickler gerufen werden, wenn
-        das Edit-Window den Focus erhalten hat. Der SFx hat so z.B. die
-        M"oglichkeit, den Accelerator einzuschalten.
+    This Method has to be called by the programmer, when the
+    Edit window has received the focus. This gives for example the SFx
+    the power to turn on the accelerator.
 
+    [Note]
 
-        [Anmerkung]
-
-        <StarView> liefert leider keine M"oglichkeit, solche Events
-        'von der Seite' einzuh"angen.
+    <StarView> does sadly enough not provide the possibillity to attach
+    such "side-way" events.
 */
 
 {
@@ -1832,9 +1808,9 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
     if ( !pClients )
         return;
 
-    for ( sal_uInt16 n=0; n < pClients->Count(); n++ )
+    for ( size_t n = 0; n < pClients->size(); n++ )
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if( pIPClient != pIP )
             pIPClient->ResetObject();
     }
@@ -1848,9 +1824,9 @@ void SfxViewShell::DisconnectAllClients()
     if ( !pClients )
         return;
 
-    for ( sal_uInt16 n=0; n<pClients->Count(); )
+    for ( size_t n = 0; n < pClients->size(); )
         // clients will remove themselves from the list
-        delete pClients->GetObject(n);
+        delete pClients->at( n );
 }
 
 //--------------------------------------------------------------------
@@ -1863,7 +1839,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 
 void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 {
-    DBG_ASSERT (pFrame, "Kein Frame?");
+    DBG_ASSERT (pFrame, "No Frame?");
     GetObjectShell()->SetVisArea( rRect );
 }
 
@@ -1875,9 +1851,9 @@ void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
     if ( !pClients )
         return;
 
-    for (sal_uInt16 n=0; n < pClients->Count(); n++)
+    for ( size_t n = 0; n < pClients->size(); n++)
     {
-        SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+        SfxInPlaceClient* pIPClient = pClients->at( n );
         if ( pIPClient->IsObjectInPlaceActive() )
             // client is active, notify client that the VisArea might have changed
             pIPClient->VisAreaChanged();
@@ -1932,11 +1908,10 @@ sal_Bool SfxViewShell::PlugInsActive() const
 //--------------------------------------------------------------------
 void SfxViewShell::DiscardClients_Impl()
 
-/*  [Beschreibung]
+/*  [Description]
 
-        Diese Methode dient dazu, vor dem Schlie\sen eines Dokuments das
-        Speichern der Objekte zu verhindern, wenn der Benutzer Schlie\en ohne
-        Speichern gew"ahlt hatte.
+    The purpose of this Method is to prevent the saving of Objects when closing
+    the Document, if the user has chosen to close without saving.
 */
 
 {
@@ -1944,8 +1919,8 @@ void SfxViewShell::DiscardClients_Impl()
     if ( !pClients )
         return;
 
-    for (sal_uInt16 n=0; n < pClients->Count(); )
-        delete pClients->GetObject(n);
+    for ( size_t n = 0; n < pClients->size(); )
+        delete pClients->at( n );
 }
 
 //--------------------------------------------------------------------
@@ -2002,7 +1977,7 @@ const Size& SfxViewShell::GetMargin() const
 
 void SfxViewShell::SetMargin( const Size& rSize )
 {
-    // Der default-Margin wurde "geeicht" mit www.apple.com !!
+    // the default margin was verified using www.apple.com !!
     Size aMargin = rSize;
     if ( aMargin.Width() == -1 )
         aMargin.Width() = DEFAULT_MARGIN_WIDTH;
@@ -2137,8 +2112,6 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
     sal_Bool bModified = sal_False;
 
     // create container from menu
-        // #110897#
-    // aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
         ::comphelper::getProcessServiceFactory(), &rIn, &rMenuIdentifier );
 
@@ -2170,7 +2143,7 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
                     // interceptor is indifferent
                     continue;
                 default:
-                    DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
+                    OSL_FAIL("Wrong return value of ContextMenuInterceptor!");
                     continue;
             }
         }
@@ -2269,7 +2242,6 @@ sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
 {
     pImp->aPrintOpts = rOpts;
-//      GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
 sal_Bool SfxViewShell::Escape()
@@ -2324,3 +2296,4 @@ void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransf
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

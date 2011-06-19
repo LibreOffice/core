@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
+#include <com/sun/star/frame/XComponentLoader.hpp>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include "comphelper/configurationhelper.hxx"
@@ -70,15 +73,16 @@
 #include <vcl/help.hxx>
 #include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/file.hxx>
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
+#include <svtools/miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
 #include <unotools/bootstrap.hxx>
-#include <vos/process.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -151,10 +155,49 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     return 0;
 }
 
+/// Find the correct location of the document (LICENSE.odt, etc.), and return
+/// it in rURL if found.
+static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )
+{
+    using namespace osl;
+    DirectoryItem aDirItem;
+
+    rURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/") );
+    rURL += rtl::OUString::createFromAscii( pName );
+    rURL += rtl::OUString::createFromAscii( pExt );
+    rtl::Bootstrap::expandMacros( rURL );
+
+    if (rURL.getLength() != 0)
+        return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
+    else
+        return sal_False;
+}
+
+/// Displays CREDITS or LICENSE in any of the available version
+static void showDocument( const char* pBaseName )
+{
+    try {
+        Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+        Sequence < com::sun::star::beans::PropertyValue > args(2);
+        args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
+        args[0].Value <<= sal_True;
+        args[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        args[1].Value <<= sal_True;
+
+        rtl::OUString aURL;
+        if ( checkURL ( pBaseName, ".odt", aURL ) ||
+                checkURL ( pBaseName, ".html", aURL ) ||
+                checkURL ( pBaseName, "", aURL ) ) {
+            xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
+        }
+    } catch (const ::com::sun::star::uno::Exception &) {
+    }
+}
+
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    bool bDone = sal_False;
+    bool bDone = false;
     switch ( rReq.GetSlot() )
     {
         case SID_SETOPTIONS:
@@ -206,7 +249,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                    if this dialog is closed by the user ...
                    So we ignore this request now and wait for a new user decision.
                 */
-                DBG_TRACE1( "QueryExit => FALSE (DispatchLevel == %u)", Application::GetDispatchLevel() );
+                OSL_TRACE( "QueryExit => sal_False (DispatchLevel == %u)", Application::GetDispatchLevel() );
                 return;
             }
 
@@ -222,7 +265,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 // if terminate() was successful, SfxApplication is now dead!
                 pAppData_Impl->bInQuit = sal_False;
 
-            // Returnwert setzten, ggf. terminieren
+            // Set return value, terminate if possible
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
             return;
         }
@@ -266,7 +309,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     const short nRet = pDlg->Execute();
 
                     if ( nRet )
-                        bDone = sal_True;
+                        bDone = true;
 
                     delete pDlg;
                 }
@@ -305,14 +348,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             sal_Bool bOk = ( n == 0);
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
-            bDone = sal_True;
+            bDone = true;
             break;
         }
 
         case SID_SAVEDOCS:
         {
             sal_Bool bOK = sal_True;
-            sal_Bool bTmpDone = sal_True;
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
@@ -322,7 +364,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     pObjSh->ExecuteSlot( aReq );
                     SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
-                    bTmpDone = aReq.IsDone();
                     if ( !pItem || !pItem->GetValue() )
                         bOK = sal_False;
                 }
@@ -333,26 +374,62 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_SHOW_LICENSE:
+        {
+            ModalDialog aDialog( NULL, SfxResId( DLG_HELP_LICENSING ) );
+
+            String aLicensing;
+            for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
+            {
+                if ( i != STR_LICENSING_INFORMATION_1 )
+                    aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+                aLicensing += String( SfxResId( i ) );
+            }
+
+            FixedText aText( &aDialog );
+            aText.SetText( aLicensing );
+            OKButton aShow( &aDialog, SfxResId( PB_LICENSING_SHOW ) );
+            CancelButton aClose( &aDialog, SfxResId( PB_LICENSING_CLOSE ) );
+
+            // positions and sizes are computed to always fit the language
+            Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+            Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+            Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+
+            long nDelimX = 12;
+            long nDelimY = 12;
+            long nWidth = aTextSize.Width() + 2*nDelimX;
+            long nButtonY = aTextSize.Height() + 2*nDelimY;
+            Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
+                    std::max( aShowSize.Height(), aCloseSize.Height() ) );
+
+            aDialog.SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
+            aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
+            aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
+            aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
+
+            aText.Show();
+
+            if ( aDialog.Execute() == RET_OK )
+                showDocument( "LICENSE" );
+
+            break;
+        }
+
+        case SID_SHOW_CREDITS:
+        {
+            showDocument( "CREDITS" );
+            break;
+        }
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
-        case SID_HELP_SUPPORTPAGE:
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                if ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE )
-                {
-                    // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( String::CreateFromAscii(".uno:HelpSupport"), String() );
-                    String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
-                    sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
-                    sHelpURL += sParams;
-                    sHelpURL += String::CreateFromAscii("&UseDB=no");
-                    pHelp->Start( sHelpURL, NULL );
-                }
-                else
-                    pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
-                bDone = sal_True;
+                pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
+                bDone = true;
             }
             break;
         }
@@ -360,22 +437,21 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPTIPS:
         {
-            // Parameter aus werten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, sal_False);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsQuickHelpEnabled();
 
-            // ausf"uhren
             if ( bOn )
                 Help::EnableQuickHelp();
             else
                 Help::DisableQuickHelp();
             SvtHelpOptions().SetHelpTips( bOn );
             Invalidate(SID_HELPTIPS);
-            bDone = sal_True;
+            bDone = true;
 
-            // ggf. recorden
+            // Record if possible
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPTIPS, bOn) );
             break;
@@ -388,22 +464,21 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_HELPBALLOONS:
         {
-            // Parameter auswerten
+            // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, sal_False);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsBalloonHelpEnabled();
 
-            // ausf"uhren
             if ( bOn )
                 Help::EnableBalloonHelp();
             else
                 Help::DisableBalloonHelp();
             SvtHelpOptions().SetExtendedHelp( bOn );
             Invalidate(SID_HELPBALLOONS);
-            bDone = sal_True;
+            bDone = true;
 
-            // ggf. recorden
+            // Record if possible
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
             break;
@@ -419,7 +494,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             : !aHelpOpt.IsHelpAgentAutoStartMode();
             aHelpOpt.SetHelpAgentAutoStartMode( bOn );
             Invalidate(SID_HELP_PI);
-            bDone = sal_True;
+            bDone = true;
             break;
         }
 
@@ -432,7 +507,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 VclAbstractDialog* pDlg = pFact->CreateVclDialog( 0, RID_DEFAULTABOUT );
                 pDlg->Execute();
                 delete pDlg;
-                bDone = sal_True;
+            bDone = true;
             }
             break;
         }
@@ -444,7 +519,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 new SfxTemplateOrganizeDlg(NULL);
             pDlg->Execute();
             delete pDlg;
-            bDone = sal_True;
+            bDone = true;
             break;
         }
 
@@ -452,7 +527,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
             aDialog.Execute();
-            bDone = sal_True;
+            bDone = true;
             break;
         }
 
@@ -525,7 +600,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     rtl::OUStringBuffer aBuf( aToolbarResName );
                     aBuf.append( pToolbarName->GetValue() );
 
-                    // Parameter auswerten
+                    // Evaluate Parameter
                     rtl::OUString aToolbarName( aBuf.makeStringAndClear() );
                     sal_Bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
@@ -559,7 +634,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
+    DBG_ASSERT(pRanges && *pRanges, "Set without range");
     while ( *pRanges )
     {
         for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -577,6 +652,18 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, String(SfxResId(STR_QUITAPP))));
+                    break;
+                }
+
+                case SID_CONFIG:
+                case SID_TOOLBOXOPTIONS:
+                case SID_CONFIGSTATUSBAR:
+                case SID_CONFIGMENU:
+                case SID_CONFIGACCEL:
+                case SID_CONFIGEVENT:
+                {
+                    if( SvtMiscOptions().DisableUICustomization() )
+                        rSet.DisableItem(nWhich);
                     break;
                 }
 
@@ -656,7 +743,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 static const ::rtl::OUString& getProductRegistrationServiceName( )
 {
-    static ::rtl::OUString s_sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.setup.ProductRegistration" );
+    static ::rtl::OUString s_sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.setup.ProductRegistration"));
     return s_sServiceName;
 }
 
@@ -770,7 +857,7 @@ namespace
                 {
                     Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
                     ::rtl::OUString sModule = xCheck->identify( xFrame );
-                    if ( sModule.equalsAscii( "com.sun.star.frame.StartModule" ) )
+                    if ( sModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.frame.StartModule" ) ) )
                         return xFrame;
                 }
                 catch( const UnknownModuleException& )
@@ -841,11 +928,17 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 VclAbstractDialog* pDlg =
                     pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
-                  pDlg->Execute();
+                  short nRet = pDlg->Execute();
                   delete pDlg;
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
                 while ( pView )
                 {
+                    if (nRet == RET_OK)
+                    {
+                        SfxObjectShell* pObjSh = pView->GetObjectShell();
+                        if (pObjSh)
+                            pObjSh->SetConfigOptionsChecked(false);
+                    }
                     pView->GetBindings().InvalidateAll(sal_False);
                     pView = SfxViewFrame::GetNext( *pView );
                 }
@@ -866,9 +959,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =
                     getConfigurationStringValue(
-                        ::rtl::OUString::createFromAscii("org.openoffice.Office.Common"),
-                        ::rtl::OUString::createFromAscii("Dictionaries"),
-                        ::rtl::OUString::createFromAscii("RepositoryURL"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dictionaries")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepositoryURL")),
                         ::rtl::OUString());
 
                 if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
@@ -879,10 +972,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                     // read locale from configuration
                     ::rtl::OUString sLocale = getConfigurationStringValue(
-                        ::rtl::OUString::createFromAscii("org.openoffice.Setup"),
-                        ::rtl::OUString::createFromAscii("L10N"),
-                        ::rtl::OUString::createFromAscii("ooLocale"),
-                        ::rtl::OUString::createFromAscii("en-US"));
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
 
                     aURLBuf.append( sLocale );
                     xSystemShell->execute(
@@ -912,12 +1005,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 // tell it that the user wants to register
                 if ( xProductRegistration.is() )
                 {
-                    xProductRegistration->trigger( ::rtl::OUString::createFromAscii( "RegistrationRequired" ) );
+                    xProductRegistration->trigger( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegistrationRequired")) );
                 }
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
-                DBG_ERROR( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
+                OSL_FAIL( "OfficeApplication::ExecuteApp_Impl(SID_ONLINE_REGISTRATION): caught an exception!" );
             }
         }
         break;
@@ -1152,13 +1245,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
@@ -1182,13 +1275,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ModuleDispatcher"))), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
@@ -1240,7 +1333,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 {
     const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
+    DBG_ASSERT(pRanges && *pRanges, "Set without Region");
     while ( *pRanges )
     {
         for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -1270,3 +1363,5 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
     if ( !aModuleOpt.IsImpress() )
         rSet.DisableItem( SID_SD_AUTOPILOT );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

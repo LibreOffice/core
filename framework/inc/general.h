@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,14 +56,6 @@ namespace css = ::com::sun::star;
 namespace framework {
 
 //-----------------------------------------------------------------------------
-/** status event mapped from load event of frame loader
-
-    @todo think about me
-          should be moved to another more specific place.
- */
-static const ::rtl::OUString FEATUREDESCRIPTOR_LOADSTATE = DECLARE_ASCII("loadFinishedOrCancelled");
-
-//-----------------------------------------------------------------------------
 /** Those macro is used to make it more clear where a synchronized block will start.
     Because normal documentation code wont be recognized by some developers to be real
     I need something where they are thinking about.
@@ -80,3 +73,5 @@ static const ::rtl::OUString FEATUREDESCRIPTOR_LOADSTATE = DECLARE_ASCII("loadFi
 } // namespace framework
 
 #endif // #ifndef __FRAMEWORK_GENERAL_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

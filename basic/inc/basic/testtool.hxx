@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,11 +39,10 @@
 
 #define ASSERTION_STACK_PREFIX "Backtrace:"
 
-// #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
+// Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
 sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
 
-//#include "testapp.hxx"
 #define ADD_ERROR_QUIET(nNr, aStr)                                      \
 {                                                                       \
     ErrorEntry *pErr;                                                   \
@@ -158,3 +158,5 @@ public:
 };
 
 #endif // _BASIC_TESTTOOL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,16 +36,12 @@
 #include <macros/debug.hxx>
 #include <macros/generic.hxx>
 
-#ifndef __FRAMEWORK_GENERAL_HXX_
 #include <general.h>
-#endif
 
 //_______________________________________________
 // include UNO interfaces
 
-#ifndef _COM_SUN_STAR_URTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
-#endif
 
 //_______________________________________________
 // include all others
@@ -98,3 +95,5 @@ class WakeUpThread : public ThreadHelpBase
 } // namespace framework
 
 #endif // __FRAMEWORK_HELPER_WAKEUPTHREAD_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

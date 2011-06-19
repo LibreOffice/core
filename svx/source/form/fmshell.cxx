@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,14 @@
 #include <svx/fmshell.hxx>
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
 #include "fmundo.hxx"
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#ifndef _COM_SUN_STAR_SDDB_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -67,13 +64,9 @@
 #include "svx/svditer.hxx"
 #include "fmobj.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
-#ifndef _SVX_FMRESIDS_HRC
 #include "svx/fmresids.hrc"
-#endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
@@ -96,38 +89,15 @@
 #include "fmdocumentclassification.hxx"
 #include "formtoolbars.hxx"
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include "svx/sdrobjectfilter.hxx"
-
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
-    try                                                                     \
-    {                                                                       \
-        successflag = sal_False;                                                \
-        action;                                                             \
-        successflag = sal_True;                                                 \
-    }                                                                       \
-    catch(::com::sun::star::sdbc::SQLException& e)                                                  \
-    {                                                                       \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());              \
-        displayException(eExtendedInfo);                                    \
-    }                                                                       \
-    catch(Exception&)                                                           \
-    {                                                                       \
-        DBG_ERROR(message);                                                 \
-    }                                                                       \
-
-
-#define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
 
 #define FmFormShell
 #include "svxslots.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "tbxform.hxx"
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -292,7 +262,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
-        // 2002-11-12 #104702# - fs@openoffice.org
         return sal_True;
 
     sal_Bool bResult = sal_True;
@@ -815,7 +784,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, ::rtl::OUString::createFromAscii( "Position" ), makeAny( (sal_Int32)nRecord ) );
+                rController->execute( nSlot, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Position" )), makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
         }   break;
@@ -1224,7 +1193,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmFormShell::GetFormState: caught an exception while determining the state!" );
+            OSL_FAIL( "FmFormShell::GetFormState: caught an exception while determining the state!" );
         }
         if (!bEnable)
             rSet.DisableItem(nWhich);
@@ -1514,3 +1483,5 @@ void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
     if ( pModel )
         pModel->GetUndoEnv().UnLock();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

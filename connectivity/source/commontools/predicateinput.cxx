@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPredicateInputController::getSeparatorChars: caught an exception!" );
+            OSL_FAIL( "OPredicateInputController::getSeparatorChars: caught an exception!" );
         }
         return sal_False;
     }
@@ -134,7 +135,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPredicateInputController::OPredicateInputController: caught an exception!" );
+            OSL_FAIL( "OPredicateInputController::OPredicateInputController: caught an exception!" );
         }
     }
 
@@ -145,7 +146,7 @@ namespace dbtools
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= nType;
+            _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) >>= nType;
 
             if  (   ( DataType::CHAR        == nType )
                 ||  ( DataType::VARCHAR     == nType )
@@ -204,10 +205,10 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString::createFromAscii( "FormatKey" ) ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "FormatKey" ) ) >>= nFormatKey;
+                        _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;
@@ -227,7 +228,7 @@ namespace dbtools
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
+                    OSL_FAIL( "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
                 }
 
                 sal_Bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
@@ -411,7 +412,6 @@ namespace dbtools
                         sReturn = pValueNode->getTokenValue();
                     else
                         pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
-                    // sReturn = pOdbcSpec->getChild(1)->getTokenValue();
                 }
             }
             else
@@ -435,7 +435,7 @@ namespace dbtools
                         );
                 }
                 else
-                    OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
+                    OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
             }
         }
         return sReturn;
@@ -445,3 +445,4 @@ namespace dbtools
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

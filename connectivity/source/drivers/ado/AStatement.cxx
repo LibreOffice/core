@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -364,7 +365,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     ::rtl::OUString aBatchSql;
     sal_Int32 nLen = 0;
     for(::std::list< ::rtl::OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
-        aBatchSql = aBatchSql + *i + ::rtl::OUString::createFromAscii(";");
+        aBatchSql = aBatchSql + *i + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 
 
     if ( m_RecordSet.IsValid() )
@@ -389,7 +390,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
         {
             assignRecordSet( pSet );
 
-            sal_Int32 nValue;
+            ADO_LONGPTR nValue;
             if(m_RecordSet.get_RecordCount(nValue))
                 pArray[j] = nValue;
         }
@@ -442,7 +443,7 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  ) throw(SQLException, Runti
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nRet;
+    ADO_LONGPTR nRet;
     if(m_RecordSet.IsValid() && m_RecordSet.get_RecordCount(nRet))
         return nRet;
     return -1;
@@ -511,7 +512,7 @@ sal_Int32 OStatement_Base::getQueryTimeOut() const  throw(SQLException, RuntimeE
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeException)
 {
-    sal_Int32 nRet=-1;
+    ADO_LONGPTR nRet=-1;
     if(!(m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet)))
         ::dbtools::throwFunctionSequenceException(NULL);
     return nRet;
@@ -734,7 +735,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     catch( const Exception& e )
     {
         bModified = sal_True;   // will ensure that the property is set
-        OSL_ENSURE( sal_False, "OStatement_Base::convertFastPropertyValue: caught something strange!" );
+        OSL_FAIL( "OStatement_Base::convertFastPropertyValue: caught something strange!" );
         (void)e;
     }
     return bModified;
@@ -839,3 +840,5 @@ void SAL_CALL OStatement::release() throw()
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

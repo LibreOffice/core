@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 
 #include <tools/debug.hxx>
-#ifndef __SGI_STL_SET
 #include <set>
-#endif
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>
@@ -45,9 +44,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/xmlimp.hxx>
 
-#ifndef _XMLOFF_PRSTYLEI_HXX
 #include <xmloff/prstylei.hxx>
-#endif
 #include <xmloff/attrlist.hxx>
 #include "xmloff/xmlerror.hxx"
 
@@ -212,15 +209,15 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = rtl::OUString::createFromAscii("ParaStyleName");
+                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
                     OUString sParent( GetParentName() );
                     if( sParent.getLength() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  rtl::OUString::createFromAscii("Standard");
+                        sParent =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
+                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName"));
                     pProps->Value <<= sParent;
                 }
 
@@ -229,8 +226,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        rtl::OUString::createFromAscii("ParaAutoStyleName") :
-                        rtl::OUString::createFromAscii("CharAutoStyleName");
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName")) :
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName"));
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {
@@ -420,3 +417,4 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

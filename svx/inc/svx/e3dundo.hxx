@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@ class E3dView;
 
 /************************************************************************\
 |*
-|* Basisklasse fuer alle 3D-Undo-Aktionen.
+|* Base class for all 3D undo actions.
 |*
 \************************************************************************/
 class E3dUndoAction : public SdrUndoAction
@@ -62,7 +63,7 @@ class E3dUndoAction : public SdrUndoAction
 
 /************************************************************************\
 |*
-|* Undo fuer 3D-Rotation ueber die Rotationsmatrizen (ob das wohl klappt ?)
+|* Undo for 3D rotation through the rotation matrices
 |*
 \************************************************************************/
 class E3dRotateUndoAction : public E3dUndoAction
@@ -91,7 +92,7 @@ class E3dRotateUndoAction : public E3dUndoAction
 
 /************************************************************************\
 |*
-|* Undo fuer 3D-Attribute (Implementiert ueber Set3DAttributes())
+|* Undo for 3D attributes (implemented using Set3DAttributes())
 |*
 \************************************************************************/
 class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
@@ -122,3 +123,5 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
 };
 
 #endif          // _E3D_CUBE3D_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

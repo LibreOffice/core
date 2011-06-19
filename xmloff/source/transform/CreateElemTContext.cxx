@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "CreateElemTContext.hxx"
 #include "MutableAttrList.hxx"
-#ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "TContextVector.hxx"
 #include "FlatTContext.hxx"
@@ -129,3 +128,5 @@ void XMLCreateElemTransformerContext::StartElement(
         (*aIter)->Export();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

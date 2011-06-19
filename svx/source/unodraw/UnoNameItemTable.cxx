@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 #include <svx/svdmodel.hxx>
 #include "UnoNameItemTable.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "svx/unoapi.hxx"
@@ -44,7 +45,6 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::vos;
 
 SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
 : mpModel( pModel ),
@@ -116,7 +116,7 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
 void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( hasByName( aApiName ) )
         throw container::ElementExistException();
@@ -132,7 +132,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
 void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // a little quickfix for 2.0 to let applications clear api
     // created items that are not used
@@ -160,7 +160,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
             maItemSetVector.erase( aIter );
             return;
         }
-        aIter++;
+        ++aIter;
     }
 
     if( !hasByName( Name ) )
@@ -171,7 +171,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     String aName;
     SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
@@ -195,7 +195,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
             (*aIter)->Put( *pNewItem );
             return;
         }
-        aIter++;
+        ++aIter;
     }
 
     // if it is not in our own sets, modify the pool!
@@ -227,7 +227,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     String aName;
     SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
@@ -259,7 +259,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     std::set< OUString, comphelper::UStringLess > aNameSet;
 
@@ -296,7 +296,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     String aName;
     SvxUnogetInternalNameForItem( mnWhich, aApiName, aName );
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
     throw( uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     const NameOrIndex *pItem;
 
@@ -339,3 +339,5 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
 
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

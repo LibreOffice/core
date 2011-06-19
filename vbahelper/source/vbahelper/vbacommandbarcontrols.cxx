@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,15 +71,15 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_COMMANDURL );
+    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_HELPURL );
+    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_LABEL );
+    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_TYPE );
+    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER );
+    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
     aProps[4].Value = aSubMenu;
     aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
     aProps[5].Value <<= isVisible;
@@ -92,19 +93,19 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
 {
     uno::Sequence< beans::PropertyValue > aProps(7);
 
-    aProps[0].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_COMMANDURL );
+    aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
     aProps[0].Value <<= sCommandURL;
-    aProps[1].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_HELPURL );
+    aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
     aProps[1].Value <<= sHelpURL;
-    aProps[2].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_LABEL );
+    aProps[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ));
     aProps[2].Value <<= sLabel;
-    aProps[3].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_TYPE );
+    aProps[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
     aProps[3].Value <<= nType;
-    aProps[4].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER );
+    aProps[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ));
     aProps[4].Value = aSubMenu;
-    aProps[5].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_ISVISIBLE );
+    aProps[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ));
     aProps[5].Value <<= isVisible;
-    aProps[6].Name = rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_STYLE );
+    aProps[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
     aProps[6].Value <<= nStyle;
 
     return aProps;
@@ -131,7 +132,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     uno::Sequence< beans::PropertyValue > aProps;
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( aProps, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
+    getPropertyValue( aProps, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
     ScVbaCommandBarControl* pNewCommandBarControl = NULL;
     if( xSubMenu.is() )
         pNewCommandBarControl = new ScVbaCommandBarPopup( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition, sal_True );
@@ -170,8 +171,8 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 {
     // Parameter is not supported
     // the following name needs to be individually created;
-    rtl::OUString sLabel( rtl::OUString::createFromAscii("Custom") );
-    rtl::OUString sCommandUrl = rtl::OUString::createFromAscii( CUSTOM_MENU_STR ) + sLabel;
+    rtl::OUString sLabel(RTL_CONSTASCII_USTRINGPARAM("Custom"));
+    rtl::OUString sCommandUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR)) + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     sal_Int32 nPosition = 0;
     sal_Bool bTemporary = sal_True;
@@ -327,3 +328,5 @@ uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

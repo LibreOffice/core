@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "ado/AKeys.hxx"
-#ifndef _CONNECTIVITY_ADO_INDEX_HXX_
 #include "ado/AKey.hxx"
-#endif
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
@@ -89,7 +88,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
     WpADOKey aKey = pKey->getImpl();
     ::rtl::OUString sName = aKey.get_Name();
     if(!sName.getLength())
-        aKey.put_Name(::rtl::OUString::createFromAscii("PrimaryKey") );
+        aKey.put_Name(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrimaryKey")) );
 
     ADOKeys* pKeys = m_aCollection;
     if ( FAILED(pKeys->Append(OLEVariant((ADOKey*)aKey),
@@ -113,3 +112,4 @@ void OKeys::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

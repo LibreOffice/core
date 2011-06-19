@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <tools/string.hxx>
 #include <tools/contnr.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <tools/shl.hxx>
 #include <editeng/outliner.hxx>
 #include "svx/svxdllapi.h"
@@ -125,7 +124,7 @@ public:
 class SfxItemSet;
 // Liefert eine Ersatzdarstellung fuer einen XFillStyle
 // Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
-SVX_DLLPUBLIC FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
+SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
 class UShortCont {
@@ -146,29 +145,24 @@ class ContainerSorter {
 protected:
     Container& rCont;
 private:
-//#if 0 // _SOLAR__PRIVATE
     void ImpSubSort(long nL, long nR) const;
-//#endif // __PRIVATE
 public:
     ContainerSorter(Container& rNewCont): rCont(rNewCont) {}
     void DoSort(sal_uIntPtr a=0, sal_uIntPtr b=0xFFFFFFFF) const;
-#ifdef This_Is_Just_For_A_Comment
-    Compare() muss returnieren:
-      -1 falls *pElem1<*pElem2
-       0 falls *pElem1=*pElem2
-      +1 falls *pElem1>*pElem2
-#endif
+
+    // Compare() has to return:
+    //  -1 if *pElem1<*pElem2
+    //   0 if *pElem1=*pElem2
+    //  +1 if *pElem1>*pElem2
     virtual int Compare(const void* pElem1, const void* pElem2) const=0;
 private: // damit keiner vergessen wird
 virtual
         void
                  Is1stLessThan2nd(const void* pElem1, const void* pElem2) const;
-//  virtual FASTBOOL Is1stLessThan2nd(const void* pElem1, const void* pElem2) const=NULL;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//#if 0 // _SOLAR__PRIVATE
 #define SDRHDC_SAVEPEN                1 /* Save Linecolor                     */
 #define SDRHDC_SAVEBRUSH              2 /* Save Fillcolorn                    */
 #define SDRHDC_SAVEFONT               4 /* Save Font                          */
@@ -186,13 +180,12 @@ class ImpSdrHdcMerk
     Color*        pLineColorMerk;
     sal_uInt16        nMode;
 public:
-    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, FASTBOOL bAutoMerk=sal_True);
+    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, bool bAutoMerk = true);
     ~ImpSdrHdcMerk();
     void Save(const OutputDevice& rOut);
-    FASTBOOL IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
+    bool IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
     void Restore(OutputDevice& rOut, sal_uInt16 nMask=SDRHDC_SAVEALL) const;
 };
-//#endif // __PRIVATE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -275,7 +268,7 @@ public:
     const Link& GetLink(unsigned nNum) const { return *((Link*)(aList.GetObject(nNum))); }
     void InsertLink(const Link& rLink, unsigned nPos=0xFFFF);
     void RemoveLink(const Link& rLink);
-    FASTBOOL HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
+    bool HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
 };
 
 // Fuer die Factory in SvdObj.CXX
@@ -354,3 +347,5 @@ SVX_DLLPUBLIC Color GetTextEditBackgroundColor(const SdrObjEditView& rView);
 /////////////////////////////////////////////////////////////////////
 
 #endif //_SVDETC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

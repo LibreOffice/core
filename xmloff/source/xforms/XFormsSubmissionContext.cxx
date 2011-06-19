@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ XFormsSubmissionContext::~XFormsSubmissionContext()
 Any toBool( const OUString& rValue )
 {
     Any aValue;
-    sal_Bool bValue;
+    bool bValue;
     if( SvXMLUnitConverter::convertBool( bValue, rValue ) )
     {
         aValue <<= ( bValue ? true : false );
@@ -165,7 +166,7 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
         lcl_setValue( mxSubmission, OUSTRING("IncludeNamespacePrefixes"), rValue );
         break;
     default:
-        DBG_ERROR( "unknown attribute" );
+        OSL_FAIL( "unknown attribute" );
         break;
     }
 }
@@ -177,6 +178,8 @@ SvXMLImportContext* XFormsSubmissionContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "no children supported" );
+    OSL_FAIL( "no children supported" );
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

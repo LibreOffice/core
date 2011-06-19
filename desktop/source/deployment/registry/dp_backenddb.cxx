@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -428,7 +429,7 @@ void BackendDb::writeSimpleList(
                 listNode, css::uno::UNO_QUERY_THROW));
 
         typedef ::std::list<OUString>::const_iterator ITC_ITEMS;
-        for (ITC_ITEMS i = list.begin(); i != list.end(); i++)
+        for (ITC_ITEMS i = list.begin(); i != list.end(); ++i)
         {
             const Reference<css::xml::dom::XNode> memberNode(
                 doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);
@@ -636,13 +637,10 @@ OUString BackendDb::readSimpleElement(
 }
 
 
-
-//================================================================================
 RegisteredDb::RegisteredDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):BackendDb(xContext, url)
 {
-
 }
 
 void RegisteredDb::addEntry(::rtl::OUString const & url)
@@ -698,14 +696,10 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sExpression);
-        if (!aNode.is())
-        {
-            return false;
-        }
-        return true;
+
+        return aNode.is();
     }
     catch(css::uno::Exception &)
     {
@@ -716,7 +710,7 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
     }
 }
 
-
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

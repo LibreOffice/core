@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "toolkit/helper/vclunohelper.hxx"
 
@@ -126,7 +127,7 @@ TheExtensionManager::~TheExtensionManager()
 //------------------------------------------------------------------------------
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     if ( bCreateUpdDlg )
     {
@@ -151,7 +152,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 //------------------------------------------------------------------------------
 void TheExtensionManager::Show()
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->Show();
 }
@@ -159,7 +160,7 @@ void TheExtensionManager::Show()
 //------------------------------------------------------------------------------
 void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->SetText( rTitle );
 }
@@ -167,7 +168,7 @@ void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 //------------------------------------------------------------------------------
 void TheExtensionManager::ToTop( sal_uInt16 nFlags )
 {
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
 
     getDialog()->ToTop( nFlags );
 }
@@ -278,7 +279,7 @@ void TheExtensionManager::terminateDialog()
 {
     if ( ! dp_misc::office_is_running() )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         delete m_pExtMgrDialog;
         m_pExtMgrDialog = NULL;
         delete m_pUpdReqDialog;
@@ -360,7 +361,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
     catch ( uno::Exception & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;
     }
 }
@@ -445,7 +446,7 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     {
         if ( dp_misc::office_is_running() )
         {
-            const ::vos::OGuard guard( Application::GetSolarMutex() );
+            const SolarMutexGuard guard;
             delete m_pExtMgrDialog;
             m_pExtMgrDialog = NULL;
             delete m_pUpdReqDialog;
@@ -514,7 +515,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
 
     ::rtl::Reference<TheExtensionManager> that( new TheExtensionManager( pParent, xContext ) );
 
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    const SolarMutexGuard guard;
     if ( ! s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
@@ -529,3 +530,4 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
 
 } //namespace dp_gui
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

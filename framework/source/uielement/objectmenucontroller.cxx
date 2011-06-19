@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,28 +44,23 @@
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
-#ifndef _COM_SUN_STAR_EMBED_VERBDATTRIBUTES_HPP_
 #include <com/sun/star/embed/VerbAttributes.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -99,7 +95,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
     PopupMenu*                                         pVCLPopupMenu     = 0;
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     resetPopupMenu( rPopupMenu );
     if ( pPopupMenu )
@@ -157,10 +153,12 @@ void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
 {
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"ObjectMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

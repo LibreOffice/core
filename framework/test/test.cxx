@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -179,7 +180,6 @@ TestApplication aTestApplication ;
 
 void TestApplication::Main()
 {
-//  RegistryCache aCache;
 
     /**-***********************************************************************************************************
         initialize program
@@ -238,9 +238,6 @@ void TestApplication::Main()
     bState = impl_testTreeSearch();
     #endif
 
-//  Execute();
-//    xFrame->dispose();
-//    delete pMainWindow;
     if( bState == sal_True )
     {
         LOG_ERROR( "TestApplication::Main()", "Test successful ..." )
@@ -368,52 +365,7 @@ void TestApplication::impl_testFilterCache()
     }
     else
     {
-/*
-        // Step over all types and log his values.
-        // These simulate a XNameAccess!
-        const Sequence< OUString > seqAllTypeNames = aCache.getAllTypeNames();
-        sal_uInt32 nCount = seqAllTypeNames.getLength();
-        for( sal_uInt32 nPosition=0; nPosition<nCount; ++nPosition )
-        {
-            sBuffer.appendAscii( "--------------------------------------------------------------------------------\n" );
-            const TType* pType = aCache.getTypeByName( seqAllTypeNames[nPosition] );
-            if( pType == NULL )
-            {
-                sBuffer.appendAscii ( "Type ["                  );
-                sBuffer.append      ( (sal_Int32)nPosition      );
-                sBuffer.appendAscii ( "] \""                    );
-                sBuffer.append      ( seqAllTypeNames[nPosition]);
-                sBuffer.appendAscii ( "\" isn't valid!"         );
-            }
-            else
-            {
-                sBuffer.appendAscii ( "Type ["                      );
-                sBuffer.append      ( (sal_Int32)nPosition          );
-                sBuffer.appendAscii ( "] \""                        );
-                sBuffer.append      ( seqAllTypeNames[nPosition]    );
-                sBuffer.appendAscii ( "\"\n\t\tUIName\t=\t"         );
-                sBuffer.append      ( pType->sUIName                );
-                sBuffer.appendAscii ( "\n\t\tMediaType\t=\t"        );
-                sBuffer.append      ( pType->sMediaType             );
-                sBuffer.appendAscii ( "\n\t\tClipboardFormat\t=\t"  );
-                sBuffer.append      ( pType->sClipboardFormat       );
-                sBuffer.appendAscii ( "\n\t\tURLPattern\t=\t{"      );
-                for( TConstStringIterator aIterator=pType->lURLPattern.begin(); aIterator!=pType->lURLPattern.end(); ++aIterator )
-                {
-                    sBuffer.append      ( *aIterator    );
-                    sBuffer.appendAscii ( ";\n\t\t"     );
-                }
-                sBuffer.appendAscii( "}\nExtensions\t=\t" );
-                for( aIterator=pType->lExtensions.begin(); aIterator!=pType->lExtensions.end(); ++aIterator )
-                {
-                    sBuffer.append      ( *aIterator    );
-                    sBuffer.appendAscii ( ";\n\t\t"     );
-                }
-                sBuffer.appendAscii ( "}\nDocumentIconID\t=\t"          );
-                sBuffer.append      ( (sal_Int32)pType->nDocumentIconID );
-            }
-        }
-*/
+
         // searchFirstType( URL, MediaType, ClipboardFormat, startEntry )
         TCheckedTypeIterator aIterator;
         sBuffer.appendAscii( "search type for \"file://c|/temp/test.sdw\"; no media type; no clipboard format\n" );
@@ -446,8 +398,6 @@ void TestApplication::impl_testLoginDialog()
     LOG_ASSERT( !(xDialog.is()==sal_False), "TestApplication::impl_testLoginDialog()\nCould not create login dialog.\n" )
     // Check set/getTitle()
     /* not implemented yet! */
-//  OUString sTitle = DECLARE_ASCII("Login Dialog Test");
-//  xDialog->setTitle( sTitle );
 //  LOG_ASSERT( !(xDialog->getTitle()!=sTitle), "TestApplication::impl_testLoginDialog()\nset/getTitle don't work correct.\n" )
 
     UniString sInternalURL = DECLARE_ASCII("private:factory/scalc");
@@ -912,45 +862,14 @@ void TestApplication::impl_buildTree( const Reference< XDesktop >& xDesktop )
     xFrames->append( xFrame_4112 );
     xFrames->append( xFrame_4113 );
 
-    // Create some active paths.
-    // desktop => task_1 => frame_11 => frame_112 => frame_1122
-//  xDesktopSupplier->setActiveFrame( xTaskFrame_1 );
-//  xTaskFramesSupplier_1->setActiveFrame( xFrame_11 );
-//  xFramesSupplier_11->setActiveFrame( xFrame_112 );
-//  xFramesSupplier_112->setActiveFrame( xFrame_1122 );
-    // frame_41 => frame_411 => frame_4111
-//  xFramesSupplier_41->setActiveFrame( xFrame_411 );
-//  xFramesSupplier_411->setActiveFrame( xFrame_4111 );
-    // task_3 => frame_31
-//  xTaskFramesSupplier_3->setActiveFrame( xFrame_31 );
-    // frame_1123 => frame_11231
-//  xFramesSupplier_1123->setActiveFrame( xFrame_11231 );
 
-//  xTask_1->activate();
-//  impl_logTree( xDesktop );
-//  xFrame_41->activate();
-//  impl_logTree( xDesktop );
-//  xFrame_52->activate();
-//  impl_logTree( xDesktop );
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "initiale Hierarchy:" )
     impl_logTree( xDesktop );
 
-//  xFrame_121->activate();
-//  impl_logTree( xDesktop );
-//  xFrame_41->activate();
-//  impl_logTree( xDesktop );
-//  xFrame_52->activate();
-//  impl_logTree( xDesktop );
 //  WRITE_LOGFILE( LOGFILENAME_EVENTS, "nach xFrame_411->activate():" )
     xFrame_411->activate();
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "nach xFrame_411->activate():" )
     impl_logTree( xDesktop );
-//  xFrame_41->deactivate();
-//  impl_logTree( xDesktop );
-//  xFrame_4113->activate();
-//  impl_logTree( xDesktop );
-//  xFrame_21->activate();
-//  impl_logTree( xDesktop );
 //  WRITE_LOGFILE( LOGFILENAME_EVENTS, "nach xFrame_11231->activate():" )
     xFrame_11231->activate();
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "nach xFrame_11231->activate():" )
@@ -961,8 +880,6 @@ void TestApplication::impl_buildTree( const Reference< XDesktop >& xDesktop )
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "nach xFrame_11221->activate():" )
     impl_logTree( xDesktop );
 
-//  WRITE_LOGFILE( LOGFILENAME_EVENTS, "nach xFrame_112->deactivate():" )
-//  xFrame_112->getCreator()->setActiveFrame( Reference< XFrame >() );
     xFrame_112->deactivate();
 //  WRITE_LOGFILE( LOGFILENAME_TREE, "nach xFrame_112->deactivate():" )
     impl_logTree( xDesktop );
@@ -997,9 +914,6 @@ void TestApplication::impl_logTree( const Reference< XDesktop >& xDesktop )
     OUString sTreeNamesStream = xDebug->dumpVariable( DUMPVARIABLE_TREEINFO, 0 );
     // And write it to logfile.
     OString sOutPut = OUStringToOString( sTreeNamesStream, RTL_TEXTENCODING_UTF8 );
-//  WRITE_LOGFILE( LOGFILENAME_TREE, "\nNew tree log:\n\n"  );
-//  WRITE_LOGFILE( LOGFILENAME_TREE, sOutPut            );
-//  WRITE_LOGFILE( LOGFILENAME_TREE, "\n"                       );
 #endif
 }
 #endif // TEST_DESKTOP
@@ -1344,3 +1258,5 @@ sal_Bool TestApplication::impl_testTreeSearch()
     return sal_True;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

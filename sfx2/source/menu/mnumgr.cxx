@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,18 +34,13 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <cstdarg>  // std::va_list
 
-#ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
-#endif
-#ifndef GCC
-#endif
 
 #include <unotools/streamwrap.hxx>
 #include <sfx2/objsh.hxx>
@@ -164,13 +160,11 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
             if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                 continue;
 
-            // neue Id vergeben
             sal_uInt16 nId = SID_VERB_START + nr++;
-            DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
+            DBG_ASSERT(nId <= SID_VERB_END, "Too many verbs!");
             if ( nId > SID_VERB_END )
                 break;
 
-            // einf"ugen
             pMenu->InsertItem( nId, aVerbs[n].VerbName );
         }
     }
@@ -199,9 +193,9 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
-    //
+
     // build thesaurus sub menu if look-up string is available
-    //
+
     PopupMenu* pThesSubMenu = 0;
     SfxPoolItem *pItem = 0;
     pBindings->QueryState( SID_THES, pItem );
@@ -230,11 +224,10 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         if (nNumSynonyms > 0)
         {
             SvtLinguConfig aCfg;
-            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
-            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
             if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
@@ -245,7 +238,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
                 String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
+                ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusFromContext?WordReplace:string=") );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -261,7 +254,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString::createFromAscii( ".uno:ThesaurusDialog" ) );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusDialog")) );
 
         pSVMenu->InsertSeparator();
         const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );
@@ -292,7 +285,6 @@ void SfxMenuManager::UseDefault()
         ResId aResId(GetType(),*pResMgr);
         aResId.SetRT(RSC_MENU);
         Menu *pSVMenu = new PopupMenu( aResId );
-        //SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
 
         if ( bAddClipboardFuncs )
         {
@@ -368,7 +360,7 @@ void SfxMenuManager::Construct_Impl( Menu* pSVMenu, sal_Bool bWithHelp )
     SfxVirtualMenu *pOldVirtMenu=0;
     if ( pMenu )
     {
-        // Es wird umkonfiguriert
+        // It is reconfigured
         pOldVirtMenu = pMenu;
         pBindings->ENTERREGISTRATIONS();
     }
@@ -638,3 +630,4 @@ Menu* SfxPopupMenuManager::GetSVMenu()
     return (Menu*) GetMenu()->GetSVMenu();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

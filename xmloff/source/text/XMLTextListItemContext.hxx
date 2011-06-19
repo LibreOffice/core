@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,11 @@ class XMLTextListItemContext : public SvXMLImportContext
 
     sal_Int16                   nStartValue;
 
-    // --> OD 2008-05-07 #refactorlists#
     // quantity of <text:list> child elements
     sal_Int16 mnSubListCount;
     // list style instance for text::style-override property
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > mxNumRulesOverride;
-    // <--
 
 public:
 
@@ -70,7 +69,6 @@ public:
     sal_Bool HasStartValue() const { return -1 != nStartValue; }
     sal_Int16 GetStartValue() const { return nStartValue; }
 
-    // --> OD 2008-05-08 #refactorlists#
     inline sal_Bool HasNumRulesOverride() const
     {
         return mxNumRulesOverride.is();
@@ -84,3 +82,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

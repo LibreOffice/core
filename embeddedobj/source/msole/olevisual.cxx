@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,16 +65,16 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a bitmap
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-            ::rtl::OUString::createFromAscii( "Bitmap" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Bitmap" )),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }
     else
     {
         // it's a metafile
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-            ::rtl::OUString::createFromAscii( "Windows Metafile" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Windows Metafile" )),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }
 
@@ -110,11 +111,11 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Illegal call!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not loaded!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
@@ -136,7 +137,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "The object should not be resized without activation!\n" );
+            OSL_FAIL( "The object should not be resized without activation!\n" );
         }
         aGuard.reset();
     }
@@ -190,11 +191,11 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Illegal call!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not loaded!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     awt::Size aResult;
@@ -219,7 +220,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 sal_Bool bSuccess = sal_False;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
-                    OSL_ENSURE( sal_False, "Loaded object has no cached size!\n" );
+                    OSL_FAIL( "Loaded object has no cached size!\n" );
 
                     // try to switch the object to RUNNING state and request the value again
                     try {
@@ -338,13 +339,13 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Illegal call!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not loaded!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     embed::VisualRepresentation aVisualRepr;
@@ -371,8 +372,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 changeState( embed::EmbedStates::RUNNING );
 
             datatransfer::DataFlavor aDataFlavor(
-                    ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-                    ::rtl::OUString::createFromAscii( "Windows Metafile" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Windows Metafile" )),
                     ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
             aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
@@ -404,7 +405,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( !m_xCachedVisualRepresentation.is() )
     {
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Illegal call!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -431,14 +432,15 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Illegal call!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object is not loaded!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

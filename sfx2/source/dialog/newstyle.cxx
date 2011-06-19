@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 #include <svl/style.hxx>
-#ifndef GCC
-#endif
 
 #include <sfx2/newstyle.hxx>
 #include "dialog.hrc"
@@ -103,7 +102,8 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
 // -----------------------------------------------------------------------
 
-__EXPORT SfxNewStyleDlg::~SfxNewStyleDlg()
+SfxNewStyleDlg::~SfxNewStyleDlg()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

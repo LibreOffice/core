@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,13 @@
 #include "precompiled_sfx2.hxx"
 
 #include "doctemplates.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -49,6 +48,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
@@ -72,6 +72,8 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include "doc.hrc"
+
+#include <vector>
 
 //-----------------------------------------------------------------------------
 
@@ -124,6 +126,8 @@ using namespace ::rtl;
 using namespace ::ucbhelper;
 using namespace ::comphelper;
 
+using ::std::vector;
+
 //=============================================================================
 
 class WaitWindow_Impl : public WorkWindow
@@ -149,12 +153,12 @@ struct NamePair_Impl
     OUString maLongName;
 };
 
-DECLARE_LIST( NameList_Impl, NamePair_Impl* )
-
 class Updater_Impl;
-class GroupList_Impl;
 class DocTemplates_EntryData_Impl;
 class GroupData_Impl;
+
+typedef vector< NamePair_Impl* > NameList_Impl;
+typedef vector< GroupData_Impl* > GroupList_Impl;
 
 //=============================================================================
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -276,7 +280,7 @@ public:
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
-    Content                     getContent() { return maRootContent; }
+    Content                     getContent() const { return maRootContent; }
 
     void                        setLocale( const Locale & rLocale );
     Locale                      getLocale();
@@ -306,7 +310,7 @@ public:
 
 //=============================================================================
 
-class Updater_Impl : public ::vos::OThread
+class Updater_Impl : public ::osl::Thread
 {
 private:
     SfxDocTplService_Impl   *mpDocTemplates;
@@ -360,8 +364,7 @@ public:
 
 class GroupData_Impl
 {
-    DECLARE_LIST( EntryList_Impl, DocTemplates_EntryData_Impl* )
-    EntryList_Impl      maEntries;
+    vector< DocTemplates_EntryData_Impl* > maEntries;
     OUString            maTitle;
     OUString            maHierarchyURL;
     OUString            maTargetURL;
@@ -377,8 +380,8 @@ public:
     void                setHierarchyURL( const OUString& rURL ) { maHierarchyURL = rURL; }
     void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
 
-    sal_Bool            getInUse() { return mbInUse; }
-    sal_Bool            getInHierarchy() { return mbInHierarchy; }
+    sal_Bool            getInUse() const { return mbInUse; }
+    sal_Bool            getInHierarchy() const { return mbInHierarchy; }
     const OUString&     getHierarchyURL() const { return maHierarchyURL; }
     const OUString&     getTargetURL() const { return maTargetURL; }
     const OUString&     getTitle() const { return maTitle; }
@@ -387,15 +390,9 @@ public:
                                   const OUString& rTargetURL,
                                   const OUString& rType,
                                   const OUString& rHierURL );
-    sal_uIntPtr               count() { return maEntries.Count(); }
-    DocTemplates_EntryData_Impl*     getEntry( sal_uIntPtr nPos ) { return maEntries.GetObject( nPos ); }
+    size_t                          count() { return maEntries.size(); }
+    DocTemplates_EntryData_Impl*    getEntry( size_t nPos ) { return maEntries[ nPos ]; }
 };
-
-DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
-
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
 //-----------------------------------------------------------------------------
 // private SfxDocTplService_Impl
@@ -460,7 +457,7 @@ void SfxDocTplService_Impl::init_Impl()
             mxInfo = uno::Reference< XStandaloneDocumentInfo > (
                 mxFactory->createInstance( aService ), UNO_QUERY );
         } catch (uno::RuntimeException &) {
-            OSL_ENSURE(false, "SfxDocTplService_Impl::init_Impl: "
+            OSL_FAIL("SfxDocTplService_Impl::init_Impl: "
                 "cannot create DocumentProperties service");
         }
 
@@ -473,7 +470,7 @@ void SfxDocTplService_Impl::init_Impl()
         if ( bNeedsUpdate )
         {
             aGuard.clear();
-            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexClearableGuard aSolarGuard;
 
             WaitWindow_Impl* pWin = new WaitWindow_Impl();
 
@@ -483,7 +480,7 @@ void SfxDocTplService_Impl::init_Impl()
             update( sal_True );
 
             anotherGuard.clear();
-            ::vos::OGuard aSecondSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSecondSolarGuard;
 
             delete pWin;
         }
@@ -543,7 +540,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
 // -----------------------------------------------------------------------
 void SfxDocTplService_Impl::readFolderList()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
     ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
@@ -558,7 +555,7 @@ void SfxDocTplService_Impl::readFolderList()
         pPair->maShortName  = aShortNames.GetString( i );
         pPair->maLongName   = aLongNames.GetString( i );
 
-        maNames.Insert( pPair, LIST_APPEND );
+        maNames.push_back( pPair );
     }
 }
 
@@ -566,17 +563,15 @@ void SfxDocTplService_Impl::readFolderList()
 OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
 {
     OUString         aRet;
-    NamePair_Impl   *pPair = maNames.First();
 
-    while ( pPair )
+    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
     {
+        NamePair_Impl* pPair = maNames[ i ];
         if ( pPair->maShortName == rShortName )
         {
             aRet = pPair->maLongName;
             break;
         }
-        else
-            pPair = maNames.Next();
     }
 
     if ( !aRet.getLength() )
@@ -599,11 +594,45 @@ void SfxDocTplService_Impl::getDirList()
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
+    uno::Reference< XComponentContext > xCtx;
+    uno::Reference< util::XMacroExpander > xExpander;
+    uno::Reference< XPropertySet > xPropSet( mxFactory, UNO_QUERY );
+    const rtl::OUString aPrefix(
+        RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" ) );
+
+    if ( xPropSet.is() )
+    {
+        xPropSet->getPropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+            >>= xCtx;
+    }
+
+    if ( xCtx.is() )
+    {
+        xCtx->getValueByName(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                               "/singletons/com.sun.star.util.theMacroExpander" ) ) )
+            >>= xExpander;
+
+        OSL_ENSURE( xExpander.is(),
+                    "Unable to obtain macro expander singleton!" );
+    }
+
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+        sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
+        if ( nIndex != -1 && xExpander.is() )
+        {
+            maTemplateDirs[i] = maTemplateDirs[i].replaceAt(nIndex,
+                                                            aPrefix.getLength(),
+                                                            rtl::OUString());
+            maTemplateDirs[i] = xExpander->expandMacros( maTemplateDirs[i] );
+        }
     }
 
     aValue <<= maTemplateDirs;
@@ -705,7 +734,7 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
                 uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
                 SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aDocType ) );
                 aType = aTypeProps.getUnpackedValueOrDefault(
-                            ::rtl::OUString::createFromAscii( "MediaType" ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
                             ::rtl::OUString() );
             }
             catch( uno::Exception& )
@@ -1044,7 +1073,7 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 }
                 else
                 {
-                    OSL_ENSURE( false, "Unsupported property value type" );
+                    OSL_FAIL( "Unsupported property value type" );
                 }
             }
         }
@@ -1105,7 +1134,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
                 }
                 else
                 {
-                    OSL_ENSURE( false, "Unsupported property value type" );
+                    OSL_FAIL( "Unsupported property value type" );
                 }
             }
         }
@@ -1153,9 +1182,14 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 
     if ( mpUpdater )
     {
-        mpUpdater->kill();
+        mpUpdater->terminate();
+        mpUpdater->join();
         delete mpUpdater;
     }
+
+    for ( size_t i = 0, n = maNames.size(); i < n; ++i )
+        delete maNames[ i ];
+    maNames.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -1236,9 +1270,9 @@ void SfxDocTplService_Impl::doUpdate()
     }
 
     // now check the list
-    GroupData_Impl *pGroup = aGroupList.First();
-    while ( pGroup )
+    for( size_t j = 0, n = aGroupList.size(); j < n; ++j )
     {
+        GroupData_Impl *pGroup = aGroupList[ j ];
         if ( pGroup->getInUse() )
         {
             if ( pGroup->getInHierarchy() )
@@ -1249,8 +1283,8 @@ void SfxDocTplService_Impl::doUpdate()
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) ),
                                  makeAny( pGroup->getTargetURL() ) );
 
-                sal_uIntPtr nCount = pGroup->count();
-                for ( sal_uIntPtr i=0; i<nCount; i++ )
+                size_t nCount = pGroup->count();
+                for ( size_t i=0; i<nCount; i++ )
                 {
                     DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
                     if ( ! pData->getInUse() )
@@ -1276,10 +1310,10 @@ void SfxDocTplService_Impl::doUpdate()
             removeFromHierarchy( pGroup ); // delete group from hierarchy
 
         delete pGroup;
-        pGroup = aGroupList.Next();
     }
+    aGroupList.clear();
 
-       aValue <<= sal_False;
+    aValue <<= sal_False;
     setProperty( maRootContent, aPropName, aValue );
 }
 
@@ -1388,11 +1422,11 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
     sal_Bool bResult = sal_False;
     try {
         uno::Reference< beans::XPropertySet > xTempFile(
-                mxFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                mxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
                 uno::UNO_QUERY_THROW );
 
         ::rtl::OUString aTempURL;
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")) );
         aUrl >>= aTempURL;
 
         uno::Reference< io::XStream > xStream( xTempFile, uno::UNO_QUERY_THROW );
@@ -1601,7 +1635,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString::createFromAscii( TARGET_URL );
+        aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
 
         try
         {
@@ -1718,7 +1752,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString::createFromAscii( TARGET_URL );
+        aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aGroup.createCursor( aProps, eInclude );
 
@@ -1824,7 +1858,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         // get document service name
         uno::Reference< frame::XModuleManager > xModuleManager(
             xFactory->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.frame.ModuleManager" ) ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ),
             uno::UNO_QUERY_THROW );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
         if ( !sDocServiceName.getLength() )
@@ -1835,18 +1869,18 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
                 xFactory->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
                 uno::UNO_QUERY_THROW );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+        aPathProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
         aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/" ) );
         aArgs[0] <<= aPathProp;
 
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                                     aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -1862,13 +1896,13 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         // find the related type name
         ::rtl::OUString aTypeName;
         uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
         for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-            if ( aFilterData[nInd].Name.equalsAscii( "Type" ) )
+            if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                 aFilterData[nInd].Value >>= aTypeName;
 
         if ( !aTypeName.getLength() )
@@ -1879,16 +1913,16 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
-                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                    xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),
                     uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
         uno::Sequence< ::rtl::OUString > aAllExt =
-            aTypeProps.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Extensions" ), Sequence< ::rtl::OUString >() );
+            aTypeProps.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions")), Sequence< ::rtl::OUString >() );
         if ( !aAllExt.getLength() )
             throw uno::RuntimeException();
 
-        ::rtl::OUString aMediaType = aTypeProps.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "MediaType"  ), ::rtl::OUString() );
+        ::rtl::OUString aMediaType = aTypeProps.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), ::rtl::OUString() );
         ::rtl::OUString aExt = aAllExt[0];
 
         if ( !aMediaType.getLength() || !aExt.getLength() )
@@ -1914,9 +1948,9 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // store template
         uno::Sequence< PropertyValue > aStoreArgs( 2 );
-        aStoreArgs[0].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+        aStoreArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
         aStoreArgs[0].Value <<= aFilterName;
-        aStoreArgs[1].Name = ::rtl::OUString::createFromAscii( "DocumentTitle" );
+        aStoreArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
         aStoreArgs[1].Value <<= rTemplateName;
 
         ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
@@ -2013,7 +2047,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     INetURLObject   aSourceObj( rSourceURL );
     if ( rTemplateName.equals( aTitle ) )
     {
-        /////////////////////////////////////////////////////
         // addTemplate will sometimes be called just to add an entry in the
         // hierarchy; the target URL and the source URL will be the same in
         // this scenario
@@ -2032,7 +2065,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
             return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
     }
 
-    /////////////////////////////////////////////////////
     // copy the template into the new group (targeturl)
 
     INetURLObject aTmpURL( aSourceObj );
@@ -2221,8 +2253,6 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 SFX_IMPL_XSERVICEINFO( SfxDocTplService, TEMPLATE_SERVICE_NAME, TEMPLATE_IMPLEMENTATION_NAME )
 SFX_IMPL_SINGLEFACTORY( SfxDocTplService )
@@ -2362,8 +2392,6 @@ void SAL_CALL SfxDocTplService::update()
         pImp->update( sal_True );
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
 Updater_Impl::Updater_Impl( SfxDocTplService_Impl* pTemplates )
@@ -2389,8 +2417,6 @@ void SAL_CALL Updater_Impl::onTerminated()
     delete this;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 WaitWindow_Impl::WaitWindow_Impl()
     : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
@@ -2422,8 +2448,6 @@ void WaitWindow_Impl::Paint( const Rectangle& /*rRect*/ )
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                                           const OUString& rTitle,
                                           const OUString& rOwnURL )
@@ -2433,9 +2457,9 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(3);
 
-    aProps[0] = OUString::createFromAscii( TITLE );
-    aProps[1] = OUString::createFromAscii( TARGET_URL );
-    aProps[2] = OUString::createFromAscii( PROPERTY_TYPE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
+    aProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ));
 
     try
     {
@@ -2454,7 +2478,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
         GroupData_Impl *pGroup = new GroupData_Impl( rTitle );
         pGroup->setHierarchy( sal_True );
         pGroup->setHierarchyURL( rOwnURL );
-        rList.Insert( pGroup );
+        rList.push_back( pGroup );
 
         uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
@@ -2519,15 +2543,20 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     if ( !aTitle.getLength() )
         return;
 
-    GroupData_Impl *pGroup = rList.First();
-
-    while ( pGroup && pGroup->getTitle() != aTitle )
-        pGroup = rList.Next();
+    GroupData_Impl* pGroup = NULL;
+    for ( size_t i = 0, n = rList.size(); i < n; ++i )
+    {
+        if ( rList[ i ]->getTitle() == aTitle )
+        {
+            pGroup = rList[ i ];
+            break;
+        }
+    }
 
     if ( !pGroup )
     {
         pGroup = new GroupData_Impl( aTitle );
-        rList.Insert( pGroup );
+        rList.push_back( pGroup );
     }
 
     if ( bWriteableGroup )
@@ -2539,7 +2568,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     Content                 aContent;
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {
@@ -2607,7 +2636,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {
@@ -2749,8 +2778,6 @@ void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl *pGroup )
 }
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 {
     maTitle = rTitle;
@@ -2761,12 +2788,9 @@ GroupData_Impl::GroupData_Impl( const OUString& rTitle )
 // -----------------------------------------------------------------------
 GroupData_Impl::~GroupData_Impl()
 {
-    DocTemplates_EntryData_Impl *pData = maEntries.First();
-    while ( pData )
-    {
-        delete pData;
-        pData = maEntries.Next();
-    }
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+        delete maEntries[ i ];
+    maEntries.clear();
 }
 
 // -----------------------------------------------------------------------
@@ -2775,12 +2799,20 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
                                           const OUString& rType,
                                           const OUString& rHierURL )
 {
-    DocTemplates_EntryData_Impl *pData = maEntries.First();
+    DocTemplates_EntryData_Impl* pData = NULL;
+    bool EntryFound = false;
 
-    while ( pData && pData->getTitle() != rTitle )
-        pData = maEntries.Next();
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+    {
+        pData = maEntries[ i ];
+        if ( pData->getTitle() == rTitle )
+        {
+            EntryFound = true;
+            break;
+        }
+    }
 
-    if ( !pData )
+    if ( !EntryFound )
     {
         pData = new DocTemplates_EntryData_Impl( rTitle );
         pData->setTargetURL( rTargetURL );
@@ -2790,7 +2822,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
             pData->setHierarchyURL( rHierURL );
             pData->setHierarchy( sal_True );
         }
-        maEntries.Insert( pData );
+        maEntries.push_back( pData );
     }
     else
     {
@@ -2813,8 +2845,6 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     return pData;
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle )
 {
@@ -2922,3 +2952,4 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

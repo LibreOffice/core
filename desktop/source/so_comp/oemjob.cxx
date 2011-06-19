@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,13 +43,16 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::Bootstrap;
 
 namespace desktop{
 
@@ -67,7 +71,7 @@ const char* OEMPreloadJob::serviceName = "com.sun.star.office.OEMPreloadJob";
 
 OUString OEMPreloadJob::GetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationName));
+    return OUString::createFromAscii(implementationName);
 }
 
 Sequence< OUString > OEMPreloadJob::GetSupportedServiceNames()
@@ -150,7 +154,7 @@ throw ( RuntimeException )
     {
         // create OEM preload service dialog
         Reference <XExecutableDialog> xDialog( m_xServiceManager->createInstance(
-            OUString::createFromAscii("org.openoffice.comp.preload.OEMPreloadWizard")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.preload.OEMPreloadWizard"))),
             UNO_QUERY );
         if ( xDialog.is() ){
             // execute OEM preload dialog and check return value
@@ -162,33 +166,6 @@ throw ( RuntimeException )
             } else {
                 // user declined...
                 // terminate.
-                /*
-                Reference< XDesktop > xDesktop( m_xServiceManager->createInstance(
-                    OUString::createFromAscii("com.sun.star.frame.Desktop")),
-                    UNO_QUERY );
-                xDesktop->terminate();
-                */
-                /*
-                OUString aName;
-                OUString aEnvType;
-                Reference<XFrame> rFrame;
-                Reference<XModel> rModel;
-                Reference<XCloseable> rClose;
-                for (int i=0; i<args.getLength(); i++)
-                {
-                    if (args[i].Name.equalsAscii("EnvType"))
-                        args[i].Value >>= aEnvType;
-                    else if (args[i].Name.equalsAscii("Frame")) {
-                        args[i].Value >>= rFrame;
-                        rClose = Reference<XCloseable>(rFrame, UNO_QUERY);
-                    }
-                    else if (args[i].Name.equalsAscii("Model")) {
-                        args[i].Value >>= rModel;
-                        rClose = Reference<XCloseable>(rModel, UNO_QUERY);
-                    }
-                }
-                if (rClose.is()) rClose->close(sal_True);
-                */
                 bCont = sal_False;
             }
         }
@@ -196,18 +173,10 @@ throw ( RuntimeException )
         // don't try again
         bCont = sal_True;
     }
-    /*
-    NamedValue nv;
-    nv.Name  = OUString::createFromAscii("Deactivate");
-    nv.Value <<=  bDeactivate;
-    Sequence<NamedValue> s(1);
-    s[0] = nv;
-    */
     Any r;
     r <<= bCont;
     return r;
 }
-
 
 static sal_Bool existsURL( OUString const& _sURL )
 {
@@ -219,7 +188,6 @@ static sal_Bool existsURL( OUString const& _sURL )
 
     return sal_False;
 }
-
 
 // locate soffice.ini/.rc file
 static OUString locateIniFile()
@@ -278,3 +246,5 @@ void OEMPreloadJob::disableOEMPreloadFlag()
 }
 
 } // namespace desktop
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <svl/svarray.hxx>
 #include "xmloff/i18nmap.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 class SvI18NMapEntry_Impl
 {
@@ -124,3 +125,4 @@ const OUString& SvI18NMap::Get( sal_uInt16 nKind, const OUString& rName ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

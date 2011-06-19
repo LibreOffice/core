@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,8 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -44,7 +47,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
@@ -74,6 +77,9 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::awt::XControl;
+    using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/
 
     class FormScriptingEnvironment;
@@ -89,11 +95,11 @@ namespace svxform
     class FormScriptListener    :public FormScriptListener_Base
     {
     private:
-        ::osl::Mutex                                            m_aMutex;
-        ::rtl::Reference< FormScriptingEnvironment >            m_pScriptExecutor;
+        ::osl::Mutex m_aMutex;
+        FormScriptingEnvironment *m_pScriptExecutor;
 
     public:
-        FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor );
+        FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
         virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException);
@@ -122,7 +128,7 @@ namespace svxform
 
         /** determines whether the instance is already disposed
         */
-        bool    impl_isDisposed_nothrow() const { return !m_pScriptExecutor.is(); }
+        bool    impl_isDisposed_nothrow() const { return !m_pScriptExecutor; }
 
         /** fires the given script event in a thread-safe manner
 
@@ -189,8 +195,8 @@ namespace svxform
     //= FormScriptListener
     //====================================================================
     //--------------------------------------------------------------------
-    FormScriptListener::FormScriptListener( const ::rtl::Reference< FormScriptingEnvironment >& _pScriptExecutor )
-        :m_pScriptExecutor( _pScriptExecutor )
+    FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
+        :m_pScriptExecutor( pScriptExecutor )
     {
     }
 
@@ -209,7 +215,7 @@ namespace svxform
             Reference< XHierarchicalNameAccess > xTypeDescriptions( aContext.getSingleton( "com.sun.star.reflection.theTypeDescriptionManager" ), UNO_QUERY_THROW );
 
             ::rtl::OUString sMethodDescription( _rListenerType );
-            sMethodDescription += ::rtl::OUString::createFromAscii( "::" );
+            sMethodDescription += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ));
             sMethodDescription += _rMethodName;
 
             Reference< XInterfaceMethodTypeDescription > xMethod( xTypeDescriptions->getByHierarchicalName( sMethodDescription ), UNO_QUERY_THROW );
@@ -225,19 +231,17 @@ namespace svxform
     //--------------------------------------------------------------------
     void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
-        OSL_PRECOND( m_pScriptExecutor.is(), "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
+        OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
 
-        ::rtl::Reference< FormScriptingEnvironment > pExecutor( m_pScriptExecutor );
         _rGuard.clear();
-        pExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
+        m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-       static const ::rtl::OUString vbaInterOp =
-           ::rtl::OUString::createFromAscii("VBAInterop");
+       static const ::rtl::OUString vbaInterOp( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
        if ( _rEvent.ScriptType.equals(vbaInterOp) )
            return; // not handled here
 
@@ -416,15 +420,26 @@ namespace svxform
         {
             Sequence< sal_Int16 > aOutArgsIndex;
             Sequence< Any > aOutArgs;
-
-            m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs );
+            EventObject aEvent;
+            Any aCaller;
+            if ( ( _rArguments.getLength() > 0 ) && ( _rArguments[ 0 ] >>= aEvent ) )
+            {
+                try
+                {
+                    Reference< XControl > xControl( aEvent.Source, UNO_QUERY_THROW );
+                    Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
+                    aCaller = xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) );
+                }
+                catch( Exception& ) {}
+            }
+            m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs, true, aCaller.hasValue() ? &aCaller : 0 );
         }
     }
 
     //--------------------------------------------------------------------
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexClearableGuard aSolarGuard;
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         if ( m_bDisposed )
@@ -438,7 +453,7 @@ namespace svxform
         // the script to execute
         PScript pScript;
 
-        if ( !_rEvent.ScriptType.equalsAscii( "StarBasic" ) )
+        if ( !_rEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
         {
             pScript.reset( new NewStyleUNOScript( *xObjectShell, _rEvent.ScriptCode ) );
         }
@@ -497,7 +512,7 @@ namespace svxform
 
         {
             // object shells are not thread safe, so guard the destruction
-            ::vos::OGuard aSolarGuarsReset( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuarsReset;
             xObjectShell = NULL;
         }
     }
@@ -520,3 +535,4 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

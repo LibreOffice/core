@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -48,7 +50,7 @@ namespace sdr
         // create a mating VCL-Provessor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
-        drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+        SVX_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
@@ -60,3 +62,5 @@ namespace sdr
 #endif //_SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

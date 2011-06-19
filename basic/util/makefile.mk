@@ -57,21 +57,15 @@ SHL1STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(VCLLIB) \
-            $(VOSLIB) \
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(SOTLIB) \
-            $(VOSLIB) \
             $(XMLSCRIPTLIB)
 
 # Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
 # SHL1STDLIBS+=$(CANVASTOOLSLIB)
-
-.IF "$(SOLAR_JAVA)" != "TRUE"
-SHL1STDLIBS+=$(SJLIB)
-.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=	\

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,9 +57,9 @@ namespace func_provider
 
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
-    userDirString = ::rtl::OUString::createFromAscii("user");
-    shareDirString =  ::rtl::OUString::createFromAscii("share");
-    bundledDirString = ::rtl::OUString::createFromAscii("bundled");
+    userDirString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+    shareDirString =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("share"));
+    bundledDirString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"));
 }
 
 ActiveMSPList::~ActiveMSPList()
@@ -68,7 +69,7 @@ ActiveMSPList::~ActiveMSPList()
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const uno::Any& context )
 {
-    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
+    ::rtl::OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.MasterScriptProvider"));
     Sequence< Any > args( &context, 1 );
 
     Reference< provider::XScriptProvider > msp(
@@ -295,7 +296,7 @@ ActiveMSPList::createNonDocMSPs()
             return;
         }
         // do creation of user and share MSPs here
-        ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("com.sun.star.script.provider.MasterScriptProvider");
+        ::rtl::OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.MasterScriptProvider"));
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;
@@ -321,3 +322,4 @@ ActiveMSPList::createNonDocMSPs()
 
 } // namespace func_provider
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

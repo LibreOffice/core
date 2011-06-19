@@ -42,7 +42,7 @@ ENABLE_EXCEPTIONS = TRUE
 SLOFILES=	\
     $(SLO)$/basrdll.obj	\
     $(SLO)$/comenumwrapper.obj	\
-    $(SLO)$/inputbox.obj	\
+    $(SLO)$/inputbox.obj\
     $(SLO)$/runtime.obj	\
     $(SLO)$/step0.obj	\
     $(SLO)$/step1.obj	\
@@ -51,16 +51,27 @@ SLOFILES=	\
     $(SLO)$/stdobj.obj	\
     $(SLO)$/stdobj1.obj	\
     $(SLO)$/methods.obj	\
-    $(SLO)$/methods1.obj	\
+    $(SLO)$/methods1.obj\
     $(SLO)$/props.obj	\
-    $(SLO)$/ddectrl.obj	\
-    $(SLO)$/dllmgr.obj \
+    $(SLO)$/ddectrl.obj \
     $(SLO)$/sbdiagnose.obj
 
+.IF "$(GUI)$(CPU)" == "WNTI"
+SLOFILES+= \
+    $(SLO)$/dllmgr-x86.obj
+.ELIF "$(GUI)$(CPU)" == "WNTX"
+SLOFILES+= \
+    $(SLO)$/dllmgr-x64.obj
+.ELSE
+SLOFILES+= \
+    $(SLO)$/dllmgr-none.obj
+.ENDIF
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
-SLOFILES+=	$(SLO)$/wnt.obj
+SLOFILES+= \
+    $(SLO)$/wnt-x86.obj
 .ELIF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
-SLOFILES+=	$(SLO)$/wnt-mingw.obj
+SLOFILES+= \
+    $(SLO)$/wnt-mingw.obj
 .ENDIF
 
 # --- Targets -------------------------------------------------------------

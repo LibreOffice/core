@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -66,9 +65,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#ifndef _COM_SUN_STAR_UI_XCONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -86,9 +83,6 @@
 #include "commonembobj.hxx"
 #include "intercept.hxx"
 
-
-// #include <toolkit/helper/vclunohelper.hxx>
-// #include <vcl/window.hxx>
 
 #define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
                              m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
@@ -181,11 +175,11 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
     m_aOutplaceFrameProps.realloc( 3 );
     beans::NamedValue aArg;
 
-    aArg.Name = ::rtl::OUString::createFromAscii("TopWindow");
+    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
     aArg.Value <<= sal_True;
     m_aOutplaceFrameProps[0] <<= aArg;
 
-    aArg.Name = ::rtl::OUString::createFromAscii("MakeVisible");
+    aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MakeVisible"));
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
@@ -203,7 +197,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
         }
         m_refCount--;
 
-        aArg.Name = ::rtl::OUString::createFromAscii("ParentFrame");
+        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
         aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
         m_aOutplaceFrameProps[2] <<= aArg;
     }
@@ -369,7 +363,6 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
                                   aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
                                   awt::PosSize::POSSIZE );
 
-        // Window* pWindow = VCLUnoHelper::GetWindow( m_xOwnWindow );
 
         m_xHatchWindow->setPosSize( aHatchRect.X,
                                     aHatchRect.Y,
@@ -439,7 +432,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
             uno::Reference< embed::XHatchWindowFactory > xHatchFactory(
                     m_xFactory->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.HatchWindowFactory" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.HatchWindowFactory" )) ),
                     uno::UNO_QUERY );
 
             if ( !xHatchFactory.is() )
@@ -474,7 +467,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
                                                 awt::WindowAttribute::SHOW | awt::VclWindowPeerAttribute::CLIPCHILDREN );
 
         uno::Reference< awt::XToolkit > xToolkit(
-                            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.Toolkit" ) ),
+                            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" )) ),
                             uno::UNO_QUERY );
         if ( !xToolkit.is() )
             throw uno::RuntimeException();
@@ -486,20 +479,20 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.TaskCreator" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.TaskCreator" )) ),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< uno::Any > aArgs( 2 );
         beans::NamedValue aArg;
 
-        aArg.Name    = ::rtl::OUString::createFromAscii("ContainerWindow");
+        aArg.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainerWindow"));
         aArg.Value <<= xOwnWindow;
         aArgs[0] <<= aArg;
 
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
         if ( xContFrame.is() )
         {
-            aArg.Name    = ::rtl::OUString::createFromAscii("ParentFrame");
+            aArg.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
             aArg.Value <<= xContFrame;
             aArgs[1] <<= aArg;
         }
@@ -514,7 +507,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
         if ( !SetFrameLMVisibility( m_xFrame, sal_False ) )
         {
-            OSL_ENSURE( sal_False, "Can't deactivate LayoutManager!\n" );
+            OSL_FAIL( "Can't deactivate LayoutManager!\n" );
             // TODO/LATER: error handling?
         }
 
@@ -626,7 +619,7 @@ void DocumentHolder::FindConnectPoints(
         xMenu->getByIndex( nInd ) >>= aProps;
         rtl::OUString aCommand;
         for ( sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); nSeqInd++ )
-            if ( aProps[nSeqInd].Name.equalsAscii( "CommandURL" ) )
+            if ( aProps[nSeqInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ) )
             {
                 aProps[nSeqInd].Value >>= aCommand;
                 break;
@@ -635,9 +628,9 @@ void DocumentHolder::FindConnectPoints(
         if ( !aCommand.getLength() )
             throw uno::RuntimeException();
 
-        if ( aCommand.equalsAscii( ".uno:PickList" ) )
+        if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:PickList" ) ) )
             nConnectPoints[0] = nInd;
-        else if ( aCommand.equalsAscii( ".uno:WindowList" ) )
+        else if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:WindowList" ) ) )
             nConnectPoints[1] = nInd;
     }
 }
@@ -877,7 +870,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     if ( !m_xFrame.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xFrameFact(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.TaskCreator" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.TaskCreator" ) )),
             uno::UNO_QUERY_THROW );
 
         m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
@@ -987,9 +980,6 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     }
 
     m_xComponent = xDoc;
-    // done outside currently uno::Reference < container::XChild > xChild( m_xComponent, uno::UNO_QUERY );
-    // done outside currently if ( xChild.is() && m_pEmbedObj )
-    // done outside currently   xChild->setParent( m_pEmbedObj->getParent() );
 
     m_bReadOnly = bReadOnly;
     m_bAllowClosing = sal_False;
@@ -1028,7 +1018,6 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "Model", m_xComponent );
             aArgs.put( "ReadOnly", m_bReadOnly );
-            //aArgs.put( "Hidden", sal_True );
             if ( bInPlace )
                 aArgs.put( "PluginMode", sal_Int16(1) );
             ::rtl::OUString sUrl;
@@ -1039,13 +1028,13 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                 sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/ReportDesign"));
             }
             else if( xServiceInfo.is()
-                &&   xServiceInfo->supportsService( ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument")) )
+                &&   xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")) ))
                 sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
             else
                 sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:object"));
 
             xComponentLoader->loadComponentFromURL( sUrl,
-                                                        rtl::OUString::createFromAscii( "_self" ),
+                                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_self" )),
                                                         0,
                                                         aArgs.getPropertyValues() );
 
@@ -1245,11 +1234,11 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
     if( m_pEmbedObj && Event.Source == m_xComponent )
     {
         // for now the ignored events are not forwarded, but sent by the object itself
-        if ( !Event.EventName.equalsAscii( "OnSave" )
-          && !Event.EventName.equalsAscii( "OnSaveDone" )
-          && !Event.EventName.equalsAscii( "OnSaveAs" )
-          && !Event.EventName.equalsAscii( "OnSaveAsDone" )
-          && !( Event.EventName.equalsAscii( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
+        if ( !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSave" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveDone" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAs" ) )
+          && !Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnSaveAsDone" ) )
+          && !( Event.EventName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OnVisAreaChanged" ) ) && m_nNoResizeReact ) )
             m_pEmbedObj->PostEvent_Impl( Event.EventName, Event.Source );
     }
 }
@@ -1358,3 +1347,5 @@ void SAL_CALL DocumentHolder::deactivated(  ) throw (::com::sun::star::uno::Runt
     // deactivation is too unspecific to be useful; usually we only trigger code from activation
     // so UIDeactivation is actively triggered by the container
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

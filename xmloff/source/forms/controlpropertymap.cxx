@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
 #include "strings.hxx"
 #include <xmloff/contextid.hxx>
 #include "controlpropertymap.hxx"
@@ -154,3 +153,4 @@ namespace xmloff
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//
 #ifndef _BASMGR_HXX
 #define _BASMGR_HXX
 
@@ -87,7 +87,6 @@ public:
 };
 
 
-//
 
 class BasicLibs;
 class ErrorManager;
@@ -166,7 +165,7 @@ protected:
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
     void            CheckModules( StarBASIC* pBasic, sal_Bool bReference ) const;
     void            SetFlagToAllLibs( short nFlag, sal_Bool bSet ) const;
-                    BasicManager(); // Nur zum anpassen von Pfaden bei 'Speichern unter'.
+                    BasicManager(); // This is used only to customize the paths for 'Save as'.
                     ~BasicManager();
 
 public:
@@ -211,7 +210,7 @@ public:
     sal_Bool            LoadLib( sal_uInt16 nLib );
     sal_Bool            RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage );
 
-    // Modify-Flag wird nur beim Speichern zurueckgesetzt.
+    // Modify-Flag will be reset only during save.
     sal_Bool            IsModified() const;
     sal_Bool            IsBasicModified() const;
 
@@ -236,7 +235,7 @@ public:
             takes the names of modules whose size exceeds the legacy limit
     */
     bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames );
-
+    bool HasExeCode( const String& );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( String const& i_fullyQualifiedName ) const;
     /// executes a given macro
@@ -266,3 +265,5 @@ private:
 void SetAppBasicManager( BasicManager* pBasMgr );
 
 #endif  //_BASMGR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             rValue <<= (sal_Int8) nValue;
             break;
         default:
-            DBG_ERROR( "Wrong type for enum property handler!" );
+            OSL_FAIL( "Wrong type for enum property handler!" );
             return sal_False;
         }
         return sal_True;
@@ -96,3 +97,4 @@ sal_Bool XMLEnumPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValu
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

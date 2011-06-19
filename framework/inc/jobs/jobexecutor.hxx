@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,6 +96,9 @@ class JobExecutor : public  css::lang::XTypeProvider
         /** we listen at the configuration for changes at the event list. */
         ConfigAccess m_aConfig;
 
+        /** helper to allow us listen to the configuration without a cyclic dependency */
+        com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> m_xConfigListener;
+
     //___________________________________
     // native interface methods
 
@@ -131,3 +135,5 @@ class JobExecutor : public  css::lang::XTypeProvider
 } // namespace framework
 
 #endif // __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

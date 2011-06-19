@@ -27,20 +27,11 @@
 
 #ifndef __ooo_vba_XHelperInterface_idl__
 #define __ooo_vba_XHelperInterface_idl__
-#ifndef __com_sun_star_uno_XInterface_idl__
+
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
-
-#ifndef __com_sun_star_script_BasicErrorException_idl__
 #include <com/sun/star/script/BasicErrorException.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
 module ooo {  module vba {
 

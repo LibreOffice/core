@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ public:
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
-        SfxStatusBarControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
+        SfxStatusBarControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
@@ -146,3 +147,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

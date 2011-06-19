@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,8 +96,8 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     ::rtl::OUString aShapeType( xDescr->getShapeType() );
 
-    if  (   aShapeType.equalsAscii( "com.sun.star.drawing.ShapeControl" )   // compatibility
-        ||  aShapeType.equalsAscii( "com.sun.star.drawing.ControlShape" )
+    if  (   aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ShapeControl" ) )   // compatibility
+        ||  aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) )
         )
         return new FmFormObj( OBJ_FM_CONTROL );
     else
@@ -144,3 +145,4 @@ sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::Ru
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

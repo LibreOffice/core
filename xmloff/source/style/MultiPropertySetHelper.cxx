@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_MULTIPROPERTYSETHELPER_HXX
 #include "MultiPropertySetHelper.hxx"
-#endif
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -214,3 +213,5 @@ const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
 // inline methods defined in header:
 // inline Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex )
 // inline sal_Bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

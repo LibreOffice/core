@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
+
+#include <osl/diagnose.h>
+
 #include "internal/contentreader.hxx"
 #include "dummytag.hxx"
 #include "simpletag.hxx"
@@ -50,11 +54,11 @@ CBaseReader( DocumentName )
     #endif
     )
     {
-        ENSURE(false, ex.what());
+        OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        ENSURE(false, "Unknown error");
+        OSL_ENSURE(false, "Unknown error");
     }
 }
 
@@ -72,11 +76,11 @@ try
     #endif
     )
     {
-        ENSURE(false, ex.what());
+        OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        ENSURE(false, "Unknown error");
+        OSL_ENSURE(false, "Unknown error");
     }
 }
 
@@ -233,3 +237,4 @@ void CContentReader::characters( const std::wstring& character )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

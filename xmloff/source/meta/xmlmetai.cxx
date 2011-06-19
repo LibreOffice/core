@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -150,9 +151,9 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
+                "properties init exception")),
             rImport, makeAny(e));
     }
 }
@@ -184,8 +185,8 @@ lcl_initGenerator(SvXMLImport & rImport,
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
-                "SvXMLMetaDocumentContext::initGenerator: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "SvXMLMetaDocumentContext::initGenerator: exception")),
             rImport, makeAny(e));
     }
 }
@@ -292,11 +293,11 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             (i_rBuildId.compareToAscii(
                 RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0))
         {
-            sBuildId = OUString::createFromAscii( "645$8687" );
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("645$8687"));
         }
         if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NeoOffice/2") ) == 0) )
         {
-            sBuildId = OUString::createFromAscii( "680$9134" ); // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("680$9134")); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 
@@ -316,3 +317,4 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

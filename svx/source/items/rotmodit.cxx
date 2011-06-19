@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,13 @@
 #include "precompiled_svx.hxx"
 #include <tools/stream.hxx>
 #include <com/sun/star/table/BorderLine.hpp>
-#include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
-#include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
@@ -66,18 +66,18 @@ SvxRotateModeItem::SvxRotateModeItem( const SvxRotateModeItem& rItem )
 {
 }
 
-__EXPORT SvxRotateModeItem::~SvxRotateModeItem()
+SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
-SfxPoolItem* __EXPORT SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
+SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxRotateModeItem( (SvxRotateMode) nVal,Which() );
 }
 
-SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
+SfxItemPresentation SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 String& rText, const IntlWrapper * )  const
@@ -100,7 +100,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
     return ePres;
 }
 
-String __EXPORT SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
+String SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
 {
     String aText;
 
@@ -113,66 +113,62 @@ String __EXPORT SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
             aText.AppendAscii("...");
             break;
         default:
-            DBG_ERROR("SvxRotateModeItem: falscher enum");
+            OSL_FAIL("SvxRotateModeItem: falscher enum");
             break;
     }
     return aText;
 }
 
-sal_uInt16 __EXPORT SvxRotateModeItem::GetValueCount() const
+sal_uInt16 SvxRotateModeItem::GetValueCount() const
 {
     return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
-SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const
+SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
 {
     return new SvxRotateModeItem( *this );
 }
 
-sal_uInt16 __EXPORT SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
+sal_uInt16 SvxRotateModeItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return 0;
 }
 
-//  QueryValue/PutValue: Der ::com::sun::star::table::CellVertJustify enum wird mitbenutzt...
-
-sal_Bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxRotateModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
+    sal_Int32 nUno = table::CellVertJustify2::STANDARD;
     switch ( (SvxRotateMode)GetValue() )
     {
-        case SVX_ROTATE_MODE_STANDARD: eUno = table::CellVertJustify_STANDARD; break;
-        case SVX_ROTATE_MODE_TOP:      eUno = table::CellVertJustify_TOP;       break;
-        case SVX_ROTATE_MODE_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
-        case SVX_ROTATE_MODE_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
+        case SVX_ROTATE_MODE_STANDARD: nUno = table::CellVertJustify2::STANDARD; break;
+        case SVX_ROTATE_MODE_TOP:      nUno = table::CellVertJustify2::TOP;      break;
+        case SVX_ROTATE_MODE_CENTER:   nUno = table::CellVertJustify2::CENTER;   break;
+        case SVX_ROTATE_MODE_BOTTOM:   nUno = table::CellVertJustify2::BOTTOM;   break;
     }
-    rVal <<= eUno;
-    return sal_True;
+    rVal <<= nUno;
+    return true;
 }
 
-sal_Bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    table::CellVertJustify eUno;
-    if(!(rVal >>= eUno))
+    sal_Int32 nUno(0);
+    if(!(rVal >>= nUno))
     {
-        sal_Int32 nValue = 0;
-        if(!(rVal >>= nValue))
-            return sal_False;
-        eUno = (table::CellVertJustify)nValue;
+        nUno = table::CellVertJustify2::STANDARD;
     }
 
     SvxRotateMode eSvx = SVX_ROTATE_MODE_STANDARD;
-    switch (eUno)
+    switch (nUno)
     {
-        case table::CellVertJustify_STANDARD: eSvx = SVX_ROTATE_MODE_STANDARD; break;
-        case table::CellVertJustify_TOP:       eSvx = SVX_ROTATE_MODE_TOP;      break;
-        case table::CellVertJustify_CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;    break;
-        case table::CellVertJustify_BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;    break;
+        case table::CellVertJustify2::STANDARD: eSvx = SVX_ROTATE_MODE_STANDARD; break;
+        case table::CellVertJustify2::TOP:      eSvx = SVX_ROTATE_MODE_TOP;      break;
+        case table::CellVertJustify2::CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;   break;
+        case table::CellVertJustify2::BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;   break;
         default: ;//prevent warning
     }
     SetValue( (sal_uInt16)eSvx );
-    return sal_True;
+    return true;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

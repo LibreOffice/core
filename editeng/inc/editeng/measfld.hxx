@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,8 @@
 
 #ifndef _FLDITEM_HXX
 #ifndef ITEMID_FIELD
-#ifndef _EDITDATA_HXX
-#include <editeng/editdata.hxx>  /* das include wird wg. EE_FEATURE_FIELD benoetigt */
-#endif
-#define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <editeng/flditem.hxx> benoetigt */
+#include <editeng/editdata.hxx>  /* this include is needed due to EE_FEATURE_FIELD */
+#define ITEMID_FIELD EE_FEATURE_FIELD  /* is needed for #include <editeng/flditem.hxx> */
 #endif
 #include <editeng/flditem.hxx>
 #endif
@@ -64,3 +63,4 @@ public:
 
 #endif //_SVDFIELD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

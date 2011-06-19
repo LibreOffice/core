@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
+#include <osl/diagnose.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/link.hxx>
@@ -172,8 +174,8 @@ EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder* 
 EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
 
 // ====================================================================
-// Diese Klasse implementiert eine SvxEditSource und einen SvxTextForwarder
-// und macht ansonsten rein garnichts
+// This class implements a SvxEditSource and SvxTextForwarder and does
+// nothing otherwise
 // ====================================================================
 
 class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder
@@ -255,7 +257,8 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTe
                             public ::com::sun::star::beans::XPropertyState,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::text::XTextRangeCompare,
-                            public ::com::sun::star::lang::XUnoTunnel
+                            public ::com::sun::star::lang::XUnoTunnel,
+                            private osl::DebugBase<SvxUnoTextRangeBase>
 
 {
     friend class SvxUnoTextRangeEnumeration;
@@ -370,9 +373,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
     sal_Bool mbPortion;
 
-protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
-
 public:
     SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion = sal_False ) throw();
     virtual ~SvxUnoTextRange() throw();
@@ -403,7 +403,6 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
 public:
     SvxUnoTextBase( ) throw();
@@ -538,8 +537,6 @@ private:
     bool mbDisposing;
 
 protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
-
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
 
@@ -627,9 +624,6 @@ class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextRangeBase,
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
 
-protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
-
 public:
     SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw();
     SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw();
@@ -675,3 +669,5 @@ EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet(
 EDITENG_DLLPUBLIC const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

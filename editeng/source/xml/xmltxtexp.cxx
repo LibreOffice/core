@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -357,7 +358,6 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::un
 class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
-    // #110680#
     SvxXMLTextExportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         EditEngine* pEditEngine,
@@ -380,7 +380,6 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-// #110680#
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     EditEngine* pEditEngine,
@@ -429,7 +428,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             if( !xServiceFactory.is() )
             {
-                DBG_ERROR( "got no service manager" );
+                OSL_FAIL( "got no service manager" );
                 break;
             }
 
@@ -439,7 +438,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             if( !xWriter.is() )
             {
-                DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
                 break;
             }
 
@@ -462,7 +461,6 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             // export text
             const OUString aName;
 
-            // #110680#
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
             SvxXMLTextExportComponent aExporter( xServiceFactory, &rEditEngine, rSel, aName, xHandler );
 
@@ -477,7 +475,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR("exception during xml export");
+        OSL_FAIL("exception during xml export");
     }
 }
 
@@ -498,3 +496,5 @@ void SvxXMLTextExportComponent::_ExportContent()
 }
 
 void SvxXMLTextExportComponent::_ExportMasterStyles() {}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

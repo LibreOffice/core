@@ -1,4 +1,5 @@
-/************************************************************************
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -36,13 +37,12 @@
 #include <osl/mutex.hxx>
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
+#ifdef UNX
+#include <vcl/sysdata.hxx>
+#endif
 
-#ifndef _COM_SUN_STAR_AWT_SYSTEMPOINTER_HDL_
 #include <com/sun/star/awt/SystemPointer.hdl>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HDL_
 #include <com/sun/star/lang/XComponent.hdl>
-#endif
 
 #define AVMEDIA_TOOLBOXITEM_PREV    0x0001
 #define AVMEDIA_TOOLBOXITEM_PLAY    0x0002
@@ -230,24 +230,19 @@ void MediaWindowImpl::onURLChanged()
 {
     if( getPlayer().is() )
     {
+        uno::Sequence< uno::Any >              aArgs( 3 );
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
+        const Point                            aPoint;
+        const Size                             aSize( maChildWindow.GetSizePixel() );
+        const sal_Int32                        nWndHandle = 0;
 
-        const Point         aPoint;
-        const Size          aSize( maChildWindow.GetSizePixel() );
-        const sal_IntPtr    nWndHandle = (sal_IntPtr) maChildWindow.GetParentWindowHandle( isMediaWindowJavaBased() );
+        aArgs[ 0 ] = uno::makeAny( nWndHandle );
+        aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
+        aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( &maChildWindow ) );
 
         try
         {
-            if( nWndHandle != 0 )
-            {
-                uno::Sequence< uno::Any > aArgs( 3 );
-
-                aArgs[ 0 ] = uno::makeAny( nWndHandle );
-                aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
-                aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( &maChildWindow ) );
-
-                xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
-            }
+            xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
         }
         catch( uno::RuntimeException )
         {
@@ -279,6 +274,8 @@ void MediaWindowImpl::onURLChanged()
         updateMediaItem( aItem );
         mpMediaWindowControl->setState( aItem );
     }
+
+    Invalidate();
 }
 
 // ---------------------------------------------------------------------
@@ -545,3 +542,5 @@ void MediaWindowImpl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 } // namespace priv
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

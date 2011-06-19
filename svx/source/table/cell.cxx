@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,13 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include "svx/sdr/properties/textproperties.hxx"
@@ -63,8 +65,8 @@
 
 // -----------------------------------------------------------------------------
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
-using ::vos::OGuard;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -181,7 +183,7 @@ namespace sdr
 
         BaseProperties& CellProperties::Clone(SdrObject& rObj) const
         {
-            DBG_ERROR("CellProperties::Clone(), does not work yet!");
+            OSL_FAIL("CellProperties::Clone(), does not work yet!");
             return *(new CellProperties(*this, rObj,0));
         }
 
@@ -333,7 +335,7 @@ void Cell::dispose()
         }
         catch( Exception& )
         {
-            DBG_ERROR("Cell::dispose(), exception caught!");
+            OSL_FAIL("Cell::dispose(), exception caught!");
         }
         mxTable.clear();
     }
@@ -553,7 +555,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     }
     else
     {
-        DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
+        OSL_FAIL("Cell::GetObjectItemSet(), called without properties!");
         return GetObject().GetObjectItemSet();
     }
 }
@@ -976,7 +978,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
         }
         else
         {
-            DBG_ERROR("GetAnyForItem() Returnvalue has wrong Type!" );
+            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
         }
     }
 
@@ -992,7 +994,7 @@ Reference< XPropertySetInfo > SAL_CALL Cell::getPropertySetInfo() throw(RuntimeE
 
 void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1137,7 +1139,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
 Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1253,7 +1255,7 @@ void SAL_CALL Cell::removeVetoableChangeListener( const OUString& /*PropertyName
 
 void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1271,11 +1273,11 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), Exception caught!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
         }
     }
 }
@@ -1284,7 +1286,7 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
 
 Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException)
 {
-    OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1303,11 +1305,11 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR( "svx::Cell::getPropertyValues(), Exception caught!" );
+            OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
     }
 
@@ -1338,7 +1340,7 @@ void SAL_CALL Cell::firePropertiesChangeEvent( const Sequence< OUString >& /*aPr
 
 PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1450,7 +1452,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
 
 Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1481,7 +1483,7 @@ Sequence< PropertyState > SAL_CALL Cell::getPropertyStates( const Sequence< OUSt
 
 void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1524,7 +1526,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
 
 Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aGuard;
 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
@@ -1807,3 +1809,4 @@ OUString Cell::getName()
 
 } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

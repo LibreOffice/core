@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,15 +61,16 @@ E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
 {
 }
 
-/*************************************************************************
-|*
-|* Identifier zurueckgeben
-|*
-\************************************************************************/
-
 sal_uInt16 E3dPolyScene::GetObjIdentifier() const
 {
     return E3D_POLYSCENE_ID;
 }
 
+E3dPolyScene* E3dPolyScene::Clone() const
+{
+    return CloneHelper< E3dPolyScene >();
+}
+
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

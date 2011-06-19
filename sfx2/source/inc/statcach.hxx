@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weak.hxx>
 
-#ifndef _SFXBINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
 
-#ifndef _SFXMSGSERV_HXX
 #include "slotserv.hxx"
-#endif
 
 #include <sfx2/sfxuno.hxx>
 
@@ -84,17 +81,17 @@ friend class BindDispatch_Impl;
     sal_uInt16              nId;           // Slot-Id
     SfxControllerItem*      pInternalController;
     com::sun::star::uno::Reference < com::sun::star::frame::XDispatch > xMyDispatch;
-    SfxControllerItem*      pController;   // Ptr auf 1. gebundenen Controller (untereinander verkettet)
-    SfxSlotServer           aSlotServ;     // SlotServer, SlotPtr = 0 -> Nicht auf Stack
-    SfxPoolItem*            pLastItem;     // zuletzt verschicktes Item, nie -1
-    SfxItemState            eLastState;    // zuletzt verschickter State
-    sal_Bool                bCtrlDirty:1;  // Controller aktualisiert?
-    sal_Bool                bSlotDirty:1;  // Funktion gfs. vorhanden, muss aktualisiert werden
-    sal_Bool                bItemVisible:1;// item visibility
-    sal_Bool                bItemDirty;    // G"ultigkeit von pLastItem
+    SfxControllerItem*      pController;    // Pointer to first bound Controller (interlinked with each other)
+    SfxSlotServer           aSlotServ;      // SlotServer, SlotPtr = 0 -> not on Stack
+    SfxPoolItem*            pLastItem;      // Last sent Item, never -1
+    SfxItemState            eLastState;     // Last sent State
+    sal_Bool                bCtrlDirty:1;   // Update Controller?
+    sal_Bool                bSlotDirty:1;   // Present Funktion, must be updated
+    sal_Bool                bItemVisible:1; // item visibility
+    sal_Bool                bItemDirty;     // Validity of pLastItem
 
 private:
-                            SfxStateCache( const SfxStateCache& rOrig ); // n.i.
+                            SfxStateCache( const SfxStateCache& rOrig ); // inward
     void                    SetState_Impl( SfxItemState, const SfxPoolItem*, sal_Bool bMaybeDirty=sal_False );
 
 public:
@@ -132,14 +129,6 @@ public:
                             { xMyDispatch = rDisp; }
 };
 
-//--------------------------------------------------------------------
-
-// checks wheather this function is in the stack of active SfxObjectInterface
-
-//inline sal_Bool SfxStateCache::IsCallable( SfxDispatcher &rDispat )
-//{
-//  return GetSlotServer(rDispat) != 0;
-//}
 //--------------------------------------------------------------------
 
 // clears Cached-Item
@@ -180,3 +169,5 @@ inline sal_uInt16 SfxStateCache::GetId() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

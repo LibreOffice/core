@@ -46,13 +46,8 @@ ZIP1TARGET = osxicons
 ZIP1DIR = ../icons
 ZIP1LIST := $(shell $(PERL) -w list_icons.pl < Info.plist)
 
-.IF "$(GUIBASE)"!="aqua"
-CREATOR_TYPE=OOo2
-EXECUTABLE=droplet
-.ELSE
-CREATOR_TYPE=OOO2
+CREATOR_TYPE=LIBO
 EXECUTABLE=soffice
-.ENDIF
 
 .IF "$(WITH_LANG)"!=""
 ULFDIR:=$(COMMONMISC)$/desktopshare

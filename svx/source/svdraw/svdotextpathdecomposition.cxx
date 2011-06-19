@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -273,7 +274,7 @@ namespace
         {
             // prepare BreakIterator
             Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"));
+            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
 
             if(xInterface.is())
             {
@@ -592,7 +593,7 @@ namespace
         const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rTarget)
     {
-        for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); aPolygon++)
+        for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); ++aPolygon)
         {
             // prepare PolyPolygons
             basegfx::B2DPolyPolygon aB2DPolyPolygon = *aPolygon;
@@ -820,5 +821,5 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalB);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

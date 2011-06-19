@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,9 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -198,7 +197,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Linientyp" );
+                OSL_FAIL( "Nicht unterstuetzter Linientyp" );
                 break;
         }
     }
@@ -382,7 +381,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     const String& rWndTitle ) :
     SfxPopupWindow( nSlotId,
                     rFrame,
-                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
+                    WinBits( WB_STDPOPUP ) ),
     pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
@@ -404,7 +403,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     pParentWindow,
-                    WinBits( WB_BORDER | WB_STDFLOATWIN | WB_SIZEABLE | WB_3DLOOK ) ),
+                    WinBits( WB_STDPOPUP ) ),
     pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
@@ -600,7 +599,7 @@ void SvxLineEndWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SvxLineEndWindow::Resizing( Size& rNewSize )
+void SvxLineEndWindow::Resizing( Size& rNewSize )
 {
     Size aBitmapSize = aBmpSize; // -> Member
     aBitmapSize.Width()  += 6; //
@@ -766,7 +765,7 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
         new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
-    pLineEndWin->StartPopupMode( &GetToolBox(), sal_True );
+    pLineEndWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
     pLineEndWin->StartSelection();
     SetPopupWindow( pLineEndWin );
     return pLineEndWin;
@@ -782,3 +781,5 @@ void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, co
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

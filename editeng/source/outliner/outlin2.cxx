@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <tools/list.hxx>
 #include <svl/style.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -56,8 +56,8 @@ DBG_NAMEEX(Outliner)
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-// =====================================================================
-// ======================   Einfache Durchreicher =======================
+// ======================================================================
+// ======================   Simple pass-through   =======================
 // ======================================================================
 
 void Outliner::SetUpdateMode( sal_Bool bUpdate )
@@ -327,6 +327,12 @@ Size Outliner::CalcTextSize()
     return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeight());
 }
 
+Size Outliner::CalcTextSizeNTP()
+{
+    DBG_CHKTHIS(Outliner,0);
+    return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeightNTP());
+}
+
 Point Outliner::GetDocPos( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -419,10 +425,8 @@ void Outliner::UndoActionEnd( sal_uInt16 nId )
 
 void Outliner::InsertUndo( EditUndo* pUndo )
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->GetUndoManager().AddUndoAction( pUndo, sal_False );
-#endif
 }
 
 sal_Bool Outliner::IsInUndo()
@@ -533,13 +537,13 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
     return pEditEngine->GetSpeller();
 }
 
-void Outliner::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
+void Outliner::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-vos::ORef<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
+rtl::Reference<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetForbiddenCharsTable();
@@ -659,6 +663,16 @@ void Outliner::QuickFormatDoc( sal_Bool bFull )
 void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 {
     DBG_CHKTHIS(Outliner,0);
+
+    // reset bullet size
+    sal_uInt16 nParagraphs = (sal_uInt16)pParaList->GetParagraphCount();
+    for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+    {
+        Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if ( pPara )
+            pPara->aBulSize.Width() = -1;
+    }
+
     pEditEngine->SetGlobalCharStretching( nX, nY );
 }
 
@@ -776,38 +790,30 @@ sal_Bool Outliner::IsForceAutoColor() const
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsForceAutoColor();
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::EndSpelling()
 {
     pEditEngine->EndSpelling();
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
-/*-- 08.09.2008 11:39:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
 {
     pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
-/*-- 13.10.2003 16:56:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

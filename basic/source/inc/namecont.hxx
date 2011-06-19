@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,14 @@
 #ifndef BASIC_NAMECONTAINER_HXX
 #define BASIC_NAMECONTAINER_HXX
 
-#include <hash_map>
-
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
+#include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -65,22 +66,43 @@
 #include <sot/storage.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
+#include <com/sun/star/deployment/XPackage.hpp>
+
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 class BasicManager;
 
 namespace basic
 {
 
-//============================================================================
+typedef ::cppu::WeakComponentImplHelper9<
+    ::com::sun::star::lang::XInitialization,
+    ::com::sun::star::script::XStorageBasedLibraryContainer,
+    ::com::sun::star::script::XLibraryContainerPassword,
+    ::com::sun::star::script::XLibraryContainerExport,
+    ::com::sun::star::script::XLibraryContainer3,
+    ::com::sun::star::container::XContainer,
+    ::com::sun::star::script::XLibraryQueryExecutable,
+    ::com::sun::star::script::vba::XVBACompatibility,
+    ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
+
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
+    ::com::sun::star::container::XContainer > NameContainerHelper;
 
 typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XContainer,
     ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
 
+//============================================================================
+
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    typedef std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
+    typedef boost::unordered_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
@@ -224,6 +246,7 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
     sal_Bool mbVBACompat;
+    rtl::OUString msProjectName;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >       mxSFI;
@@ -518,10 +541,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException) = 0;
     // Methods XVBACompatibility
-    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode()
-            throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon )
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const ::rtl::OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getRunningVBAScripts()
             throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVBAScriptListener(
@@ -794,3 +817,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

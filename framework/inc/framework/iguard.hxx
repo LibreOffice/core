@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,3 +68,5 @@ class SAL_NO_VTABLE IGuard
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_THREADHELP_IGUARD_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

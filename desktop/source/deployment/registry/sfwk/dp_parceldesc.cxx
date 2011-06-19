@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,9 +99,9 @@ ParcelDescDocHandler::startElement( const OUString& aName,
         aName + OUSTR("\n"));
     if ( !skipIndex )
     {
-        if ( aName.equals( OUString::createFromAscii( "parcel" ) ) )
+        if ( aName.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "parcel" )) ) )
         {
-            m_sLang = xAttribs->getValueByName( OUString::createFromAscii( "language" ) );
+            m_sLang = xAttribs->getValueByName( OUString(RTL_CONSTASCII_USTRINGPARAM( "language" )) );
         }
         ++skipIndex;
     }
@@ -128,3 +129,4 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

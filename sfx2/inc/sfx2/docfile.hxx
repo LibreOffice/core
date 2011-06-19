@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
+
+#include <vector>
 
 class SvKeyValueIterator;
 class SfxObjectFactory;
@@ -62,8 +64,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
-
-#define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
 //____________________________________________________________________________________________________________________________________
 //  defines for namespaces
@@ -92,7 +92,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
-//REMOVE        SvStorageRef        aStorage;
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
@@ -160,11 +159,7 @@ public:
     void                ReOpen();
     void                CompleteReOpen();
     const String&       GetName() const {return aLogicName;}
-#if defined SINIX && defined GCC && defined C272
-    const INetURLObject& GetURLObject();
-#else
     const INetURLObject& GetURLObject() const;
-#endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
     sal_Bool            DocNeedsFileDateCheck();
@@ -183,7 +178,6 @@ public:
     void                SetDataAvailableLink( const Link& rLink );
     Link                GetDataAvailableLink( ) const;
 
-    sal_uInt32          GetMIMEAndRedirect( String& );
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
                         { return ERRCODE_TOERROR(GetErrorCode()); }
@@ -277,7 +271,6 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-//REMOVE        void                SetStorage_Impl( SvStorage* pStor );
     SAL_DLLPRIVATE void SetLongName(const String &rName)
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }
@@ -329,10 +322,8 @@ public:
 SV_DECL_IMPL_REF( SfxMedium )
 SV_DECL_COMPAT_WEAK( SfxMedium )
 
-#ifndef SFXMEDIUM_LIST
-#define SFXMEDIUM_LIST
-DECLARE_LIST( SfxMediumList, SfxMedium* )
-#endif
+typedef ::std::vector< SfxMedium* > SfxMediumList;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

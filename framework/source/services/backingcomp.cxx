@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <properties.h>
 #include <services.h>
 
-#ifndef _FRAMEWORK_HELPID_HRC
 #include <helpid.hrc>
-#endif
 
 //_______________________________________________
 // interface includes
@@ -70,16 +69,12 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include <svl/urihelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 
-#ifndef _UTL_BOOTSTRAP_HXX_
 #include <unotools/bootstrap.hxx>
-#endif
 
 namespace framework
 {
@@ -467,17 +462,17 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("already attached"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already attached")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("invalid frame reference"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid frame reference")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("instance seams to be not or wrong initialized"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("instance seams to be not or wrong initialized")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // safe the frame reference
@@ -504,7 +499,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
     // disable full screen mode of the frame!
-    if (pParent->IsFullScreenMode())
+    if (pParent && pParent->IsFullScreenMode())
     {
         pParent->ShowFullScreenMode(sal_False);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
@@ -518,17 +513,14 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     {
         xLayoutManager->lock();
         xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
-        /* #i85963# new backing window comes withoud standard bar and statusbar
-        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-        */
         xLayoutManager->unlock();
     }
 
-    // set help ID for our canvas
-    pWindow->SetHelpId(HID_BACKINGWINDOW);
+    if (pWindow)
+    {
+        // set help ID for our canvas
+        pWindow->SetHelpId(HID_BACKINGWINDOW);
+    }
 
     // inform BackingWindow about frame
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
@@ -666,7 +658,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("unexpected source or called twice"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unexpected source or called twice")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     m_xWindow = css::uno::Reference< css::awt::XWindow >();
@@ -760,7 +752,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
     throw(css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-            ::rtl::OUString::createFromAscii("not supported"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not supported")),
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
@@ -807,7 +799,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                ::rtl::OUString::createFromAscii("already initialized"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("already initialized")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -818,7 +810,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                ::rtl::OUString::createFromAscii("wrong or corrupt argument list"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wrong or corrupt argument list")),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -829,7 +821,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("couldn't create component window"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("couldn't create component window")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // start listening for window disposing
@@ -872,3 +864,5 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

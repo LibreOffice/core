@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,12 @@ namespace connectivity
     class java_lang_String : public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+    // statis Data for the Class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_lang_String();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_String( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         operator ::rtl::OUString();
@@ -51,3 +52,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_JAVA_LANG_STRING_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

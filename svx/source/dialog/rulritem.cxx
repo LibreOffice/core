@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ String SvxLongLRSpaceItem::GetValueText() const
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-sal_Bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -82,18 +83,18 @@ sal_Bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_u
 
         case MID_LEFT: nVal = lLeft; break;
         case MID_RIGHT: nVal = lRight; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if ( bConvert )
         nVal = TWIP_TO_MM100( nVal );
 
     rVal <<= nVal;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -106,7 +107,7 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, s
         {
             lLeft    = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Left ) : aLeftRightMargin.Left;
             lRight   = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Right ) : aLeftRightMargin.Right;
-            return sal_True;
+            return true;
         }
     }
     else if ( rVal >>= nVal )
@@ -118,13 +119,13 @@ sal_Bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, s
         {
             case MID_LEFT: lLeft = nVal; break;
             case MID_RIGHT: lRight = nVal; break;
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -189,7 +190,7 @@ String SvxLongULSpaceItem::GetValueText() const
     return String();
 }
 
-sal_Bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -203,23 +204,23 @@ sal_Bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_u
             aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
             aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
             rVal <<= aUpperLowerMargin;
-            return sal_True;
+            return true;
         }
 
         case MID_UPPER: nVal = lLeft; break;
         case MID_LOWER: nVal = lRight; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if ( bConvert )
         nVal = TWIP_TO_MM100( nVal );
 
     rVal <<= nVal;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -232,7 +233,7 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, s
         {
             lLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
             lRight   = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
-            return sal_True;
+            return true;
         }
     }
     else if ( rVal >>= nVal )
@@ -244,13 +245,13 @@ sal_Bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, s
         {
             case MID_UPPER: lLeft = nVal; break;
             case MID_LOWER: lRight = nVal; break;
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -307,7 +308,7 @@ int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
             lHeight == ((const SvxPagePosSizeItem &)rCmp).lHeight;
 }
 
-sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -322,7 +323,7 @@ sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_u
             aPagePosSize.Width = lWidth;
             aPagePosSize.Height = lHeight;
             rVal <<= aPagePosSize;
-            return sal_True;
+            return true;
         }
 
         case MID_X: nVal = aPos.X(); break;
@@ -330,14 +331,14 @@ sal_Bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_u
         case MID_WIDTH: nVal = lWidth; break;
         case MID_HEIGHT: nVal = lHeight; break;
 
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     rVal <<= nVal;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -365,13 +366,13 @@ sal_Bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, s
             case MID_WIDTH: lWidth = nVal; break;
             case MID_HEIGHT: lHeight = nVal; break;
 
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return sal_False;
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -568,7 +569,7 @@ const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
 sal_Bool SvxColumnItem::CalcOrtho() const
 {
     const sal_uInt16 nCount = Count();
-    DBG_ASSERT(nCount >= 2, "keine Spalten");
+    DBG_ASSERT(nCount >= 2, "no columns");
     if(nCount < 2)
         return sal_False;
 
@@ -577,7 +578,7 @@ sal_Bool SvxColumnItem::CalcOrtho() const
         if( (*this)[i].GetWidth() != nColWidth)
             return sal_False;
     }
-    //!! Breite Trenner
+    //!! Wide divider
     return sal_True;
 }
 
@@ -595,27 +596,27 @@ long SvxColumnItem::GetVisibleRight() const
     return (*this)[nIdx].nEnd;
 }
 
-sal_Bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_COLUMNARRAY:
         {
-            return sal_False;
+            return false;
         }
         case MID_RIGHT: rVal <<= nRight; break;
         case MID_LEFT: rVal <<= nLeft; break;
         case MID_ORTHO: rVal <<= (sal_Bool) bOrtho; break;
         case MID_ACTUAL: rVal <<= (sal_Int32) nActColumn; break;
         case MID_TABLE: rVal <<= (sal_Bool) bTable; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
@@ -623,17 +624,17 @@ sal_Bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     {
         case MID_COLUMNARRAY:
         {
-            return sal_False;
+            return false;
         }
         case MID_RIGHT: rVal >>= nRight; break;
         case MID_LEFT: rVal >>= nLeft; break;
         case MID_ORTHO: rVal >>= nVal; bOrtho = (sal_Bool) nVal; break;
         case MID_ACTUAL: rVal >>= nVal; nActColumn = (sal_uInt16) nVal; break;
         case MID_TABLE: rVal >>= nVal; bTable = (sal_Bool) nVal; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -706,7 +707,7 @@ SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 {
 }
 
-sal_Bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -717,17 +718,17 @@ sal_Bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
         case MID_END_Y : rVal <<= nEndY; break;
         case MID_LIMIT : rVal <<= bLimits; break;
         default:
-            DBG_ERROR( "Wrong MemberId" );
+            OSL_FAIL( "Wrong MemberId" );
             return sal_False;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet=sal_False;
+    bool bRet = false;
     switch ( nMemberId )
     {
         case MID_START_X : bRet = (rVal >>= nStartX); break;
@@ -735,9 +736,10 @@ sal_Bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
         case MID_END_X : bRet = (rVal >>= nEndX); break;
         case MID_END_Y : bRet = (rVal >>= nEndY); break;
         case MID_LIMIT : bRet = (rVal >>= bLimits); break;
-        default: DBG_ERROR( "Wrong MemberId" );
+        default: OSL_FAIL( "Wrong MemberId" );
     }
 
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,6 @@ public:
 private:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
-    Image                   m_aCheckedImageHC;
     String                  m_aAllString;
     com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;
@@ -105,10 +105,6 @@ namespace layout
 class SvxLanguageBoxImpl;
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
-    /*DECL_GET_IMPL( SvxLanguageBox );
-    DECL_CONSTRUCTORS( SvxLanguageBox, ListBox, WB_BORDER );
-    DECL_GET_WINDOW (SvxLanguageBox);*/
-
 public:
     SvxLanguageBox( Context*, const char*, sal_Bool bCheck = sal_False );
     ~SvxLanguageBox ();
@@ -126,3 +122,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

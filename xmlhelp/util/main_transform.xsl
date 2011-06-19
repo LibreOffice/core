@@ -4,7 +4,6 @@
 <!--***********************************************************************
   This is the main transformation style sheet for transforming.
   Only use with OOo 2.0
-  Owner: fpe@openoffice.org
   =========================================================================
   Changes Log
     May 24 2004 Created

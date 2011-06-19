@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ public:
     virtual ~MyApp();
 
     // Application
-    virtual void Main();
+    virtual int Main();
 };
 
 //______________________________________________________________________________
@@ -79,11 +80,11 @@ MyApp::MyApp()
 }
 
 //______________________________________________________________________________
-void MyApp::Main()
+int MyApp::Main()
 {
+    return EXIT_SUCCESS;
 }
 
-//##############################################################################
 
 namespace
 {
@@ -206,7 +207,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
 {
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
             ::dp_gui::TheExtensionManager::get( m_xComponentContext,
                                                 m_parent ? *m_parent : Reference<awt::XWindow>(),
@@ -234,7 +235,7 @@ void ServiceImpl::startExecuteModal(
         }
         catch (Exception & exc) {
             if (bAppUp) {
-                const vos::OGuard guard( Application::GetSolarMutex() );
+                const SolarMutexGuard guard;
                 std::auto_ptr<ErrorBox> box(
                     new ErrorBox( Application::GetActiveTopWindow(),
                                   WB_OK, exc.Message ) );
@@ -278,7 +279,7 @@ void ServiceImpl::startExecuteModal(
     }
 
     {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        const SolarMutexGuard guard;
         ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(
             ::dp_gui::TheExtensionManager::get(
                 m_xComponentContext,
@@ -350,13 +351,13 @@ sdecl::ServiceDecl const updateDecl(
 
 extern "C" {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )
@@ -366,3 +367,5 @@ void * SAL_CALL component_getFactory(
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

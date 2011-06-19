@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <svx/svdedxv.hxx>
 
-#ifndef _GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,3 +159,5 @@ public:
 };
 
 #endif //_SVDXCGV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

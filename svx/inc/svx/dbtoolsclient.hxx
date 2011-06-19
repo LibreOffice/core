@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ namespace svxform
         static oslModule        s_hDbtoolsModule;
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
+
         mutable sal_Bool            m_bCreateAlready;
 
     private:
@@ -233,3 +234,4 @@ namespace svxform
 #endif // SVX_DBTOOLSCLIENT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

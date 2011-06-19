@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define INCLUDED_CONFIGMGR_SOURCE_NODEMAP_HXX
 
 #include "sal/config.h"
-
 #include <map>
-
 #include "rtl/ref.hxx"
 
 namespace rtl { class OUString; }
@@ -47,3 +46,5 @@ void cloneNodeMap(NodeMap const & source, NodeMap * target);
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

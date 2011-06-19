@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,9 @@ static ResMgr* pResMgr=0;
 ResMgr* DialogsResMgr::GetResMgr()
 {
     if ( !pResMgr )
-    {
-        ByteString aName( "svx" );
-        pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
-    }
+        pResMgr = ResMgr::CreateResMgr( "svx", Application::GetSettings().GetUILocale() );
 
     return pResMgr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

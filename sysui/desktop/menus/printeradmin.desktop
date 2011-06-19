@@ -4,5 +4,6 @@ Terminal=false
 Icon=printeradmin
 Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
-Exec=openoffice-printeradmin
+Exec=${UNIXBASISROOTNAME}-printeradmin
 Name=%PRODUCTNAME Printer Administration
+

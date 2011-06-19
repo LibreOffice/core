@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -226,7 +227,7 @@ namespace dbtools
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ParameterManager::collectInnerParameters: caught an exception!" );
+                OSL_FAIL( "ParameterManager::collectInnerParameters: caught an exception!" );
             }
         }
     }
@@ -240,7 +241,7 @@ namespace dbtools
         // format is:
         // <detail_column> = :<new_param_name>
         sFilter = quoteName( m_sIdentifierQuoteString, _rDetailLink );
-        sFilter += ::rtl::OUString::createFromAscii( " = :" );
+        sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " = :" ));
 
         // generate a parameter name which is not already used
         _rNewParamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "link_from_" ) );
@@ -416,7 +417,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::analyzeFieldLinks: caught an exception!" );
+            OSL_FAIL( "ParameterManager::analyzeFieldLinks: caught an exception!" );
         }
     }
 
@@ -442,6 +443,7 @@ namespace dbtools
         {
 #if OSL_DEBUG_LEVEL > 0
             if ( aParam->second.aInnerIndexes.size() )
+            {
                 if ( aParam->second.eType == eLinkedByColumnName )
                 {
                     if ( nSmallestIndexLinkedByColumnName == -1 )
@@ -451,6 +453,7 @@ namespace dbtools
                 {
                     nLargestIndexNotLinkedByColumnName = aParam->second.aInnerIndexes[ aParam->second.aInnerIndexes.size() - 1 ];
                 }
+            }
 #endif
             if ( aParam->second.eType != eFilledExternally )
                 continue;
@@ -571,7 +574,7 @@ namespace dbtools
                 // does the name denote a valid column in the parent?
                 if ( !_rxParentColumns->hasByName( *pMasterFields ) )
                 {
-                    OSL_ENSURE( sal_False, "ParameterManager::fillLinkedParameters: invalid master names should have been stripped long before!" );
+                    OSL_FAIL( "ParameterManager::fillLinkedParameters: invalid master names should have been stripped long before!" );
                     continue;
                 }
 
@@ -581,7 +584,7 @@ namespace dbtools
                     || ( aParamInfo->second.aInnerIndexes.empty() )
                     )
                 {
-                    OSL_ENSURE( sal_False, "ParameterManager::fillLinkedParameters: nothing known about this detail field!" );
+                    OSL_FAIL( "ParameterManager::fillLinkedParameters: nothing known about this detail field!" );
                     continue;
                 }
 
@@ -620,8 +623,7 @@ namespace dbtools
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False,
-                                    ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
+                        OSL_FAIL( ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
                                 +=  ::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
                                 +=  ::rtl::OString( " could not be filled!" ) );
                     }
@@ -662,7 +664,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::completeParameters: caught an exception while calling the handler!" );
+            OSL_FAIL( "ParameterManager::completeParameters: caught an exception while calling the handler!" );
         }
 
         if ( !pParams->wasSelected() )
@@ -692,7 +694,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::completeParameters: caught an exception while propagating the values!" );
+            OSL_FAIL( "ParameterManager::completeParameters: caught an exception while propagating the values!" );
         }
         return true;
     }
@@ -763,7 +765,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::getConnection: could not retrieve the connection of the !" );
+            OSL_FAIL( "ParameterManager::getConnection: could not retrieve the connection of the !" );
         }
         return _rxConnection.is();
     }
@@ -786,7 +788,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::cacheConnectionInfo: caught an exception!" );
+            OSL_FAIL( "ParameterManager::cacheConnectionInfo: caught an exception!" );
         }
     }
 
@@ -842,7 +844,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::getParentColumns: caught an exception!" );
+            OSL_FAIL( "ParameterManager::getParentColumns: caught an exception!" );
         }
         return _out_rxParentColumns.is();
     }
@@ -897,7 +899,7 @@ namespace dbtools
                 {
                     // if this name is unknown in the parent columns, then we don't have a source
                     // for copying the value to the detail columns
-                    OSL_ENSURE( sal_False, "ParameterManager::resetParameterValues: this should have been stripped long before!" );
+                    OSL_FAIL( "ParameterManager::resetParameterValues: this should have been stripped long before!" );
                     continue;
                 }
 
@@ -909,7 +911,7 @@ namespace dbtools
                     || ( aParamInfo->second.aInnerIndexes.empty() )
                     )
                 {
-                    OSL_ENSURE( sal_False, "ParameterManager::resetParameterValues: nothing known about this detail field!" );
+                    OSL_FAIL( "ParameterManager::resetParameterValues: nothing known about this detail field!" );
                     continue;
                 }
 
@@ -941,7 +943,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::resetParameterValues: caught an exception!" );
+            OSL_FAIL( "ParameterManager::resetParameterValues: caught an exception!" );
         }
 
     }
@@ -1118,3 +1120,4 @@ namespace dbtools
 }   // namespace frm
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

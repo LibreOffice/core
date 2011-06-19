@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -52,18 +53,18 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
 
     if( rtl_str_compare( pImplName, AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( AVMEDIA_QUICKTIME_MANAGER_SERVICENAME ) );
+        const ::rtl::OUString aServiceName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_MANAGER_SERVICENAME )) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString::createFromAscii( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME )),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 
@@ -75,3 +76,5 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
 
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,6 +109,7 @@ public:
         ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
         locale_(locale)
     {
+        lock_ = lock();
         OSL_ASSERT(context.is());
     }
 
@@ -171,6 +173,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString locale_;
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
@@ -274,7 +277,7 @@ Service::createInstanceWithArguments(
              ServiceSpecifier),
             static_cast< cppu::OWeakObject * >(this));
     }
-    osl::MutexGuard guard(lock);
+    osl::MutexGuard guard(*lock_);
     Components & components = Components::getSingleton(context_);
     rtl::Reference< RootAccess > root(
         new RootAccess(components, nodepath, locale, update));
@@ -355,13 +358,13 @@ void Service::removeFlushListener(
 void Service::setLocale(css::lang::Locale const & eLocale)
     throw (css::uno::RuntimeException)
 {
-    osl::MutexGuard guard(lock);
+    osl::MutexGuard guard(*lock_);
     locale_ = comphelper::Locale(
         eLocale.Language, eLocale.Country, eLocale.Variant).toISO();
 }
 
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
-    osl::MutexGuard guard(lock);
+    osl::MutexGuard guard(*lock_);
     css::lang::Locale loc;
     if (locale_.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))) {
         loc.Language = locale_;
@@ -385,7 +388,7 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
 void Service::flushModifications() const {
     Components * components;
     {
-        osl::MutexGuard guard(lock);
+        osl::MutexGuard guard(*lock_);
         components = &Components::getSingleton(context_);
     }
     components->flushModifications();
@@ -543,3 +546,5 @@ createFactory(
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

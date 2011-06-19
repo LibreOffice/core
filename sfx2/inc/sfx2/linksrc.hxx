@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 #include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
@@ -44,13 +43,12 @@
 namespace com { namespace sun { namespace star { namespace uno
 {
     class Any;
-    //class Type;
 }}}}
 class Window;
 class String;
 
 #ifndef ADVISEMODE_NODATA
-// Muessen die gleichen Werte wie Ole2 ADVF_* sein
+// Must be the same value as Ole2 ADVF_*
 #define ADVISEMODE_NODATA       0x01
 //#define ADVISEMODE_PRIMEFIRST   0x02
 #define ADVISEMODE_ONLYONCE     0x04
@@ -74,7 +72,6 @@ public:
                         SvLinkSource();
     virtual             ~SvLinkSource();
 
-//  SvBaseLink*         GetDataBaseLink() const;
     sal_Bool                HasDataLinks( const SvBaseLink* = 0 ) const;
 
     void                Closed();
@@ -124,12 +121,12 @@ public:
 
     StreamToLoadFrom getStreamToLoadFrom();
     void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly );
-    // --> OD 2008-06-18 #i88291#
     void clearStreamToLoadFrom();
-    // <--
 };
 
 SV_DECL_IMPL_REF(SvLinkSource);
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

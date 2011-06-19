@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::osl;
 
-//
 // This ObjectID must match the one created in WarpIN scripts!!
-//
 #define QUICKSTART_OBJID    "OO2_QUICKSTART"
 
 bool ShutdownIcon::IsQuickstarterInstalled()
@@ -92,3 +91,4 @@ bool ShutdownIcon::GetAutostartOs2( )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

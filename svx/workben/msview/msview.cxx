@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <algorithm>
 #include <boost/shared_ptr.hpp>
 #include <sot/storage.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 #include <sal/main.h>
 #include <vcl/event.hxx>
@@ -389,7 +388,6 @@ const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstanc
 Atom* Atom::findFirstEqualAtom( Atom* pCompare, Atom* pContainer, Atom* pSearch, int& nDistance )
 {
     nDistance = 0;
-    Atom* pRet = 0;
 
     while( pSearch )
     {
@@ -516,48 +514,7 @@ public:
         SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
 
         rOutDev.SetTextColor( aOldTextColor );
-
-/*
-        Color aOldFillColor = rOutDev.GetFillColor();
-
-        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >( &rOutDev );
-        long nX = pTreeBox->GetSizePixel().Width();
-
-        ScrollBar* pVScroll = pTreeBox->GetVScroll();
-        if ( pVScroll->IsVisible() )
-        {
-            nX -= pVScroll->GetSizePixel().Width();
-        }
-
-        SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
-        nX -= pItem->aSize.Height();
-
-        long nSize = pItem->aSize.Height() / 2;
-        long nHalfSize = nSize / 2;
-        long nY = rPos.Y() + nHalfSize;
-
-        if ( aOldFillColor == COL_WHITE )
-        {
-            rOutDev.SetFillColor( Color( COL_BLACK ) );
-        }
-        else
-        {
-            rOutDev.SetFillColor( Color( COL_WHITE ) );
-        }
-
-        long n = 0;
-        while ( n <= nHalfSize )
-        {
-            rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
-            n++;
-        }
-
-        rOutDev.SetFillColor( aOldFillColor );
-*/
     }
-
-private:
-    Image* mpImage;
 };
 
 
@@ -1146,7 +1103,7 @@ void MSViewerWorkWindow::Resize()
         uno::Reference< uno::XComponentContext > xCtx( cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            DBG_ERROR( "Error creating initial component context!" );
+            OSL_FAIL( "Error creating initial component context!" );
             return -1;
         }
 
@@ -1154,25 +1111,25 @@ void MSViewerWorkWindow::Resize()
 
         if ( !xMSF.is() )
         {
-            DBG_ERROR( "No service manager!" );
+            OSL_FAIL( "No service manager!" );
             return -1;
         }
 
         // Init UCB
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-        aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+        aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+        aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
         sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
         if ( !bSuccess )
         {
-            DBG_ERROR( "Error creating UCB!" );
+            OSL_FAIL( "Error creating UCB!" );
             return -1;
         }
 
     }
     catch ( uno::Exception const & )
     {
-        DBG_ERROR( "Exception during creation of initial component context!" );
+        OSL_FAIL( "Exception during creation of initial component context!" );
         return -1;
     }
     comphelper::setProcessServiceFactory( xMSF );
@@ -1222,3 +1179,5 @@ void MSViewerWorkWindow::Resize()
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

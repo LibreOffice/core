@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,8 +193,8 @@ void DAVResourceAccess::OPTIONS(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "OPTIONS" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "OPTIONS" )),
                                    aHeaders );
 
             m_xSession->OPTIONS( getRequestURI(),
@@ -236,8 +237,8 @@ void DAVResourceAccess::PROPFIND(
 
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "PROPFIND" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "PROPFIND" )),
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -279,8 +280,8 @@ void DAVResourceAccess::PROPFIND(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "PROPFIND" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "PROPFIND" )),
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -320,8 +321,8 @@ void DAVResourceAccess::PROPPATCH(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "PROPPATCH" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "PROPPATCH" )),
                                    aHeaders );
 
             m_xSession->PROPPATCH( getRequestURI(),
@@ -361,7 +362,7 @@ void DAVResourceAccess::HEAD(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "HEAD" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HEAD")),
                                    aHeaders );
 
             m_xSession->HEAD( getRequestURI(),
@@ -401,7 +402,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "GET" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GET")),
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -442,7 +443,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "GET" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GET")),
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -483,7 +484,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "GET" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GET")),
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -528,7 +529,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "GET" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GET")),
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -615,7 +616,7 @@ void DAVResourceAccess::PUT(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "PUT" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PUT")),
                                    aHeaders );
 
             m_xSession->PUT( getRequestURI(),
@@ -667,7 +668,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "POST" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("POST")),
                                    aHeaders );
 
             xStream = m_xSession->POST( getRequestURI(),
@@ -730,7 +731,7 @@ void DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "POST" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("POST")),
                                    aHeaders );
 
             m_xSession->POST( getRequestURI(),
@@ -778,7 +779,7 @@ void DAVResourceAccess::MKCOL(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "MKCOL" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MKCOL")),
                                    aHeaders );
 
             m_xSession->MKCOL( getRequestURI(),
@@ -818,7 +819,7 @@ void DAVResourceAccess::COPY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "COPY" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COPY")),
                                    aHeaders );
 
             m_xSession->COPY( rSourcePath,
@@ -860,7 +861,7 @@ void DAVResourceAccess::MOVE(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "MOVE" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MOVE")),
                                    aHeaders );
 
             m_xSession->MOVE( rSourcePath,
@@ -899,8 +900,8 @@ void DAVResourceAccess::DESTROY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii(
-                                       "DESTROY" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                       "DESTROY" )),
                                    aHeaders );
 
             m_xSession->DESTROY( getRequestURI(),
@@ -939,7 +940,7 @@ void DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "LOCK" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCK")),
                                    aHeaders );
 
             m_xSession->LOCK( getRequestURI(),
@@ -981,7 +982,7 @@ sal_Int64 DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "LOCK" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCK")),
                                    aHeaders );
 
             nNewTimeout = m_xSession->LOCK( getRequestURI(),
@@ -1023,7 +1024,7 @@ void DAVResourceAccess::UNLOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString::createFromAscii( "UNLOCK" ),
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNLOCK")),
                                    aHeaders );
 
             m_xSession->UNLOCK( getRequestURI(),
@@ -1161,7 +1162,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
         if ( aUri == (*it) )
             return sal_True;
 
-        it++;
+        ++it;
     }
 
     return sal_False;
@@ -1197,7 +1198,7 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
             return sal_True;
         }
         return sal_False;
-    // --> tkr #67048# copy & paste images doesn't display.
+    // #67048# copy & paste images doesn't display.
     // if we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
         // retry up to three times, if not a client-side error.
@@ -1207,12 +1208,12 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
             return sal_True;
         }
         return sal_False;
-    // <--
-    // --> tkr: if connection has said retry then retry!
+    // if connection has said retry then retry!
     case DAVException::DAV_HTTP_RETRY:
         return sal_True;
-    // <--
     default:
         return sal_False; // Abort
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

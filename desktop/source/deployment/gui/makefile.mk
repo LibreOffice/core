@@ -30,15 +30,10 @@ PRJ = ..$/..$/..
 PRJNAME = desktop
 TARGET = deploymentgui
 ENABLE_EXCEPTIONS = TRUE
-#USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 USE_PCH :=
 ENABLE_PCH :=
 PRJINC:=..$/..
-
-.IF "$(GUI)"=="OS2"
-TARGET = deplgui
-.ENDIF
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
@@ -55,7 +50,6 @@ SLOFILES = \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
-        $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 
@@ -88,8 +82,6 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
-#DEFLIB1NAME = $(TARGET)
-#DEF1DEPN =
 
 SRS1NAME = $(TARGET)
 SRC1FILES = \

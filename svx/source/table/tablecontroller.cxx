@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,7 @@
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;
@@ -612,7 +614,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("svx::SvxTableController::onInsert(), exception caught!");
+        OSL_FAIL("svx::SvxTableController::onInsert(), exception caught!");
     }
 }
 
@@ -903,7 +905,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+                    OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
                 }
             }
 
@@ -914,7 +916,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+        OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
     }
 }
 
@@ -1640,7 +1642,7 @@ void SvxTableController::checkCell( CellPos& rPos )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SvxTableController::checkCell(), exception caught!" );
+        OSL_FAIL("sdr::table::SvxTableController::checkCell(), exception caught!" );
     }
 }
 
@@ -1659,7 +1661,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
+        OSL_FAIL("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
     }
 }
 
@@ -2429,7 +2431,7 @@ bool SvxTableController::GetMarkedObjModel( SdrPage* pNewPage )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
+        OSL_FAIL( "svx::SvxTableController::GetMarkedObjModel(), exception caught!" );
     }
     return false;
 }
@@ -2616,3 +2618,5 @@ IMPL_LINK( SvxTableController, UpdateHdl, void *, EMPTYARG )
 }
 
 } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

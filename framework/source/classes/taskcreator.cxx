@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,9 +105,9 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
-    static ::rtl::OUString PACKAGE = ::rtl::OUString::createFromAscii("org.openoffice.Office.TabBrowse");
-    static ::rtl::OUString RELPATH = ::rtl::OUString::createFromAscii("TaskCreatorService"             );
-    static ::rtl::OUString KEY     = ::rtl::OUString::createFromAscii("ImplementationName"             );
+    static ::rtl::OUString PACKAGE(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.TabBrowse"));
+    static ::rtl::OUString RELPATH(RTL_CONSTASCII_USTRINGPARAM("TaskCreatorService"));
+    static ::rtl::OUString KEY(RTL_CONSTASCII_USTRINGPARAM("ImplementationName"));
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -169,3 +170,5 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -306,15 +307,13 @@ BackendImpl::BackendImpl(
                              OUSTR("application/vnd.sun.star.package-bundle"),
                              OUSTR("*.oxt;*.uno.pkg"),
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
-                             RID_IMG_DEF_PACKAGE_BUNDLE,
-                             RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                             RID_IMG_DEF_PACKAGE_BUNDLE ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    OUSTR("application/"
                                          "vnd.sun.star.legacy-package-bundle"),
                                    OUSTR("*.zip"),
                                    m_xBundleTypeInfo->getShortDescription(),
-                                   RID_IMG_DEF_PACKAGE_BUNDLE,
-                                   RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                                   RID_IMG_DEF_PACKAGE_BUNDLE ) ),
     m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;
@@ -352,7 +351,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return comphelper::makeSequence(
-        OUString::createFromAscii(BACKEND_SERVICE_NAME) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM(BACKEND_SERVICE_NAME)) );
 }
 
 // XPackageRegistry
@@ -485,7 +484,6 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
 }
 
 
-//##############################################################################
 
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -723,10 +721,6 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 return true;
             else
                 return false;
-                //throw css::deployment::DeploymentException(
-                //    OUSTR("Extension Manager: User declined the license."),
-                //    static_cast<OWeakObject*>(this),
-                //    Any( css::deployment::LicenseException(OUSTR("User declined the license."), 0, m_name, sLicense)));
         }
         return true;
     } catch (css::ucb::CommandFailedException&) {
@@ -923,7 +917,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (Exception &)
                         {
-                            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            OSL_FAIL( ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1014,7 +1008,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( css::deployment::DeploymentException& )
         {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
@@ -1142,14 +1136,14 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (deployment::DeploymentException &) {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::comphelper::anyToString(
                                 ::cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (lang::IllegalArgumentException & exc) {
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
 
@@ -1218,7 +1212,7 @@ void BackendImpl::PackageImpl::exportTo(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false ) )
         {
-            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+            OSL_FAIL( "### missing META-INF/manifest.xml file!" );
             return;
         }
 
@@ -1442,7 +1436,7 @@ void BackendImpl::PackageImpl::scanBundle(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false /* no throw */ ))
     {
-        OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+        OSL_FAIL( "### missing META-INF/manifest.xml file!" );
         return;
     }
 
@@ -1665,7 +1659,8 @@ BackendImpl::PackageImpl::getPackagesFromDb(
         Reference<deployment::XPackage> xExtension =
             bindBundleItem(i->first, i->second, true, m_identifier, xCmdEnv);
         OSL_ASSERT(xExtension.is());
-        retVector.push_back(xExtension);
+        if (xExtension.is())
+            retVector.push_back(xExtension);
     }
 
     return retVector;
@@ -1693,3 +1688,4 @@ Reference<deployment::XPackageRegistry> create(
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

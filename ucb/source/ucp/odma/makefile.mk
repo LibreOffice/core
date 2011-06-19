@@ -47,7 +47,7 @@ LIBTARGET=NO
 
 # --- General -----------------------------------------------------
 
-SLOFILES=\
+SLO1FILES=\
     $(SLO)$/odma_lib.obj    		\
     $(SLO)$/odma_services.obj    	\
     $(SLO)$/odma_provider.obj    	\
@@ -58,7 +58,7 @@ SLOFILES=\
     $(SLO)$/odma_contentcaps.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
+LIB1OBJFILES=$(SLO1FILES)
 
 # --- Shared-Library ---------------------------------------------------
 
@@ -91,7 +91,21 @@ APP2STDLIBS=$(SALLIB)			\
 
 DEF2DES=UCB ODMA URL converter
 
+# --- odma_lib library -----------------------------------------------
+
+SLO3FILES=$(SLO)$/odma_lib.obj
+
+LIB3TARGET=$(SLB)$/odma_lib.lib
+LIB3OBJFILES=$(SLO3FILES)
+
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE: target.mk
 
+ALLTAR : $(MISC)/$(TARGET)$(UCP_VERSION).component
+
+$(MISC)/$(TARGET)$(UCP_VERSION).component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        $(TARGET)$(UCP_VERSION).component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET)$(UCP_VERSION).component

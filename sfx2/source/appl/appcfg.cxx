@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
-#ifndef _STDLIB_H
 #include <stdlib.h>
-#endif
 #include <tools/config.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
@@ -157,7 +154,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
     {
         ByteString aTmp( "SfxEvent: ");
         aTmp += ByteString( String( aHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        OSL_TRACE( "%s", aTmp.GetBuffer() );
     }
 #endif
     SFX_APP()->Broadcast( aHint );
@@ -174,7 +171,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
     SfxItemPool &rPool = GetPool();
-    String aTRUEStr('1');
+    String asal_TrueStr('1');
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
@@ -274,9 +271,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
                     break;
                 case SID_ATTR_METRIC :
-//                    if(rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_METRIC ),
-//                                pOptions->GetMetric() ) ) )
-//                        bRet = sal_True;
                     break;
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
@@ -390,23 +384,14 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
                             ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
-                            List aList;
+                            std::vector<String> aList;
                             sal_uInt32 nCount = seqURLs.getLength();
                             sal_uInt32 nURL;
                             for( nURL=0; nURL<nCount; ++nURL )
-                            {
-                                aList.Insert( new String( seqURLs[nURL] ), LIST_APPEND );
-                            }
-                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL),
-                                    &aList ) ) )
-                            {
+                                aList.push_back(seqURLs[nURL]);
+
+                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &aList ) ) )
                                 bRet = sal_False;
-                            }
-                            for( nURL=0; nURL<nCount; ++nURL )
-                            {
-                                delete (String*)aList.GetObject(nURL);
-                            }
-                            aList.Clear();
                         }
                     }
                     break;
@@ -505,7 +490,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
             }
 #ifdef DBG_UTIL
             if ( !bRet )
-                DBG_ERROR( "Putting options failed!" );
+                OSL_FAIL( "Putting options failed!" );
 #endif
         }
         pRanges++;
@@ -520,13 +505,11 @@ sal_Bool SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* p
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
 }
 //--------------------------------------------------------------------
-// TODO/CLEANUP: wieso zwei SetOptions Methoden?
+// TODO/CLEANUP: Why two SetOptions Methods?
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
-    sal_Bool bResetSession = sal_False;
-    sal_Bool bProxiesModified = sal_False;
 
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
@@ -609,14 +592,14 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSaveOptions.SetDocInfoSave(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // offende Dokumente merken
+    // Mark open Documents
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Fenster-Einstellung speichern
+    // Save window settings
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -627,7 +610,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
-//        pOptions->SetMetric((FieldUnit)((const SfxUInt16Item*)pItem)->GetValue());
     }
 
     // HelpBalloons
@@ -672,7 +654,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         sal_Bool bReset = ((const SfxBoolItem *)pItem)->GetValue();
         if ( bReset )
         {
-            DBG_ERROR( "Not implemented, may be EOL!" );
+            OSL_FAIL( "Not implemented, may be EOL!" );
         }                                                   }
 
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), sal_True, &pItem))
@@ -702,16 +684,16 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         sal_uInt16 nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
         aUndoOptions.SetUndoCount( nUndoCount );
 
-        // um alle Undo-Manager zu erwischen: "uber alle Frames iterieren
+        // To catch all Undo-Managers: Iterate over all Frames
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame) )
         {
-            // den Dispatcher des Frames rausholen
+            // Get the Dispatcher of the Frames
             SfxDispatcher *pDispat = pFrame->GetDispatcher();
             pDispat->Flush();
 
-            // "uber alle SfxShells auf dem Stack des Dispatchers iterieren
+            // Iterate over all SfxShells on the Dispatchers Stack
             sal_uInt16 nIdx = 0;
             for ( SfxShell *pSh = pDispat->GetShell(nIdx);
                   pSh;
@@ -743,51 +725,38 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetExecutePlugins( ( (const SfxBoolItem *)pItem )->GetValue() );
-        bResetSession = sal_True;
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), sal_True, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
         aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
-        bResetSession = sal_True;
-        bProxiesModified = sal_True;
     }
 
     // Secure-Referers
@@ -796,13 +765,12 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DELETEZ(pAppData_Impl->pSecureURLs);
 
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
-        const List *pList = ((SfxStringListItem*)pItem)->GetList();
-        sal_uInt32 nCount = pList->Count();
+        const std::vector<String> &aList = ((SfxStringListItem*)pItem)->GetList();
+        sal_uInt32 nCount = aList.size();
         ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs(nCount);
         for( sal_uInt32 nPosition=0;nPosition<nCount;++nPosition)
-        {
-            seqURLs[nPosition] = *(const String*)(pList->GetObject(nPosition));
-        }
+            seqURLs[nPosition] = aList[nPosition];
+
         aSecurityOptions.SetSecureURLs( seqURLs );
     }
 
@@ -825,7 +793,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #endif
     }
 
-    // geaenderte Daten speichern
+    // Store changed data
     aInetOptions.flush();
 }
 
@@ -834,7 +802,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
 
-    // Daten werden in DocInfo und IniManager gespeichert
+    // Data is saved in DocInfo and IniManager
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
 
@@ -933,7 +901,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
 //--------------------------------------------------------------------
 
-// alle Dokumente speichern
+// Save all Documents
 
 sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
 {
@@ -993,13 +961,6 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
 
-#ifdef DBG_UTIL
-    //::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
-    //ByteString aTmp( "SfxEvent: ");
-    //aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-    //DBG_TRACE( aTmp.GetBuffer() );
-#endif
-
     if ( bSynchron )
     {
 #ifdef DBG_UTIL
@@ -1007,7 +968,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
         {
             ByteString aTmp( "SfxEvent: ");
             aTmp += ByteString( String( rEventHint.GetEventName() ), RTL_TEXTENCODING_UTF8 );
-            DBG_TRACE( aTmp.GetBuffer() );
+            OSL_TRACE( "%s", aTmp.GetBuffer() );
         }
 #endif
         Broadcast(rEventHint);
@@ -1020,3 +981,4 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 
 IMPL_OBJHINT( SfxStringHint, String )
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

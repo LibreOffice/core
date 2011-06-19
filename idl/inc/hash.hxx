@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,16 @@
 #ifndef _HASH_HXX
 #define _HASH_HXX
 
-
-
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
-/****************** H a s h - T a b l e **********************************/
 class SvHashTable
 {
     sal_uInt32       nMax;                 // size of hash-tabel
     sal_uInt32       nFill;                // elements in hash-tabel
-    sal_uInt32       lAsk;                 // Anzahl der Anfragen
-    sal_uInt32       lTry;                 // Anzahl der Versuche
+    sal_uInt32       lAsk;                 // number of requests
+    sal_uInt32       lTry;                 // number of tries
 protected:
     sal_Bool        Test_Insert( const void *, sal_Bool bInsert, sal_uInt32 * pInsertPos );
 
@@ -56,7 +55,6 @@ public:
     virtual sal_Bool            IsEntry( sal_uInt32 ) const = 0;
 };
 
-/************** S t r i n g H a s h T a b l e E n t r y ******************/
 class SvStringHashTable;
 class SvStringHashEntry : public SvRefBase
 {
@@ -97,12 +95,11 @@ public:
 
 SV_DECL_IMPL_REF(SvStringHashEntry)
 
-/****************** S t r i n g H a s h T a b l e ************************/
-DECLARE_LIST(SvStringHashList,SvStringHashEntry *)
+typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
 
 class SvStringHashTable : public SvHashTable
 {
-    SvStringHashEntry * pEntries;
+    SvStringHashEntry*      pEntries;
 protected:
     virtual sal_uInt32          HashFunc( const void * pElement ) const;
     virtual StringCompare   Compare( const void * pElement, sal_uInt32 nIndex ) const;
@@ -123,3 +120,5 @@ public:
 };
 
 #endif // _RSCHASH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

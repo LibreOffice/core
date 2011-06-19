@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -384,7 +385,6 @@ public:
     virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener )     throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
-//#if 0 // _SOLAR__PRIVATE
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
     SfxViewShell* GetViewShell_Impl() const;
@@ -393,7 +393,6 @@ public:
     SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
-//#endif
 private:
     enum ConnectSfxFrame
     {
@@ -415,3 +414,5 @@ private:
 } ; // class SfxBaseController
 
 #endif  // _SFX_SFXBASECONTROLLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

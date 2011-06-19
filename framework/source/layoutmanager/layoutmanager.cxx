@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,6 +90,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
@@ -189,6 +191,7 @@ LayoutManager::~LayoutManager()
 {
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_aAsyncLayoutTimer.Stop();
+    delete m_pGlobalSettings;
 }
 
 // Internal helper function
@@ -199,7 +202,7 @@ void LayoutManager::impl_clearUpMenuBar()
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
@@ -257,7 +260,7 @@ void LayoutManager::implts_lock()
 sal_Bool LayoutManager::implts_unlock()
 {
     WriteGuard aWriteLock( m_aLock );
-    m_nLockCount = std::max( --m_nLockCount, static_cast<sal_Int32>(0) );
+    m_nLockCount = std::max( m_nLockCount-1, static_cast<sal_Int32>(0) );
     return ( m_nLockCount == 0 );
 }
 
@@ -583,22 +586,22 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXT)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextSensitive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_NOCLOSE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_NOCLOSE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bNoClose = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXTACTIVE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_CONTEXTACTIVE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bContextActive = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SOFTCLOSE ))
+                    else if ( aWindowState[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(WINDOWSTATE_PROPERTY_SOFTCLOSE)))
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bSoftClose = bValue;
@@ -726,7 +729,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
     Window* pContainerWindow( 0 );
 
     // Retrieve output size from container Window
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     pContainerWindow  = VCLUnoHelper::GetWindow( m_xContainerWindow );
     if ( pContainerWindow )
         aContainerWinSize = pContainerWindow->GetOutputSizePixel();
@@ -784,7 +787,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     bool bMustDoLayout(false);
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         MenuBar* pMenuBar( 0 );
         if ( xInplaceMenuBar.is() )
@@ -913,7 +916,7 @@ void LayoutManager::implts_createProgressBar()
     {
         Reference< awt::XWindow > xStatusBarWindow = pWrapper->getStatusBar();
 
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pStatusBarWnd = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( !pStatusBarWnd )
         {
@@ -1003,7 +1006,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
 
     if ( xWindow.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
@@ -1045,7 +1048,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow )
     {
@@ -1089,7 +1092,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( pWindow && pWindow->IsVisible() && ( bHideStatusBar || bInternalStatusBar ))
     {
@@ -1114,7 +1117,7 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
     {
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && !pWindow->IsVisible() )
         {
@@ -1140,7 +1143,7 @@ sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
     {
         Reference< awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
 
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow && pWindow->IsVisible() )
         {
@@ -1174,7 +1177,7 @@ throw (uno::RuntimeException)
 
     if ( !m_bInplaceMenuSet )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Reset old inplace menubar!
         m_pInplaceMenuBar = 0;
@@ -1214,10 +1217,9 @@ throw (uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     m_bInplaceMenuSet = sal_False;
 
-    // if ( m_xMenuBar.is() &&
     if ( m_xContainerWindow.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
         SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
         if ( pSysWindow )
@@ -1247,25 +1249,19 @@ throw (uno::RuntimeException)
 void SAL_CALL LayoutManager::reset()
 throw (RuntimeException)
 {
-    sal_Bool bComponentAttached( sal_False );
-
-    ReadGuard aReadLock( m_aLock );
-    bComponentAttached = m_bComponentAttached;
-    aReadLock.unlock();
-
     implts_reset( sal_True );
 }
 
 void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+    OSL_FAIL( "This method is obsolete and should not be used!\n" );
 }
 
 void SAL_CALL LayoutManager::resetInplaceMenuBar()
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+    OSL_FAIL( "This method is obsolete and should not be used!\n" );
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -1356,7 +1352,7 @@ throw ( RuntimeException )
         // #i37884# set initial visibility state - in the plugin case the container window is already shown
         // and we get no notification anymore
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
             if( pContainerWindow )
                 m_bParentWindowVisible = pContainerWindow->IsVisible();
@@ -1370,7 +1366,7 @@ throw ( RuntimeException )
 
     if ( xDockingAreaAcceptor.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         // Add layout manager as listener to get notifications about toolbar button activties
         Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -1422,7 +1418,7 @@ void LayoutManager::implts_reparentChildWindows()
 
     if ( xStatusBarWindow.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow          = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( pWindow && pContainerWindow )
@@ -1509,7 +1505,7 @@ throw (RuntimeException)
                 m_xMenuBar = implts_createElement( aName );
                 if ( m_xMenuBar.is() )
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
 
                     SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
                     if ( pSysWindow )
@@ -1664,7 +1660,6 @@ throw (uno::RuntimeException)
 {
     bool            bResult( false );
     bool            bNotify( false );
-    bool            bDoLayout( false );
     ::rtl::OUString aElementType;
     ::rtl::OUString aElementName;
 
@@ -1690,7 +1685,7 @@ throw (uno::RuntimeException)
             if ( xUIElement.is() )
             {
                 // we need VCL here to pass special flags to Show()
-                vos::OGuard     aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
@@ -1698,7 +1693,6 @@ throw (uno::RuntimeException)
                     pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                     bResult   = true;
                     bNotify   = true;
-                    bDoLayout = true;
                 }
             }
         }
@@ -1709,7 +1703,6 @@ throw (uno::RuntimeException)
         implts_showProgressBar();
         bResult   = true;
         bNotify   = true;
-        bDoLayout = true;
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
     {
@@ -1721,7 +1714,6 @@ throw (uno::RuntimeException)
         if ( pToolbarManager && bComponentAttached )
         {
                 bNotify   = pToolbarManager->requestToolbar( rResourceURL );
-            bDoLayout = true;
             }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
@@ -1880,7 +1872,6 @@ throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
 
-    bool            bResult( false );
     bool            bNotify( false );
     bool            bMustLayout( false );
     ::rtl::OUString aElementType;
@@ -1898,7 +1889,7 @@ throw (RuntimeException)
         {
             m_bMenuVisible = sal_False;
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
             {
@@ -1906,7 +1897,6 @@ throw (RuntimeException)
                 if ( pMenuBar )
                 {
                     pMenuBar->SetDisplayable( sal_False );
-                    bResult = true;
                     bNotify = true;
                 }
             }
@@ -1921,12 +1911,11 @@ throw (RuntimeException)
             implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
             bMustLayout = sal_True;
             bNotify     = sal_True;
-            bResult     = sal_True;
         }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
     {
-        bResult = bNotify = implts_hideProgressBar();
+        bNotify = implts_hideProgressBar();
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2132,7 +2121,7 @@ throw (RuntimeException)
         {
             aReadLock.unlock();
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
             {
@@ -2289,7 +2278,7 @@ throw (RuntimeException)
     aStr += ByteString::CreateFromInt32((long)this);
     aStr += " - ";
     aStr += ByteString::CreateFromInt32(nLockCount);
-    DBG_TRACE( aStr.GetBuffer() );
+    OSL_TRACE( aStr.GetBuffer() );
 #endif
 
     Any a( nLockCount );
@@ -2311,7 +2300,7 @@ throw (RuntimeException)
     aStr += ByteString::CreateFromInt32((long)this);
     aStr += " - ";
     aStr += ByteString::CreateFromInt32(nLockCount);
-    DBG_TRACE( aStr.GetBuffer() );
+    OSL_TRACE( aStr.GetBuffer() );
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
@@ -2604,7 +2593,7 @@ void LayoutManager::implts_updateMenuBarClose()
 
     if ( xContainerWindow.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
         if ( pSysWindow )
@@ -2639,7 +2628,7 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
     if ( pSysWindow && bMenuVisible && pSetMenuBar )
     {
@@ -2675,8 +2664,8 @@ IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
 
     xDispatcher->executeDispatch(
         xProvider,
-        ::rtl::OUString::createFromAscii(".uno:CloseWin"),
-        ::rtl::OUString::createFromAscii("_self"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
         0,
         uno::Sequence< beans::PropertyValue >());
 
@@ -2947,7 +2936,7 @@ throw( RuntimeException )
         m_xFrame.clear();
         delete m_pGlobalSettings;
         m_pGlobalSettings = 0;
-                m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
+        m_xDockingAreaAcceptor = Reference< ui::XDockingAreaAcceptor >();
 
         bDisposeAndClear = sal_True;
     }
@@ -3224,24 +3213,39 @@ void SAL_CALL LayoutManager::getFastPropertyValue( uno::Any& aValue, sal_Int32 n
     LayoutManager_PBase::getFastPropertyValue( aValue, nHandle );
 }
 
-::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
+namespace detail
 {
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
-
-    if( pInfoHelper == NULL )
+    class InfoHelperBuilder : private ::boost::noncopyable
     {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        if( pInfoHelper == NULL )
+    private:
+        ::cppu::OPropertyArrayHelper *m_pInfoHelper;
+    public:
+        InfoHelperBuilder(const LayoutManager &rManager)
         {
             uno::Sequence< beans::Property > aProperties;
-            describeProperties( aProperties );
-            static ::cppu::OPropertyArrayHelper aInfoHelper( aProperties, sal_True );
-            pInfoHelper = &aInfoHelper;
+            rManager.describeProperties(aProperties);
+            m_pInfoHelper = new ::cppu::OPropertyArrayHelper(aProperties, sal_True);
         }
-    }
+        ~InfoHelperBuilder()
+        {
+            delete m_pInfoHelper;
+        }
 
-    return(*pInfoHelper);
+        ::cppu::OPropertyArrayHelper& getHelper() { return *m_pInfoHelper; }
+    };
+}
+namespace
+{
+    struct theInfoHelper :
+        public rtl::StaticWithArg< detail::InfoHelperBuilder, LayoutManager,
+        theInfoHelper >
+    {
+    };
+}
+
+::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
+{
+    return theInfoHelper::get(*this).getHelper();
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo() throw (uno::RuntimeException)
@@ -3263,3 +3267,5 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

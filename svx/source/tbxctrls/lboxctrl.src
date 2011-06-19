@@ -32,27 +32,20 @@
 FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 150 , 74 ) ;
+    Size = MAP_APPFONT ( 102 , 87 ) ;
     HelpID = HID_SVXTBX_UNDO_REDO_CTRL ;
-    SysWin = TRUE;
-    Border = TRUE ;
+    StdPopup = TRUE;
     Hide = TRUE ;
-    SVLook = TRUE ;
     OutputSize = TRUE ;
 
     ListBox LB_SVXTBX_UNDO_REDO_CTRL
     {
         HelpID = "svx:ListBox:RID_SVXTBX_UNDO_REDO_CTRL:LB_SVXTBX_UNDO_REDO_CTRL";
         Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 150 , 60 ) ;
+        Size = MAP_APPFONT ( 100 , 85 ) ;
         Border = TRUE ;
         DropDown = FALSE ;
         OutputSize = TRUE ;
-    };
-    FixedText FT_NUM_OPERATIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 138 , 10 ) ;
     };
 };
 

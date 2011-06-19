@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #define SVX_UNOPROV_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxItemPropertySet;
@@ -40,29 +41,14 @@ class SfxItemPool;
 * class UHashMap                                                       *
 ***********************************************************************/
 
-struct UHashMapEntry
-{
-    ::rtl::OUString aIdentifier;
-    sal_uInt32 nId;
-
-    UHashMapEntry(const sal_Char * value, sal_Int32 length, sal_uInt32 _nId) : aIdentifier(value,length,RTL_TEXTENCODING_ASCII_US), nId(_nId) { }
-};
-
-DECLARE_LIST( UHashMapEntryList, UHashMapEntry* )
-
-#define HASHARRAYSIZE   0x10
 #define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
-
 class UHashMap
 {
-private:
-    UHashMapEntryList m_aHashList[HASHARRAYSIZE];
-
+    UHashMap() {}
 public:
-    UHashMap( UHashMapEntry* pMap );
-    ~UHashMap() {};
-
-    sal_uInt32 getId( const ::rtl::OUString& rCompareString );
+    static sal_uInt32 getId( const ::rtl::OUString& rCompareString );
+    static rtl::OUString getNameFromId (sal_uInt32 nId);
+    static ::com::sun::star::uno::Sequence< rtl::OUString > getServiceNames();
 };
 
 /***********************************************************************
@@ -103,7 +89,6 @@ class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(sal_uInt16 nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
@@ -117,10 +102,6 @@ public:
 
 const sal_Int16 OBJ_OLE2_APPLET = 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
-
-extern SvxUnoPropertyMapProvider aSvxMapProvider;
-extern UHashMapEntry pSdrShapeIdentifierMap[];
-extern UHashMap aSdrShapeIdentifierMap;
 
 #define E3D_INVENTOR_FLAG           (0x80000000)
 
@@ -147,3 +128,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MyEDITVIEW, wegen exportiertem EditView
+// MyEDITVIEW, due to exported EditView
 #ifndef _MyEDITVIEW_HXX
 #define _MyEDITVIEW_HXX
 
@@ -58,9 +59,7 @@ class SfxStyleSheet;
 class Font;
 class FontList;
 
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include "editeng/editengdllapi.h"
 
@@ -77,7 +76,7 @@ class EDITENG_DLLPUBLIC EditView
     friend class ImpEditEngine;
     friend class EditSelFunctionSet;
 
-public: // brauche ich fuer Undo
+public: // Needed for Undo
     ImpEditView*    GetImpEditView() const      { return pImpEditView; }
     ImpEditEngine*  GetImpEditEngine() const;
 
@@ -127,13 +126,13 @@ public:
 
     sal_uInt16          GetSelectedScriptType() const;
 
-                        // Position der VisArea im Ausgabefenster.
-                        // Eine Groessenaenderung betrifft auch die VisArea
+                        // VisArea position of the Output window.
+                        // A size change also affects the VisArea
     void                SetOutputArea( const Rectangle& rRec );
     const Rectangle&    GetOutputArea() const;
 
-                        // Dokumentposition.
-                        // Eine Groessenaenderung betrifft auch die VisArea
+                        // Document position.
+                        // A size change also affects the VisArea
     void                SetVisArea( const Rectangle& rRec );
     const Rectangle&    GetVisArea() const;
 
@@ -145,7 +144,7 @@ public:
 
     void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
 
-    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent );
+    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
     sal_Bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     sal_Bool            MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -167,7 +166,7 @@ public:
     void            Undo();
     void            Redo();
 
-    // speziell fuer Olli
+    // especially for Oliver Specht
     sal_uInt16          GetParagraph( const Point& rMousePosPixel );
     Point           GetWindowPosTopLeft( sal_uInt16 nParagraph );
     void            MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
@@ -196,7 +195,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
 
-    // An EditView, damit bei sal_True flackerfreies Update:
+    // An EditView, so that when TRUE the update will be free from flickering:
     void            SetEditEngineUpdateMode( sal_Bool bUpdate );
     void            ForceUpdate();
 
@@ -208,7 +207,7 @@ public:
 
     sal_Bool            MatchGroup();
 
-    void            CompleteAutoCorrect();
+    void            CompleteAutoCorrect( Window* pFrameWin = NULL );
 
     EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
@@ -248,3 +247,5 @@ public:
 };
 
 #endif // _MyEDITVIEW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

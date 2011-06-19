@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,15 +26,12 @@
  *
  ************************************************************************/
 
+#include <sal/macros.h>
 #include <svtools/filedlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_MASTERPASSCRTDLG_HRC
 #include <masterpasscrtdlg.hrc>
-#endif
 #include <masterpasscrtdlg.hxx>
 
 // MasterPasswordCreateDialog---------------------------------------------------
@@ -129,7 +127,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     aFTMasterPasswordWarning.SetPosSizePixel( aFTMasterPasswordWarning.GetPosPixel(), aNewWarningSize );
 
     Window* pControls[] = { &aFL, &aOKBtn, &aCancelBtn, &aHelpBtn };
-    const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[0] );
+    const sal_Int32 nCCount = SAL_N_ELEMENTS( pControls );
     for ( int i = 0; i < nCCount; ++i )
     {
         Point aNewPos =(*pControls[i]).GetPosPixel();
@@ -152,7 +150,7 @@ void MasterPasswordCreateDialog::CalculateTextHeight()
                             &aFTMasterPasswordRepeat, &aEDMasterPasswordRepeat, &aFTCautionText,
                             &aFLCautionText, &aOKBtn, &aCancelBtn, &aHelpBtn };
         Window** pWindow = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[0] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pWindow )
         {
             Point aNewPos = (*pWindow)->GetPosPixel();
@@ -171,7 +169,7 @@ void MasterPasswordCreateDialog::CalculateTextHeight()
         nDelta += nTemp;
         Window* pWins[] = { &aFLCautionText, &aOKBtn, &aCancelBtn, &aHelpBtn };
         Window** pWindow = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[0] );
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pWindow )
         {
             Point aNewPos = (*pWindow)->GetPosPixel();
@@ -188,3 +186,4 @@ void MasterPasswordCreateDialog::CalculateTextHeight()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

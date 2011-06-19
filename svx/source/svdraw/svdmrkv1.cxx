@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -263,7 +264,7 @@ sal_Bool SdrMarkView::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
                 } else {
 #ifdef DBG_UTIL
                     if (pObj->IsInserted()) {
-                        DBG_ERROR("SdrMarkView::MarkPoints(const Rectangle* pRect): Markiertes Objekt nicht gefunden");
+                        OSL_FAIL("SdrMarkView::MarkPoints(const Rectangle* pRect): Markiertes Objekt nicht gefunden");
                     }
 #endif
                     pM=NULL;
@@ -401,7 +402,7 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
             else
             {
-                DBG_ERROR("SdrMarkView::UndirtyMrkPnt(): Markierte Punkte an einem Objekt, dass kein PolyObj ist!");
+                OSL_FAIL("SdrMarkView::UndirtyMrkPnt(): Markierte Punkte an einem Objekt, dass kein PolyObj ist!");
                 if(pPts && pPts->GetCount())
                 {
                     pPts->Clear();
@@ -722,3 +723,4 @@ const Rectangle& SdrMarkView::GetMarkedGluePointsRect() const
     return aMarkedGluePointsRect;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,19 +27,10 @@
 #ifndef __ooo_vba_XCollection_idl__
 #define __ooo_vba_XCollection_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_script_XDefaultMethod_idl__
 #include <com/sun/star/script/XDefaultMethod.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 //=============================================================================
 
 module ooo {  module vba {

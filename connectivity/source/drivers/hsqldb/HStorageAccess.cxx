@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,9 +90,9 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         {
             xFlush->flush();
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
-            OSL_ENSURE( false, "NativeStorageAccess::close: caught an exception while flushing!" );
+            OSL_FAIL( "NativeStorageAccess::close: caught an exception while flushing!" );
         }
 #ifdef HSQLDB_DBG
     {
@@ -170,7 +171,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
         {
             nBytesRead = xIn->readBytes(aData,1);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -248,7 +249,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
         {
             nBytesRead = xIn->readBytes(aData, len);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -316,7 +317,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
         {
             nBytesRead = xIn->readBytes(aData, 4);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             StorageContainer::throwJavaException(e,env);
             return -1;
@@ -442,7 +443,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             OSL_ENSURE(buf,"buf is NULL");
             if ( buf && len > 0 && len <= env->GetArrayLength(buffer))
@@ -463,9 +464,9 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
                     "No OutputStream");
         }
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
-        OSL_ENSURE(0,"Exception caught! : write [BII)V");
+        OSL_FAIL("Exception caught! : write [BII)V");
         StorageContainer::throwJavaException(e,env);
     }
 }
@@ -522,9 +523,9 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
                     "No OutputStream");
         }
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
-        OSL_ENSURE(0,"Exception catched! : writeBytes(aData);");
+        OSL_FAIL("Exception caught! : writeBytes(aData);");
         StorageContainer::throwJavaException(e,env);
     }
 }
@@ -549,3 +550,5 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStor
     write_to_storage_stream( env, obj_this, name, key, v );
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

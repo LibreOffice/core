@@ -35,7 +35,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //......................................................................................................................
 namespace xmloff { namespace metadata
@@ -83,7 +83,7 @@ namespace xmloff { namespace metadata
         // for some attribute or property, and otherwise delegate to the next instance.
 
         //..............................................................................................................
-        typedef ::std::hash_map< ::rtl::OUString, const PropertyDescription*, ::rtl::OUStringHash > DescriptionsByName;
+        typedef ::boost::unordered_map< ::rtl::OUString, const PropertyDescription*, ::rtl::OUStringHash > DescriptionsByName;
 
         //..............................................................................................................
         const DescriptionsByName& lcl_getPropertyDescriptions()
@@ -124,7 +124,7 @@ namespace xmloff { namespace metadata
         }
 
         //..............................................................................................................
-        typedef ::std::hash_map< ::rtl::OUString, XMLTokenEnum, ::rtl::OUStringHash > ReverseTokenLookup;
+        typedef ::boost::unordered_map< ::rtl::OUString, XMLTokenEnum, ::rtl::OUStringHash > ReverseTokenLookup;
 
         //..............................................................................................................
         const ReverseTokenLookup& getReverseTokenLookup()
@@ -153,7 +153,7 @@ namespace xmloff { namespace metadata
         };
 
         //..............................................................................................................
-        typedef ::std::hash_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
+        typedef ::boost::unordered_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
 
         //..............................................................................................................
         const AttributeGroups& lcl_getAttributeGroups()
@@ -174,7 +174,7 @@ namespace xmloff { namespace metadata
         }
 
         //..............................................................................................................
-        typedef ::std::hash_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
+        typedef ::boost::unordered_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
 
         //..............................................................................................................
         const AttributesWithoutGroup& lcl_getAttributesWithoutGroups()

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,7 +175,7 @@ void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const u
     throw (uno::RuntimeException)
 {
     if ( !Number.hasValue() )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("Missing Required Paramater"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Missing Required Paramater")), uno::Reference< uno::XInterface >() );
     Number >>= m_nNumber;
     Description >>= m_sDescription;
     Source >>= m_sSource;
@@ -223,3 +224,4 @@ void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OU
         m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

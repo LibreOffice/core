@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,11 @@
 
 #include "acceptor.hxx"
 #include <unotools/bootstrap.hxx>
-#include <vos/process.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_UNO_XNAMEINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
 
 #include <cppuhelper/factory.hxx>
 
@@ -71,10 +69,10 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
 {
     m_rSMgr = rFactory;
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
-        rtl::OUString::createFromAscii( "com.sun.star.connection.Acceptor" )),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.connection.Acceptor" ))),
         UNO_QUERY );
     m_rBridgeFactory = Reference < XBridgeFactory > (m_rSMgr->createInstance(
-        rtl::OUString::createFromAscii( "com.sun.star.bridge.BridgeFactory" )),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" ))),
         UNO_QUERY );
     // get component context
     m_rContext = getComponentContext(m_rSMgr);
@@ -176,7 +174,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         // "<connectString>;<protocol>"
         sal_Int32 nIndex1 = m_aAcceptString.indexOf( (sal_Unicode) ';' );
         if (nIndex1 < 0) throw IllegalArgumentException(
-            OUString::createFromAscii("Invalid accept-string format"), m_rContext, 1);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid accept-string format")), m_rContext, 1);
         m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
         nIndex1++;
         sal_Int32 nIndex2 = m_aAcceptString.indexOf( (sal_Unicode) ';' , nIndex1 );
@@ -202,7 +200,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     if (!bOk)
     {
         throw IllegalArgumentException(
-            OUString::createFromAscii("invalid initialization"), m_rContext, 1);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid initialization")), m_rContext, 1);
     }
 }
 
@@ -277,29 +275,17 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
     else if ( aName.compareToAscii("StarOffice.NamingService" ) == 0 )
     {
         Reference< XNamingService > rNamingService(
-            m_rSMgr->createInstance( OUString::createFromAscii( "com.sun.star.uno.NamingService" )),
+            m_rSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.NamingService" ))),
             UNO_QUERY );
         if ( rNamingService.is() )
         {
             rNamingService->registerObject(
-                OUString::createFromAscii( "StarOffice.ServiceManager" ), m_rSMgr );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )), m_rSMgr );
             rNamingService->registerObject(
-                OUString::createFromAscii( "StarOffice.ComponentContext" ), getComponentContext( m_rSMgr ));
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ComponentContext" )), getComponentContext( m_rSMgr ));
             rInstance = rNamingService;
         }
     }
-    /*
-    else if ( aName.compareToAscii("com.sun.star.ucb.RemoteContentProviderAcceptor" ))
-    {
-        Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
-        if ( rSMgr.is() ) {
-            try {
-                rInstance = rSMgr->createInstance( sObjectName );
-            }
-            catch (Exception const &) {}
-        }
-    }
-    */
     return rInstance;
 }
 
@@ -311,14 +297,12 @@ extern "C"
 {
 using namespace desktop;
 
-void SAL_CALL
-component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **)
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-void * SAL_CALL
-component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
 {
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )
@@ -348,3 +332,5 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,16 +64,16 @@
 
  *************************************************************************/
 
-#include "com/sun/star/beans/Property.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/embed/XStorage.hpp"
-#include "com/sun/star/frame/XModel.hpp"
-#include "com/sun/star/ucb/CommandInfo.hpp"
-#include "com/sun/star/ucb/OpenCommandArgument2.hpp"
-#include "com/sun/star/ucb/TransferInfo.hpp"
-
-#include "tdoc_content.hxx"
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <sal/macros.h>
+#include <tdoc_content.hxx>
 
 namespace com { namespace sun { namespace star { namespace embed {
     class XStorage;
@@ -88,10 +89,10 @@ using namespace tdoc_ucp;
 //=========================================================================
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS( a ) )
 
 #define MAKECMDSEQUENCE( a ) \
-    uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+    uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS( a ) )
 
 //=========================================================================
 //
@@ -703,3 +704,5 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         return MAKECMDSEQUENCE( aRootCommandInfoTable );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <tools/list.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 // xmloff/functional.hxx is obsolete and should be replaced by its comphelper
@@ -45,11 +45,7 @@
 #include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
 
-
-// --> OD 2008-04-25 #refactorlists#
 class XMLTextListsHelper;
-// <--
-
 class SvXMLImportContext;
 class SvXMLTokenMap;
 class SvXMLImportPropertyMapper;
@@ -289,10 +285,8 @@ enum XMLTextListBlockAttrTokens
     XML_TOK_TEXT_LIST_BLOCK_XMLID,
     XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME,
     XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING,
-    // --> OD 2008-04-22 #refactorlists#
     XML_TOK_TEXT_LIST_BLOCK_ID,
     XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST,
-    // <--
     XML_TOK_TEXT_LIST_BLOCK_END=XML_TOK_UNKNOWN
 };
 
@@ -380,9 +374,6 @@ enum XMLTextType
 #define XML_TEXT_RENAME_TYPE_FRAME 10
 #define XML_TEXT_RENAME_TYPE_TABLE 20
 
-// create type for section list, XMLSectionList_Impl
-DECLARE_LIST( XMLSectionList_Impl, XMLSectionImportContext* )
-
 class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase,
     private boost::noncopyable
 {
@@ -462,8 +453,6 @@ public:
     bool IsOrganizerMode() const;
     bool IsProgress() const;
 
-    XMLSectionList_Impl & GetSectionList();
-
     ::rtl::OUString ConvertStarFonts( const ::rtl::OUString& rChars,
                                       const ::rtl::OUString& rStyleName,
                                       sal_uInt8& rFlags,
@@ -481,9 +470,8 @@ public:
     void InsertTextContent( ::com::sun::star::uno::Reference <
                             ::com::sun::star::text::XTextContent > & xContent);
 
-    // --> OD 2007-07-25 #i73509# - add parameter <bOutlineLevelAttrFound>
-    // --> OD 2007-08-17 #i80724#
-    // add parameter <bSetListAttrs> in order to suppress the handling of the list attributes
+    // Add parameter <bOutlineLevelAttrFound> (#i73509#)
+    // Add parameter <bSetListAttrs> in order to suppress the handling of the list attributes (#i80724#)
     ::rtl::OUString SetStyleAndAttrs(
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
@@ -493,22 +481,19 @@ public:
             sal_Bool bOutlineLevelAttrFound = sal_False,
             sal_Int8 nOutlineLevel = -1,
             sal_Bool bSetListAttrs = sal_True );
-    // <--
 
     /** Find a suitable name for the given outline level.
      *  If rStyleName is empty, change it to a previously used or default style
      *  name for that level. Otherwise, leave rStyleName unmodified.
      */
-    // --> OD 2006-10-12 #i69629# - adjust 2nd parameter
+    // Adjust 2nd parameter (#i69629#)
     void FindOutlineStyleName( ::rtl::OUString& rStyleName,
                                sal_Int8 nOutlineLevel );
-    // <--
 
-    // --> OD 2006-10-12 #i69629#
-    // change method name to reflect change of data structure
+    // Change method name to reflect change of data structure (#i69629#)
     void AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
                                    const ::rtl::OUString& rStyleName );
-    // <--
+
     void SetOutlineStyles( sal_Bool bSetEmpty );
 
     void SetHyperlink(
@@ -741,9 +726,7 @@ public:
 
     SvXMLImport & GetXMLImport();
 
-    // --> OD 2008-04-25 #refactorlists#
     XMLTextListsHelper & GetTextListHelper();
-    // <--
 
     // forwards to TextListHelper; these are used in many places
     /// push a list context on the list context stack
@@ -756,3 +739,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

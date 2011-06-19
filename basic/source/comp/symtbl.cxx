@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -400,7 +401,6 @@ SbiSymScope SbiSymDef::GetScope() const
     return pIn ? pIn->GetScope() : SbLOCAL;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 // Die Prozedur-Definition hat drei Pools:
 // 1) aParams: wird durch die Definition gefuellt. Enthaelt die Namen
@@ -501,7 +501,7 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
             case PROPERTY_MODE_LET:     aCompleteProcName.AppendAscii( "Let " ); break;
             case PROPERTY_MODE_SET:     aCompleteProcName.AppendAscii( "Set " ); break;
             case PROPERTY_MODE_NONE:
-                DBG_ERROR( "Illegal PropertyMode PROPERTY_MODE_NONE" );
+                OSL_FAIL( "Illegal PropertyMode PROPERTY_MODE_NONE" );
                 break;
         }
         aCompleteProcName += aName;
@@ -510,7 +510,6 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
 
 SbiConstDef::SbiConstDef( const String& rName )
            : SbiSymDef( rName )
@@ -536,3 +535,4 @@ SbiConstDef* SbiConstDef::GetConstDef()
     return this;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

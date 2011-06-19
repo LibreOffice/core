@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ namespace
         {
             try
             {
-                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))));
                 aNumber >>= nRetval;
             }
             catch(const uno::Exception&)
@@ -446,6 +447,55 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+         Primitive2DSequence SdrAutoFitTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+         {
+             Primitive2DSequence aRetval;
+             getSdrText()->GetObject().impDecomposeAutoFitTextPrimitive(aRetval, *this, aViewInformation);
+
+             return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
+         }
+
+         SdrAutoFitTextPrimitive2D::SdrAutoFitTextPrimitive2D(
+             const SdrText* pSdrText,
+             const OutlinerParaObject& rParaObj,
+             const ::basegfx::B2DHomMatrix& rTextRangeTransform,
+             bool bWordWrap)
+         :  SdrTextPrimitive2D(pSdrText, rParaObj),
+             maTextRangeTransform(rTextRangeTransform),
+             mbWordWrap(bWordWrap)
+         {
+         }
+
+         bool SdrAutoFitTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+         {
+             if(SdrTextPrimitive2D::operator==(rPrimitive))
+             {
+                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+
+                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
+                     && getWordWrap() == rCompare.getWordWrap());
+             }
+
+             return false;
+         }
+
+         SdrTextPrimitive2D* SdrAutoFitTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
+         {
+             return new SdrAutoFitTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
+         }
+
+         // provide unique ID
+         ImplPrimitrive2DIDBlock(SdrAutoFitTextPrimitive2D, PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D)
+
+     } // end of namespace primitive2d
+ } // end of namespace drawinglayer
+
+ //////////////////////////////////////////////////////////////////////////////
+
+ namespace drawinglayer
+ {
+     namespace primitive2d
+     {
         Primitive2DSequence SdrStretchTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
@@ -495,3 +545,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

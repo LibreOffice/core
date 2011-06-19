@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,41 +42,25 @@
 //_______________________________________________
 // interface includes
 
-#ifndef __COM_SUN_STAR_CONFIGURATION_CORRUPTEDUICONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
 //_______________________________________________
 // other includes
 #include <vcl/svapp.hxx>
 
-#ifndef _RTL_USTRBUF_HXX
 #include <rtl/ustrbuf.hxx>
-#endif
 
 //_______________________________________________
 // const
@@ -227,7 +212,7 @@ void PresetHandler::forgetCachedStorages()
 //-----------------------------------------------
 ::rtl::OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 {
-    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Unknown error.");
+    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Unknown error."));
 
     switch(nID)
     {
@@ -275,7 +260,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     nPos = sShareLayer.lastIndexOf('/');
     if (nPos != sShareLayer.getLength()-1)
-        sShareLayer += ::rtl::OUString::createFromAscii("/");
+        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sShareLayer += RELPATH_SHARE_LAYER; // folder
     /*
@@ -331,7 +316,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     sal_Int32 nPos = sUserLayer.lastIndexOf('/');
     if (nPos != sUserLayer.getLength()-1)
-        sUserLayer += ::rtl::OUString::createFromAscii("/");
+        sUserLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sUserLayer  += RELPATH_USER_LAYER; // storage file
 
@@ -431,7 +416,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         if (!xDocumentRoot.is())
             throw css::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("There is valid root storage, where the UI configuration can work on."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("There is valid root storage, where the UI configuration can work on.")),
                     css::uno::Reference< css::uno::XInterface >());
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;
@@ -935,3 +920,5 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
 
 //-----------------------------------------------
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <xmloff/maptype.hxx>
 
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -200,3 +199,5 @@ void XMLSectionFootnoteConfigExport::exportXML(
                                  sal_True, sal_True);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

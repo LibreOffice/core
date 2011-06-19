@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught WrappedTargetException!" );
+            OSL_FAIL( "Caught WrappedTargetException!" );
         }
     }
 
@@ -735,11 +736,11 @@ bool OfficeDocumentsManager::isBasicIDE(
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( frame::UnknownModuleException const & )
         {
-            OSL_ENSURE( false, "Caught UnknownModuleException!" );
+            OSL_FAIL( "Caught UnknownModuleException!" );
         }
 
         if ( aModule.getLength() > 0 )
@@ -780,3 +781,5 @@ bool OfficeDocumentsManager::isOfficeDocument(
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

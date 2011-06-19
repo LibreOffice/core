@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,14 @@
 
 #include "rtl/ustring.hxx"
 #include "db.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace berkeleydbproxy;
 
 namespace dp_misc
 {
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     ::rtl::OString, ::rtl::OString, ::rtl::OStringHash > t_string2string_map;
 
 //==============================================================================
@@ -63,3 +64,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

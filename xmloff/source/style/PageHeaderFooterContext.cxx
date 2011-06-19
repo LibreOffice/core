@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _XMLOFF_PAGEPHEADERFOOTERCONTEXT_HXX
 #include "PageHeaderFooterContext.hxx"
-#endif
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "PagePropertySetContext.hxx"
@@ -98,3 +97,4 @@ void PageHeaderFooterContext::EndElement()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

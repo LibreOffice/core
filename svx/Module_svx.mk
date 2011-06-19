@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,svx,\
     AllLangResTarget_svx \
     AllLangResTarget_ofa \
     AllLangResTarget_gal \
-    AllLangResTarget_about \
     AllLangResTarget_textconversiondlgs \
     Package_inc \
     Package_sdi \

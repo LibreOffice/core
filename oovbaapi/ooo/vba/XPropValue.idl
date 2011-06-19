@@ -27,10 +27,7 @@
 #ifndef __ooo_vba_XPropValue_idl__
 #define __ooo_vba_XPropValue_idl__
 
-#ifndef __com_sun_star_script_XDefaultProperty_idl__
 #include <com/sun/star/script/XDefaultProperty.idl>
-#endif
-
 
 //=============================================================================
 

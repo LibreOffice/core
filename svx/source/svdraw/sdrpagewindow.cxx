@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -104,8 +105,8 @@ using namespace ::com::sun::star;
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
-                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
+                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainer"))), uno::UNO_QUERY);
+                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainerModel"))), uno::UNO_QUERY);
                 uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
                 if (xControl.is())
                     xControl->setModel(xModel);
@@ -288,8 +289,6 @@ namespace
                         Color aColor(rand()%255, rand()%255, rand()%255);
                         impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
                     }
-
-                    bool bBla = true;
                 }
             }
         }
@@ -466,3 +465,5 @@ void SdrPageWindow::SetDesignMode( bool _bDesignMode ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

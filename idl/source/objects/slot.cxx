@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,10 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <tools/debug.hxx>
-#include <attrib.hxx>
 #include <slot.hxx>
 #include <globals.hxx>
 #include <database.hxx>
 
-/****************** SvMetaSlot *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaSlot, SvMetaAttribute );
 
 SvMetaObject *SvMetaSlot::MakeClone() const
@@ -44,12 +43,6 @@ SvMetaObject *SvMetaSlot::MakeClone() const
         return new SvMetaSlot( *this );
 }
 
-/*************************************************************************
-|*    SvMetaSlot::SvMetaSlot()
-|*
-|*    Beschreibung      Zweites sal_False bei den SvBOOL-Objekten bedeutet,
-|*                      IsSet() liefert sal_False (Defaultinitialisierung).
-*************************************************************************/
 SvMetaSlot::SvMetaSlot()
     : aCachable( sal_True, sal_False )
     , aSynchron( sal_True, sal_False )
@@ -73,17 +66,6 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
 {
 }
 
-/*
-#define TEST_READ                                               \
-{                                                               \
-    sal_uInt32  nPos;                                               \
-    rStm >> nPos;                                               \
-    DBG_ASSERT( nPos +4 == rStm.Tell(), "stream pos error" );   \
-}
-
-#define TEST_WRITE                                              \
-    rStm << (sal_uInt32)rStm.Tell();
-*/
 #define TEST_READ
 #define TEST_WRITE
 
@@ -188,7 +170,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
 {
     SvMetaAttribute::Save( rStm );
 
-    // Maske erstellen
+    // create mask
     sal_uInt16 nMask = 0;
     if( aMethod.Is() )          nMask |= 0x0001;
     if( aGroupId.Len() )        nMask |= 0x0002;
@@ -207,7 +189,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aSynchron.IsSet() )     nMask |= 0x4000;
     if( aAsynchron.IsSet() )    nMask |= 0x8000;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     TEST_WRITE
     if( nMask & 0x0001 ) rStm << aMethod;
@@ -242,8 +224,8 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     TEST_WRITE
     if( nMask & 0x8000 ) rStm << aAsynchron;
 
-    // naechste Fuhre schreiben
-    // Maske erstellen
+    // write next bunch
+    // create mask
     nMask = 0;
     if( aRecordPerItem.IsSet() )  nMask |= 0x0001;
     if( aRecordManual.IsSet() )   nMask |= 0x0002;
@@ -262,7 +244,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aRecordAbsolute.IsSet() ) nMask |= 0x4000;
     if( aImageRotation.IsSet() )       nMask |= 0x8000;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     TEST_WRITE
     if( nMask & 0x0001 ) rStm << aRecordPerItem;
@@ -307,21 +289,11 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( nMask & 0x0002 ) rStm << aImageReflection;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::IsVariable()
-|*
-|*    Beschreibung
-*************************************************************************/
 sal_Bool SvMetaSlot::IsVariable() const
 {
     return SvMetaAttribute::IsVariable();
 }
 
-/*************************************************************************
-|*    SvMetaSlot::IsMethod()
-|*
-|*    Beschreibung
-*************************************************************************/
 sal_Bool SvMetaSlot::IsMethod() const
 {
     sal_Bool b = SvMetaAttribute::IsMethod();
@@ -329,11 +301,6 @@ sal_Bool SvMetaSlot::IsMethod() const
     return b;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::HasMethods()
-|*
-|*    Beschreibung
-*************************************************************************/
 ByteString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
 {
     if( !bVariable )
@@ -346,12 +313,12 @@ ByteString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
 }
 
 /*************************************************************************
-|*    Referenz
+|*    reference
 |*
-|*    Beschreibung      Zweites sal_False bei den SvBOOL-Objekten bedeutet,
-|*                      IsSet() liefert sal_False (Defaultinitialisierung).
+|*    description       Second FALSE in the SvBOOL-Objects means
+|*                      IsSet() provides FALSE (default initialization).
 *************************************************************************/
-/** Referenz Aufloesung **/
+/** reference disbandment **/
 SvMetaType * SvMetaSlot::GetSlotType() const
 {
     if( aSlotType.Is() || !GetRef() ) return aSlotType;
@@ -402,28 +369,16 @@ sal_Bool SvMetaSlot::GetPseudoSlots() const
     if( aPseudoSlots.IsSet() || !GetRef() ) return aPseudoSlots;
     return ((SvMetaSlot *)GetRef())->GetPseudoSlots();
 }
-/*
-sal_Bool SvMetaSlot::GetGet() const
-{
-    if( aGet.IsSet() || !GetRef() ) return aGet;
-    return ((SvMetaSlot *)GetRef())->GetGet();
-}
-sal_Bool SvMetaSlot::GetSet() const
-{
-    if( aSet.IsSet() || !GetRef() ) return aSet;
-    return ((SvMetaSlot *)GetRef())->GetSet();
-}
-*/
 sal_Bool SvMetaSlot::GetCachable() const
 {
-    // Cachable und Volatile sind exclusiv
+    // Cachable and Volatile are exclusive
     if( !GetRef() || aCachable.IsSet() || aVolatile.IsSet() )
          return aCachable;
     return ((SvMetaSlot *)GetRef())->GetCachable();
 }
 sal_Bool SvMetaSlot::GetVolatile() const
 {
-    // Cachable und Volatile sind exclusiv
+    // Cachable and Volatile are exclusive
     if( !GetRef() || aVolatile.IsSet() || aCachable.IsSet() )
         return aVolatile;
     return ((SvMetaSlot *)GetRef())->GetVolatile();
@@ -440,21 +395,21 @@ sal_Bool SvMetaSlot::GetAutoUpdate() const
 }
 sal_Bool SvMetaSlot::GetSynchron() const
 {
-    // Synchron und Asynchron sind exclusiv
+    // Synchron and Asynchron are exclusive
     if( !GetRef() || aSynchron.IsSet() || aAsynchron.IsSet() )
         return aSynchron;
     return ((SvMetaSlot *)GetRef())->GetSynchron();
 }
 sal_Bool SvMetaSlot::GetAsynchron() const
 {
-    // Synchron und Asynchron sind exclusiv
+    // Synchron and Asynchron are exclusive
     if( !GetRef() || aAsynchron.IsSet() || aSynchron.IsSet() )
         return aAsynchron;
     return ((SvMetaSlot *)GetRef())->GetAsynchron();
 }
 sal_Bool SvMetaSlot::GetRecordPerItem() const
 {
-    // Record- PerItem, No, PerSet und Manual sind exclusiv
+    // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordPerItem;
@@ -462,7 +417,7 @@ sal_Bool SvMetaSlot::GetRecordPerItem() const
 }
 sal_Bool SvMetaSlot::GetRecordPerSet() const
 {
-    // Record- PerItem, No, PerSet und Manual sind exclusiv
+    // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordPerSet;
@@ -470,7 +425,7 @@ sal_Bool SvMetaSlot::GetRecordPerSet() const
 }
 sal_Bool SvMetaSlot::GetRecordManual() const
 {
-    // Record- PerItem, No, PerSet und Manual sind exclusiv
+    // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aRecordManual;
@@ -478,7 +433,7 @@ sal_Bool SvMetaSlot::GetRecordManual() const
 }
 sal_Bool SvMetaSlot::GetNoRecord() const
 {
-    // Record- PerItem, No, PerSet und Manual sind exclusiv
+    // Record- PerItem, No, PerSet and Manual are exclusive
     if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
       || aRecordPerSet.IsSet() || aRecordManual.IsSet() )
         return aNoRecord;
@@ -549,48 +504,7 @@ const ByteString& SvMetaSlot::GetUnoName() const
     return ((SvMetaSlot *)GetRef())->GetUnoName();
 }
 
-/*************************************************************************
-|*    SvMetaSlot::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaSlot::FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj,
-                                sal_Bool bVariable )
-{
-    // keine Attribut fuer Automation
-    if( !GetAutomation() || !GetExport() )
-        return;
-
-    if( !bVariable )
-    {
-        SvMetaAttributeRef xM = GetMethod();
-        if( xM.Is() )
-        {
-            SvMetaType *    pType = xM->GetType();
-            SvMetaType *    pRetBaseType = pType->GetReturnType()->GetBaseType();
-            ByteString          aName = xM->GetName();
-
-            SbxMethodRef xMeth = new SbxMethod( aName,
-                                    pRetBaseType->GetSbxDataType() );
-            pType->FillSbxObject( xMeth, bVariable );
-            xMeth->SetUserData( MakeSlotValue(rBase, sal_False) );
-
-            pObj->Insert( &xMeth );
-            return;
-        }
-    }
-
-    SvMetaAttribute::FillSbxObject( rBase, pObj, bVariable );
-}
- */
-
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*    SvMetaSlot::ReadAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
@@ -717,11 +631,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaSlot::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                        SvStream & rOutStm,
                        sal_uInt16 nTab )
@@ -800,7 +709,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aVolatile )
         aOut += aVolatile.GetSvIdlString( SvHash_Volatile() );
     else if( !aCachable )
-        // wegen Default == sal_True, nur wenn kein anderer gesetzt
+        // because of Default == TRUE, only when no other is set
         aOut += aCachable.GetSvIdlString( SvHash_Cachable() );
     else
         aDel.Erase();
@@ -820,7 +729,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aAsynchron )
         ( aOut += aDel ) += aAsynchron.GetSvIdlString( SvHash_Asynchron() );
     else if( !aSynchron )
-        // wegen Default == sal_True, nur wenn kein anderer gesetzt
+        // because of Default == TRUE, only when no other is set
         ( aOut += aDel ) += aSynchron.GetSvIdlString( SvHash_Synchron() );
     else
         aDel1 = aDel;
@@ -831,7 +740,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     else if( aNoRecord )
         ( aOut += aDel1 ) += aNoRecord.GetSvIdlString( SvHash_NoRecord() );
     else if( !aRecordPerSet )
-        // wegen Default == sal_True, nur wenn kein anderer gesetzt
+        // because of Default == TRUE, only when no other is set
         ( aOut += aDel1 ) += aRecordPerSet.GetSvIdlString( SvHash_RecordPerSet() );
     else if( aRecordPerItem )
         ( aOut += aDel1 ) += aRecordPerItem.GetSvIdlString( SvHash_RecordPerItem() );
@@ -898,11 +807,6 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 }
 
 
-/*************************************************************************
-|*    SvMetaSlot::Test()
-|*
-|*    Beschreibung
-*************************************************************************/
 sal_Bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_Bool bOk = SvMetaAttribute::Test( rBase, rInStm );
@@ -922,11 +826,6 @@ sal_Bool SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::ReadSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos     = rInStm.Tell();
@@ -935,7 +834,7 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     SvMetaAttribute * pAttr = rBase.ReadKnownAttr( rInStm, GetType() );
     if( pAttr )
     {
-        // F"ur Testzwecke: Referenz bei Kurz-Syntax
+        // c
         SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr );
         if( pKnownSlot )
         {
@@ -960,16 +859,16 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         SvMetaAttribute *pAttr2 = rBase.SearchKnownAttr( GetSlotId() );
         if( pAttr2 )
         {
-            // F"ur Testzwecke: Referenz bei kompletter Definition
+            // for testing purposes: reference in case of complete definition
             SvMetaSlot * pKnownSlot = PTR_CAST( SvMetaSlot, pAttr2 );
             if( pKnownSlot )
             {
                 SetRef( pKnownSlot );
 
-                  // Namen d"urfen abweichen, da mit angegeben
+                  // names may differ, because explicitly given
                 if ( pKnownSlot->GetName() != GetName() )
                 {
-                    DBG_ERROR("Illegal definition!");
+                    OSL_FAIL("Illegal definition!");
                     rInStm.Seek( nTokPos );
                     return sal_False;
                 }
@@ -994,22 +893,12 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::WriteSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaSlot::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                             sal_uInt16 nTab )
 {
     SvMetaAttribute::WriteSvIdl( rBase, rOutStm, nTab );
 }
 
-/*************************************************************************
-|*    SvMetaSlot::Write()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaSlot::Write( SvIdlDataBase & rBase,
                         SvStream & rOutStm, sal_uInt16 nTab,
                         WriteType nT, WriteAttribute nA )
@@ -1021,7 +910,7 @@ void SvMetaSlot::Write( SvIdlDataBase & rBase,
     }
     else
     {
-        // keine Attribut fuer Automation
+        // no attribute for Automation
         if( !GetAutomation() || !GetExport() )
             return;
     }
@@ -1045,16 +934,16 @@ void SvMetaSlot::Write( SvIdlDataBase & rBase,
 void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
                         SvIdlDataBase& rBase)
 {
-    // Einf"ugeposition durch bin"are Suche in der SlotListe ermitteln
+    // get insert position through binary search in slotlist
     sal_uInt16 nId = (sal_uInt16) GetSlotId().GetValue();
-    sal_uInt16 nListCount = (sal_uInt16) rList.Count();
+    sal_uInt16 nListCount = (sal_uInt16) rList.size();
     sal_uInt16 nPos;
     sal_uLong m;  // for inner "for" loop
 
     if ( !nListCount )
         nPos = 0;
     else if ( nListCount == 1 )
-        nPos = rList.GetObject(0)->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
+        nPos = rList[ 0 ]->xSlot->GetSlotId().GetValue() >= nId ? 0 : 1;
     else
     {
         sal_uInt16 nMid = 0, nLow = 0;
@@ -1064,7 +953,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         {
             nMid = (nLow + nHigh) >> 1;
             DBG_ASSERT( nMid < nListCount, "bsearch ist buggy" );
-            int nDiff = (int) nId - (int) rList.GetObject(nMid)->xSlot->GetSlotId().GetValue();
+            int nDiff = (int) nId - (int) rList[ nMid ]->xSlot->GetSlotId().GetValue();
             if ( nDiff < 0)
             {
                 if ( nMid == 0 )
@@ -1088,29 +977,38 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
     DBG_ASSERT( nPos <= nListCount,
         "nPos too large" );
     DBG_ASSERT( nPos == nListCount || nId <=
-        (sal_uInt16) rList.GetObject(nPos)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos ]->xSlot->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
     DBG_ASSERT( nPos == 0 || nId >
-        (sal_uInt16) rList.GetObject(nPos-1)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos-1 ]->xSlot->GetSlotId().GetValue(),
         "Predecessor has higher SlotId" );
     DBG_ASSERT( nPos+1 >= nListCount || nId <
-        (sal_uInt16) rList.GetObject(nPos+1)->xSlot->GetSlotId().GetValue(),
+        (sal_uInt16) rList[ nPos+1 ]->xSlot->GetSlotId().GetValue(),
         "Successor has lower SlotId" );
 
-    rList.Insert( new SvSlotElement( this, rPrefix ), nPos );
+    if ( nPos < rList.size() )
+    {
+        SvSlotElementList::iterator it = rList.begin();
+        std::advance( it, nPos );
+        rList.insert( it, new SvSlotElement( this, rPrefix ) );
+    }
+    else
+    {
+        rList.push_back( new SvSlotElement( this, rPrefix ) );
+    }
 
-    // EnumSlots plattklopfen
+    // iron out EnumSlots
     SvMetaTypeEnum * pEnum = NULL;
     SvMetaType * pBType = GetType()->GetBaseType();
     pEnum = PTR_CAST( SvMetaTypeEnum, pBType );
     if( GetPseudoSlots() && pEnum && pEnum->Count() )
     {
-        // Den MasterSlot clonen
+        // clone the MasterSlot
         SvMetaSlotRef xEnumSlot;
         SvMetaSlot *pFirstEnumSlot = NULL;
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
-            // Die SlotId erzeugen
+            // create SlotId
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
             ByteString aValName = enumValue->GetName();
             ByteString aSId( GetSlotId() );
@@ -1133,7 +1031,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 
             if ( m == rBase.GetAttrList().Count() )
             {
-                DBG_ERROR("Invalid EnumSlot!");
+                OSL_FAIL("Invalid EnumSlot!");
                 xEnumSlot = Clone();
                 sal_uLong nValue;
                 if ( rBase.FindId(aSId , &nValue) )
@@ -1145,30 +1043,30 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
                 }
             }
 
-            // Die Slaves sind kein Master !
+            // The slaves are no master!
             xEnumSlot->aPseudoSlots = sal_False;
             xEnumSlot->SetEnumValue(enumValue);
 
             if ( !pFirstEnumSlot || xEnumSlot->GetSlotId().GetValue() < pFirstEnumSlot->GetSlotId().GetValue() )
                 pFirstEnumSlot = xEnumSlot;
 
-            // Den erzeugten Slave ebenfalls einf"ugen
+            // insert the created slave as well
             xEnumSlot->Insert( rList, rPrefix, rBase);
 
-            // Die EnumSlots mit dem Master verketten
+            // concatenate the EnumSlots with the master
             xEnumSlot->pLinkedSlot = this;
         }
 
-        // Master zeigt auf den ersten Slave
+        // master points to the first slave
         pLinkedSlot = pFirstEnumSlot;
 
-        // Slaves untereinander verketten
-        rList.Seek((sal_uLong)0);
+        // concatenate slaves among themselves
         xEnumSlot = pFirstEnumSlot;
+        size_t i = 0;
         SvSlotElement *pEle;
         do
         {
-            pEle = rList.Next();
+            pEle = ( ++i < rList.size() ) ? rList[ i ] : NULL;
             if ( pEle && pEle->xSlot->pLinkedSlot == this )
             {
                 xEnumSlot->pNextSlot = pEle->xSlot;
@@ -1181,11 +1079,6 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
 }
 
 
-/*************************************************************************
-|*    SvMetaSlot::WriteSlotMap()
-|*
-|*    Beschreibung
-*************************************************************************/
 static ByteString MakeSlotName( SvStringHashEntry * pEntry )
 {
     ByteString aName( "SFX_SLOT_" );
@@ -1197,18 +1090,6 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
 {
-/*
-    ByteString aName = GetName();
-    SvMetaAttribute * pAttr = rAttrList.First();
-    while( pAttr )
-    {
-        if( pAttr->GetName() == aName )
-            break;
-        pAttr = rAttrList.Next();
-    }
-    if( pAttr )
-        return;
-*/
     if ( !GetExport() && !GetHidden() )
         return;
 
@@ -1216,9 +1097,9 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
     if ( aMethodName.Len() && aMethodName != "NoExec" )
     {
         sal_Bool bIn = sal_False;
-        for( sal_uInt16 n = 0; n < rList.Count(); n++ )
+        for( size_t n = 0; n < rList.size(); n++ )
         {
-            if( *(rList.GetObject(n)) == aMethodName )
+            if( *(rList[ n ]) == aMethodName )
             {
                 bIn=sal_True;
                 break;
@@ -1227,7 +1108,7 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 
         if ( !bIn )
         {
-            rList.Insert( new ByteString(aMethodName), LIST_APPEND );
+            rList.push_back( new ByteString(aMethodName) );
             rOutStm << "SFX_EXEC_STUB("
                     << rShellName.GetBuffer()
                     << ','
@@ -1240,9 +1121,9 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
     if ( aMethodName.Len() && aMethodName != "NoState" )
     {
         sal_Bool bIn = sal_False;
-        for ( sal_uInt16 n=0; n < rList.Count(); n++ )
+        for ( size_t n=0; n < rList.size(); n++ )
         {
-            if ( *(rList.GetObject(n)) == aMethodName )
+            if ( *(rList[ n ]) == aMethodName )
             {
                 bIn=sal_True;
                 break;
@@ -1251,7 +1132,7 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 
         if ( !bIn )
         {
-            rList.Insert( new ByteString(aMethodName), LIST_APPEND );
+            rList.push_back( new ByteString(aMethodName) );
             rOutStm << "SFX_STATE_STUB("
                     << rShellName.GetBuffer()
                     << ','
@@ -1264,13 +1145,13 @@ void SvMetaSlot::WriteSlotStubs( const ByteString & rShellName,
 void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
                             const ByteString & rSlotId,
                             SvSlotElementList& rSlotList,
+                            size_t nStart,
                             const ByteString & rPrefix,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     if ( !GetExport() && !GetHidden() )
         return;
 
-//  sal_Bool bIsEnumSlot = 0 != rValueName.Len();
     sal_Bool bIsEnumSlot = 0 != pEnumValue;
 
     rOutStm << "// Slot Nr. " << ByteString::CreateFromInt32(nListPos).GetBuffer() << " : ";
@@ -1319,32 +1200,35 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     }
     else
     {
-        // Den n"achsten Slot suchen, der die gleiche StateMethod hat wie ich
-        // Die SlotList ist auf den aktuellen Slot geseekt
-        SvSlotElement * pEle = rSlotList.Next();
+        // look for the next slot with the same StateMethod like me
+        // the slotlist is set to the current slot
+        size_t i = nStart;
+        SvSlotElement* pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
         pNextSlot = pEle ? &pEle->xSlot : NULL;
         while ( pNextSlot )
         {
             if ( !pNextSlot->pNextSlot &&
-                pNextSlot->GetStateMethod() == GetStateMethod() )
+                pNextSlot->GetStateMethod() == GetStateMethod()
+            ) {
                 break;
-            pEle = rSlotList.Next();
+            }
+            pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
             pNextSlot = pEle ? &pEle->xSlot : NULL;
         }
 
         if ( !pNextSlot )
         {
-            // Es gibt nach mir keinen Slot mehr, der die gleiche ExecMethode
-            // hat. Also suche ich den ersten Slot, der diese hatte (das
-            // k"onnte auch ich selbst sein)
-            pEle = rSlotList.First();
+            // There is no slot behind me that has the same ExecMethod.
+            // So I search for the first slot with it (could be myself).
+            i = 0;
+            pEle = rSlotList.empty() ? NULL : rSlotList[ i ];
             pNextSlot = pEle ? &pEle->xSlot : NULL;
             while ( pNextSlot != this )
             {
                 if ( !pNextSlot->pEnumValue &&
                     pNextSlot->GetStateMethod() == GetStateMethod() )
                     break;
-                pEle = rSlotList.Next();
+                pEle = ( ++i < rSlotList.size() ) ? rSlotList[ i ] : NULL;
                 pNextSlot = pEle ? &pEle->xSlot : NULL;
             }
         }
@@ -1367,7 +1251,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
 
         WriteTab( rOutStm, 4 );
 
-        // ExecMethod schreiben, wenn nicht angegeben, standard Namen
+        // write ExecMethod, with standard name if not specified
         if( GetExecMethod().Len() && GetExecMethod() != "NoExec")
             rOutStm << "SFX_STUB_PTR(" << rShellName.GetBuffer() << ','
                     << GetExecMethod().GetBuffer() << ')';
@@ -1375,7 +1259,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
             rOutStm << "SFX_STUB_PTR_EXEC_NONE";
         rOutStm << ',';
 
-        // StateMethod schreiben, wenn nicht angegeben, standard Namen
+        // write StateMethod, with standard name if not specified
         if( GetStateMethod().Len() && GetStateMethod() != "NoState")
             rOutStm << "SFX_STUB_PTR(" << rShellName.GetBuffer() << ','
                     << GetStateMethod().GetBuffer() << ')';
@@ -1385,7 +1269,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     rOutStm << ',' << endl;
     WriteTab( rOutStm, 4 );
 
-    // Flags schreiben
+    // write flags
     if( GetHasCoreId() )
         rOutStm << MakeSlotName( SvHash_HasCoreId() ).GetBuffer() << '|';
     if( GetCachable() )
@@ -1439,7 +1323,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     else
         rOutStm << GetDisableFlags().GetBuffer();
 
-    // Attribut Typ schreiben
+    // write attribute type
     if( !bIsEnumSlot )
     {
         rOutStm << ',' << endl;
@@ -1489,7 +1373,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         else
             rOutStm << '0';
 
-        // Name f"urs Recording
+        // name for recording
         if ( GetExport() )
         {
             rOutStm << ",\"";
@@ -1504,7 +1388,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         else
             rOutStm << ", 0, ";
 
-        // Method/Property Flags
+        // Method/Property flags
         if( IsMethod() )
             rOutStm << "SFX_SLOT_METHOD|";
         if( IsVariable() )
@@ -1517,15 +1401,11 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         rOutStm << '0';
     }
 
-//    if ( GetUnoName().Len() )
     {
         rOutStm << ",\"";
         rOutStm << GetMangleName( sal_False ).GetBuffer();
-        //rOutStm << GetUnoName().GetBuffer();
         rOutStm << "\"";
     }
-//    else
-//        rOutStm << ", 0";
 
     rOutStm << " )," << endl;
 }
@@ -1556,9 +1436,9 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             WriteTab( rOutStm, 1 );
             rOutStm << "SFX_ARGUMENT("
                 << pPar->GetSlotId().GetBuffer() << ',' // SlodId
-                // Parameter Name
+                // parameter name
                 << "\"" << pPar->GetName().GetBuffer() << "\","
-                // Item Name
+                // item name
                 << pPType->GetName().GetBuffer() << ")," << endl;
             if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.Append( pPType );
@@ -1570,11 +1450,12 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
 
 sal_uInt16 SvMetaSlot::WriteSlotMap( const ByteString & rShellName, sal_uInt16 nCount,
                                 SvSlotElementList& rSlotList,
+                                size_t nStart,
                                 const ByteString & rPrefix,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
 {
-    // SlotId, wenn nicht angegeben, aus Namen generieren
+    // SlotId, if not specified generate from name
     ByteString slotId = GetSlotId();
 
     sal_uInt16 nSCount = 0;
@@ -1590,13 +1471,10 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const ByteString & rShellName, sal_uInt16 n
         nSCount = (sal_uInt16)pType->GetAttrCount();
     }
 
-    WriteSlot( rShellName, nCount, slotId, rSlotList, rPrefix, rBase, rOutStm );
+    WriteSlot( rShellName, nCount, slotId, rSlotList, nStart, rPrefix, rBase, rOutStm );
     return nSCount;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::WriteSrc()
-*************************************************************************/
 void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
@@ -1647,7 +1525,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                 bIdOk = sal_True;
             }
 
-            // wenn Id nicht gefunden, immer schreiben
+            // if id not found, write always
             if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
             {
                 pTable->Insert( nSId2, this );
@@ -1699,7 +1577,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                 bIdOk = sal_True;
             }
 
-            // wenn Id nicht gefunden, immer schreiben
+            // if id not found, write always
             if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
             {
                 pTable->Insert( nSId2, this );
@@ -1714,9 +1592,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
 void WriteBool( sal_Bool bSet, SvStream& rStream )
 {
     if ( bSet )
-        rStream << "sal_True" << ',';
+        rStream << "TRUE" << ',';
     else
-        rStream << "sal_False" << ',';
+        rStream << "FALSE" << ',';
 }
 
 void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
@@ -1818,3 +1696,4 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 #endif // IDL_COMPILER
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

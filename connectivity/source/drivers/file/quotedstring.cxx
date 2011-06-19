@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,44 +45,44 @@ namespace connectivity
             return 0;
 
         xub_StrLen nTokCount = 1;
-        sal_Bool bStart = sal_True;     // Stehen wir auf dem ersten Zeichen im Token?
-        sal_Bool bInString = sal_False; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+        sal_Bool bStart = sal_True;     // Are we on the first character in the Token?
+        sal_Bool bInString = sal_False; // Are we WITHIN a (cStrDel delimited) String?
 
-        // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+        // Search for String-end after the first not matching character
         for( xub_StrLen i = 0; i < nLen; ++i )
         {
             const sal_Unicode cChar = m_sString.GetChar(i);
             if (bStart)
             {
                 bStart = sal_False;
-                // Erstes Zeichen ein String-Delimiter?
+                // First character a String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = sal_True;   // dann sind wir jetzt INNERHALB des Strings!
-                    continue;           // dieses Zeichen ueberlesen!
+                    bInString = sal_True;   // then we are now WITHIN the string!
+                    continue;           // skip this character!
                 }
             }
 
             if (bInString)
             {
-                // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
+                // when now the String-Delimiter-character occurs ...
                 if ( cChar == cStrDel )
                 {
                     if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                     {
-                        // Verdoppeltes String-Delimiter-Zeichen:
-                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
+                        // double String-Delimter-character:
+                        ++i;    // no string-end, skip next character.
                     }
                     else
                     {
-                        // String-Ende
+                        // String-End
                         bInString = sal_False;
                     }
                 }
             } // if (bInString)
             else
             {
-                // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+                // does the Token-character match, then raise TokCount
                 if ( cChar == cTok )
                 {
                     ++nTokCount;
@@ -102,58 +103,57 @@ namespace connectivity
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // are we WITHIN a (cStrDel delimited) String?
 
-            // Erstes Zeichen ein String-Delimiter?
+            // First character a String-Delimiter?
             if (bInString )
-                ++nStartPos;            // dieses Zeichen ueberlesen!
+                ++nStartPos;            // skip this character!
             if ( nStartPos >= nLen )
                 return;
 
             sal_Unicode* pData = _rStr.AllocBuffer( nLen - nStartPos + 1 );
             const sal_Unicode* pStart = pData;
-            // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+            // Search until end of string for the first not matching character
             for( xub_StrLen i = nStartPos; i < nLen; ++i )
             {
                 const sal_Unicode cChar = m_sString.GetChar(i);
                 if (bInString)
                 {
-                    // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
+                    // when now the String-Delimiter-character occurs ...
                     if ( cChar == cStrDel )
                     {
                         if ((i+1 < nLen) && (m_sString.GetChar(i+1) == cStrDel))
                         {
-                            // Verdoppeltes String-Delimiter-Zeichen:
-                            // kein String-Ende, naechstes Zeichen ueberlesen.
+                            // double String Delimiter-character
+                            // no end of string, skip next character.
                             ++i;
-                            *pData++ = m_sString.GetChar(i);    // Zeichen gehoert zum Resultat-String
+                            *pData++ = m_sString.GetChar(i);    // character belongs to Result-String
                         }
                         else
                         {
-                            // String-Ende
+                            //end of String
                             bInString = sal_False;
                             *pData = 0;
                         }
                     }
                     else
                     {
-                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // character belongs to Result-String
                     }
 
                 }
                 else
                 {
-                    // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
+                    // does the Token-sign match, then raise nTok
                     if ( cChar == cTok )
                     {
-                        // Vorzeitiger Abbruch der Schleife moeglich, denn
-                        // wir haben, was wir wollten.
+                        // premature break of loop possible, because we found what we were looking for
                         nStartPos = i+1;
                         break;
                     }
                     else
                     {
-                        *pData++ = cChar;   // Zeichen gehoert zum Resultat-String
+                        *pData++ = cChar;   // character belongs to Result-String
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
@@ -162,3 +162,5 @@ namespace connectivity
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

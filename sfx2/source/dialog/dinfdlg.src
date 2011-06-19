@@ -126,9 +126,17 @@ TabPage TP_DOCINFODOC
     Edit ED_FILE_NAME
     {
         HelpID = "sfx2:Edit:TP_DOCINFODOC:ED_FILE_NAME";
-        Pos = MAP_APPFONT ( 54 , 12 ) ;
-        Size = MAP_APPFONT ( 200 , RSC_CD_TEXTBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 36 , 12 ) ;
+        Size = MAP_APPFONT ( 140 , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
+    };
+    PushButton BTN_CHANGE_PASS
+    {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:BTN_CHANGE_PASS";
+        Pos = MAP_APPFONT ( 189 , 11 ) ;
+        Size = MAP_APPFONT ( 65 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Hide = FALSE;
+        Text [ en-US ] = "Change ~Password...";
     };
     FixedLine FL_FILE_1
     {
@@ -527,7 +535,6 @@ TabPage TP_CUSTOMPROPERTIES
         Size = MAP_APPFONT ( 248 , 141 ) ;
         Border = TRUE;
         DialogControl = TRUE;
-        //OutputSize = TRUE ;
         Window WIN_PROPERTIES
         {
             OutputSize = TRUE ;
@@ -707,11 +714,6 @@ ImageButton SFX_PB_PROPERTY_REMOVE
 Image SFX_IMG_PROPERTY_REMOVE
 {
     ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
-    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
-};
-Image SFX_IMG_PROPERTY_REMOVE_HC
-{
-    ImageBitmap = Bitmap { File = "deleterow_h.bmp" ; };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
 

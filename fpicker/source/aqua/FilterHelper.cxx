@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,9 @@
 
 #include <functional>
 #include <algorithm>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-// #ifndef _OSL_DIAGNOSE_H_
-// #include <osl/diagnose.h>
-// #endif
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 #include "NSURL_OOoAdditions.hxx"
@@ -272,7 +270,7 @@ void FilterHelper::SetCurFilter( const rtl::OUString& rFilter )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "filter", rFilter);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if(m_aCurrentFilter.equals(rFilter) == false)
     {
@@ -319,7 +317,7 @@ void FilterHelper::appendFilter(const ::rtl::OUString& aTitle, const ::rtl::OUSt
 throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", aTitle, "filter", aFilterString);
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( FilterNameExists( aTitle ) ) {
         throw com::sun::star::lang::IllegalArgumentException();
@@ -361,7 +359,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "title", OUStringToOString(sGroupTitle, RTL_TEXTENCODING_UTF8).getStr());
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     //add a separator if this is not the first group to be added
     sal_Bool bPrependSeparator = m_pFilterList != NULL;
@@ -374,7 +372,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
     // append the filter
     if (bPrependSeparator) {
-        rtl::OUString dash = rtl::OUString::createFromAscii("-");
+        rtl::OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
         OUStringList emptyList;
         m_pFilterList->push_back(FilterEntry(dash, emptyList));
     }
@@ -421,7 +419,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     {
         rtl::OUString aName = [sFilename OUString];
-        rtl::OUString allMatcher = rtl::OUString::createFromAscii(".*");
+        rtl::OUString allMatcher(RTL_CONSTASCII_USTRINGPARAM(".*"));
         for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
             if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
                 return sal_True;
@@ -543,3 +541,5 @@ OUStringList FilterHelper::getCurrentFilterSuffixList() {
 
     return retVal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

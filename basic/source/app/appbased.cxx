@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <basic/sbx.hxx>
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 #include <basic/sbmeth.hxx>
 #include <svtools/stringtransfer.hxx>
 
-#ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
 
 #include "basic.hrc"
 #include "status.hxx"
@@ -59,10 +56,8 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     pBreakpoints->Show();
 
-
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( sal_True );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-//  ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
     ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( sal_True );
     ((TextEdit*)pDataEdit)->SaveAsUTF8( sal_True );
 
@@ -78,10 +73,6 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
     bCompiled = pMod->IsCompiled();
 
     pBreakpoints->SetModule( pMod );
-
-    // Define icon:
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     SetText( pMod->GetName() );
     pDataEdit->SetText( pMod->GetSource() );
@@ -210,7 +201,6 @@ void AppBasEd::LoadSource()
 {
     sal_Bool bErr;
 
-//  if( pDataEdit->GetText().Len() != 0 ) return;
     String aName = pMod->GetName();
     bErr = !pDataEdit->Load( aName );
     pBreakpoints->LoadBreakpoints( GetText() );
@@ -250,7 +240,7 @@ sal_Bool AppBasEd::Compile()
     }
     else
     {
-        BasicError* pErr = pFrame->Basic().aErrors.First();
+        BasicError* pErr = pFrame->Basic().FirstError();
         if( pErr ) pErr->Show();
     }
     return bCompiled = bRes;
@@ -287,7 +277,7 @@ void AppBasEd::Run()
         pMain->Run();
         if (aBasicApp.pFrame)
         {
-            BasicError* pErr = aBasicApp.pFrame->Basic().aErrors.First();
+            BasicError* pErr = aBasicApp.pFrame->Basic().FirstError();
             if( pErr )
                 pErr->Show();
             aBasicApp.pFrame->SetAppMode( String() );
@@ -297,3 +287,4 @@ void AppBasEd::Run()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

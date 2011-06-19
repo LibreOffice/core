@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,7 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
-#ifndef INCLUDED_HASH_MAP
-#include <hash_map>
-#define INCLUDED_HASH_MAP
-#endif
+#include <boost/unordered_map.hpp>
 
 namespace rtl {
     class OUString;
@@ -56,7 +54,7 @@ public:
     rtl::Reference< Object2 > get(rtl::OUString const & rKey);
 
 private:
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
                            com::sun::star::uno::WeakReference< Object2 >,
                            rtl::OUStringHash >
     Map;
@@ -71,3 +69,5 @@ private:
 } }
 
 #endif // INCLUDED_UCB_CACHEMAPOBJECTCONTAINER2_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

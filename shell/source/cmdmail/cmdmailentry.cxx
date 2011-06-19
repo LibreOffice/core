@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,8 +57,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 #define COMP_IMPL_NAME     "com.sun.star.comp.system.SimpleCommandMail"
 
 //-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
 
 namespace
 {
@@ -68,7 +67,7 @@ namespace
 }
 
 //-----------------------------------------------------------------------
-// the 3 important functions which will be exported
+// the 2 important functions which will be exported
 //-----------------------------------------------------------------------
 
 extern "C"
@@ -78,7 +77,7 @@ extern "C"
 // component_getImplementationEnvironment
 //----------------------------------------------------------------------
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -88,7 +87,7 @@ void SAL_CALL component_getImplementationEnvironment(
 // component_getFactory
 //----------------------------------------------------------------------
 
-void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /*pSrvManager*/, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /*pSrvManager*/, uno_Interface* /*pRegistryKey*/ )
 {
     Reference< XSingleComponentFactory > xFactory;
 
@@ -109,3 +108,5 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* /
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,20 +42,12 @@ CFLAGS+=-DSYSTEM_EXPAT
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 
 SLOFILES=$(SLO)$/recently_used_file.obj \
          $(SLO)$/recently_used_file_handler.obj
 
 SHL1TARGET=recentfile
-.IF "$(GUI)" == "OS2"
-SHL1IMPLIB=i$(TARGET)
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-DEF1NAME=       $(SHL1TARGET)
-
-.ELSE
-#SHL1IMPLIB=
-.ENDIF
 
 SHL1STDLIBS=$(EXPATASCII3RDLIB)\
     $(SALLIB)
@@ -67,9 +59,9 @@ SHL1VERSIONMAP=recfile.map
 .ELSE
 
 dummy:
-    @echo "Nothing to build for MACOSX"
+    @echo "Nothing to build for $(OS)"
 
-.ENDIF # MACOSX
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk

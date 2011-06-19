@@ -48,6 +48,4 @@
 #define AVMEDIA_IMG_MUTE        2054
 
 #define AVMEDIA_IMGLST          3072
-#define AVMEDIA_IMGLST_HC       3073
 #define AVMEDIA_IMGLST_L        3074
-#define AVMEDIA_IMGLST_L_HC     3075

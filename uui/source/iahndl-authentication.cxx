@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 
 #include "osl/diagnose.h"
 #include "rtl/digest.h"
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/errcode.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/abstdlg.hxx"
@@ -69,7 +70,7 @@ executeLoginDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
         bool bSavePassword   = rInfo.GetCanRememberPassword();
@@ -151,7 +152,6 @@ void getRememberModes(
     }
     else
     {
-        //bool bHasRememberModeNo = false;
         bool bHasRememberModeSession = false;
         bool bHasRememberModePersistent = false;
 
@@ -160,7 +160,6 @@ void getRememberModes(
             switch ( rRememberModes[i] )
             {
             case ucb::RememberAuthentication_NO:
-                //bHasRememberModeNo = true;
                 break;
             case ucb::RememberAuthentication_SESSION:
                 bHasRememberModeSession = true;
@@ -296,7 +295,7 @@ handleAuthenticationRequest_(
 
             if (ePreferredRememberMode != eAlternateRememberMode)
             {
-                // user had te choice.
+                // user had the choice.
                 if (aInfo.GetIsRememberPassword())
                     xSupplyAuthentication->setRememberPassword(
                         ePreferredRememberMode);
@@ -422,7 +421,7 @@ executeMasterPasswordDialog(
     rtl::OString aMaster;
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -525,7 +524,7 @@ executePasswordDialog(
 {
     try
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
 
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
@@ -767,3 +766,4 @@ UUIInteractionHelper::handlePasswordRequest(
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

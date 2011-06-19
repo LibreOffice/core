@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,10 +89,10 @@ public:
     SearchAttrItem& GetObject( sal_uInt16 nPos ) const
                         { return SrchAttrItemList::GetObject( nPos ); }
 
-    // der Pointer auf das Item wird nicht kopiert!!! (also nicht l"oschen)
+    // the pointer to the item is not being copierd, so don't delete
     void Insert( const SearchAttrItem& rItem )
         { SrchAttrItemList::Insert( rItem, SrchAttrItemList::Count() ); }
-    // l"oscht die Pointer auf die Items
+    // deletes the pointer to the items
     void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
 };
 
@@ -120,10 +121,10 @@ public:
 /*
     {k:\svx\prototyp\dialog\svx/srchdlg.hxx}
 
-    [Beschreibung]
-    In diesem Modeless-Dialog werden die Attribute einer Suche eingestellt
-    und damit eine Suche gestartet. Es sind mehrere Sucharten
-    ( Suchen, Alle suchen, Ersetzen, Alle ersetzen ) m"oglich.
+    [Description]
+    In this modeless dialog the attributes for a search are configured
+    and a search is started from it. Several search types
+    (search, search all, replace, replace all) are possible.
 
     [Items]
     <SvxSearchItem><SID_ATTR_SEARCH>
@@ -159,6 +160,8 @@ public:
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
 
     sal_Int32           GetTransliterationFlags() const;
+
+    void            SetSaveToModule(bool b);
 
 private:
     FixedText       aSearchText;
@@ -218,9 +221,9 @@ private:
     sal_Bool            bSearch;
     sal_Bool            bFormat;
     sal_uInt16          nOptions;
-    FASTBOOL        bSet;
-    FASTBOOL        bReadOnly;
-    FASTBOOL        bConstruct;
+    bool            bSet;
+    bool            bReadOnly;
+    bool            bConstruct;
     sal_uIntPtr         nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;
@@ -300,3 +303,4 @@ inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

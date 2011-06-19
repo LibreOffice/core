@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ inline Regexp::Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
     m_bTranslation(bTheTranslation)
 {
     OSL_ASSERT(m_eKind == KIND_DOMAIN
-               || !m_bEmptyDomain && m_aInfix.getLength() == 0);
+               || (!m_bEmptyDomain && m_aInfix.getLength() == 0));
     OSL_ASSERT(m_bTranslation || m_aReversePrefix.getLength() == 0);
 }
 
@@ -471,3 +472,4 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <string.h>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
-//#include "typecast.hxx"
 
 #if defined (ALPHA) && defined (UNX)
 #define DEL_ARRAY( X )
@@ -60,7 +60,6 @@ public:\
     const T& GetObject( sal_uInt16 nPos ) const; \
     T& GetObject( sal_uInt16 nPos ); \
 \
-    void Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX );\
     void Insert( sal_uInt16 nPos, const T& rElem );\
     void Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen );\
     void Append( const T& rElem );\
@@ -76,11 +75,6 @@ public:\
     sal_Bool Contains( const T& rItem ) const;\
     void Clear() { Remove( 0, Count() ); }\
 };\
-\
-inline void ARR::Insert( sal_uInt16 nPos, ARR& rIns, sal_uInt16 nStart, sal_uInt16 nEnd )\
-{\
-    Insert( nPos, *(rIns.pData+(sizeof(T)*nStart)), nStart-nEnd+1 );\
-}\
 \
 inline void ARR::Insert( sal_uInt16 nPos, const T& rElem )\
 {\
@@ -282,7 +276,7 @@ void ARR::Insert( sal_uInt16 nPos, const T& rElems, sal_uInt16 nLen ) \
     if ( nUnused == 0 ) \
     { \
         \
-        /* auf die naechste Grow-Grenze aufgerundet vergroeszern */ \
+        /* increase (round up) to the next Grow-limit  */       \
         sal_uInt16 nNewSize; \
         for ( nNewSize = nUsed+nGrow; nNewSize < (nUsed + nLen); ++nNewSize ) \
             /* empty loop */; \
@@ -527,3 +521,5 @@ public:\
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

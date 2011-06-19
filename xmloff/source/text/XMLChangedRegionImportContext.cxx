@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ void XMLChangedRegionImportContext::StartElement(
             }
             else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
                 {
                     bMergeLastPara = bTmp;
@@ -194,3 +195,5 @@ void XMLChangedRegionImportContext::UseRedlineText()
         // else: leave as is
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

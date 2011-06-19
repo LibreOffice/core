@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -28,29 +29,25 @@
 #ifndef _FRAMEGRABBER_HXX
 #define _FRAMEGRABBER_HXX
 
-#include "gstplayer.hxx"
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gstcommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XFRAMEGRABBER_HDL_
 #include "com/sun/star/media/XFrameGrabber.hdl"
-#endif
 
-namespace avmedia { namespace gst {
+namespace avmedia { namespace gstreamer {
 
 // ----------------
 // - FrameGrabber -
 // ----------------
 
-class FrameGrabber : public Player,
-                     public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
+class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
                                                       ::com::sun::star::lang::XServiceInfo >
 {
 public:
 
-    // static create method instead of public Ctor
-    static FrameGrabber* create( const GString* pUri );
+            FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+            ~FrameGrabber();
 
-    ~FrameGrabber();
+    bool    create( const ::rtl::OUString& rURL );
 
     // XFrameGrabber
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException);
@@ -60,22 +57,15 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-protected: FrameGrabber( GString* pURI = NULL );
+private:
 
-    virtual gboolean busCallback( GstBus* pBus,
-                                  GstMessage* pMsg );
-
-private: FrameGrabber( const FrameGrabber& );
-    FrameGrabber& operator=( const FrameGrabber& );
-
-    GMutex* mpFrameMutex;
-    GCond* mpFrameCond;
-    GdkPixbuf* mpLastPixbuf;
-    double mfGrabTime;
-    bool mbIsInGrabMode;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMgr;
+    ::rtl::OUString                                                                     maURL;
 };
 
-} // namespace gst
+} // namespace gstreamer
 } // namespace avmedia
 
 #endif // _FRAMEGRABBER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

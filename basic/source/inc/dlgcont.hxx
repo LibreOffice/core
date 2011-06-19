@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "namecont.hxx"
 
-#ifndef _COM_SUN_STAR_AWT_XSTRINGRESOURCESUPPLIER_HPP_
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#endif
 #include "com/sun/star/resource/XStringResourcePersistence.hpp"
 
 #include <cppuhelper/implbase1.hxx>
@@ -96,7 +95,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException);
-
+    // XLibraryQueryExecutable
+    virtual sal_Bool SAL_CALL HasExecutableCode(const rtl::OUString&)
+        throw (::com::sun::star::uno::RuntimeException);
     // Service
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static();
     static ::rtl::OUString getImplementationName_static();
@@ -173,3 +174,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

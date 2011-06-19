@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -169,7 +170,7 @@ public:
 
 
 //typedef ::std::map< ::rtl::OUString, Reference< browse::XBrowseNode > >
-typedef ::std::hash_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
+typedef ::boost::unordered_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
         BrowseNodeAggregatorHash;
 typedef ::std::vector< ::rtl::OUString > vString;
@@ -264,7 +265,7 @@ private:
         for ( sal_Int32 i = 0; i < langNodes.getLength(); i++ )
         {
             Reference< browse::XBrowseNode > xbn;
-            if ( langNodes[ i ]->getName().equals(::rtl::OUString::createFromAscii("uno_packages")) )
+            if ( langNodes[ i ]->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno_packages"))) )
             {
                 xbn.set( new LocationBrowseNode( langNodes[ i ] ) );
             }
@@ -324,8 +325,8 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             xCtx->getValueByName(
                 OUSTR("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("user") ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString::createFromAscii("share") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("share")) ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( Exception& e )
@@ -417,7 +418,7 @@ public:
         }
         catch(  uno::Exception& )
         {
-            OSL_ENSURE( false, "DefaultBrowseNode::DefaultBrowseNode: Caught exception!" );
+            OSL_FAIL( "DefaultBrowseNode::DefaultBrowseNode: Caught exception!" );
         }
         OSL_ENSURE( m_xAggProxy.is(),
             "DefaultBrowseNode::DefaultBrowseNode: Wrapped BrowseNode cannot be aggregated!" );
@@ -569,7 +570,7 @@ public:
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
-        m_Name = ::rtl::OUString::createFromAscii( "Root" );
+        m_Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root"));
     }
 
     ~DefaultRootBrowseNode()
@@ -637,7 +638,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getName()
         throw ( RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii( "Root" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root"));
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -735,8 +736,8 @@ Sequence< ::rtl::OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
     SAL_THROW( () )
 {
-    ::rtl::OUString str_name = ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.browse.BrowseNodeFactory");
+    ::rtl::OUString str_name(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.script.browse.BrowseNodeFactory"));
 
     return Sequence< ::rtl::OUString >( &str_name, 1 );
 }
@@ -745,8 +746,8 @@ bnf_getSupportedServiceNames( )
 bnf_getImplementationName( )
     SAL_THROW( () )
 {
-    return ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.browse.BrowseNodeFactory" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.script.browse.BrowseNodeFactory" ));
 }
 
 Reference< XInterface > SAL_CALL
@@ -795,3 +796,5 @@ sal_Bool BrowseNodeFactoryImpl::supportsService(
 }
 
 } // namespace browsenodefactory
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

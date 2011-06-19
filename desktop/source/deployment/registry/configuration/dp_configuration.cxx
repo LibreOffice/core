@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,7 +145,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
     ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
     void revokeEntryFromDb(OUString const & url);
-    ::std::list<OUString> getAllIniEntries();
     bool hasActiveEntry(OUString const & url);
     bool activateEntry(OUString const & url);
 
@@ -193,13 +193,13 @@ BackendImpl::BackendImpl(
                                      "vnd.sun.star.configuration-data"),
                                OUSTR("*.xcu"),
                                getResourceString(RID_STR_CONF_DATA),
-                               RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                               RID_IMG_CONF_XML ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.configuration-schema"),
                                  OUSTR("*.xcs"),
                                  getResourceString(RID_STR_CONF_SCHEMA),
-                                 RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                                 RID_IMG_CONF_XML ) ),
       m_typeInfos( 2 )
 {
     m_typeInfos[ 0 ] = m_xConfDataTypeInfo;
@@ -253,14 +253,6 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
     if (m_backendDb.get())
         m_backendDb->revokeEntry(url);
-}
-
-::std::list<OUString> BackendImpl::getAllIniEntries()
-{
-    if (m_backendDb.get())
-        return m_backendDb->getAllIniEntries();
-    else
-        return ::std::list<OUString>();
 }
 
 bool BackendImpl::hasActiveEntry(OUString const & url)
@@ -363,7 +355,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 void BackendImpl::configmgrini_verify_init(
@@ -527,7 +518,6 @@ bool BackendImpl::removeFromConfigmgrIni(
     return true;
 }
 
-//##############################################################################
 
 // Package
 //______________________________________________________________________________
@@ -819,3 +809,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

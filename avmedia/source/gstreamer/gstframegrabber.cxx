@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -25,153 +26,83 @@
  *
  ************************************************************************/
 
-#include "gstframegrabber.hxx"
-#include "gstplayer.hxx"
+#include <objbase.h>
+#include <strmif.h>
+#include <Amvideo.h>
+#include <Qedit.h>
+#include <uuids.h>
 
+#include "framegrabber.hxx"
+#include "player.hxx"
+
+#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
+#include <unotools/localfilehelper.hxx>
 
-#include <string>
-
+#define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
+#define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
 
 using namespace ::com::sun::star;
 
-namespace avmedia { namespace gst {
-
-const gulong GRAB_TIMEOUT = 10000000;
+namespace avmedia { namespace gstreamer {
 
 // ----------------
 // - FrameGrabber -
 // ----------------
 
-FrameGrabber::FrameGrabber( GString* pURI ) :
-    Player( pURI  ),
-    mpFrameMutex( g_mutex_new() ),
-    mpFrameCond( g_cond_new() ),
-    mpLastPixbuf( NULL ),
-    mbIsInGrabMode( false )
+FrameGrabber::FrameGrabber( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+    mxMgr( rxMgr )
 {
+    ::CoInitialize( NULL );
 }
 
 // ------------------------------------------------------------------------------
 
 FrameGrabber::~FrameGrabber()
 {
-    if( g_atomic_pointer_get( &mpPlayer ) )
-    {
-        implQuitThread();
-    }
-
-    // thread has ended, so that no more synchronization is necessary
-    if( mpLastPixbuf )
-    {
-        g_object_unref( mpLastPixbuf );
-        mpLastPixbuf = NULL;
-    }
-
-    g_cond_free( mpFrameCond );
-    g_mutex_free( mpFrameMutex );
+    ::CoUninitialize();
 }
 
 // ------------------------------------------------------------------------------
 
-FrameGrabber* FrameGrabber::create( const GString* pURI )
+IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
 {
-    FrameGrabber* pFrameGrabber = NULL;
+    IMediaDet* pDet = NULL;
 
-    if( pURI && pURI->len )
+    if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
     {
-        // safely initialize GLib threading framework
-        try
+        String aLocalStr;
+
+        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && aLocalStr.Len() )
         {
-            if( !g_thread_supported() )
+            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( aLocalStr.GetBuffer() ) ) ) )
             {
-                g_thread_init( NULL );
-            }
-        }
-        catch( ... )
-        {}
-
-        if( g_thread_supported() )
-        {
-            pFrameGrabber = new FrameGrabber( g_string_new( pURI->str ) );
-
-            // wait until thread signals that it has finished initialization
-            if( pFrameGrabber->mpThread )
-            {
-                g_mutex_lock( pFrameGrabber->mpMutex );
-
-                while( !pFrameGrabber->implIsInitialized() )
-                {
-                    g_cond_wait( pFrameGrabber->mpCond, pFrameGrabber->mpMutex );
-                }
-
-                g_mutex_unlock( pFrameGrabber->mpMutex );
-            }
-
-            GstElement* pPixbufSink = gst_element_factory_make( "gdkpixbufsink", NULL );
-
-            // check if player pipeline and GdkPixbufSink could be initialized
-            if( !pFrameGrabber->mpPlayer || !pPixbufSink )
-            {
-                delete pFrameGrabber;
-                pFrameGrabber = NULL;
-            }
-            else
-            {
-                g_object_set( pFrameGrabber->mpPlayer, "audio-sink", gst_element_factory_make( "fakesink", NULL ), NULL );
-                g_object_set( pFrameGrabber->mpPlayer, "video-sink", pPixbufSink, NULL );
+                pDet->Release();
+                pDet = NULL;
             }
         }
     }
 
-    return( pFrameGrabber );
+    return pDet;
 }
 
 // ------------------------------------------------------------------------------
 
-gboolean FrameGrabber::busCallback( GstBus* pBus, GstMessage* pMsg )
+bool FrameGrabber::create( const ::rtl::OUString& rURL )
 {
-    bool bDone = false;
+    // just check if a MediaDet interface can be created with the given URL
+    IMediaDet*  pDet = implCreateMediaDet( rURL );
 
-    if( pMsg && pMsg->structure )
+    if( pDet )
     {
-        GstStructure* pStruct = pMsg->structure;
-        const gchar* pStructName = gst_structure_get_name( pStruct );
-
-        if( ( ::std::string( pStructName ).find( "pixbuf" ) != ::std::string::npos ) &&
-            gst_structure_has_field ( pStruct, "pixbuf") )
-        {
-            bool bFrameGrabbed = false;
-
-            g_mutex_lock( mpFrameMutex );
-
-            if( mbIsInGrabMode && ( getMediaTime() >= mfGrabTime ) )
-            {
-                OSL_TRACE( "Grabbing frame at %fs", getMediaTime() );
-
-                if( mpLastPixbuf )
-                {
-                    g_object_unref( mpLastPixbuf );
-                    mpLastPixbuf = NULL;
-                }
-
-                mpLastPixbuf = GDK_PIXBUF( g_value_dup_object( gst_structure_get_value( pStruct, "pixbuf" ) ) );
-                bFrameGrabbed = true;
-            }
-
-            g_mutex_unlock( mpFrameMutex );
-
-            if( bFrameGrabbed )
-            {
-                g_cond_signal( mpFrameCond );
-            }
-
-            bDone = true;
-        }
+        maURL = rURL;
+        pDet->Release();
+        pDet = NULL;
     }
+    else
+        maURL = ::rtl::OUString();
 
-    return( bDone || Player::busCallback( pBus, pMsg ) );
+    return( maURL.getLength() > 0 );
 }
 
 // ------------------------------------------------------------------------------
@@ -180,100 +111,93 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     throw (uno::RuntimeException)
 {
     uno::Reference< graphic::XGraphic > xRet;
+    IMediaDet*                          pDet = implCreateMediaDet( maURL );
 
-    if( implInitPlayer() )
+    if( pDet )
     {
-        OSL_TRACE( "Trying to grab frame at %fs", fMediaTime );
+        double  fLength;
+        long    nStreamCount;
+        bool    bFound = false;
 
-        GTimeVal aTimeoutTime;
-
-        g_get_current_time( &aTimeoutTime );
-        g_time_val_add( &aTimeoutTime, GRAB_TIMEOUT );
-        setMediaTime( fMediaTime );
-        start();
-
-        if( isPlaying() )
+        if( SUCCEEDED( pDet->get_OutputStreams( &nStreamCount ) ) )
         {
-            g_mutex_lock( mpFrameMutex );
+            for( long n = 0; ( n < nStreamCount ) && !bFound; ++n )
+            {
+                GUID aMajorType;
 
-            mbIsInGrabMode = true;
-            mfGrabTime = fMediaTime;
-            g_cond_timed_wait( mpFrameCond, mpFrameMutex, &aTimeoutTime );
-            mbIsInGrabMode = false;
-
-            g_mutex_unlock( mpFrameMutex );
-
-            stop();
+                if( SUCCEEDED( pDet->put_CurrentStream( n ) )  &&
+                    SUCCEEDED( pDet->get_StreamType( &aMajorType ) ) &&
+                    ( aMajorType == MEDIATYPE_Video ) )
+                {
+                    bFound = true;
+                }
+            }
         }
 
-        OSL_ENSURE( g_atomic_pointer_get( &mpLastPixbuf ), "FrameGrabber timed out without receiving a Pixbuf" );
-
-        if( g_atomic_pointer_get( &mpLastPixbuf ) )
+        if( bFound &&
+            ( S_OK == pDet->get_StreamLength( &fLength ) ) &&
+            ( fLength > 0.0 ) && ( fMediaTime >= 0.0 ) && ( fMediaTime <= fLength ) )
         {
-            OSL_TRACE( "FrameGrabber received a GdkPixbuf");
+            AM_MEDIA_TYPE   aMediaType;
+            long            nWidth = 0, nHeight = 0, nSize = 0;
 
-            g_mutex_lock( mpFrameMutex );
-
-            const int nWidth = gdk_pixbuf_get_width( mpLastPixbuf );
-            const int nHeight = gdk_pixbuf_get_height( mpLastPixbuf );
-            const int nChannels = gdk_pixbuf_get_n_channels( mpLastPixbuf );
-            const guchar* pBuffer = gdk_pixbuf_get_pixels( mpLastPixbuf );
-
-            if( pBuffer && ( nWidth > 0 ) && ( nHeight > 0 ) )
+            if( SUCCEEDED( pDet->get_StreamMediaType( &aMediaType ) ) )
             {
-                Bitmap aFrame( Size( nWidth, nHeight), 24 );
-                bool bInit = false;
-
-                if( ( gdk_pixbuf_get_colorspace( mpLastPixbuf ) == GDK_COLORSPACE_RGB ) &&
-                    ( nChannels >= 3 ) && ( nChannels <= 4 ) &&
-                    ( gdk_pixbuf_get_bits_per_sample( mpLastPixbuf ) == 8 ) )
+                if( ( aMediaType.formattype == FORMAT_VideoInfo ) &&
+                    ( aMediaType.cbFormat >= sizeof( VIDEOINFOHEADER ) ) )
                 {
-                    BitmapWriteAccess* pAcc = aFrame.AcquireWriteAccess();
+                    VIDEOINFOHEADER* pVih = reinterpret_cast< VIDEOINFOHEADER* >( aMediaType.pbFormat );
 
-                    if( pAcc )
-                    {
-                        BitmapColor aPixel( 0, 0, 0 );
-                        const int nRowStride = gdk_pixbuf_get_rowstride( mpLastPixbuf );
-                        const bool bAlpha = ( nChannels == 4  );
+                    nWidth = pVih->bmiHeader.biWidth;
+                    nHeight = pVih->bmiHeader.biHeight;
 
-                        for( int nRow = 0; nRow < nHeight; ++nRow )
-                        {
-                            guchar* pCur = const_cast< guchar* >( pBuffer + nRow * nRowStride );
-
-                            for( int nCol = 0; nCol < nWidth; ++nCol )
-                            {
-                                aPixel.SetRed( *pCur++ );
-                                aPixel.SetGreen( *pCur++ );
-                                aPixel.SetBlue( *pCur++ );
-
-                                // ignore alpha channel
-                                if( bAlpha )
-                                {
-                                    ++pCur;
-                                }
-
-                                pAcc->SetPixel( nRow, nCol, aPixel );
-                            }
-                        }
-
-                        aFrame.ReleaseAccess( pAcc );
-                        bInit = true;
-                    }
+                    if( nHeight < 0 )
+                        nHeight *= -1;
                 }
 
-                if( !bInit )
+                if( aMediaType.cbFormat != 0 )
                 {
-                    aFrame.Erase( Color( COL_BLACK ) );
+                    ::CoTaskMemFree( (PVOID) aMediaType.pbFormat );
+                    aMediaType.cbFormat = 0;
+                    aMediaType.pbFormat = NULL;
                 }
 
-                xRet = Graphic( aFrame ).GetXGraphic();
+                if( aMediaType.pUnk != NULL )
+                {
+                    aMediaType.pUnk->Release();
+                    aMediaType.pUnk = NULL;
+                }
             }
 
-            g_object_unref( mpLastPixbuf );
-            mpLastPixbuf = NULL;
+            if( ( nWidth > 0 ) && ( nHeight > 0 ) &&
+                SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, NULL, nWidth, nHeight ) ) &&
+                ( nSize > 0  ) )
+            {
+                char* pBuffer = new char[ nSize ];
 
-            g_mutex_unlock( mpFrameMutex );
+                try
+                {
+                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, NULL, pBuffer, nWidth, nHeight ) ) )
+                    {
+                        SvMemoryStream  aMemStm( pBuffer, nSize, STREAM_READ | STREAM_WRITE );
+                        Bitmap          aBmp;
+
+                        if( aBmp.Read( aMemStm, false ) && !aBmp.IsEmpty() )
+                        {
+                            const Graphic aGraphic( aBmp );
+                            xRet = aGraphic.GetXGraphic();
+                        }
+                    }
+                }
+                catch( ... )
+                {
+                }
+
+                delete [] pBuffer;
+            }
         }
+
+        pDet->Release();
     }
 
     return xRet;
@@ -284,7 +208,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 ::rtl::OUString SAL_CALL FrameGrabber::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GSTREAMER_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME ) );
 }
 
 // ------------------------------------------------------------------------------
@@ -292,7 +216,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 sal_Bool SAL_CALL FrameGrabber::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_GSTREAMER_FRAMEGRABBER_SERVICENAME ) );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_GST_FRAMEGRABBER_SERVICENAME ) );
 }
 
 // ------------------------------------------------------------------------------
@@ -301,10 +225,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FrameGrabber::getSupportedServiceNames
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_GSTREAMER_FRAMEGRABBER_SERVICENAME ) );
+    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( AVMEDIA_GST_FRAMEGRABBER_SERVICENAME ) );
 
     return aRet;
 }
 
-} // namespace win
+} // namespace gstreamer
 } // namespace avmedia
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
 #include <sal/types.h>
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring>
-#endif
+#include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include "platform_xp.h"
@@ -213,10 +212,10 @@ public:
     // the method returns:
     //  0 - when the dialog was canceled by the user
     //  1 - when the dialog was closed with ok
-    // -1 - when an error occured
+    // -1 - when an error occurred
     sal_Int16 SAL_CALL doModal();
 
-    // returns the last dialog error that occured
+    // returns the last dialog error that occurred
     sal_uInt32 SAL_CALL getLastDialogError() const;
 
     // retrievs the currently selected file
@@ -304,9 +303,9 @@ private:
     WNDPROC             m_pfnBaseDlgProc;
 
     // callback function
-    static unsigned int CALLBACK ofnHookProc(
+    static UINT_PTR CALLBACK ofnHookProc(
         HWND hChildDlg, // handle to child dialog box
-        unsigned int uiMsg,     // message identifier
+        UINT uiMsg,     // message identifier
         WPARAM wParam,  // message parameter
         LPARAM lParam   // message parameter
     );
@@ -325,3 +324,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

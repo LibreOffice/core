@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -231,7 +232,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_getDataSourceIndirectProperties: caught an exception!" );
+                OSL_FAIL( "lcl_getDataSourceIndirectProperties: caught an exception!" );
             }
             return aInfo;
         }
@@ -545,7 +546,7 @@ namespace svxform
             const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
             for ( ; pInfo != pInfoEnd; ++pInfo )
             {
-                if ( pInfo->Name.equalsAscii( "PreferDosLikeLineEnds" ) )
+                if ( pInfo->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferDosLikeLineEnds" ) ) )
                 {
                     pInfo->Value >>= bDosLineEnds;
                     break;
@@ -625,7 +626,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMinValue;
                 else
                 {
-                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
+                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MinValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMIN, aValue );
 
@@ -637,7 +638,7 @@ namespace svxform
                     aValue <<= (sal_Int32)nMaxValue;
                 else
                 {
-                    DBG_ERROR( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
+                    OSL_FAIL( "FormControlFactory::initializeFieldDependentProperties: unexpected property type (MaxValue)!" );
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMAX, aValue );
             }
@@ -731,3 +732,5 @@ namespace svxform
 //........................................................................
 } // namespace svxform
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

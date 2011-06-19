@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <svl/visitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -68,7 +69,7 @@ SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDis
 {
     m_aCommand.Complete = rCommand;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -112,7 +113,7 @@ void SfxStatusListener::Bind( sal_uInt16 nSlotId, const rtl::OUString& rNewComma
         m_nSlotID = nSlotId;
         m_aCommand.Complete = rNewCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( m_aCommand );
 
         m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -190,7 +191,7 @@ throw ( RuntimeException )
 void SAL_CALL SfxStatusListener::disposing( const EventObject& Source )
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( Source.Source == Reference< XInterface >( m_xDispatch, UNO_QUERY ))
         m_xDispatch.clear();
@@ -201,7 +202,7 @@ throw( RuntimeException )
 void SAL_CALL SfxStatusListener::statusChanged( const FeatureStateEvent& rEvent)
 throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     SfxViewFrame* pViewFrame = NULL;
     if ( m_xDispatch.is() )
@@ -288,3 +289,4 @@ throw( RuntimeException )
     delete pItem;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

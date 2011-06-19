@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,15 +48,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL OPackageStructureCreator::impl_getStaticSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.PackageStructureCreator");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.PackageStructureCreator");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.PackageStructureCreator"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.PackageStructureCreator"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OPackageStructureCreator::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.PackageStructureCreator");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.PackageStructureCreator"));
 }
 
 //-------------------------------------------------------------------------
@@ -200,3 +201,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OPackageStructureCreator::getSupported
     return impl_getStaticSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

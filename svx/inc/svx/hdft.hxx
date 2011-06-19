@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,11 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svx/pagectrl.hxx>
 #include "svx/svxdllapi.h"
 
@@ -90,7 +85,7 @@ protected:
     SfxItemSet*     pBBSet;
     sal_Bool            bDisableQueryBox;
     sal_Bool            bEnableBackgroundSelector;
-    FASTBOOL        bInReset;
+    bool            bInReset;
 
     void            InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);
@@ -134,3 +129,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

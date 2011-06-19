@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-//#define TF_NEWDESKTOP
-
 #define _SDINTERN_HXX
 
 #include <stdio.h>
@@ -40,7 +39,6 @@
 #include <svl/itempool.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>
-#include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -85,7 +83,7 @@ DBG_NAME(SfxAppMainCHAOSReg)
 //===================================================================
 
 #ifdef TF_POOLABLE
-static SfxItemInfo __READONLY_DATA aItemInfos[] =
+static SfxItemInfo const aItemInfos[] =
 {
     { 0, 0 }
 };
@@ -100,18 +98,19 @@ void SfxApplication::Init
 (
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application:a:Main() gerufen,
-    bevor Execute() ausgef"uhrt wird und
-    - das Intro bereits angezeigt ist,
-    - das Applikationsfenster exisitiert, aber noch hidden ist,
-    - die Bindings bereits existieren (Controller sind anmeldbar),
-    - der Ini- und Config-Manager bereits existiert,
-    - die Standard-Controller bereits exisitieren,
-    - die SFx-Shells ihre Interfaces bereits registriert haben.
+    This virtual method is called from SFx through Application::Main(),
+    before Execute() is called and:
+    - the Intro is already displayed,
+    - the Applications window exists, but it is still hidden,
+    - the Bindings already exist (Controller can be registered),
+    - the Init and Config-Manager already exists,
+    - the Standard-Controller already exists,
+    - the SFx-Shells have alredy registered their Interfaces.
 
-    [Querverweise]
+    [Cross-reference]
+
     <SfxApplication::Exit()>
     <SfxApplication::OpenClients()>
 */
@@ -122,17 +121,17 @@ void SfxApplication::Init
 
 void SfxApplication::Exit()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application::Main() gerufen,
-    nachdem Execute() beendet ist und
-    - die Konfiguration (SfxConfigManager) bereits gespeichert wurde,
-    - die Fensterpostionen etc. in den SfxIniManager geschrieben wurden,
-    - das Applikationsfenster noch existiert, aber hidden ist
-    - s"amtliche Dokumente und deren Views bereits geschlossen sind.
-    - Dispatcher, Bindings etc. bereits zerst"ort sind
+    This virtual method is called from SFx through Application::Main(),
+    after Execute() has finished and
+    - the configuration (SfxConfigManager) was already saved,
+    - the window postions etc. in the SfxIniManager were written,
+    - the Application widow still exists, but is hidden
+    - all Documents and their Views already are closed.
+    - Dispatcher, Bindings etc. already destroyed.
 
-    [Querverweise]
+    [Cross-reference]
     <SfxApplication::Init(int,char*[])>
 */
 
@@ -161,3 +160,5 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
     }
     return *pAppData_Impl->pMatcher;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

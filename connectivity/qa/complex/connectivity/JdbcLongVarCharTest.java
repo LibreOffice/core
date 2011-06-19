@@ -121,7 +121,7 @@ public class JdbcLongVarCharTest extends ComplexTestCase
         }
         catch (java.lang.Exception e)
         {
-            System.out.println("== Exception occured while testing ==");
+            System.out.println("== Exception occurred while testing ==");
             e.printStackTrace();
         } finally
         {

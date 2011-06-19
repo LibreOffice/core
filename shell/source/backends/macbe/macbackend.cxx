@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -427,7 +428,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
                 CFStringRef rException = (CFStringRef) CFArrayGetValueAtIndex(rExceptionsList, idx);
 
                 if (idx>0)
-                    aProxyBypassList += rtl::OUString::createFromAscii( ";" );
+                    aProxyBypassList += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 
                 aProxyBypassList += CFStringToOUString(rException);
             }
@@ -455,7 +456,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
 rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.MacOSXBackend");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.MacOSXBackend"));
 }
 
 //------------------------------------------------------------------------------
@@ -497,3 +498,5 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(vo
 {
     return getBackendServiceNames();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

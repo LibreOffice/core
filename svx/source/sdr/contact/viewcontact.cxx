@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -209,7 +210,7 @@ namespace sdr
         ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
         {
             // This is the default implementation; call would be an error
-            DBG_ERROR("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
+            OSL_FAIL("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
             return (ViewContact&)(*this);
         }
 
@@ -274,7 +275,7 @@ namespace sdr
             // providing a seqence of primitives -> which cannot be correct.
             // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
             // hairline polygon with a default size of (1000, 1000, 5000, 3000)
-            DBG_ERROR("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
+            OSL_FAIL("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
             const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -327,3 +328,5 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

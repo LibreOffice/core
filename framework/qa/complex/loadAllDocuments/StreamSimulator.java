@@ -385,8 +385,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         else
         if (m_xOutStream != null)
             m_bOutWasUsed = true;
-//        else
-            //m_aProtocol.log("\tno stream open!\n");
 
         if (m_xSeek == null)
         {
@@ -416,8 +414,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         else
         if (m_xOutStream != null)
             m_bOutWasUsed = true;
-//        else
-            //m_aProtocol.log("\tno stream open!\n");
 
         if (m_xSeek == null)
         {
@@ -449,8 +445,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         else
         if (m_xOutStream != null)
             m_bOutWasUsed = true;
-//        else
-            //m_aProtocol.log("\tno stream open!\n");
 
         if (m_xSeek == null)
         {

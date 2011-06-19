@@ -28,10 +28,7 @@
 #ifndef __ooo_vba_excel_Globals_idl__
 #define __ooo_vba_excel_Globals_idl__
 
-#ifndef __ooo_vba_excel_XGlobals_idl__
 #include <ooo/vba/excel/XGlobals.idl>
-#endif
-
 #include <com/sun/star/uno/XComponentContext.idl>
 #include <com/sun/star/table/XCellRange.idl>
 

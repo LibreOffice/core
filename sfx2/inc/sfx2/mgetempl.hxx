@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,16 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 
 #include <sfx2/tabdlg.hxx>
 
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
 
-/* erwartet:
-    SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
-    SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
+/* expected:
+    SID_TEMPLATE_NAME   :   In: StringItem, Name of Template
+    SID_TEMPLATE_FAMILY :   In: Family of Template
 */
 
 class SfxStyleFamilies;
@@ -80,7 +79,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
     String aBuf;
     sal_Bool bModified;
 
-        // initiale Daten des Styles
+    // initial data for the style
     String aName;
     String aFollow;
     String aParent;
@@ -89,13 +88,11 @@ class SfxManageStyleSheetPage : public SfxTabPage
 private:
 friend class SfxStyleDialog;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
     void    UpdateName_Impl(ListBox *, const String &rNew);
     void    SetDescriptionText_Impl();
-//#endif
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     ~SfxManageStyleSheetPage();
@@ -118,3 +115,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

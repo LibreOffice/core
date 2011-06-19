@@ -33,7 +33,7 @@ PKGREV          = $(LAST_MINOR:s/m//:s/s/./)
 ABSLOCALOUT:=$(shell @cd $(PRJ) && pwd)$/$(ROUT)
 
 # create desktop-integration subfolder on linux
-.IF "$(OS)"=="LINUX"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="AIX"
 # rpm seems to require absolute paths here :(
 PKGDIR:=$(ABSLOCALOUT)$/bin$/desktop-integration
 RPMMACROS= \
@@ -43,11 +43,8 @@ RPMMACROS= \
 PKGDIR=$(BIN)
 .ENDIF
 
-PRODUCTLIST = openoffice.org broffice.org
+.INCLUDE : productversion.mk
 
-# default values to minimize maintainance effort 
-PRODUCTVERSION = 3.4
-PRODUCTVERSIONSHORT = 3
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
@@ -61,18 +58,16 @@ ICONVERSION = $(PRODUCTVERSIONSHORT:s/.//g)
 # which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
 UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{BRANDPACKAGEVERSION}}'
 
-PRODUCTNAME.openoffice.org = OpenOffice.org
-PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.openoffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.openoffice.org = $(PKGVERSION)
-UNIXFILENAME.openoffice.org = $(PRODUCTNAME.openoffice.org:l)$(PRODUCTVERSIONSHORT.openoffice.org)
-ICONPREFIX.openoffice.org = $(UNIXFILENAME.openoffice.org:s/.//g)
+PRODUCTNAME.libreoffice = LibreOffice
+PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.libreoffice = $(PKGVERSION)
+UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)$(PRODUCTVERSION.libreoffice)
+ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
 
-PRODUCTNAME.broffice.org = BrOffice.org
-PRODUCTVERSION.broffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.broffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.broffice.org = $(PKGVERSION)
-UNIXFILENAME.broffice.org = $(PRODUCTNAME.broffice.org:l)$(PRODUCTVERSIONSHORT.broffice.org)
-ICONPREFIX.broffice.org = $(UNIXFILENAME.broffice.org:s/.//g)
-
-
+PRODUCTNAME.oxygenoffice = OxygenOffice
+PRODUCTVERSION.oxygenoffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.oxygenoffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.oxygenoffice = $(PKGVERSION)
+UNIXFILENAME.oxygenoffice = $(PRODUCTNAME.oxygenoffice:l)$(PRODUCTVERSION.oxygenoffice)
+ICONPREFIX.oxygenoffice = $(UNIXFILENAME.oxygenoffice:s/.//g)

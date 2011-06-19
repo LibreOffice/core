@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,8 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -58,7 +61,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -71,7 +73,6 @@ using namespace ::com::sun::star::ui;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
@@ -254,7 +255,7 @@ class ConfigurationAccess_WindowState : // interfaces
         sal_Bool                  impl_initializeConfigAccess();
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  WindowStateInfo,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
@@ -263,6 +264,7 @@ class ConfigurationAccess_WindowState : // interfaces
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
         sal_Bool                          m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;
@@ -320,7 +322,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
 }
 
 // XNameAccess
@@ -585,12 +587,10 @@ void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerE
 
 void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 // lang.XEventListener
@@ -1226,7 +1226,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( ::rtl::OUString::createFromAscii( "," ));
+    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1326,7 +1326,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         return sal_True;
@@ -1376,7 +1379,14 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                                                     UNO_QUERY );
     Reference< XNameAccess > xEmptyNameAccess;
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
+    Sequence< rtl::OUString > aElementNames;
+    try
+    {
+        aElementNames = xNameAccess->getElementNames();
+    }
+    catch (::com::sun::star::uno::RuntimeException &)
+    {
+    }
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 
@@ -1388,7 +1398,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
-                if ( aSeq[y].Name.equalsAscii("ooSetupFactoryWindowStateConfigRef") )
+                if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryWindowStateConfigRef")) )
                 {
                     aSeq[y].Value >>= aWindowStateFileStr;
                     break;
@@ -1491,3 +1501,4 @@ throw (::com::sun::star::uno::RuntimeException)
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

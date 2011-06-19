@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,7 +157,7 @@ ________________________________________________________________________________
         throw( css::uno::Exception )                                                                                                                                \
     {                                                                                                                                                               \
         /* retrieve component context from the given service manager */                                                                                             \
-        static const ::rtl::OUString PROP_DEFAULTCONTEXT = ::rtl::OUString::createFromAscii("DefaultContext");                                                      \
+        static const ::rtl::OUString PROP_DEFAULTCONTEXT(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"));                                                        \
         css::uno::Reference< css::beans::XPropertySet >    xSMGRProps(xServiceManager, css::uno::UNO_QUERY_THROW);                                                  \
         css::uno::Reference< css::uno::XComponentContext > xComponentContext;                                                                                       \
         xSMGRProps->getPropertyValue( PROP_DEFAULTCONTEXT ) >>= xComponentContext;                                                                                  \
@@ -270,3 +271,5 @@ ________________________________________________________________________________
 }       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

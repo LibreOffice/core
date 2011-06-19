@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,12 +51,11 @@
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
 
-const ::rtl::OUString SERVICENAME_WINPROVIDER
-                                        = ::rtl::OUString::createFromAscii("com.sun.star.awt.ContainerWindowProvider");
-const ::rtl::OUString EXTERNAL_EVENT    = ::rtl::OUString::createFromAscii("external_event");
-const ::rtl::OUString BACK_METHOD       = ::rtl::OUString::createFromAscii("back");
-const ::rtl::OUString INITIALIZE_METHOD = ::rtl::OUString::createFromAscii("initialize");
-const ::rtl::OUString OK_METHOD         = ::rtl::OUString::createFromAscii("ok");
+const ::rtl::OUString SERVICENAME_WINPROVIDER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.ContainerWindowProvider"));
+const ::rtl::OUString EXTERNAL_EVENT(RTL_CONSTASCII_USTRINGPARAM("external_event"));
+const ::rtl::OUString BACK_METHOD(RTL_CONSTASCII_USTRINGPARAM("back"));
+const ::rtl::OUString INITIALIZE_METHOD(RTL_CONSTASCII_USTRINGPARAM("initialize"));
+const ::rtl::OUString OK_METHOD(RTL_CONSTASCII_USTRINGPARAM("ok"));
 
 using namespace ::com::sun::star;
 
@@ -195,8 +195,7 @@ void FwkTabPage::Resize()
 {
     if ( m_xPage.is () )
     {
-        Size  aSize = GetSizePixel ();
-        Point aPos  = GetPosPixel  ();
+        Size aSize = GetSizePixel();
 
         m_xPage->setPosSize( 0, 0, aSize.Width()-1 , aSize.Height()-1, awt::PosSize::POSSIZE );
     }
@@ -322,7 +321,6 @@ IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
 
 IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
 {
-//    Close();
     return 0;
 }
 
@@ -353,17 +351,17 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
         beans::NamedValue aValue = rProperties[i];
         ::rtl::OUString sName = aValue.Name;
 
-        if ( sName.equalsAscii("Title") )
+        if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
             aValue.Value >>= sTitle;
-        else if ( sName.equalsAscii("ToolTip") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ToolTip")) )
             aValue.Value >>= sToolTip;
-        else if ( sName.equalsAscii("PageURL") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PageURL")) )
             aValue.Value >>= sPageURL;
-        else if ( sName.equalsAscii("EventHdl") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EventHdl")) )
             aValue.Value >>= xEventHdl;
-        else if ( sName.equalsAscii("Image") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Image")) )
             aValue.Value >>= xImage;
-        else if ( sName.equalsAscii("Disabled") )
+        else if ( sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Disabled")) )
             aValue.Value >>= bDisabled;
     }
 
@@ -411,3 +409,4 @@ void FwkTabWindow::Resize()
 
 } // namespace framework
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

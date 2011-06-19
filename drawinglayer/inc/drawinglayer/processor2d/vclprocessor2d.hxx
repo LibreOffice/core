@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
+
+#include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -71,7 +74,7 @@ namespace drawinglayer
             This processor is the base class for VCL-Based processors. It has no
             processBasePrimitive2D implementation and thus is not usable directly.
          */
-        class VclProcessor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC VclProcessor2D : public BaseProcessor2D
         {
         protected:
             // the destination OutDev
@@ -138,3 +141,5 @@ namespace drawinglayer
 #endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

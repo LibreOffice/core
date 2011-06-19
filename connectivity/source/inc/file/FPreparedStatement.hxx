@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-//  #include <com/sun/star/sdbc/XClearParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include "file/FResultSet.hxx"
@@ -59,7 +59,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
             OResultSet*                                         m_pResultSet;
-            ::vos::ORef<connectivity::OSQLColumns>              m_xParamColumns;    // the parameter columns
+            ::rtl::Reference<connectivity::OSQLColumns>             m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
@@ -80,7 +80,7 @@ namespace connectivity
             virtual ~OPreparedStatement();
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection);
 
             virtual void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -133,3 +133,4 @@ namespace connectivity
 #endif // _CONNECTIVITY_FILE_OPREPAREDSTATEMENT_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

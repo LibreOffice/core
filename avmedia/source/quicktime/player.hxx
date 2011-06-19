@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <osl/conditn.h>
 #include "quicktimecommon.hxx"
 
-#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HDL_
 #include "com/sun/star/media/XPlayer.hdl"
-#endif
 
 namespace avmedia { namespace quicktime {
 
@@ -52,8 +51,6 @@ public:
     ~Player();
 
     bool create( const ::rtl::OUString& rURL );
-
-//    void processMessage( GstMessage *message );
 
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -88,9 +85,7 @@ private:
     ::rtl::OUString         maURL;
 
     QTMovie                 *mpMovie;      // the Movie object
-  /* GST
-    sal_Bool                mbFakeVideo;
-  */
+
     float                   mnUnmutedVolume;
     double                  mnStopTime;
 
@@ -111,3 +106,5 @@ private:
 } // namespace avmedia
 
 #endif // _PLAYER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

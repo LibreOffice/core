@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,11 +67,12 @@
 #include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyName.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
+#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
 #include "osl/conditn.hxx"
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 #include "tools/diagnose_ex.h"
 #include "comphelper/documentconstants.hxx" // ODFVER_012_TEXT
 #include "svtools/sfxecode.hxx" // ERRCODE_SFX_*
@@ -352,7 +354,7 @@ namespace
             aMessage.append( "no type found for '" );
             aMessage.append( ::rtl::OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
             aMessage.append( "'" );
-            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+            OSL_FAIL( aMessage.makeStringAndClear().getStr() );
 #endif
             return false;
         }
@@ -856,6 +858,23 @@ UUIInteractionHelper::handleRequest_impl(
             return true;
         }
 
+        loader::CannotActivateFactoryException aCannotActivateFactoryException;
+        if (aAnyRequest >>= aCannotActivateFactoryException)
+        {
+            ErrCode nErrorCode = ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY;
+            std::vector< rtl::OUString > aArguments;
+            aArguments.push_back( aCannotActivateFactoryException.Message );
+
+            handleErrorHandlerRequest( task::InteractionClassification_ERROR,
+                                       nErrorCode,
+                                       aArguments,
+                                       rRequest->getContinuations(),
+                                       bObtainErrorStringOnly,
+                                       bHasErrorString,
+                                       rErrorString );
+            return true;
+        }
+
 
         ///////////////////////////////////////////////////////////////////
         // Handle requests which do not have a plain string representation.
@@ -967,8 +986,8 @@ UUIInteractionHelper::getInteractionHandlerList(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
             m_xServiceFactory->createInstance(
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.configuration.ConfigurationProvider" ) ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider" )) ),
             uno::UNO_QUERY );
 
         if ( !xConfigProv.is() )
@@ -1046,8 +1065,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_ENSURE( false,
-                                    "GetInteractionHandlerList - "
+                        OSL_FAIL( "GetInteractionHandlerList - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -1061,8 +1079,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                 {
                     // getByHierarchicalName
 
-                    OSL_ENSURE( false,
-                                "GetInteractionHandlerList - "
+                    OSL_FAIL( "GetInteractionHandlerList - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -1074,7 +1091,7 @@ UUIInteractionHelper::getInteractionHandlerList(
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false, "GetInteractionHandlerList - Caught Exception!" );
+        OSL_FAIL( "GetInteractionHandlerList - Caught Exception!" );
     }
 }
 
@@ -1160,7 +1177,7 @@ executeMessageBox(
     WinBits nButtonMask )
     SAL_THROW((uno::RuntimeException))
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
@@ -1311,7 +1328,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             {
                 uno::Any aProductNameAny =
                     ::utl::ConfigManager::GetConfigManager()
-                        ->GetDirectConfigProperty(
+                        .GetDirectConfigProperty(
                            ::utl::ConfigManager::PRODUCTNAME );
                 aProductNameAny >>= aTitle;
             }
@@ -1450,8 +1467,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
         s_bDeferredToNextSession = true;
         break;
     default:
-        OSL_ENSURE( false,
-            "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
+        OSL_FAIL( "UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest: "
                     "unexpected dialog return value!" );
         break;
     }
@@ -1493,7 +1509,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     ::rtl::OUString aMessage;
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         std::auto_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
@@ -1525,10 +1541,10 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         return;
 
     uno::Any aProductNameAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME );
     uno::Any aProductVersionAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTVERSION );
     ::rtl::OUString aProductName, aProductVersion;
     if ( !( aProductNameAny >>= aProductName ) )
@@ -1586,3 +1602,5 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     m_pResMgr->PopContext();
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

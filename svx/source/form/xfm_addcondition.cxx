@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SOURCE_FORM_XFM_ADDCONDITION_HXX
 #include "xfm_addcondition.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -73,7 +72,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OAddConditionDialog_GetImplementationName()
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.svx.OAddConditionDialog" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.OAddConditionDialog"));
     }
 
     //====================================================================
@@ -191,3 +190,4 @@ namespace svxform
 } // namespace svxformv
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MyEDITENG, wegen exportiertem EditEng
+// MyEDITENG, due to exported EditEng
 #ifndef _MyEDITENG_HXX
 #define _MyEDITENG_HXX
 
@@ -52,6 +53,7 @@ class Rectangle;
 class SvStream;
 class Link;
 class OutputDevice;
+class Window;
 class SvUShorts;
 class SfxPoolItem;
 class SvxNumBulletItem;
@@ -62,7 +64,7 @@ class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
 class FontList;
 
-#include <vos/ref.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 
@@ -88,13 +90,11 @@ class IUndoManager;
 
 namespace basegfx { class B2DPolyPolygon; }
 #include <rsc/rscsfx.hxx>
-#ifndef _EDITDATA_HXX
 #include <editeng/editdata.hxx>
-#endif
 #include <i18npool/lang.h>
 #include "editeng/editengdllapi.h"
 
-#include <tools/rtti.hxx>   // wegen typedef TypeId
+#include <tools/rtti.hxx>   // due to typedef TypeId
 
 #include <editeng/eedata.hxx>
 class SvxFieldData;
@@ -124,10 +124,7 @@ private:
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
-
-//#if 0 // _SOLAR__PRIVATE
-    EDITENG_DLLPRIVATE sal_Bool PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView );
-//#endif
+    EDITENG_DLLPRIVATE sal_uInt8        PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
 
 protected:
 
@@ -208,6 +205,7 @@ public:
     String          GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
+    sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
 
     String          GetText( sal_uInt16 nParagraph ) const;
@@ -302,13 +300,13 @@ public:
     Point           GetDocPos( const Point& rPaperPos ) const;
     sal_Bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
 
-    // StartDocPos entspr. VisArea.TopLeft().
+    // StartDocPos corrresponds to VisArea.TopLeft().
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, sal_Bool bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
-//  sal_uInt32: Fehlercode des Streams.
+//  sal_uInt32: Error code of the stream.
         sal_uLong               Read( SvStream& rInput, const String& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
@@ -321,7 +319,7 @@ public:
     void            SetImportHdl( const Link& rLink );
     Link            GetImportHdl() const;
 
-    // Flat-Mode: Keine Zeichenformatierung auswerten => Fuer Outliner
+    // Do not evaluate font formatting => For Outliner
     sal_Bool            IsFlatMode() const;
     void            SetFlatMode( sal_Bool bFlat );
 
@@ -376,8 +374,8 @@ public:
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
-    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
+    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
@@ -389,7 +387,7 @@ public:
     sal_uInt16          GetBigTextObjectStart() const;
     sal_Bool            ShouldCreateBigTextObject() const;
 
-    // Zum schnellen Vorab-Pruefen ohne View:
+    // For fast Pre-Test without view:
     EESpellState    HasSpellErrors();
     sal_Bool            HasText( const SvxSearchItem& rSearchItem );
 
@@ -433,7 +431,6 @@ public:
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void    ParagraphHeightChanged( sal_uInt16 nPara );
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,
         const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
@@ -446,6 +443,13 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
+    virtual void DrawingTab(
+        const Point& rStartPos, long nWidth, const String& rChar,
+        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        bool bEndOfLine,
+        bool bEndOfParagraph,
+        const Color& rOverlineColor,
+        const Color& rTextLineColor);
     virtual String  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual sal_Bool    FormattingParagraph( sal_uInt16 nPara );
     virtual sal_Bool    SpellNextDocument();
@@ -488,3 +492,5 @@ public:
 };
 
 #endif // _MyEDITENG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

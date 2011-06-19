@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
 #include "thesdta.hxx"
 
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -44,11 +43,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
 
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 
 ThesaurusMeaning::ThesaurusMeaning(const OUString &rText,
@@ -77,7 +76,7 @@ uno::Sequence< OUString > SAL_CALL ThesaurusMeaning::querySynonyms()
 }
 */
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

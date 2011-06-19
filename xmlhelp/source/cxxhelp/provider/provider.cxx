@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,20 +37,17 @@
 
 #include <stdio.h>
 #include <osl/file.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <unotools/configmgr.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include "databases.hxx"
@@ -72,7 +70,7 @@ ContentProvider::ContentProvider(
     const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
     : ::ucbhelper::ContentProviderImplHelper( rSMgr ),
         isInitialized( false ),
-        m_aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) ),
+        m_aScheme(RTL_CONSTASCII_USTRINGPARAM(MYUCP_URL_SCHEME)),
         m_pDatabases( 0 )
 {
 }
@@ -125,7 +123,7 @@ rtl::OUString SAL_CALL ContentProvider::getImplementationName()
 
 rtl::OUString ContentProvider::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii("CHelpContentProvider" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHelpContentProvider" ));
 }
 
 sal_Bool SAL_CALL
@@ -165,11 +163,11 @@ ContentProvider::getSupportedServiceNames_Static()
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
     aSNS.getArray()[ 0 ] =
-        rtl::OUString::createFromAscii(
-            MYUCP_CONTENT_PROVIDER_SERVICE_NAME1 );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            MYUCP_CONTENT_PROVIDER_SERVICE_NAME1 ));
     aSNS.getArray()[ 1 ] =
-        rtl::OUString::createFromAscii(
-            MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 ));
 
     return aSNS;
 }
@@ -280,7 +278,7 @@ void ContentProvider::init()
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( ! instPath.getLength() )
         // try to determine path from default
-        instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
+        instPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "$(instpath)/help" ));
     // replace anything like $(instpath);
     subst( instPath );
 
@@ -293,7 +291,7 @@ void ContentProvider::init()
         if( xAccess.is() )
         {
             uno::Any aAny =
-                xAccess->getByName( rtl::OUString::createFromAscii( "Help" ) );
+                xAccess->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Help" )) );
             aAny >>= m_xContainer;
             if( m_xContainer.is() )
                 m_xContainer->addContainerListener( this );
@@ -309,9 +307,10 @@ void ContentProvider::init()
      *  productversion,
      */
 
+    rtl::OUString productname;
+    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= productname;
+
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
-    rtl::OUString productname(
-        getKey( xHierAccess,"Product/ooName" ) );
 
     rtl::OUString setupversion(
         getKey( xHierAccess,"Product/ooSetupVersion" ) );
@@ -320,21 +319,21 @@ void ContentProvider::init()
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-              m_xSMgr ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+              m_xSMgr ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))), uno::UNO_QUERY_THROW);
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
-        aParam.Value <<= ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Product");
+        aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+        aParam.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Product"));
         lParams[0] = uno::makeAny(aParam);
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString::createFromAscii("ooSetupExtension"));
+        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupExtension")));
 
         aRet >>= setupextension;
     }
@@ -344,7 +343,7 @@ void ContentProvider::init()
 
     rtl::OUString productversion(
         setupversion +
-        rtl::OUString::createFromAscii( " " ) +
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " )) +
         setupextension );
 
     uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
@@ -387,8 +386,8 @@ ContentProvider::getConfiguration() const
         try
         {
             rtl::OUString sProviderService =
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.configuration.ConfigurationProvider" );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider" ));
             sProvider =
                 uno::Reference< lang::XMultiServiceFactory >(
                     m_xSMgr->createInstance( sProviderService ),
@@ -414,8 +413,8 @@ ContentProvider::getHierAccess(
     {
         uno::Sequence< uno::Any > seq( 1 );
         rtl::OUString sReaderService(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.configuration.ConfigurationAccess" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationAccess" )) );
 
         seq[ 0 ] <<= rtl::OUString::createFromAscii( file );
 
@@ -492,8 +491,8 @@ void ContentProvider::subst( rtl::OUString& instpath ) const
             xCfgMgr =
                 uno::Reference< frame::XConfigManager >(
                     m_xSMgr->createInstance(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.config.SpecialConfigManager" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.config.SpecialConfigManager" )) ),
                     uno::UNO_QUERY );
         }
         catch( const uno::Exception&)
@@ -508,3 +507,5 @@ void ContentProvider::subst( rtl::OUString& instpath ) const
     if( xCfgMgr.is() )
         instpath = xCfgMgr->substituteVariables( instpath );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

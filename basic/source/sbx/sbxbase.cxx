@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,15 +37,15 @@
 #include <basic/sbxfac.hxx>
 #include <basic/sbxbase.hxx>
 
-// AppData-Struktur fuer SBX:
+// AppData-Structure for SBX:
 
 SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
 SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
 TYPEINIT0(SbxBase)
 
-// SBX-Daten anfordern oder ggf. anlegen
-// wir legen den Bereich einfach an und verzichten auf die Freigabe!
+// Request SBX-Data or if necessary create them
+// we just create the area and waive the release!
 
 SbxAppData* GetSbxData_Impl()
 {
@@ -152,11 +153,11 @@ void SbxBase::AddFactory( SbxFactory* pFac )
     SbxAppData* p = GetSbxData_Impl();
     const SbxFactory* pTemp = pFac;
 
-    // AB, 6.3.96: HandleLast-Flag beruecksichtigen
-    sal_uInt16 nPos = p->aFacs.Count();     // Einfuege-Position
-    if( !pFac->IsHandleLast() )         // Nur, wenn nicht selbst HandleLast
+    // From 1996-03-06: take the HandleLast-Flag into account
+    sal_uInt16 nPos = p->aFacs.Count(); // Insert position
+    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
     {
-        // Neue Factory vor Factories mit HandleLast einordnen
+        // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
                 (static_cast<SbxFactory*>(p->aFacs.GetObject( nPos-1 )))->IsHandleLast() )
             nPos--;
@@ -200,7 +201,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
         case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
-    // Unbekanter Typ: Åber die Factories gehen!
+    // Unknown type: go over the factories!
     SbxAppData* p = GetSbxData_Impl();
     SbxBase* pNew = NULL;
     for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
@@ -245,7 +246,7 @@ SbxObject* SbxBase::CreateObject( const XubString& rClass )
 
 static sal_Bool bStaticEnableBroadcasting = sal_True;
 
-// Sbx-Loesung als Ersatz fuer SfxBroadcaster::Enable()
+// Sbx-Solution in exchange for SfxBroadcaster::Enable()
 void SbxBase::StaticEnableBroadcasting( sal_Bool bEnable )
 {
     bStaticEnableBroadcasting = bEnable;
@@ -263,7 +264,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     sal_uInt32 nCreator, nSize;
     rStrm >> nCreator >> nSbxId >> nFlags >> nVer;
 
-    // Eine Dummheit meinerseits korrigieren:
+    // Correcting a foolishness of mine:
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
@@ -282,7 +283,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
                 rStrm.Seek( nOldPos );
             if( !p->LoadCompleted() )
             {
-                // Loeschen des Objekts
+                // Deleting of the object
                 SbxBaseRef aRef( p );
                 p = NULL;
             }
@@ -290,7 +291,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         else
         {
             rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            // Loeschen des Objekts
+            // Deleting of the object
             SbxBaseRef aRef( p );
             p = NULL;
         }
@@ -300,7 +301,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     return p;
 }
 
-// Sbx-Objekt im Stream ueberspringen
+// Skip the Sbx-Object inside the stream
 void SbxBase::Skip( SvStream& rStrm )
 {
     sal_uInt16 nSbxId, nFlags, nVer;
@@ -453,3 +454,4 @@ sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

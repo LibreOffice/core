@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,3 +109,5 @@ class ComplexToolbarController : public svt::ToolboxController
 }
 
 #endif // __FRAMEWORK_UIELEMENT_COMPLEXTOOLBARCONTROLLER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

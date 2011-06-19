@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/dialmgr.hxx>
 
+#include <sal/macros.h>
+
+#include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "docrecovery.hxx"
 #include "docrecovery.hrc"
@@ -44,14 +47,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/scrbar.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
-//#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-//#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -100,7 +99,7 @@ void TabDialog4Recovery::addTabPage(IExtendedTabPage* pPage)
 //===============================================
 short TabDialog4Recovery::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     Show();
     m_pActualPage = m_lTabPages.begin();
@@ -549,8 +548,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     if (!sURL.Len())
         sURL = aNew.TemplateURL;
     INetURLObject aURL(sURL);
-    aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL, false, false);
-    aNew.HCImage       = SvFileInformationManager::GetFileImage(aURL, false, true );
+    aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL, false);
 
     /* set the right UI state for this item to NOT_RECOVERED_YET ... because nDocState shows the state of
        the last emergency save operation before and is interessting for the used recovery core service only ...
@@ -559,7 +557,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
 
     // patch DisplayName! Because the document title contain more then the file name ...
-    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString::createFromAscii(" - "));
+    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
     if (i > 0)
         aNew.DisplayName = aNew.DisplayName.copy(0, i);
 
@@ -775,7 +773,6 @@ SaveDialog::SaveDialog(Window*       pParent,
     m_aTitleFT.SetFont(aFont);
 
     m_aOkBtn.SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
-//    m_aFileListLB.EnableInput( sal_False );
     m_aFileListLB.SetControlBackground( rStyleSettings.GetDialogColor() );
 
     // fill listbox with current open documents
@@ -808,7 +805,7 @@ IMPL_LINK( SaveDialog, OKButtonHdl, void*, EMPTYARG )
 //===============================================
 short SaveDialog::execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     // wait for user input "OK"
     m_nResult = DLG_RET_UNKNOWN;
@@ -848,7 +845,6 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     FreeResource();
     PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
                     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
-//  m_aProgrBaseTxt = m_aProgrFT.GetText();
 }
 
 //===============================================
@@ -859,7 +855,7 @@ SaveProgressDialog::~SaveProgressDialog()
 //===============================================
 short SaveProgressDialog::Execute()
 {
-    ::vos::OGuard aLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aLock;
 
     m_pCore->setProgressHandler(m_xProgress);
     m_pCore->setUpdateListener(this);
@@ -914,16 +910,12 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
     const String*       pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
-    sal_Bool      bHC         = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
-
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
     switch(pInfo->RecoveryState)
     {
         case E_SUCCESSFULLY_RECOVERED :
         {
             pImg = &pList->m_aGreenCheckImg;
-            if (bHC)
-                pImg = &pList->m_aGreenCheckImgHC;
             pTxt = &pList->m_aSuccessRecovStr;
         }
         break;
@@ -931,8 +923,6 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
         case E_ORIGINAL_DOCUMENT_RECOVERED : // TODO must be renamed into ORIGINAL DOCUMENT recovered! Because its marked as yellow
         {
             pImg = &pList->m_aYellowCheckImg;
-            if (bHC)
-                pImg = &pList->m_aYellowCheckImgHC;
             pTxt = &pList->m_aOrigDocRecovStr;
         }
         break;
@@ -940,8 +930,6 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
         case E_RECOVERY_FAILED :
         {
             pImg = &pList->m_aRedCrossImg;
-            if (bHC)
-                pImg = &pList->m_aRedCrossImgHC;
             pTxt = &pList->m_aRecovFailedStr;
         }
         break;
@@ -981,9 +969,6 @@ RecovDocList::RecovDocList(      Window* pParent,
     , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK,*rResId.GetResMgr()     ) )
     , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK,*rResId.GetResMgr()    ) )
     , m_aRedCrossImg      ( ResId(IMG_REDCROSS,*rResId.GetResMgr()       ) )
-    , m_aGreenCheckImgHC  ( ResId(IMG_GREENCHECK_HC,*rResId.GetResMgr()  ) )
-    , m_aYellowCheckImgHC ( ResId(IMG_YELLOWCHECK_HC,*rResId.GetResMgr() ) )
-    , m_aRedCrossImgHC    ( ResId(IMG_REDCROSS_HC,*rResId.GetResMgr()    ) )
     , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV,*rResId.GetResMgr()   ) )
     , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV,*rResId.GetResMgr()   ) )
     , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED,*rResId.GetResMgr()    ) )
@@ -1104,8 +1089,6 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         sName += impl_getStatusString( rInfo );
         SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
-        m_aFileListLB.SetExpandedEntryBmp (pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
-        m_aFileListLB.SetCollapsedEntryBmp(pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
     }
 
     // mark first item
@@ -1122,7 +1105,7 @@ RecoveryDialog::~RecoveryDialog()
 //===============================================
 short RecoveryDialog::execute()
 {
-    ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+    ::SolarMutexGuard aSolarLock;
 
     switch(m_eRecoveryState)
     {
@@ -1337,7 +1320,7 @@ short RecoveryDialog::execute()
     }
 
     // should never be reached .-)
-    DBG_ERROR("Should never be reached!");
+    OSL_FAIL("Should never be reached!");
     return DLG_RET_OK;
 }
 
@@ -1658,7 +1641,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepWelcomeDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            ::SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)
@@ -1753,12 +1736,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
             ReadParams();
 
-            /*
-            maDocTypeED.SetText( maParams.maSubject );
-            maUsingML.SetText( maParams.maBody );
-            maContactCB.Check( maParams.mbAllowContact );
-            maEMailAddrED.SetText( maParams.maReturnAddress );
-            */
             ContactCBHdl( 0 );
         }
 
@@ -1768,7 +1745,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         short ErrorRepSendDialog::execute()
         {
-            ::vos::OGuard aLock(Application::GetSolarMutex());
+            ::SolarMutexGuard aLock;
             Show();
             m_nResult = DLG_RET_UNKNOWN;
             while(m_nResult == DLG_RET_UNKNOWN)
@@ -1865,7 +1842,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 }
 
                 // loop through all the other windows and adjust their size
-                for ( ; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+                for ( ; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
                 {
                     Size aSize = (*pCurrent)->GetSizePixel();
                     aSize.Width() -= nDelta;
@@ -1936,7 +1913,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 &maProxyServerEd, &maProxyPortFT, &maProxyPortEd, &maDescriptionFT
             };
             Window** pCurrent = pWins;
-            for ( sal_uInt32 i = 0; i < sizeof( pWins ) / sizeof( pWins[ 0 ] ); ++i, ++pCurrent )
+            for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS( pWins ); ++i, ++pCurrent )
             {
                 Point aPos = (*pCurrent)->GetPosPixel();
                 aPos.Y() -= nDelta;
@@ -2035,22 +2012,22 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         static ::rtl::OUString GetCrashConfigDir()
         {
 
-#if defined(WNT) || defined(OS2)
-            OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+#if defined(WNT)
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined( MACOSX )
-            OUString    ustrValue = OUString::createFromAscii("~");
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
 #else
-            OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
 #endif
             Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT) || defined(OS2)
-            ustrValue += OUString::createFromAscii("/user/crashdata");
+#if defined(WNT)
+            ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
             return ustrValue;
         }
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define CHKFILE "crashdat.chk"
 #define STKFILE "crashdat.stk"
 #define PRVFILE "crashdat.prv"
@@ -2059,26 +2036,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 #define STKFILE ".crash_report_frames"
 #define PRVFILE ".crash_report_preview"
 #endif
-
-//      static ::rtl::OUString GetChecksumURL()
-//      {
-//          ::rtl::OUString aURL = GetCrashConfigDir();
-
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHKFILE ) );
-
-//          return aURL;
-//      }
-
-//      static ::rtl::OUString GetStackURL()
-//      {
-//          ::rtl::OUString aURL = GetCrashConfigDir();
-
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STKFILE ) );
-
-//          return aURL;
-//      }
 
         static ::rtl::OUString GetPreviewURL()
         {
@@ -2096,7 +2053,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             ::osl::File aFile( rURL );
 
             printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
-            if ( ::osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
+            if ( ::osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
             {
                 ::rtl::OString  aContent;
                 ::osl::FileBase::RC result;
@@ -2179,3 +2136,4 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     }   // namespace DocRecovery
 }   // namespace svx
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

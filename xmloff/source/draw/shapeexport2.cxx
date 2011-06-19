@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include "anim.hxx"
 
-#ifndef _XMLOFF_SHAPEEXPORT_HXX
 #include <xmloff/shapeexport.hxx>
-#endif
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -89,16 +88,17 @@ void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet
 void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& rMatrix,
     const uno::Reference< beans::XPropertySet >& xPropSet)
 {
-    // --> OD 2004-08-09 #i28749# - Get <TransformationInHoriL2R>, if it exist
-    // and if the document is exported into the OpenOffice.org file format.
-    // This property only exists at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <TransformationInHoriL2R>, if it exist
+       and if the document is exported into the OpenOffice.org file format.
+       This property only exists at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i28749#)
+    */
     uno::Any aAny;
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xPropSet->getPropertySetInfo()->hasPropertyByName(
@@ -110,7 +110,6 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
     {
         aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
     }
-    // <--
     drawing::HomogenMatrix3 aMatrix;
     aAny >>= aMatrix;
 
@@ -293,9 +292,6 @@ const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
 const sal_Int32 FOUND_MACRO             = 0x00000100;
 const sal_Int32 FOUND_LIBRARY           = 0x00000200;
 const sal_Int32 FOUND_ACTIONEVENTTYPE   = 0x00000400;
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-const sal_Int32 FOUND_URL               = 0x00000800;
-#endif
 
 } // namespace
 
@@ -385,33 +381,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         }
     }
 
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    // extract properties from "OnAction" event -------------------------------
-
-    OUString aActionEventType;
-    OUString aHyperURL;
-
-    uno::Sequence< beans::PropertyValue > aActionProperties;
-    if( xEvents->hasByName( msOnAction ) && (xEvents->getByName( msOnAction ) >>= aActionProperties) )
-    {
-        const beans::PropertyValue* pProperty = aActionProperties.getConstArray();
-        const beans::PropertyValue* pPropertyEnd = pProperty + aActionProperties.getLength();
-        for( ; pProperty != pPropertyEnd; ++pProperty )
-        {
-            if( ( ( nFound & FOUND_ACTIONEVENTTYPE ) == 0 ) && pProperty->Name == msEventType )
-            {
-                if( pProperty->Value >>= aActionEventType )
-                    nFound |= FOUND_ACTIONEVENTTYPE;
-            }
-            else if( ( ( nFound & FOUND_URL ) == 0 ) && ( pProperty->Name == msURL  ) )
-            {
-                if( pProperty->Value >>= aHyperURL )
-                    nFound |= FOUND_URL;
-            }
-        }
-    }
-#endif
-
     // create the XML elements
 
     if( aClickEventType == msPresentation )
@@ -439,7 +408,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             case presentation::ClickAction_VANISH:          eStrAction = XML_FADE_OUT; break;
             case presentation::ClickAction_SOUND:           eStrAction = XML_SOUND; break;
             default:
-                DBG_ERROR( "unknown presentation::ClickAction found!" );
+                OSL_FAIL( "unknown presentation::ClickAction found!" );
                 eStrAction = XML_UNKNOWN;
         }
 
@@ -563,15 +532,9 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
         }
     }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-    else if( aClickEventType == msScript || aActionEventType == msAction )
-    {
-        if( nFound & ( FOUND_MACRO | FOUND_URL ) )
-#else
     else if( aClickEventType == msScript )
     {
         if( nFound & FOUND_MACRO )
-#endif
         {
             SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
             if ( nFound & FOUND_MACRO )
@@ -586,18 +549,6 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
             }
-#ifdef ISSUE66550_HLINK_FOR_SHAPES
-            if ( nFound & FOUND_URL )
-            {
-                OUString aEventQName(
-                    mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "action" ) ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aHyperURL );
-
-                SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_PRESENTATION, XML_EVENT_LISTENER, sal_True, sal_True);
-            }
-#endif
         }
     }
 }
@@ -613,8 +564,8 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
         OUString aDescription;
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
-        xProps->getPropertyValue( OUString::createFromAscii( "Description" ) ) >>= aDescription;
+        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= aTitle;
+        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Description" )) ) >>= aDescription;
 
         if(aTitle.getLength())
         {
@@ -630,7 +581,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
     catch( uno::Exception& )
     {
-        DBG_ERROR( "could not export Title and/or Description for shape!" );
+        OSL_FAIL( "could not export Title and/or Description for shape!" );
     }
 }
 
@@ -1193,7 +1144,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 {
                     if( aStr[ 0 ] == '#' )
                     {
-                        aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
+                        aStreamURL = OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ));
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
                     }
 
@@ -1335,17 +1286,18 @@ void XMLShapeExport::ImpExportConnectorShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
-    // <EndPositionInHoriL2R>, if they exist and if the document is exported
-    // into the OpenOffice.org file format.
-    // These properties only exist at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <StartPositionInHoriL2R> and
+       <EndPositionInHoriL2R>, if they exist and if the document is exported
+       into the OpenOffice.org file format.
+       These properties only exist at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
+    */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
             OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
@@ -1360,7 +1312,6 @@ void XMLShapeExport::ImpExportConnectorShape(
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
     }
-    // <--
 
     if( pRefPoint )
     {
@@ -1507,17 +1458,18 @@ void XMLShapeExport::ImpExportMeasureShape(
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
-    // --> OD 2004-08-09 #i36248# - Get <StartPositionInHoriL2R> and
-    // <EndPositionInHoriL2R>, if they exist and if the document is exported
-    // into the OpenOffice.org file format.
-    // These properties only exist at service com::sun::star::text::Shape - the
-    // Writer UNO service for shapes.
-    // This code is needed, because the positioning attributes in the
-    // OpenOffice.org file format are given in horizontal left-to-right layout
-    // regardless the layout direction the shape is in. In the OASIS Open Office
-    // file format the positioning attributes are correctly given in the layout
-    // direction the shape is in. Thus, this code provides the conversion from
-    // the OASIS Open Office file format to the OpenOffice.org file format.
+    /* Get <StartPositionInHoriL2R> and
+       <EndPositionInHoriL2R>, if they exist and if the document is exported
+       into the OpenOffice.org file format.
+       These properties only exist at service com::sun::star::text::Shape - the
+       Writer UNO service for shapes.
+       This code is needed, because the positioning attributes in the
+       OpenOffice.org file format are given in horizontal left-to-right layout
+       regardless the layout direction the shape is in. In the OASIS Open Office
+       file format the positioning attributes are correctly given in the layout
+       direction the shape is in. Thus, this code provides the conversion from
+       the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
+    */
     if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
          xProps->getPropertySetInfo()->hasPropertyByName(
             OUString(RTL_CONSTASCII_USTRINGPARAM("StartPositionInHoriL2R"))) &&
@@ -1532,7 +1484,6 @@ void XMLShapeExport::ImpExportMeasureShape(
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition"))) >>= aStart;
         xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition"))) >>= aEnd;
     }
-    // <--
 
     if( pRefPoint )
     {
@@ -1642,7 +1593,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     // OOo internal links have no storage persistance, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
-                    xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
+                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LinkURL" )) ) >>= sURL;
                 }
 
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
@@ -2054,3 +2005,5 @@ void XMLShapeExport::ImpExportMediaShape(
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

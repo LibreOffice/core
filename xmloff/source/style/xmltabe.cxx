@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,16 +118,12 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
     uno::Sequence< ::com::sun::star::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
-        DBG_ERROR( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
+        OSL_FAIL( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
     }
     else
     {
         const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
         const sal_Int32 nTabs   = aSeq.getLength();
-
-        // ignore default tab stop here
-        //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
-        //  return;
 
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
                                   sal_True, sal_True );
@@ -140,3 +137,4 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

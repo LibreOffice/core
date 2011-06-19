@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
     if( sTrimmedChars.getLength() )
     {
         OUString sChars;
-        if( sBase64CharsLeft )
+        if( sBase64CharsLeft.getLength() )
         {
             sChars = sBase64CharsLeft;
             sChars += sTrimmedChars;
@@ -89,3 +90,5 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
     }
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

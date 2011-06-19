@@ -126,7 +126,7 @@
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <info>
             <desc>Indicates whether to show help-lines when moving an object.</desc>
-            <label>Guides when moving</label>
+            <label>Helplines While Moving</label>
           </info>
           <value>false</value>
         </prop>
@@ -475,7 +475,7 @@
           </desc>
           <label>List of files containing transition effects</label>
         </info>
-        <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml</value>
+        <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
       </prop>
       <prop oor:name="EffectFiles" oor:type="oor:string-list">
         <!-- OldPath: -->

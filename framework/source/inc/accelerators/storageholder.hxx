@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,13 +40,9 @@
 //===============================================
 // interface includes
 
-#ifndef __COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 //===============================================
 // other includes
@@ -94,7 +91,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         };
 
         /** @short  TODO */
-        typedef ::std::hash_map< ::rtl::OUString                    ,
+        typedef ::boost::unordered_map< ::rtl::OUString                    ,
                                  TStorageInfo                       ,
                                  ::rtl::OUStringHash                ,
                                  ::std::equal_to< ::rtl::OUString > > TPath2StorageInfo;
@@ -203,7 +200,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void operator=(const StorageHolder& rCopy);
+        void operator=(const StorageHolder& rCopy);
 
         //---------------------------------------
         /** @short  opens a sub element of the specified base storage.
@@ -259,3 +256,5 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
 } // namespace framework
 
 #endif // __FRAMEWORK_ACCELERATORS_STORAGEHOLDER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

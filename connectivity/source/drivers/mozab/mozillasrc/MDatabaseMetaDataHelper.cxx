@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,8 @@
 
 #include "resource/mozab_res.hrc"
 #include "MDatabaseMetaDataHelper.hxx"
-#ifndef _CONNECTIVITY_MAB_CONVERSIONS_HXX_
 #include "MTypeConverter.hxx"
-#endif
-#ifndef CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
 #include "MConfigAccess.hxx"
-#endif
 #include <connectivity/dbexception.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
@@ -804,3 +801,5 @@ nsresult NewAddressBook(const ::rtl::OUString * aName)
     rv = parentDir->CreateNewDirectory(aProperties);
     return rv;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

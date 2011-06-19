@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,6 @@
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
-//#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-//#include "connectivity/CommonTools.hxx"
-//#endif
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/StdTypeDefs.hxx"
 
@@ -124,7 +122,7 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSet( ADORecordset* _pRecordSet);
             ~ODatabaseMetaDataResultSet();
 
@@ -225,3 +223,4 @@ namespace connectivity
 }
 #endif // _CONNECTIVITY_ADO_ADATABASEMETADATARESULTSET_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ ScVbaCommandBarControl::getCaption() throw ( uno::RuntimeException )
 {
     // "Label" always empty
     rtl::OUString sCaption;
-    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("Label") ) >>= sCaption;
+    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sCaption;
     return sCaption;
 }
 
@@ -61,7 +62,7 @@ void SAL_CALL
 ScVbaCommandBarControl::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
 {
     rtl::OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("Label"), uno::makeAny( sCaption ) );
+    setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), uno::makeAny( sCaption ) );
     ApplyChange();
 }
 
@@ -69,7 +70,7 @@ ScVbaCommandBarControl::setCaption( const ::rtl::OUString& _caption ) throw (uno
 ScVbaCommandBarControl::getOnAction() throw (uno::RuntimeException)
 {
     rtl::OUString sCommandURL;
-    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL") ) >>= sCommandURL;
+    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")) ) >>= sCommandURL;
     return sCommandURL;
 }
 
@@ -83,7 +84,7 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
     {
         rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", rtl::OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-        setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandURL")), uno::makeAny( aCommandURL ) );
         ApplyChange();
     }
 }
@@ -175,7 +176,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
 {
     // only Popup Menu has controls
     uno::Reference< container::XIndexAccess > xSubMenu;
-    getPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii( ITEM_DESCRIPTOR_CONTAINER ) ) >>= xSubMenu;
+    getPropertyValue( m_aPropertyValues, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )) ) >>= xSubMenu;
     if( !xSubMenu.is() )
         throw uno::RuntimeException();
 
@@ -257,3 +258,5 @@ ScVbaCommandBarButton::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

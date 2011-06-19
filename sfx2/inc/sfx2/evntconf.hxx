@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@
 #endif
 #define ITEMID_MACRO SID_ATTR_MACROITEM
 #include <svl/macitem.hxx>
+#include <vector>
 
 class SfxObjectShell;
 class SvxMacroTableDtor;
@@ -64,16 +66,26 @@ struct SFX2_DLLPUBLIC SfxEventName
                 , maUIName( rUIName ) {}
 };
 
-DECLARE_LIST( _SfxEventNamesList, SfxEventName* )
+typedef ::std::vector< SfxEventName* > _SfxEventNamesList;
 
-class SFX2_DLLPUBLIC SfxEventNamesList : public _SfxEventNamesList
+class SFX2_DLLPUBLIC SfxEventNamesList
 {
+private:
+    _SfxEventNamesList  aEventNamesList;
+    void DelDtor();
+
 public:
-    SfxEventNamesList( const sal_uInt16 nInitSz = 0, const sal_uInt16 nReSz = 1 ): _SfxEventNamesList( nInitSz, nReSz ) {}
-    SfxEventNamesList( const SfxEventNamesList &rCpy ) : _SfxEventNamesList() { *this = rCpy; }
+    SfxEventNamesList() {}
+    SfxEventNamesList( const SfxEventNamesList &rCpy ) { *this = rCpy; }
     ~SfxEventNamesList() { DelDtor(); }
     SfxEventNamesList& operator=( const SfxEventNamesList &rCpy );
-    void DelDtor();
+
+    size_t size() const { return aEventNamesList.size(); };
+
+    SfxEventName* at( size_t Index ) const
+        { return Index < aEventNamesList.size() ? aEventNamesList[ Index ] : NULL; }
+
+    void push_back( SfxEventName* Item ) { aEventNamesList.push_back( Item ); }
 };
 
 class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
@@ -117,3 +129,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

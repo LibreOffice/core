@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
             if(xRow->getString(6) == aName && (!aQualifier.getLength() || xRow->getString(5) == aQualifier ))
             {
                 OAdabasIndex* pRet = new OAdabasIndex(m_pTable,aName,aQualifier,!xRow->getBoolean(4),
-                    aName == ::rtl::OUString::createFromAscii("SYSPRIMARYKEYINDEX"),
+                    aName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSPRIMARYKEYINDEX")),
                     xRow->getShort(7) == IndexType::CLUSTERED);
                 xRet = pRet;
                 break;
@@ -104,22 +105,22 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
     if ( m_pTable->isNew() )
         ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE " ));
     ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     if(getBOOL(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
-        aSql = aSql + ::rtl::OUString::createFromAscii("UNIQUE ");
-    aSql = aSql + ::rtl::OUString::createFromAscii("INDEX ");
+        aSql = aSql + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNIQUE "));
+    aSql = aSql + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INDEX "));
 
 
     if(_rForName.getLength())
     {
         aSql = aSql + aQuote + _rForName + aQuote
-                    + ::rtl::OUString::createFromAscii(" ON ")
+                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "))
                     + aQuote + m_pTable->getSchema() + aQuote + sDot
                     + aQuote + m_pTable->getTableName() + aQuote
-                    + ::rtl::OUString::createFromAscii(" ( ");
+                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ( "));
 
         Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
         Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -131,12 +132,12 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
             aSql = aSql +   (getBOOL(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING)))
                                         ?
-                            ::rtl::OUString::createFromAscii(" ASC")
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ASC"))
                                         :
-                            ::rtl::OUString::createFromAscii(" DESC"))
-                        +   ::rtl::OUString::createFromAscii(",");
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DESC")))
+                        +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         }
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
     }
     else
     {
@@ -170,14 +171,14 @@ void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
         aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
 
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP INDEX " ));
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         if (aSchema.getLength())
             (((aSql += aQuote) += aSchema) += aQuote) += sDot;
 
-        (((aSql += aQuote) += aName) += aQuote) += ::rtl::OUString::createFromAscii(" ON ");
+        (((aSql += aQuote) += aName) += aQuote) += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "));
 
         (((aSql += aQuote) += m_pTable->getSchema()) += aQuote) += sDot;
         ((aSql += aQuote) += m_pTable->getTableName()) += aQuote;
@@ -190,3 +191,4 @@ void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
 // -------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

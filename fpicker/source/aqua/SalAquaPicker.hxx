@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,17 +35,11 @@
 
 #include <osl/mutex.hxx>
 
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HXX_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HXX_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
 #include "ControlHelper.hxx"
 
 #include <premac.h>
@@ -104,3 +99,5 @@ protected:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

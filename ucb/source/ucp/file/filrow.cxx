@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-//using namespace com::sun::star::ucb;
-
 
 // Funktion for TypeConverting
 
@@ -55,11 +54,7 @@ sal_Bool convert( shell* pShell,
         {
             xConverter = uno::Reference< script::XTypeConverter >(
                 pShell->m_xMultiServiceFactory->createInstance(
-                    rtl::OUString::createFromAscii( "com.sun.star.script.Converter" ) ),uno::UNO_QUERY );
-
-/*          DBG_ASSERT( m_xTypeConverter.is(),
-                        "PropertyValueSet::getTypeConverter() - "
-                        "Service 'com.sun.star.script.Converter' n/a!" );*/
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ), uno::UNO_QUERY );
         }
 
         try
@@ -427,3 +422,5 @@ XRow_impl::getArray(
                                                             Value );
     return Value;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

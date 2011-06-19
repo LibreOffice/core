@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 }
 
 
-sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     String aValue;
     sal_Bool bIsString = sal_False;
@@ -102,21 +103,21 @@ sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal
             aValue = aLanguage;
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
-               return sal_False;
+            OSL_FAIL("Wrong MemberId!");
+               return false;
      }
 
     if ( bIsString )
         rVal <<= ::rtl::OUString( aValue );
     else
         rVal <<= bValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ::rtl::OUString aValue;
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -127,10 +128,11 @@ sal_Bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal,
                 aLanguage = aValue;
             break;
         default:
-            DBG_ERROR("Wrong MemberId!");
-            return sal_False;
+            OSL_FAIL("Wrong MemberId!");
+            return false;
     }
 
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

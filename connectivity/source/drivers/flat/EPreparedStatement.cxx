@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_FLAT_EPREPAREDSTATEMENT_HXX_
 #include "flat/EPreparedStatement.hxx"
-#endif
 #include "flat/EResultSet.hxx"
 
 using namespace connectivity::flat;
@@ -44,3 +43,4 @@ OResultSet* OFlatPreparedStatement::createResultSet()
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OFlatPreparedStatement,"com.sun.star.sdbc.driver.flat.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

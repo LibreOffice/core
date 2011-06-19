@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ namespace migration
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
             {
-                ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
+                ::osl::FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
                 if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
                 {
                     if ( aFileStatus.getFileType() == ::osl::FileStatus::Directory )
@@ -223,7 +224,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
                         ::rtl::OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
                         aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                              +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                        OSL_ENSURE( sal_False, aMsg.getStr() );
+                        OSL_FAIL( aMsg.getStr() );
                     }
                 }
                 ++aI;
@@ -231,7 +232,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
         }
         else
         {
-            OSL_ENSURE( sal_False, "WordbookMigration::copyFiles: no user installation!" );
+            OSL_FAIL( "WordbookMigration::copyFiles: no user installation!" );
         }
     }
 
@@ -278,11 +279,11 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAscii( "UserData" ) )
+            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "WordbookMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "WordbookMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;
@@ -320,3 +321,5 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
 //.........................................................................
 }   // namespace migration
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

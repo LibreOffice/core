@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 
 #include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HRC
 #include <sslwarndlg.hrc>
-#endif
-#ifndef UUI_UNKNOWNAUTHDLG_HXX
 #include <sslwarndlg.hxx>
-#endif
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
@@ -54,7 +49,7 @@ IMPL_LINK( SSLWarnDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
     xDocumentDigitalSignatures = uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >(
-                    getServiceFactory().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.DocumentDigitalSignatures" )), uno::UNO_QUERY );
+                    getServiceFactory().get()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.security.DocumentDigitalSignatures" ))), uno::UNO_QUERY );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 
@@ -91,3 +86,4 @@ SSLWarnDialog::SSLWarnDialog
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

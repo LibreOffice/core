@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,8 +59,8 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setMultiSelect( sal_Bool _multiselect ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getMultiSelect() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setMultiSelect( ::sal_Int32 _multiselect ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
 
     // Methods
@@ -72,7 +73,7 @@ public:
     virtual void SAL_CALL setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException);
 
     // XDefaultProperty
-    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
+    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
 
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
@@ -86,3 +87,5 @@ public:
 };
 
 #endif //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

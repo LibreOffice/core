@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ namespace connectivity
 
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (staruno::RuntimeException)
             {
-                return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ACollection");
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ACollection"));
             }
             virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& _rServiceName ) throw(staruno::RuntimeException)
             {
@@ -95,7 +96,7 @@ namespace connectivity
             virtual staruno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(staruno::RuntimeException)
             {
                 staruno::Sequence< ::rtl::OUString > aSupported(1);
-                aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Container");
+                aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Container"));
                 return aSupported;
             }
 
@@ -229,3 +230,4 @@ namespace connectivity
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

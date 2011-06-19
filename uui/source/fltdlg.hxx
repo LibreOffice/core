@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,10 @@
 
 #include <vcl/dialog.hxx>
 
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <tools/string.hxx>
 
@@ -96,3 +93,5 @@ class FilterDialog : public ModalDialog
 }   // namespace uui
 
 #endif // UUI_FLTDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

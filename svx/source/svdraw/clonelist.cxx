@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,18 +36,10 @@
 #include <svx/svdoedge.hxx>
 #include <svx/scene3d.hxx>
 
-CloneList::CloneList()
-{
-}
-
-CloneList::~CloneList()
-{
-}
-
 void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
 {
-    maOriginalList.Insert((SdrObject*)pOriginal, LIST_APPEND);
-    maCloneList.Insert(pClone, LIST_APPEND);
+    maOriginalList.push_back(pOriginal);
+    maCloneList.push_back(pClone);
 
     // look for subobjects, too.
     sal_Bool bOriginalIsGroup(pOriginal->IsGroupObject());
@@ -77,22 +70,24 @@ void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
 
 sal_uInt32 CloneList::Count() const
 {
-    return maOriginalList.Count();
+    return maOriginalList.size();
 }
 
 const SdrObject* CloneList::GetOriginal(sal_uInt32 nIndex) const
 {
-    return (SdrObject*)maOriginalList.GetObject(nIndex);
+    return maOriginalList[nIndex];
 }
 
 SdrObject* CloneList::GetClone(sal_uInt32 nIndex) const
 {
-    return (SdrObject*)maCloneList.GetObject(nIndex);
+    return maCloneList[nIndex];
 }
 
 void CloneList::CopyConnections() const
 {
-    for(sal_uInt32 a(0); a < maOriginalList.Count(); a++)
+    sal_uInt32 cloneCount = maCloneList.size();
+
+    for(sal_uInt32 a = 0; a < maOriginalList.size(); a++)
     {
         const SdrEdgeObj* pOriginalEdge = PTR_CAST(SdrEdgeObj, GetOriginal(a));
         SdrEdgeObj* pCloneEdge = PTR_CAST(SdrEdgeObj, GetClone(a));
@@ -104,27 +99,41 @@ void CloneList::CopyConnections() const
 
             if(pOriginalNode1)
             {
-                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode1));
+                std::vector<const SdrObject*>::const_iterator it = std::find(maOriginalList.begin(),
+                                                                 maOriginalList.end(),
+                                                                 pOriginalNode1);
 
-                if(LIST_ENTRY_NOTFOUND != nPos)
+                sal_uInt32 nPos = it - maOriginalList.begin();
+
+                if(it != maOriginalList.end())
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_True) != GetClone(nPos))
-                    {
-                        pCloneEdge->ConnectToNode(sal_True, GetClone(nPos));
-                    }
+                    SdrObject *cObj = NULL;
+
+                    if (nPos < cloneCount)
+                        cObj = GetClone(nPos);
+
+                    if(pOriginalEdge->GetConnectedNode(sal_True) != cObj)
+                        pCloneEdge->ConnectToNode(sal_True, cObj);
                 }
             }
 
             if(pOriginalNode2)
             {
-                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode2));
+                std::vector<const SdrObject*>::const_iterator it = std::find(maOriginalList.begin(),
+                                                                 maOriginalList.end(),
+                                                                 pOriginalNode2);
 
-                if(LIST_ENTRY_NOTFOUND != nPos)
+                sal_uInt32 nPos = it - maOriginalList.begin();
+
+                if(it != maOriginalList.end())
                 {
-                    if(pOriginalEdge->GetConnectedNode(sal_False) != GetClone(nPos))
-                    {
-                        pCloneEdge->ConnectToNode(sal_False, GetClone(nPos));
-                    }
+                    SdrObject *cObj = NULL;
+
+                    if (nPos < cloneCount)
+                        cObj = GetClone(nPos);
+
+                    if(pOriginalEdge->GetConnectedNode(sal_False) != cObj)
+                        pCloneEdge->ConnectToNode(sal_False, cObj);
                 }
             }
         }
@@ -132,3 +141,5 @@ void CloneList::CopyConnections() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

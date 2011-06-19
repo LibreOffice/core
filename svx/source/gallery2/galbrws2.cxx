@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,17 +122,16 @@ void GalleryBackgroundPopup::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
         if( ( pStrLstItem = PTR_CAST( SfxStringListItem, pItem ) ) != NULL )
         {
-            List* pList = pStrLstItem->GetList();
+            const std::vector<String> &aList = pStrLstItem->GetList();
 
-            if( pList )
-                for ( sal_uIntPtr i = 0, nCount = pList->Count(); i < nCount; i++ )
-                    InsertItem( (sal_uInt16) i + 1, *(String*) pList->GetObject( i ) );
+            for ( sal_uIntPtr i = 0, nCount = aList.size(); i < nCount; i++ )
+                InsertItem( (sal_uInt16) i + 1, aList[i]);
         }
         else if( ( pStrItem = PTR_CAST( SfxStringItem, pItem ) ) != NULL )
             InsertItem( 1, pStrItem->GetValue() );
         else
         {
-            DBG_ERROR( "SgaBGPopup::StateChanged(...): Wrong item type!" );
+            OSL_FAIL( "SgaBGPopup::StateChanged(...): Wrong item type!" );
         }
     }
 }
@@ -1030,15 +1030,15 @@ void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
                 if( pObj )
                 {
                     const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
-                    //CHINA001 TitleDialog      aDlg( this, aOldTitle );
+
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle );
-                        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
-                        if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
+                        DBG_ASSERT(aDlg, "Dialogdiet fail!");
+                        if( aDlg->Execute() == RET_OK )
                         {
-                            String aNewTitle( aDlg->GetTitle() );//CHINA001 String aNewTitle( aDlg.GetTitle() );
+                            String aNewTitle( aDlg->GetTitle() );
 
                             if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
                             {
@@ -1051,7 +1051,7 @@ void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
                         }
 
                         mpCurTheme->ReleaseObject( pObj );
-                        delete aDlg; //add CHINA001
+                        delete aDlg;
                     }
                 }
             }
@@ -1171,12 +1171,12 @@ String GalleryBrowser2::GetFilterName() const
 
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
-            GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
+            GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
-            sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
+            sal_uInt16          nFilter = rFilter.GetImportFormatNumberForShortName( aURL.GetExtension() );
 
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
-                aFilterName = pFilter->GetImportFormatName( nFilter );
+                aFilterName = rFilter.GetImportFormatName( nFilter );
         }
     }
 
@@ -1248,12 +1248,10 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 {
-    const sal_Bool  bHC = maViewBox.GetSettings().GetStyleSettings().GetHighContrastMode();
-
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
-    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
+    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
 
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {
@@ -1271,3 +1269,5 @@ IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 
     return 0L;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,7 +111,7 @@ Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false, "Storage::Storage: Caught exception!" );
+        OSL_FAIL( "Storage::Storage: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -156,7 +157,7 @@ Storage::~Storage()
             }
             catch ( ... )
             {
-                OSL_ENSURE( false, "Storage::~Storage - Caught exception!" );
+                OSL_FAIL( "Storage::~Storage - Caught exception!" );
             }
         }
     }
@@ -619,7 +620,7 @@ OutputStream::OutputStream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false, "OutputStream::OutputStream: Caught exception!" );
+        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -820,7 +821,7 @@ Stream::Stream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_ENSURE( false, "OutputStream::OutputStream: Caught exception!" );
+        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -1106,3 +1107,4 @@ void Stream::commitChanges()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

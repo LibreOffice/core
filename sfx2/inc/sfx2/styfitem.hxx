@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,28 +31,17 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-#include <tools/list.hxx>
-#ifndef _RC_HXX //autogen
 #include <tools/rc.hxx>
-#endif
 #include <rsc/rscsfx.hxx>
+#include <vector>
 
-#ifndef _SFX_STYFITEM_HXX_NOLIST
 struct SfxFilterTupel {
     String aName;
     sal_uInt16 nFlags;
 };
-
-DECLARE_LIST(SfxStyleFilter, SfxFilterTupel*)
-#else
-typedef List SfxStyleFilter;
-#endif
+typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
 
 // CLASS -----------------------------------------------------------------
 
@@ -80,11 +70,7 @@ public:
     void            SetImage( const Image& _rImg ) { aImage = _rImg; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
-DECLARE_LIST(SfxStyleFamilyList, SfxStyleFamilyItem*)
-//#else
-//typedef List SfxStyleFamilyList;
-//#endif
+typedef ::std::vector< SfxStyleFamilyItem* > SfxStyleFamilyList;
 
 class SFX2_DLLPUBLIC SfxStyleFamilies: public Resource
 {
@@ -98,11 +84,11 @@ public:
                         SfxStyleFamilies( ) {};
                         ~SfxStyleFamilies();
 
-    sal_uInt16              Count() const
-                        { return (sal_uInt16)aEntryList.Count(); }
+    size_t              size() const
+                        { return aEntryList.size(); }
 
-    const SfxStyleFamilyItem* GetObject(sal_uIntPtr nIdx) const
-                        { return (SfxStyleFamilyItem*)aEntryList.GetObject(nIdx); }
+    const SfxStyleFamilyItem* at(size_t nIdx) const
+                        { return (SfxStyleFamilyItem*)(aEntryList.empty() ? NULL : aEntryList[nIdx]); }
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource
 
@@ -114,8 +100,9 @@ public:
         @return
             <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
-    sal_Bool    updateImages( const ResId& _rId, const BmpColorMode _eMode );
+    sal_Bool    updateImages( const ResId& _rId );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

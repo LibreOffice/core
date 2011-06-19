@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,7 +124,9 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
-
+    // XLibraryQueryExecutable
+    virtual sal_Bool SAL_CALL HasExecutableCode(const rtl::OUString&)
+        throw (::com::sun::star::uno::RuntimeException);
     // Methods XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName( )
         throw (::com::sun::star::uno::RuntimeException);
@@ -140,6 +143,7 @@ public:
 };
 
 //============================================================================
+typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
 
 typedef ::cppu::ImplHelper1< ::com::sun::star::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
@@ -147,7 +151,7 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
 
-    typedef std::hash_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash > ModuleInfoMap;
+    typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash > ModuleInfoMap;
 
     sal_Bool mbLoadedSource;
     sal_Bool mbLoadedBinary;
@@ -199,3 +203,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

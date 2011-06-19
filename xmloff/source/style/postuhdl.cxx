@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMapping[] =
+SvXMLEnumMapEntry const aPostureGenericMapping[] =
 {
     { XML_POSTURE_NORMAL,       ITALIC_NONE     },
     { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
@@ -91,3 +92,4 @@ sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -918,8 +919,8 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString::createFromAscii(
-                    "com.sun.star.text.InContentMetadata"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.text.InContentMetadata")),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -997,8 +998,8 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString::createFromAscii(
-                    "com.sun.star.text.textfield.MetadataField"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.text.textfield.MetadataField")),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
@@ -1015,11 +1016,11 @@ void XMLMetaFieldImportContext::InsertMeta(
             if (-1 != nKey)
             {
                 static ::rtl::OUString sPropertyIsFixedLanguage(
-                    ::rtl::OUString::createFromAscii("IsFixedLanguage") );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")) );
                 Any any;
                 any <<= nKey;
                 xPropertySet->setPropertyValue(
-                    OUString::createFromAscii("NumberFormat"), any);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")), any);
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {
@@ -1189,7 +1190,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
         }
 
         default:
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             break;
     }
 }
@@ -1249,7 +1250,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
             break;
 
         default:
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             break;
     }
 }
@@ -1300,7 +1301,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
 
         default:
         {
-            DBG_ERROR("unknown index mark type!");
+            OSL_FAIL("unknown index mark type!");
             OUString sTmp;
             sServiceName = sTmp;
             break;
@@ -1540,7 +1541,8 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
         }
         else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
         {
-            sal_Bool bMainEntry = sal_False, bTmp;
+            sal_Bool bMainEntry = sal_False;
+            bool bTmp;
 
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
                 bMainEntry = bTmp;
@@ -1694,7 +1696,6 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_NOTE:
-#ifndef SVX_LIGHT
         if (rImport.GetTextImport()->IsInFrame())
         {
             // we must not insert footnotes into text frames
@@ -1707,10 +1708,6 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                                      *rImport.GetTextImport().get(),
                                                      nPrefix, rLocalName );
         }
-#else
-        // create default context to skip content
-        pContext = new SvXMLImportContext( rImport, nPrefix, rLocalName );
-#endif // #ifndef SVX_LIGHT
         rIgnoreLeadingSpace = sal_False;
         break;
 
@@ -1751,11 +1748,10 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                 new XMLTextFrameContext( rImport, nPrefix,
                                          rLocalName, xAttrList,
                                          TextContentAnchorType_AS_CHARACTER );
-            // --> OD 2004-08-24 #i33242# - remove check for text content.
+            // Remove check for text content. (#i33242#)
             // Check for text content is done on the processing of the hint
             if( TextContentAnchorType_AT_CHARACTER ==
                                             pTextFrameContext->GetAnchorType() )
-            // <--
             {
                 rHints.Insert( new XMLTextFrameHint_Impl(
                     pTextFrameContext, xAnchorPos ),
@@ -1904,15 +1900,14 @@ XMLParaContext::XMLParaContext(
     m_bHaveAbout(false),
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
-    // --> OD 2007-07-25 #i73509#
+    // Lost outline numbering in master document (#i73509#)
     mbOutlineLevelAttrFound( sal_False ),
-    // <--
     bIgnoreLeadingSpace( sal_True ),
     bHeading( bHead ),
     bIsListHeader( false ),
     bIsRestart (false),
-    nStartValue(0)
-    ,nStarFontsConvFlags( 0 )
+    nStartValue(0),
+    nStarFontsConvFlags( 0 )
 {
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextPAttrTokenMap();
@@ -1970,14 +1965,13 @@ XMLParaContext::XMLParaContext(
                         nTmp = 127;
                     nOutlineLevel = (sal_Int8)nTmp;
                 }
-                // --> OD 2007-07-25 #i73509#
+                // Lost outline numbering in master document (#i73509#)
                 mbOutlineLevelAttrFound = sal_True;
-                // <--
             }
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
             {
-                sal_Bool bBool;
+                bool bBool;
                 if( SvXMLUnitConverter::convertBool( bBool, rValue ) )
                 {
                     bIsListHeader = bBool;
@@ -1986,7 +1980,7 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_RESTART_NUMBERING:
             {
-                sal_Bool bBool;
+                bool bBool;
                 if (SvXMLUnitConverter::convertBool(bBool, rValue))
                 {
                     bIsRestart = bBool;
@@ -2075,15 +2069,14 @@ XMLParaContext::~XMLParaContext()
     OUString const sCellParaStyleName(xTxtImport->GetCellParaStyleDefault());
     if( sCellParaStyleName.getLength() > 0 )
     {
-        // --> OD 2007-08-16 #i80724#
-        // suppress handling of outline and list attributes,
-        // because of side effects of method <SetStyleAndAttrs(..)>
+        /* Suppress handling of outline and list attributes,
+           because of side effects of method <SetStyleAndAttrs(..)> (#i80724#)
+        */
         xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                       sCellParaStyleName,
                                       sal_True,
                                       sal_False, -1, // suppress outline handling
                                       sal_False );   // suppress list attributes handling
-        // <--
     }
 
     // #103445# for headings without style name, find the proper style
@@ -2091,13 +2084,12 @@ XMLParaContext::~XMLParaContext()
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
-    // --> OD 2007-07-25 #i73509# - add paramter <mbOutlineLevelAttrFound>
+    // Add paramter <mbOutlineLevelAttrFound> (#i73509#)
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
                                                sStyleName,
                                                sal_True,
                                                mbOutlineLevelAttrFound,
                                                bHeading ? nOutlineLevel : -1 );
-    // <--
 
     // handle list style header
     if (bHeading && (bIsListHeader || bIsRestart))
@@ -2212,21 +2204,23 @@ XMLParaContext::~XMLParaContext()
                 {
                     const XMLTextFrameHint_Impl *pFHint =
                         (const XMLTextFrameHint_Impl *)pHint;
-                    // --> OD 2004-08-24 #i33242# - check for text content
+                    // Check for text content (#i33242#)
                     Reference < XTextContent > xTextContent =
                                                     pFHint->GetTextContent();
                     if ( xTextContent.is() )
                     {
-                        // OD 2004-04-20 #i26791#
+                        /* Core impl. of the unification of drawing objects and
+                           Writer fly frames (#i26791#)
+                        */
                         Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                         if ( pFHint->IsBoundAtChar() )
                         {
                             xTextContent->attach( xRange );
                         }
                     }
-                    // <--
-                    // --> OD 2004-08-24 #i33242# - consider, that hint can
-                    // also contain a shape - e.g. drawing object of type 'Text'.
+                    /* Consider, that hint can also contain a shape -
+                       e.g. drawing object of type 'Text'. (#i33242#)
+                    */
                     else
                     {
                         Reference < XShape > xShape = pFHint->GetShape();
@@ -2252,16 +2246,16 @@ XMLParaContext::~XMLParaContext()
                             }
                         }
                     }
-                    // <--
                 }
                 break;
-            // --> DVO, OD 2004-07-14 #i26791#
+            /* Core impl. of the unification of drawing objects and
+               Writer fly frames (#i26791#)
+            */
             case XML_HINT_DRAW:
                 {
                     const XMLDrawHint_Impl *pDHint =
                         static_cast<const XMLDrawHint_Impl*>(pHint);
-                    // --> OD 2004-08-24 #i33242# - improvement: hint directly
-                    // provides the shape.
+                    // Improvement: hint directly provides the shape. (#i33242#)
                     Reference < XShape > xShape = pDHint->GetShape();
                     if ( xShape.is() )
                     {
@@ -2283,11 +2277,8 @@ XMLParaContext::~XMLParaContext()
                             xPropSet->setPropertyValue(sTextRange, aPos);
                         }
                     }
-                    // <--
                 }
                 break;
-            // <--
-
             default:
                 DBG_ASSERT( !this, "What's this" );
                 break;
@@ -2444,3 +2435,5 @@ SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

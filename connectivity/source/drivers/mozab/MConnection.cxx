@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
 // -----------------------------------------------------------------------------
 ::rtl::OUString OConnection::getDriverImplementationName()
 {
-    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
 }
 
 // -----------------------------------------------------------------------------
@@ -127,6 +128,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     ,m_nMaxResultRecords( -1 )
     ,m_aNameMapper(NULL)
     ,m_eSDBCAddressType(SDBCAddress::Unknown)
+    ,m_bForceLoadTable(false)
 {
     m_pDriver->acquire();
 
@@ -157,7 +159,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    OSL_ENSURE( url.copy( 0, nLen ).equalsAscii( "sdbc:address" ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+    OSL_ENSURE( url.copy( 0, nLen ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:address" ) ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
     ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
@@ -571,11 +573,11 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
                 "$1$", sParameter
              ) );
             ::dbtools::throwGenericSQLException( sError, _rxContext );
-            OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (1)!" );
+            OSL_FAIL( "OConnection::throwSQLException: unreachable (1)!" );
         }
 
         throwGenericSQLException( _rError.getResId(), _rxContext );
-        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (2)!" );
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
     }
 
     if ( _rError.getErrorCondition() != 0 )
@@ -586,7 +588,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
-        OSL_ENSURE( false, "OConnection::throwSQLException: unreachable (3)!" );
+        OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
     }
 
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
@@ -601,3 +603,5 @@ void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const R
 }
 
 } } // namespace connectivity::mozab
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

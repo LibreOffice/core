@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,14 @@
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
 
-#ifndef __FRAMEWORK_CLASS_CONVERTER_HXX_
 #include <classes/converter.hxx>
-#endif
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <general.h>
 #include <services.h>
+
+#include "helper/mischelper.hxx"
 
 //________________________________
 //  interface includes
@@ -124,8 +125,8 @@ DEFINE_INIT_SERVICE( JobExecutor,
                             css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
                             if (xNotifier.is())
                             {
-                                css::uno::Reference< css::container::XContainerListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-                                xNotifier->addContainerListener(xThis);
+                                m_xConfigListener = new WeakContainerListener(this);
+                                xNotifier->addContainerListener(m_xConfigListener);
                             }
 
                             // don't close cfg here!
@@ -156,6 +157,9 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
 
 JobExecutor::~JobExecutor()
 {
+    css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    if (xNotifier.is())
+        xNotifier->removeContainerListener(m_xConfigListener);
     LOG_ASSERT(m_aConfig.getMode() == ConfigAccess::E_CLOSED, "JobExecutor::~JobExecutor()\nConfiguration don't send dispoing() message!\n")
 }
 
@@ -380,3 +384,5 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent ) thr
 }
 
 } // namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

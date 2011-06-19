@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
+
+#include <osl/diagnose.h>
+
 #include "internal/basereader.hxx"
 
-#ifndef XML_PARSER_HXX_INCLUDED
 #include "internal/xml_parser.hxx"
-#endif
 
 #include "assert.h"
 #include <memory>
@@ -44,8 +46,6 @@ m_ZipFile( DocumentName )
 }
 
 //------------------------------
-//
-//------------------------------
 
 CBaseReader::CBaseReader(void * sw, zlib_filefunc_def* fa):
 m_ZipFile( sw , fa )
@@ -53,23 +53,17 @@ m_ZipFile( sw , fa )
 }
 
 //------------------------------
-//
-//------------------------------
 
 CBaseReader::~CBaseReader()
 {
 }
 
 //------------------------------
-//
-//------------------------------
 
 void CBaseReader::start_document()
 {
 }
 
-//------------------------------
-//
 //------------------------------
 
 void CBaseReader::end_document()
@@ -97,10 +91,12 @@ void CBaseReader::Initialize( const std::string& ContentName)
     #endif
         )
     {
-        ENSURE( false, ex.what() );
+        OSL_ENSURE( false, ex.what() );
     }
     catch(...)
     {
-        ENSURE(false, "Unknown error");
+        OSL_ENSURE(false, "Unknown error");
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

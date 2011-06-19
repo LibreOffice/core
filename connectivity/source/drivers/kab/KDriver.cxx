@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                OSL_FAIL( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
@@ -125,7 +126,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "kabdrv1" ) );
+    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "kabdrv1" ) ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -359,7 +360,7 @@ Sequence< ::rtl::OUString > KabDriver::getSupportedServiceNames_Static(  ) throw
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
 
     return aSNS;
 }
@@ -417,7 +418,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:kab:"), 16));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab:")), 16));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
@@ -471,3 +472,4 @@ Reference< XInterface >  SAL_CALL KabDriver::Create( const Reference< XMultiServ
     return *(new KabDriver(_rxFactory));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,17 +52,17 @@ using namespace ::com::sun::star::lang;
 ::rtl::OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexDescriptor");
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndex");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VIndexDescriptor"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VIndex"));
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexDescriptor");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.IndexDescriptor"));
     else
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Index");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Index"));
 
     return aSupported;
 }
@@ -176,7 +177,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumn
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( false, "OIndex::getColumns: caught an exception!" );
+        OSL_FAIL( "OIndex::getColumns: caught an exception!" );
     }
 
     return const_cast<OIndex*>(this)->m_pColumns;
@@ -221,3 +222,4 @@ void OIndex::refreshColumns()
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

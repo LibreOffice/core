@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,6 @@
 #include "calc/CTable.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-//#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-//#include <com/sun/star/ucb/XContentAccess.hpp>
-//#endif
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -79,7 +77,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 
-// -------------------------------------------------------------------------
 
 void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {
@@ -497,22 +494,22 @@ void OCalcTable::fillColumns()
                 }
                 break;
             case DataType::DECIMAL:
-                aTypeName = ::rtl::OUString::createFromAscii("DECIMAL");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
                 break;
             case DataType::BIT:
-                aTypeName = ::rtl::OUString::createFromAscii("BOOL");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOL"));
                 break;
             case DataType::DATE:
-                aTypeName = ::rtl::OUString::createFromAscii("DATE");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
                 break;
             case DataType::TIME:
-                aTypeName = ::rtl::OUString::createFromAscii("TIME");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = ::rtl::OUString::createFromAscii("TIMESTAMP");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
                 break;
             default:
-                OSL_ASSERT("missing type name");
+                OSL_FAIL("missing type name");
                 aTypeName = ::rtl::OUString();
         }
 
@@ -869,3 +866,4 @@ void OCalcTable::FileClose()
 }
 // -------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

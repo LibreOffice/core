@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,10 @@
 #define _DDECTRL_HXX
 
 #include <tools/link.hxx>
-#ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>
-#endif
 #include <tools/string.hxx>
 
 class DdeConnection;
-class DdeConnections;
 class DdeData;
 
 class SbiDdeControl
@@ -44,7 +42,7 @@ private:
     DECL_LINK( Data, DdeData* );
     SbError GetLastErr( DdeConnection* );
     sal_Int16 GetFreeChannel();
-    DdeConnections* pConvList;
+    std::vector<DdeConnection*> aConvList;
     String aData;
 
 public:
@@ -54,11 +52,13 @@ public:
 
     SbError Initiate( const String& rService, const String& rTopic,
                      sal_Int16& rnHandle );
-    SbError Terminate( sal_Int16 nChannel );
+    SbError Terminate( sal_uInt16 nChannel );
     SbError TerminateAll();
-    SbError Request( sal_Int16 nChannel, const String& rItem, String& rResult );
-    SbError Execute( sal_Int16 nChannel, const String& rCommand );
-    SbError Poke( sal_Int16 nChannel, const String& rItem, const String& rData );
+    SbError Request( sal_uInt16 nChannel, const String& rItem, String& rResult );
+    SbError Execute( sal_uInt16 nChannel, const String& rCommand );
+    SbError Poke( sal_uInt16 nChannel, const String& rItem, const String& rData );
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

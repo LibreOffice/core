@@ -5,17 +5,21 @@ Summary: %productname desktop integration
 Name: %pkgprefix-suse-menus
 Group: Office
 License: LGPL
-Vendor: OpenOffice.org
+Vendor: The Document Foundation
 AutoReqProv: no
 BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
 Requires: /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openoffice.org3-desktop-integration
+Provides: libreoffice-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %define _binary_filedigest_algorithm 1
 %define _binary_payload w9.gzdio
+
+%define gnome_dir /opt/gnome
+%define gnome_mime_theme hicolor
+
 %description 
 %productname desktop integration
 
@@ -32,8 +36,7 @@ mkdir -p $RPM_BUILD_ROOT
 # set parameters for the create_tree script 
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/opt/kde3
-export GNOMEDIR=/opt/gnome
-export GNOME_MIME_THEME=hicolor
+export GNOMEDIR=%{gnome_dir}
 
 ./create_tree.sh
 
@@ -74,6 +77,51 @@ if [ -x /opt/gnome/bin/update-desktop-database ]; then
   /opt/gnome/bin/update-desktop-database 
 fi 
 
+# add symlinks so that nautilus can identify the mime-icons 
+# not strictly freedesktop-stuff but there is no common naming scheme yet.
+# One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
+# for e.g. application/vnd.oasis.opendocument.spreadsheet
+link_target_root="%{gnome_dir}/share/icons/%{gnome_mime_theme}"
+
+if [ ! -d "${link_target_root}" ]
+then
+  link_target_root="%{gnome_dir}/share/icons/gnome"
+fi
+
+for subdir in `cd ${link_target_root}; ls -d *`
+do
+  link_dir="%{gnome_dir}/share/icons/%{gnome_mime_theme}/$subdir/mimetypes"
+  link_target_dir="../../../gnome/$subdir/mimetypes/"
+
+  test -d "${link_dir}" || mkdir -p "${link_dir}"
+  test -d ${link_dir}/${link_target_dir} || continue
+
+  icon=${link_target_dir}%iconprefix-drawing.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.png
+  icon=${link_target_dir}%iconprefix-drawing-template.png;            test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.draw.template.png
+  icon=${link_target_dir}%iconprefix-formula.png;                     test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.math.png
+  icon=${link_target_dir}%iconprefix-master-document.png;             test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.global.png
+  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.base.png
+  icon=${link_target_dir}%iconprefix-oasis-database.png;              test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.database.png
+  icon=${link_target_dir}%iconprefix-oasis-drawing.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  icon=${link_target_dir}%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  icon=${link_target_dir}%iconprefix-oasis-formula.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
+  icon=${link_target_dir}%iconprefix-oasis-master-document.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  icon=${link_target_dir}%iconprefix-oasis-presentation.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  icon=${link_target_dir}%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  icon=${link_target_dir}%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  icon=${link_target_dir}%iconprefix-oasis-spreadsheet-template.png;  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  icon=${link_target_dir}%iconprefix-oasis-text.png;                  test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text.png
+  icon=${link_target_dir}%iconprefix-oasis-text-template.png;         test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  icon=${link_target_dir}%iconprefix-oasis-web-template.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  icon=${link_target_dir}%iconprefix-presentation.png;                test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.png
+  icon=${link_target_dir}%iconprefix-presentation-template.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.impress.template.png
+  icon=${link_target_dir}%iconprefix-spreadsheet.png;                 test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.png
+  icon=${link_target_dir}%iconprefix-spreadsheet-template.png;        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.calc.template.png
+  icon=${link_target_dir}%iconprefix-text.png;                        test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.png
+  icon=${link_target_dir}%iconprefix-text-template.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.sun.xml.writer.template.png
+  icon=${link_target_dir}%iconprefix-extension.png;                   test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.openofficeorg.extension.png
+done
+
 # run only on first install, since postun is run when updating
 # post would be run before the old files are removed 
 if [ "$1" = "1" ] ; then  # first install
@@ -104,14 +152,18 @@ sed '
 # now append our stuff to the temporary file
 cat >> /etc/mime.types.tmp$$ << END
 application/vnd.oasis.opendocument.text odt
+application/vnd.oasis.opendocument.text-flat-xml fodt
 application/vnd.oasis.opendocument.text-template ott
 application/vnd.oasis.opendocument.text-web oth
 application/vnd.oasis.opendocument.text-master odm
 application/vnd.oasis.opendocument.graphics odg
+application/vnd.oasis.opendocument.graphics-flat-xml fodg
 application/vnd.oasis.opendocument.graphics-template otg
 application/vnd.oasis.opendocument.presentation odp
+application/vnd.oasis.opendocument.presentation-flat-xml fodp
 application/vnd.oasis.opendocument.presentation-template otp
 application/vnd.oasis.opendocument.spreadsheet ods
+application/vnd.oasis.opendocument.spreadsheet-flat-xml fods
 application/vnd.oasis.opendocument.spreadsheet-template ots
 application/vnd.oasis.opendocument.chart odc
 application/vnd.oasis.opendocument.formula odf
@@ -175,6 +227,7 @@ then
   cat >> /etc/mailcap.tmp$$ << END
 # OpenOffice.org
 application/vnd.oasis.opendocument.text; %unixfilename -view %s
+application/vnd.oasis.opendocument.text-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-web; %unixfilename -view %s
 application/vnd.oasis.opendocument.text-master; %unixfilename -view %s
@@ -190,6 +243,7 @@ application/vnd.stardivision.math; %unixfilename -view %s
 application/x-starmath; %unixfilename -view %s
 application/msword; %unixfilename -view %s
 application/vnd.oasis.opendocument.spreadsheet; %unixfilename -view %s
+application/vnd.oasis.opendocument.spreadsheet-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.spreadsheet-template; %unixfilename -view %s
 application/vnd.sun.xml.calc; %unixfilename -view %s
 application/vnd.sun.xml.calc.template; %unixfilename -view %s
@@ -202,6 +256,7 @@ application/msexcel; %unixfilename -view %s
 application/vnd.ms-excel; %unixfilename -view %s
 application/x-msexcel; %unixfilename -view %s
 application/vnd.oasis.opendocument.presentation; %unixfilename -view %s
+application/vnd.oasis.opendocument.presentation-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.presentation-template; %unixfilename -view %s
 application/vnd.sun.xml.impress; %unixfilename -view %s
 application/vnd.sun.xml.impress.template; %unixfilename -view %s
@@ -212,6 +267,7 @@ application/mspowerpoint; %unixfilename -view %s
 application/vnd.ms-powerpoint; %unixfilename -view %s
 application/x-mspowerpoint; %unixfilename -view %s
 application/vnd.oasis.opendocument.graphics; %unixfilename -view %s
+application/vnd.oasis.opendocument.graphics-flat-xml; %unixfilename -view %s
 application/vnd.oasis.opendocument.graphics-template; %unixfilename -view %s
 application/vnd.sun.xml.draw; %unixfilename -view %s
 application/vnd.sun.xml.draw.template; %unixfilename -view %s
@@ -223,6 +279,7 @@ application/vnd.wordperfect; %unixfilename -view %s
 application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
+application/vnd.lotus-wordpro; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
 application/vnd.openofficeorg.extension; %unixfilename %s
 application/vnd.openxmlformats-officedocument.wordprocessingml.document; %unixfilename -view %s
@@ -237,6 +294,7 @@ application/vnd.openxmlformats-officedocument.presentationml.presentation; %unix
 application/vnd.ms-powerpoint.presentation.macroenabled.12; %unixfilename -view %s
 application/vnd.openxmlformats-officedocument.presentationml.template; %unixfilename -view %s
 application/vnd.ms-powerpoint.template.macroenabled.12; %unixfilename -view %s
+application/x-hwp; %unixfilename -view %s
 END
 
   # and replace the original file
@@ -280,7 +338,12 @@ for themedir in /opt/gnome/share/icons/gnome /opt/gnome/share/icons/hicolor /opt
 done
 
 %files
-%attr(0755,root,root) /usr/bin/soffice
+%if "%unixfilename" != "libreoffice%productversion"
+# compat symlinks
+%attr(0755,root,root) /opt/%unixfilename
+%attr(0755,root,root) /usr/bin/libreoffice%productversion
+%attr(0755,root,root) /usr/bin/libreoffice%productversion-printeradmin
+%endif
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -299,7 +362,6 @@ done
 /opt/kde3/share/mimelnk/application/*.desktop
 /opt/gnome/share/icons/gnome/*/apps/*png
 /opt/gnome/share/icons/gnome/*/mimetypes/*png
-/opt/gnome/share/icons/hicolor/*/mimetypes/*png
 /opt/kde3/share/icons/hicolor/*/apps/*png
 /opt/kde3/share/icons/hicolor/*/mimetypes/*png
 /opt/kde3/share/icons/locolor/*/apps/*png

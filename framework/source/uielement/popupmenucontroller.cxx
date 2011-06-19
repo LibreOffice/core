@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,13 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-//#include <toolkit/unohlp.hxx>
 
 #include <rtl/ref.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include "uielement/popupmenucontroller.hxx"
 #include "services.h"
@@ -193,7 +193,7 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
 
 Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() throw (RuntimeException)
 {
-    ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+    SolarMutexGuard aSolarLock;
 
     Reference< awt::XWindow > xRet;
 
@@ -246,3 +246,4 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createItemWindow( const 
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

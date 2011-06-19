@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include "svl/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/script/XLibraryContainer3.hpp"
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <memory>
@@ -61,7 +61,6 @@ namespace {
 typedef ::cppu::ImplInheritanceHelper1<
     ::dp_registry::backend::PackageRegistryBackend, util::XUpdatable > t_helper;
 
-//==============================================================================
 class BackendImpl : public t_helper
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -162,13 +161,13 @@ BackendImpl::BackendImpl(
                                      "vnd.sun.star.basic-library"),
                                OUString() /* no file filter */,
                                getResourceString(RID_STR_BASIC_LIB),
-                               RID_IMG_SCRIPTLIB, RID_IMG_SCRIPTLIB_HC ) ),
+                               RID_IMG_SCRIPTLIB) ),
       m_xDialogLibTypeInfo( new Package::TypeInfo(
                                 OUSTR("application/"
                                       "vnd.sun.star.dialog-library"),
                                 OUString() /* no file filter */,
                                 getResourceString(RID_STR_DIALOG_LIB),
-                                RID_IMG_DIALOGLIB, RID_IMG_DIALOGLIB_HC ) ),
+                                RID_IMG_DIALOGLIB) ),
       m_typeInfos( 2 )
 {
     m_typeInfos[ 0 ] = m_xBasicLibTypeInfo;
@@ -297,7 +296,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 // Package
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
@@ -314,15 +312,13 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard &,
-    ::rtl::Reference<AbortChannel> const &,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard & /* guard */,
+    ::rtl::Reference<AbortChannel> const & /* abortChannel */,
+    Reference<XCommandEnvironment> const & /* xCmdEnv */ )
 {
-    (void)xCmdEnv;
-
     BackendImpl * that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
 
@@ -332,16 +328,67 @@ BackendImpl::PackageImpl::isRegistered_(
         beans::Ambiguous<sal_Bool>( registered, false /* IsAmbiguous */ ) );
 }
 
-//______________________________________________________________________________
+void
+lcl_maybeRemoveScript(
+        bool const bExists,
+        OUString const& rName,
+        OUString const& rScriptURL,
+        Reference<css::script::XLibraryContainer3> const& xScriptLibs)
+{
+    if (bExists && xScriptLibs.is() && xScriptLibs->hasByName(rName))
+    {
+        const OUString sScriptUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
+        if (sScriptUrl.equals(rScriptURL))
+            xScriptLibs->removeLibrary(rName);
+    }
+}
+
+bool
+lcl_maybeAddScript(
+        bool const bExists,
+        OUString const& rName,
+        OUString const& rScriptURL,
+        Reference<css::script::XLibraryContainer3> const& xScriptLibs)
+{
+    if (bExists && xScriptLibs.is())
+    {
+        bool bCanAdd = true;
+        if (xScriptLibs->hasByName(rName))
+        {
+            const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
+            //We assume here that library names in extensions are unique, which may not be the case
+            //ToDo: If the script exist in another extension, then both extensions must have the
+            //same id
+            if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
+                || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
+            {
+                xScriptLibs->removeLibrary(rName);
+                bCanAdd = true;
+            }
+            else
+            {
+                bCanAdd = false;
+            }
+        }
+
+        if (bCanAdd)
+        {
+            xScriptLibs->createLibraryLink(rName, rScriptURL, false);
+            return xScriptLibs->hasByName(rName);
+        }
+    }
+
+    return false;
+}
+
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard &,
+    ::osl::ResettableMutexGuard & /* guard */,
     bool doRegisterPackage,
     bool startup,
-    ::rtl::Reference<AbortChannel> const &,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::rtl::Reference<AbortChannel> const & /* abortChannel */,
+    Reference<XCommandEnvironment> const & /* xCmdEnv */ )
 {
-    (void)xCmdEnv;
-
     BackendImpl * that = getMyBackend();
 
     Reference< deployment::XPackage > xThisPackage( this );
@@ -390,19 +437,8 @@ void BackendImpl::PackageImpl::processPackage_(
             //we also prevent and live deployment at startup
             if (!isRemoved() && !startup)
             {
-                if (bScript && xScriptLibs.is() && xScriptLibs->hasByName(m_name))
-                {
-                    const OUString sScriptUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
-                    if (sScriptUrl.equals(m_scriptURL))
-                        xScriptLibs->removeLibrary(m_name);
-                }
-
-                if (bDialog && xDialogLibs.is() && xDialogLibs->hasByName(m_dialogName))
-                {
-                    const OUString sDialogUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
-                    if (sDialogUrl.equals(m_dialogURL))
-                        xDialogLibs->removeLibrary(m_dialogName);
-                }
+                lcl_maybeRemoveScript(bScript, m_name, m_scriptURL, xScriptLibs);
+                lcl_maybeRemoveScript(bDialog, m_dialogName, m_dialogURL, xDialogLibs);
             }
             getMyBackend()->revokeEntryFromDb(getURL());
             return;
@@ -413,72 +449,14 @@ void BackendImpl::PackageImpl::processPackage_(
 
     // Update LibraryContainer
     bool bScriptSuccess = false;
-    const bool bReadOnly = false;
-
     bool bDialogSuccess = false;
     if (!startup)
     {
         //If there is a bundled extension, and the user installes the same extension
         //then the script from the bundled extension must be removed. If this does not work
         //then live deployment does not work for scripts.
-        if (bScript && xScriptLibs.is())
-        {
-            bool bCanAdd = true;
-            if (xScriptLibs->hasByName(m_name))
-            {
-                const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(m_name);
-                //We assume here that library names in extensions are unique, which may not be the case
-                //ToDo: If the script exist in another extension, then both extensions must have the
-                //same id
-                if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
-                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
-                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
-                {
-                    xScriptLibs->removeLibrary(m_name);
-                    bCanAdd = true;
-                }
-                else
-                {
-                    bCanAdd = false;
-                }
-            }
-
-            if (bCanAdd)
-            {
-                xScriptLibs->createLibraryLink( m_name, m_scriptURL, bReadOnly );
-                bScriptSuccess = xScriptLibs->hasByName( m_name );
-            }
-        }
-
-
-        if (bDialog && xDialogLibs.is())
-        {
-            bool bCanAdd = true;
-            if (xDialogLibs->hasByName(m_dialogName))
-            {
-                const OUString sOriginalUrl = xDialogLibs->getOriginalLibraryLinkURL(m_dialogName);
-                //We assume here that library names in extensions are unique, which may not be the case
-                //ToDo: If the script exist in another extension, then both extensions must have the
-                //same id
-                if (sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"))
-                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE"))
-                    || sOriginalUrl.match(OUSTR("vnd.sun.star.expand:$BUNDLED_EXTENSIONS")))
-                {
-                    xDialogLibs->removeLibrary(m_dialogName);
-                    bCanAdd = true;
-                }
-                else
-                {
-                    bCanAdd = false;
-                }
-            }
-
-            if (bCanAdd)
-            {
-                xDialogLibs->createLibraryLink( m_dialogName, m_dialogURL, bReadOnly );
-                bDialogSuccess = xDialogLibs->hasByName(m_dialogName);
-            }
-        }
+        bScriptSuccess = lcl_maybeAddScript(bScript, m_name, m_scriptURL, xScriptLibs);
+        bDialogSuccess = lcl_maybeAddScript(bDialog, m_dialogName, m_dialogURL, xDialogLibs);
     }
     bool bSuccess = bScript || bDialog;     // Something must have happened
     if( bRunning && !startup)
@@ -502,3 +480,4 @@ extern sdecl::ServiceDecl const serviceDecl(
 } // namespace backend
 } // namespace dp_registry
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

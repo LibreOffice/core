@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,3 +90,5 @@ sal_Bool DashListPtrItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uI
     return sal_False;
 }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

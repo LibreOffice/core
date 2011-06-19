@@ -28,6 +28,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_QUADRATICSHADOWPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_QUADRATICSHADOWPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -42,7 +44,7 @@ namespace drawinglayer
         /** DiscreteShadow data class
 
          */
-        class DiscreteShadow
+        class DRAWINGLAYER_DLLPUBLIC DiscreteShadow
         {
         private:
             /// the original shadow BitmapEx in a special form
@@ -85,7 +87,7 @@ namespace drawinglayer
         /** DiscreteShadowPrimitive2D class
 
          */
-        class DiscreteShadowPrimitive2D : public DiscreteMetricDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC DiscreteShadowPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // the object transformation of the rectangular object

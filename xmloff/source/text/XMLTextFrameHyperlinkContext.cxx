@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
             break;
         case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
             {
-                sal_Bool bTmp;
+                bool bTmp;
                 if( rImport.GetMM100UnitConverter().convertBool( bTmp,
                                                                   rValue ) )
                 {
@@ -171,7 +172,7 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
     return xTxt;
 }
 
-// --> OD 2004-08-24 #33242#
+// Frame "to character": anchor moves from first to last char after saving (#i33242#)
 Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 {
     Reference < drawing::XShape > xShape;
@@ -183,6 +184,5 @@ Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 
     return xShape;
 }
-// <--
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -247,11 +248,13 @@ namespace xmloff
         // insert the element into the parent container
         if (!m_sName.getLength())
         {
-            OSL_ENSURE(sal_False, "OElementImport::EndElement: did not find a name attribute!");
+            OSL_FAIL("OElementImport::EndElement: did not find a name attribute!");
             m_sName = implGetDefaultName();
         }
 
-        m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+        if (m_xParentContainer.is())
+            m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+
         LEAVE_LOG_CONTEXT( );
     }
 
@@ -316,7 +319,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OElementImport::implApplySpecificProperties: could not set the properties (using the XMultiPropertySet)!");
+                OSL_FAIL("OElementImport::implApplySpecificProperties: could not set the properties (using the XMultiPropertySet)!");
             }
         }
 
@@ -336,8 +339,7 @@ namespace xmloff
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(sal_False,
-                            ::rtl::OString("OElementImport::implApplySpecificProperties: could not set the property \"")
+                    OSL_FAIL(::rtl::OString("OElementImport::implApplySpecificProperties: could not set the property \"")
                         +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                         +=  ::rtl::OString("\"!"));
                 }
@@ -374,7 +376,7 @@ namespace xmloff
                         ::rtl::OString aMessage( "OElementImport::implApplyGenericProperties: encountered an unknown property (" );
                         aMessage += ::rtl::OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
                         aMessage += "), but component is no PropertyBag!";
-                        OSL_ENSURE( false, aMessage.getStr() );
+                        OSL_FAIL( aMessage.getStr() );
                     #endif
                         continue;
                     }
@@ -410,7 +412,7 @@ namespace xmloff
 
                 if ( bPropIsSequence != bValueIsSequence )
                 {
-                    OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: either both value and property should be a sequence, or none of them!" );
+                    OSL_FAIL( "OElementImport::implImportGenericProperties: either both value and property should be a sequence, or none of them!" );
                     continue;
                 }
 
@@ -464,13 +466,13 @@ namespace xmloff
                             aPropValues->Value <<= static_cast< sal_Int64 >( nVal );
                             break;
                         default:
-                            OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: unsupported value type!" );
+                            OSL_FAIL( "OElementImport::implImportGenericProperties: unsupported value type!" );
                             break;
                         }
                     }
                     break;
                     default:
-                        OSL_ENSURE( false, "OElementImport::implApplyGenericProperties: non-double values not supported!" );
+                        OSL_FAIL( "OElementImport::implImportGenericProperties: non-double values not supported!" );
                         break;
                     }
                 }
@@ -479,8 +481,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False,
-                        ::rtl::OString("OElementImport::EndElement: could not set the property \"")
+                OSL_FAIL(::rtl::OString("OElementImport::EndElement: could not set the property \"")
                     +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                     +=  ::rtl::OString("\"!"));
             }
@@ -493,7 +494,7 @@ namespace xmloff
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
         Sequence< ::rtl::OUString > aNames = m_xParentContainer->getElementNames();
-        static const ::rtl::OUString sUnnamedName = ::rtl::OUString::createFromAscii("unnamed");
+        static const ::rtl::OUString sUnnamedName(RTL_CONSTASCII_USTRINGPARAM("unnamed"));
 
         ::rtl::OUString sReturn;
         const ::rtl::OUString* pNames = NULL;
@@ -516,7 +517,7 @@ namespace xmloff
                 continue;
             return sReturn;
         }
-        OSL_ENSURE(sal_False, "OElementImport::implGetDefaultName: did not find a free name!");
+        OSL_FAIL("OElementImport::implGetDefaultName: did not find a free name!");
         return sUnnamedName;
     }
 
@@ -648,7 +649,7 @@ namespace xmloff
             xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);
         }
         else
-            OSL_ENSURE(sal_False, "OElementImport::createElement: no service name to create an element!");
+            OSL_FAIL("OElementImport::createElement: no service name to create an element!");
 
         return xReturn;
     }
@@ -857,7 +858,7 @@ namespace xmloff
             // get the property set info
             if (!m_xInfo.is())
             {
-                OSL_ENSURE(sal_False, "OControlImport::StartElement: no PropertySetInfo!");
+                OSL_FAIL("OControlImport::StartElement: no PropertySetInfo!");
                 return;
             }
 
@@ -890,7 +891,7 @@ namespace xmloff
                         if (!bRetrievedValues)
                         {
                             getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
-                            ENSURE_OR_BREAK( pValueProperty, "OControlImport::StartElement: illegal value property names!" );
+                            ENSURE_OR_BREAK( pCurrentValueProperty || pValueProperty, "OControlImport::StartElement: illegal value property names!" );
                             bRetrievedValues = sal_True;
                         }
                         ENSURE_OR_BREAK((PROPID_VALUE != aValueProps->Handle) || pValueProperty,
@@ -998,7 +999,6 @@ namespace xmloff
         // In case the Text is not part of the property sequence (or occurs _before_
         // the DefaultText, which can happen for other value/default-value property names),
         // this means that the Text (the value property) is incorrectly imported.
-        // #102475# - 04.09.2002 - fs@openoffice.org
 
         sal_Bool bRestoreValuePropertyValue = sal_False;
         Any aValuePropertyValue;
@@ -1011,7 +1011,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while retrieving the class id!" );
+            OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the class id!" );
         }
 
         const sal_Char* pValueProperty = NULL;
@@ -1048,7 +1048,7 @@ namespace xmloff
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while retrieving the current value property!" );
+                    OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the current value property!" );
                 }
             }
         }
@@ -1065,7 +1065,7 @@ namespace xmloff
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OControlImport::EndElement: caught an exception while restoring the value property!" );
+                OSL_FAIL( "OControlImport::EndElement: caught an exception while restoring the value property!" );
             }
         }
 
@@ -1124,7 +1124,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    //added by BerryJia for fixing bug102407 2002-11-5
+
     Reference< XPropertySet > OControlImport::createElement()
     {
         const Reference<XPropertySet> xPropSet = OElementImport::createElement();
@@ -1558,7 +1558,7 @@ namespace xmloff
         {
             ::rtl::OUString sDefaultControl;
             OSL_VERIFY( aDefaultControlPropertyPos->Value >>= sDefaultControl );
-            if ( sDefaultControl.equalsAscii( "stardiv.one.form.control.Edit" ) )
+            if ( sDefaultControl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stardiv.one.form.control.Edit" ) ) )
             {
                 // complete remove this property value from the array. Today's "default value" of the "DefaultControl"
                 // property is sufficient
@@ -1622,12 +1622,12 @@ namespace xmloff
             const Reference< sax::XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const ::rtl::OUString s_sOptionElementName = ::rtl::OUString::createFromAscii("option");
+        static const ::rtl::OUString s_sOptionElementName(RTL_CONSTASCII_USTRINGPARAM("option"));
         if (s_sOptionElementName == _rLocalName)
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const ::rtl::OUString s_sItemElementName = ::rtl::OUString::createFromAscii("item");
+        static const ::rtl::OUString s_sItemElementName(RTL_CONSTASCII_USTRINGPARAM("item"));
         if (s_sItemElementName == _rLocalName)
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 
@@ -1839,9 +1839,9 @@ namespace xmloff
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
         const ::rtl::OUString sLabelAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii("label"));
+            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("label")));
         const ::rtl::OUString sValueAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii("value"));
+            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")));
 
         // -------------------
         // the label attribute
@@ -1878,13 +1878,13 @@ namespace xmloff
             GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
-        sal_Bool bSelected;
+        bool bSelected;
         GetImport().GetMM100UnitConverter().convertBool(bSelected, _rxAttrList->getValueByName(sSelectedAttribute));
         if (bSelected)
             m_xListBoxImport->implSelectCurrentItem();
 
         // same for the default selected
-        sal_Bool bDefaultSelected;
+        bool bDefaultSelected;
         GetImport().GetMM100UnitConverter().convertBool(bDefaultSelected, _rxAttrList->getValueByName(sDefaultSelectedAttribute));
         if (bDefaultSelected)
             m_xListBoxImport->implDefaultSelectCurrentItem();
@@ -2136,7 +2136,7 @@ namespace xmloff
         }
         else
         {
-            OSL_ENSURE(sal_False, "OFormImport::implTranslateStringListProperty: invalid value (empty)!");
+            OSL_FAIL("OFormImport::implTranslateStringListProperty: invalid value (empty)!");
         }
 
         aProp.Value <<= aList;
@@ -2229,3 +2229,4 @@ namespace xmloff
 }   // namespace xmloff
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

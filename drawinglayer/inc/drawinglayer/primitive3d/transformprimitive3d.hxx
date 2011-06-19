@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
+
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
@@ -46,7 +49,7 @@ namespace drawinglayer
             Please see the description for TransformPrimitive2D since these
             primitives are pretty similar.
          */
-        class TransformPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC TransformPrimitive3D : public GroupPrimitive3D
         {
         private:
             // the 3D transformation to apply
@@ -79,3 +82,5 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

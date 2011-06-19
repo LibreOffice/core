@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ private:
     PopupMenu*      pWindowMenu;
     PopupMenu*      pPickMenu;
     PopupMenu*      pAddonsMenu;
-    Timer*          pAutoDeactivate; // Hack fuer QAP-Bug
+    Timer*          pAutoDeactivate; // Hack for QAP-Bug
     sal_uInt16          nVisibleItems;
     sal_uInt16          nId;
     sal_uInt16          nCount;
@@ -63,12 +64,11 @@ private:
     sal_Bool            bHelpInitialized : 1;
     sal_Bool            bIsActive : 1;
     sal_Bool            bControllersUnBound : 1;
-    sal_Bool            bWasHighContrast : 1;
     sal_Bool            bIsAddonPopupMenu : 1;
 
 private:
     void            Construct_Impl();
-    bool        Bind_Impl( Menu *pMenu );
+    bool            Bind_Impl( Menu *pMenu );
     inline SfxMenuCtrlArr_Impl& GetAppCtrl_Impl()
     {
         return pAppCtrl? *pAppCtrl: *(pAppCtrl = new SfxMenuCtrlArr_Impl) ;
@@ -108,9 +108,7 @@ public:
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
     SfxVirtualMenu* GetPopupMenu( sal_uInt16 nId ) const;
     String          GetItemText( sal_uInt16 nId ) const;
-    String          GetItemHelpText( sal_uInt16 nId ) const;
 
-    //void            InvalidateKeyCodes();
 
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
@@ -124,7 +122,6 @@ public:
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
-    sal_Bool            IsHiContrastMode() const;
     void            UpdateImages();
 
     DECL_LINK( Select, Menu * );
@@ -140,7 +137,6 @@ inline sal_uInt16 SfxVirtualMenu::GetItemCount() const
 }
 //--------------------------------------------------------------------
 
-//
 
 inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
 {
@@ -157,3 +153,5 @@ inline sal_uInt16 SfxVirtualMenu::GetItemId( sal_uInt16 nPos ) const
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

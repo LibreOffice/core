@@ -40,15 +40,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	$(SLO)$/splash.obj \
-            $(SLO)$/firststart.obj \
             $(SLO)$/services_spl.obj
 
 SHL1DEPN=   makefile.mk
 SHL1OBJS=   $(SLOFILES) \
-            $(SLO)$/pages.obj \
-            $(SLO)$/wizard.obj \
-            $(SLO)$/migration.obj \
-            $(SLO)$/cfgfilter.obj
+            $(SLO)$/migration.obj
 
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
@@ -65,28 +61,15 @@ SHL1STDLIBS= \
     $(COMPHELPERLIB)    \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
-        $(UCBHELPERLIB)        \
+    $(UCBHELPERLIB)     \
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(VOSLIB)           \
     $(SALLIB)           \
     $(SFXLIB)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(SLO)$/splash.obj : $(INCCOM)$/introbmpnames.hxx
-
-.INCLUDE .IGNORE : $(MISC)$/intro_bmp_names.mk
-
-.IF "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
-DO_PHONY=.PHONY
-.ENDIF			# "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
-
-$(INCCOM)$/introbmpnames.hxx $(DO_PHONY):
-    echo const char INTRO_BITMAP_STRINGLIST[]=$(EMQ)"$(INTRO_BITMAPS:f:t",")$(EMQ)"$(EMQ); > $@
-    echo LASTTIME_INTRO_BITMAPS=$(INTRO_BITMAPS:f) > $(MISC)$/intro_bmp_names.mk
 
 ALLTAR : $(MISC)/spl.component
 

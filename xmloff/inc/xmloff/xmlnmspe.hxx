@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,6 +105,10 @@ XML_OLD_NAMESPACE( META,    6U )
 
 // experimental namespaces
 XML_NAMESPACE( FIELD,           100U )
+XML_NAMESPACE( CSS3TEXT,        103U )      // CSS Text Level 3
+XML_NAMESPACE( FORMX,           101U )      // form interop extensions
 
 
 #endif  //  _XMLOFF_XMLNMSPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

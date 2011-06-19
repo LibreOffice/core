@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -85,10 +84,10 @@ class Window;
 #define SFXWB_READONLY          WB_READONLY                 // ((WinBits)0x02000000)
 #define SFXWB_PATHDIALOG        WB_PATH                     // ((WinBits)0x00100000)
 #define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_SHOWALLFOLDER     0x10000000L     // alle Ordner auch Mail/News/...
-#define SFXWB_MULTISELECTION    0x20000000L     // Multiselection an
+#define SFXWB_SHOWALLFOLDER     0x10000000L     // All folders also mail/news/...
+#define SFXWB_MULTISELECTION    0x20000000L
 #define SFXWB_NOREMOTE          0x40000000L
-#define SFXWB_SHOWVERSIONS      0x80000000L     // Versionsauswahl anzeigen
+#define SFXWB_SHOWVERSIONS      0x80000000L
 
 #define SFXWB_GRAPHIC           0x00800000L     // FileOpen with link and preview box
 #define SFXWB_SHOWSTYLES        0x01000000L     // FileOpen with link and preview box and styles
@@ -135,11 +134,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
     FileDialogHelper_Impl   *mpImp;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE sal_Int16 getDialogType( sal_Int64 nFlags ) const;
-
-//#endif
 
 public:
                             FileDialogHelper( sal_Int64 nFlags,
@@ -292,21 +288,18 @@ public:
 
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
-//#if 0 // _SOLAR__PRIVATE
     ErrCode                  Execute( SvStringsDtor*& rpURLList,
                                       SfxItemSet *&   rpSet,
                                       String&         rFilter,
                                       const String&   rDirPath );
     ErrCode                  Execute( SfxItemSet *&   rpSet,
                                       String&         rFilter );
-//#endif
 };
 
 #define SFX2_IMPL_DIALOG_CONFIG 0
 #define SFX2_IMPL_DIALOG_SYSTEM 1
 #define SFX2_IMPL_DIALOG_OOO 2
 
-//#if 0 // _SOLAR__PRIVATE
 ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              const String& rFact,
                              SvStringsDtor *& rpURLList,
@@ -316,10 +309,10 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                              const String& rStandardDir = String::CreateFromAscii( "" ),
                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
-//#endif
 }
 
 //-----------------------------------------------------------------------------
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

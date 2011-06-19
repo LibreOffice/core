@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,23 +36,16 @@
 
 TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
 
-/*-- 16.12.2003 15:24:25---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bHidden )
 {
 }
-/*-- 16.12.2003 15:24:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxPoolItem* SvxCharHiddenItem::Clone( SfxItemPool * ) const
 {
     return new SvxCharHiddenItem( *this );
 }
-/*-- 16.12.2003 15:24:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxItemPresentation SvxCharHiddenItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -80,3 +74,4 @@ SfxItemPresentation SvxCharHiddenItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

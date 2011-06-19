@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <sot/exchange.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -196,7 +196,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
     if ( xProps.is() )
     {
         ::rtl::OUString aMediaType;
-        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+        xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
         if ( aMediaType.getLength() )
         {
             ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
@@ -249,3 +249,5 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
 
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

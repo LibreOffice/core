@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,10 @@
 #ifndef _SVDMARK_HXX
 #define _SVDMARK_HXX
 
+#include <vector>
+
 #include <tools/contnr.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 #include <svx/sdrobjectuser.hxx>
 
@@ -377,7 +379,7 @@ namespace sdr
         SdrMarkList                 maMarkedObjectList;
         SdrMarkList                 maEdgesOfMarkedNodes;
         SdrMarkList                 maMarkedEdgesOfMarkedNodes;
-        List                        maAllMarkedObjects;
+        std::vector<SdrObject*>     maAllMarkedObjects;
 
         // bitfield
         unsigned                    mbEdgesOfMarkedNodesDirty : 1;
@@ -397,7 +399,7 @@ namespace sdr
 
         const SdrMarkList& GetEdgesOfMarkedNodes() const;
         const SdrMarkList& GetMarkedEdgesOfMarkedNodes() const;
-        const List& GetAllMarkedObjects() const;
+        const std::vector<SdrObject*>& GetAllMarkedObjects() const;
 
         SdrMarkList& GetMarkedObjectListWriteAccess()
         {
@@ -410,3 +412,5 @@ namespace sdr
 
 #endif //_SVDMARK_HXX
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

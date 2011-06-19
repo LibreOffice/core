@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,9 @@
 
 // -----------------------------------------------------------------------------
 
-class SvxBorderLine;
+namespace editeng {
+    class SvxBorderLine;
+}
 
 namespace sdr { namespace table {
 
@@ -51,7 +54,7 @@ namespace sdr { namespace table {
 */
 bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedCol, sal_Int32 nMergedRow, sal_Int32& rOriginCol, sal_Int32& rOriginRow );
 
-typedef std::vector< SvxBorderLine* > BorderLineVector;
+typedef std::vector< editeng::SvxBorderLine* > BorderLineVector;
 typedef std::vector< BorderLineVector > BorderLineMap;
 
 // -----------------------------------------------------------------------------
@@ -94,13 +97,12 @@ public:
 
     ::sal_Int32 getRowCount() const { return static_cast< ::sal_Int32 >( maRows.size() ); }
     ::sal_Int32 getColumnCount() const { return static_cast< ::sal_Int32 >( maColumns.size() ); }
-
-    sal_Int32 getRowHeight( sal_Int32 nRow );
+    sal_Int32 getRowHeight( sal_Int32 nRow ) const;
 
     // sets the layout height of the given row hard, LayoutTable must be called directly after calling this method! */
     void setRowHeight( sal_Int32 nRow, sal_Int32 nHeight );
 
-    sal_Int32 getColumnWidth( sal_Int32 nColumn );
+    sal_Int32 getColumnWidth( sal_Int32 nColumn ) const;
 
     // sets the layout width of the given column hard, LayoutTable must be called directly after calling this method! */
     void setColumnWidth( sal_Int32 nColumn, sal_Int32 nWidth );
@@ -116,7 +118,7 @@ public:
     bool isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const;
 
     /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
-    SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
+    editeng::SvxBorderLine* getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const;
 
     void updateCells( ::Rectangle& rRectangle );
 
@@ -144,9 +146,9 @@ private:
     void ResizeBorderLayout();
     void ResizeBorderLayout( BorderLineMap& rMap );
 
-    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine );
+    void SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const editeng::SvxBorderLine* pLine );
 
-    static bool HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
+    static bool HasPriority( const editeng::SvxBorderLine* pThis, const editeng::SvxBorderLine* pOther );
 
     struct Layout
     {
@@ -176,3 +178,5 @@ private:
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

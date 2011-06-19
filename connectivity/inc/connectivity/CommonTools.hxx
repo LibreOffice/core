@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,10 @@ namespace connectivity
 {
     //------------------------------------------------------------------------------
     OOO_DLLPUBLIC_DBTOOLS sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape);
+    inline sal_Bool match(const ::rtl::OUString &rWild, const ::rtl::OUString &rStr, const sal_Unicode cEscape)
+    {
+        return match(rWild.getStr(), rStr.getStr(), cEscape);
+    }
     //------------------------------------------------------------------------------
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toString(const ::com::sun::star::uno::Any& rValue);
     OOO_DLLPUBLIC_DBTOOLS rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
@@ -72,8 +77,6 @@ namespace connectivity
     {
         std::vector< VectorVal > m_vector;
         oslInterlockedCount         m_refCount;
-        //  ORefVector(const ORefVector&);
-        //  ORefVector& operator=(const ORefVector&);
 
     protected:
         virtual ~ORefVector(){}
@@ -214,3 +217,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_COMMONTOOLS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

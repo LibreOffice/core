@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 
-#ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"
-#endif
 #include "TransformerActions.hxx"
 #include "AttrTransformerAction.hxx"
 #include "ActionMapTypesOASIS.hxx"
@@ -45,9 +44,7 @@
 #include "RenameElemTContext.hxx"
 #include "FlatTContext.hxx"
 
-#ifndef _XMLOFF_NOTESCONTEXT_HXX
 #include "NotesTContext.hxx"
-#endif
 
 using ::rtl::OUString;
 using namespace ::xmloff::token;
@@ -230,3 +227,5 @@ sal_Bool XMLNotesTransformerContext::IsPersistent() const
 {
     return m_bPersistent;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

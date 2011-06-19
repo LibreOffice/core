@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,9 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         }
         catch( Exception& )
         {
-            DBG_ERROR("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
+            OSL_FAIL("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

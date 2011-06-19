@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,10 +51,11 @@ protected:
    SfxHTMLParser( rStream, bIsNewDoc, pMediumPtr ) {};
 
 public:
-    // Diese Methoden koennen auch von anderen Parsern benutzt werden
+    // These methods can also be used by other parsers.
     static void             ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions*, const String& );
 
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

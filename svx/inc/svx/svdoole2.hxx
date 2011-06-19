@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,10 +86,10 @@ protected:
 public:
     TYPEINFO();
 
-    SdrOle2Obj(FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=sal_False);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(bool bFrame_ = false);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_ = false);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, bool bFrame_ = false);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, bool bFrame_ = false);
     virtual ~SdrOle2Obj();
 
     // access to svt::EmbeddedObjectRef
@@ -117,7 +118,7 @@ public:
     // spaeter wieder abfragen kann (SD braucht das fuer Praesentationsobjekte).
     void SetProgName(const String& rNam) { aProgName=rNam; }
     const String& GetProgName() const { return aProgName; }
-    FASTBOOL IsEmpty() const;
+    bool IsEmpty() const;
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObjRef() const;
@@ -144,7 +145,8 @@ public:
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
-    virtual void operator=(const SdrObject& rObj);
+    SdrOle2Obj* Clone() const;
+    SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
     virtual void NbcMove(const Size& rSize);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -188,3 +190,4 @@ public:
 
 #endif //_SVDOOLE2_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

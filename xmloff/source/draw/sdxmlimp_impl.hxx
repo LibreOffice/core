@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/xmlimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -337,3 +336,5 @@ public:
 };
 
 #endif  //  _SDXMLIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

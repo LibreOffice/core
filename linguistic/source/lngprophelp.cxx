@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_linguistic.hxx"
 
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
@@ -41,10 +43,7 @@
 
 #include <linguistic/lngprophelp.hxx>
 
-
-//using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -52,10 +51,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+using ::rtl::OUString;
+
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aCH[] =
 {
@@ -63,7 +63,7 @@ static const char *aCH[] =
     UPN_IS_USE_DICTIONARY_LIST,
 };
 
-static int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
+static int nCHCount = SAL_N_ELEMENTS(aCH);
 
 
 PropertyChgHelper::PropertyChgHelper(
@@ -80,7 +80,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (sal_Int32 i = 0;  i < nCHCount;  ++i)
     {
-        pName[i] = A2OU( aCH[i] );
+        pName[i] = ::rtl::OUString::createFromAscii( aCH[i] );
     }
 
     SetDefaultValues();
@@ -117,7 +117,8 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount 
         OUString *pName = GetPropNames().getArray();
         for (sal_Int32 i = 0;  i < nCount;  ++i)
         {
-            pName[ nLen + i ] = A2OU( pNewNames[ i ] );
+            pName[ nLen + i ] = ::rtl::OUString::createFromAscii( pNewNames[ i ] );
+
         }
     }
 }
@@ -168,7 +169,7 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
     // temporary value
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
-    //
+
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -184,7 +185,6 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
                         pbResVal = &bResIsUseDictionaryList; break;
                 default:
                         ;
-                    //DBG_ASSERT( 0, "unknown property" );
             }
             if (pbResVal)
                 pVal[i].Value >>= *pbResVal;
@@ -222,7 +222,6 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
             default:
             {
                 bRes = sal_False;
-                //DBG_ASSERT( 0, "unknown property" );
             }
         }
         if (pbVal)
@@ -344,7 +343,6 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 
 PropertyHelper_Thes::PropertyHelper_Thes(
@@ -371,7 +369,6 @@ void SAL_CALL
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 // list of properties from the property set to be used
 // and listened to
@@ -388,7 +385,7 @@ PropertyHelper_Spell::PropertyHelper_Spell(
         Reference< XPropertySet > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
-    AddPropNames( aSP, sizeof(aSP) / sizeof(aSP[0]) );
+    AddPropNames( aSP, SAL_N_ELEMENTS(aSP));
     SetDefaultValues();
     GetCurrentValues();
 
@@ -527,14 +524,14 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
-    //
+
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            if (pVal[i].Name.equalsAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS ))
+            if (pVal[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(UPN_MAX_NUMBER_OF_SUGGESTIONS)))
             {
                 pVal[i].Value >>= nResMaxNumberOfSuggestions;
             }
@@ -561,7 +558,6 @@ sal_Int16 PropertyHelper_Spell::GetDefaultNumberOfSuggestions() const
     return 16;
 }
 
-///////////////////////////////////////////////////////////////////////////
 
 static const char *aHP[] =
 {
@@ -576,7 +572,7 @@ PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         Reference< XPropertySet > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
-    AddPropNames( aHP, sizeof(aHP) / sizeof(aHP[0]) );
+    AddPropNames( aHP, SAL_N_ELEMENTS(aHP));
     SetDefaultValues();
     GetCurrentValues();
 }
@@ -689,7 +685,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
-    //
+
     sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -866,7 +862,7 @@ sal_Bool PropertyHelper_Spelling::removeLinguServiceEventListener(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+
 #include "dp_script.hrc"
 #include "dp_resource.h"
 #include "dp_xml.h"
 #include "dp_lib_container.h"
+
+#include "rtl/ustring.hxx"
 #include "ucbhelper/content.hxx"
+#include "xmlscript/xmllib_imexp.hxx"
 
 
 using namespace ::dp_misc;
@@ -71,3 +78,4 @@ OUString LibraryContainer::get_libname(
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

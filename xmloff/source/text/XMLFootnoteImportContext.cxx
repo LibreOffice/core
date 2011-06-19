@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ enum XMLFootnoteChildToken {
     XML_TOK_FTN_NOTE_BODY
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
+static SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
       XML_TOK_FTN_NOTE_CITATION },
@@ -241,3 +242,5 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

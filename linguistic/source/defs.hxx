@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,15 +39,11 @@
 class SvStream;
 
 
-///////////////////////////////////////////////////////////////////////////
-
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 typedef boost::shared_ptr< SvStream > SvStreamPtr;
 
 namespace css = ::com::sun::star;
 
-///////////////////////////////////////////////////////////////////////////
 
 struct LangSvcEntries
 {
@@ -117,7 +114,6 @@ struct LangSvcEntries_Thes : public LangSvcEntries
     LangSvcEntries_Thes( const css::uno::Sequence< ::rtl::OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 // virtual base class for the different dispatchers
 class LinguDispatcher
@@ -130,7 +126,7 @@ public:
     virtual DspType GetDspType() const = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include "PageMasterExportPropMapper.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -45,17 +46,19 @@ using namespace ::xmloff::token;
 
 //______________________________________________________________________________
 
-inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
+inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
-            (rLine1.LineDistance == rLine2.LineDistance);
+            (rLine1.LineDistance == rLine2.LineDistance) &&
+            (rLine1.LineWidth == rLine2.LineWidth);
 }
 
-inline sal_Bool operator==( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
+inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.Color == rLine2.Color) &&
-            lcl_HasSameLineWidth( rLine1, rLine2 );
+            lcl_HasSameLineWidth( rLine1, rLine2 ) &&
+            ( rLine1.LineStyle == rLine2.LineStyle );
 }
 
 inline void lcl_RemoveState( XMLPropertyState* pState )
@@ -168,7 +171,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
     {
         if( pPMBorderTop && pPMBorderBottom && pPMBorderLeft && pPMBorderRight )
         {
-            table::BorderLine aLineTop, aLineBottom, aLineLeft, aLineRight;
+            table::BorderLine2 aLineTop, aLineBottom, aLineLeft, aLineRight;
 
             pPMBorderTop->maValue >>= aLineTop;
             pPMBorderBottom->maValue >>= aLineBottom;
@@ -193,7 +196,7 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
     {
         if( pPMBorderWidthTop && pPMBorderWidthBottom && pPMBorderWidthLeft && pPMBorderWidthRight )
         {
-            table::BorderLine aLineTop, aLineBottom, aLineLeft, aLineRight;
+            table::BorderLine2 aLineTop, aLineBottom, aLineLeft, aLineRight;
 
             pPMBorderWidthTop->maValue >>= aLineTop;
             pPMBorderWidthBottom->maValue >>= aLineBottom;
@@ -482,3 +485,4 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     SvXMLExportPropertyMapper::ContextFilter(rPropState,rPropSet);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

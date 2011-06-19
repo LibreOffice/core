@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "diagnose_ex.h"
 #include <osl/thread.h>
+
+#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace connectivity
@@ -76,21 +79,19 @@ namespace connectivity
                     {
                         ::comphelper::disposeComponent(m_xOutputStream);
                     }
-                    catch(DisposedException&)
+                    catch(const DisposedException&)
                     {
                     }
-                    catch(const Exception& e)
+                    catch(const Exception&)
                     {
-                        OSL_UNUSED( e );
-                        OSL_ENSURE(0,"Could not dispose OutputStream");
+                        OSL_FAIL("Could not dispose OutputStream");
                     }
                     m_xOutputStream.clear();
                 }
             }
-            catch(Exception& ex)
+            catch(const Exception&)
             {
-                OSL_UNUSED( ex );
-                OSL_ENSURE(0,"Exception catched!");
+                OSL_FAIL("Exception caught!");
             }
         }
         // -----------------------------------------------------------------------------
@@ -155,7 +156,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             ::rtl::OUString aStr;
             if ( jstr )
@@ -172,7 +173,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             return aStr;
         }
@@ -184,9 +185,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind == rMap.end() )
             {
@@ -215,9 +216,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind != rMap.end() )
                 sKey = aFind->first;
@@ -242,7 +243,7 @@ namespace connectivity
                             xTrans->commit();
                     }
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                 }
                 rMap.erase(aFind);
@@ -278,7 +279,7 @@ namespace connectivity
                             {
                                 pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
                             }
-                            catch(Exception& )
+                            catch(const Exception&)
                             {
                                 ::rtl::OUString sStrippedName = removeOldURLPrefix(sOrgName);
 
@@ -289,7 +290,7 @@ namespace connectivity
                                     {
                                        bIsStream = aStoragePair.first.first->isStreamElement(sStrippedName);
                                     }
-                                    catch(Exception& )
+                                    catch(const Exception&)
                                     {
                                         bIsStream = sal_False;
                                     }
@@ -300,7 +301,7 @@ namespace connectivity
                             }
                             aFind->second.second.insert(TStreamMap::value_type(sName,pHelper));
                         }
-                        catch(Exception& e)
+                        catch(const Exception& e)
                         {
 #if OSL_DEBUG_LEVEL > 0
                             ::rtl::OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
@@ -310,7 +311,7 @@ namespace connectivity
                             if ( _nMode < 16 )
                                 sMessage += "0";
                             sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
-                            OSL_ENSURE( false, sMessage.getStr() );
+                            OSL_FAIL( sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);
                         }
@@ -360,3 +361,5 @@ namespace connectivity
 }
 // namespace connectivity
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

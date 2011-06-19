@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XDialogEventHandler.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -107,13 +109,14 @@ namespace dlgprov
     {
         protected:
         rtl::OUString msDialogCodeName;
+        rtl::OUString msDialogLibName;
         Reference<  script::XScriptListener > mxListener;
         virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
         public:
-        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel );
+        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const rtl::OUString& sDialogLibName );
     };
 
-    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel ) : DialogScriptListenerImpl( rxContext )
+    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const rtl::OUString& sDialogLibName ) : DialogScriptListenerImpl( rxContext ), msDialogLibName( sDialogLibName )
     {
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         Sequence< Any > args(1);
@@ -141,10 +144,10 @@ namespace dlgprov
 
     void DialogVBAScriptListenerImpl::firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* )
     {
-        if ( aScriptEvent.ScriptType.equals( rtl::OUString::createFromAscii("VBAInterop") ) && mxListener.is() )
+        if ( aScriptEvent.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop")) ) && mxListener.is() )
         {
             ScriptEvent aScriptEventCopy( aScriptEvent );
-            aScriptEventCopy.ScriptCode = msDialogCodeName;
+            aScriptEventCopy.ScriptCode = msDialogLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( msDialogCodeName );
             try
             {
                 mxListener->firing( aScriptEventCopy );
@@ -162,18 +165,18 @@ namespace dlgprov
     // DialogEventsAttacherImpl
     // =============================================================================
 
-    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener   )
+    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener, const rtl::OUString& sDialogLibName )
         :mbUseFakeVBAEvents( false ), m_xContext( rxContext )
     {
         // key listeners by protocol when ScriptType = 'Script'
         // otherwise key is the ScriptType e.g. StarBasic
         if ( rxRTLListener.is() ) // set up handler for RTL_BASIC
-            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = rxRTLListener;
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) ] = rxRTLListener;
         else
-            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
-        // handler for Script & ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" )
-        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
-        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
+        // handler for Script & ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO:"))
+        listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO")) ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
+        listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script")) ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
 
         // determine the VBA compatibility mode from the Basic library container
         try
@@ -187,7 +190,7 @@ namespace dlgprov
         {
         }
         if ( mbUseFakeVBAEvents )
-            listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop")) ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
     // -----------------------------------------------------------------------------
@@ -214,6 +217,7 @@ namespace dlgprov
             Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
                 xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
+
         }
         return xEventsSupplier;
     }
@@ -226,6 +230,9 @@ namespace dlgprov
             Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
 
             Reference< XControlModel > xControlModel = xControl->getModel();
+            Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
+            rtl::OUString sName;
+            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) ) >>= sName;
             if ( xEventCont.is() )
             {
                 Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
@@ -239,7 +246,7 @@ namespace dlgprov
                     Any aElement = xEventCont->getByName( pNames[ j ] );
                     aElement >>= aDesc;
                     rtl::OUString sKey = aDesc.ScriptType;
-                    if ( aDesc.ScriptType.equals( rtl::OUString::createFromAscii("Script" ) ) || aDesc.ScriptType.equals( rtl::OUString::createFromAscii("UNO" ) ) )
+                    if ( aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ) || aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO")) ) )
                     {
                         sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
                         sKey = aDesc.ScriptCode.copy( 0, nIndex );
@@ -282,6 +289,51 @@ namespace dlgprov
         }
     }
 
+
+    void DialogEventsAttacherImpl::nestedAttachEvents( const Sequence< Reference< XInterface > >& Objects, const Any& Helper, rtl::OUString& sDialogCodeName )
+    {
+        const Reference< XInterface >* pObjects = Objects.getConstArray();
+        sal_Int32 nObjCount = Objects.getLength();
+
+        for ( sal_Int32 i = 0; i < nObjCount; ++i )
+        {
+            // We know that we have to do with instances of XControl.
+            // Otherwise this is not the right implementation for
+            // XScriptEventsAttacher and we have to give up.
+            Reference< XControl > xControl( pObjects[ i ], UNO_QUERY );
+            Reference< XControlContainer > xControlContainer( xControl, UNO_QUERY );
+            Reference< XDialog > xDialog( xControl, UNO_QUERY );
+            if ( !xControl.is() )
+                throw IllegalArgumentException();
+
+            // get XEventsSupplier from control model
+            Reference< XControlModel > xControlModel = xControl->getModel();
+            Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
+            attachEventsToControl( xControl, xEventsSupplier, Helper );
+            if ( mbUseFakeVBAEvents )
+            {
+                xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
+                Any newHelper(xControl );
+                attachEventsToControl( xControl, xEventsSupplier, newHelper );
+            }
+            if ( xControlContainer.is() && !xDialog.is() )
+            {
+                Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
+                sal_Int32 nControlCount = aControls.getLength();
+
+                Sequence< Reference< XInterface > > aObjects( nControlCount );
+                Reference< XInterface >* pObjectsModify = aObjects.getArray();
+                const Reference< XControl >* pControls = aControls.getConstArray();
+
+                for ( sal_Int32 j = 0; j < nControlCount; ++j )
+                {
+                    pObjectsModify[j] = Reference< XInterface >( pControls[j], UNO_QUERY );
+                }
+                nestedAttachEvents( aObjects, Helper, sDialogCodeName );
+            }
+        }
+    }
+
     // -----------------------------------------------------------------------------
     // XScriptEventsAttacher
     // -----------------------------------------------------------------------------
@@ -314,12 +366,9 @@ namespace dlgprov
 
             }
         }
-
-        // go over all objects
-        const Reference< XInterface >* pObjects = Objects.getConstArray();
+        rtl::OUString sDialogCodeName;
         sal_Int32 nObjCount = Objects.getLength();
         Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog
-        rtl::OUString sDialogCodeName;
         if ( xDlgControl.is() )
         {
             Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
@@ -329,26 +378,8 @@ namespace dlgprov
             }
             catch( Exception& ){}
         }
-
-        for ( sal_Int32 i = 0; i < nObjCount; ++i )
-        {
-            // We know that we have to do with instances of XControl.
-            // Otherwise this is not the right implementation for
-            // XScriptEventsAttacher and we have to give up.
-            Reference< XControl > xControl( pObjects[ i ], UNO_QUERY );
-            if ( !xControl.is() )
-                throw IllegalArgumentException();
-
-            // get XEventsSupplier from control model
-            Reference< XControlModel > xControlModel = xControl->getModel();
-            Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
-            attachEventsToControl( xControl, xEventsSupplier, Helper );
-            if ( mbUseFakeVBAEvents )
-            {
-                xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
-                attachEventsToControl( xControl, xEventsSupplier, Helper );
-            }
-        }
+        // go over all objects
+        nestedAttachEvents( Objects, Helper, sDialogCodeName );
     }
 
 
@@ -406,7 +437,7 @@ namespace dlgprov
 
     void DialogAllListenerImpl::firing( const AllEventObject& Event ) throw ( RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         firing_impl( Event, NULL );
     }
@@ -416,7 +447,7 @@ namespace dlgprov
     Any DialogAllListenerImpl::approveFiring( const AllEventObject& Event )
         throw ( reflection::InvocationTargetException, RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         Any aReturn;
         firing_impl( Event, &aReturn );
@@ -468,13 +499,13 @@ namespace dlgprov
                 {
                     Reference< provider::XScriptProviderFactory > xFactory(
                         m_xContext->getValueByName(
-                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")) ),
                         UNO_QUERY );
                     OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
                     if ( xFactory.is() )
                     {
                         Any aCtx;
-                        aCtx <<= ::rtl::OUString::createFromAscii( "user" );
+                        aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
                         xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                     }
                 }
@@ -519,9 +550,9 @@ namespace dlgprov
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
             if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
             {
-                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                sScriptURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
                 sScriptURL += sScriptCode.copy( nIndex + 1 );
-                sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                sScriptURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
                 sScriptURL += sScriptCode.copy( 0, nIndex );
             }
             ScriptEvent aSFScriptEvent( aScriptEvent );
@@ -532,7 +563,7 @@ namespace dlgprov
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
-        static ::rtl::OUString sUnoURLScheme = ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
+        static ::rtl::OUString sUnoURLScheme(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO:"));
 
         ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
         ::rtl::OUString aMethodName = aScriptEvent.ScriptCode.copy( sUnoURLScheme.getLength() );
@@ -652,7 +683,7 @@ namespace dlgprov
 
     void DialogScriptListenerImpl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         firing_impl( aScriptEvent, NULL );
     }
@@ -662,7 +693,7 @@ namespace dlgprov
     Any DialogScriptListenerImpl::approveFiring( const ScriptEvent& aScriptEvent )
         throw ( reflection::InvocationTargetException, RuntimeException )
     {
-        ::osl::MutexGuard aGuard( getMutex() );
+        //::osl::MutexGuard aGuard( getMutex() );
 
         Any aReturn;
         firing_impl( aScriptEvent, &aReturn );
@@ -674,3 +705,5 @@ namespace dlgprov
 //.........................................................................
 }   // namespace dlgprov
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

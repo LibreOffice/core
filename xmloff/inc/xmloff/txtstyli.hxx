@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
     const ::rtl::OUString       sIsAutoUpdate;
     const ::rtl::OUString       sCategory;
     const ::rtl::OUString       sNumberingStyleName;
-    const ::rtl::OUString       sOutlineLevel; //#outline level,add by zhaojianwei
+    const ::rtl::OUString       sOutlineLevel;
 
 public:
     const ::rtl::OUString       sDropCapCharStyleName;
@@ -58,10 +59,8 @@ private:
 
     sal_Bool bHasCombinedCharactersLetter : 1;
 
-    // --> OD 2006-09-21 #i69523#
-    // introduce import of empty list style
+    // Introduce import of empty list style (#i69523#)
     sal_Bool mbListStyleSet : 1;
-    // <--
 
     XMLEventsImportContext* pEventContext;
 
@@ -91,12 +90,12 @@ public:
     sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
 
     const ::rtl::OUString& GetListStyle() const { return sListStyleName; }
-    // --> OD 2006-10-13 #i69629#
+    // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
     sal_Bool IsListStyleSet() const
     {
         return mbListStyleSet;
     }
-    // <--
+
     const ::rtl::OUString& GetMasterPageName() const { return sMasterPageName; }
     sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
     const ::rtl::OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
@@ -118,3 +117,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,7 +109,7 @@ sal_Bool GalleryExplorer::IsLinkage() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::FillThemeList( List& rThemeList )
+bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
 {
     Gallery* pGal = ImplGetGallery();
 
@@ -119,16 +120,16 @@ sal_Bool GalleryExplorer::FillThemeList( List& rThemeList )
             const GalleryThemeEntry* pEntry = pGal->GetThemeInfo( i );
 
             if( pEntry && !pEntry->IsReadOnly() && !pEntry->IsHidden() )
-                rThemeList.Insert( new String( pEntry->GetThemeName() ), LIST_APPEND );
+                rThemeList.push_back(pEntry->GetThemeName());
         }
     }
 
-    return( rThemeList.Count() > 0 );
+    return !rThemeList.empty();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList )
+sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, std::vector<String> &rObjList )
 {
     Gallery* pGal = ImplGetGallery();
 
@@ -139,22 +140,26 @@ sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, List& rObjList 
 
         if( pTheme )
         {
-            for( sal_uIntPtr i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
-                rObjList.Insert( new String( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) ), LIST_APPEND );
+            for( sal_uInt32 i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
+                rObjList.push_back( pTheme->GetObjectURL( i ).GetMainURL( INetURLObject::NO_DECODE ) );
 
             pGal->ReleaseTheme( pTheme, aListener );
         }
     }
 
-    return( rObjList.Count() > 0 );
+    return !rObjList.empty();
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::FillObjList( sal_uIntPtr nThemeId, List& rObjList )
+sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList )
 {
     Gallery* pGal = ImplGetGallery();
-    return( pGal ? FillObjList( pGal->GetThemeName( nThemeId ), rObjList ) : sal_False );
+
+    if (!pGal)
+        return false;
+
+    return FillObjList( pGal->GetThemeName( nThemeId ), rObjList );
 }
 
 // ------------------------------------------------------------------------
@@ -182,7 +187,7 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
             pGal->ReleaseTheme( pTheme, aListener );
         }
     }
-    return( rList.size() > 0 );
+    return !rList.empty();
 }
 
 // ------------------------------------------------------------------------
@@ -513,3 +518,5 @@ sal_Bool GalleryExplorer::DrawCentered( OutputDevice* pOut, const FmFormModel& r
 {
     return SgaObjectSvDraw::DrawCentered( pOut, rModel );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

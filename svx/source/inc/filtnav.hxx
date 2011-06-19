@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,7 @@ public:
     ::rtl::OUString  GetText() const { return m_aText; }
     FmParentData* GetParent() const {return m_pParent;}
 
-    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    virtual Image GetImage() const;
 };
 
 //========================================================================
@@ -129,7 +130,7 @@ public:
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterController >&
         GetFilterController() { return m_xFilterController; }
 
-    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    virtual Image GetImage() const;
 };
 
 //========================================================================
@@ -141,7 +142,7 @@ public:
     FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
-    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    virtual Image GetImage() const;
 };
 
 //========================================================================
@@ -163,7 +164,7 @@ public:
     const ::rtl::OUString& GetFieldName() const {return m_aFieldName;}
     sal_Int32 GetComponentIndex() const { return m_nComponentIndex; }
 
-    virtual Image GetImage( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    virtual Image GetImage() const;
 };
 
 //========================================================================
@@ -370,3 +371,4 @@ public:
 
 #endif // _SVX_FILTNAV_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

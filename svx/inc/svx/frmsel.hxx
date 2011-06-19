@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,13 @@
 #include <tools/color.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/bitmap.hxx>
+#include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
 #include "svx/svxdllapi.h"
 
-class SvxBorderLine;
+namespace editeng {
+    class SvxBorderLine;
+}
 
 namespace svx {
 
@@ -113,10 +117,10 @@ public:
     /** Returns the state (visible/hidden/don't care) of the specified frame border. */
     FrameBorderState    GetFrameBorderState( FrameBorderType eBorder ) const;
     /** Returns the style of the specified frame border, if it is visible. */
-    const SvxBorderLine* GetFrameBorderStyle( FrameBorderType eBorder ) const;
+    const editeng::SvxBorderLine* GetFrameBorderStyle( FrameBorderType eBorder ) const;
 
     /** Shows the specified frame border using the passed style, or hides it, if pStyle is 0. */
-    void                ShowBorder( FrameBorderType eBorder, const SvxBorderLine* pStyle );
+    void                ShowBorder( FrameBorderType eBorder, const editeng::SvxBorderLine* pStyle );
     /** Sets the specified frame border to "don't care" state. */
     void                SetBorderDontCare( FrameBorderType eBorder );
 
@@ -127,8 +131,8 @@ public:
 
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
-        returns the widths in the passed parameters. */
-    bool                GetVisibleWidth( sal_uInt16& rnPrim, sal_uInt16& rnDist, sal_uInt16& rnSec ) const;
+        returns the width in the passed parameter. */
+    bool                GetVisibleWidth( long& rnWidth, editeng::SvxBorderStyle& rnStyle ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */
@@ -159,7 +163,7 @@ public:
     void                SelectAllVisibleBorders( bool bSelect = true );
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( sal_uInt16 nPrim, sal_uInt16 nDist, sal_uInt16 nSec );
+    void                SetStyleToSelection( long nWidth, editeng::SvxBorderStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 
@@ -202,3 +206,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

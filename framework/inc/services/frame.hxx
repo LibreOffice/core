@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
 #include <threadhelp/transactionbase.hxx>
-#endif
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <macros/xinterface.hxx>
@@ -105,6 +104,8 @@ enum EActiveState
     E_ACTIVE        ,   // I'am in the middle of an active path in tree and i don't have the focus.
     E_FOCUS             // I have the focus now. I must a member of an active path!
 };
+
+class WindowCommandDispatch;
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -439,6 +440,8 @@ class Frame :   // interfaces
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
         css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
 
+        WindowCommandDispatch*                                                  m_pWindowCommandDispatch            ;
+
     protected:
 
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
@@ -478,3 +481,5 @@ class Frame :   // interfaces
 }       // namespace framework
 
 #endif  // #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
