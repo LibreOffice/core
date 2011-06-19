@@ -44,13 +44,5 @@ ZIP1TARGET      = $(TEMPLATE_WIZARD_LETTER_TARGET)
 # Do not use $/ here.
 ZIP1LIST	= */*.ott
 
-ZIP2TARGET      = $(TEMPLATE_WIZARD_LETTER_ONELANG_TARGET)
-
-# */*.ott is here on purpose. It works in all build environments.
-# Do not use $/ here.
-ZIP2LIST	= $(LANGDIR)/*.ott
-
-
-
 .INCLUDE : target.mk
 

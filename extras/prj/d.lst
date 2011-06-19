@@ -1,12 +1,12 @@
-mkdir: %_DEST%\pck%_EXT%
-mkdir: %COMMON_DEST%\pck%_EXT%
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
+mkdir: %_DEST%\pck
+mkdir: %COMMON_DEST%\pck
+mkdir: %COMMON_DEST%\pck\openoffice
 
-..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\pck%_EXT%\*.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ja.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ko.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-CN.zip
-..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-TW.zip
-..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
-..\source\shellnew\soffice.* %COMMON_DEST%\pck%_EXT%\soffice.*
-..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck%_EXT%\openoffice\fonts.dir
+..\%COMMON_OUTDIR%\bin\*.zip %COMMON_DEST%\pck\*.zip
+..\source\extensions\*.oxt %COMMON_DEST%\bin\*.oxt
+..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck\*.ttf
+..\source\truetype\symbol\*.otf %COMMON_DEST%\pck\*.otf
+..\source\truetype\decorative\*.ttf %COMMON_DEST%\pck\*.ttf
+..\source\truetype\decorative\*.otf %COMMON_DEST%\pck\*.otf
+..\source\shellnew\soffice.* %COMMON_DEST%\pck\soffice.*
+..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck\openoffice\fonts.dir
