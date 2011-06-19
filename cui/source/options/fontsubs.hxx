@@ -99,7 +99,6 @@ class SvxFontSubstTabPage : public SfxTabPage
     String          sHeader4;
 
     Color           aTextColor;
-    ByteString      sFontGroup;
 
     SvLBoxButtonData*   pCheckButtonData;
 

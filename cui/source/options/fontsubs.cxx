@@ -77,7 +77,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader3            (CUI_RES( STR_HEADER3       )),
     sHeader4            (CUI_RES( STR_HEADER4       )),
 
-    sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)
 {
     FreeResource();
