@@ -2449,7 +2449,7 @@ void SvtFileDialog::InitSize()
 
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState( ByteString( String( aDlgOpt.GetWindowState() ), osl_getThreadTextEncoding() ) );
+        SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState(), osl_getThreadTextEncoding()));
 
         Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ));
         ::rtl::OUString sCfgStr;
