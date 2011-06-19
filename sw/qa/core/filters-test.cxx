@@ -132,17 +132,27 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             recursiveScan(rFilter, sURL, rUserData, nExpected);
         else
         {
-            sal_Int32 nGitIndex = sURL.lastIndexOfAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".gitignore"));
+            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
 
-            if (nGitIndex == sURL.getLength() - RTL_CONSTASCII_LENGTH(".gitignore"))
+            //ignore .files
+            if (
+                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
+                 (sURL.getStr()[nLastSlash+1] == '.')
+               )
+            {
                 continue;
+            }
 
-            bool bRes = load(rFilter, sURL, rUserData);
-            rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
+            rtl::OString aRes(rtl::OUStringToOString(sURL,
+                osl_getThreadTextEncoding()));
             if (nExpected == indeterminate)
             {
-                printf("indeterminate pass/fail %s was %d\n", aRes.getStr(), bRes);
+                fprintf(stderr, "loading %s\n", aRes.getStr());
+            }
+            bool bRes = load(rFilter, sURL, rUserData);
+            if (nExpected == indeterminate)
+            {
+                fprintf(stderr, "pass/fail was %d\n", bRes);
                 continue;
             }
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
@@ -184,7 +194,6 @@ void FiltersTest::testCVEs()
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/writer/sw/qa/core/data/ww8/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
-
 #endif
 }
 
