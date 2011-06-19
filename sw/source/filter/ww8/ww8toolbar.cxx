@@ -237,13 +237,20 @@ bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ), uno::UNO_QUERY_THROW );
-        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) ) );
-        helper.setMSOCommandMap( new MSOWordCommandConvertor() );
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+            uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) ) ), uno::UNO_QUERY_THROW );
+            CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument" ) ) ) );
+            helper.setMSOCommandMap( new MSOWordCommandConvertor() );
 
-        if ( !(*it).ImportCustomToolBar( *this, helper ) )
-            return false;
+            if ( !(*it).ImportCustomToolBar( *this, helper ) )
+                return false;
+        }
+        catch(...)
+        {
+            continue;
+        }
     }
     return false;
 }
