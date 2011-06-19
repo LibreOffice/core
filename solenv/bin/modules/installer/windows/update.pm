@@ -215,6 +215,7 @@ sub correct_database
 
     my $localproduct = $installer::globals::product;
     if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+    elsif ( $installer::globals::helppack ) { $localproduct = $localproduct . "HelpPack"; }
 
     if ( $product eq $localproduct ) { $product_is_good = 1; }
 
@@ -334,7 +335,6 @@ sub readdatabase
     }
     else
     {
-        # installer::logger::print_message( "... no update process, no database found ...\n" );
         $infoline = "\nNo database found in $completelistname. This is no update process!\n\n";
     }
     push( @installer::globals::logfileinfo, $infoline);

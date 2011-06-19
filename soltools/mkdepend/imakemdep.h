@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 /* $XConsortium: imakemdep.h,v 1.83 95/04/07 19:47:46 kaleb Exp $ */
 /* $XFree86: xc/config/imake/imakemdep.h,v 3.12 1995/07/08 10:22:17 dawes Exp $ */
@@ -42,14 +43,6 @@ in this Software without prior written authorization from the X Consortium.
  *     These will be passed to the compile along with the contents of the
  *     make variable BOOTSTRAPCFLAGS.
  */
-#ifdef hpux
-#ifdef hp9000s800
-#define imake_ccflags "-DSYSV"
-#else
-#define imake_ccflags "-Wc,-Nd4000,-Ns3000 -DSYSV"
-#endif
-#endif
-
 #if defined(macII) || defined(_AUX_SOURCE)
 #define imake_ccflags "-DmacII -DSYSV"
 #endif
@@ -137,14 +130,6 @@ in this Software without prior written authorization from the X Consortium.
 #define imake_ccflags "-DSYSV -DUSG -DNOSTDHDRS"
 #endif
 
-#ifdef sequent
-#define imake_ccflags "-DX_NOT_STDC_ENV -DX_NOT_POSIX"
-#endif
-
-#ifdef _SEQUENT_
-#define imake_ccflags "-DSYSV -DUSG"
-#endif
-
 #if defined(SX) || defined(PC_UX)
 #define imake_ccflags "-DSYSV"
 #endif
@@ -174,7 +159,7 @@ in this Software without prior written authorization from the X Consortium.
  *     descriptor onto another, define such a mechanism here (if you don't
  *     already fall under the existing category(ies).
  */
-#if defined(SYSV) && !defined(_CRAY) && !defined(Mips) && !defined(_SEQUENT_)
+#if defined(SYSV) && !defined(_CRAY) && !defined(Mips)
 #define dup2(fd1,fd2)   ((fd1 == fd2) ? fd1 : (close(fd2), \
                            fcntl(fd1, F_DUPFD, fd2)))
 #endif
@@ -207,9 +192,6 @@ in this Software without prior written authorization from the X Consortium.
  *     If use cc -E but want a different compiler, define DEFAULT_CC.
  *     If the cpp you need is not in /lib/cpp, define DEFAULT_CPP.
  */
-#ifdef hpux
-#define USE_CC_E
-#endif
 #ifdef WIN32
 #define USE_CC_E
 #define DEFAULT_CC "cl"
@@ -235,7 +217,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef _CRAY
 #define DEFAULT_CPP "/lib/pcpp"
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 #define DEFAULT_CPP "/usr/libexec/cpp"
 #endif
 #ifdef  MACH
@@ -273,7 +255,9 @@ char *cpp_argv[ARGUMENTS] = {
 #ifdef unix
     "-Uunix",   /* remove unix symbol so that filename unix.c okay */
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(MACH)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
+    defined(MACH) || defined(DRAGONFLY)
+/* FIXME: strange list of obsolete systems */
 # ifdef __i386__
     "-D__i386__",
 # endif
@@ -513,6 +497,8 @@ char *cpp_argv[ARGUMENTS] = {
  *     them to the the following table.  The definition of struct symtab is
  *     in util/makedepend/def.h.
  */
+
+/* FIXME: strange list of obsolete systems */
 struct pair predefs[] = {
 #ifdef apollo
     {"apollo", "1", NULL},
@@ -544,18 +530,6 @@ struct pair predefs[] = {
 #ifdef __sparc__
     {"__sparc__", "1", NULL},
 #endif
-#ifdef hpux
-    {"hpux", "1", NULL},
-#endif
-#ifdef __hpux
-    {"__hpux", "1", NULL},
-#endif
-#ifdef __hp9000s800
-    {"__hp9000s800", "1", NULL},
-#endif
-#ifdef __hp9000s700
-    {"__hp9000s700", "1", NULL},
-#endif
 #ifdef vax
     {"vax", "1", NULL},
 #endif
@@ -579,9 +553,6 @@ struct pair predefs[] = {
 #endif
 #ifdef __mips__
     {"__mips__", "1", NULL},
-#endif
-#ifdef ultrix
-    {"ultrix", "1", NULL},
 #endif
 #ifdef stellar
     {"stellar", "1", NULL},
@@ -673,10 +644,6 @@ struct pair predefs[] = {
 #ifdef __sxg__
     {"__sxg__", "1", NULL},
 #endif
-#ifdef _SEQUENT_
-    {"_SEQUENT_", "1", NULL},
-    {"__STDC__", "1", NULL},
-#endif
 #ifdef __bsdi__
     {"__bsdi__", "1", NULL},
 #endif
@@ -719,6 +686,9 @@ struct pair predefs[] = {
 #ifdef __OpenBSD__
     {"__OpenBSD__", "1", NULL},
 #endif
+#ifdef __DragonFly__
+    {"__DragonFly__", "1", NULL},
+#endif
 #ifdef __EMX__
     {"__EMX__", "1", NULL},
 #endif
@@ -728,3 +698,5 @@ struct pair predefs[] = {
 
 #endif /* MAKEDEPEND */
 #endif /* CCIMAKE */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

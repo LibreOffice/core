@@ -46,16 +46,11 @@ unless ( $zip->read( $filename ) == AZ_OK ) {
 my @members = $zip ->members();
 
 foreach my $member ( @members ) {
-#   printf ( "%o\n",$member->unixFileAttributes());
-#   printf ( "%o\n",$member->unixFileAttributes() & 0b111111111111);
     my $attribs = $member->unixFileAttributes();
     if ( $member->isDirectory ) {
         $attribs = $attribs & 0b101111111111;
         $member->unixFileAttributes($attribs)
     }
-#   printf ( "%o\n",$member->unixFileAttributes());
-#   printf ( "%o\n",$member->unixFileAttributes() & 0b111111111111);
-#   print ( $member->fileName()."\n");
 }
 unless ( $zip->writeToFileNamed( ${filename}."_new" ) == AZ_OK ) {
     die "$0: ERROR reading ${filename}_new\n";

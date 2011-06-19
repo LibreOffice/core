@@ -1,12 +1,7 @@
-# Define additional MSDOS specific settings.
+# Define additional Windows-specific settings.
 #
 
-# --- Set Wrapper command ---
-# Provide a macro that can be used to access the wrapper and to avoid
-# hardcoding the program name everywhere
-GUWCMD*=guw.exe
-
-# This is a no-op for native W32 dmake
+# This is a no-op for native Windows dmake
 .WINPATH !:= yes
 
 # Directory cache configuration.
@@ -24,9 +19,6 @@ E *:= .exe	# Executables
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
 
-.EXPORT : GUWCMD
-
 # Does not respect case of filenames.
 .DIRCACHERESPCASE := no
 NAMEMAX	=	256
-

@@ -45,7 +45,7 @@ sub replace_all_ziplistvariables_in_file
     {
         my $line = ${$fileref}[$i];
 
-        if ( $line =~ /^.*\$\{\w+\}.*$/ )   # only occurence of ${abc}
+        if ( $line =~ /^.*\$\{\w+\}.*$/ )   # only occurrence of ${abc}
         {
             my $key;
 
@@ -69,13 +69,11 @@ sub replace_all_ziplistvariables_in_rtffile
 {
     my ( $fileref, $variablesref, $onelanguage, $loggingdir ) = @_;
 
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_before.rtf", $fileref);
-
     for ( my $i = 0; $i <= $#{$fileref}; $i++ )
     {
         my $line = ${$fileref}[$i];
 
-        if ( $line =~ /^.*\$\\\{\w+\\\}.*$/ )   # only occurence of $\{abc\}
+        if ( $line =~ /^.*\$\\\{\w+\\\}.*$/ )   # only occurrence of $\{abc\}
         {
             for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
             {
@@ -96,8 +94,6 @@ sub replace_all_ziplistvariables_in_rtffile
             }
         }
     }
-
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_after.rtf", $fileref);
 }
 
 #########################################################

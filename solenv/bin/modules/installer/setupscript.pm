@@ -162,23 +162,17 @@ sub add_lowercase_productname_setupscriptvariable
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $newline = "\%SYSTEMINTUNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%UNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
                 $value =~ s/\.//g;
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
-                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $newline = "\%SOLARISBRANDPACKAGENAME " . lc($value) . "\n";
@@ -272,7 +266,7 @@ sub replace_all_setupscriptvariables_in_script
     my $bigstring = '';
     for my $line (@{$scriptref}) { $bigstring = $bigstring . $line; }
 
-    foreach my $key ( keys %subs )
+    foreach my $key (sort { length ($b) <=> length ($a) } keys %subs)
     {
         # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
         my $value = $subs{$key};
@@ -292,7 +286,6 @@ sub replace_all_setupscriptvariables_in_script
             if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ )) { next; }
             my $infoline = "WARNING: mis-named or un-known '%' variable in setup script at line $num:\n$check\n";
             push( @installer::globals::globallogfileinfo, $infoline);
-            # print STDERR "Warning: mis-named or un-known '%' variable at line $num:\n$check\n";
         }
     }
 
@@ -311,91 +304,72 @@ sub get_all_items_from_script
 
     my @allitemarray = ();
 
-    my ($itemkey, $itemvalue, $valuecounter);
+    my ($itemkey, $itemvalue);
 
     for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
     {
         my $line = ${$scriptref}[$i];
 
-        if ( $line =~ /^\s*\Q$searchitem\E\s+(\S+)\s*$/ )
+        next unless ($line =~ /^\s*\Q$searchitem\E\s+(\S+)\s*$/);
+        my $gid = $1;
+
+        my %oneitemhash = ();
+        my $ismultilang = 0;
+
+        $oneitemhash{'gid'} = $gid;
+
+        while (!( $line =~ /^\s*End\s*$/ ))
         {
-            my $gid = $1;
-            my $counter = $i + 1;
-
-            my %oneitemhash = ();
-            my $ismultilang = 0;
-
-            $oneitemhash{'gid'} = $gid;
-
-            while  (!( $line =~ /^\s*End\s*$/ ))
-            {
-                if ( $counter > $#{$scriptref} ) {
-                    installer::exiter::exit_program("Invalid setup script file. End of file reached before 'End' line of '$searchitem' section.", "get_all_items_from_script");
-                }
-                $line = ${$scriptref}[$counter];
-                $counter++;
-
-                if ( $line =~ /^\s*(.+?)\s*\=\s*(.+?)\s*\;\s*$/ )   # only oneliner!
-                {
-                    $itemkey = $1;
-                    $itemvalue = $2;
-
-                    installer::remover::remove_leading_and_ending_quotationmarks(\$itemvalue);
-                    $itemvalue =~ s/\s*$//; # removing ending whitespaces. Could be introduced by empty variables.
-
-                    $oneitemhash{$itemkey} = $itemvalue;
-
-                    if ( $itemkey =~ /^\s*\S+\s+\(\S+\)\s*$/ )
-                    {
-                        $ismultilang = 1;
-                    }
-                }
-                else
-                {
-                    if ( $searchitem eq "Module" ) # more than one line, for instance files at modules!
-                    {
-                        if (( $line =~ /^\s*(.+?)\s*\=\s*\(/ ) && (!($line =~ /\)\;\s*$ / )))
-                        {
-                            if ( $line =~ /^\s*(.+?)\s*\=\s*(.+)/ ) # the first line
-                            {
-                                $itemkey = $1;
-                                $itemvalue = $2;
-                                $itemvalue =~ s/\s*$//;
-                            }
-
-                            # collecting the complete itemvalue
-
-                            $valuecounter = $counter;
-                            $line = ${$scriptref}[$valuecounter];
-                            installer::remover::remove_leading_and_ending_whitespaces(\$line);
-                            $itemvalue = $itemvalue . $line;
-
-                            while (!( $line =~ /\)\;\s*$/ ))
-                            {
-                                $valuecounter++;
-                                $line = ${$scriptref}[$valuecounter];
-                                installer::remover::remove_leading_and_ending_whitespaces(\$line);
-                                $itemvalue = $itemvalue . $line;
-                            }
-
-                            # removing ending ";"
-                            $itemvalue =~ s/\;\s*$//;
-
-                            $oneitemhash{$itemkey} = $itemvalue;
-
-                            if ( $itemkey =~ /^\s*\S+\s+\(\S+\)\s*$/ )
-                            {
-                                $ismultilang = 1;
-                            }
-                        }
-                    }
-                }
+            if ( $i >= $#{$scriptref} ) {
+                installer::exiter::exit_program("Invalid setup script file. End of file reached before 'End' line of '$searchitem' section.", "get_all_items_from_script");
             }
+            $line = ${$scriptref}[++$i];
 
-            $oneitemhash{'ismultilingual'} = $ismultilang;
+            if ( $line =~ /^\s*(.+?)\=\s*(.+?)\;\s*$/ ) # only oneliner!
+            {
+                $itemkey = $1;
+                $itemvalue = $2;
 
-            push(@allitemarray, \%oneitemhash);
+                $itemkey =~ s/\s+$//;
+                $itemvalue =~ s/\s+$//;
+
+                installer::remover::remove_leading_and_ending_quotationmarks(\$itemvalue);
+
+                $oneitemhash{$itemkey} = $itemvalue;
+
+                $ismultilang ||= $itemkey =~ /^\S+\s+\(\S+\)$/;
+            }
+            elsif (($searchitem eq "Module") &&
+                   ($line =~ /^\s*.+?\s*\=\s*\(/) &&
+                   (!($line =~ /\)\;\s*$/)))    # more than one line, for instance files at modules!
+            {
+                $line =~ /^\s*(.+?)\s*\=\s*(.+?)\s*$/;  # the first line
+                $itemkey = $1;
+                $itemvalue = $2;
+
+                # collecting the complete itemvalue
+                do
+                {
+                    if ( $i >= $#{$scriptref} ) {
+                        installer::exiter::exit_program("Invalid setup script file. Premature end of file.", "get_all_items_from_script");
+                    }
+                    $line = ${$scriptref}[++$i];
+                    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+                    $itemvalue .= $line;
+                } while (!($line =~ /\)\;\s*$/));
+
+                # removing ending ";"
+                $itemvalue =~ s/\;\s*$//;
+
+                $oneitemhash{$itemkey} = $itemvalue;
+
+                $ismultilang ||= $itemkey =~ /^\S+\s+\(\S+\)$/;
+            }
         }
+
+        $oneitemhash{'ismultilingual'} = $ismultilang+0;
+
+        push(@allitemarray, \%oneitemhash);
     }
 
     return \@allitemarray;
@@ -521,10 +495,6 @@ sub replace_preset_properties
     my @presetproperties = ();
     push(@presetproperties, "SOLARISBRANDPACKAGENAME");
     push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
-    # push(@presetproperties, "UNIXPACKAGENAME");
-    # push(@presetproperties, "WITHOUTDOTUNIXPACKAGENAME");
-    # push(@presetproperties, "UNIXPRODUCTNAME");
-    # push(@presetproperties, "WITHOUTDOTUNIXPRODUCTNAME");
 
 
     foreach $property ( @presetproperties )

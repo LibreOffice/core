@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ Simstr::Simstr(const char * s_)
       }
    else
       {
-         len = strlen(s_);
+         len = (int)strlen(s_);
          sz = new char[len+1];
          memcpy(sz,s_,len+1);
       }
@@ -96,7 +97,7 @@ Simstr::Simstr( const char *   anybytes,
                 int            firstBytesPos,
                 int            nrOfBytes)
 {
-   unsigned slen = strlen(anybytes);
+   unsigned slen = (unsigned)strlen(anybytes);
    if (anybytes == 0 || slen <= unsigned(firstBytesPos))
       {
          len = 0;
@@ -831,3 +832,4 @@ operator>=(const char * str, const Simstr & S)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -76,8 +76,16 @@ sub new {
             $source_root .= '/..';
         }
     } else {
-        $source_root = $ENV{SOURCE_ROOT_DIR};
+        $source_root = $ENV{SRC_ROOT};
     };
+    if ( defined $ENV{USE_GBUILD} and "$ENV{USE_GBUILD}" ne "" )
+    {
+        $self->{POSSIBLE_BUILD_LIST} = ('gbuild.lst', 'build.lst', 'build.xlist'); # build lists names
+    }
+    else
+    {
+        $self->{POSSIBLE_BUILD_LIST} = ('build.lst', 'build.xlist'); # build lists names
+    }
     $source_root = Cwd::realpath($source_root);
     $self->{SOURCE_ROOT} = $source_root;
     $self->{DEBUG} = 0;
@@ -94,6 +102,7 @@ sub new {
     $self->{REMOVE_REPOSITORIES} = {};
     $self->{NEW_REPOSITORIES} = [];
     $self->{WARNINGS} = [];
+    $self->{GBUILD} = 0;
     $self->{REPORT_MESSAGES} = [];
     $self->{CONFIG_FILE_CONTENT} = [];
     if (defined $self->{USER_SOURCE_ROOT}) {
@@ -173,11 +182,14 @@ sub get_module_build_list {
     if (defined ${$self->{MODULE_BUILD_LIST_PATHS}}{$module}) {
         return ${$self->{MODULE_BUILD_LIST_PATHS}}{$module};
     } else {
-        my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
-        foreach (@possible_build_lists) {
-            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$_";
+        my @possible_build_lists = $self->{POSSIBLE_BUILD_LIST}; # build lists names
+        foreach my $build_list (@possible_build_lists) {
+            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$build_list";
             if (-e $possible_path) {
                 ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $possible_path;
+                if ( $build_list eq "gbuild.lst" ) {
+                    $self->{GBUILD} = 1;
+                };
                 return $possible_path;
             };
         };
@@ -305,12 +317,6 @@ sub read_config_file {
             if (/\s*(\S+)=active\s*(\s+#)*/) {
                 if ($repository_section) {
                     my $repository_source_path = $self->{SOURCE_ROOT} . "/$1";
-                    if (defined $ENV{UPDMINOREXT}) {
-                        $repository_source_path .= $ENV{UPDMINOREXT};
-                        if (defined ${$self->{REPOSITORIES}}{$1.$ENV{UPDMINOREXT}}) {
-                            delete ${$self->{REPOSITORIES}}{$1.$ENV{UPDMINOREXT}};
-                        };
-                    };
                     ${$self->{REPOSITORIES}}{$1} = $repository_source_path;
                     ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
                     next;

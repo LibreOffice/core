@@ -139,7 +139,6 @@ sub get_next_free_number_with_hash
 
     if (!($dontsave))
     {
-        # push(@{$shortnamesref}, $newname);    # adding the new shortname to the array of shortnames
         $shortnamesref->{$newname} = 1; # adding the new shortname to the array of shortnames, always uppercase
         $saved = 1;
     }
@@ -273,7 +272,6 @@ sub make_eight_three_conform_with_hash
     my $changed = 0;
     my $saved;
 
-    # if (( $inputstring =~ /^\s*(.*?)\.(.*?)\s*$/ ) && ( $pattern eq "file" )) # files with a dot
     if (( $inputstring =~ /^\s*(.*)\.(.*?)\s*$/ ) && ( $pattern eq "file" ))    # files with a dot
     {
         # extension has to be non-greedy, but name is. This is important to find the last dot in the filename
@@ -401,7 +399,7 @@ sub write_idt_header
     {
         $oneline = "File\tComponent_\tFileName\tFileSize\tVersion\tLanguage\tAttributes\tSequence\n";
         push(@{$idtref}, $oneline);
-        $oneline = "s72\ts72\tl255\ti4\tS72\tS20\tI2\ti2\n";
+        $oneline = "s72\ts72\tl255\ti4\tS72\tS20\tI2\ti4\n";
         push(@{$idtref}, $oneline);
         $oneline = "File\tFile\n";
         push(@{$idtref}, $oneline);
@@ -461,7 +459,7 @@ sub write_idt_header
     {
         $oneline = "DiskId\tLastSequence\tDiskPrompt\tCabinet\tVolumeLabel\tSource\n";
         push(@{$idtref}, $oneline);
-        $oneline = "i2\ti2\tL64\tS255\tS32\tS72\n";
+        $oneline = "i2\ti4\tL64\tS255\tS32\tS72\n";
         push(@{$idtref}, $oneline);
         $oneline = "Media\tDiskId\n";
         push(@{$idtref}, $oneline);
@@ -629,7 +627,6 @@ sub get_languagefilename
 {
     my ($idtfilename, $basedir) = @_;
 
-    # $idtfilename =~ s/\.idt/\.ulf/;
     $idtfilename =~ s/\.idt/\.mlf/;
 
     my $languagefilename = $basedir . $installer::globals::separator . $idtfilename;
@@ -758,7 +755,6 @@ sub translate_idtfile
             my $language_block = get_language_block_from_language_file($oldstring, $languagefile);
             my $newstring = get_language_string_from_language_block($language_block, $onelanguage, $oldstring);
 
-            # if (!( $newstring eq "" )) { ${$idtfile}[$i] =~ s/$oldstring/$newstring/; }
             ${$idtfile}[$i] =~ s/$oldstring/$newstring/;    # always substitute, even if $newstring eq "" (there are empty strings for control.idt)
         }
     }
@@ -922,17 +918,11 @@ sub get_rtf_licensetext
     for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
     {
         my $oneline = ${$licensefile}[$i];
-        # if  ( $oneline =~ /^\s*$/ ) { $oneline = '\par'; }    # empty lines
 
         if ( $i == 0 ) { $oneline =~ s/^\W*//; }
 
         $oneline =~ s/\t/    /g;        # no tabs allowed, converting to four spaces
         $oneline =~ s/\n$//g;           # no newline at line end
-
-#       $oneline =~ s/ä/\\\'e4/g;           # converting "ä"
-#       $oneline =~ s/ö/\\\'f6/g;           # converting "ö"
-#       $oneline =~ s/ü/\\\'fc/g;           # converting "ü"
-#       $oneline =~ s/ß/\\\'df/g;           # converting "ß"
 
         # german replacements
 
@@ -1146,11 +1136,7 @@ sub add_language_checkboxes_to_database
         my $onelanguage = ${$languagesarrayref}[$i];
         my $windowslanguage = installer::windows::language::get_windows_language($onelanguage);
 
-        # my $is_english = 0;
-        # if ( $windowslanguage eq "1033" ) { $is_english = 1; }
-
         my $checkboxattribute = "3";
-        # if ( $is_english ) { $checkboxattribute = "1"; }  # english is not deselectable
 
         my $count = $i + 1;
         my $nextcount = $i + 2;
@@ -1167,7 +1153,6 @@ sub add_language_checkboxes_to_database
         my $yvalue = $offset + $i * $multiplier;
 
         my $property = "IS" . $windowslanguage;
-    #   if ( ! exists($installer::globals::languageproperties{$property}) ) { installer::exiter::exit_program("ERROR: Could not find property \"$property\" in the list of language properties!", "add_language_checkboxes_to_database"); }
 
         my $controlnext = "";
         if ( $last ) { $controlnext = "Next"; }
@@ -1301,7 +1286,7 @@ sub set_custom_action
 
     # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
     # Both must be added together
-    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+    my $localfilesref = [@installer::globals::binarytableonlyfiles, @{$filesref}];
 
     for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
@@ -1379,7 +1364,7 @@ sub add_custom_action_to_install_table
 
     # All files are located in $filesref and in @installer::globals::binarytableonlyfiles.
     # Both must be added together
-    my $localfilesref = installer::converter::combine_arrays_from_references(\@installer::globals::binarytableonlyfiles, $filesref);
+    my $localfilesref = [@installer::globals::binarytableonlyfiles, @{$filesref}];
 
     for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
@@ -1613,7 +1598,6 @@ sub include_subdirname_into_directory_table
             {
                 my $newuniquename = "sub" . $subdir;
                 $newdir = $newuniquename;
-                # my $newparent = $parent;
                 my $newparent = "INSTALLLOCATION";
                 my $newname = $name . "\:" . $subdir;
                 my $newline =
@@ -2097,7 +2081,7 @@ sub get_customaction_position
 
 ##########################################################################
 # Setting the position of CustomActions in sequence tables.
-# Replacing all occurences of "POSITIONTEMPLATE_"
+# Replacing all occurrences of "POSITIONTEMPLATE_"
 ##########################################################################
 
 sub set_positions_in_table
@@ -2107,7 +2091,7 @@ sub set_positions_in_table
     my $infoline = "\nSetting positions in table \"$tablename\".\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-    # Step 1: Resolving all occurences of "POSITIONTEMPLATE_end"
+    # Step 1: Resolving all occurrences of "POSITIONTEMPLATE_end"
 
     my $lastposition = get_last_position_in_sequencetable($sequencetable);
 
@@ -2123,9 +2107,9 @@ sub set_positions_in_table
         }
     }
 
-    # Step 2: Resolving all occurences of "POSITIONTEMPLATE_abc" or "POSITIONTEMPLATE_behind_abc"
+    # Step 2: Resolving all occurrences of "POSITIONTEMPLATE_abc" or "POSITIONTEMPLATE_behind_abc"
     # where abc is the name of the reference Custom Action.
-    # This has to be done, until there is no more occurence of POSITIONTEMPLATE (success)
+    # This has to be done, until there is no more occurrence of POSITIONTEMPLATE (success)
     # or there is no replacement in one circle (failure).
 
     my $template_exists = 0;
@@ -2180,7 +2164,7 @@ sub set_positions_in_table
         }
     } while (( $template_exists ) && ( $template_replaced ));
 
-    # An error occured, because templates still exist, but could not be replaced.
+    # An error occurred, because templates still exist, but could not be replaced.
     # Reason:
     # 1. Wrong name of CustomAction in scp2 (typo?)
     # 2. Circular dependencies of CustomActions (A after B and B after A)
@@ -2193,9 +2177,6 @@ sub set_positions_in_table
 
     if (( $template_exists ) && ( ! $template_replaced ))
     {
-        # Giving a precise error message, collecting all unresolved templates
-        # my $templatestring = "";
-
         for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
         {
             if ( ${$sequencetable}[$i] =~ /^\s*([\w\.]+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
@@ -2204,22 +2185,12 @@ sub set_positions_in_table
                 my $fulltemplate = $2;
                 my $template = $fulltemplate;
                 $template =~ s/POSITIONTEMPLATE_//;
-                # my $newstring = $customactionname . " (" . $template . ")";
-                # $templatestring = $templatestring . $newstring . ", ";
-                # Setting at the end!
                 $lastposition = $lastposition + 25;
                 ${$sequencetable}[$i] =~ s/$fulltemplate/$lastposition/;
                 $infoline = "WARNING: Setting position \"$lastposition\" for custom action \"$customactionname\". Could not find CustomAction \"$template\".\n";
                 push(@installer::globals::logfileinfo, $infoline);
             }
         }
-        # $templatestring =~ s/,\s*$//;
-
-        # $infoline = "Error: Saving table \"$tablename\"\n";
-        # push(@installer::globals::logfileinfo, $infoline);
-        # print $infoline;
-        # installer::files::save_file($tablename, $sequencetable);
-        # installer::exiter::exit_program("ERROR: Unresolved positions in CustomActions in scp2: $templatestring", "set_positions_in_table");
     }
 }
 

@@ -94,6 +94,7 @@ sub get_registry_component_name
     $componentname = $componentname . $addon;
 
     if (( $styles =~ /\bLANGUAGEPACK\b/ ) && ( $installer::globals::languagepack )) { $componentname = $componentname . "_lang"; }
+    elsif (( $styles =~ /\bHELPPACK\b/ ) && ( $installer::globals::helppack )) { $componentname = $componentname . "_help"; }
     if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
 
     # Attention: Maximum length for the componentname is 72

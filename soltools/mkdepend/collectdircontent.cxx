@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include  "collectdircontent.hxx"
 
 PathFilePair IncludesCollection::split_path(const string& filePath) {
@@ -41,6 +42,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     while ((pent = readdir(pdir))) {
         dirContent.insert(pent->d_name);
     };
+    closedir(pdir);
 #endif // defined( WNT )
     allIncludes.insert(EntriesPair(dirPath, dirContent));
 };
@@ -64,7 +66,6 @@ bool IncludesCollection::exists(string filePath) {
     } else {
         return true;
     };
-    //return false;
 };
 
 extern "C" {
@@ -81,3 +82,5 @@ extern "C" {
         return m->exists(filePath);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ sal_uInt32 getEntriesFromFile( sal_Char* fName,
                                             vector< sal_Char* >& entries ) {
 
     ::osl::File inFile( cnvrtPth( fName ) );
-    if ( inFile.open( OpenFlag_Read ) == ::osl::FileBase::E_None) {
+    if ( inFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None) {
         ::rtl::ByteSequence byteSeq;
         inFile.readLine( byteSeq );
         while ( byteSeq.getLength() ) {
@@ -145,3 +146,4 @@ sal_uInt32 ln( const sal_Char* str ) {
 
 } // </namespace_tstutl>
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

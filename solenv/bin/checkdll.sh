@@ -33,7 +33,7 @@ set -- `getopt "L:" "$@"` ||  {
     exit 1
 }
 
-checkdll="$SOLARVERSION/$INPATH/bin$UPDMINOREXT/checkdll"
+checkdll="$SOLARVERSION/$INPATH/bin/checkdll"
 
 if [ -x $checkdll ]; then
     while :
@@ -56,6 +56,11 @@ if [ -x $checkdll ]; then
         *) DYLD_LIBRARY_PATH=$libpath;;
         esac
         export DYLD_LIBRARY_PATH;;
+    AIX) case "${LIBPATH:+X}" in
+        X) LIBPATH=$libpath:$LIBPATH;;
+        *) LIBPATH=$libpath;;
+        esac
+        export LIBPATH;;
     *)  case "${LD_LIBRARY_PATH:+X}" in
         X) LD_LIBRARY_PATH=$libpath:$LD_LIBRARY_PATH;;
         *) LD_LIBRARY_PATH=$libpath;;
@@ -77,6 +82,14 @@ if [ -x $checkdll ]; then
     fi
 else
     echo "WARNING: checkdll not found!" 1>&2
+
+    for parameter in $*; do
+        library=$parameter;
+    done
+    realname=`echo $library | sed "s/check_//"`
+    if [ $library != $realname ]; then
+        mv $library $realname
+    fi
 fi
 
 exit 0

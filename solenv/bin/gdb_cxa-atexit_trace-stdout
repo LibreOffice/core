@@ -1,0 +1,8 @@
+set pagination off
+break __cxa_atexit
+commands
+    bt
+    cont
+end
+run
+quit

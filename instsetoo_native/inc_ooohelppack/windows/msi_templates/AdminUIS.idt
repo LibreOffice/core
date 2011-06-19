@@ -1,0 +1,14 @@
+Action	Condition	Sequence
+s72	S255	I2
+AdminUISequence	Action
+AdminWelcome	Not PATCH	250
+CostFinalize		200
+CostInitialize		100
+ExecuteAction		350
+FileCost		150
+PatchWelcome	PATCH	260
+SetupCompleteError		-3
+SetupCompleteSuccess		-1
+SetupInitialization		50
+SetupInterrupted		-2
+SetupProgress		300

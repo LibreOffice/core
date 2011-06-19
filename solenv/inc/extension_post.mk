@@ -85,7 +85,7 @@ $(EXTENSIONDIR) :
 
 $(PACK_RUNTIME_FLAG) : $(EXTENSIONDIR)
     @@-$(MKDIRHIER) $(@:d)
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 .IF "$(COM)"=="GCC"
    $(GNUCOPY) $(SOLARBINDIR)/mingwm10.dll $(EXTENSIONDIR)
    .IF "$(MINGW_GCCDLL)"!=""
@@ -131,7 +131,7 @@ $(PACK_RUNTIME_FLAG) : $(EXTENSIONDIR)
 .ENDIF			# "$(CCNUMVER)" <= "001399999999"
 .ENDIF          # "$(PACKMS)"!=""
 .ENDIF	#"$(COM)"=="GCC" 
-.ENDIF 			# "$(OS)$(CPU)"=="WNTI"
+.ENDIF 			# "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
     @$(TOUCH) $@
 .ENDIF			# "$(PACK_RUNTIME)"!=""
 
@@ -146,25 +146,22 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     @@-$(MKDIRHIER) $(@:d)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)/$(TARGET)_lang_track.mk
 
-    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.1.$(EXTNAME)
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/transform_description.pl $(DESCRIPTION_SRC) $@.1.$(EXTNAME)
 
-    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/transform_description.pl $@.1.$(EXTNAME) $@.2.$(EXTNAME)
+    $(COMMAND_ECHO)$(TYPE) $@.1.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $@.2.$(EXTNAME)
     @@-$(RM) $@.1.$(EXTNAME)
 
-    $(COMMAND_ECHO)$(TYPE) $@.2.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $@.3.$(EXTNAME)
+    $(COMMAND_ECHO)$(TYPE) $@.2.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
     @@-$(RM) $@.2.$(EXTNAME)
-
-    $(COMMAND_ECHO)$(TYPE) $@.3.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $@.3.$(EXTNAME)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
 # default OOo license text!!!
 # may not fit...
 .IF "$(CUSTOM_LICENSE)"==""
 .IF "$(GUI)" == "WNT"
-PACKLICDEPS=$(SOLARBINDIR)/osl/license$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+PACKLICDEPS=$(SOLARBINDIR)/osl/license.txt
 .ELSE			# "$(GUI)" == "WNT"
-PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE			# "$(CUSTOM_LICENSE)" == ""
 PACKLICDEPS=$(CUSTOM_LICENSE)

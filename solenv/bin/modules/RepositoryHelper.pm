@@ -118,8 +118,7 @@ sub search_for_hg {
 
 sub search_via_build_lst {
     my $self = shift;
-#    my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
-    my @possible_build_lists = ('build.lst'); # build lists names
+    my @possible_build_lists = ('gbuild.lst', 'build.lst'); # build lists names
     my $previous_dir = '';
     my $rep_root_candidate = $self->{INITIAL_DIRECTORY};
     do {
@@ -136,7 +135,7 @@ sub search_via_build_lst {
             };
         };
         $previous_dir = $rep_root_candidate;
-        $rep_root_candidate = File::Basename::dirname(Cwd::realpath($rep_root_candidate));
+        $rep_root_candidate = File::Basename::dirname($rep_root_candidate);
         return 0 if ((!$rep_root_candidate) || ($rep_root_candidate eq $previous_dir));
     }
     while (chdir "$rep_root_candidate");

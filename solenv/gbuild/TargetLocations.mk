@@ -30,8 +30,15 @@
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_ComponentTarget_get_outdir_inbuild_target = $(OUTDIR)/xml/component/$(1).inbuild.component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
-gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc $(OUTDIR)/bin $(OUTDIR)/pck
+gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT)
+gb_PackagePart_get_destinations = \
+	$(OUTDIR)/xml \
+	$(OUTDIR)/pck \
+	$(OUTDIR)/inc \
+	$(OUTDIR)/bin \
+
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
+gb_RdbTarget_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
@@ -71,22 +78,27 @@ gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
 gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
+gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_NoexPrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
+gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
+gb_RdbTarget_get_target = $(WORKDIR)/RdbTarget/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
+gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
+gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
@@ -108,40 +120,43 @@ $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_Static
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
-    AllLangResTarget \
-    ComponentTarget \
-    JavaClassSet \
+	AllLangResTarget \
+	ComponentTarget \
+	JavaClassSet \
 	Jar \
-    JunitTest \
-    LinkTarget \
-    Module \
-    NoexPrecompiledHeader \
-    PackagePart \
-    PrecompiledHeader \
-    ResTarget \
-    SdiTarget \
-    SrsTarget \
-    CppunitTest \
-    CustomTarget \
+	JunitTest \
+	LinkTarget \
+	Module \
+	NoexPrecompiledHeader \
+	PackagePart \
+	PrecompiledHeader \
+	RdbTarget \
+	ResTarget \
+	SdiTarget \
+	SrsTarget \
+	SrsTemplateTarget \
+	CppunitTest \
+	CustomTarget \
     WinResTarget \
 	Zip \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
-    Executable \
-    Library \
-    Package \
-    StaticLibrary \
+	Executable \
+	Library \
+	Package \
+	StaticLibrary \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
-    CObject \
-    CxxObject \
-    ObjCxxObject \
+	CObject \
+	CxxObject \
+	ObjCObject \
+	ObjCxxObject \
 	GenCxxObject \
-    LinkTarget \
-    SrsPartTarget \
-    SrsTarget \
+	LinkTarget \
+	SrsPartTarget \
+	SrsTarget \
 ))
 
 # other getters
@@ -162,6 +177,9 @@ define gb_StaticLibrary_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
+gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
+gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
+gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 
 # static members declared here because they are used globally
 
@@ -170,4 +188,4 @@ gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

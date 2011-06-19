@@ -74,7 +74,7 @@ STD_LIB_FILE( gid_File_Lib_Rptxml, rptxml )
 
 File gid_File_Help_Sdatabase_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdatabase);
     Patchfiles = (); 
 End

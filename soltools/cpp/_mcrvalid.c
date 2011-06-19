@@ -1,15 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "cpp.h"
-
-/*
-    Nlist *             pMacro;
-    Token *             pTokenWhereMacroBecomesValid;
-    struct macroValidator *
-                        pNext;
-*/
 
 void
 mvl_init(MacroValidatorList * out_pValidators)
@@ -69,21 +63,6 @@ mvl_add( MacroValidatorList *   inout_pValidators,
     inout_pValidators->pFirst = pNew;
 }
 
-/*
-void
-mvl_move( MacroValidatorList * inout_pValidators,
-          int                  in_nSpace )
-{
-    MacroValidator * pV;
-    for ( pV = inout_pValidators->pFirst;
-          pV != 0;
-          pV = pV->pNext )
-    {
-        pV->pTokenWhereMacroBecomesValid += in_nSpace;
-    }
-}
-*/
-
 void
 mvl_check(  MacroValidatorList * inout_pValidators,
             Token *              inout_pTokenToCheck)
@@ -127,3 +106,4 @@ tokenrow_zeroTokenIdentifiers(Tokenrow* trp)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

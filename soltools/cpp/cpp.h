@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $Id: cpp.h,v 1.4 2006-06-20 05:07:28 hr Exp $ */
 
 #define INS         32768   /* input buffer                             */
@@ -53,8 +54,8 @@ typedef struct token
 {
     unsigned char type;
     unsigned char flag;
-    unsigned int wslen;
-    unsigned int len;
+    size_t wslen;
+    size_t len;
     uchar *t;
     unsigned int identifier;            /* used from macro processor to identify where a macro becomes valid again. */
 }   Token;
@@ -64,7 +65,7 @@ typedef struct tokenrow
     Token *tp;                          /* current one to scan */
     Token *bp;                          /* base (allocated value) */
     Token *lp;                          /* last+1 token used */
-    int max;                            /* number allocated */
+    size_t max;                         /* number allocated */
 }   Tokenrow;
 
 typedef struct source
@@ -86,7 +87,7 @@ typedef struct nlist
 {
     struct nlist *next;
     uchar *name;
-    int len;
+    size_t len;
     Tokenrow *vp;                       /* value as macro */
     Tokenrow *ap;                       /* list of argument names, if any */
     char val;                           /* value as preprocessor name */
@@ -143,16 +144,7 @@ void        mvl_add(
                                 inout_pValidators,
                 Nlist *         in_pMacro,
                 Token *         in_pTokenWhereMacroBecomesValid);
-/*  Updates all token pointers within the list, when the tokens have
-    moved, by
-        pTokenWhereMacroBecomesValid += in_nNrofTokens;
-    .
 
-void        mvl_move(
-                MacroValidatorList *
-                                inout_pValidators,
-                int             in_nSpace); // in pointer units.
-*/
 /*  Checks if one of the validators within the list points to
     the token in_pTokenToCheck. If so, the macro is set valid and
     the validator is removed.
@@ -173,7 +165,7 @@ Source *setsource(char *, int, int, char *, int);
 void unsetsource(void);
 void puttokens(Tokenrow *);
 void process(Tokenrow *);
-void *domalloc(int);
+void *domalloc(size_t);
 void dofree(void *);
 void error(enum errtype, char *,...);
 void flushout(void);
@@ -210,7 +202,7 @@ void setempty(Tokenrow *);
 void makespace(Tokenrow *, Token *);
 char *outnum(char *, int);
 int digit(int);
-uchar *newstring(uchar *, int, int);
+uchar *newstring(uchar *, size_t, size_t);
 
 #define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 
@@ -237,3 +229,4 @@ extern Includelist includelist[NINCLUDE];
 extern Wraplist wraplist[NINCLUDE];
 extern char wd[];
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

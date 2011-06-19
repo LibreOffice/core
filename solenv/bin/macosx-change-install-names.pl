@@ -48,6 +48,7 @@ sub action($$$)
          'shl/BOXT/URELIB' => '@executable_path/urelibs',
          'shl/BOXT/OOO' => '@loader_path/../../../basis-link/program',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
+         'shl/OOO/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/NONE' => '@__VIA_LIBRARY_PATH__');
     my ($type, $loc1, $loc2) = @_;
@@ -111,6 +112,8 @@ foreach $file (@ARGV)
     {
         $change .= " -change $1 " . action($type, $loc, $2) . "$3"
             if m'^\s*(@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$';
+        $change .= ' -change '.$1.' @loader_path/'.$2
+            if m'^\s*(/python-inst/(OOoPython.framework/Versions/[^/]+/OOoPython))';
     }
     close(IN);
     if ($change ne "")

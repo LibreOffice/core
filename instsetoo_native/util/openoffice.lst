@@ -5,29 +5,29 @@ Globals
 		variables
 		{
 			OOOBASEVERSION 3.4
-			OOOPACKAGEVERSION 3.4.0
+  			OOOPACKAGEVERSION 3.4.0
 			UREPACKAGEVERSION 3.4.0
 			URELAYERVERSION 1
-			BASISROOTNAME OpenOffice.org
-			UNIXBASISROOTNAME openoffice.org
-			SERVICETAG_PRODUCTNAME OpenOffice.org 3.4 
+			BASISROOTNAME LibreOffice
+			UNIXBASISROOTNAME libreoffice3.4
+			SERVICETAG_PRODUCTNAME LibreOffice 3.4
 			SERVICETAG_PRODUCTVERSION 3.4
-			SERVICETAG_PARENTNAME OpenOffice.org 3.4 
+			SERVICETAG_PARENTNAME LibreOffice 3.4
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
 			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
-			BASISPACKAGEPREFIX ooobasis
-			UREPACKAGEPREFIX openoffice.org
-			SOLSUREPACKAGEPREFIX openofficeorg
+			BASISPACKAGEPREFIX libobasis
+			UREPACKAGEPREFIX libreoffice
+			SOLSUREPACKAGEPREFIX libreoffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
             POOLPRODUCT 1
-            REGISTRATION_HOST https://hs-ws1.oracle.com/RegistrationWeb
-			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
-			PROGRESSBARCOLOR 14,133,205
-			PROGRESSSIZE 320,7
-			PROGRESSPOSITION 185,206
+            REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
+			REGISTRATIONURL http://survey.libreoffice.org/user/index.php
+			PROGRESSBARCOLOR 126,170,23
+			PROGRESSSIZE 319,10
+			PROGRESSPOSITION 164,225
 			PROGRESSFRAMECOLOR 207,208,211
 			NATIVEPROGRESS true
 			REGISTRYLAYERNAME Layers
@@ -37,7 +37,7 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 8
-            OOOVENDOR Oracle
+            OOOVENDOR The Document Foundation
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
 			BUILDIDCWS {buildidcws}
@@ -46,26 +46,26 @@ Globals
 	}
 }
 
-OpenOffice
+LibreOffice
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME OpenOffice.org
+			PRODUCTNAME LibreOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+			SHORT_PRODUCTEXTENSION rc2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
+			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
 			BASEPRODUCTVERSION 3.4
             PCPFILENAME openoffice.pcp
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -74,7 +74,7 @@ OpenOffice
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
+			PACKAGEREVISION {buildid}
 			LICENSENAME LGPL
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -93,42 +93,43 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	OOo_{productversion}_{os}_install_{languages}
-		langpackdownloadname	OOo_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	LibO_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
+		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
-OpenOffice_wJRE
+LibreOffice_wJRE
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME OpenOffice.org
+			PRODUCTNAME LibreOffice
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+			SHORT_PRODUCTEXTENSION rc2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
+			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
 			BASEPRODUCTVERSION 3.4
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -137,7 +138,7 @@ OpenOffice_wJRE
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
+			PACKAGEREVISION {buildid}
 			LICENSENAME LGPL
 			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
@@ -158,56 +159,56 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	OOo_{productversion}_{os}_installwjre_{languages}
+		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
-OpenOffice_Dev
+LibreOffice_Dev
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME OOo-dev
+			PRODUCTNAME LibO-dev
 			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME OOo-dev
-			UNIXBASISROOTNAME ooo-dev
+			SHORT_PRODUCTEXTENSION rc2
+			BASISROOTNAME LibO-dev
+			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
+			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
 			BASEPRODUCTVERSION 3.4
 			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX ooobasis-dev
-			UREPACKAGEPREFIX ooodev
-			SOLSUREPACKAGEPREFIX ooodev
+			BASISPACKAGEPREFIX libobasis-dev
+			UREPACKAGEPREFIX lodev
+			SOLSUREPACKAGEPREFIX lodev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
+			PACKAGEREVISION {buildid}
 			LICENSENAME LGPL
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -215,12 +216,11 @@ OpenOffice_Dev
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
+			XPDINSTALLER 0
 			BETAUPGRADECODE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			JAVAPRODUCT 1
 			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
@@ -229,19 +229,20 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_PRODUCT LibreOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
 		compression		5
-		script			setup_osljre
-		downloadname	OOo-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	OOo_{productversion}_languagepack_{os}_install_{languages}
+		script			setup_osl
+		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
+		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -258,8 +259,9 @@ URE
             PACKAGEVERSION 3.4
             PACKAGEREVISION 1
             PRODUCTEXTENSION
+            BRANDPACKAGEVERSION 3.4
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION rc2
             LICENSENAME LGPL
             SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
@@ -271,13 +273,13 @@ URE
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
 			PACKAGEMAP package_names_ext.txt
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -286,27 +288,27 @@ URE
     }
 }
 
-OpenOffice_SDK
+LibreOffice_SDK
 {
     Settings
     {
         downloadname OOo-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME OpenOffice.org
+            PRODUCTNAME LibreOffice
             PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION rc2
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
+            BRANDPACKAGEVERSION 3.4
             PACKAGEVERSION 3.4.0
-            PACKAGEREVISION {milestone}
+            PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg33sdk
+            DATABASENAME libreoffice33sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -319,11 +321,11 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -332,34 +334,34 @@ OpenOffice_SDK
     }
 }
 
-OpenOffice_Dev_SDK
+LibreOffice_Dev_SDK
 {
     Settings
     {
         downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME OOo-dev
+            PRODUCTNAME LibO-dev
             PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION
-            BASISROOTNAME OOo-dev
-            UNIXBASISROOTNAME ooo-dev
+            SHORT_PRODUCTEXTENSION rc2
+            BASISROOTNAME LibO-dev
+            UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-            BRANDPACKAGEVERSION 3
+            BRANDPACKAGEVERSION 3.4
             PACKAGEVERSION 3.4.0
-            PACKAGEREVISION {milestone}
-            BASISPACKAGEPREFIX ooobasis-dev
-            UREPACKAGEPREFIX ooodev
-            SOLSUREPACKAGEPREFIX ooodev
+            PACKAGEREVISION {buildid}
+            BASISPACKAGEPREFIX libobasis-dev
+            UREPACKAGEPREFIX lodev
+            SOLSUREPACKAGEPREFIX lodev
             REGISTRYLAYERNAME LayerDev
 			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg33devsdk
+            DATABASENAME libreoffice33devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -372,11 +374,11 @@ OpenOffice_Dev_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -385,29 +387,26 @@ OpenOffice_Dev_SDK
     }
 }
 
-BrOffice
+OxygenOffice
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME BrOffice.org
+			PRODUCTNAME OxygenOffice
 			PRODUCTVERSION 3.4
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			SHORT_PRODUCTEXTENSION  rc2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
+			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
-			PROGRESSBARCOLOR 
-			PROGRESSSIZE 
-			PROGRESSPOSITION 
-			PROGRESSFRAMECOLOR 
-			NATIVEPROGRESS
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			BASEPRODUCTVERSION 3.4
+            PCPFILENAME openoffice.pcp
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -416,13 +415,14 @@ BrOffice
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
+			PACKAGEREVISION {buildid}
 			LICENSENAME LGPL
-			SETSTATICPATH 1
+			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
+			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 0
 			BETAUPGRADECODE
@@ -430,53 +430,52 @@ BrOffice
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
-			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE bro_patchcodes.txt
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
+			PATCHCODEFILE ooo_patchcodes.txt
+			DOWNLOADBANNER	ooobanner_ooop.bmp
+			DOWNLOADBITMAP	ooobitmap_ooop.bmp
+			PROGRESSBARCOLOR 126,170,23
+			PROGRESSSIZE 430,5
+			PROGRESSPOSITION 5,230
+			PROGRESSFRAMECOLOR 207,208,211
 			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_PRODUCT OxygenOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	BrOo_{productversion}_{os}_install_{languages}
-		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		downloadname	OOOP_{productversion}_{os}_install_{languages}
+		langpackdownloadname	OOOP_{productversion}_languagepack_{os}_install_{languages}
+		helppackdownloadname	OOOP_{productversion}_helppack_{os}_install_{languages}
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
 	}
 }
 
-BrOffice_wJRE
+OxygenOffice_wJRE
 {
 	Settings
 	{
 		variables
 		{
-			PRODUCTNAME BrOffice.org
+			PRODUCTNAME OxygenOffice
 			PRODUCTVERSION 3.4
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			SHORT_PRODUCTEXTENSION rc2
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
+			BRANDPACKAGEVERSION 3.4
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.4.0
-			PROGRESSBARCOLOR 
-			PROGRESSSIZE 
-			PROGRESSPOSITION 
-			PROGRESSFRAMECOLOR 
-			NATIVEPROGRESS
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
+			BASEPRODUCTVERSION 3.4
+			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
@@ -485,14 +484,15 @@ BrOffice_wJRE
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
 			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
+			PACKAGEREVISION {buildid}
 			LICENSENAME LGPL
+			SERVICESPROJEKT 1
 			WITHJREPRODUCT 1
-			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
+			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
 			XPDINSTALLER 1
 			BETAUPGRADECODE
@@ -500,98 +500,30 @@ BrOffice_wJRE
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
-			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE bro_patchcodes.txt
+			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
+			DOWNLOADBANNER	ooobanner_ooop.bmp
+			DOWNLOADBITMAP	ooobitmap_ooop.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
+			PROGRESSBARCOLOR 126,170,23
+			PROGRESSSIZE 430,5
+			PROGRESSPOSITION 5,230
+			PROGRESSFRAMECOLOR 207,208,211
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
+            REGISTRATION_PRODUCT OxygenOffice
             REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
 		}
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	BrOo_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
-}
-
-BrOffice_Dev
-{
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME BrOo-dev
-			PRODUCTVERSION 3.4
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
-			BASISROOTNAME OOo-dev
-			UNIXBASISROOTNAME ooo-dev
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.4.0
-			DEVELOPMENTPRODUCT 1
-			BASISPACKAGEPREFIX ooobasis-dev
-			UREPACKAGEPREFIX ooodev
-			SOLSUREPACKAGEPREFIX ooodev
-			REGISTRYLAYERNAME LayerDevBroffice
-			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
-			UPDATEURL http://update38.services.openoffice.org/ProductUpdateService/check.Update
-            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.4.0
-			PACKAGEREVISION {milestone}
-			LICENSENAME LGPL
-			SETSTATICPATH 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			OPENSOURCE 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			JAVAPRODUCT 1
-			LIBRARYVERSION 9.4.0
-			PATCHCODEFILE brodev_patchcodes.txt
-			CODEFILENAME codes_broodev.txt
-			DOWNLOADBANNER	brobanner.bmp
-			DOWNLOADBITMAP	brobitmap.bmp
-			DOWNLOADSETUPICO	ooosetup.ico
-			WINDOWSBITMAPDIRECTORY ..\inc_broffice\windows\msi_templates\Binary
-			LOCALUSERDIR $ORIGIN/..
-			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/BrOffice/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/BrOffice/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/BrOffice/templates.jsp?cid=926383
-            STARTCENTER_LAYOUT_STYLE 0
-            REGISTRATION_PRODUCT OpenOffice.org
-            REGISTRATION_CID 926117
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
-		}
-		active			1
-		compression		5
-		script			setup_osljre
-		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{solarpath}/bin.{minor}/broffice,{localpath}/bin/broffice_dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice_dev,{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		downloadname	OOOP_{productversion}_{os}_installwjre_{languages}
+		langpackdownloadname	OOOP_{productversion}_languagepack_{os}_installwjre_{languages}
+		helppackdownloadname	OOOP_{productversion}_helppack_{os}_installwjre_{languages}
+		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
 	}
 }

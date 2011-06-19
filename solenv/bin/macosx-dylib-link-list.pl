@@ -76,6 +76,7 @@ foreach $file (@todo)
         {
             my $full = $1;
             my $loc = locate($2);
+            $loc = locate($1) if $full =~ m'^\s*@loader_path/(OOoPython.framework/Versions/[^/]+/OOoPython)';
             if (defined $loc)
             {
                 handle($full, $loc) unless defined $done{$full};

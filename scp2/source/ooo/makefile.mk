@@ -49,6 +49,9 @@ SCPDEFS+=-DBUILD_SPECIAL
 SCPDEFS+=-DBUILD_X64
 .ENDIF
 
+.IF "$(ENABLE_OPENGL)"=="TRUE"
+SCPDEFS+=-DENABLE_OPENGL
+.ENDIF
 .IF "$(PROF_EDITION)"!=""
 SCPDEFS+=-DPROF_EDITION
 .ENDIF
@@ -63,15 +66,10 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 SCPDEFS+=-DGTK_TWO_FOUR
 .ENDIF
 .ENDIF
+.IF "$(ENABLE_GTK3)" != ""
+SCPDEFS+=-DENABLE_GTK3
+.ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
-
-.IF "$(ENABLE_SYSTRAY_GTK)" != ""
-SCPDEFS+=-DENABLE_SYSTRAY_GTK
-.ENDIF
-
-.IF "$(ENABLE_GSTREAMER)" != ""
-SCPDEFS+=-DENABLE_GSTREAMER
-.ENDIF
 
 .IF "$(ENABLE_KDE)" != ""
 SCPDEFS+=-DENABLE_KDE
@@ -118,10 +116,6 @@ SCPDEFS+=-DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR)
 
 .IF "$(SYSTEM_DB)" == "YES"
 SCPDEFS+=-DSYSTEM_DB
-.ENDIF
-
-.IF "$(USE_SYSTEM_STL)" == "YES" || "$(STLPORT4)" != "NO_STLPORT4"
-SCPDEFS+=-DUSE_SYSTEM_STL
 .ENDIF
 
 .IF "$(WITH_MOZILLA)" == "NO"
@@ -223,8 +217,12 @@ SCPDEFS+=-DOPENSSL
 SCPDEFS+=-DDISABLE_ATL
 .ENDIF
 
+.IF "$(DISABLE_PYTHON)" == "TRUE"
+SCPDEFS+=-DDISABLE_PYUNO
+.ELSE
 .IF "$(SYSTEM_PYTHON)" == "YES"
 SCPDEFS+=-DSYSTEM_PYTHON
+.ENDIF
 .ENDIF
 
 .IF "$(SYSTEM_LIBTEXTCAT)" == "YES"
@@ -271,6 +269,10 @@ SCPDEFS+=-DSYSTEM_LIBCROCO
 SCPDEFS+=-DSYSTEM_LIBJPEG
 .ENDIF
 
+.IF "$(ENABLE_LIBRSVG)" == "INTERNAL"
+SCPDEFS+=-DENABLE_LIBRSVG
+.ENDIF
+
 .IF "$(SYSTEM_LIBRSVG)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBRSVG
 .ENDIF
@@ -283,6 +285,9 @@ SCPDEFS+=-DSYSTEM_PANGO
 SCPDEFS+=-DSYSTEM_LIBGSF
 .ENDIF
 
+.IF "$(ENABLE_LOMENUBAR)" == "TRUE"
+SCPDEFS+=-DENABLE_LOMENUBAR
+.ENDIF
 
 SCP_PRODUCT_TYPE=osl
 
@@ -298,7 +303,6 @@ PARFILES=                          \
         scpaction_ooo.par          \
         directory_ooo.par          \
         directory_ooo_macosx.par   \
-        datacarrier_ooo.par        \
         file_ooo.par               \
         file_extra_ooo.par         \
         file_font_ooo.par          \
@@ -310,6 +314,8 @@ PARFILES=                          \
         module_hidden_ooo.par      \
         module_langpack.par        \
         module_lang_template.par   \
+        module_helppack.par        \
+        module_help_template.par   \
         module_java.par            \
         module_systemint.par       \
         module_improvement.par     \
@@ -337,6 +343,7 @@ ULFFILES=                          \
         folderitem_ooo.ulf         \
         module_ooo.ulf             \
         module_langpack.ulf        \
+        module_helppack.ulf        \
         module_java.ulf            \
         registryitem_ooo.ulf       \
         module_systemint.ulf

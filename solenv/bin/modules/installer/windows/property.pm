@@ -54,6 +54,7 @@ sub get_arpcomments_for_property_table
     }
 
     if ( $installer::globals::languagepack ) { $comment = $comment . " " . "Language Pack"; }
+    elsif ( $installer::globals::helppack ) { $comment = $comment . " " . "Help Pack"; }
 
     if ( $installer::globals::patch )
     {
@@ -142,11 +143,20 @@ sub get_english_language_string
     return $langstring;
 }
 
-sub get_productname_for_property_table
+sub get_productname($$)
 {
-    my ( $allvariables ) = @_;
+    my ( $language, $allvariables ) = @_;
 
     my $name = $allvariables->{'PRODUCTNAME'};
+
+    return $name;
+}
+
+sub get_productname_for_property_table($$)
+{
+    my ( $language, $allvariables ) = @_;
+
+    my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $productname = $name . " " . $version;
 
@@ -166,9 +176,13 @@ sub get_productname_for_property_table
 
     if ( $installer::globals::languagepack )
     {
-        # my $langstring = get_language_string();   # Example (English, Deutsch)
-        my $langstring = get_english_language_string(); # New: (English, German)
+        my $langstring = get_english_language_string(); # Example: (English, German)
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
+    }
+    elsif ( $installer::globals::helppack )
+    {
+        my $langstring = get_english_language_string(); # New: (English, German)
+        $productname = $name . " " . $version . " Help Pack" . " " . $langstring;
     }
 
     if ( $installer::globals::patch )
@@ -186,13 +200,12 @@ sub get_productname_for_property_table
     return $productname;
 }
 
-sub get_quickstarterlinkname_for_property_table
+sub get_quickstarterlinkname_for_property_table($$)
 {
-    my ( $allvariables ) = @_;
+    my ( $language, $allvariables ) = @_;
 
     # no usage of POSTVERSIONEXTENSION for Quickstarter link name!
-
-    my $name = $allvariables->{'PRODUCTNAME'};
+    my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $quickstartername = $name . " " . $version;
 
@@ -358,6 +371,11 @@ sub set_important_properties
         my $onepropertyline = "ISLANGUAGEPACK" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
+    elsif ( $installer::globals::helppack )
+    {
+        my $onepropertyline = "ISHELPPACK" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
 
     my $languagesline = "PRODUCTALLLANGUAGES" . "\t" . $$languagestringref . "\n";
     push(@{$propertyfile}, $languagesline);
@@ -485,9 +503,9 @@ sub update_property_table
     my $ischeckforproductupdates = get_ischeckforproductupdates_for_property_table();
     my $manufacturer = get_manufacturer_for_property_table();
     my $productlanguage = get_productlanguage_for_property_table($language);
-    my $productname = get_productname_for_property_table($allvariables);
+    my $productname = get_productname_for_property_table($language, $allvariables);
     my $productversion = get_productversion_for_property_table();
-    my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($allvariables);
+    my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($language, $allvariables);
 
     # Updating the values
 

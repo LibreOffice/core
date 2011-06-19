@@ -24,14 +24,12 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-###############################################
-#        Windows 64 bit special
-#	only used for 64 bit shell extension
-#          ( Windows Vista )
-# ---------------------------------------------
-# THIS FILE WILL BE DELETED when a fully ported
-# Windows 64 bit version is available
-###############################################
+##############################################################################################
+#       Used when building 64-bit Windows code for the 64-bit Explorer shell extension
+#	in an otherwise 32-bit LibreOffice build. Don't confuse with
+#	building a completely 64-bit LibreOffice on Windows, which is unfinished
+#	and highly experimental work.
+##############################################################################################
 
 .IF "$(BUILD_X64)"!=""
 
@@ -43,7 +41,7 @@ $(SLOTARGET_X64): $(SLOFILES_X64) $(IDLSLOFILES_X64)
 .ENDIF
     @echo ------------------------------
     @echo Making: $@
-    @-$(MKDIR) $(SLB_X64)
+    @-$(MKDIRHIER) $(SLB_X64)
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
@@ -73,10 +71,7 @@ SHL1IMPLIBN_X64=$(LB_X64)/$(SHL1IMPLIB_X64).lib
 .ENDIF # "$(SLOFILES_X64)$(OBJFILES_X64)"!=""
 
 make_x64_dirs :
-    -$(MKDIR) $(BIN_X64)
-    -$(MKDIR) $(MISC_X64)
-    -$(MKDIR) $(LB_X64)
-    -$(MKDIR) $(SLB_X64)
+    $(MKDIRHIER) $(BIN_X64) $(MISC_X64) $(LB_X64) $(SLB_X64)
 
 
 .IF "$(LIBTARGET)" == ""
@@ -92,7 +87,7 @@ $(LIB1TARGET_X64) :	$(LIB1FILES_X64) \
     @echo using: $(LIB1TARGET_X64)
     @echo ------------------------------
     @echo Making: $@
-    -$(MKDIR) $(SLB_X64)
+    $(MKDIRHIER) $(SLB_X64)
     @@-$(RM) $@
     $(LIBMGR_X64) $(LIBFLAGS_X64) /OUT:$@ @$(mktmp $(LIB1FILES_X64) $(LIB1OBJFILES_X64))
     @-$(RM) $(@:s/.lib/.lin/)
@@ -113,7 +108,7 @@ $(LIB2TARGET_X64) :	$(LIB2FILES_X64) \
     @echo using: $(LIB2TARGET_X64)
     @echo ------------------------------
     @echo Making: $@
-    -$(MKDIR) $(SLB_X64)
+    $(MKDIRHIER) $(SLB_X64)
     @@-$(RM) $@
     $(LIBMGR_X64) $(LIBFLAGS_X64) /OUT:$@ @$(mktmp $(LIB2FILES_X64) $(LIB2OBJFILES_X64))
     @-$(RM) $(@:s/.lib/.lin/)
@@ -131,7 +126,7 @@ $(LIB2TARGET_X64) :	$(LIB2FILES_X64) \
 $(DEF1TARGETN_X64) : \
         $(DEF1DEPN_X64) \
         $(DEF1EXPORTFILE_X64)
-        @-$(MKDIR) $(MISC_X64)
+        @-$(MKDIRHIER) $(MISC_X64)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -169,7 +164,7 @@ $(DEF1TARGETN_X64) : \
 $(DEF2TARGETN_X64) : \
         $(DEF2DEPN_X64) \
         $(DEF2EXPORTFILE_X64)
-    @-$(MKDIR) $(MISC_X64)
+    @-$(MKDIRHIER) $(MISC_X64)
     @-$(RM) $@.tmpfile
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(EMQ)"$(SHL2TARGETN:f)$(EMQ)" 								 >$@.tmpfile
@@ -325,7 +320,7 @@ $(SHL1IMPLIBN_X64):	\
                     $(USELIBDEPN_X64)
     @echo Making: $(SHL1IMPLIBN_X64)
 # bei use_deffile implib von linker erstellt
-    @-mkdir $(LB_X64)
+    @-$(MKDIRHIER) $(LB_X64)
 .IF "$(USE_DEFFILE_X64)"==""
     $(IMPLIB_X64) $(IMPLIBFLAGS_X64) @$(mktmp -out:$(SHL1IMPLIBN_X64) \
     -def:$(SHL1DEF_X64) )
@@ -469,7 +464,7 @@ $(SHL2IMPLIBN_X64):	\
                     $(USELIBDEPN_X64)
     @echo Making: $(SHL2IMPLIBN_X64)
 # bei use_deffile implib von linker erstellt
-    @-mkdir $(LB_X64)
+    @-$(MKDIRHIER) $(LB_X64)
 .IF "$(USE_DEFFILE_X64)"==""
     $(IMPLIB_X64) $(IMPLIBFLAGS_X64) @$(mktmp -out:$(SHL2IMPLIBN_X64) \
     -def:$(SHL2DEF_X64) )
@@ -484,21 +479,21 @@ $(SLO_X64)/%.obj : %.cpp
     @echo ------------------------------
     @echo Making: $@
     @@-$(RM) $@ >& $(NULLDEV)
-    -$(MKDIR) $(@:d)
-    @-$(MKDIR) $(MISC_X64)
+    -$(MKDIRHIER) $(@:d)
+    @-$(MKDIRHIER) $(MISC_X64)
     $(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cpp $(CAPTURE_OUTPUT)
 
 $(SLO_X64)/%.obj : %.cxx
     @echo Making: $@
     @@-$(RM) $@ >& $(NULLDEV)
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
-    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(MISC_X64)
     $(COMMAND_ECHO)$(CAPTURE_COMMAND) $(CXX_X64) $(USE_CFLAGS_X64) $(INCLUDE_X64) $(CFLAGSCXX_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx $(CAPTURE_OUTPUT)
 
 $(SLO_X64)/%.obj : $(MISC)/%.c
     @echo Making: $@
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
-    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC_X64)
     @@-$(RM) $@
     @$(TYPE) $(mktmp $(CC_X64) $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $(MISC)/$*.c )
     @$(ECHONL)
@@ -506,8 +501,8 @@ $(SLO_X64)/%.obj : $(MISC)/%.c
 
 $(SLO_X64)/%.obj : %.c
     @echo Making: $@
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
-    $(COMMAND_ECHO)@-$(MKDIR) $(MISC_X64)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC_X64)
     @@-$(RM) $@
     $(COMMAND_ECHO)$(CC_X64) @$(mktmp $(USE_CFLAGS_X64) $(INCLUDE_C) $(CFLAGSCC_X64) $(CFLAGSSLO_X64) $(USE_CDEFS_X64) $(CDEFSSLO_X64) $(CDEFSMT_X64) $(CFLAGSAPPEND_X64) $(CFLAGSOUTOBJ)$(SLO_X64)/$*.obj $*.c )
 

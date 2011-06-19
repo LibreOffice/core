@@ -1,7 +1,7 @@
 so  soltools :   solenv SUN:so_prereq NULL
 so	soltools								usr1	-	all	so_usr1 NULL
 so	soltools\inc							get	-	all	so_inc NULL
-so	soltools\ldump							nmake	-	all	so_ldump so_mkdep NULL
+so	soltools\ldump							nmake	-	w	so_ldump so_mkdep NULL
 so	soltools\winunistd						nmake	-	n	so_wunistd NULL
 so	soltools\mkdepend						nmake	-	all	so_mkdep so_wunistd.n NULL
 so	soltools\checkdll						nmake	-	u	so_chkdl so_adjvis.u so_mkdep NULL

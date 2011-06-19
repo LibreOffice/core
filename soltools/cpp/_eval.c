@@ -1,7 +1,9 @@
-#include "cpp.h"
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #include <stdlib.h>
 #include <string.h>
+
+#include "cpp.h"
 
 #define NSTAK   32
 #define SGN 0
@@ -234,7 +236,8 @@ long
 {
     Token *tp;
     Nlist *np;
-    int ntok, rnd;
+    size_t  ntok;
+    int rnd;
 
     trp->tp++;
     if (kw == KIFDEF || kw == KIFNDEF)
@@ -765,3 +768,5 @@ int
                 i = -1;
     return i;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

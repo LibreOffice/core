@@ -52,7 +52,7 @@
 
 //#define MH_TEST2  1           // fuers direkte Testen
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #ifdef _MSC_VER
 #pragma warning (push,1)
 #endif
@@ -74,10 +74,10 @@
 #endif
 
 #if defined WNT
-#include <tools/svwin.h>
+#include <windows.h>
 #endif
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define     cPathSeperator ';'
 #endif
 #ifdef UNX
@@ -436,8 +436,6 @@ CCommand::operator int()
     int nRet;
 #if defined WNT
     nRet = _spawnv( P_WAIT, ppArgv[0], (const char **) ppArgv );
-#elif defined OS2
-    nRet = _spawnv( P_WAIT, ppArgv[0], ppArgv );
 #elif defined UNX
     //fprintf( stderr, "CComand : operator (int) not implemented\n");
     // **** Unix Implementierung ***************

@@ -128,6 +128,11 @@ sub get_file_component_directory
         return $installer::globals::templatefolder;
     }
 
+    if ( $destdir =~ /\bPREDEFINED_OSWINSHELLNEWDIR\b/ )
+    {
+        return "WindowsShellNewFolder";
+    }
+
     my $destination = $onefile->{'destination'};
 
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
@@ -394,9 +399,6 @@ sub create_component_table
     my ($oneline, $infoline);
 
     installer::windows::idtglobal::write_idt_header(\@componenttable, "component");
-
-    # collect_layer_conditions();
-
 
     # File components
 

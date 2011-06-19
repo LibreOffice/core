@@ -34,46 +34,26 @@ TARGET=so_stlport
 
 .INCLUDE :	settings.mk
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
+.IF "$(WITH_STLPORT)"!="YES"
 
-.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
-# System STL when building with SunStudio is just a version of STLport
-# which comes with the compiler
 all:
     @echo "Nothing to do"
-.ELSE #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
-#
-# If you choose to build without stlport, some headers will be used to bring the
-# sgi extensions into the std namespace:
-$(INCCOM)$/stlport$/functional \
-$(INCCOM)$/stlport$/hash_map \
-$(INCCOM)$/stlport$/hash_set \
-$(INCCOM)$/stlport$/numeric \
-$(INCCOM)$/stlport$/slist \
-$(INCCOM)$/stlport$/rope \
-$(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
-    $(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-.ENDIF #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 
-.ELSE # "$(USE_SYSTEM_STL)"
+.ELSE # "$(WITH_STLPORT)"!="YES"
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
     TARFILE_MD5=18f577b374d60b3c760a3a3350407632
-    PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
+    PATCH_FILES=\
+                STLport-4.5.patch \
+                STLport-4.5-gcc43_warnings.patch \
+                STLport-4.5-cxx0x.patch
 .ELIF "$(GUI)"=="WNT"
-    .IF "$(CCNUMVER)"<="001300000000"
-        TARFILE_NAME=STLport-4.0
-        TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
-        PATCH_FILES=STLport-4.0.patch
-    .ELSE
-        TARFILE_NAME=STLport-4.5-0119
-        TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
-        PATCH_FILES=STLport-4.5-0119.patch
-    .ENDIF
+    TARFILE_NAME=STLport-4.5-0119
+    TARFILE_MD5=7376930b0d3f3d77a685d94c4a3acda8
+    PATCH_FILES=STLport-4.5-0119.patch
 .ELSE
     TARFILE_NAME=STLport-4.0
     TARFILE_MD5=c441926f3a552ed3e5b274b62e86af16
@@ -113,11 +93,7 @@ BUILD_DIR=src
 
 .IF "$(COM)"=="MSC"
 BUILD_ACTION=nmake
-.IF "$(CCNUMVER)"<="001400000000"
-BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHsc"
-.ELSE			# "$(CCNUMVER)"<="001400000000"
 BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
-.ENDIF			# "$(CCNUMVER)"<="001400000000"
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -125,8 +101,6 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
         # FreeBSD needs a special makefile
         .IF "$(OS)"=="FREEBSD"
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
-        .ELIF "$(OS)"=="OS2"
-            BUILD_FLAGS=-f gcc-3.0-os2.mak
         .ELIF "$(GUI)"=="WNT"
             BUILD_FLAGS=-f gcc-3.0-mingw.mak
         .ELSE
@@ -144,7 +118,7 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
     BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-CXX+= -Wl,--hash-style=both
+CXX+= -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
 .ENDIF
 
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
@@ -188,11 +162,6 @@ OUT2BIN= \
 
 .ENDIF # "$(COM)"=="GCC"
 
-.ELIF "$(GUI)"=="OS2"
-
-OUT2LIB= lib$/*.lib
-OUT2BIN= lib$/*.dll
-
 .ELSE          # "$(GUI)"=="WNT"
 
 OUT2LIB= \
@@ -202,45 +171,8 @@ OUT2LIB= \
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(STLPORT4)"!="NO_STLPORT4"
-all :
-       @echo "         An already available installation of STLport has been chosen in the configure process."
-       @echo "         Therefore the version provided here does not need to be built in addition."
-.ELIF "$(OS)"=="MACOSX"
-all:
-    @echo '--with-stlport=yes is not supported on Mac OS X'
-    false
-.ENDIF
-
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-.IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
-.IF "$(CCNUMVER)"<="001300000000"
-
-$(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
-avoid_win32_patches :
-    @$(ECHONL)
-    @echo ERROR! this module can't use automated patch creation
-    @echo on windows.
-    @$(ECHONL)
-    force_dmake_to_error
-
-$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
-
-.IF "$(USE_NEW_SDK)"!=""
-$(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    win32_sdk.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
-
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
-.ENDIF			# "$(USE_NEW_SDK)"!=""
-.ENDIF			# COMVER<=001300000000
-.ENDIF "$(COM)"=="GCC"
-.ENDIF          # "$(GUI)"=="WNT"
-
-.ENDIF # "$(USE_SYSTEM_STL)"
+.ENDIF # "$(WITH_STLPORT)"!="YES"

@@ -98,15 +98,7 @@ const string transformvars[] = { "SOLAR_VERSION",
                                  "SOLARVERSION",
                                  "SOLARVER",
                                  "SRC_ROOT",
-                                 "LOCALINI",
-                                 "GLOBALINI",
                                  "SOLARENV",
-                                 "STAR_INSTPATH",
-                                 "STAR_SOLARPATH",
-                                 "STAR_PACKMISC",
-                                 "STAR_SOLARENVPATH",
-                                 "STAR_INITROOT",
-                                 "STAR_STANDLST",
                                  "CLASSPATH",
                                  "JAVA_HOME" };
 
@@ -290,7 +282,7 @@ void init_ignorepara(string fullcommand) {
 bool is_ignorepara(const string &para) {
 
   for( vector<string>::iterator it = ignorepara_vec.begin();
-       it != ignorepara_vec.end(); it++ ) {
+       it != ignorepara_vec.end(); ++it ) {
     if ( para.find(*it) != string::npos ) {
       if ( debug )
         cerr << "Found execption para: " << para << endl;
@@ -641,7 +633,7 @@ void rep_subn_cyg(string &argument)
   regfree(&re);
 }
 
-// Replace all occurences of subexpression number "subexp" with "repl"
+// Replace all occurrences of subexpression number "subexp" with "repl"
 void rep_subn( string &argument, const char *pattern, int subexp, const char repl)
 {
   int status, pos=0;

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,6 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-    int     rc;
     int     silent=0;
     void    *phandle;
     char    *(*pfun)(void);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         ++argv, --argc;
     }
 
-    if ( (rc = access( argv[1], R_OK )) == -1 ) {
+    if ( access( argv[1], R_OK ) == -1 ) {
         fprintf(stderr, "%s: ERROR: %s: %s\n",
                 pprog_name, argv[1], strerror(errno));
         return 2;
@@ -95,3 +95,4 @@ int main(int argc, char *argv[])
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

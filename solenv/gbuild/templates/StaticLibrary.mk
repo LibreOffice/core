@@ -32,4 +32,4 @@ $(eval $(call gb_StaticLibrary_add_package_headers,LIB,MODULE_inc))
 $(eval $(call gb_StaticLibrary_add_exception_objects,LIB,\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

@@ -64,7 +64,10 @@ sub write_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Compress=ON\n";
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set CompressionLevel=$installer::globals::cabfilecompressionlevel\n";
+# The window size for LZX compression
+# CompressionMemory=15 | 16 | ... | 21
+# Reference: http://msdn.microsoft.com/en-us/library/bb417343.aspx
+    $oneline = ".Set CompressionMemory=$installer::globals::cabfilecompressionlevel\n";
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set Cabinet=ON\n";
     push(@{$ddffileref} ,$oneline);
@@ -1010,9 +1013,9 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occurred.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
-        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
+        # exists and if it is larger than 0 bytes. If this is true, then no error occurred.
         # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
         # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
@@ -1026,7 +1029,7 @@ sub create_transforms
             my $digest = Digest::MD5->new->addfile(*FILE)->hexdigest;
             close(FILE);
 
-            my @problemchecksums = ("b66190a70145a57773ec769e16777b29", "aa25d3445b94ffde8ef0c1efb77a56b8");
+            my @problemchecksums = ("b66190a70145a57773ec769e16777b29", "aa25d3445b94ffde8ef0c1efb77a56b8", "748206e54fc93efe6a1aaa9d491f3ad1");
             my $isproblemchecksum = 0;
 
             foreach my $problemchecksum ( @problemchecksums )
@@ -1057,13 +1060,13 @@ sub create_transforms
                     }
                     else
                     {
-                        $infoline = "Filesize indicates that an error occured.\n";
+                        $infoline = "Filesize indicates that an error occurred.\n";
                         push( @installer::globals::logfileinfo, $infoline);
                     }
                 }
                 else
                 {
-                    $infoline = "File $transformfile does not exist -> An error occured.\n";
+                    $infoline = "File $transformfile does not exist -> An error occurred.\n";
                     push( @installer::globals::logfileinfo, $infoline);
                 }
             }
@@ -1476,7 +1479,6 @@ sub get_guid_list
 
     # "-c" for uppercase output
 
-    # my $systemcall = "$uuidgen -n$number -c |";
     my $systemcall = "$uuidgen -n$number |";
     open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
     my @uuidlist = <UUIDGEN>;
@@ -1519,7 +1521,6 @@ sub calculate_guid
     my $digest = $md5->hexdigest;
     $digest = uc($digest);
 
-    # my $id = pack("A32", $digest);
     my ($first, $second, $third, $fourth, $fifth) = unpack ('A8 A4 A4 A4 A12', $digest);
     $guid = "$first-$second-$third-$fourth-$fifth";
 
@@ -1593,8 +1594,6 @@ sub set_uuid_into_component_table
 
     my $infoline = "";
     my $counter = 0;
-    # my $componentfile = installer::files::read_file($installer::globals::componentfilename);
-    # my $componenthash = fill_component_hash($componentfile);
 
     for ( my $i = 3; $i <= $#{$componenttable}; $i++ )  # ignoring the first three lines
     {
@@ -1603,13 +1602,6 @@ sub set_uuid_into_component_table
         if ( $oneline =~ /^\s*(\S+?)\t/ ) { $componentname = $1; }
 
         my $uuid = "";
-
-    #   if ( $componenthash->{$componentname} )
-    #   {
-    #       $uuid = $componenthash->{$componentname};
-    #   }
-    #   else
-    #   {
 
             if ( exists($installer::globals::calculated_component_guids{$componentname}))
             {
@@ -1634,44 +1626,12 @@ sub set_uuid_into_component_table
                 if ( exists($installer::globals::allcalculated_guids{$uuid}) ) { installer::exiter::exit_program("ERROR: \"$uuid\" was already created before!", "set_uuid_into_component_table"); }
                 $installer::globals::allcalculated_guids{$uuid} = 1;
                 $installer::globals::calculated_component_guids{$componentname} = $uuid;
-
-                # Setting new uuid
-                # $componenthash->{$componentname} = $uuid;
-
-                # Setting flag
-                # $installer::globals::created_new_component_guid = 1;  # this is very important!
             }
-    #   }
 
         ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
     }
 
     installer::files::save_file($componenttablename, $componenttable);
-
-#   if ( $installer::globals::created_new_component_guid )
-#   {
-#       # create new component file!
-#       $componentfile = create_new_component_file($componenthash);
-#       installer::worker::sort_array($componentfile);
-#
-#       # To avoid conflict the components file cannot be saved at the same place
-#       # All important data have to be saved in the directory: $installer::globals::infodirectory
-#       my $localcomponentfilename = $installer::globals::componentfilename;
-#       installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localcomponentfilename);
-#       $localcomponentfilename = $installer::globals::infodirectory . $installer::globals::separator . $localcomponentfilename;
-#       installer::files::save_file($localcomponentfilename, $componentfile);
-#
-#       # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
-#
-#       $infoline = "COMPONENTCODES: Created $counter new GUIDs for components ! \n";
-#       push( @installer::globals::logfileinfo, $infoline);
-#   }
-#   else
-#   {
-#       $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
-#       push( @installer::globals::logfileinfo, $infoline);
-#   }
-
 }
 
 #########################################################################
@@ -1884,8 +1844,6 @@ sub execute_packaging
 
         installer::logger::print_message( "... makecab.exe ($callscounter/$allmakecabcalls) ... \n" );
 
-        # my $returnvalue = system($systemcall);
-
         for ( my $n = 1; $n <= $maxmakecabcalls; $n++ )
         {
             my @ddfoutput = ();
@@ -1913,7 +1871,6 @@ sub execute_packaging
                 }
 
                 push( @installer::globals::logfileinfo, $infoline);
-                # for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
 
                 for ( my $m = 0; $m <= $#ddfoutput; $m++ )
                 {
@@ -1930,7 +1887,6 @@ sub execute_packaging
             }
             else
             {
-                # installer::logger::print_message( "Success (Try $n): \"$systemcall\"\n" );
                 $infoline = "Success (Try $n): $systemcall";
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
@@ -2033,7 +1989,6 @@ sub set_global_code_variables
         $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
     }
 
-    # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
@@ -2226,8 +2181,8 @@ sub read_saved_mappings
     {
         my @errorlines = ();
         my $errorstring = "";
-        my $error_occured = 0;
-        my $file_error_occured = 0;
+        my $error_occurred = 0;
+        my $file_error_occurred = 0;
         my $dir_error = 0;
 
         my $idtdir = $installer::globals::previous_idt_dir;
@@ -2251,28 +2206,28 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::savedmapping{"$2/$5"}))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             if ( exists($installer::globals::savedrevmapping{$lc1}))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             my $shortname = $4 || '';
@@ -2286,15 +2241,15 @@ sub read_saved_mappings
 
             if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
@@ -2326,15 +2281,15 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::saved83dirmapping{$1}) )
             {
-                if ( ! $dir_error_occured )
+                if ( ! $dir_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $dir_error_occured = 1;
+                $error_occurred = 1;
+                $dir_error_occurred = 1;
             }
 
             $installer::globals::saved83dirmapping{$1} = $4;
@@ -2346,7 +2301,7 @@ sub read_saved_mappings
 
         # Analyzing errors
 
-        if ( $error_occured )
+        if ( $error_occurred )
         {
             for ( my $i = 0; $i <= $#errorlines; $i++ )
             {
@@ -2356,7 +2311,6 @@ sub read_saved_mappings
             installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
         }
     } else {
-        # push( @installer::globals::globallogfileinfo, "WARNING: Windows patch shall be prepared, but PREVIOUS_IDT_DIR is not set!\n" );
         installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
     }
 

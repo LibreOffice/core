@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #include <unistd.h>
 #include <netinet/in.h>     /* ntohl(), ntohs() */
 #elif defined(WNT)
@@ -52,10 +53,6 @@
                         (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
 
 #define ntohs(x)    ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
-#endif
-
-#if defined(OS2)
-#define CDECL
 #endif
 
 /* max. length of line in response file */
@@ -104,10 +101,10 @@ enum { NGROW_INIT = 10, NGROW = 2 };
 
 static char     *pprogname  = "javadep";
 static char     csep        = ';';
-#if defined (UNX) || defined(OS2)
+#if defined (UNX)
 #define CDECL
 static char     cpathsep    = '/';
-#elif defined (WNT) || defined(OS2)
+#elif defined (WNT)
 static char     cpathsep    = '\\';
 #endif
 static FILE     *pfsout     = NULL;
@@ -118,7 +115,7 @@ static char     *pout_file  = NULL;
 uint8   read_uint8(const file_t *pfile);
 uint16  read_uint16(const file_t *pfile);
 uint32  read_uint32(const file_t *pfile);
-void    skip_bytes(const file_t *pfile, const size_t nnum);
+void    skip_bytes(const file_t *pfile, const long nnum);
 char    *escape_slash(const char *pstr);
 int     is_inner(const char *pstr);
 void    print_dependencies(const struct growable *pdep,
@@ -151,7 +148,7 @@ uint8
 read_uint8(const file_t *pfile)
 {
     /* read a byte from classfile */
-    int nread;
+    size_t nread;
     uint8 ndata;
     nread = fread(&ndata, sizeof(uint8), 1, pfile->pfs);
     if ( !nread ) {
@@ -165,7 +162,7 @@ uint16
 read_uint16(const file_t *pfile)
 {
     /* read a short from classfile and convert it to host format */
-    int nread;
+    size_t nread;
     uint16 ndata;
     nread = fread(&ndata, sizeof(uint16), 1, pfile->pfs);
     if ( !nread ) {
@@ -180,7 +177,7 @@ uint32
 read_uint32(const file_t *pfile)
 {
     /* read an int from classfile and convert it to host format */
-    int nread;
+    size_t nread;
     uint32 ndata;
     nread = fread(&ndata, sizeof(uint32), 1, pfile->pfs);
     if ( !nread ) {
@@ -202,7 +199,7 @@ read_utf8(const file_t *pfile)
      */
 
     utf8_t  a_utf8;
-    int     nread;
+    size_t  nread;
 
     a_utf8.pdata = NULL;
 
@@ -254,7 +251,7 @@ char *utf8tolatin1(const utf8_t a_utf8)
 
 
 void
-skip_bytes(const file_t *pfile, const size_t nnumber)
+skip_bytes(const file_t *pfile, const long nnumber)
 {
     /* skip a nnumber of bytes in classfile */
     if ( fseek(pfile->pfs, nnumber, SEEK_CUR) == -1 )
@@ -269,7 +266,7 @@ add_to_dependencies(struct growable *pdep,
 {
     /* create dependencies */
     int i;
-    int nlen_filt, nlen_str, nlen_pdepstr;
+    size_t nlen_filt, nlen_str, nlen_pdepstr;
     char *pstr, *ptrunc;
     char path[PATH_MAX+1];
     char cnp_class_file[PATH_MAX+1];
@@ -301,7 +298,7 @@ add_to_dependencies(struct growable *pdep,
             }
 
             /* get the canonical path */
-#if defined (UNX) || defined(OS2)
+#if defined (UNX)
             if ( !(realpath(pclass_file, cnp_class_file)
                 && realpath(path, cnp_str) ) ) {
                 err_quit("can't get the canonical path");
@@ -344,7 +341,7 @@ escape_slash(const char *pstr)
     const char *pp = pstr;
     char *p, *pnp;
     char *pnew_str;
-    int nlen_pnp, nlen_pp;
+    size_t nlen_pnp, nlen_pp;
     int i = 0;
 
     while ( (p=strchr(pp, cpathsep)) != NULL ) {
@@ -453,9 +450,12 @@ process_class_file(const char *pfilename, const struct growable *pfilt)
     ncnt = read_uint16(&file);
 
 #ifdef DEBUG
-    printf("Magic: %p\n", (void*)nmagic);
+    printf("Magic: %x\n", nmagic);
     printf("Major %d, Minor %d\n", nmajor, nminor);
     printf("Const_pool_count %d\n", ncnt);
+#else
+    (void)nmajor;
+    (void)nminor;
 #endif
 
     /* There can be ncount entries in the constant_pool table
@@ -603,9 +603,11 @@ xcalloc(size_t nmemb, size_t size)
 void *
 xrealloc(void *ptr, size_t size)
 {
-    ptr = realloc(ptr, size);
+    void *newptr = realloc(ptr, size);
 
-    if ( !ptr )
+    if (newptr)
+        ptr = newptr;
+    else
         err_quit("out of memory");
 
     return ptr;
@@ -703,7 +705,8 @@ void
 create_filters(struct growable *pfilt, const struct growable *pinc)
 {
     char *p, *pp, *pstr;
-    int i, nlen, nlen_pstr;
+    int i;
+    size_t nlen, nlen_pstr;
     /* break up includes into filter list */
     for ( i = 0; i < pinc->ncur; i++ ) {
         pp = pinc->parray[i];
@@ -909,3 +912,4 @@ main(int argc, char *argv[])
     exit(0);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

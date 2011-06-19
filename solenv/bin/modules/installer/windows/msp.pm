@@ -420,7 +420,6 @@ sub execute_msimsp
         $locallogfilename =~ s/\//\\\\/g;
 
         $localmspfilename =~ s/\\/\\\\/g; # path already contains backslash
-        # $localmspfilename =~ s/\//\\\\/g;
 
         $localmsimsptemppath = qx{cygpath -w "$localmsimsptemppath"};
         $localmsimsptemppath =~ s/\\/\\\\/g;
@@ -888,7 +887,7 @@ sub change_patchmetadata_table
     if ( $allvariables->{'PROPERTYTABLEPRODUCTNAME'} ) { $targetproductnamevalue = $allvariables->{'PROPERTYTABLEPRODUCTNAME'}; }
 
     my $manufacturerstring = "ManufacturerName";
-    my $manufacturervalue = "OpenOffice.org";
+    my $manufacturervalue = "LibreOffice";
     if ( $installer::globals::longmanufacturer ) { $manufacturervalue = $installer::globals::longmanufacturer; }
 
     my $displaynamestring = "DisplayName";
@@ -897,7 +896,7 @@ sub change_patchmetadata_table
     my $descriptionvalue = "";
 
     my $base = $allvariables->{'PRODUCTNAME'} . " " . $allvariables->{'PRODUCTVERSION'};
-    if ( $installer::globals::languagepack ) { $base = $targetproductnamevalue; }
+    if ( $installer::globals::languagepack || $installer::globals::helppack ) { $base = $targetproductnamevalue; }
 
     my $windowspatchlevel = 0;
     if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
@@ -1176,6 +1175,7 @@ sub correct_patch
 
     my $localproduct = $installer::globals::product;
     if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+    elsif ( $installer::globals::helppack ) { $localproduct = $localproduct . "HelpPack"; }
 
     if ( $product eq $localproduct ) { $product_is_good = 1; }
 
@@ -1273,10 +1273,7 @@ sub convert_unicode_to_ascii
     my $savfilename = $filename . "_before.unicode";
     installer::systemactions::copy_one_file($filename, $savfilename);
 
-#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
-#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
     open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
-#   open( IN, "<:encoding(UTF-8)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
     while ( $line = <IN> ) {
         push @localfile, $line;
     }
@@ -1408,6 +1405,7 @@ sub create_msp_patch
     my $pcpfilename = $allvariables->{'PCPFILENAME'};
 
     if ( $installer::globals::languagepack ) { $pcpfilename =~ s/.pcp\s*$/languagepack.pcp/; }
+    elsif ( $installer::globals::helppack ) { $pcpfilename =~ s/.pcp\s*$/helppack.pcp/; }
 
     # Searching the pcp file in the include pathes
     my $fullpcpfilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$pcpfilename, $includepatharrayref, 1);
@@ -1456,7 +1454,7 @@ sub create_msp_patch
     installer::systemactions::copy_complete_directory($oldinstallationsetpath, $mspdir);
 
     # Copying additional patches into the installation set, if required
-    if (( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ) && ( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ne "" ) && ( ! $installer::globals::languagepack ))
+    if (( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ) && ( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ne "" ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
     {
         my $filename = $allvariables->{'ADDITIONALREQUIREDPATCHES'};
 

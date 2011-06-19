@@ -32,8 +32,6 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -41,6 +39,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP$(TNR)TARGET)"!=""
+
+.IF "$(ZIP$(TNR)STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP$(TNR)EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -145,6 +148,11 @@ $(ZIP$(TNR)TARGETN) : delzip $(ZIP$(TNR)DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP$(TNR)STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF

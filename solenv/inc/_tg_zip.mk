@@ -4,8 +4,6 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -13,6 +11,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP1TARGET)"!=""
+
+.IF "$(ZIP1STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP1EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -117,6 +120,11 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP1STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP1DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -127,8 +135,6 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -136,6 +142,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP2TARGET)"!=""
+
+.IF "$(ZIP2STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP2EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -240,6 +251,11 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP2STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP2DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -250,8 +266,6 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -259,6 +273,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP3TARGET)"!=""
+
+.IF "$(ZIP3STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP3EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -363,6 +382,11 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP3STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP3DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -373,8 +397,6 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -382,6 +404,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP4TARGET)"!=""
+
+.IF "$(ZIP4STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP4EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -486,6 +513,11 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP4STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP4DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -496,8 +528,6 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -505,6 +535,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP5TARGET)"!=""
+
+.IF "$(ZIP5STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP5EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -609,6 +644,11 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP5STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP5DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -619,8 +659,6 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -628,6 +666,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP6TARGET)"!=""
+
+.IF "$(ZIP6STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP6EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -732,6 +775,11 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP6STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP6DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -742,8 +790,6 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -751,6 +797,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP7TARGET)"!=""
+
+.IF "$(ZIP7STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP7EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -855,6 +906,11 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP7STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP7DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -865,8 +921,6 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -874,6 +928,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP8TARGET)"!=""
+
+.IF "$(ZIP8STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP8EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -978,6 +1037,11 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP8STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP8DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -988,8 +1052,6 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -997,6 +1059,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP9TARGET)"!=""
+
+.IF "$(ZIP9STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP9EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -1101,6 +1168,11 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP9STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP9DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF
@@ -1111,8 +1183,6 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
-.ELIF "$(GUI)"=="OS2"
-command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
@@ -1120,6 +1190,11 @@ avoid_cvs_dir=-x "*CVS*" -x "*.svn*"
 .ENDIF
 
 .IF "$(ZIP10TARGET)"!=""
+
+.IF "$(ZIP10STRIPLANGUAGETAGS)" != ""
+CALLXSLTPROC:=$(XSLTPROC)
+.EXPORT: CALLXSLTPROC
+.ENDIF
 
 ZIP10EXT*=.zip
 .IF "$(common_build_zip)"!=""
@@ -1224,6 +1299,11 @@ $(ZIP10TARGETN) : delzip $(ZIP10DEPS)
     $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
         $(PERL) -w $(SOLARENV)/bin/cleanzip.pl $@ \
         $(FI)
+.IF "$(ZIP10STRIPLANGUAGETAGS)" != ""
+    $(COMMAND_ECHO)$(IFEXIST) $@ $(THEN) \
+        $(SOLARENV)/bin/striplanguagetags.sh $@ \
+        $(FI)
+.ENDIF
 .ENDIF			# "$(ZIP10DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
 .ENDIF

@@ -70,11 +70,11 @@ sub save_followme_info
     push(@filecontent, "globals:issolarisx86build: $installer::globals::issolarisx86build\n");
     push(@filecontent, "globals:isfreebsdpkgbuild: $installer::globals::isfreebsdpkgbuild\n");
     push(@filecontent, "globals:islinuxbuild: $installer::globals::islinuxbuild\n");
-    push(@filecontent, "globals:islinuxrpmbuild: $installer::globals::islinuxrpmbuild\n");
+    push(@filecontent, "globals:isrpmbuild: $installer::globals::isrpmbuild\n");
     push(@filecontent, "globals:islinuxintelrpmbuild: $installer::globals::islinuxintelrpmbuild\n");
     push(@filecontent, "globals:islinuxppcrpmbuild: $installer::globals::islinuxppcrpmbuild\n");
     push(@filecontent, "globals:islinuxx86_64rpmbuild: $installer::globals::islinuxx86_64rpmbuild\n");
-    push(@filecontent, "globals:islinuxdebbuild: $installer::globals::islinuxdebbuild\n");
+    push(@filecontent, "globals:isdebbuild: $installer::globals::isdebbuild\n");
     push(@filecontent, "globals:islinuxinteldebbuild: $installer::globals::islinuxinteldebbuild\n");
     push(@filecontent, "globals:islinuxppcdebbuild: $installer::globals::islinuxppcdebbuild\n");
     push(@filecontent, "globals:islinuxx86_64debbuild: $installer::globals::islinuxx86_64debbuild\n");
@@ -87,6 +87,7 @@ sub save_followme_info
     push(@filecontent, "globals:product: $installer::globals::product\n");
     push(@filecontent, "globals:patch: $installer::globals::patch\n");
     push(@filecontent, "globals:languagepack: $installer::globals::languagepack\n");
+    push(@filecontent, "globals:helppack: $installer::globals::helppack\n");
     push(@filecontent, "globals:installertypedir: $installer::globals::installertypedir\n");
     push(@filecontent, "globals:max_lang_length: $installer::globals::max_lang_length\n");
     push(@filecontent, "globals:compiler: $installer::globals::compiler\n");
@@ -169,11 +170,11 @@ sub read_followme_info
             if ( $name eq "issolarisx86build" ) { $installer::globals::issolarisx86build = $value; }
             if ( $name eq "isfreebsdpkgbuild" ) { $installer::globals::isfreebsdpkgbuild = $value; }
             if ( $name eq "islinuxbuild" ) { $installer::globals::islinuxbuild = $value; }
-            if ( $name eq "islinuxrpmbuild" ) { $installer::globals::islinuxrpmbuild = $value; }
+            if ( $name eq "isrpmbuild" ) { $installer::globals::isrpmbuild = $value; }
             if ( $name eq "islinuxintelrpmbuild" ) { $installer::globals::islinuxintelrpmbuild = $value; }
             if ( $name eq "islinuxppcrpmbuild" ) { $installer::globals::islinuxppcrpmbuild = $value; }
             if ( $name eq "islinuxx86_64rpmbuild" ) { $installer::globals::islinuxx86_64rpmbuild = $value; }
-            if ( $name eq "islinuxdebbuild" ) { $installer::globals::islinuxdebbuild = $value; }
+            if ( $name eq "isdebbuild" ) { $installer::globals::isdebbuild = $value; }
             if ( $name eq "islinuxinteldebbuild" ) { $installer::globals::islinuxinteldebbuild = $value; }
             if ( $name eq "islinuxppcdebbuild" ) { $installer::globals::islinuxppcdebbuild = $value; }
             if ( $name eq "islinuxx86_64debbuild" ) { $installer::globals::islinuxx86_64debbuild = $value; }
@@ -189,6 +190,7 @@ sub read_followme_info
             if ( $name eq "product" ) { $installer::globals::product = $value; }
             if ( $name eq "patch" ) { $installer::globals::patch = $value; }
             if ( $name eq "languagepack" ) { $installer::globals::languagepack = $value; }
+            if ( $name eq "helppack" ) { $installer::globals::helppack = $value; }
             if ( $name eq "installertypedir" ) { $installer::globals::installertypedir = $value; }
             if ( $name eq "max_lang_length" ) { $installer::globals::max_lang_length = $value; }
             if ( $name eq "compiler" ) { $installer::globals::compiler = $value; }

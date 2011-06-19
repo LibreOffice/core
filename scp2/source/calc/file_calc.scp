@@ -53,7 +53,7 @@ STD_LIB_FILE( gid_File_Lib_Sc, sc)
 
 STD_LIB_FILE( gid_File_Lib_Scui, scui)
 
-STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
+STD_FILTER_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
 
@@ -67,7 +67,7 @@ STD_RES_FILE( gid_File_Res_Sc, sc )
 
 File gid_File_Help_Scalc_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(scalc);
     Patchfiles = ();
 End

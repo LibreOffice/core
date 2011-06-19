@@ -53,7 +53,7 @@ CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA
 
 # --- TARGETS -----------------------------------------------------
 
-$(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg $(SOLARENV)/inc/ant.properties
+$(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg $(SOLARENV)/inc/ant.properties
     @echo "Making:   " $@
     @echo solar.build=$(BUILD) > $@
     @echo solar.rscversion=$(USQ)$(RSCVERSION)$(USQ) >> $@
@@ -65,13 +65,13 @@ $(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minor
     @cat $(DMAKEROOT)/../ant.properties >> $@
 
 ANTBUILD .PHONY:
-    $(ANT) $(ANT_FLAGS)
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 prepare .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 main: .PHONY:
     $(ANT) $(ANT_FLAGS) $@
@@ -80,21 +80,19 @@ info: .PHONY
     $(ANT) $(ANT_FLAGS) $@
 
 jar .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 depend .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 config .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@
 
 test .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
-
-
+    $(COMMAND_ECHO)$(ANT) $(ANT_FLAGS) $@

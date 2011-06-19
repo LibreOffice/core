@@ -26,6 +26,21 @@
 #*************************************************************************
 
 
+# Overview of dependencies and tasks of Module
+#
+# target                      task                         depends on
+# Module                      build the product            all product targets
+#                              excluding tests             recursive Modules
+# Module/check                run unit tests               all unit tests
+#                                                          recursive Module/checks
+# Module/subsequentcheck      run system tests             all system tests
+#                                                          recursive Module/subsequentchecks
+# all (global)                build the product            top-level Module
+# check (global)              run unit tests               top-level Module/check
+# subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
+# allandcheck (global)        default goal                 all check
+
+
 # Module class
 
 gb_Module_ALLMODULES :=
@@ -37,31 +52,31 @@ gb_Module_CLEANTARGETSTACK :=
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),MOD,5)
-    $(call gb_Output_announce_title,module $* cleared.)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
+	$(call gb_Output_announce,$*,$(false),MOD,5)
+	$(call gb_Output_announce_title,module $* cleared.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_Module_get_target,$*) $(call gb_Module_get_check_target,$*) $(call gb_Module_get_subsequentcheck_target,$*))
 
 $(call gb_Module_get_check_target,%) :
-    $(call gb_Output_announce,$*,$(true),CHK,5)
-    $(call gb_Output_announce_title,module $* checks done.)
-    -$(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        touch $@)
+	$(call gb_Output_announce,$*,$(true),CHK,5)
+	$(call gb_Output_announce_title,module $* checks done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
 
 $(call gb_Module_get_subsequentcheck_target,%) :
-    $(call gb_Output_announce,$*,$(true),SCK,5)
-    $(call gb_Output_announce_title,module $* subsequentchecks done.)
-    -$(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        touch $@)
+	$(call gb_Output_announce,$*,$(true),SCK,5)
+	$(call gb_Output_announce_title,module $* subsequentchecks done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
 
 $(call gb_Module_get_target,%) :
-    $(call gb_Output_announce,$*,$(true),MOD,5)
-    $(call gb_Output_announce_title,module $* done.)
-    -$(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        touch $@)
+	$(call gb_Output_announce,$*,$(true),MOD,5)
+	$(call gb_Output_announce_title,module $* done.)
+	-$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		touch $@)
 
 .PHONY : all allandcheck clean check subsequentcheck
 .DEFAULT_GOAL := allandcheck
@@ -74,26 +89,28 @@ ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
 endif
 
 all : 
-    $(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
-    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
-    $(call gb_Output_announce_title,all done.)
-    $(call gb_Output_announce_bell)
+	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
+	$(call gb_Output_announce_title,all done.)
+	$(call gb_Output_announce_bell)
 
 check :
-    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
-    $(call gb_Output_announce_title,all tests checked.)
-    $(call gb_Output_announce_bell)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
+	$(call gb_Output_announce_title,all tests checked.)
+	$(call gb_Output_announce_bell)
 
-subsequentcheck : all 
-    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
-    $(call gb_Output_announce_title,all subsequent tests checked.)
-    $(call gb_Output_announce_bell)
+# removing the dependency on all for now until we can make a full build with gbuild
+#subsequentcheck : all 
+subsequentcheck : 
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
+	$(call gb_Output_announce_title,all subsequent tests checked.)
+	$(call gb_Output_announce_bell)
 
 clean : 
-    $(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6)
-    $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
-    $(call gb_Output_announce_title,all cleared.)
-    $(call gb_Output_announce_bell)
+	$(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
+	$(call gb_Output_announce_title,all cleared.)
+	$(call gb_Output_announce_bell)
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -207,6 +224,7 @@ ifneq ($$(and $$(gb_Module_TARGETSTACK),$$(gb_Module_CHECKTARGETSTACK),$$(gb_Mod
 $$(eval $$(call gb_Output_error,Corrupted module target stack!3))
 endif
 
+$$(eval $$(gb_Extensions_final_hook))
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

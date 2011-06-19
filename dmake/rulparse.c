@@ -451,12 +451,6 @@ int flag;
       DB_PRINT( "par", ("Binding to %s, %04x", tg->CE_NAME, tg->ce_flag) );
       magic = tg->ce_flag & F_PERCENT;
 
-#if 0
-      /* Check to see if we had a rule of the form '%.o : a.h b.h ; xxx'
-       * In which case we must build a NULL prq node to hold the recipe */
-      if( _sv_globprq_only && (_sv_rules != NIL(STRING)) )
-     _build_graph( _sv_op, tg, NIL(CELL) );
-#endif
 
       /* NOTE:  For targets that are magic or special we ignore any
        * previously defined rules, ie. We throw away the old definition
@@ -1199,7 +1193,7 @@ CELLPTR prereq;
     * definitions for the %-target members are stored in the prerequisites
     * list of the master target. */
    /* This relies on target->ce_prq being NULL if this is the first
-    * occurence of this %-target and therefore not yet having a %-target
+    * occurrence of this %-target and therefore not yet having a %-target
     * master. */
    match = FALSE;
    for(edl=target->ce_prq; !match && edl != NIL(LINK); edl=edl->cl_next) {

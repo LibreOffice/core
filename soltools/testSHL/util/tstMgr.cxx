@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 #include <osl/module.hxx>
 #include <rtl/tres.hxx>
 
-#ifndef _SOLTOOLS_TESTSHL_TLOG_HXX_
 #include "tlog.hxx"
-#endif
 
-#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
 #include "tutil.hxx"
-#endif
 
 using namespace rtl;
 
@@ -83,7 +80,7 @@ sal_Bool tstMgr::test_Entries( vector< sal_Char* > entries,
                     bOK &= oRes.getState();
                     log.writeRes( oRes );
                 }
-                iter++;
+                ++iter;
             }
         log.close();
     }
@@ -117,7 +114,7 @@ sal_Bool tstMgr::test_EntriesFromFile( sal_Char* fName, sal_Char* logName ) {
             if ( *iter ) {
                 delete [] *iter;
             }
-            iter++;
+            ++iter;
         }
     }
     else  {
@@ -162,3 +159,5 @@ void test_Entry_Impl( ::osl::Module& oMod, ::rtl::TestResult* oRes ) {
 } // </function_test_Entry_Impl>
 
 } // </namespace_tstutl>
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

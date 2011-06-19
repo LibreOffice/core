@@ -32,4 +32,4 @@ en-US = "From Template"
 en-US = "Open Document"
 
 [STR_FI_TOOLTIP_SOFFICE]
-en-US = "The office productivity suite compatible to the open and standardized ODF document format. Supported by Oracle."
+en-US = "LibreOffice, the office productivity suite provided by The Document Foundation. See http://www.documentfoundation.org"

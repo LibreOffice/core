@@ -42,7 +42,7 @@ LIBSALCPPRT=$(0)
 # --- Files --------------------------------------------------------
 
 # ldump only supports windows environment
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
 #ldump4 reimplements feature set of ldump2 and ldump3
 APP1TARGET=	ldump4

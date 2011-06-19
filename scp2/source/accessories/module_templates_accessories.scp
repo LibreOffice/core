@@ -1,0 +1,99 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Kálmán Szalai - KAMI <kami911@gmail.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Kálmán Szalai - KAMI <kami911@gmail.com>
+ *
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+#ifdef WITH_EXTRA_TEMPLATE
+
+Module gid_Module_Optional_Accessories_Templates
+    MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_TEMPLATES);
+    ParentID = gid_Module_Optional_Accessories;
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+#include "alllangmodules_accessories_templates_root.inc"
+
+Module gid_Module_Optional_Accessories_Tem_Template
+    ParentID = gid_Module_Optional_Accessories_Templates;
+    Name = "gid_Module_Optional_Accessories_Tem_Template";
+    Description = "gid_Module_Optional_Accessories_Tem_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (
+        gid_File_Extra_Templates_Accessories,
+        gid_File_Extra_Templates_Layout_Accessories,
+        gid_File_Extra_Templates_Present_Accessories,
+        gid_File_Extra_Templates_Educate_Accessories,
+        gid_File_Extra_Templates_Finance_Accessories,
+        gid_File_Extra_Templates_Forms_Accessories,
+        gid_File_Extra_Templates_Labels_Accessories,
+        gid_File_Extra_Templates_Misc_Accessories,
+        gid_File_Extra_Templates_Officorr_Accessories,
+        gid_File_Extra_Templates_Offimisc_Accessories,
+        gid_File_Extra_Templates_Personal_Accessories,
+        gid_File_Extra_Templates_NONFREE_Accessories,
+        gid_File_Extra_Templates_NONFREE_Layout_Accessories,
+        gid_File_Extra_Templates_NONFREE_Present_Accessories,
+        gid_File_Extra_Templates_NONFREE_Educate_Accessories,
+        gid_File_Extra_Templates_NONFREE_Finance_Accessories,
+        gid_File_Extra_Templates_NONFREE_Forms_Accessories,
+        gid_File_Extra_Templates_NONFREE_Labels_Accessories,
+        gid_File_Extra_Templates_NONFREE_Misc_Accessories,
+        gid_File_Extra_Templates_NONFREE_Officorr_Accessories,
+        gid_File_Extra_Templates_NONFREE_Offimisc_Accessories,
+        gid_File_Extra_Templates_NONFREE_Personal_Accessories );
+    Minimal = NO;
+    Default = YES;
+End
+
+Module gid_Module_Optional_Accessories_Tem_Common
+    PackageInfo = "packinfo_accessories.txt";
+    ParentID = gid_Module_Optional_Accessories;
+    Name = "gid_Module_Optional_Accessories_Tem_Common";
+    MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_TEMPLATES_COMMON);
+    Files = (
+        gid_File_Extra_Templates_Common,
+        gid_File_Extra_Templates_Common_Layout,
+        gid_File_Extra_Templates_Common_Present,
+        gid_File_Extra_Templates_Common_Educate,
+        gid_File_Extra_Templates_Common_Finance,
+        gid_File_Extra_Templates_Common_Forms,
+        gid_File_Extra_Templates_Common_Labels,
+        gid_File_Extra_Templates_Common_Misc,
+        gid_File_Extra_Templates_Common_Officorr,
+        gid_File_Extra_Templates_Common_Offimisc,
+        gid_File_Extra_Templates_Common_Personal );
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+#include "alllangmodules_accessories_templates.inc"
+
+#endif

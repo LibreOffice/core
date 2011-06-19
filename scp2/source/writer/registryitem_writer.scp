@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__30a2652a_Ddf7_45e7_Aca6_3eab26fc8a4e_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,6 +267,7 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Versionind
     Value = "opendocument.WriterDocument.1";
 End
 
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -273,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
     REG_VALUE_LNG(SO60_TEXT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument.6\CLSID";
     Value = "{30A2652A-DDF7-45e7-ACA6-3EAB26FC8A4E}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -761,12 +768,16 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1
     REG_VALUE_LNG(OO_WRITER)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "opendocument.WriterDocument.1\CLSID";
     Value = "{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -881,6 +892,53 @@ RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1_Shell_Open_Command
     Subkey = "opendocument.WriterWebDocument.1\shell\open\command";
     Value = "\"<progpath>\program\sweb.exe\" -o \"%1\"";
     Styles = ();
+End
+
+// .fodt
+
+RegistryItem gid_Regitem_Fodt_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".fodt\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fodt_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".fodt\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fodt_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".fodt\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem__Fodt
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".fodt";
+    Value = "opendocument.WriterDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fodt";
+    Value = "opendocument.WriterDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Fodt_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".fodt";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.text";
 End
 
 // new ott file extension 
@@ -1338,6 +1396,15 @@ RegistryItem gid_Regitem_OpenOffice_WPD_OpenWith_Writer
     Subkey = ".wpd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "soffice.StarWriterDocument.6";
+    Value = " ";
+End
+
+// .WPS
+RegistryItem gid_Regitem_OpenOffice_WPS_OpenWith_Writer
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".wps\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Name = "opendocument.WriterDocument.1";
     Value = " ";
 End
 

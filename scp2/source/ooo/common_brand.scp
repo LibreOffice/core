@@ -62,8 +62,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
-             gid_Brand_File_Bin_Msvcr71,
              gid_Brand_File_Bin_Libxml2,
+             gid_Brand_File_Bmp_Shell,
              gid_Brand_File_Bmp_IntroAbout,
              gid_Brand_File_C05_Zip_Faq,
              gid_Brand_File_C05_Zip_Register,
@@ -98,10 +98,13 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_JavaFilter,
              gid_Brand_File_Share_Xdg_Math,
              gid_Brand_File_Share_Xdg_Printeradmin,
-//             gid_Brand_File_Share_Xdg_QStart,
+             gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
-             gid_Brand_File_Txt_Package);
+             gid_Brand_File_Txt_Package,
+	     gid_License_Txt,
+	     git_License_Odt,
+	     gid_Credits_Odt);
     Unixlinks = (gid_Brand_Unixlink_BasisLink,
                  gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
@@ -116,34 +119,21 @@ Module gid_Module_Langpack_Brand_Template
     Description = "gid_Module_Langpack_Brand_Template";
     Styles = (TEMPLATEMODULE);
     InstallOrder = "1050";
-    Dirs = (gid_Brand_Dir_Help,
-            gid_Brand_Dir_Help_Isolanguage,
-            gid_Brand_Dir_License,
-            gid_Brand_Dir_Program,
-            gid_Brand_Dir_Resource,
-            gid_Brand_Dir_Readme,
-            gid_Brand_Dir_Share,
-            gid_Brand_Dir_Share_Readme);
-    Files = (gid_Brand_File_Res_About,
+    Dirs = (gid_Brand_Dir_Program,
+            gid_Brand_Dir_Program_Shell,
+            gid_Brand_Dir_Program_Resource,
+            gid_Brand_Dir_Readme);
+    Files = (gid_Brand_File_Res_Iso,
+             gid_Brand_File_Res_Ooo,
              gid_Brand_File_Res_Oirm,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
              gid_Brand_File_Help_C05_Swriter_Zip,
-             gid_Brand_File_License_License,
-             gid_Brand_File_License_License_Small,
-             gid_Brand_File_License_License_Html,
-             gid_Brand_File_License_License_Html_Small,
              gid_Brand_File_Readme_Readme,
-             gid_Brand_File_Readme_Readme_Html,
              gid_Brand_File_Share_Registry_Cjk_Xcd,
              gid_Brand_File_Share_Registry_Korea_Xcd,
-             gid_Brand_File_Txt_License,
-             gid_Brand_File_Txt_License_Small,
-             gid_Brand_File_Txt_License_Html,
-             gid_Brand_File_Txt_License_Html_Small,
-             gid_Brand_File_Txt_Readme,
-             gid_Brand_File_Txt_Readme_Html);
+             gid_Brand_File_Txt_Readme);
 End
 
 // Directories
@@ -158,9 +148,14 @@ Directory gid_Brand_Dir_Program
 #endif
 End
 
-Directory gid_Brand_Dir_Resource
+Directory gid_Brand_Dir_Program_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";
+End
+
+Directory gid_Brand_Dir_Program_Shell
+    ParentID = gid_Brand_Dir_Program;
+    DosName = "shell";
 End
 
 Directory gid_Brand_Dir_Readme
@@ -170,15 +165,6 @@ Directory gid_Brand_Dir_Readme
     ParentID = gid_Dir_Brand_Root;
 #endif
     DosName = "readmes";
-End
-
-Directory gid_Brand_Dir_License
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Dir_Brand_Root;
-#endif
-    DosName = "licenses";
 End
 
 Directory gid_Brand_Dir_Help
@@ -209,11 +195,6 @@ Directory gid_Brand_Dir_Share_Config
     DosName = "config";
 End
 
-Directory gid_Brand_Dir_Share_Readme
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "readme";
-End
-
 Directory gid_Brand_Dir_Share_Extension
     ParentID = gid_Brand_Dir_Share;
     DosName = "extension";
@@ -238,6 +219,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Af
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-af";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Br
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-br";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ca
@@ -305,6 +291,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Hu
     DosName = "dict-hu";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Hr
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-hr";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_It
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-it";
@@ -333,6 +324,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_No
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-no";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Oc
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-oc";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Pl
@@ -383,6 +379,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Th
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-th";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Uk
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-uk";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Vi
@@ -445,7 +446,7 @@ Unixlink gid_Brand_Unixlink_BasisLink
     // Styles = (LAYERLINK);
     Name = "basis-link";
     Dir = gid_Dir_Brand_Root;
-    Target = "../${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}";
+    Target = "basis${OOOBASEVERSION}";
 End
 #endif
 
@@ -513,6 +514,17 @@ File gid_Brand_File_Bin_Soffice_Bin
     Name = "soffice.bin";
 End
 
+#if defined UNX && ! defined MACOSX
+
+File gid_File_Bin_QStart_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED, PATCH);
+    Name = "oosplash.bin";
+End
+
+#endif
+
 // use this for high detail file open dialog >= 5.1 windows
 #ifdef WNT
 File gid_Brand_File_Bin_Soffice_Bin_Manifest
@@ -558,22 +570,6 @@ File gid_Brand_File_Bin_Unopkgexe
 End
 #endif
 
-#ifdef WNT
-File gid_Brand_File_Bin_Rebaseoo
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "rebaseoo.exe";
-End
-
-File gid_Brand_File_Bin_Rebasegui
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "rebasegui.exe";
-End
-#endif
-
 #if defined UNX && !defined MACOSX
 File gid_Brand_File_Script_Unopkg
     BIN_FILE_BODY;
@@ -599,18 +595,6 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
-
-#if defined WNT && \
-    (defined M1310 || \
-     ((defined M1400 || defined M1500) && \
-      !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)))
-File gid_Brand_File_Bin_Msvcr71
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
-    Styles = (PACKED);
-End
-#endif
 
 // Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
 // from a Windows system directory instead of the one from the URE; to avoid
@@ -651,6 +635,13 @@ File gid_Brand_File_Images_Brand_Zip
     Dir = gid_Brand_Dir_Share_Config;
     Name = "images_brand.zip";
     Styles = (PACKED);
+End
+
+File gid_Brand_File_Bmp_Shell
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program_Shell;
+    Name = "shell.zip";
+    Styles = (ARCHIVE);
 End
 
 File gid_Brand_File_Txt_Package
@@ -738,16 +729,16 @@ File gid_Brand_File_Share_Xdg_Printeradmin
 End
 #endif
 
-//#if defined UNX && ! defined MACOSX
-//#ifdef ENABLE_GTK
-//File gid_Brand_File_Share_Xdg_QStart
-//    TXT_FILE_BODY;
-//    Dir = gid_Brand_Dir_Share_Xdg;
-//    Styles = (PACKED,SCPZIP_REPLACE);
-//    Name = "qstart.desktop";
-//End
-//#endif
-//#endif
+#if defined UNX && ! defined MACOSX
+#ifdef ENABLE_GTK
+File gid_Brand_File_Share_Xdg_QStart
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "qstart.desktop";
+End
+#endif
+#endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Writer
@@ -786,23 +777,6 @@ File gid_Brand_File_Lib_Mingwm10
 End
 #endif
 
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -827,57 +801,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_Brand_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 // Profiles
@@ -973,7 +896,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
   #elif defined MACOSX
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #else
-    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #endif
 End
 
@@ -1039,19 +962,14 @@ ProfileItem gid_Brand_Profileitem_Soffice_NativeProgress_So
     Value = "${NATIVEPROGRESS}";
 End
 
-#ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root_Brand;
     Section = "Bootstrap";
     Order = 7;
     Key = "HideEula";
-    Value = "[HIDEEULA]";
-    Inifiletablekey = "HideEula";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
+    Value = "1";
 End
-#endif
 
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Startlang
@@ -1195,6 +1113,24 @@ ProfileItem gid_Brand_Profileitem_Version_Useragent
     Value = "<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})";
 End
 
+ProfileItem gid_Brand_Profileitem_Version_Vendor
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 16;
+    Key = "Vendor";
+    Value = "<vendor>";
+End
+
+ProfileItem gid_Brand_Profileitem_Version_BuildVersion
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Order = 17;
+    Key = "BuildVersion";
+    Value = "<buildversion>";
+End
+
 ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1210,7 +1146,7 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Section = "Version";
     Order = 18;
     Key = "ExtensionUpdateURL";
-    Value = "http://updateexte.services.openoffice.org/ExtensionUpdateService/check.Update";
+    Value = "http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
@@ -1488,7 +1424,7 @@ End
 #endif
 
 //TODO: This actually belongs into a module of its own:
-#if !defined SYSTEM_PYTHON
+#if !defined DISABLE_PYUNO && !defined SYSTEM_PYTHON
 File gid_Brand_File_Bin_Python
     BIN_FILE_BODY;
     Name = EXENAME(pyuno/python);
@@ -1497,5 +1433,40 @@ File gid_Brand_File_Bin_Python
 End
 #endif
 
-BRAND_RES_FILE( gid_Brand_File_Res_About, about )
+File gid_License_Txt
+  TXT_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+  #ifdef UNX
+    Name = "LICENSE";
+  #endif
+  #ifdef WNT
+    Name = "license.txt";
+  #endif
+    Styles = (PACKED);
+End
 
+File gid_License_Odt
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "LICENSE.odt";
+    Styles = (PACKED);
+End
+
+File gid_Credits_Odt
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "CREDITS.odt";
+    Styles = (PACKED);
+End

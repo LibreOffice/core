@@ -49,13 +49,8 @@
 
 RCD_LANGUAGE rcdata
 {
-#ifdef LG_D
-    "040704B0",     // Germany -> Unicode
-    "040704E4",     // Germany -> Windows, Multilingual
-#else
-    "040904B0",     // Germany -> Unicode
+    "040904B0",     // USA -> Unicode
     "040904E4",     // USA -> Windows, Multilingual
-#endif
     "04090000",     // USA -> 7-Bit-ASCII
     0               // end of table
 }

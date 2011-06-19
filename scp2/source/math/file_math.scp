@@ -52,7 +52,7 @@ End
 
 File gid_File_Help_Smath_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(smath);
     Patchfiles = ();
 End

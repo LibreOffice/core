@@ -40,9 +40,9 @@ TARGET=templates
 COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 .EXPORT : COMPLETELANGISO_VAR
 
-ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc
+ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc $(INCCOM)$/alllangmodules_accessories_templates_root.inc $(INCCOM)$/alllangmodules_accessories_samples_root.inc $(INCCOM)$/alllangmodules_accessories_templates.inc $(INCCOM)$/alllangmodules_accessories_samples.inc $(INCCOM)$/alllangmodules_extensions_templates.inc $(INCCOM)$/alllangmodules_extensions_lightproof.inc $(INCCOM)$/allhelpmodules.inc $(INCCOM)$/allhelpmodules_root.inc
 
-.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
+.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk $(MISC)$/$(TARGET)_help_track.mk
 .IF "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
 PHONYTEMPL=.PHONY
 .ENDIF			# "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
@@ -50,3 +50,7 @@ $(INCCOM)$/alllangmodules%.inc $(PHONYTEMPL) : module_langpack%.sct
     @@-$(RENAME) $@ $@.tmp
     $(COMMAND_ECHO)$(PERL) -w modules.pl -i $< -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
     @echo LAST_COMPLETELANGISO_VAR=$(COMPLETELANGISO_VAR) > $(MISC)$/$(TARGET)_lang_track.mk
+$(INCCOM)$/allhelpmodules%.inc $(PHONYTEMPL) : module_helppack%.sct
+    @@-$(RENAME) $@ $@.tmp
+    $(COMMAND_ECHO)$(PERL) -w modules.pl -i $< -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    @echo LAST_COMPLETELANGISO_VAR=$(COMPLETELANGISO_VAR) > $(MISC)$/$(TARGET)_help_track.mk

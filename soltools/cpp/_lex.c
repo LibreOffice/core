@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -634,7 +635,7 @@ Source *
     setsource(char *name, int path, int fd, char *str, int wrap)
 {
     Source *s = new(Source);
-    int len;
+    size_t len;
 
     s->line = 1;
     s->lineinc = 0;
@@ -686,3 +687,5 @@ void
     cursource = s->next;
     dofree(s);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

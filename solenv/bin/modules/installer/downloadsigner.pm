@@ -91,8 +91,6 @@ Ende
 
 sub getparameter
 {
-    # installer::logger::print_message("Checking parameter");
-
     while ( $#ARGV >= 0 )
     {
         my $param = shift(@ARGV);
@@ -347,7 +345,6 @@ sub check_cws_build
     my $iscws = 1;
 
     if ( $filename =~ /follow_me_\d+_/ ) { $iscws = 0; }
-    # if ( $filename =~ /log_\d+_/ ) { $iscws = 0; }
 
     return $iscws;
 }
@@ -414,6 +411,11 @@ sub filter_all_files_with_correct_settings
     my $workstamp = "";
 
     if ( $ENV{'WORK_STAMP'} ) { $workstamp = $ENV{'WORK_STAMP'}; }
+
+    # This is broken, we don't want to support any UPDMINOR
+    # complexities in LibreOffice. (Or do we?) This needs updating if
+    # we want to actually use this file for signing.
+
     if ( $ENV{'UPDMINOR'} ) { $minor = $ENV{'UPDMINOR'}; }
 
     if ( $minor eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"UPDMINOR\" not set!", "filter_all_files_with_correct_settings"); }

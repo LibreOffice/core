@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,11 +51,11 @@ static const struct VersionInfo g_aVersionInfo =
     _INPATH
 };
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void);
 #endif
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void)
 #else
 const struct VersionInfo *GetVersionInfo(void)
@@ -63,17 +64,4 @@ const struct VersionInfo *GetVersionInfo(void)
     return &g_aVersionInfo;
 }
 
-#if 0
-#include <stdio.h>
-
-int main( int argc, char **argv )
-{
-    const VersionInfo *pInfo = GetVersionInfo();
-    fprintf( stderr, "Date : %s\n", pInfo->pDate);
-    fprintf( stderr, "Time : %s\n", pInfo->pTime);
-    fprintf( stderr, "UPD : %s\n", pInfo->pUpd);
-    delete pInfo;
-    return 0;
-}
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

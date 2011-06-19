@@ -107,9 +107,10 @@ PERL*=perl
 TYPE=cat
 CDD=cd
 COPY=cp -f
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS_FOR_BUILD)"=="MACOSX" || "$(OS_FOR_BUILD)"=="NETBSD" || "$(OS_FOR_BUILD)"=="OPENBSD" || \
+    "$(OS_FOR_BUILD)"=="DRAGONFLY"
 COPYRECURSE=-R
-.ELSE #"$(OS)"=="MACOSX"
+.ELSE # Not BSD based ones:
 COPYRECURSE=-r
 .ENDIF
 .IF "$(OS)"=="SOLARIS"
@@ -118,6 +119,12 @@ GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
 GNUTAR*=/usr/sfw/bin/gtar
 DEREFERENCE=
+.ELIF "$(OS)"=="AIX"
+AWK*=/opt/freeware/bin/awk
+GNUCOPY*=cp
+GNUPATCH*=/opt/freeware/bin/patch
+GNUTAR*=gtar
+DEREFERENCE=-L
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 # this is not true, as BSD does not default to a GNU cp, but BSD cp
@@ -142,33 +149,6 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
-.ELIF "$(GUI)"=="OS2"
-SED*=sed
-SORT*=sort
-PERL*=perl
-TYPE=cat
-CDD=@cd
-COPY*=$(SHELL) /c copy /b
-COPYRECURSE=/s
-COPYUPDATE=/u
-DELAY=sleep
-ECHON*=echos
-ECHONL=+echo.
-AWK*=awk
-GNUCOPY*=cp
-GNUPATCH*=gnupatch
-GNUMAKE*=make
-TOUCH=touch /c
-#YD rename doesn't work across different drives!
-RENAME=mv
-MKDIR=+md
-MKDIRHIER=+md /s
-GREP=grep
-FIND=find
-LS=ls
-DUMPBIN=echo
-4nt_force_shell:=+
-
 .ENDIF			# "$(GUI)"=="UNX"
 
 # (Global) Set if not set before

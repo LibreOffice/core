@@ -39,11 +39,6 @@ Installation gid_Installation_Sdk
 #endif
 End
 
-DataCarrier gid_Datacarrier
-    Name = "%PRODUCTNAME %PRODUCTVERSION";
-    DiskNo = 1;
-End
-
 #ifndef MACOSX
 
 #ifdef WNT
@@ -60,7 +55,7 @@ Directory gid_Dir_Ooo_Openofficeorg_Sdk
   #ifdef WNT
     HostName = "${BASISROOTNAME}";
   #else
-    HostName = "${UNIXBASISROOTNAME}";
+    HostName = ".";
   #endif
 End
 #endif
@@ -82,8 +77,7 @@ End
 Directory gid_Dir_Basis_Sdk
 #if defined MACOSX
     ParentID = PREDEFINED_PROGDIR;
-    // DosName = "OpenOffice.org${OOOBASEVERSION}_SDK";
-    DosName = "OpenOffice.org_SDK";
+    DosName = "LibreOffice${OOOBASEVERSION}_SDK";
 #else
   #if defined WNT
     ParentID = gid_Dir_Sdkoo_Root;
@@ -93,24 +87,6 @@ Directory gid_Dir_Basis_Sdk
     DosName = "sdk";
 #endif
 End
-
-
-#if defined MACOSX
-ScpAction scp_Copy_License_Html_Sdk
-    README_TXT_ALL_LANG(Copy, LICENSE, html);
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-    Styles = (SCPZIP_REPLACE);
-    Subdir = "LICENSEs";
-End
-
-ScpAction scp_Copy_License_Txt_Sdk
-    README_ALL_LANG(Copy, LICENSE);
-    README_ALL_LANG(Name, LICENSE);
-    Styles = (SCPZIP_REPLACE);
-    Subdir = "LICENSEs";
-End
-#endif
-
 
 Directory gid_Dir_Share_Sdk
     ParentID = gid_Dir_Basis_Sdk;
@@ -123,7 +99,7 @@ Directory gid_Dir_Share_Readme_Sdk
 End
 
 
-Module gid_Module_Root
+Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";
     PackageInfo = "packinfo_sdkoo.txt";
@@ -134,22 +110,10 @@ File gid_File_Txt_License
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme_Sdk;
   #ifdef UNX
-    Name = "LICENSE_en-US";
+    Name = "LICENSE";
   #endif
   #ifdef WNT
-    Name = "license_en-US.txt";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Txt_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "LICENSE_en-US.html";
-  #endif
-  #ifdef WNT
-    Name = "license_en-US.html";
+    Name = "license.txt";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
@@ -165,19 +129,6 @@ File gid_File_Txt_Readme
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
-
-File gid_File_Txt_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "README_en-US.html";
-  #endif
-  #ifdef WNT
-    Name = "readme_en-US.html";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 
 File gid_File_Zip_Odkexamples
     TXT_FILE_BODY;

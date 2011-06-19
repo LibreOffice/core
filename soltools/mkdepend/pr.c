@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: pr.c,v 1.17 94/04/17 20:10:38 gildea Exp $ */
 /*
 
@@ -110,12 +111,12 @@ void pr(ip, file, base)
     char    buf[ BUFSIZ ];
 
     printed = TRUE;
-    len = strlen(ip->i_file)+1;
+    len = (int)strlen(ip->i_file)+1;
     if (current_len + len > width || file != lastfile) {
         lastfile = file;
         sprintf(buf, "\n%s%s%s: %s", objprefix, base, objsuffix,
             ip->i_file);
-        len = current_len = strlen(buf);
+        len = current_len = (int)strlen(buf);
     }
     else {
         buf[0] = ' ';
@@ -135,3 +136,5 @@ void pr(ip, file, base)
     for (i=0; i<ip->i_listlen; i++)
         printf("\n#\t%s", ip->i_list[ i ]->i_incstring);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,4 +34,3 @@ CDEFS+=-DM68K
 CFLAGS+=-fsigned-char -fno-omit-frame-pointer
 CFLAGSCC+=-fsigned-char
 CFLAGSCXX+=-fsigned-char
-DLLPOSTFIX=lm

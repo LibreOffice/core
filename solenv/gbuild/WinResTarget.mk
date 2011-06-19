@@ -30,21 +30,21 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,%) : $(gb_Helper_MISCDUMMY)
-        mkdir -p $(dir $@) && \
-            echo '$(call gb_WinResTarget_get_target,$*) : $$(gb_Helper_PHONY)' > $@
+		mkdir -p $(dir $@) && \
+			echo '$(call gb_WinResTarget_get_target,$*) : $$(gb_Helper_PHONY)' > $@
 endif
 
 
 $(call gb_WinResTarget_get_target,%) :
-    $(call gb_Output_announce,$*,$(true),RES,1)
-    $(call gb_WinResTarget__command_dep,$*,$<)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@))
-    $(call gb_WinResTarget__command,$@)
+	$(call gb_Output_announce,$*,$(true),RES,1)
+	$(call gb_WinResTarget__command_dep,$*,$<)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@))
+	$(call gb_WinResTarget__command,$@)
 
 $(call gb_WinResTarget_get_clean_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_WinResTarget_get_target,$*))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_WinResTarget_get_target,$*))
 
 define gb_WinResTarget_set_defs
 $(call gb_WinResTarget_get_target,$(1)) : DEFS := $(2)

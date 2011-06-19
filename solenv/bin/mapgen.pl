@@ -135,7 +135,10 @@ sub filter_symbols {
         $env_section = '1' and next if ((/^# SOLARIS #$/) && ($ENV{OS} eq 'SOLARIS'));
         $env_section = '1' and next if ((/^# LINUX #$/) && ($ENV{OS} eq 'LINUX'));
         $env_section = '1' and next if ((/^# FREEBSD #$/) && ($ENV{OS} eq 'FREEBSD'));
-        last if ($env_section && ((/^# SOLARIS #$/) || (/^# FREEBSD #$/) || (/^# LINUX #$/)));
+        $env_section = '1' and next if ((/^# NETBSD #$/) && ($ENV{OS} eq 'NETBSD'));
+        $env_section = '1' and next if ((/^# OPENBSD #$/) && ($ENV{OS} eq 'OPENBSD'));
+        $env_section = '1' and next if ((/^# DRAGONFLY #$/) && ($ENV{OS} eq 'DRAGONFLY'));
+        last if ($env_section && ((/^# SOLARIS #$/) || (/^# FREEBSD #$/) || (/^# LINUX #$/) || (/^# NETBSD #$/) || (/^# OPENBSD #$/) (/^# DRAGONFLY #$/)));
         next if (!$_ || /^#/);
         push(@filters, $_);
     };

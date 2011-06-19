@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: main.c,v 1.84 94/11/30 16:10:44 kaleb Exp $ */
 /* $XFree86: xc/config/makedepend/main.c,v 3.4 1995/07/15 14:53:49 dawes Exp $ */
 /*
@@ -30,6 +31,10 @@ in this Software without prior written authorization from the X Consortium.
 #if defined(FREEBSD) || defined(MACOSX)
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
+
+#ifdef _WIN32
+#include <io.h>
 #endif
 
 #ifdef _MSC_VER     /* Define ssize_t */
@@ -143,7 +148,7 @@ catch (sig)
     fatalerr ("got signal %d\n", sig);
 }
 
-#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(OS2) || defined(Lynx_22)
+#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(Lynx_22)
 #define USGISH
 #endif
 
@@ -346,7 +351,6 @@ int main(argc, argv)
             break;
         default:
             if (endmarker) break;
-    /*      fatalerr("unknown opt = %s\n", argv[0]); */
             warning("ignoring option %s\n", argv[0]);
         }
     }
@@ -687,12 +691,12 @@ void redirect(line, makefile)
         fatalerr("cannot open \"%s\"\n", makefile);
     sprintf(backup, "%s.bak", makefile);
     unlink(backup);
-#if defined(WIN32) || defined(OS2)
+#if defined(WIN32)
     fclose(fdin);
 #endif
     if (rename(makefile, backup) < 0)
         fatalerr("cannot rename %s to %s\n", makefile, backup);
-#if defined(WIN32) || defined(OS2)
+#if defined(WIN32)
     if ((fdin = fopen(backup, "r")) == NULL)
         fatalerr("cannot open \"%s\"\n", backup);
 #endif
@@ -715,7 +719,7 @@ void redirect(line, makefile)
         }
     }
     fflush(fdout);
-#if defined(USGISH) || defined(_SEQUENT_) || defined(USE_CHMOD)
+#if defined(USGISH) || defined(USE_CHMOD)
     chmod(makefile, st.st_mode);
 #else
     fchmod(fileno(fdout), st.st_mode);
@@ -761,7 +765,7 @@ void warning1(char *msg, ...)
 void convert_slashes(path)
     char* path;
 {
-#if defined (WNT) || defined(OS2)
+#if defined (WNT)
     /*
      * Convert backslashes to slashes
      */
@@ -797,3 +801,4 @@ char* append_slash(path)
     return new_string;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

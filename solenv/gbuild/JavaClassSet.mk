@@ -30,11 +30,11 @@ gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-	$(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(if $(filter-out $(JARDEPS),$(3)),\
+	mkdir -p $(dir $(1)) && \
+	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(if $(filter-out $(JARDEPS),$(3)),\
 			$(filter-out $(JARDEPS),$(3)),\
-			$(filter-out $(JARDEPS),$(4))) &&\
-    touch $(1))
+			$(filter-out $(JARDEPS),$(4))) &&) \
+	touch $(1))
 
 endef
 
@@ -44,8 +44,8 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 
 $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),JCS,3)
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
 # no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 # UGLY: cannot use target local variable for REPO because it's needed in prereq
@@ -110,4 +110,4 @@ define gb_JavaClassSet_use_externals
 $(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

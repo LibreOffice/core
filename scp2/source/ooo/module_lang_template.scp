@@ -31,21 +31,17 @@ Module gid_Module_Langpack_Basis_Template
     Description = "gid_Module_Langpack_Root_Template";
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Extra_Autotextshare_Lang,
-             gid_File_Extra_Palettes_Lang,
-             gid_File_Extra_Tpllayoutimpr_Lang,
              gid_File_Extra_Tplpresntimpr_Lang,
              gid_File_Extra_Tplwizagenda_Lang,
              gid_File_Extra_Tplwizdesktop_Lang,
              gid_File_Extra_Tplwizfax_Lang,
-             gid_File_Extra_Tplwizletter_Lang,
              gid_File_Extra_Tplwizreport_Lang,
              gid_File_Extra_Tplwizstyles_Lang,
-             gid_File_Extra_Wordbook,
-             gid_File_Extra_Wordbook_Lang,
              gid_File_Registry_Filter_Zip,
              gid_File_Registry_Lang,
              gid_File_Registry_Spool_Langpack_Lang,
              gid_File_Share_Registry_Ctl_Xcd,
+             gid_File_Share_Registry_Ctlseqcheck_Xcd,
              gid_File_InfoPlist_Lang);
     Dirs = (gid_Dir_Samples_Language);
 End
@@ -108,17 +104,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_UpdChk,
              gid_File_Res_Upd);
 End
-
-Module gid_Module_Langpack_Help_Template
-    ParentID = gid_Module_Langpack_Languageroot;
-    Name = "gid_Module_Langpack_Help_Template";
-    Description = "gid_Module_Langpack_Help_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Common_Zip,
-             gid_File_Help_Sbasic_Zip,
-             gid_File_Help_Schart_Zip);
-End
-
 Module gid_Module_Langpack_Fonts_Template
     ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Fonts_Template";

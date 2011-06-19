@@ -26,7 +26,16 @@
 #*************************************************************************
 LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.INCLUDE .IGNORE : icuversion.mk
+.INCLUDE .IGNORE : i18npool/version.mk
+.INCLUDE .IGNORE : comphelper/version.mk
+.INCLUDE .IGNORE : ucbhelper/version.mk
+.INCLUDE .IGNORE : connectivity/version.mk
+
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
+
+# No ODMA on UNX
+ODMA_LIB_LIB=
 
 #
 #externe libs in plattform.mk
@@ -37,28 +46,22 @@ AWTLIB*=$(JAVA_HOME)/lib/jawt.lib
 AWTLIB*=-ljawt
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : icuversion.mk
+.IF "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
 ICUDATALIB=-licudt$(ICU_MAJOR)$(ICU_MINOR)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
 ICUDATALIB=-licudata
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC" && "$(SYSTEM_ICU)"!="YES"
 I18NUTILLIB=-li18nutil$(COMID)
-.INCLUDE .IGNORE : i18npool/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 I18NREGEXPLIB=-li18nregexp$(DLLPOSTFIX)
-.IF "$(GUI)$(COM)"=="WNTGCC"
-SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
-.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-luno_salhelper$(COMID)
-.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp$(COMID)
 CONNECTIVITYLIB=-lconnectivity
@@ -73,7 +76,6 @@ CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : ucbhelper/version.mk
 UCBHELPERLIB=-lucbhelper4$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -91,18 +93,15 @@ REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : vos/version.mk
-VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore$(UDK_MAJOR)
-SALLIB=-lsal$(UDK_MAJOR)
+SALLIB=-luno_sal$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore
 SALLIB=-luno_sal
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : connectivity/version.mk
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
@@ -113,7 +112,6 @@ RMCXTLIB=-lrmcxt
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(DLLPOSTFIX)
-SOLDEPLIB=-lsoldep$(DLLPOSTFIX)
 TRANSEXLIB=-ltransex
 OTXLIB=-lotx_ind
 OSXLIB=-losx
@@ -201,18 +199,7 @@ ZLIB3RDLIB=-lz
 ZLIB3RDLIB=-lzlib
 .ENDIF
 .IF "$(SYSTEM_JPEG)"=="YES"
-.IF "$(SOLAR_JAVA)" != "" && "$(JDK)" != "gcj" && "$(OS)" != "MACOSX"
-#i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
-.IF "$(OS)" == "FREEBSD"
-JPEG3RDLIB=/usr/local/lib/libjpeg.so
-.ELIF "$(CPUNAME)" == "X86_64" || "$(CPUNAME)" == "S390X" || "$(CPUNAME)" == "POWERPC64"
-JPEG3RDLIB=/usr/lib64/libjpeg.so
-.ELSE
-JPEG3RDLIB=/usr/lib/libjpeg.so
-.ENDIF
-.ELSE
 JPEG3RDLIB=-ljpeg
-.ENDIF
 .ELSE
 JPEG3RDLIB=-ljpeglib
 .ENDIF
@@ -226,14 +213,13 @@ NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
 NEON3RDLIB=-lneon
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
-BERKELEYLIB=-ldb
+BERKELEYLIB=-l$(DB_LIB)
 .ELSE
 BERKELEYLIB=-ldb-4.7
 .ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
 SFXLIB=-lsfx$(DLLPOSTFIX)
-EGGTRAYLIB=-leggtray$(DLLPOSTFIX)
 SFXDEBUGLIB=
 FWELIB=-lfwe$(DLLPOSTFIX)
 FWILIB=-lfwi$(DLLPOSTFIX)
@@ -251,6 +237,7 @@ SCHLIB=-lysch
 SMLIB=-lysm
 OFALIB=-lofa$(DLLPOSTFIX)
 PRXLIB=-llprx2$(DLLPOSTFIX)
+PACKAGE2LIB=-lpackage2
 PAPILIB=-lpap$(DLLPOSTFIX)
 SCLIB=-lsclib
 SDLIB=-lsdlib
@@ -319,7 +306,7 @@ BFSVTOOLLIB=-lbf_svt$(DLLPOSTFIX)
 # Libraries
 USED_OSL_LIBS =
 USED_VOS_LIBS =		$(OSLLIB)
-USED_UNO_LIBS =		$(VOSLIB) $(OSLLIB)
+USED_UNO_LIBS =		 $(OSLLIB)
 USED_TOOLS_LIBS =
 USED_SOT_LIBS = 	$(TOOLSLIB)
 USED_VCL_LIBS =		$(SOTLIB) $(TOOLSLIB) $(USED_UNO_LIBS)
@@ -354,18 +341,15 @@ UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
 XMLREADERLIB=-lxmlreader
 
-.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC")
 
+ODMA_LIB_LIB=odma_lib.lib
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
-.IF "$(GUI)"=="OS2"
 ICUDATALIB=icudt.lib
-.ELSE
-ICUDATALIB=icudata.lib
-.ENDIF
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 I18NPAPERLIB=ii18npaper.lib
@@ -378,11 +362,7 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
-.IF "$(GUI)"=="OS2"
-OPENSSLLIB=ssl.lib crypto.lib
-.ELSE
 OPENSSLLIB=ssleay32.lib libeay32.lib
-.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile.lib
@@ -390,7 +370,6 @@ TOOLSLIB=itools.lib
 TOOLSLIBST=atools.lib
 BPICONVLIB=bpiconv.lib
 SALLIB=isal.lib
-VOSLIB=ivos.lib
 UNOTOOLSLIB=iutl.lib
 RMCXTLIB=irmcxt.lib
 XMLOFFLIB=ixo.lib
@@ -411,7 +390,6 @@ FWELIB=ifwe.lib
 FWILIB=ifwi.lib
 BTSTRPLIB=btstrp.lib
 BTSTRPDTLIB=bootstrpdt.lib
-SOLDEPLIB=soldep.lib
 TRANSEXLIB=transex.lib
 ICOLIB=icom.lib
 SVTOOLLIB=svtool.lib
@@ -437,7 +415,6 @@ DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
 VBAHELPERLIB=vbahelper.lib
 TKTLIB=tkt.lib
-SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
@@ -468,6 +445,7 @@ SDLIB=sdlib.lib
 SDLLIB=sdl.lib
 SWLIB=swlib.lib
 PRXLIB=ilprx2.lib
+PACKAGE2LIB=ipackage.lib
 ISWLIB=_sw.lib
 ISCLIB=sci.lib
 ISDLIB=sdi.lib
@@ -490,11 +468,7 @@ HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = icppunit_dll.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
-.IF "$(GUI)"=="OS2"
-REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
-.ELSE
 REDLANDLIB = librdf.lib
-.ENDIF
 
 JVMFWKLIB = ijvmfwk.lib
 
@@ -535,6 +509,7 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
+BOOSTTHREADLIB=boostthread.lib
 XMLREADERLIB=ixmlreader.lib
 
-.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC")

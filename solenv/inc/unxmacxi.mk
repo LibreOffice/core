@@ -31,8 +31,6 @@
 
 PROCESSOR_DEFINES=-DX86
 
-DLLPOSTFIX=mxi
-
 # special for SO build environment
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)"!=""
@@ -42,12 +40,8 @@ CXXCPP*:=g++ -E $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(SYSBASE)"!=""
 
-# flags to enable build with symbols; required by crashdump feature
-.IF "$(ENABLE_SYMBOLS)"=="SMALL"
-CFLAGSENABLESYMBOLS=-g1
-.ELSE
+# flags to enable build with symbols
 CFLAGSENABLESYMBOLS=-g
-.ENDIF
 
 # Include generic Mac OS X makefile
 .INCLUDE : unxmacx.mk

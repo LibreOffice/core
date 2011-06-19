@@ -35,18 +35,26 @@ noadjust=TRUE
 nodep=true
 ENABLE_EXCEPTIONS=TRUE
 
-# "mkdepend" is written in K&R style C. Modern compilers will generate
-# lots of warning. There is no point in cleaning this up, so we just
-# ignore warnings
-EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 LIBSALCPPRT=
 UWINAPILIB=
 
 CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS  
+
+.IF "$(COM)" == "MSC"
+# C4100: unreferenced formal parameter
+# C4131: uses old-style declarator
+# C4242: conversion from 'int' to 'char', possible loss of data
+# C4706: assignment within conditional expression
+CDEFS+=-wd4100 -wd4131 -wd4242 -wd4706
+.ENDIF
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \

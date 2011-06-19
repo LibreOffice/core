@@ -39,17 +39,17 @@ endef
 
 define gb_Deliver_add_deliverable
 gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
-$(if $(gb_HIRESTIME),,.LOW_RESOLUTION_TIME : $(1))
+$(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 
 endef
 
 ifeq ($(strip $(gb_Deliver_GNUCOPY)),)
 define gb_Deliver__deliver
-mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -f $(1) $(2) && touch -r $(1) $(2)
+mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -f) $(1) $(2) && touch -r $(1) $(2)
 endef
 else
 define gb_Deliver__deliver
-mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --force --preserve=timestamps $(1) $(2)
+mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) $(if $(gb_Deliver_HARDLINK),--link) --force --preserve=timestamps $(1) $(2)
 endef
 endif
 
@@ -72,7 +72,7 @@ deliverlog : COMMAND := \
  mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) \
  && RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),100,$$(sort $$(gb_Deliver_DELIVERABLES))) \
  && $(gb_AWK) -f $$(GBUILDDIR)/processdelivered.awk < $$$${RESPONSEFILE} \
-        > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
+		> $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
  && rm -f $$$${RESPONSEFILE}
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
@@ -84,8 +84,8 @@ endef
 # deliver.log format is broken in that case anyway
 .PHONY : deliverlog showdeliverables
 deliverlog:
-    $(eval $(call gb_Deliver_setdeliverlogcommand))
-    $(call gb_Helper_abbreviate_dirs, $(COMMAND))
+	$(eval $(call gb_Deliver_setdeliverlogcommand))
+	$(call gb_Helper_abbreviate_dirs, $(COMMAND))
 
 # all : deliverlog
 
@@ -94,8 +94,8 @@ $(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
 endef
 
 showdeliverables :
-    $(eval MAKEFLAGS := s)
-    $(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
-            $(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
-    true
-# vim: set noet sw=4 ts=4:
+	$(eval MAKEFLAGS := s)
+	$(foreach deliverable,$(sort $(gb_Deliver_DELIVERABLES)),\
+			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
+	true
+# vim: set noet sw=4:

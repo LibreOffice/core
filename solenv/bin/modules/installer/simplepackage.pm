@@ -27,7 +27,6 @@
 
 package installer::simplepackage;
 
-# use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Cwd;
 use File::Copy;
 use installer::download;
@@ -111,6 +110,13 @@ sub register_extensions
         push( @installer::globals::logfileinfo, $infoline);
     }
 
+    if (( $installer::globals::helppack ) && ( ! -f $unopkgfile ))
+    {
+        $unopkgexists = 0;
+        $infoline = "Help packs do not contain unopkg!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
     if ( ! -f $unopkgfile )
     {
         $unopkgexists = 0;
@@ -127,7 +133,7 @@ sub register_extensions
 
         if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
 
-        my $systemcall = $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
+        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
@@ -174,9 +180,6 @@ sub register_extensions
 sub get_mac_translation_file
 {
     my $translationfilename = $installer::globals::maclangpackfilename;
-    # my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::maclangpackfilename;
-    # if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
-    # else { $translationfilename = $translationfilename . ".mlf"; }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_mac_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
 
@@ -288,8 +291,6 @@ sub localize_scriptfile
 {
     my ($scriptfile, $translationfile, $languagestringref) = @_;
 
-    # my $translationfile = get_mac_translation_file();
-
     my $onelanguage = $$languagestringref;
     if ( $onelanguage =~ /^\s*(.*?)_/ ) { $onelanguage = $1; }
 
@@ -337,7 +338,7 @@ sub replace_variables_in_scriptfile
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
     my $scriptname = lc($allvariables->{'PRODUCTNAME'}) . "\.script";
-    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $scriptname = "org.openoffice.script"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $scriptname = "org.libreoffice.script"; }
 
     replace_one_variable_in_shellscript($scriptfile, $scriptname, "SEARCHSCRIPTNAME" );
 }
@@ -414,9 +415,10 @@ sub create_package
 
         my $localtempdir = $tempdir;
 
-        if (( $installer::globals::languagepack ) || ( $installer::globals::patch ))
+        if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
         {
             $localtempdir = "$tempdir/$packagename";
+            if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
             if ( $installer::globals::languagepack )
             {
                 $volume_name = "$volume_name Language Pack";
@@ -473,6 +475,7 @@ sub create_package
             my $scriptrealfilename = "osx_install.applescript";
             my $scriptfilename = "";
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
+            if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
             if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
             # my $scripthelperrealfilename = $volume_name;
@@ -503,10 +506,8 @@ sub create_package
             replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
-            $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
-            system($systemcall);
-            $systemcall = "chmod 775 " . "\"" . $scripthelperrealfilename . "\"";
-            system($systemcall);
+            chmod 0775, $scriptfilename;
+            chmod 0775, $scripthelperrealfilename;
 
             # Copy also Info.plist and icon file
             # Finding both files in solver
@@ -620,6 +621,7 @@ sub create_simple_package
         {
             $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
             if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
+            if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
             if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
             $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
         }
@@ -709,7 +711,7 @@ sub create_simple_package
             }
             else
             {
-                $infoline = "ERROR: Could not copy $source to $destination\n";
+                $infoline = "ERROR: Could not copy $source to $destination $!\n";
                 $returnvalue = 0;
             }
 
@@ -722,13 +724,9 @@ sub create_simple_package
             if ( ! $installer::globals::iswindowsbuild )
             {
                 # see issue 102274
-                my $unixrights = "";
                 if ( $onefile->{'UnixRights'} )
                 {
-                    $unixrights = $onefile->{'UnixRights'};
-
-                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
-                    system($localcall);
+                    chmod oct($onefile->{'UnixRights'}), $destination;
                 }
             }
         }

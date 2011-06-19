@@ -31,10 +31,6 @@
 
 .IF "$(SHL$(TNR)TARGETN)"!=""
 
-.IF "$(OS)"=="AIX"
-SHL$(TNR)STDLIBS=
-.ENDIF
-
 .IF "$(SHLLINKARCONLY)" != ""
 SHL$(TNR)STDLIBS=
 STDSHL=
@@ -91,20 +87,23 @@ $(MISC)/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL$(
 .ENDIF
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "WNT"
 .IF "$(SHL$(TNR)IMPLIB)" == ""
 SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 .ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
 .IF "$(COM)" != "GCC"
 USE_$(TNR)IMPLIB=-implib:$(LB)/$(SHL$(TNR)IMPLIB).lib
-.ENDIF			# "$(COM)" != "GCC"
 SHL$(TNR)IMPLIBN=$(LB)/$(SHL$(TNR)IMPLIB).lib
+.ELSE
+SHL$(TNR)IMPLIBN=$(LB)/lib$(SHL$(TNR)IMPLIB).dll.a
+USE_$(TNR)IMPLIB=-Wl,--out-implib=$(SHL$(TNR)IMPLIBN)
+.ENDIF			# "$(COM)" != "GCC"
 ALLTAR : $(SHL$(TNR)IMPLIBN)
 
 .IF "$(USE_DEFFILE)"==""
 USE_$(TNR)IMPLIB_DEPS=$(LB)/$(SHL$(TNR)IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.ENDIF			# "$(GUI)" == "WNT"
 USE_SHL$(TNR)DEF=$(SHL$(TNR)DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL$(TNR)DEF=
@@ -129,7 +128,9 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
 
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
+.IF "$(OS)" != "AIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
+.ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): \
                     $(SHL$(TNR)OBJS)\
@@ -166,7 +167,9 @@ $(USE_SHL$(TNR)VERSIONMAP) :
 #and now for the plain non-generic way...
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET)$(SHL$(TNR)VERSIONMAP:e)
+.IF "$(OS)" != "AIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
+.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
@@ -214,7 +217,7 @@ $(USE_SHL$(TNR)VERSIONMAP) .ERRREMOVE: $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(GUI)" != "UNX"
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-.IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="IOS" && "$(OS)"!="AIX"
 .IF "$(GUI)"=="UNX"
 SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:f)\"
 .ENDIF			# "$(GUI)"!="UNX"
@@ -237,7 +240,7 @@ SHL$(TNR)LINKRESO*=$(MISC)/$(SHL$(TNR)TARGET)_res.o
 #.IF "$(SHL$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL$(TNR)LIBS)"!=""
 $(MISC)/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -250,7 +253,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL$(TNR)LIBS)"!=""
 SHL$(TNR)LINKLIST=$(MISC)/$(SHL$(TNR)TARGET)_link.lst
@@ -267,20 +270,6 @@ $(MISC)/%linkinc.ls:
     @echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
-.IF "$(GUI)" == "OS2"
-#21/02/2006 YD dll names must be 8.3, invoke fix script
-#check osl/os2/module.c/osl_loadModule()
-SHL$(TNR)TARGET8=$(shell @fix_shl $(SHL$(TNR)TARGET))
-.ENDIF
-
-.IF "$(GUI)" == "OS2"
-_SHL$(TNR)IMP_ORD = $(SHL$(TNR)STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL$(TNR)STDLIBS:^"$(LB)/") 
-SHL$(TNR)IMP_ORD = $(foreach,i,$(_SHL$(TNR)IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL$(TNR)IMP_ORD = 
-.ENDIF
-
-
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
                     $(SHL$(TNR)LIBS)\
@@ -289,7 +278,6 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)DEPN) \
-                    $(SHL$(TNR)IMP_ORD) \
                     $(SHL$(TNR)LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -311,39 +299,69 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
-    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+.IF "$(RCFLAGSOUTRES)"!=""
+# rc, takes separate flag naming output file, source .rc file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(RCFLAGSOUTRES)$(SHL$(TNR)DEFAULTRES) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+.ELSE
+# windres, just takes output file last
+    $(COMMAND_ECHO)$(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc $(SHL$(TNR)DEFAULTRES)
+.ENDIF
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
     $(COMMAND_ECHO)$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
 .IF "$(COM)"=="GCC"
-    windres $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
+    $(WINDRES) $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(COM)"=="GCC"	# always have to call dlltool explicitly as ld cannot handle # comment in .def
-    @echo dlltool --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
-        --kill-at \\ > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+# GNU ld since 2.17 supports @cmdfile syntax
+.IF "$(USE_DEFFILE)"!=""
+    @$(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL$(TNR)LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(SHL$(TNR)DEF) \
+        $(USE_$(TNR)IMPLIB) \
+        $(STDOBJ) \
+        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL$(TNR)LIBS))) \
+        -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)LINKRESO) \
+    ))
+.ELSE
     @noop $(assign ALL$(TNR)OBJLIST:=$(STDOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) $(shell $(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s?$(ROUT)?$(PRJ)/$(ROUT)?g))
 .IF "$(DEFLIB$(TNR)NAME)"!=""	# do not have to include objs
     @noop $(assign DEF$(TNR)OBJLIST:=$(shell $(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)/$(i).lib) | sed s?$(ROUT)?$(PRJ)/$(ROUT)?g))
     @noop $(foreach,i,$(DEF$(TNR)OBJLIST) $(assign ALL$(TNR)OBJLIST:=$(ALL$(TNR)OBJLIST:s?$i??)))
 .ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
-    @echo	--output-exp $(MISC)/$(@:b)_exp.o \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.IF "$(SHL$(TNR)DEF)"!=""
-    @echo	--input-def $(SHL$(TNR)DEF) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.ELSE
-    @echo	$(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) \\ >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.ENDIF
-    @echo	$(ALL$(TNR)OBJLIST) >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(MINGWSSTDOBJ) -o $@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
-        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` \
+    $(COMMAND_ECHO)$(DLLTOOL) @@(mktmp \
+        --dllname $(SHL$(TNR)TARGET)$(DLLPOST) \
+        --kill-at \
+        --output-exp $(MISC)/$(@:b)_exp.o \
+        $(SHL$(TNR)VERSIONOBJ) \
+        @(ALL$(TNR)OBJLIST)
+    )
+    $(COMMAND_ECHO)$(LINK) @$(mktmp $(strip \
+        $(SHL$(TNR)LINKFLAGS) \
+        $(LINKFLAGSSHL) \
+	$(SOLARLIB) \
+        $(MINGWSSTDOBJ) \
+        -o $@ \
+        -Wl,-Map,$(MISC)/$(@:b).map \
+        $(MISC)/$(@:b)_exp.o \
+        $(USE_$(TNR)IMPLIB) \
+        $(STDOBJ) \
+        $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(subst,$(ROUT),$(PRJ)/$(ROUT) $(shell cat /dev/null $(SHL$(TNR)LIBS))) \
         -Wl,--exclude-libs,ALL,--start-group $(SHL$(TNR)STDLIBS) -Wl,--end-group \
-        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(MISC)/$(@:b)_exp.o $(MINGWSSTDENDOBJ) \
-        -Wl,-Map,$(MISC)/$(@:b).map >> $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  .IF "$(VERBOSE)" == "TRUE"
-    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-  .ENDIF
-    @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)LINKRESO) \
+    ))
+.ENDIF
 .ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
@@ -458,7 +476,7 @@ $(SHL$(TNR)TARGETN) : \
     @echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd` \
@@ -478,6 +496,9 @@ $(SHL$(TNR)TARGETN) : \
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
+.ELIF "$(OS)"=="IOS"
+    $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL$(TNR)OBJS)) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
+    $(COMMAND_ECHO)$(RANLIB) $@
 .ELSE			# "$(OS)"=="MACOSX"
     @-$(RM) $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
@@ -500,7 +521,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
-.IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
     $(COMMAND_ECHO)cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -508,65 +529,6 @@ $(SHL$(TNR)TARGETN) : \
     @ls -l $@
 .ENDIF
 .ENDIF			# "$(GUI)" == "UNX"
-
-.IF "$(GUI)" == "OS2"
-
-.IF "$(SHL$(TNR)DEFAULTRES)"!=""
-    @+-$(RM) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc >& $(NULLDEV)
-.IF "$(SHL$(TNR)ICON)" != ""
-    @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
-.ENDIF
-.IF "$(use_shl_versions)" != ""
-.IF "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo $(EMQ)#include $(EMQ)"$(SHL$(TNR)ADD_VERINFO)$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
-.ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
-    @-+echo MENU 1 BEGIN END >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
-#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
-.ENDIF			# "$(use_shl_versions)" != ""
-# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
-    $(COMMAND_ECHO)$(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
-.ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
-
-.IF "$(SHL$(TNR)ALLRES)"!=""
-    $(COMMAND_ECHO)+$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
-.ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
-
-.IF "$(USE_DEFFILE)"!=""
-
-    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
-        $(SHL$(TNR)DEF) \
-        $(STDOBJ) \
-        -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) \
-        $(SHL$(TNR)LIBS) \
-        $(SHL$(TNR)STDLIBS:^"-l") \
-        $(SHL$(TNR)LINKRES) \
-        $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l") 
-
-.ELSE			# "$(USE_DEFFILE)"!=""
-
-    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) -v 	$(SHL$(TNR)LINKFLAGS)			\
-        $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
-        $(SHL$(TNR)STACK) -o $(SHL$(TNR)TARGETN)	\
-        $(SHL$(TNR)DEF) \
-        $(STDOBJ)							\
-        -L$(LB) \
-        -L$(SOLARVERSION)/$(INPATH)/lib \
-        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) \
-        $(SHL$(TNR)LIBS) \
-        $(SHL$(TNR)STDLIBS:^"-l") \
-        $(SHL$(TNR)LINKRES) \
-        $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l")                           \
-    @$(LS) $@ >& $(NULLDEV)
-
-.ENDIF			# "$(USE_DEFFILE)"!=""
-
-.IF "$(SHL$(TNR)TARGET8)" != "$(SHL$(TNR)TARGET)"
-    $(COMMAND_ECHO)+$(COPY) $@ $(@:d)$(SHL$(TNR)TARGET8).dll
-.ENDIF
-
-.ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
@@ -590,6 +552,7 @@ USELIB$(TNR)DEPN+=$(SHL$(TNR)LIBS)
 USE_SHL$(TNR)TARGET=$(SHL$(TNR)TARGETN)
 .ENDIF
 
+.IF "$(GUI)$(COM)" != "WNTGCC"
 .IF "$(GUI)" != "UNX"
 $(SHL$(TNR)IMPLIBN):	\
                     $(SHL$(TNR)DEF) \
@@ -602,11 +565,6 @@ $(SHL$(TNR)IMPLIBN):	\
 .ENDIF
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-    @echo no ImportLibs on mingw
-    @-$(RM) $@
-    @$(TOUCH) $@
-.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
@@ -615,19 +573,12 @@ $(SHL$(TNR)IMPLIBN):	\
     @echo build of $(SHL$(TNR)TARGETN) creates $@
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
-.ENDIF			# "$(COM)"=="GCC"
-
-.ELIF "$(GUI)" == "OS2"
-
-# touch creates an empty file, but this is not good for emxomfar, so
-# create a dummy lib here
-    $(COMMAND_ECHO)-$(LIBMGR) $(LIBFLAGS) $@ $(SHL$(TNR)VERSIONOBJ)
-    +@echo build of $(SHL$(TNR)TARGETN) creates $@
 
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
     @$(TOUCH) $@
+.ENDIF
 .ENDIF
 .ENDIF
 

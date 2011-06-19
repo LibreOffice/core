@@ -120,8 +120,8 @@ sub get_feature_display
     # Special handling for c05office. No program module visible.
     if (( $onefeature->{'gid'} eq "gid_Module_Prg" ) && ( $installer::globals::product =~ /c05office/i )) { $display = "0"; }
 
-    # making all feature invisible in Language packs!
-    if ( $installer::globals::languagepack ) { $display = "0"; }
+    # making all feature invisible in Language packs and in Help packs!
+    if ( $installer::globals::languagepack || $installer::globals::helppack ) { $display = "0"; }
 
     return $display
 }
@@ -218,7 +218,8 @@ sub replace_variables
 {
     my ($translationfile, $variableshashref) = @_;
 
-    foreach $key (keys %{$variableshashref})
+    # we want to substitute FOO_BR before FOO to avoid floating _BR suffixes
+    foreach $key (sort { length ($b) <=> length ($a) } keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
         replace_one_variable($translationfile, $value, $key);
@@ -399,7 +400,6 @@ sub create_feature_table
 
             $feature{'feature'} = get_feature_gid($onefeature);
             $feature{'feature_parent'} = get_feature_parent($onefeature);
-            # if ( $onefeature->{'ParentID'} eq "" ) { $feature{'feature_parent'} = ""; }   # Root has no parent
             $feature{'Title'} = $onefeature->{'Name'};
             $feature{'Description'} = $onefeature->{'Description'};
             $feature{'Display'} = get_feature_display($onefeature);

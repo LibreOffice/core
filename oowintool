@@ -46,12 +46,11 @@ sub print_syntax()
     print " commands:\n";
     print "   --msvc-ver              - dump version of MSVC eg. 6.0\n";
     print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
-    print "   --msvc-copy-instmsi <dest> - copy instmsia.exe, insmsiw.exe into <dest>\n";
     print "   --msvc-productdir       - dump productdir\n";
     print "   --msvs-productdir       - dump productdir\n";
-    print "   --dotnetsdk-dir         - dump .Net SDK path\n";
-    print "   --csc-compilerdir       - dump .Net SDK compiler path\n";
-    print "   --psdk-home             - dump psdk install dir\n";
+    print "   --dotnetsdk-dir         - dump .NET SDK path\n";
+    print "   --csc-compilerdir       - dump .NET SDK compiler path\n";
+    print "   --windows-sdk-home      - dump Windows SDK install dir\n";
     print "   --jdk-home              - dump the jdk install dir\n";
     print "   --nsis-dir              - dump NSIS path\n";
     print "   --help                  - this message\n";
@@ -92,7 +91,7 @@ sub print_path($$)
     print $path;
 }
 
-sub print_psdk_home()
+sub print_windows_sdk_home()
 {
     my ($value, $key);
     $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v6.1/InstallationFolder');
@@ -115,92 +114,51 @@ sub print_psdk_home()
 		$value = `/bin/find "$dir" -iname platformsdk | head -n 1`;
     }
 
-    defined $value || die "psdk not found";
+    defined $value || die "Windows Sdk not found";
 
     print cygpath ($value, 'w', $output_format);
 }
 
-my %msvc_net_2003 = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VC/ProductDir',
-    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => '../Visual Studio .NET Professional 2003 - English',
-    'dll_suffix' => '71'
-);
-my %msvs_net_2003 = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Professional 2003 - English',
-    'dll_suffix' => '71'
-);
-my %msvs_net_2003_ea = (
-    'ver' => '7.1',
-    'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Enterprise Architect 2003 - English', # testme ...
-    'dll_suffix' => '71'
-);
-my %msvs_express_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VCExpress/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
-my %msvc_express_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VCExpress/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
-my %msvs_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VisualStudio/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => 'SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => 'Visual Studio .NET Professional 2005 - English',
-    'dll_suffix' => '80'
-);
-my %msvc_2005 = (
-    'ver' => '8.0',
-    'key' => 'Microsoft/VisualStudio/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
-    'dll_path' => '../SDK/v2.0/Bin',
-    'dll_suffix' => '80'
-);
 my %msvs_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VisualStudio/9.0/Setup/VS/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvc_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VisualStudio/9.0/Setup/VC/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvs_express_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VCExpress/9.0/Setup/VS/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvc_express_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VCExpress/9.0/Setup/VC/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
+);
+my %msvs_2010 = (
+    'ver' => '10.0',
+    'key' => 'Microsoft/VisualStudio/10.0/Setup/VS/ProductDir',
+    'dll_path' => 'VC/redist/x86/Microsoft.VC100.CRT',
+    'dll_suffix' => '100'
+);
+my %msvc_2010 = (
+    'ver' => '10.0',
+    'key' => 'Microsoft/VisualStudio/10.0/Setup/VC/ProductDir',
+    'dll_path' => 'redist/x86/Microsoft.VC100.CRT',
+    'dll_suffix' => '100'
 );
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2005, \%msvs_express_2005, \%msvs_net_2003_ea, \%msvs_net_2003 );
+    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2010 );
 
     for $ver (@ms_versions)
     {
@@ -215,7 +173,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2005, \%msvc_express_2005, \%msvc_net_2003 );
+    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2010 );
 
     for $ver (@ms_versions)
     {
@@ -249,7 +207,9 @@ sub print_msvs_productdir()
 sub print_csc_compiler_dir()
 {
     my $dir = cygpath (reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot"), 'w', $output_format);
-    my $csc_exe = `/bin/find "$dir" -iname csc.exe | grep "v2\." | head -n 1`;
+    my $csc_exe = `/bin/find "$dir" -iname csc.exe | grep "v3\.5\." | head -n 1` ||
+                  `/bin/find "$dir" -iname csc.exe | grep "v4\." | head -n 1` ||
+                  `/bin/find "$dir" -iname csc.exe | grep "v2\." | head -n 1`;
     print `dirname $csc_exe`;
 }
 
@@ -258,13 +218,16 @@ sub print_dotnetsdk_dir()
     my $dir = 
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv1.1") ||
           reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv2.0");
-    print cygpath ($dir, 'w', $output_format);
+    if ($dir) {
+      print cygpath ($dir, 'w', $output_format);
+    }
 }
 
 sub print_jdk_dir()
 {
     my $dir =
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
+      reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
     print cygpath($dir, 'w', $output_format); 
@@ -314,25 +277,11 @@ sub msvc_copy_dlls($)
 	      $dest . $ver->{'dll_suffix'});
     copy_dll ($srcdir, "msvcr" . $ver->{'dll_suffix'} . ".dll",
 	      $dest . $ver->{'dll_suffix'});
-    if ($ver->{'dll_suffix'} >= 90) {
+    if ($ver->{'dll_suffix'} == 90) {
         copy_dll ($srcdir, "msvcm" . $ver->{'dll_suffix'} . ".dll",
                   $dest . $ver->{'dll_suffix'});
         copy_dll ($srcdir, "Microsoft.VC90.CRT.manifest", $dest . $ver->{'dll_suffix'});
     }
-}
-
-sub msvc_copy_instmsi($)
-{
-    my $dest = shift;
-    my $ver = msvc_find_version('instmsi_path');
-    defined $ver || return;
-    my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
-		  $ver->{'instmsi_path'});
-
-    copy_dll ($srcdir, "instmsia.exe",
-	      $dest);
-    copy_dll ($srcdir, "instmsiw.exe",
-	      $dest);
 }
 
 if (!@ARGV) {
@@ -362,10 +311,6 @@ while (@commands) {
 	my $dest = shift @commands;
 	defined $dest || die "copy-dlls requires a destination directory";
 	msvc_copy_dlls( $dest );
-    } elsif ($opt eq '--msvc-copy-instmsi') {
-	my $dest = shift @commands;
-	defined $dest || die "copy-instmsi requires a destination directory";
-	msvc_copy_instmsi( $dest );
     } elsif ($opt eq '--msvs-productdir') {
 	print_msvs_productdir();
     } elsif ($opt eq '--msvc-productdir') {
@@ -374,8 +319,8 @@ while (@commands) {
 	print_dotnetsdk_dir();
     } elsif ($opt eq '--csc-compilerdir') {
 	print_csc_compiler_dir();
-    } elsif ($opt eq '--psdk-home') {
-	print_psdk_home();
+    } elsif ($opt eq '--windows-sdk-home') {
+	print_windows_sdk_home();
     } elsif ($opt eq '--jdk-home') {
 	print_jdk_dir();
     } elsif ($opt eq '--nsis-dir') {

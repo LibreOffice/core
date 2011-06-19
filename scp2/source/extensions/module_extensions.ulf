@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: module_accessories.ulf,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 3.
+ *
+ *
+ *    GNU Lesser General Public License Version 3
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS]
+en-US = "Extensions"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS]
+en-US = "Useful %PRODUCTNAME extensions."
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MINIMIZER]
+en-US = "Presentation Minimizer"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MINIMIZER]
+en-US = "Presentation Minimizer"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_REPORTDESIGN]
+en-US = "Report Builder"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_REPORTDESIGN]
+en-US = "Report Builder"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI]
+en-US = "MediaWiki Publisher"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI]
+en-US = "MediaWiki Publisher"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_PRESENTER_SCREEN]
+en-US = "Presenter Screen"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_PRESENTER_SCREEN]
+en-US = "Presenter Screen"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_PDFIMPORT]
+en-US = "PDF Import"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_PDFIMPORT]
+en-US = "PDF Import"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_LIGHTPROOF]
+en-US = "Lightproof"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_LIGHTPROOF]
+en-US = "Lightproof"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT]
+en-US = "Numbertext"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT]
+en-US = "Numbertext"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_HUNART]
+en-US = "Hungarian cross-reference toolbar"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_HUNART]
+en-US = "Toolbar to add cross-references with automatic conditional Hungarian articles (eg. *az* 5. ábra, *a* 6. ábra) to avoid bad article and number combination in cross-references."
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_TYPO]
+en-US = "Typography toolbar"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_TYPO]
+en-US = "Toolbar for Graphite smart font features: ligatures, small caps, old style numbers, proportional or monospaced numbers, automatic thousand separators, minus sign, real superscript and subscript, German umlaut variants, fractions."
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_CT2N]
+en-US = "Convert Text to Number"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_CT2N]
+en-US = "Convert Text to Number"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW]
+en-US = "Watch Window"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW]
+en-US = "Watch Window"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_DIAGRAM]
+en-US = "Diagram"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_DIAGRAM]
+en-US = "Diagram"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_VALIDATOR]
+en-US = "Validator"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_VALIDATOR]
+en-US = "Validator"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_BARCODE]
+en-US = "Barcode"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_BARCODE]
+en-US = "Barcode"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
+en-US = "Google Docs & Zoho"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
+en-US = "Google Docs & Zoho"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER]
+en-US = "Solver for Nonlinear Programming"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER]
+en-US = "Solver for Nonlinear Programming"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_LANGUAGETOOL]
+en-US = "LanguageTool Open Source language checker"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_LANGUAGETOOL]
+en-US = "LanguageTool Open Source language checker"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MYSQLC]
+en-US = "MySQL Connector"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MYSQLC]
+en-US = "MySQL Connector"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER]
+en-US = "Metaweblog Support"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER]
+en-US = "Metaweblog Support"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK]
+en-US = "Sun Professional Template Pack"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK]
+en-US = "Sun Professional Template Pack"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL]
+en-US = "Script provider for BeanShell"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL]
+en-US = "Script provider for BeanShell"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT]
+en-US = "Script provider for JavaScript"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT]
+en-US = "Script provider for JavaScript"
+
+[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON]
+en-US = "Script provider for Python"
+
+[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON]
+en-US = "Script provider for Python"

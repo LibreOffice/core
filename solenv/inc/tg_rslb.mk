@@ -41,12 +41,11 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB$(TNR)NAME)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)/$(RSCDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
+    $(foreach,j,$(subst,$(PRJ),$(SOLARDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/$i -lip=$(SOLARSRC)/$(RSCDEFIMG) ) \
-    -subMODULE=$(SOLARSRC)/$(RSCDEFIMG) \
-    -subGLOBALRES=$(SOLARSRC)/$(RSCDEFIMG)/res \
+    -lip=$(SOLARDEFIMG)/res/$i -lip=$(SOLARDEFIMG)/res ) \
+    -subMODULE=$(SOLARDEFIMG) \
+    -subGLOBALRES=$(SOLARDEFIMG)/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
@@ -57,12 +56,11 @@ $(RSC_MULTI$(TNR)) : \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB$(TNR)NAME)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)/$(RSCDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
+    $(foreach,j,$(subst,$(PRJ),$(SOLARDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/$i -lip=$(SOLARSRC)/$(RSCDEFIMG) ) \
-    -subMODULE=$(SOLARSRC)/$(RSCDEFIMG) \
-    -subGLOBALRES=$(SOLARSRC)/$(RSCDEFIMG)/res \
+    -lip=$(SOLARDEFIMG)/res/$i -lip=$(SOLARDEFIMG)/res ) \
+    -subMODULE=$(SOLARDEFIMG) \
+    -subGLOBALRES=$(SOLARDEFIMG)/res \
     -oil=$(BIN) \
     -ft=$@ \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \

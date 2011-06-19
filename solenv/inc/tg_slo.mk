@@ -47,13 +47,6 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="OS2"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
-.ENDIF			# "$(GUI)"=="OS2"
-
 .IF "$(GUI)"=="UNX"
     @echo $(foreach,i,$(SLOFILES:f) $(RSLO)/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
@@ -80,13 +73,6 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
     $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
-
-.IF "$(GUI)"=="OS2"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
-.ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"

@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,7 +267,7 @@ RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Versionind
     Value = "opendocument.DrawDocument.1";
 End
 
-
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -274,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Stardrawdocument_6
     REG_VALUE_LNG(SO60_DRAWING)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "soffice.StarDrawDocument.6\CLSID";
     Value = "{41662FC2-0D57-4aff-AB27-AD2E12E7C273}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -639,12 +645,16 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1
     REG_VALUE_LNG(OO_DRAW)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "opendocument.DrawDocument.1\CLSID";
     Value = "{448BB771-CFE2-47C4-BCDF-1FBF378E202C}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -736,6 +746,53 @@ RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Ve
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
+End
+
+// .fodg
+
+RegistryItem gid_Regitem_Fodg_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fodg_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fodg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_Fodg_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.graphics";
+End
+
+RegistryItem gid_Regitem__Fodg
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg";
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fodg";
+    Value = "opendocument.DrawDocument.1";
+    Styles = (PATCH);
 End
 
 // new otg file extension 

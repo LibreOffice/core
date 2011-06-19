@@ -301,13 +301,6 @@ File gid_File_Extra_Palettes
     Patchfiles = ();
 End
 
-File gid_File_Extra_Palettes_Lang
-    Dir = gid_Dir_User_Config;
-    USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(palettes,zip);
-End
-
 File gid_File_Extra_Poll_Asp
     Dir = gid_Dir_Config_Webcast;
     PACKED_TXT_FILE_BODY;
@@ -350,18 +343,17 @@ File gid_File_Extra_Symbols
     Name = "symbols.zip";
 End
 
-File gid_File_Extra_Tpllayoutimpr_Lang
-    Dir = gid_Dir_Template_Layout;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tpllayoutimpr,zip);
-End
-
 File gid_File_Extra_Tplpresntimpr_Lang
     Dir = gid_Dir_Template_Presnt;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(tplpresntimpr,zip);
+End
+
+File gid_File_Extra_Tpllayoutimpr
+    Dir = gid_Dir_Template_Common_Layout;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tpllayoutimpr.zip";
 End
 
 File gid_File_Extra_Tplwizbitmap
@@ -381,12 +373,6 @@ File gid_File_Extra_Tplwizletter
     Dir = gid_Dir_Share_Template_Wizard_Letter;
     ARCHIVE_TXT_FILE_BODY;
     Name = "tplwizletter.zip";
-End
-
-File gid_File_Extra_Tplwizletter_Lang
-    Dir = gid_Dir_Template_Wizard_Letter;
-    ARCHIVE_TXT_FILE_BODY;
-    EXTRA_ALL_LANG(tplwizletter,zip);
 End
 
 File gid_File_Extra_Tplwizfax_Lang
@@ -430,15 +416,8 @@ File gid_File_Extra_Webcast_Pl
 End
 
 File gid_File_Extra_Wordbook
-    Dir = gid_Dir_Wordbook_Language;
+    Dir = gid_Dir_Wordbook;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_IDENT_ALL_LANG(wordbook.zip);
-End
-
-File gid_File_Extra_Wordbook_Lang
-    Dir = gid_Dir_Wordbook_Language;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(wordbook,zip);
+    Name = "wordbook.zip";
 End

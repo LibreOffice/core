@@ -20,7 +20,6 @@ static const Path GBUILDDIR;
 static const Path INPATH;
 static const Path JAVA_HOME;
 static const Path UPD;
-static const String CVER;
 static const String LIBXML_CFLAGS;
 static const String OS;
 static const String STLPORT_VER;

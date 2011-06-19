@@ -1,0 +1,314 @@
+#!/bin/sh
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+# environment setup yet?
+if [ -z "$TARFILE_LOCATION" ]; then
+    . ./*Env.Set.sh
+fi
+
+# we want to clone if we are in the bootstrap git repo and clone does not exist yet
+# we need to test for a .git in order not to clone after rsync if we are called in
+# the inner autogen of the buid-repo based build
+
+check_file()
+{
+    echo "Looking for $1 ..."
+    if test -f $1; then
+	    echo "ok"
+    else
+	    echo "missing required archive; run './download' again";
+	    exit 1;
+    fi
+}
+
+if [ -d .git ] ; then
+    if [ -z "$GIT_LINK_SRC" ]; then
+        ./g -f clone
+    else
+        # space-saving clone from another local workdir
+        mkdir clone
+        for i in $GIT_REPO_NAMES ; do
+            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
+            for i in clone/$i/* ; do
+                ln -sf $i $(basename $i)
+            done
+        done
+    fi
+fi
+
+if [ ! -d "$TARFILE_LOCATION" ]; then
+    mkdir $TARFILE_LOCATION
+fi
+if [ ! -d "$TARFILE_LOCATION" ]; then
+    echo "Error: Cannot create $TARFILE_LOCATION."
+    exit 1
+fi
+
+FILELIST="$1"
+if [ -z "$FILELIST" ]; then
+    echo "No filelist provided, using the default ooo.lst."
+    FILELIST="ooo.lst"
+fi
+
+# check for wget and md5sum
+wget=
+md5sum=
+curl=`which curl 2>/dev/null`
+
+for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
+    eval "$i --version" > /dev/null 2>&1
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        wget=$i
+        break
+    fi
+done
+
+if [ -z "$wget" -a -z "$curl" ]; then
+    echo "ERROR: neither  wget nor curl found!"
+    exit 1
+fi
+
+for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
+    if [ "$i" = "md5" ]; then
+        eval "$i -x" > /dev/null 2>&1
+    else
+        eval "$i --version" > /dev/null 2>&1
+    fi
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        md5sum=$i
+        break
+    fi
+done
+
+if [ "$md5sum" = "md5" ]; then
+    if md5 -r < /dev/null > /dev/null 2>/dev/null; then
+        md5special=-r
+    elif md5 -n < /dev/null > /dev/null 2>/dev/null; then
+        md5special=-n
+    fi
+fi
+
+if [ -z "$md5sum" ]; then
+    echo "Warning: no md5sum: found!"
+fi
+
+start_dir=`pwd`
+logfile=$TARFILE_LOCATION/fetch.log
+date >> $logfile
+
+downloaditem()
+{
+    if [ "$1" != "" ]; then
+        if [ ! -f "../$2" ]; then
+            echo $2
+            if [ ! -z "$wget" ]; then
+                $wget --progress=dot:mega -N $1/$2 2>&1 | tee -a $logfile
+            else
+                echo fetching $2
+                $curl $file_date_check -O $1/$2 2>&1 | tee -a $logfile
+            fi
+            wret=$?
+            if [ $wret -ne 0 ]; then
+                mv $2 ${i}_broken
+                failed="$failed $2"
+                wret=0
+            fi
+            if [ -f $2 -a -n "$3" -a -n "$md5sum" ]; then
+                sum=`$md5sum $md5special $2 | sed "s/ .*//"`
+                if [ "$sum" != "$3" ]; then
+                    echo checksum failure for $2 2>&1 | tee -a $logfile
+                    failed="$failed $2"
+                    mv $2 ${i}_broken
+                else
+                    mv $2 ..
+                fi
+            else
+                mv $2 ..
+            fi
+        fi
+    fi
+}
+
+filelist=`cat $FILELIST`
+mkdir -p $TARFILE_LOCATION/tmp
+cd $TARFILE_LOCATION/tmp
+echo $$ > fetch-running
+for i in $filelist ; do
+#    echo $i
+    if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
+        tarurl=$i
+    # TODO: check for comment    
+    else
+        if [ "$tarurl" != "" ]; then
+            sum=`echo $i | sed "s/-.*//"`
+            downloaditem $tarurl $i $sum
+        fi
+    fi
+done
+
+if [ "$COM" = "MSC" ]; then
+    downloaditem "http://download.microsoft.com/download/platformsdk/Redist/5.0.2195.1/W9XNT4/EN-US/" "dbghinst.EXE" "096f1d53d9ba09cde27d6f7c2ea6cc47"
+    downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
+
+    msvcver=`$SRC_ROOT/oowintool --msvc-ver`
+    case "$msvcver" in
+        9.0)
+          downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x86.exe" "fd30acc7a696c32f661b33668e73bf7b"
+          downloaditem "http://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/" "vcredist_x64.exe" "a31dc1a74f1dee5caf63aec8ebb5fe20"
+        ;;
+    *)
+        ;;
+    esac
+
+fi
+
+if [ -f $start_dir/bootstrap.ver -a ! -d $start_dir/.git ] ; then
+    # bootstrap is from sources, so get the other source tarballs
+    . $start_dir/bootstrap.ver
+    lo_src_dir="$start_dir/src"
+    mkdir -p "$lo_src_dir"
+    for piece in `cat $start_dir/bin/repo-list` ; do
+        tarname="libreoffice-$piece-$lo_bootstrap_ver"
+        if [ ! -f "$TARFILE_LOCATION/$tarname.tar.bz2" ] ; then
+	    downloaditem "http://download.documentfoundation.org/libreoffice/src/" "$tarname.tar.bz2" ""
+	fi
+	if [ ! -d $lo_src_dir/$tarname ] ; then
+	    echo "Unpacking $tarname.tar.bz2..."
+	    tar -xf "$TARFILE_LOCATION/$tarname.tar.bz2" -C "$lo_src_dir"
+	fi
+	# create symlinks
+	for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d` ; do
+	    ln -sf "$dir" "$start_dir"
+	done
+    done
+fi
+
+rm $TARFILE_LOCATION/tmp/*-*
+cd $start_dir
+
+if [ ! -z "$failed" ]; then
+    echo
+    echo ERROR: failed on:
+    for i in $failed ; do
+        echo $i
+    done
+    exit 1
+fi
+
+if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
+    # This can be run only on Windows itself (Cygwin)
+    TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
+    chmod a+w $TARFILE_LOCATION/tmp
+    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbghinst.EXE ]; then
+	if [ ! -x $TARFILE_LOCATION/dbghinst.EXE ]; then
+	    chmod +x $TARFILE_LOCATION/dbghinst.EXE
+	fi
+        $TARFILE_LOCATION/dbghinst.EXE /T:$TMPUNPACK /C
+        sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/dbghelp.exe | sed "s/ .*//"`
+        if [ "$sum" = "cd3086a91e37965dd761ef5fd5df5b15" ]; then
+            unzip -LL -j -o -d ./external/dbghelp $TARFILE_LOCATION/tmp/dbghelp.exe
+        fi
+    fi
+    if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB975337-x86-ENU.exe ]; then
+	gdiplus_dll_path=asms/10/msft/windows/gdiplus/gdiplus.dll
+
+	# Run it through cmd so that the UAC prompt is displayed
+	echo
+	echo "NOTE: We are running the Microsoft KB975337 security fix installer"
+	echo "to get gdiplus.dll. You will most probably get a UAC prompt now."
+	echo "If you trust us, just enter your administrator password."
+	echo "The security fix is run with the /extract switch to just unpack"
+	echo "its files."
+	echo "If you don't trust us, just get gdiplus.dll yourself and put it"
+	echo "in external/gdiplus/gdiplus.dll."
+	echo "gdiplus.dll is included in the LibreOffice installer for the benefit of"
+	echo "Windows 2000 users."
+	# A few empty lines so that the above is visible even if the taskbar's auto-hide is turned on,
+	# and the UAC prompt caused it to taise (with a blinking icon for the UAC prompt)
+	echo
+	echo
+	echo
+        cmd /c "`cygpath -d $TARFILE_LOCATION/WindowsXP-KB975337-x86-ENU.exe` /extract:$TMPUNPACK /q"
+	if [ -f $TARFILE_LOCATION/tmp/$gdiplus_dll_path ]; then
+	    echo "Extraction succeeded"
+	    sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$gdiplus_dll_path | sed "s/ .*//"`
+	    if [ "$sum" = "4721ab485e0c29cd1617a5f296b9cc47" ]; then
+		cp $TARFILE_LOCATION/tmp/$gdiplus_dll_path ./external/gdiplus/gdiplus.dll
+	    else
+		echo "But unexpected checksum of $gdiplus_dll_path"
+	    fi
+	else
+	    echo "WindowsXP-KB975337-x86-ENU.exe did not unpack the expected $gdiplus_dll_path"
+        fi
+    fi
+    if [ ! -f ./external/vcredist/vcredist_x86.exe -a -f $TARFILE_LOCATION/vcredist_x86.exe ]; then
+        cp $TARFILE_LOCATION/vcredist_x86.exe ./external/vcredist/vcredist_x86.exe
+    fi
+    if [ ! -f ./external/vcredist/vcredist_x64.exe -a -f $TARFILE_LOCATION/vcredist_x64.exe ]; then
+        cp $TARFILE_LOCATION/vcredist_x64.exe ./external/vcredist/vcredist_x64.exe
+    fi
+fi
+
+# OxygenOffice extras
+for pack in $OOOP_FONTS_PACK $OOOP_GALLERY_PACK $OOOP_SAMPLES_PACK $OOOP_TEMPLATES_PACK ; do
+    check_file $TARFILE_LOCATION/$pack
+    echo "Unpacking OxygenOffice extra '$pack' ..."
+    unzip -o -q $TARFILE_LOCATION/$pack -d $SRC_ROOT/extras/source
+done
+
+# Extensions copy
+for pack in $BARCODE_EXTENSION_PACK $DIAGRAM_EXTENSION_PACK $VALIDATOR_EXTENSION_PACK $WATCH_WINDOW_EXTENSION_PACK $NUMBERTEXT_EXTENSION_PACK $HUNART_EXTENSION_PACK $TYPO_EXTENSION_PACK $GOOGLE_DOCS_EXTENSION_PACK $OOOBLOGGER_EXTENSION_PACK $LIGHTPROOF_HU_PACK $LIGHTPROOF_EN_US_PACK $SUNTEMPLATES_DE_PACK $SUNTEMPLATES_EN_US_PACK $SUNTEMPLATES_ES_PACK $SUNTEMPLATES_FR_PACK $SUNTEMPLATES_HU_PACK $SUNTEMPLATES_IT_PACK; do
+    check_file $TARFILE_LOCATION/$pack
+    packfilename=`echo "$pack" | cut -f 2- -s -d - | cut -f 1 -d _`
+    echo "Copy extension: '$pack' as '$packfilename.oxt' ..."
+    mkdir -p $SRC_ROOT/extras/source/extensions/ || exit 1
+    cp $TARFILE_LOCATION/$pack $SRC_ROOT/extras/source/extensions/$packfilename.oxt || exit 1
+done
+
+[ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
+
+# Save the config.log from the main configure script
+# and restore it after running post_download.
+mv config.log config.log.save
+
+./post_download --build=$BUILD_PLATFORM --host=$HOST_PLATFORM
+post_download_status=$?
+
+test -f config.log && mv config.log post_download.log
+mv config.log.save config.log
+
+exit $post_download_status
+
+# Local Variables:
+# tab-width: 4
+# indent-tabs-mode: nil
+# End:
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -39,4 +39,4 @@ $(eval $(call gb_Package_Package,MODULE_TYPE,$(SRCDIR)/MODULE/SOURCE))
 # DESTINATION_RELPATH/file.ext is the destination file (relative to $(OUTDIR))
 $(eval $(call gb_Package_add_file,MODULE_TYPE,DESTINATION_RELPATH/file.ext,SOURCE_RELPATH/file.ext))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

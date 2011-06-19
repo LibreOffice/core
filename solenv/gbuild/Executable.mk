@@ -32,14 +32,14 @@
 
 .PHONY : $(call gb_Executable_get_clean_target,%)
 $(call gb_Executable_get_clean_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Executable_get_target,$*) \
-            $(AUXTARGETS))
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_Executable_get_target,$*) \
+			$(AUXTARGETS))
 
 $(call gb_Executable_get_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Deliver_deliver,$<,$@) \
-            $(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
+	$(call gb_Helper_abbreviate_dirs,\
+		$(call gb_Deliver_deliver,$<,$@) \
+			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
 
 define gb_Executable_Executable
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
@@ -64,42 +64,46 @@ endef
 
 
 define gb_Executable_forward_to_Linktarget
-gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),Executable/$$(1)$$(gb_Executable_EXT),$$(2),$$(3))
+gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
 
 $(eval $(foreach method,\
-    add_cobject \
-    add_cobjects \
-    add_cxxobject \
-    add_cxxobjects \
-    add_objcxxobject \
-    add_objcxxobjects \
-    add_exception_objects \
-    add_noexception_objects \
-    add_generated_exception_objects \
+	add_cobject \
+	add_cobjects \
+	add_cxxobject \
+	add_cxxobjects \
+	add_objcobject \
+	add_objcobjects \
+	add_objcxxobject \
+	add_objcxxobjects \
+	add_exception_objects \
+	add_noexception_objects \
+	add_generated_cxxobjects \
+	add_generated_exception_objects \
 	add_cflags \
-    set_cflags \
+	set_cflags \
 	add_cxxflags \
-    set_cxxflags \
+	set_cxxflags \
 	add_objcxxflags \
-    set_objcxxflags \
+	set_objcflags \
+	set_objcxxflags \
 	add_defs \
-    set_defs \
-    set_include \
+	set_defs \
+	set_include \
 	add_ldflags \
-    set_ldflags \
+	set_ldflags \
 	add_libs \
-    set_library_path_flags \
-    add_linked_libs \
-    add_linked_static_libs \
+	set_library_path_flags \
+	add_linked_libs \
+	add_linked_static_libs \
 	use_external \
 	use_externals \
-    add_package_headers \
-    add_sdi_headers \
-    add_precompiled_header \
+	add_package_headers \
+	add_sdi_headers \
+	add_precompiled_header \
 ,\
-    $(call gb_Executable_forward_to_Linktarget,$(method))\
+	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

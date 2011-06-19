@@ -33,9 +33,9 @@ Directory gid_Dir_Brand_Root
   #ifdef WNT
     HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
   #else
-    HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
+    HostName = ".";
   #endif
-    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION);
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
 End
 #endif
 
@@ -53,7 +53,7 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     Order = 8;
     Key = "ErrorReportServer";
   #if defined(BUILD_SPECIAL)
-    Value = "report.services.openoffice.org";
+    Value = "report.libreoffice.org";
   #else
     Value = "";
   #endif

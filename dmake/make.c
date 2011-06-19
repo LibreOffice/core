@@ -1044,6 +1044,7 @@ char *pat;
       cmp1 = DmStrPbrk(pfx,DirBrkStr);
       result = DmStrJoin(result,up,-1,TRUE);
    }
+   FREE(up);
 
    pat = DmStrSpn(pat,DirBrkStr);
    /* Append pat to result. */
@@ -1254,7 +1255,7 @@ Exec_commands( cp )/*
 
   The function returns 0, if the command is executed and has successfully
   returned, and it returns 1 if the command is executing but has not yet
-  returned or -1 if an error occured (Return value from Do_cmnd()).
+  returned or -1 if an error occurred (Return value from Do_cmnd()).
 
   Macros that are found in recipe lines are expanded in this function, in
   parallel builds this can mean they are expanded before the previous recipe
@@ -1519,7 +1520,6 @@ char *name;
 int  ignore;
 {
    STRINGPTR   new_dir;
-   int         freedir=FALSE;
 
    DB_ENTER( "Push_dir" );
 
@@ -1527,12 +1527,9 @@ int  ignore;
    if( *dir == '\'' && dir[strlen(dir)-1] == '\'' ) {
       dir = DmStrDup(dir+1);
       dir[strlen(dir)-1]='\0';
-      freedir=TRUE;
    }
-   else if (strchr(dir,'$') != NIL(char)) {
+   else if (strchr(dir,'$') != NIL(char))
       dir = Expand(dir);
-      freedir=TRUE;
-   }
    else
       dir = DmStrDup(dir);
 
@@ -1540,7 +1537,7 @@ int  ignore;
       if( !ignore )
          Fatal( "Unable to change to directory `%s', target is [%s]",
             dir, name );
-      if (freedir) FREE(dir);
+      FREE(dir);
       DB_RETURN( 0 );
    }
 
@@ -1548,7 +1545,7 @@ int  ignore;
    if( Verbose & V_DIR_SET )
       printf( "%s:  Changed to directory [%s]\n", Pname, dir  );
 
-   if (freedir) FREE( dir );
+   FREE( dir );
    TALLOC( new_dir, 1, STRING );
    new_dir->st_next   = dir_stack;
    dir_stack          = new_dir;

@@ -116,6 +116,16 @@
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,PATCH)
 
+#ifdef WITH_HELPPACK_INTEGRATION
+#define ARCHIVE_TXT_FILE_BODY_HELPPACK \
+        TXT_FILE_BODY; \
+        Styles = (ARCHIVE,FORCEHELPPACK,LANGUAGEMODULE)
+#else
+#define ARCHIVE_TXT_FILE_BODY_HELPPACK \
+        TXT_FILE_BODY; \
+        Styles = (ARCHIVE,HELPPACK,LANGUAGEMODULE)
+#endif
+
 #define ARCHIVE_SUBST_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,SUBSTITUTE)
@@ -180,7 +190,7 @@
     File id \
         TXT_FILE_BODY; \
         RESFILE_ALL_LANG(name); \
-        Dir     = gid_Brand_Dir_Resource; \
+        Dir     = gid_Brand_Dir_Program_Resource; \
         Styles  = (PACKED); \
     End
 
@@ -314,24 +324,6 @@
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
         PACKED_LIB_FILE_BODY_PATCH; \
-    End
-
-#define WINW4WFILTERFILENAME(name) STRING(CONCAT2(name,f32w.dll))
-
-#define STD_WIN_W4WFILTER_FILE(id,name) \
-    File id \
-        PACKED_FILTER_FILE_BODY; \
-        Name            = WINW4WFILTERFILENAME(name);  \
-    End
-
-#define SOLSW4WFILTERFILENAME(name) STRING(CONCAT2(w4w, name))
-
-#define STD_SOLS_W4WFILTER_FILE(id,name) \
-    File id \
-        BIN_FILE_BODY; \
-        Styles = (PACKED); \
-        Dir = gid_Dir_Filter; \
-        Name = SOLSW4WFILTERFILENAME(name); \
     End
 
 #define SPECIAL_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
@@ -508,10 +500,11 @@ End
 #define SCP2_URE_DL_BARE(n) n ".dll"
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
+#define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
-#if defined _STLP_DEBUG
+#if defined _DEBUG_RUNTIME
 #define SCP2_STDLP_DEBUG "d"
 #else
 #define SCP2_STDLP_DEBUG ""
@@ -523,6 +516,8 @@ End
 #define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_COMID_VER(n, v) \
     "lib" n STRING(COMID) STRING(UNXSUFFIX) "." v
+#define SCP2_URE_DL_COMID_NORMAL(n) \
+    "lib" n STRING(COMID) STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_VER(n, v) "libuno_" n STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_UNO_NORMAL(n) "libuno_" n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_UNO_COMID_VER(n, v)	\

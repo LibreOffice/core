@@ -1,17 +1,166 @@
-# just dumb wrapper; make install comes later
+# @configure_input@
 
-SHELL=/bin/sh
+SHELL=/usr/bin/env bash
 
-all:
-	. ./*Env.Set.sh && \
-	./bootstrap && \
-		cd instsetoo_native && ../solenv/bin/build.pl --all
+ifeq ($(USE_GMAKE),)
+GBUILD_OPT:=
+else
+GBUILD_OPT:=--gmake
+endif
+
+ifeq (@CROSS_COMPILING@,YES)
+all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset
+else
+all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded
+endif
+	@. ./*Env.Set.sh && \
+        cd instsetoo_native && \
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+
+ifeq (@CROSS_COMPILING@,YES)
+cross-build-toolset:
+# Build necessary modules for the *build* platform, i.e. those needed
+# by tools run at build time. Sure, in many of these modules only a
+# part of the produced binaries are actually used then in the build.
+# Once everything is handled by gbuild, this can hopefully be streamlined.
+	. ./Env.Build.sh && \
+	for D in \
+	  solenv \
+	  soltools \
+	  boost \
+	  external \
+	  cppunit \
+	  xml2cmp \
+	  sal \
+	  cosv \
+	  udm \
+	  autodoc \
+	  store \
+	  salhelper \
+	  registry \
+	  idlc \
+	  icu \
+	  udkapi \
+	  expat \
+	  libxml2 \
+	  xml2cmp \
+	  libxslt \
+	  offapi \
+	  oovbaapi \
+	  codemaker \
+	  offuh \
+	  cppu \
+	  cppuhelper \
+	  rdbmaker \
+	  cpputools \
+	  xmlreader \
+	  i18nutil \
+	  ridljar \
+	  jurt \
+	  jvmaccess \
+	  bridges \
+	  ucbhelper \
+	  GBUILD:comphelper \
+	  jvmfwk \
+	  regexp \
+	  sax \
+	  stoc \
+	  i18npool \
+	  unodevtools \
+	  gettext \
+	  dictionaries \
+	  o3tl \
+	  basegfx \
+	  GBUILD:tools \
+	  rsc \
+	  setup_native; do \
+	    case $$D in \
+	    GBUILD:*) \
+	      (cd $${D#*:} && make -r -j@BUILD_MAX_JOBS@) \
+	      ;; \
+	    *) \
+	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) \
+	      ;; \
+	    esac; \
+	done
+endif
+
+install:
+	@. ./*Env.Set.sh && \
+	echo "Installing in $${prefix:-@prefix@}..." && \
+	ooinstall "$${prefix:-@prefix@}" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "$${prefix:-@prefix@}/program/soffice"
+
+dev-install:
+	@. ./*Env.Set.sh && \
+        cd smoketestoo_native && \
+		export SAL_USE_VCLPLUGIN="svp" && \
+		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
+		echo "" && \
+        echo "Developer installation finished, you can now execute:"
+	@if test `uname -s` = Darwin; then \
+		echo open install/LibreOffice.app; \
+	else \
+		echo "cd @abs_builddir@/install/program" && \
+		echo ". ooenv" && \
+		echo "./soffice.bin"; \
+	fi
 
 distclean:
-	. ./*Env.Set.sh && \
-	dmake distclean
+	-rm config.cache
+	-rm config.log
+ifeq (@BUILD_DMAKE@,YES)
+	-$(GNUMAKE) -C dmake distclean
+endif
 
 clean:
 	. ./*Env.Set.sh && \
-	dmake clean
-	
+	rm -rf */$$INPATH && \
+	rm -rf solver/*/$$INPATH && \
+	rm -rf install && \
+	$$GNUMAKE -C dmake clean && \
+	rm -f solenv/*/bin/dmake* && \
+	$$GNUMAKE -f GNUmakefile.mk -sr clean
+ifeq (@CROSS_COMPILING@,YES)
+	. ./*Env.Set.sh && \
+	rm -rf */$$INPATH_FOR_BUILD && \
+	rm -rf solver/*/$$INPATH_FOR_BUILD
+endif
+
+dmake/dmake@EXEEXT_FOR_BUILD@:
+	./bootstrap
+
+src.downloaded: ooo.lst download
+ifeq (@DO_FETCH_TARBALLS@,YES)
+	@. ./*Env.Set.sh && \
+	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
+else
+        @echo "Automatic fetching of external tarballs is disabled."
+endif
+
+fetch: src.downloaded
+
+Makefile: configure.in set_soenv.in Makefile.in
+	./autogen.sh
+
+check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
+	@. ./*Env.Set.sh && \
+	cd smoketestoo_native && \
+	export SAL_USE_VCLPLUGIN="svp" && \
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	@. ./*Env.Set.sh && $$SOLARENV/bin/subsequenttests
+
+id:
+	@. ./*Env.Set.sh && \
+		create-ids
+
+tags:
+	@. ./*Env.Set.sh && \
+		create-tags
+
+docs:
+	@. ./*Env.Set.sh && \
+		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg

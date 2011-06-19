@@ -77,7 +77,6 @@ sub check_system_path
 {
     # The following files have to be found in the environment variable PATH
     # All platforms: zip
-    # Windows only: msvcp70.dll, msvcr70.dll for regcomp.exe
     # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
     my $onefile;
@@ -87,9 +86,14 @@ sub check_system_path
 
     if( $^O =~ /cygwin/i )
     {   # When using cygwin's perl the PATH variable is POSIX style and ...
-        $pathvariable = qx{cygpath -mp "$pathvariable"} ;
+        my $temparrayref = installer::converter::convert_stringlist_into_array_without_newline(\$pathvariable, $local_pathseparator);
+        foreach $i (0..$#$temparrayref) {
+            $$temparrayref[$i] = qx{cygpath -m "$$temparrayref[$i]"};
+            chomp($$temparrayref[$i]);
+        }
         # has to be converted to DOS style for further use.
         $local_pathseparator = ';';
+        $pathvariable = join($local_pathseparator, @$temparrayref);
     }
     my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
@@ -100,19 +104,6 @@ sub check_system_path
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
         @needed_files_in_path = ("zip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
-
-        if ( $installer::globals::compiler eq "wntmsci8" )
-        {
-            push(@needed_files_in_path, "msvcp70.dll");
-            push(@needed_files_in_path, "msvcr70.dll");
-        }
-
-        if ( $installer::globals::compiler eq "wntmsci10" )
-        {
-            push(@needed_files_in_path, "msvcp71.dll");
-            push(@needed_files_in_path, "msvcr71.dll");
-        }
-
     }
     elsif ($installer::globals::iswin)
     {
@@ -341,11 +332,11 @@ sub check_logfile
         # Errors are all errors, but not the Windows installer table "Error.idt"
 
         my $compareline = $line;
-        $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
-        $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
-        $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
-        $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
-        $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
+        $compareline =~ s/Error\.idt//g;    # removing all occurrences of "Error.idt"
+        $compareline =~ s/Error\.mlf//g;    # removing all occurrences of "Error.mlf"
+        $compareline =~ s/Error\.ulf//g;    # removing all occurrences of "Error.ulf"
+        $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
+        $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
 
         if ( $compareline =~ /\bError\b/i )
         {
@@ -364,7 +355,7 @@ sub check_logfile
     {
         my $line = "\n*********************************************************************\n";
         push(@output, $line);
-        $line = "ERROR: The following errors occured in packaging process:\n\n";
+        $line = "ERROR: The following errors occurred in packaging process:\n\n";
         push(@output, $line);
 
         for ( my $i = 0; $i <= $#errors; $i++ )
@@ -375,7 +366,6 @@ sub check_logfile
 
         $line = "*********************************************************************\n";
         push(@output, $line);
-#       exit(-1);
     }
     else
     {
@@ -440,7 +430,6 @@ sub determine_ship_directory
     {
         my $number_of_languages = installer::systemactions::get_number_of_langs($languagestring);
         chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-        # $languagestring = $shorter;
         my $id = substr($shorter, 0, 8); # taking only the first 8 digits
         $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
     }
@@ -455,6 +444,7 @@ sub determine_ship_directory
     }
 
     if ( $installer::globals::languagepack ) { $productstring = $productstring . "_languagepack"; }
+    if ( $installer::globals::helppack ) { $productstring = $productstring . "_helppack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
@@ -654,11 +644,6 @@ sub read_encodinglist
 
     $installer::globals::msiencoding = \%msiencoding;
     $installer::globals::msilanguage = \%msilanguage;
-
-    # my $key;
-    # foreach $key (keys %{$installer::globals::msiencoding}) { print "A Key: $key : Value: $installer::globals::msiencoding->{$key}\n"; }
-    # foreach $key (keys %{$installer::globals::msilanguage}) { print "B Key: $key : Value: $installer::globals::msilanguage->{$key}\n"; }
-
 }
 
 #############################################################
@@ -720,24 +705,6 @@ sub set_addchildprojects
     push( @installer::globals::globallogfileinfo, $infoline);
 }
 
-####################################################################
-# Setting global variable "$installer::globals::addjavainstaller"
-####################################################################
-
-sub set_addjavainstaller
-{
-    my ($allvariables) = @_;
-
-    if ( $allvariables->{'JAVAINSTALLER'} ) { $installer::globals::addjavainstaller = 1; }
-
-    if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
-    if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
-    if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
-
-    my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-}
-
 #######################################################################
 # Setting global variable "$installer::globals::addsystemintegration"
 #######################################################################
@@ -750,6 +717,7 @@ sub set_addsystemintegration
 
     if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
+    if ( $installer::globals::helppack ) { $installer::globals::addsystemintegration = 0; }
     if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }
 
     my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";

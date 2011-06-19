@@ -464,7 +464,7 @@ sub replace_all_variables_in_pathes
 
         my $key;
 
-        foreach $key (keys %{$variableshashref})
+        foreach $key (sort { length ($b) <=> length ($a) } keys %{$variableshashref})
         {
             my $value = $variableshashref->{$key};
 
@@ -489,18 +489,8 @@ sub replace_minor_in_pathes
     {
         my $line = ${$patharrayref}[$i];
 
-        if ( ! defined $ENV{CWS_WORK_STAMP} and defined $ENV{UPDMINOR} )
-#       if ( $installer::globals::minor )
-        {
-            $line =~ s/\{minor\}/$installer::globals::minor/g;
-            # no difference for minor and minornonpre (ToDo ?)
-            $line =~ s/\{minornonpre\}/$installer::globals::minor/g;
-        }
-        else    # building without a minor
-        {
-            $line =~ s/\.\{minor\}//g;
-            $line =~ s/\.\{minornonpre\}//g;
-        }
+        $line =~ s/\.\{minor\}//g;
+        $line =~ s/\.\{minornonpre\}//g;
 
         ${$patharrayref}[$i] = $line;
     }
@@ -643,7 +633,7 @@ sub set_manufacturer
 {
     my ($allvariables) = @_;
 
-    my $openofficeproductname = "OpenOffice.org";
+    my $openofficeproductname = "LibreOffice";
     my $sunname = "";
 
 
@@ -793,6 +783,7 @@ sub add_variables_to_allvariableshashref
 
     if ( $installer::globals::patch ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::patchaddon; }
     elsif ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
+    elsif ( $installer::globals::helppack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::helppackpackaddon; }
     else { $variableshashref->{'PRODUCTADDON'} = ""; }
 
     my $localbuild = $installer::globals::build;

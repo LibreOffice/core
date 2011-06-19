@@ -1,6 +1,0 @@
-#!/bin/sh
-if [ x${SOLARENV}x = xx ]; then
-    echo No environment found, please use 'configure' or 'setsolar'
-    exit 1
-fi
-echo "Please use the 'cws create' command for creating new child workspaces!"

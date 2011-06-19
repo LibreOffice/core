@@ -128,10 +128,7 @@ sub parse_list
     return 0 if ! -r $list_file;
 
     open(FILE, "<$list_file") or croak("can't open $list_file: $!");
-    # my $t0 = new Benchmark;
     $self->parse_block(\*FILE, $self->{'DATA'});
-    # my $t1 = new Benchmark;
-    # print STDERR "parsing $list_file took: ", timestr(timediff($t1, $t0)), "\n";
     close(FILE);
 }
 

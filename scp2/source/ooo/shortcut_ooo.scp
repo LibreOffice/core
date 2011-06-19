@@ -33,53 +33,48 @@
 Shortcut gid_Shortcut_Lib_Icudata
     FileID = gid_File_Lib_Icudata;
     Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
     Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicudata.so";
+#endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icui18n
     FileID = gid_File_Lib_Icui18n;
     Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
     Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicui18n.so";
+#endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icule
     FileID = gid_File_Lib_Icule;
     Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
     Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicule.so";
+#endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
     Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
     Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicuuc.so";
+#endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
-
-Shortcut gid_Shortcut_Lib_Graphite_0
-    FileID = gid_File_Lib_Graphite;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libgraphite,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Graphite_1
-    FileID = gid_File_Lib_Graphite;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libgraphite,UNXSUFFIX,.,3));
-    Styles = (NETWORK,RELATIVE);
-End
-
-Shortcut gid_Shortcut_Lib_Graphite_2
-    FileID = gid_File_Lib_Graphite;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libgraphite,UNXSUFFIX,.,3.0));
-    Styles = (NETWORK,RELATIVE);
-End
 
 #endif
 

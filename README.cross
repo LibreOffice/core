@@ -1,0 +1,237 @@
+Cross-compiling LibreOffice
+===========================
+
+Notes on cross-compiling LibreOffice, written by Tor Lillqvist
+<tlillqvist@novell.com> <tml@iki.fi> in May, 2011.
+
+Cross-compilation of LibreOffice is not possible yet. Some initial
+work is done, "baby steps", but a lot remains. This work is highly
+experimental and done mostly in my own spare time just for the hacking
+pleasure. No promise, explicit or implied, is given that it will ever
+be finished.
+
+Searching for information about cross-compilation of OpenOffice.org
+(the predecessor of LibreOffice) you will find information about what
+actually was not cross-compilation, but using QEMU.
+
+My cross-compilation experimentation is going on for four platforms:
+Windows, iOS, Android and PowerPC Mac OS X. I work on the master
+branch of LibreOffice. Some other people have talked about setting up
+a separate branch for Android work, or even separate clones at
+github. I am not interested in that.
+
+
+General
+-------
+
+In GNU Autoconf terminology, "build" is the platform on which you are
+running a build on some software and "host" is the platform on which
+the software you are building will run. Only in the specific case of
+building compilers and other programming tools is the term "target"
+used to indicate the platform for which the tools your are building
+will produce code. As LibreOffice is not a compiler, the "target" term
+should not be used in the context of cross-compilation.
+
+(For a case where all three of "build", "host" and "target" are
+different: consider a gcc cross-compiler running on Windows, producing
+code for Android, where the cross-compiler itself was built on
+Linux. (This is a real case.) An interesting tidbit is that such
+configurations are called "Canadian Cross".)
+
+Even though the LibreOffice build mechanism is highly unorthodox, the
+configure script takes the normal --build and --host options like any
+GNU Autoconf -based configure script. To cross-compile, you basically
+need just to specify a suitable --host option and things should work
+out nicely. In practise, some more details might be needed. See
+examples below.
+
+
+What is so hard, then?
+----------------------
+
+Despite the fact that the configure script takes normal --build and
+--host options, that is just the beginning. In practise a lot of work
+was necessary to separate tests for "host" and "build" platforms in
+the configure script. See the git log for details. And the reasonably
+"standard" configure.in is just the top level; when we get down to the
+actual makefilery used to build the bits of LibreOffice, it gets much
+worse.
+
+
+Windows
+-------
+
+There is some support in LibreOffice already (from OpenOffice.org) for
+building it locally on Windows but with the GNU tool-chain, i.e. what
+is commonly known as MinGW. But as far as I know, that work has never
+attempted cross-compilation.
+
+This OOo-originated MinGW support attempts to support both running
+Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler.  The
+-mno-cygwin mechanism in the Cygwin gcc is rapidly being obsoleted, if
+it isn't already, and I have not attempted to check that it keeps
+working. Ditto for native MinGW; if one compiles natively on Windows,
+why not use Microsoft's compiler, as OOo/LO has been build for Windows
+all the time using that and it works fine. In my opinion, it makes
+sense to use MinGW only for cross-compilation. (Because of obvious
+benefits like speed improvement, easier automation in systems like the
+openSUSE Build Servce, etc.)
+
+MinGW is available as cross-build toolchains pre-packaged in more or
+less official packages for many Linux distros including Debian, Fedora
+and openSUSE. Personally I use the mingw32 packages in the openSUSE
+Build Service, running on openSUSE.
+
+It is somewhat unclear how well thought-out the conditionals and code
+for MinGW inside the LibreOffice code actually is. The little I have
+seen of it seems a bit randomish, with copy-pasting haveing been
+preferred to factoring out differences.
+
+The autogen.lastrun I use for my MinGW cross-compilation experimentation is:
+
+CC=ccache i686-w64-mingw32-gcc
+CXX=ccache i686-w64-mingw32-g++
+CC_FOR_BUILD=ccache gcc
+CXX_FOR_BUILD=ccache g++
+--build=x86_64-unknown-linux-gnu
+--host=i686-w64-mingw32
+--with-distro=LibreOfficeWin32
+--disable-build-mozilla
+--disable-ext-nlpsolver
+--disable-ext-pdfimport
+--disable-ext-presenter-console
+--disable-ext-presenter-minimizer
+--disable-ext-report-builder
+--disable-ext-scripting-beanshell
+--disable-ext-scripting-javascript
+--disable-ext-wiki-publisher
+--disable-ext-wiki-publisher
+--disable-mozilla
+--disable-zenity
+--enable-python=system
+--with-external-tar=/mnt/hemulen/ooo/git/master/src
+--with-num-cpus=1
+--with-max-jobs=1
+--with-system-altlinuxhyph
+--with-system-boost
+--with-system-curl
+--with-system-db
+--with-system-expat
+--with-system-gettext
+--with-system-hunspell
+--with-system-icu
+--with-system-libwpd
+--with-system-libwpg
+--with-system-libwps
+--with-system-libxml
+--with-system-libxslt
+--with-system-lpsolve
+--with-system-mythes
+--with-system-neon
+--with-system-openssl
+--with-system-redland
+--with-system-zlib
+--with-vendor=no
+
+
+iOS
+---
+
+iOS is the operating system of Apple's mobile devices. Clearly for a
+device like the iPad it would be totally unacceptable to run a normal
+LibreOffice application with a overlapping windows and mouse-oriented
+GUI widgets. No work has been done (at least publicly) to design a
+touch GUI for LibreOffice, so the work on cross-compiling LibreOffice
+for iOS is extremely experimental, and of course partly pointless;)
+But it is interesting and fun nonetheless.
+
+Obviously it will make sense to build only a part of LibreOffice's
+code for iOS. Most likely all GUI-oriented code should be left out,
+and some iOS app that eventually wants to use the remaining bits will
+handle all its GUI in a platform-dependent manner. How well it will be
+possible to do such a split remains to be seen. As I said, this is
+highly experimental and just in its baby steps phase.
+
+Technically, one important special aspect of iOS is that apps are not
+allowed to load own dynamic libraries. (System libraries are used in
+the form of dynamic libraries, just like on MacOSX, of which iOS is a
+variant.) So all the libraries in LibreOffice that normally are shared
+libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
+libraries on MacOSX (.dylib)) need to be built as static archives
+instead. Obviously this will have some interesting consequences for
+how UNO is implemented and used. None of that has been spared much
+thought yet.
+
+The Apple tool-chain for iOS cross-building is available only for
+MacOSX, so that is where I have been doing it.
+
+Here is my autogen.lastrun for iOS:
+CXX=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
+CC=ccache /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc-4.2 -arch armv7 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
+--with-distro=LibreOfficeiOS
+--with-external-tar=/Volumes/ooo/git/master/src
+--with-num-cpus=1
+--with-max-jobs=1
+
+
+Android
+-------
+
+I don't know much about Android, but from a technical point of view it
+is a kind of Linux, of course. As far as I know it is allowed for an
+Android app to use shared objects, but if it isn't, then just the same
+approach as used on iOS will need to be used.
+
+As for the GUI, the same holds as said above for iOS.
+
+I have done my Android cross-compilation work on Linux (openSUSE in
+particular), but it could as well be done on MacOSX. The Android
+cross-buld tool-chain (the "Native Development Kit", or NDK) is
+available for Linux, MacOSX and Windows. (Trying to cross-compile from
+Windows will probably drive you insane.)
+
+Here is my autogen.lastrun for Android:
+SYSBASE=/home/tml/android-ndk-r5b/platforms/android-9/arch-arm
+CC=ccache /home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc --sysroot /home/tml/android-ndk-r5b/platforms/android-9/arch-arm
+CXX=ccache /home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ --sysroot /home/tml/android-ndk-r5b/platforms/android-9/arch-arm -I /home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r5b/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
+AR=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ar
+NM=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-nm
+OBJDUMP=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-objdump
+RANLIB=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-ranlib
+STRIP=/home/tml/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-strip
+CC_FOR_BUILD=ccache gcc
+CXX_FOR_BUILD=ccache g++
+--build=x86_64-unknown-linux-gnu
+--disable-zenity
+--with-distro=LibreOfficeAndroid
+--with-external-tar=/mnt/hemulen/ooo/git/master/src
+
+
+PowerPC Mac OS X
+----------------
+
+Cross-compiling for PowerPC Mac OS X from Intel Mac OS X will probably
+be easy. The APIs available should after all be closely identical to
+those on Intel Mac OS X, and LibreOffice builds fine natively on
+PowerPC Mac already. I have just started experimenting with it. My
+autogen.lastrun looks like this:
+
+CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
+CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
+--build=i386-apple-darwin10.7.0
+--host=powerpc-apple-darwin10
+--disable-mozilla
+--disable-build-mozilla
+--with-external-tar=/Volumes/ooo/git/master/src
+
+
+
+That's all, thank you, and have a nice day. People with commit access,
+feel free to edit this document, and add yourself below. Sorry for
+writing now initially from such a personal point of view.
+
+--Tor Lillqvist <tlillqvist@novell.com>, <tml@iki.fi>

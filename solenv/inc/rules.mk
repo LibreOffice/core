@@ -637,7 +637,7 @@ $(MISC)/%.dpj :
 $(SLO)/%.obj : %.asm
        @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
 .IF "$(COM)"=="GCC"
-.IF "$(ASM)"=="ml"
+.IF "$(ASM)"=="ml" || "$(ASM)"=="ml64"
        $(COMMAND_ECHO)$(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)/$*.obj $*.asm
        @@-$(RM) $*.err
 .ELSE			# "$(ASM)"=="ml"
@@ -650,7 +650,7 @@ $(SLO)/%.obj : %.asm
         @-$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE
 .IF "$(COM)"=="MSC"
-.IF "$(ASM)"=="ml"
+.IF "$(ASM)"=="ml" || "$(ASM)"=="ml64"
     $(COMMAND_ECHO)$(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)/$*.obj $*.asm
     @-$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
 .ELSE			# "$(ASM)"=="ml"
@@ -715,14 +715,14 @@ $(MISC)/%.sh : %.sh
 .IF "$(WITH_LANG)"!=""
 $(COMMONMISC)/$(TARGET)/%.ulf : %.ulf
     @echo "Making:   " $(@:f)
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
     $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 
 $(COMMONMISC)/$(TARGET)/%.xrb : %.xrb
-    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
     $(COMMAND_ECHO)$(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@

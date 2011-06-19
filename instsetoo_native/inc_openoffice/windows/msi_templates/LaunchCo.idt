@@ -2,4 +2,4 @@ Condition	Description
 s255	l255
 WINDOWSENCODINGTEMPLATE	LaunchCondition	Condition
 Privileged	OOO_LAUNCH_1
-(VersionNT < 600) or (SETUP_USED=1) or Installed	OOO_LAUNCH_2 
+(VersionNT < 900) or (SETUP_USED=1) or Installed	OOO_LAUNCH_2

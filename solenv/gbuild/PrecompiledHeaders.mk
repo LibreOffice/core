@@ -40,38 +40,38 @@ gb_NoexPrecompiledHeader_DEBUGDIR := nodebug
 endif
 
 $(call gb_PrecompiledHeader_get_dep_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        echo '$(call gb_PrecompiledHeader_get_target,$*) : $$(gb_Helper_PHONY)' > $@)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		echo '$(call gb_PrecompiledHeader_get_target,$*) : $$(gb_Helper_PHONY)' > $@)
 
 $(call gb_NoexPrecompiledHeader_get_dep_target,%) :
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        echo '$(call gb_NoexPrecompiledHeader_get_target,$*) : $$(gb_Helper_PHONY)' > $@)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		echo '$(call gb_NoexPrecompiledHeader_get_target,$*) : $$(gb_Helper_PHONY)' > $@)
 
 $(call gb_PrecompiledHeader_get_target,%) :
-    $(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
+	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_NoexPrecompiledHeader_get_target,%) :
-    $(call gb_NoexPrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
+	$(call gb_NoexPrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%) $(call gb_NoExPrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),PCH,1)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_PrecompiledHeader_get_target,$*) \
-            $(call gb_PrecompiledHeader_get_target,$*).obj \
-            $(call gb_PrecompiledHeader_get_target,$*).pdb \
-            $(call gb_PrecompiledHeader_get_dep_target,$*))
+	$(call gb_Output_announce,$*,$(false),PCH,1)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_PrecompiledHeader_get_target,$*) \
+			$(call gb_PrecompiledHeader_get_target,$*).obj \
+			$(call gb_PrecompiledHeader_get_target,$*).pdb \
+			$(call gb_PrecompiledHeader_get_dep_target,$*))
 
 
 $(call gb_NoexPrecompiledHeader_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),PCH,1)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
-            $(call gb_NoexPrecompiledHeader_get_target,$*).obj \
-            $(call gb_NoexPrecompiledHeader_get_target,$*).pdb \
-            $(call gb_NoexPrecompiledHeader_get_dep_target,$*))
+	$(call gb_Output_announce,$*,$(false),PCH,1)
+	-$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
+			$(call gb_NoexPrecompiledHeader_get_target,$*).obj \
+			$(call gb_NoexPrecompiledHeader_get_target,$*).pdb \
+			$(call gb_NoexPrecompiledHeader_get_dep_target,$*))
 endif
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

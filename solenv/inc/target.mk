@@ -31,9 +31,6 @@ MKFILENAME:=TARGET.MK
 # INCLUDE-Path
 # ------------------------------------------------------------------
 
-.IF "$(STL_OS2_BUILDING)" != ""
-CDEFS+=-DSTL_OS2_BUILDING
-.ENDIF
 .IF "$(VISIBILITY_HIDDEN)" != ""
 .IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGS += -fvisibility=hidden
@@ -197,7 +194,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(IDLDIRS)/$i)
 DEPIDLFILES:=$(IDLFILES)
 .ENDIF			# "$(EXTERNIDLFILES)"!=""
 .ELSE			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i) $i $(shell @($(FIND) $(IDLDIRS) -name $(i:f)) | $(SED) s/\//\\/g )))
 .ELSE			# "$(GUI)"=="WNT"
 DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i -print) $i $(shell @$(FIND) $(IDLDIRS) -name $(i:f) -print )  ))
@@ -209,7 +206,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i -print)
 .IF "$(JARFILES)"!=""
 LOCALJARS:=$(foreach,i,$(shell @@-cd $(JARDIR) && ls -1 $(JARFILES) ) $(JARDIR)/$i)
 NEWCLASS:=$(LOCALJARS)
-NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARBINDIR)/$i $(NULL)))
+NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARVERSION)$/$(INPATH)$/bin$/$i $(NULL)))
 .ENDIF			# "$(JARFILES)"!=""
 NEWCLASS+=$(EXTRAJARFILES)
 .IF "$(GENJAVACLASSFILES)"!=""
@@ -344,14 +341,8 @@ JAVATARGET:=$(MISC)/$(TARGET)_dummy.java
 
 .IF "$(JARTARGET)"!=""
 JARCLASSDIRS*=.
-.IF "$(NEW_JAR_PACK)"!=""
 JARMANIFEST*=$(CLASSDIR)/$(TARGET)/META-INF/MANIFEST.MF
-.ENDIF			# "$(NEW_JAR_PACK)"!=""
 JARTARGETN=$(CLASSDIR)/$(JARTARGET)
-.IF "$(NOJARDEP)$(NEW_JAR_PACK)"==""
-JARTARGETDEP=$(JARTARGET).dep
-JARTARGETDEPN=$(MISC)/$(JARTARGET).dep
-.ENDIF			# "$(NOJARDEP)$(NEW_JAR_PACK)"==""
 .ENDIF			# "$(JARTARGET)"!=""
 .ELSE			# "$(SOLAR_JAVA)"!=""
 JAVACLASSFILES:=
@@ -441,7 +432,7 @@ APP2BASEX=/BASE:$(APP2BASE)
 .IF "$(APP3TARGET)"!=""
 APP3TARGETN=$(BIN)/$(APP3TARGET)$(EXECPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(APP3BASE)"==""
 APP3BASE=$(BASE)
 .ENDIF
@@ -501,7 +492,7 @@ APP7BASEX=/BASE:$(APP7BASE)
 .IF "$(APP8TARGET)"!=""
 APP8TARGETN=$(BIN)/$(APP8TARGET)$(EXECPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(APP8BASE)"==""
 APP8BASE=$(BASE)
 .ENDIF
@@ -513,7 +504,7 @@ APP8BASEX=/BASE:$(APP8BASE)
 .IF "$(APP9TARGET)"!=""
 APP9TARGETN=$(BIN)/$(APP9TARGET)$(EXECPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(APP9BASE)"==""
 APP9BASE=$(BASE)
 .ENDIF
@@ -529,7 +520,7 @@ SHL1TARGET!:=$(SHL1TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL1DLLPRE*=$(DLLPRE)
 SHL1TARGETN=$(DLLDEST)/$(SHL1DLLPRE)$(SHL1TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL1BASE)"==""
 SHL1BASE=$(BASE)
 .ENDIF
@@ -545,7 +536,7 @@ SHL2TARGET!:=$(SHL2TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL2DLLPRE*=$(DLLPRE)
 SHL2TARGETN=$(DLLDEST)/$(SHL2DLLPRE)$(SHL2TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL2BASE)"==""
 SHL2BASE=$(BASE)
 .ENDIF
@@ -561,7 +552,7 @@ SHL3TARGET!:=$(SHL3TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL3DLLPRE*=$(DLLPRE)
 SHL3TARGETN=$(DLLDEST)/$(SHL3DLLPRE)$(SHL3TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL3BASE)"==""
 SHL3BASE=$(BASE)
 .ENDIF
@@ -577,7 +568,7 @@ SHL4TARGET!:=$(SHL4TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL4DLLPRE*=$(DLLPRE)
 SHL4TARGETN=$(DLLDEST)/$(SHL4DLLPRE)$(SHL4TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL4BASE)"==""
 SHL4BASE=$(BASE)
 .ENDIF
@@ -593,7 +584,7 @@ SHL5TARGET!:=$(SHL5TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL5DLLPRE*=$(DLLPRE)
 SHL5TARGETN=$(DLLDEST)/$(SHL5DLLPRE)$(SHL5TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL5BASE)"==""
 SHL5BASE=$(BASE)
 .ENDIF
@@ -609,7 +600,7 @@ SHL6TARGET!:=$(SHL6TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL6DLLPRE*=$(DLLPRE)
 SHL6TARGETN=$(DLLDEST)/$(SHL6DLLPRE)$(SHL6TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL6BASE)"==""
 SHL6BASE=$(BASE)
 .ENDIF
@@ -625,7 +616,7 @@ SHL7TARGET!:=$(SHL7TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL7DLLPRE*=$(DLLPRE)
 SHL7TARGETN=$(DLLDEST)/$(SHL7DLLPRE)$(SHL7TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL7BASE)"==""
 SHL7BASE=$(BASE)
 .ENDIF
@@ -641,7 +632,7 @@ SHL8TARGET!:=$(SHL8TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL8DLLPRE*=$(DLLPRE)
 SHL8TARGETN=$(DLLDEST)/$(SHL8DLLPRE)$(SHL8TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL8BASE)"==""
 SHL8BASE=$(BASE)
 .ENDIF
@@ -657,7 +648,7 @@ SHL9TARGET!:=$(SHL9TARGET)$($(WINVERSIONNAMES)_MAJOR)
 SHL9DLLPRE*=$(DLLPRE)
 SHL9TARGETN=$(DLLDEST)/$(SHL9DLLPRE)$(SHL9TARGET)$(DLLPOST)
 .IF "$(BASE)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(SHL9BASE)"==""
 SHL9BASE=$(BASE)
 .ENDIF
@@ -779,7 +770,7 @@ LIB8TARGETN=$(LIB8TARGET)
 LIB9TARGETN=$(LIB9TARGET)
 .ENDIF
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
 LIB1ARCHIV=
 LIB2ARCHIV=
@@ -1035,7 +1026,7 @@ ALL_JAVA_TARGETS= \
 .IF "$(lintit)"==""
 .IF "$(L10N_framework)"!=""
 ALLTAR:	\
-        "$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk" \
+        "$(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk" \
         $(SUBDIRS)		\
         $(DPRTARGET) \
         $(DPZTARGET) \
@@ -1083,7 +1074,7 @@ ALLTAR:	\
 .ELSE			# "$(L10N_framework)"!=""
 
 ALLTAR: \
-        "$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk" \
+        "$(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk" \
         $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
         $(JAVAVERMK) \
@@ -1363,7 +1354,7 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
     $(TOUCH) $@
 
 .IF "$(LOCALIZATION_FOUND)"==""
-.IF "$(LOCALSDFFILE)"!=""
+.IF "$(LOCALSDFFILE)"!="" && "$(LOCALSDFFILE)"=="$(LOCALIZESDF)"
 "$(LOCALIZESDF)" : $(SOLARCOMMONSDFDIR)/$(PRJNAME).zip
     @@-$(MKDIRHIER) $(@:d)
     @@-$(MKDIRHIER) $(COMMONMISC)/$(PRJNAME)_$(TARGET)
@@ -1422,7 +1413,7 @@ $(SCP_PRODUCT_TYPE):
 
 .ENDIF			# "$(PARFILES)"!=""
 
-"$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg" :
+"$(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg" :
     $(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
@@ -1431,7 +1422,7 @@ $(SCP_PRODUCT_TYPE):
 COMPVERMK_PHONY:=.PHONY
 .ENDIF			# "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVTMP:=$(mktmp iii)
-"$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+"$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
 .IF "$(CCNUMVER)"!=""
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
@@ -1459,7 +1450,7 @@ COMPVTMP:=$(mktmp iii)
 .IF "$(JAVALOCATION)"!="$(JAVA_HOME)"
 "$(JAVAVERMK)" .PHONY :
 .ELSE          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
-"$(JAVAVERMK)" : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+"$(JAVAVERMK)" : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
 .ENDIF          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
     @-$(RM) $@
     @echo JAVAVER:=$(JAVAVER) > $@
@@ -1756,7 +1747,7 @@ ALLTAR : forcedeps
     @$(TOUCH) $(TMP)/makedt.don
 
 killbin:
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
     @$(IFEXIST) $(BIN)/$(SHL1TARGET).dll $(THEN) $(RM:s/+//) $(BIN)/$(SHL1TARGET).dll $(FI)
     @$(IFEXIST) $(BIN)/$(SHL2TARGET).dll $(THEN) $(RM:s/+//) $(BIN)/$(SHL2TARGET).dll $(FI)
     @$(IFEXIST) $(BIN)/$(SHL3TARGET).dll $(THEN) $(RM:s/+//) $(BIN)/$(SHL3TARGET).dll $(FI)
@@ -1963,7 +1954,7 @@ $(MISC)/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGE
 .ENDIF
 
 VERSIONTMP:=$(mktmp iii)
-$(INCCOM)/%_version.h : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+$(INCCOM)/%_version.h : $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
     @echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
     @echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
     @echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)

@@ -57,22 +57,13 @@ $id_str =~ /Revision:\s+(\S+)\s+\$/
 print "$script_name -- version: $script_rev\n";
 
 my $inpath    = $ENV{INPATH};
-my $milestone = $ENV{UPDMINOR};
-my $milestoneext = $ENV{UPDMINOREXT};
 
-if ( $ARGV[0] ) {
-    if ( $milestone && ( $milestone ne $ARGV[0] ) ) {
-        die "Error: specified milestone $ARGV[0] does not match your environment";
-    }
-    $milestone = $ARGV[0];
-}
-
-if ( !$inpath || !$milestone ) {
-    print STDERR "$script_name: INAPTH or UPDMINOR not set!\n";
+if ( !$inpath ) {
+    print STDERR "$script_name: INAPTH not set!\n";
     exit(1);
 }
 my $relocators = CreatePDBRelocators->new();
-my $rc = $relocators->create_pdb_relocators($inpath, $milestoneext, "");
+my $rc = $relocators->create_pdb_relocators($inpath, "", "");
 
 if ( !$rc ) {
     print STDERR "$script_name: creating PDB relocators failed!\n";

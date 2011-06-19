@@ -354,34 +354,6 @@ second()
     check(strpbrk(one, "bc") == NULL, 10);  /* Empty string. */
     check(strpbrk(one, "") == NULL, 11);    /* Both strings empty. */
 
-#if 0
-    /*
-     * strstr - somewhat like strchr
-     */
-    it = "strstr";
-    check(strstr("abcd", "z") == NULL, 1);  /* Not found. */
-    check(strstr("abcd", "abx") == NULL, 2);    /* Dead end. */
-    (void) strcpy(one, "abcd");
-    check(strstr(one, "c") == one+2, 3);    /* Basic test. */
-    check(strstr(one, "bc") == one+1, 4);   /* Multichar. */
-    check(strstr(one, "d") == one+3, 5);    /* End of string. */
-    check(strstr(one, "cd") == one+2, 6);   /* Tail of string. */
-    check(strstr(one, "abc") == one, 7);    /* Beginning. */
-    check(strstr(one, "abcd") == one, 8);   /* Exact match. */
-    check(strstr(one, "abcde") == NULL, 9); /* Too long. */
-    check(strstr(one, "de") == NULL, 10);   /* Past end. */
-    check(strstr(one, "") == one+4, 11);    /* Finding empty. */
-    (void) strcpy(one, "ababa");
-    check(strstr(one, "ba") == one+1, 12);  /* Finding first. */
-    (void) strcpy(one, "");
-    check(strstr(one, "b") == NULL, 13);    /* Empty string. */
-    check(strstr(one, "") == one, 14);  /* Empty in empty string. */
-    (void) strcpy(one, "bcbca");
-    check(strstr(one, "bca") == one+2, 15); /* False start. */
-    (void) strcpy(one, "bbbcabbca");
-    check(strstr(one, "bbca") == one+1, 16);    /* With overlap. */
-#endif
-
     /*
      * strspn
      */

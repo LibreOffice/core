@@ -51,23 +51,23 @@ $(CLASSDIR)/%.class .NOINFER .IGNORE : %.java
 
 $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES) 
 .IF "$(JAVARESPONSE)"!=""
-    $(JAVAC) @<<
+    $(COMMAND_ECHO)$(JAVAC) @<<
     $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
     <<keep
 .ELSE			# "$(JAVARESPONSE)"!=""
 .IF "$(use_jdep)"!=""
-    $(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
+    $(COMMAND_ECHO)$(JAVAC) -depend $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(use_jdep)"!=""
 .IF "$(javauno)"!=""
 .IF "$(JAVAFILES:d)"==""
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
+    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(JAVAFILES:d)"==""
     @@$(TOUCH) $(INPATH)_$(VCSID)_a_dummy.java
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) ./*.java $(uniq $(JAVAFILES:d:+"*.java"))
+    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) ./*.java $(uniq $(JAVAFILES:d:+"*.java"))
     @@-$(RM) $(INPATH)_$(VCSID)_a_dummy.java
 .ENDIF			# "$(JAVAFILES:d)"==""
 .ELSE			# "$(javauno)"!=""
-    $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
+    $(COMMAND_ECHO)$(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
 .ENDIF			# "$(javauno)"!=""
 .ENDIF			# "$(use_jdep)"!=""
 .ENDIF			# "$(JAVARESPONSE)"!=""

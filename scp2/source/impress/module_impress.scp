@@ -44,17 +44,9 @@ Module gid_Module_Prg_Impress_Bin
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Share_Registry_Impress_Xcd,
-	gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
+    gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
     gid_File_Tmp_Userinstall_Impress_Inf);
 End
-
-// Module gid_Module_Prg_Impress_Help
-//     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_HELP );
-//     ParentID = gid_Module_Prg_Impress;
-//     Sortkey = "200";
-//     Default = YES;
-//     Files = (gid_File_Help_Simpress_Zip);
-// End
 
 Module gid_Module_Brand_Prg_Impress
     PackageInfo = "packinfo_brand.txt";
@@ -74,7 +66,7 @@ Module gid_Module_Langpack_Impress_Template
     Name = "gid_Module_Langpack_Impress_Template";
     Description = "gid_Module_Langpack_Impress_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Simpress_Zip);
+    Files = ();
 End
 
 Module gid_Module_Prg_Impress_MSO_Reg

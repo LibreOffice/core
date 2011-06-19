@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ class ST_List            /// Soltools-List.
                         ST_List();
                         ST_List(
                             const ST_List<XX> & i_rList );
-    virtual             ~ST_List() { }
+    virtual             ~ST_List() { delete[] inhalt; }
 
     // OPERATORS
     ST_List<XX> &       operator=(
@@ -62,7 +63,7 @@ class ST_List            /// Soltools-List.
     void                insert(
                             iterator            i_aPos,
                             const XX &          elem_ )
-                                                { Insert(i_aPos-begin(), elem_); }
+                                                { Insert((unsigned)(i_aPos-begin()), elem_); }
     virtual void        Insert(
                             unsigned            pos,
                             const XX &          elem );
@@ -71,7 +72,7 @@ class ST_List            /// Soltools-List.
                                                 { Insert(size(),elem_); }
     void                remove(
                             iterator            i_aPos )
-                                                { Remove(i_aPos-begin()); }
+                                                { Remove((int)(i_aPos-begin())); }
     virtual void        Remove(
                             unsigned            pos );
     void                pop_back()              { Remove(size()-1); }
@@ -328,3 +329,4 @@ DynamicList<XY>::Remove( unsigned pos )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

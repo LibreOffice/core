@@ -37,6 +37,11 @@ NO_DEFAULT_STL=TRUE
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 
@@ -55,7 +60,7 @@ OBJFILES= \
 
 # nonstandard cpp options needed for Mac (-isysroot),
 # needs the custom stgetopt defined here :/
-.IF "$(OS)" == "MACOSX" || "$(HAVE_GETOPT)" != "YES"
+.IF "$(OS)" == "MACOSX" || "$(OS)" == "AIX" || "$(HAVE_GETOPT)" != "YES"
 OBJFILES += $(OBJ)$/_getopt.obj
 .ENDIF
 .IF "$(HAVE_GETOPT)" == "YES"
@@ -63,9 +68,7 @@ CDEFS += -DHAVE_GETOPT
 .ENDIF
 
 APP1TARGET	=	$(TARGET)
-.IF "$(GUI)" != "OS2"
 APP1STACK	=	1000000
-.ENDIF
 APP1LIBS	=	$(LB)$/$(TARGET).lib
 APP1DEPN	=   $(LB)$/$(TARGET).lib
 

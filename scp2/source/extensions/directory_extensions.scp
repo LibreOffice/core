@@ -1,0 +1,303 @@
+/*************************************************************************
+*
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: directory_extensions.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 3.
+ *
+ *
+ *    GNU Lesser General Public License Version 3
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+/* *** Additional Extensions *** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
+/* ** Presentation Minimizer ** */
+
+#ifndef WITHOUT_EXTENSION_MINIMIZER
+
+Directory gid_Brand_Dir_Share_Extensions_Presentation_Minimizer
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "presentation-minimizer";
+End
+
+#endif
+
+/* ** Report Builder ** */
+
+#ifndef WITHOUT_EXTENSION_REPORTDESIGN
+
+Directory gid_Brand_Dir_Share_Extensions_Report_Builder
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "report-builder";
+End
+
+#endif
+
+/* ** MediaWiki Publisher** */
+
+#ifndef WITHOUT_EXTENSION_MEDIAWIKI
+
+Directory gid_Brand_Dir_Share_Extensions_MediaWiki
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "wiki-publisher";
+End
+
+#endif
+
+/* ** Presenter Screen ** */
+
+#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
+
+Directory gid_Brand_Dir_Share_Extensions_Presenter_Screen
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "presenter-screen";
+End
+
+#endif
+
+/* ** PDF Import ** */
+
+#ifndef WITHOUT_EXTENSION_PDFIMPORT
+
+Directory gid_Brand_Dir_Share_Extensions_PDF_Import
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "pdfimport";
+End
+
+#endif
+
+/* ** Lightproof ** */
+
+#ifdef WITH_EXTENSION_LIGHTPROOF
+
+Directory gid_Brand_Dir_Share_Extensions_LightProof
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName (en-US) = "lightproof-en-US-0.1";
+    DosName (hu) = "lightproof-hu-1.2";
+    DosName = "lightproof";
+End
+
+#endif
+
+/* ** Numbertext ** */
+
+#ifdef WITH_EXTENSION_NUMBERTEXT
+
+Directory gid_Brand_Dir_Share_Extensions_NumberText
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "numbertext";
+End
+
+#endif
+
+/* ** ConvertTextToNumber ** */
+
+#ifdef WITH_EXTENSION_CT2N
+
+Directory gid_Brand_Dir_Share_Extensions_CT2N
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "ConvertTextToNumber";
+End
+
+#endif
+
+/* ** Hungarian Cross-reference Toolbar** */
+
+#ifdef WITH_EXTENSION_HUNART
+
+Directory gid_Brand_Dir_Share_Extensions_HunArt
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "hunart";
+End
+
+#endif
+
+/* ** Typography Toolbar** */
+
+#ifdef WITH_EXTENSION_TYPO
+
+Directory gid_Brand_Dir_Share_Extensions_Typo
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "typo";
+End
+
+#endif
+
+/* ** Watch Window ** */
+
+#ifdef WITH_EXTENSION_WATCH_WINDOW
+
+Directory gid_Brand_Dir_Share_Extensions_Watch_Window
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "WatchWindow";
+End
+
+#endif
+
+/* ** Diagram ** */
+
+#ifdef WITH_EXTENSION_DIAGRAM
+
+Directory gid_Brand_Dir_Share_Extensions_Diagram
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "Diagram";
+End
+
+#endif
+
+/* ** Validator ** */
+
+#ifdef WITH_EXTENSION_VALIDATOR
+
+Directory gid_Brand_Dir_Share_Extensions_Validator
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "Validator";
+End
+
+#endif
+
+/* ** Barcode ** */
+
+#ifdef WITH_EXTENSION_BARCODE
+
+Directory gid_Brand_Dir_Share_Extensions_Barcode
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "Barcode";
+End
+
+#endif
+
+/* ** Google Docs ** */
+
+#ifdef WITH_EXTENSION_GOOGLE_DOCS
+
+Directory gid_Brand_Dir_Share_Extensions_Google_Docs
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "gdocs";
+End
+
+#endif
+
+/* ** NLPSolver ** */
+
+#ifdef WITH_EXTENSION_NLPSOLVER
+
+Directory gid_Brand_Dir_Share_Extensions_NLPSolver
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "NLPSolver";
+End
+
+#endif
+
+/* ** LanguageTool ** */
+
+#ifdef WITH_EXTENSION_LANGUAGETOOL
+
+Directory gid_Brand_Dir_Share_Extensions_LanguageTool
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "LanguageTool";
+End
+
+#endif
+
+/* ** MySQL Connector ** */
+
+#ifdef WITH_EXTENSION_MYSQLC
+
+Directory gid_Brand_Dir_Share_Extensions_MySQLConnector
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "mysql-connector-ooo";
+End
+
+#endif
+
+/* ** oooblogger ** */
+
+#ifdef WITH_EXTENSION_OOOBLOGGER
+
+Directory gid_Brand_Dir_Share_Extensions_OOoBlogger
+	ParentID = gid_Brand_Dir_Share_Extensions;
+	DosName = "oooblogger";
+End
+
+#endif
+
+/* ** Sun Template Pack ** */
+
+#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
+
+Directory gid_Brand_Dir_Share_Extensions_Sun_Template_Pack
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName (en-US) = "Sun_ODF_Template_Pack_en-US";
+    DosName (de) = "Sun_ODF_Template_Pack_de";
+    DosName (es) = "Sun_ODF_Template_Pack_es";
+    DosName (fr) = "Sun_ODF_Template_Pack_fr";
+    DosName (hu) = "Sun_ODF_Template_Pack_hu";
+    DosName (it) = "Sun_ODF_Template_Pack_it";
+    DosName = "Sun_ODF_Template_Pack";
+End
+
+#endif
+
+/* ** Script provider for BeanShell ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-beanshell";
+End
+
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-javascript";
+End
+
+#endif
+
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-python";
+End
+
+#endif
+
+#endif

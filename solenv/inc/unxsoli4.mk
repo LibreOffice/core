@@ -29,7 +29,7 @@
 ASM=/usr/ccs/bin/as
 AFLAGS=-P
 
-CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 
 SOLAR_JAVA*=TRUE
 .IF "$(SOLAR_JAVA)"!=""
@@ -87,7 +87,7 @@ CFLAGSOUTOBJ=-o
 #   (this_type(p).swap(*this))
 # - truncwarn: "conversion of 64 bit type value to smaller type causes
 #   truncation" at least with CC 5.8 is reported only at the end of a
-#   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
+#   compilation unit that uses boost::unordered_map<sal_Int64, sal_Int64> (see
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
 # - wnoretvalue: warning about the last statement of a function not
@@ -106,8 +106,7 @@ CFLAGSWERRCXX=-xwe
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
-MODULES_WITH_WARNINGS := \
-    soldep
+MODULES_WITH_WARNINGS :=
 
 STDOBJVCL=$(L)/salmain.o
 
@@ -201,14 +200,6 @@ X11LINK_DYNAMIC = -lXext -lX11
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
 LIBSALCPPRT=
 
-.IF "$(USE_STLP_DEBUG)" != ""
-LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro_debug
-LIBSTLPORTST=$(STATIC) -lstlport_sunpro_debug $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
-LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
-
 LIBMGR=CC
 LIBFLAGS=-xar -o
 
@@ -224,8 +215,6 @@ RCFLAGS=-fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
-
-DLLPOSTFIX=si
 
 DLLPRE=lib
 DLLPOST=.so

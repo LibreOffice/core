@@ -1,3 +1,4 @@
+# -*- Mode: GNUmakefile; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,6 @@ gb_Helper_NULLFILE := /dev/null
 
 gb_Helper_MISC := $(WORKDIR)/Misc
 
-ifeq ($(JAVACOMPILER),)
-JAVACOMPILER := javac
-endif
-
-ifeq ($(JAVAINTERPRETER),)
-JAVAINTERPRETER := java
-endif
-
 # general propose phony target
 gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 
@@ -47,7 +40,7 @@ gb_Helper_REPOSITORYNAMES :=
 
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
-    @mkdir -p $(dir $@) && touch $@
+	@mkdir -p $(dir $@) && touch $@
 
 define gb_Helper_abbreviate_dirs
 R=$(REPODIR) && \
@@ -73,19 +66,19 @@ endef
 
 define gb_Helper_make_clean_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_clean_target,$(targettype)))
+	$(call gb_Helper_make_clean_target,$(targettype)))
 
 endef
 
 define gb_Helper_make_outdir_clean_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_outdir_clean_target,$(targettype)))
+	$(call gb_Helper_make_outdir_clean_target,$(targettype)))
 
 endef
 
 define gb_Helper_make_dep_targets
 $(foreach targettype,$(1),\
-    $(call gb_Helper_make_dep_target,$(targettype)))
+	$(call gb_Helper_make_dep_target,$(targettype)))
 
 endef
 
@@ -118,7 +111,7 @@ endef
 
 define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO BRAND NONE
-gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
+gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
 gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
@@ -183,5 +176,12 @@ $(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
 gb_StaticLibrary_$(1) += $(2)
 
 endef
+
+define gb_Helper_execute
+$(call gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
+endef
+
+export gb_Helper_set_ld_path
+export gb_Helper_execute
 
 # vim: set noet sw=4 ts=4:

@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -265,7 +267,7 @@ RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionind
     Value = "opendocument.ImpressDocument.1";
 End
 
-
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -274,12 +276,16 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     REG_VALUE_LNG(SO60_PRESENT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6\CLSID";
     Value = "{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -654,12 +660,16 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1
     REG_VALUE_LNG(OO_PRESENT)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "opendocument.ImpressDocument.1\CLSID";
     Value = "{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -765,6 +775,53 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Show_Command
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "opendocument.ImpressDocument.1\shell\show\command";
     Value = "\"<progpath>\program\soffice.exe\" -show \"%1\"";
+End
+
+// .fodp
+
+RegistryItem gid_Regitem_Fodp_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fodp_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fodp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem__Fodp
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fodp";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Fodp_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.presentation";
 End
 
 // new otp file extension

@@ -1,4 +1,4 @@
-cp    scp2    :    L10N:l10n i18npool setup_native l10ntools PYTHON:python ICU:icu REDLAND:redland LIBXSLT:libxslt NULL
+cp    scp2    :    TRANSLATIONS:translations i18npool setup_native l10ntools PYTHON:python ICU:icu REDLAND:redland LIBXSLT:libxslt NULL
 cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\macros                 nmake    -    all    cp_langmacros NULL
 cp    scp2\source\templates       nmake    -    all    cp_langtemplates NULL
@@ -8,6 +8,7 @@ cp    scp2\source\calc            nmake    -    all    cp_calc cp_langmacros cp_
 cp    scp2\source\canvas          nmake    -    all    cp_canvas cp_langmacros cp_langtemplates NULL
 cp    scp2\source\crashrep        nmake    -    all    cp_crashrep cp_langmacros cp_langtemplates NULL
 cp    scp2\source\draw            nmake    -    all    cp_draw cp_langmacros cp_langtemplates NULL
+cp    scp2\source\extensions      nmake    -    all    cp_extensions cp_langmacros cp_langtemplates NULL
 cp    scp2\source\gnome           nmake    -    all    cp_gnome cp_langmacros cp_langtemplates NULL
 cp    scp2\source\graphicfilter   nmake    -    all    cp_graphicfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\impress         nmake    -    all    cp_impress cp_langmacros cp_langtemplates NULL
@@ -25,4 +26,5 @@ cp    scp2\source\base            nmake    -    all    cp_base cp_langmacros cp_
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\winexplorerext  nmake    -    all    cp_winexplorerext cp_langmacros cp_langtemplates NULL
 cp    scp2\source\onlineupdate    nmake    -    all    cp_update cp_langmacros cp_langtemplates NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update NULL
+cp    scp2\source\accessories     nmake    -    all    cp_accessories cp_langmacros NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_extensions cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update cp_accessories NULL

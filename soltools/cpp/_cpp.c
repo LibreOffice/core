@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -298,7 +299,7 @@ void
 }
 
 void *
-    domalloc(int size)
+    domalloc(size_t size)
 {
     void *p = malloc(size);
 
@@ -381,3 +382,5 @@ void
         nerrs = 1;
     fflush(stderr);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

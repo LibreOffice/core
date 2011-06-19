@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,14 @@
 #include    <osl/file.hxx>
 #include <rtl/tres.hxx>
 
-#ifndef _SOLTOOLS_TESTSHL_TUTIL_HXX_
 #include "tutil.hxx"
-#endif
 
 #include <iostream>
 
 using namespace std;
 
-// <namespace_tstutl>
 namespace tstutl {
 
-// <class_tLog>
 class tLog {
 
     // <private_members>
@@ -98,3 +95,5 @@ public:
 } // </namespace_tstutl>
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,8 @@
 
 #define MAX_INC_DEPTH     10     /* max of ten nested include files      */
 #define MAX_COND_DEPTH    20     /* max nesting level of conditionals    */
-#define ERROR_EXIT_VALUE  255    /* return code of aborted make          */
+#define ERROR_ABORT_VALUE 254    /* return code of aborted make          */
+#define ERROR_EXIT_VALUE  255    /* return code of failed  make          */
 #define CONTINUATION_CHAR '\\'   /* line continuation \<nl>              */
 #define DEF_ESCAPE_CHAR   '\\'   /* escape char for used chars           */
 #define ESCAPE_CHAR       *Escape_char

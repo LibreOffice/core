@@ -82,4 +82,3 @@ File gid_File_Xsl_Export_Xhtml_Table
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/table.xsl";
 End
-

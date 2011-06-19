@@ -49,13 +49,8 @@
 
 RCD_LANGUAGE rcdata
 {
-#ifdef LG_D
-    "040704B0",     // Germany -> Unicode
-    "040704E4",     // Germany -> Windows, Multilingual
-#else
-    "040904B0",     // Germany -> Unicode
+    "040904B0",     // USA -> Unicode
     "040904E4",     // USA -> Windows, Multilingual
-#endif
     "04090000",     // USA -> 7-Bit-ASCII
     0               // end of table
 }
@@ -66,5 +61,4 @@ VS_VERSION_INFO rcdata
 {
     0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
     VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-};
-
+}

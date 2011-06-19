@@ -37,6 +37,11 @@ NO_DEFAULT_STL=TRUE
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 

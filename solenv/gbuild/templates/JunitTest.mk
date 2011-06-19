@@ -28,16 +28,16 @@
 $(eval $(call gb_JunitTest_JunitTest,MODULE_TYPE))
 
 $(eval $(call gb_JunitTest_set_defs,MODULE_TYPE,\
-    $$(DEFS) \
-    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/MODULE/DOCUMENTPATH \
+	$$(DEFS) \
+	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/MODULE/DOCUMENTPATH \
 ))
 
 $(eval $(call gb_JunitTest_add_jars,MODULE_TYPE,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
-    $(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,MODULE_TYPE,\
@@ -46,4 +46,4 @@ $(eval $(call gb_JunitTest_add_sourcefiles,MODULE_TYPE,\
 $(eval $(call gb_JunitTest_add_classes,MODULE_COMPLEX,\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 File gid_File_Lib_Soactivex
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -58,3 +60,4 @@ File gid_File_Lib_Regpatchactivex_Msi
     Name = "regpatchactivex.dll";
 End
 
+#endif // WITH_ACTIVEX_COMPONENT

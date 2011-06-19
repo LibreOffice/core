@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+. ./*.Set.sh
+
+omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
+ctags -h "+.hdl.hrc" --langmap=c:+.hdl.hrc.src $omnicppoptions \
+      --languages=-HTML,Java \
+      -R --exclude=`echo ${INPATH} | sed 's/\./\\\./g'` --exclude=binfilter --exclude=solver \
+      --exclude=clone --exclude=install --totals=yes --sort=foldcase *

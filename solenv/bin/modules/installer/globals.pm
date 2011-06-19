@@ -131,8 +131,8 @@ BEGIN
     $ismacosx = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
-    $islinuxrpmbuild = 0;
-    $islinuxdebbuild = 0;
+    $isrpmbuild = 0;
+    $isdebbuild = 0;
     $islinuxintelrpmbuild = 0;
     $islinuxppcrpmbuild = 0;
     $islinuxinteldebbuild = 0;
@@ -196,7 +196,7 @@ BEGIN
     %alllangmodules = ();
     $englishlicenseset = 0;
     $englishlicense = "";
-    $englishsolarislicensename = "LICENSE_en-US";
+    $englishsolarislicensename = "LICENSE"; # _en-US";
     $solarisdontcompress = 0;
     $patharray = "";
 
@@ -310,7 +310,6 @@ BEGIN
     $productxpdfile = "setup.xpd";
     $xpd_files_prepared = 0;
     $defaultlanguage = "";
-    # @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
     $isxpdplatform = 0;
@@ -318,7 +317,6 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
-    $addjavainstaller = 0;
     $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
@@ -329,6 +327,7 @@ BEGIN
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
+    $helppackaddon = "HelpPack";
     $patchaddon = "Patch";
     $ooodownloadfilename = "";
     $downloadfilename = "";
@@ -346,6 +345,7 @@ BEGIN
     $patch_user_dir = 0;
     $addchildprojects = 0;
     $languagepack = 0;
+    $helppack = 0;
     $tab = 0;
     $patch = 0;
     $patchincludepath = "";
@@ -424,7 +424,7 @@ BEGIN
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
-    $cabfilecompressionlevel = 2;
+    $cabfilecompressionlevel = 21; # Using LZX compression, possible values are: 15 | 16 | ... | 21 (best compression)
     $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
     $use_packages_for_cabs = 0;
@@ -464,6 +464,7 @@ BEGIN
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @languagepackfeature =();
+    @helppackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
@@ -536,9 +537,6 @@ BEGIN
         $isunix = 1;
         $iswin = 0;
     }
-    # WRAPCMD is gone - remove this and all related
-    # $installer::globals::wrapcmd entries
-    $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }

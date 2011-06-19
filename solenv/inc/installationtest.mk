@@ -51,28 +51,28 @@ my_file = file://
 .IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
     "$(CWS_WORK_STAMP)" == "" && "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
-    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
+    $(SHIPDRIVE)/$(INPATH)/LibreOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
 installationtest_instset = $(my_instsets:1)
 .ELSE
 installationtest_instset = \
-    $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)
+    $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
 .END
 
 .IF "$(OS)" == "WNT"
 installationtest_instpath = `cat $(MISC)/$(TARGET)/installation.flag`
 .ELSE
-installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation$(UPDMINOREXT)
+installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation
 .END
 
 .IF "$(OS)" == "MACOSX"
 my_sofficepath = \
-    $(installationtest_instpath)/opt/OpenOffice.org.app/Contents/MacOS/soffice
+    $(installationtest_instpath)/opt/LibreOffice.app/Contents/MacOS/soffice
 .ELIF "$(OS)" == "WNT"
 my_sofficepath = \
-    $(installationtest_instpath)'/opt/OpenOffice.org 3/program/soffice.exe'
+    $(installationtest_instpath)'/opt/LibreOffice 3/program/soffice.exe'
 .ELSE
 my_sofficepath = \
-    $(installationtest_instpath)/opt/openoffice.org3/program/soffice
+    $(installationtest_instpath)/opt/program/soffice
 .END
 
 .IF "$(OOO_TEST_SOFFICE)" == ""
@@ -97,10 +97,10 @@ my_javaenv = \
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
 OOO_EXTRACT_TO:=$(shell cygpath -m `mktemp -dt ooosmoke.XXXXXX`)
 $(MISC)/$(TARGET)/installation.flag : $(shell \
-        ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
+        ls $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip)
     $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
-    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/OOo_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
+    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
+    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/LibO_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
     $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
 .END
 

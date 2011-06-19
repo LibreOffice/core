@@ -96,6 +96,7 @@ sub get_createfolder_component
 
     my $onefile = "";
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
+    elsif ( $installer::globals::helppack ) { $onefile = installer::existence::get_specified_file($filesref, 'gid_File_Help_Common_Zip'); }
     else { $onefile = installer::existence::get_specified_file($filesref, $globalfilegid); }
 
     return $onefile->{'componentname'};
@@ -121,8 +122,8 @@ sub create_createfolder_table
     {
         my $onedir = ${$dirref}[$i];
 
-        # language packs get only language dependent directories
-        if (( $installer::globals::languagepack ) && ( $onedir->{'specificlanguage'} eq "" )) { next };
+        # language packs and help packs get only language dependent directories
+        if (( $installer::globals::languagepack ) ||  ( $installer::globals::languagepack ) && ( $onedir->{'specificlanguage'} eq "" )) { next };
 
         my $styles = "";
 

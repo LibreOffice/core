@@ -32,14 +32,15 @@ TARGET=soltools_giparser
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 

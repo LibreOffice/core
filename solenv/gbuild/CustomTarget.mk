@@ -30,9 +30,9 @@ gb_CustomTarget_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 # N.B.: putting the "+" there at the start activates the GNU make job server
 define gb_CustomTarget__command
 +$(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
-    $(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
-    touch $(1))
+	mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
+	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
+	touch $(1))
 
 endef
 
@@ -42,9 +42,9 @@ $(call gb_CustomTarget_get_target,%) :
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),MAK,3)
-    $(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
+	$(call gb_Output_announce,$*,$(false),MAK,3)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
 		rm -f $(call gb_CustomTarget_get_target,$*))
 
 define gb_CustomTarget__get_makefile
@@ -81,4 +81,4 @@ $(foreach dependency,$(2),$(call gb_CustomTarget_add_outdir_dependency,$(1),$(de
 
 endef
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

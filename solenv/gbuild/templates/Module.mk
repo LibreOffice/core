@@ -42,4 +42,4 @@ $(eval $(call gb_Module_add_check_targets,MODULE,\
 $(eval $(call gb_Module_add_subsequentcheck_targets,MODULE,\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

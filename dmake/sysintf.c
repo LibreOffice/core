@@ -278,7 +278,7 @@ int     last;   /* Last recipe line in target. */
       DB_RETURN( 0 );
    }
 
-   /* Stop making the rest of the recipies for this target if an error occured
+   /* Stop making the rest of the recipies for this target if an error occurred
     * but the Continue (-k) flag is set to build as much as possible. */
    if ( target->ce_attr & A_ERROR ) {
       if ( last ) {

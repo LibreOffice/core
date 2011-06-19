@@ -1,10 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -12,7 +13,7 @@
 
 #include "cpp.h"
 
-#if defined MACOSX || !defined HAVE_GETOPT
+#if defined MACOSX || defined AIX || !defined HAVE_GETOPT
 extern int stgetopt(int, char *const *, const char *);
 extern char *optarg;
 extern int optind;
@@ -42,7 +43,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-#if defined MACOSX || !defined HAVE_GETOPT
+#if defined MACOSX || defined(AIX) || !defined HAVE_GETOPT
     while ((c = stgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
 #else
     while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
@@ -134,7 +135,7 @@ void
 
                         case 'w':
                             dp = &optarg[n + 1];
-                            n += strlen(dp);
+                            n += (int)strlen(dp);
                             while (isspace(*dp)) dp++;
 
                             for (i = NINCLUDE - 1; i >= 0; i--)
@@ -172,7 +173,7 @@ void
     {
         if ((fp = strrchr(argv[optind], '/')) != NULL)
         {
-            int len = fp - argv[optind];
+            int len = (int)(fp - argv[optind]);
 
             dp = (char *) newstring((uchar *) argv[optind], len + 1, 0);
             dp[len] = '\0';
@@ -197,38 +198,4 @@ void
 }
 
 
-/* memmove is defined here because some vendors don't provide it at
-   all and others do a terrible job (like calling malloc) */
-
-#if !defined(__IBMC__) && !defined(_WIN32) && !defined(__GLIBC__)
-
-void *
-    memmove(void *dp, const void *sp, size_t n)
-{
-    unsigned char *cdp, *csp;
-
-    if (n <= 0)
-        return 0;
-    cdp = dp;
-    csp = (unsigned char *) sp;
-    if (cdp < csp)
-    {
-        do
-        {
-            *cdp++ = *csp++;
-        } while (--n);
-    }
-    else
-    {
-        cdp += n;
-        csp += n;
-        do
-        {
-            *--cdp = *--csp;
-        } while (--n);
-    }
-    return 0;
-}
-
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

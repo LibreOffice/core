@@ -49,129 +49,129 @@ gb_CXX := $(CXX)
 endif
 
 gb_OSDEFS := \
-    -DWINVER=0x0500 \
-    -D_WIN32_IE=0x0500 \
-    -DNT351 \
-    -DWIN32 \
-    -DWNT \
+	-DWINVER=0x0500 \
+	-D_WIN32_IE=0x0500 \
+	-DNT351 \
+	-DWIN32 \
+	-DWNT \
 
 gb_COMPILERDEFS := \
-    -DMSC \
-    -D_CRT_NON_CONFORMING_SWPRINTFS \
-    -D_CRT_NONSTDC_NO_DEPRECATE \
-    -D_CRT_SECURE_NO_DEPRECATE \
-    -D_MT \
-    -DBOOST_MEM_FN_ENABLE_CDECL \
-    -DCPPU_ENV=msci \
-    -DFULL_DESK \
-    -DM1500 \
+	-DMSC \
+	-D_CRT_NON_CONFORMING_SWPRINTFS \
+	-D_CRT_NONSTDC_NO_DEPRECATE \
+	-D_CRT_SECURE_NO_DEPRECATE \
+	-D_MT \
+	-D_DLL \
+	-DBOOST_MEM_FN_ENABLE_CDECL \
+	-DCPPU_ENV=msci \
+	-DM1500 \
 
 gb_CPUDEFS := -DINTEL -D_X86_=1
 
 gb_RCDEFS := \
-     -DWINVER=0x0400 \
-     -DWIN32 \
+	 -DWINVER=0x0400 \
+	 -DWIN32 \
 
 gb_RCFLAGS := \
-     -V
+	 -V
 
 gb_CFLAGS := \
-    -Gd \
-    -GR \
-    -Gs \
-    -GS \
-    -nologo \
-    -Wall \
-    -wd4005 \
-    -wd4061 \
-    -wd4127 \
-    -wd4180 \
-    -wd4189 \
-    -wd4191 \
-    -wd4217 \
-    -wd4250 \
-    -wd4251 \
-    -wd4255 \
-    -wd4275 \
-    -wd4290 \
-    -wd4294 \
-    -wd4350 \
-    -wd4355 \
-    -wd4365 \
-    -wd4503 \
-    -wd4505 \
-    -wd4511 \
-    -wd4512 \
-    -wd4514 \
-    -wd4611 \
-    -wd4619 \
-    -wd4625 \
-    -wd4626 \
-    -wd4640 \
-    -wd4668 \
-    -wd4675 \
-    -wd4692 \
-    -wd4710 \
-    -wd4711 \
-    -wd4738 \
-    -wd4786 \
-    -wd4800 \
-    -wd4820 \
-    -wd4826 \
-    -Zc:forScope,wchar_t- \
-    -Zm500 \
+	-Gd \
+	-GR \
+	-Gs \
+	-GS \
+	-MD \
+	-nologo \
+	-Wall \
+	-wd4005 \
+	-wd4061 \
+	-wd4127 \
+	-wd4180 \
+	-wd4189 \
+	-wd4191 \
+	-wd4217 \
+	-wd4250 \
+	-wd4251 \
+	-wd4255 \
+	-wd4275 \
+	-wd4290 \
+	-wd4294 \
+	-wd4350 \
+	-wd4355 \
+	-wd4365 \
+	-wd4503 \
+	-wd4505 \
+	-wd4511 \
+	-wd4512 \
+	-wd4514 \
+	-wd4611 \
+	-wd4619 \
+	-wd4625 \
+	-wd4626 \
+	-wd4640 \
+	-wd4668 \
+	-wd4675 \
+	-wd4692 \
+	-wd4710 \
+	-wd4711 \
+	-wd4738 \
+	-wd4786 \
+	-wd4800 \
+	-wd4820 \
+	-wd4826 \
+	-Zc:forScope,wchar_t- \
+	-Zm500 \
 
 gb_CXXFLAGS := \
-    -Gd \
-    -GR \
-    -Gs \
-    -GS \
-    -Gy \
-    -nologo \
-    -Wall \
-    -wd4005 \
-    -wd4061 \
-    -wd4127 \
-    -wd4180 \
-    -wd4189 \
-    -wd4191 \
-    -wd4217 \
-    -wd4250 \
-    -wd4251 \
-    -wd4275 \
-    -wd4290 \
-    -wd4294 \
-    -wd4350 \
-    -wd4355 \
-    -wd4365 \
-    -wd4503 \
-    -wd4505 \
-    -wd4511 \
-    -wd4512 \
-    -wd4514 \
-    -wd4611 \
-    -wd4619 \
-    -wd4625 \
-    -wd4626 \
-    -wd4640 \
-    -wd4668 \
-    -wd4675 \
-    -wd4692 \
-    -wd4710 \
-    -wd4711 \
-    -wd4738 \
-    -wd4786 \
-    -wd4800 \
-    -wd4820 \
-    -wd4826 \
-    -Zc:forScope,wchar_t- \
-    -Zm500 \
+	-Gd \
+	-GR \
+	-Gs \
+	-GS \
+	-Gy \
+	-MD \
+	-nologo \
+	-Wall \
+	-wd4005 \
+	-wd4061 \
+	-wd4127 \
+	-wd4180 \
+	-wd4189 \
+	-wd4191 \
+	-wd4217 \
+	-wd4250 \
+	-wd4251 \
+	-wd4275 \
+	-wd4290 \
+	-wd4294 \
+	-wd4350 \
+	-wd4355 \
+	-wd4365 \
+	-wd4503 \
+	-wd4505 \
+	-wd4511 \
+	-wd4512 \
+	-wd4514 \
+	-wd4611 \
+	-wd4619 \
+	-wd4625 \
+	-wd4626 \
+	-wd4640 \
+	-wd4668 \
+	-wd4675 \
+	-wd4692 \
+	-wd4710 \
+	-wd4711 \
+	-wd4738 \
+	-wd4786 \
+	-wd4800 \
+	-wd4820 \
+	-wd4826 \
+	-Zc:forScope,wchar_t- \
+	-Zm500 \
 
 gb_STDLIBS := \
-    uwinapi \
-    kernel32 \
-    msvcrt \
-    oldnames \
+	uwinapi \
+	advapi32 \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
@@ -179,25 +179,24 @@ gb_CXXFLAGS_WERROR := -WX
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
-    -DEXCEPTIONS_ON \
-    -EHa \
+	-DEXCEPTIONS_ON \
+	-EHa \
 
 gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
-    -DEXCEPTIONS_OFF \
+	-DEXCEPTIONS_OFF \
 
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
-    -MACHINE:IX86 \
-    -NODEFAULTLIB \
-    -OPT:NOREF \
-    -safeseh \
-    -nxcompat \
-    -dynamicbase \
-    $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
+	-MACHINE:IX86 \
+	-OPT:NOREF \
+	-safeseh \
+	-nxcompat \
+	-dynamicbase \
+	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 	
 gb_DEBUG_CFLAGS := -Zi
 
@@ -208,7 +207,10 @@ gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifeq ($(gb_SYMBOL),$(true))
+endif
+
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_LinkTarget_LDFLAGS += -DEBUG
 gb_COMPILEROPTFLAGS :=
 else
@@ -217,6 +219,16 @@ endif
 
 gb_COMPILERNOOPTFLAGS := -Od
 
+ifeq ($(gb_FULLDEPS),$(true))
+gb_COMPILERDEPFLAGS := -showIncludes
+define gb_create_deps
+| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3); exit $${PIPESTATUS[0]}
+endef
+else
+gb_COMPILERDEPFLAGS :=
+define gb_create_deps
+endef
+endif
 
 # Helper class
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
@@ -228,6 +240,8 @@ define gb_Helper_abbreviate_dirs_native
 R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \
 $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
 endef
+
+gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
 # convert parametters filesystem root to native notation
 # does some real work only on windows, make sure not to
@@ -243,41 +257,21 @@ endef
 
 # CObject class
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_Object__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME)%,$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $((2))
-endef
-else
-gb_Object__command_deponcompile =
-endif
-
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    unset INCLUDE && \
-    $(gb_CC) \
+	mkdir -p $(dir $(1)) && \
+	unset INCLUDE && \
+	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
 		-Fd$(PDBFILE) \
-        $(PCHFLAGS) \
-        -I$(dir $(3)) \
-        $(INCLUDE) \
-        -c $(3) \
-        -Fo$(1))
+		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(realpath $(dir $(3))) \
+		$(INCLUDE) \
+		-c $(realpath $(3)) \
+		-Fo$(1)) $(call gb_create_deps,$(1),$(call gb_CObject_get_dep_target,$(2)),$(realpath $(3)))
 $(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
@@ -287,17 +281,18 @@ endef
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    unset INCLUDE && \
-    $(gb_CXX) \
+	mkdir -p $(dir $(1)) && \
+	unset INCLUDE && \
+	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
 		-Fd$(PDBFILE) \
-        $(PCHFLAGS) \
-        -I$(dir $(3)) \
-        $(INCLUDE_STL) $(INCLUDE) \
-        -c $(3) \
-        -Fo$(1))
+		$(PCHFLAGS) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(realpath $(dir $(3))) \
+		$(INCLUDE_STL) $(INCLUDE) \
+		-c $(realpath $(3)) \
+		-Fo$(1))  $(call gb_create_deps,$(1),$(call gb_CxxObject_get_dep_target,$(2)),$(realpath $(3)))
 $(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
@@ -305,83 +300,39 @@ endef
 # PrecompiledHeader class
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-                                       -Fp$(call gb_PrecompiledHeader_get_target,$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME)%,$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_PrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_PrecompiledHeader__command_deponcompile =
-endif
-
+	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-    unset INCLUDE && \
-    $(gb_CXX) \
-        $(4) $(5) -Fd$(PDBFILE) \
-        -I$(dir $(3)) \
-        $(6) \
-        -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
+	$(gb_CXX) \
+		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(realpath $(dir $(3))) \
+		$(6) \
+		-c $(realpath $(3)) \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_PrecompiledHeader_get_dep_target,$(2)),$(realpath $(3)))
 endef
 
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-                                           -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME)%,$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_NoexPrecompiledHeader__command_deponcompile =
-endif
-
+	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-    unset INCLUDE && \
-    $(gb_CXX) \
-        $(4) $(5) -Fd$(PDBFILE) \
-        -I$(dir $(3)) \
-        $(6) \
-        -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
-$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
+	$(gb_CXX) \
+		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_COMPILERDEPFLAGS) \
+		-I$(realpath $(dir $(3))) \
+		$(6) \
+		-c $(realpath $(3)) \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(realpath $(3)))
 endef
 
 # LinkTarget class
@@ -390,8 +341,8 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
 gb_LinkTarget_INCLUDE :=\
-    $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
-    $(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
+	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
+	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
@@ -400,25 +351,26 @@ gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    rm -f $(1) && \
-    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
-        $(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(PCHOBJS) $(NATIVERES))) && \
-    $(gb_LINK) \
-        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-        $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
-        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+	mkdir -p $(dir $(1)) && \
+	rm -f $(1) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
+		$(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
+		$(PCHOBJS) $(NATIVERES))) && \
+	$(gb_LINK) \
+		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
+		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(T_LDFLAGS) \
-        @$${RESPONSEFILE} \
-        $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
-        $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
+		@$${RESPONSEFILE} \
+		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
+		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
-        $(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
-    $(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
+		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
+	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
 
@@ -432,78 +384,74 @@ gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
 
 gb_Library_PLAINLIBS_NONE += \
-    advapi32 \
+	advapi32 \
 	d3d9 \
 	d3dx \
 	ddraw \
-    gdi32 \
-    gdiplus \
-    gnu_getopt \
-    imm32\
-    kernel32 \
-    msimg32 \
-    msvcrt \
-    mpr \
-    oldnames \
-    ole32 \
-    oleaut32 \
-    shell32 \
-    unicows \
-    user32 \
-    uuid \
-    uwinapi \
+	gdi32 \
+	gdiplus \
+	gnu_getopt \
+	imm32\
+	kernel32 \
+	msimg32 \
+	msvcrt \
+	msvcprt \
+	mpr \
+	oldnames \
+	ole32 \
+	oleaut32 \
+	shell32 \
+	shlwapi \
+	unicows \
+	user32 \
+	uuid \
+	uwinapi \
+	version \
 	winmm \
-    winspool \
+	winspool \
 
 gb_Library_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 gb_Library_FILENAMES :=\
-    $(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
-ifeq ($(gb_PRODUCT),$(true))
-gb_Library_STLEXT := port_vc7145$(gb_Library_DLLEXT)
-else
-gb_Library_STLEXT := port_vc7145_stldebug$(gb_Library_DLLEXT)
-endif
-gb_Library_OOOEXT := mi$(gb_Library_DLLEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
 
 gb_Library_DLLFILENAMES :=\
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTEXT)) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVEREXT)) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):$(lib)$(gb_Library_STLEXT)) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVEREXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
-    $(3).manifest \
-    $(call gb_LinkTarget_get_pdbfile,$(2)) \
-    $(patsubst %.dll,%.pdb,$(3)) \
-    $(patsubst %.dll,%.ilk,$(3)) \
+	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
+	$(3).manifest \
+	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(patsubst %.dll,%.pdb,$(3)) \
+	$(patsubst %.dll,%.ilk,$(3)) \
 )
 
 $(call gb_Library_get_target,$(1)) \
@@ -512,8 +460,8 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir 
 ifneq ($(ENABLE_CRASHDUMP),)
 $(call gb_Library_get_target,$(1)) \
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
-        $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
-        $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
+		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
+		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
 
 endif
 
@@ -528,10 +476,10 @@ define gb_Library_add_default_nativeres
 $(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
 $(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
 $(call gb_WinResTarget_set_defs,$(1)/$(2),\
-        $$(DEFS) \
-        -DADDITIONAL_VERINFO1 \
-        -DADDITIONAL_VERINFO2 \
-        -DADDITIONAL_VERINFO3 \
+		$$(DEFS) \
+		-DADDITIONAL_VERINFO1 \
+		-DADDITIONAL_VERINFO2 \
+		-DADDITIONAL_VERINFO3 \
 )
 $(call gb_Library_add_nativeres,$(1),$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
@@ -558,8 +506,8 @@ gb_StaticLibrary_PLAINEXT := .lib
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
 
 gb_StaticLibrary_FILENAMES := \
-    $(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
-    $(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
+	$(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
+	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
@@ -568,7 +516,7 @@ $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 )
 
 endef
@@ -576,15 +524,15 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := -RELEASE -OPT:NOREF -INCREMENTAL:NO -DEBUG
 gb_Executable_get_rpath :=
 gb_Executable_TARGETGUI := 
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
-    $(call gb_LinkTarget_get_pdbfile,$(2)) \
-    $(call gb_LinkTarget_get_target,$(2)).manifest \
+	$(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
+	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_target,$(2)).manifest \
 )
 
 $(call gb_Executable_get_target,$(1)) \
@@ -599,7 +547,12 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_DEFS := -D_DLL
-gb_CppunitTest_CPPTESTPRECOMMAND :=
+# cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
+# thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
+# PATH is the Cygwin one while ${OUTDIR} is a Win32 pathname, thus
+# cygpath -u.
+gb_CppunitTest_CPPTESTPRECOMMAND := PATH="`cygpath -u $(OUTDIR)`/bin:$${PATH}"
+
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
@@ -609,11 +562,11 @@ define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
-    $(3).manifest \
-    $(patsubst %.dll,%.pdb,$(3)) \
-    $(call gb_LinkTarget_get_pdbfile,$(2)) \
-    $(patsubst %.dll,%.ilk,$(3)) \
+	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
+	$(3).manifest \
+	$(patsubst %.dll,%.pdb,$(3)) \
+	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(patsubst %.dll,%.ilk,$(3)) \
 )
 
 $(call gb_LinkTarget_get_target,$(2)) \
@@ -644,11 +597,11 @@ $(call gb_JunitTest_get_target,$(1)) : $(call gb_JunitTest_get_target,$(1)).inst
 $(call gb_JunitTest_get_target,$(1)) : CLEAN_CMD = $(call gb_Helper_abbreviate_dirs,rm -rf `cat $$@.instpath` $$@.instpath)
 
 $(call gb_JunitTest_get_target,$(1)).instpath : 
-    INST_DIR=$$$$(cygpath -m `mktemp -d -t testinst.XXXXXX`) \
-    && unzip -d "$$$${INST_DIR}"  $$(gb_smoketest_instset) \
-    && mv "$$$${INST_DIR}"/OOo_*_install-arc_$$(gb_defaultlangiso) "$$$${INST_DIR}"/opt\
-    && mkdir -p $$(dir $$@) \
-    && echo "$$$${INST_DIR}" > $$@
+	INST_DIR=$$$$(cygpath -m `mktemp -d -t testinst.XXXXXX`) \
+	&& unzip -d "$$$${INST_DIR}"  $$(gb_smoketest_instset) \
+	&& mv "$$$${INST_DIR}"/OOo_*_install-arc_$$(gb_defaultlangiso) "$$$${INST_DIR}"/opt\
+	&& mkdir -p $$(dir $$@) \
+	&& echo "$$$${INST_DIR}" > $$@
 
 endef
 else # OOO_TEST_SOFFICE
@@ -659,20 +612,22 @@ define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_JunitTest_platform_longpathname_hack,$(1))
 
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-    -Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:`cat $(call gb_JunitTest_get_target,$(1)).instpath`/opt/OpenOffice.org 3/program/soffice.exe}" \
-    -Dorg.openoffice.test.arg.env=PATH \
-    -Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1)) \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:`cat $(call gb_JunitTest_get_target,$(1)).instpath`/opt/OpenOffice.org 3/program/soffice.exe}" \
+	-Dorg.openoffice.test.arg.env=PATH \
+	-Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1)) \
 
 endef
 
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# svidl.exe is in ${OUTDIR}/bin itself, so nothing special needed to have it find
+# DLLs in the same directory
+gb_SdiTarget_SVIDLPRECOMMAND :=
 
 # SrsPartMergeTarget
-
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# Ditto for transex3
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND :=
 
 # SrsPartTarget class
 
@@ -682,18 +637,18 @@ gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCT
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(INCLUDE) \
-        $(DEFS) \
-        $(2) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_SrsPartTarget_get_dep_target,$(1)))
+	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+		$(INCLUDE) \
+		$(DEFS) \
+		$(2) \
+		-f - \
+	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+		-v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
+		-v OUTDIR=$(OUTDIR)/ \
+		-v WORKDIR=$(WORKDIR)/ \
+		-v SRCDIR=$(SRCDIR)/ \
+		-v REPODIR=$(REPODIR)/ \
+	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 else
 gb_SrsPartTarget__command_dep =
@@ -706,34 +661,34 @@ gb_WinResTarget_POSTFIX :=.res
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RES,3)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    $(gb_RC) \
-        $(DEFS) $(FLAGS) \
-        -I$(dir $(3)) \
-        $(INCLUDE) \
-        -Fo$(1) \
-        $(RCFILE) )
+	mkdir -p $(dir $(1)) && \
+	$(gb_RC) \
+		$(DEFS) $(FLAGS) \
+		-I$(dir $(3)) \
+		$(INCLUDE) \
+		-Fo$(1) \
+		$(RCFILE) )
 endef
 
 $(eval $(call gb_Helper_make_dep_targets,\
-    WinResTarget \
+	WinResTarget \
 ))
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(INCLUDE) \
-        $(DEFS) \
-        $(2) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(call gb_WinResTarget_get_target,$(1)) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_WinResTarget_get_dep_target,$(1)))
+	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+		$(INCLUDE) \
+		$(DEFS) \
+		$(2) \
+		-f - \
+	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
+		-v OBJECTFILE=$(call gb_WinResTarget_get_target,$(1)) \
+		-v OUTDIR=$(OUTDIR)/ \
+		-v WORKDIR=$(WORKDIR)/ \
+		-v SRCDIR=$(SRCDIR)/ \
+		-v REPODIR=$(REPODIR)/ \
+	> $(call gb_WinResTarget_get_dep_target,$(1)))
 endef
 else
 gb_WinResTarget__command_dep =
@@ -741,10 +696,12 @@ endif
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# See comment for svidl.exe
+gb_XSLTPROCPRECOMMAND :=
+
 gb_Library_COMPONENTPREFIXES := \
-    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
-    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
+	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
     NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

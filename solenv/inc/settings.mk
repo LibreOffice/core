@@ -64,16 +64,16 @@ EXTNAME*=$(EXTENSIONNAME)_in
 WRONG_SOURCEVERSION
 .ENDIF
 
-# Create $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk if needed
+# Create $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk if needed
 %minor.mk : $(SOLARENV)/inc/minor.mk
-    @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)
-    @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk
-    @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg
+    @@-$(MKDIRHIER) $(SOLARVERSION)/$(INPATH)/inc
+    @@$(COPY) $(SOLARENV)/inc/minor.mk $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
+    @@$(TOUCH) $(SOLARVERSION)/$(INPATH)/inc/minormkchanged.flg
 .ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
-# Force creation of $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/
+# Force creation of $(SOLARVERSION)/$(INPATH)/inc/
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
-.INCLUDE : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(UPD)minor.mk
+.INCLUDE : $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
 
 .IF "$(BSCLIENT)"=="TRUE"
 .IF "$(UPDATER)"!="YES"
@@ -146,6 +146,9 @@ JAVAC=$(JAVACOMPILER)
 JAVAI:=$(JAVAINTERPRETER)
 .IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
+.ENDIF
+.IF "$(JDK)" != "gcj" && $(JAVACISKAFFE) != "yes"
+JAVAC+=-source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
 .ENDIF
 
 #classpath and response
@@ -299,11 +302,11 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI_FOR_BUILD)"=="WNT"
 posix_PWD:=/cygdrive/$(PWD:s/://)
-.ELSE			#GUI)"=="WNT"
+.ELSE
 posix_PWD:=$(PWD)
-.ENDIF			#GUI)"=="WNT"
+.ENDIF
 
 
 .IF "$(TMP)"!=""
@@ -351,10 +354,6 @@ DBG_LEVEL=$(dbglevel)
 nodebug=$(NODEBUG)
 .ENDIF
 
-.IF "$(hbtoolkit)"!=""
-HBTOOLKIT=$(hbtoolkit)
-.ENDIF
-
 .IF "$(PRODUCT)"!=""
 product*=$(PRODUCT)
 .ENDIF
@@ -387,10 +386,6 @@ COMPILER_WARN_ALL=TRUE
 
 .IF "$(werror)"!=""
 COMPILER_WARN_ERRORS=TRUE
-.ENDIF
-
-.IF "$(RSC_ONCE)"!=""
-rsc_once*=$(RSC_ONCE)
 .ENDIF
 
 #.IF "$(COMMON_BUILD)"!=""
@@ -468,7 +463,7 @@ product=full
 .ENDIF
 
 .IF "$(debug)"!=""
-DBG_LEVEL*=2
+DBG_LEVEL*=1
 .ENDIF
 
 # Produkt auf einen Wert setzen (alles klein)
@@ -488,7 +483,7 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
-USE_STLP_DEBUG*=TRUE
+USE_DEBUG_RUNTIME*=TRUE
 .ENDIF
 
 .IF "$(debug)"!=""
@@ -534,25 +529,30 @@ TARGETTYPE=CUI
 # profile has to be first for not getting the .pro extension
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ELSE
 
 .IF "$(product)"!=""
 OUT=$(PRJ)/$(OUTPATH).pro
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).pro
 ROUT=$(OUTPATH).pro
 
 .ELSE
 .IF "$(profile)"!=""
 OUT=$(PRJ)/$(OUTPATH).cap
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).cap
 ROUT=$(OUTPATH).cap
 .ENDIF
 .IF "$(dbcs)"!=""
 OUT=$(PRJ)/$(OUTPATH).w
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).w
 ROUT=$(OUTPATH).w
 .ENDIF
 # could already be set by makefile.mk
 .IF "$(OUT)" == ""
 OUT*=$(PRJ)/$(OUTPATH)
+OUT_FOR_BUILD*=$(PRJ)/$(OUTPATH_FOR_BUILD)
 ROUT*=$(OUTPATH)
 .ENDIF
 .ENDIF
@@ -560,19 +560,17 @@ ROUT*=$(OUTPATH)
 
 .IF "$(bndchk)" != ""
 OUT:=$(PRJ)/$(OUTPATH).bnd
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).bnd
 ROUT=$(OUTPATH).bnd
 .ENDIF
 .IF "$(truetime)" != ""
 OUT=$(PRJ)/$(OUTPATH).tt
+OUT_FOR_BUILD=$(PRJ)/$(OUTPATH_FOR_BUILD).tt
 ROUT=$(OUTPATH).tt
-.ENDIF
-.IF "$(hbtoolkit)"!=""
-OUT=$(PRJ)/$(OUTPATH).tlk
-ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 PATH_IN_MODULE:=\
     $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))/, $(PWD))
 .ELSE			# "$(GUI)"=="WNT"
@@ -602,6 +600,7 @@ COMMON_OUTDIR:=$(OUTPATH)
 #.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
+LOCAL_OUT_FOR_BUILD:=$(OUT_FOR_BUILD)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 .EXPORT : LOCAL_OUT LOCAL_COMMON_OUT
 
@@ -635,6 +634,7 @@ MISCX=$(OUT)/umisc
 MISC=$(OUT)/umisc
 .ELSE
 MISC=$(OUT)/misc
+MISC_FOR_BUILD=$(OUT_FOR_BUILD)/misc
 # pointing to misc in common output tree if exists
 COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
@@ -699,7 +699,7 @@ PROCESSOUT*:=$(MISC)
 # Makros fuer die Librarynamen des Solar
 .INCLUDE : libs.mk
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 VERSIONOBJ=$(SLO)/_version.obj
 .ENDIF
 
@@ -707,11 +707,11 @@ VERSIONOBJ=$(SLO)/_version.obj
 VERSIONOBJ=$(SLO)/_version.o
 .ENDIF
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 SHELLLIB=-lgdi32 -lshell32 -ladvapi32 -lcomdlg32
 .ELSE
@@ -768,39 +768,35 @@ BIN=$(PRJ)/$(OUTPATH).xl/bin
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
 
 .IF "$(common_build)"!=""
-SOLARIDLDIR=$(SOLARVERSION)/common$(PROEXT)/idl$(UPDMINOREXT)
+SOLARIDLDIR=$(SOLARVERSION)/common$(PROEXT)/idl
 .ELSE
-SOLARIDLDIR=$(SOLARVERSION)/$(INPATH)/idl$(UPDMINOREXT)
+SOLARIDLDIR=$(SOLARVERSION)/$(INPATH)/idl
 .ENDIF
 
-#.IF "$(UPDMINOR)" != ""
-#UPDMINOREXT=.$(UPDMINOR)
-#.ELSE
-#UPDMINOREXT=
-#.ENDIF
-SOLARRESDIR=$(SOLARVERSION)/$(INPATH)/res$(UPDMINOREXT)
-SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res$(UPDMINOREXT)
-SOLARLIBDIR=$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)
-SOLARJAVADIR=$(SOLARVERSION)/$(INPATH)/java$(UPDMINOREXT)
-SOLARINCDIR=$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)
-SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)
+SOLARRESDIR=$(SOLARVERSION)/$(INPATH)/res
+SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res
+SOLARLIBDIR=$(SOLARVERSION)/$(INPATH)/lib
+SOLARLIBDIR_FOR_BUILD=$(SOLARVERSION)/$(INPATH_FOR_BUILD)/lib
+SOLARJAVADIR=$(SOLARVERSION)/$(INPATH)/java
+SOLARINCDIR=$(SOLARVERSION)/$(INPATH)/inc
+SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc
 .IF "$(SOLARLANG)"!="deut"
 .IF "$(SOLARLANG)" != ""
-SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/$(SOLARLANG)
-SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res$(UPDMINOREXT)/$(SOLARLANG)
+SOLARINCXDIR=$(SOLARVERSION)/$(INPATH)/inc/$(SOLARLANG)
+SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res/$(SOLARLANG)
 .ENDIF
 .ENDIF
-SOLARBINDIR:=$(SOLARVERSION)/$(INPATH)/bin$(UPDMINOREXT)
-SOLARUCRDIR=$(SOLARVERSION)/$(INPATH)/ucr$(UPDMINOREXT)
-SOLARPARDIR=$(SOLARVERSION)/$(INPATH)/par$(UPDMINOREXT)
-SOLARXMLDIR=$(SOLARVERSION)/$(INPATH)/xml$(UPDMINOREXT)
-SOLARDOCDIR=$(SOLARVERSION)/$(INPATH)/doc$(UPDMINOREXT)
-SOLARPCKDIR=$(SOLARVERSION)/$(INPATH)/pck$(UPDMINOREXT)
-SOLARSDFDIR=$(SOLARVERSION)/$(INPATH)/sdf$(UPDMINOREXT)
-SOLARCOMMONBINDIR=$(SOLARVERSION)/common$(PROEXT)/bin$(UPDMINOREXT)
-SOLARCOMMONRESDIR=$(SOLARVERSION)/common$(PROEXT)/res$(UPDMINOREXT)
-SOLARCOMMONPCKDIR=$(SOLARVERSION)/common$(PROEXT)/pck$(UPDMINOREXT)
-SOLARCOMMONSDFDIR=$(SOLARVERSION)/common$(PROEXT)/sdf$(UPDMINOREXT)
+SOLARBINDIR:=$(SOLARVERSION)/$(INPATH_FOR_BUILD)/bin
+SOLARUCRDIR=$(SOLARVERSION)/$(INPATH)/ucr
+SOLARPARDIR=$(SOLARVERSION)/$(INPATH)/par
+SOLARXMLDIR=$(SOLARVERSION)/$(INPATH)/xml
+SOLARDOCDIR=$(SOLARVERSION)/$(INPATH)/doc
+SOLARPCKDIR=$(SOLARVERSION)/$(INPATH)/pck
+SOLARSDFDIR=$(SOLARVERSION)/$(INPATH)/sdf
+SOLARCOMMONBINDIR=$(SOLARVERSION)/common$(PROEXT)/bin
+SOLARCOMMONRESDIR=$(SOLARVERSION)/common$(PROEXT)/res
+SOLARCOMMONPCKDIR=$(SOLARVERSION)/common$(PROEXT)/pck
+SOLARCOMMONSDFDIR=$(SOLARVERSION)/common$(PROEXT)/sdf
 .IF "$(common_build)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 SOLARCOMMONRESDIR=$(SOLARRESDIR)
@@ -810,19 +806,9 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .EXPORT : SOLARBINDIR
 
-L10N_MODULE*=$(SOURCE_ROOT_DIR)/l10n/l10n
-ALT_L10N_MODULE*=$(SOLARSRC)$/l10n_so
-
 .IF "$(WITH_LANG)"!=""
 .INCLUDE .IGNORE: $(L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
-.INCLUDE .IGNORE: $(ALT_L10N_MODULE)/$(COMMON_OUTDIR)$(PROEXT)/inc/localization_present.mk
 
-# check for localizations not hosted in l10n module. if a file exists there
-# it won't in l10n
-.IF "$(ALT_LOCALIZATION_FOUND)"!=""
-TRYALTSDF:=$(ALT_L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
-LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYALTSDF) $(THEN) echo $(TRYALTSDF) $(FI)))
-.ENDIF			# "$(ALT_LOCALIZATION_FOUND)"!=""
 # if the l10n module exists, use split localize.sdf directly from there
 .IF "$(LOCALIZATION_FOUND)"!="" && "$(LOCALIZESDF)"==""
 # still check for existence as there may be no localization yet
@@ -863,8 +849,8 @@ LIB:=$(LB);$(BIN);$(ILIB)
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
-.IF "$(USE_STLP_DEBUG)" != ""
-SCPCDEFS+=-D_STLP_DEBUG
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+SCPCDEFS+=-D_DEBUG_RUNTIME
 .ENDIF
 
 .IF "$(UDK_MAJOR)"!=""
@@ -876,10 +862,6 @@ SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
 SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3) -DSHORTSTDC3=$(SHORTSTDC3)
 .ENDIF			# "$(SHORTSTDCPP3)"!=""
-# extend library path for OS/2 gcc/wlink
-.IF "$(GUI)"=="OS2"
-LIB:=$(LB);$(SLB);$(ILIB)
-.ENDIF
 
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
@@ -888,10 +870,10 @@ UNOIDLDEPFLAGS=-Mdepend=$(SOLARVER)
 
 UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I$(SOLARIDLDIR) -I$(SOLARINCDIR)
 
-CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
+CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CPUNAME)
 
-.IF "$(USE_STLP_DEBUG)" != "" && "$(GUI)"!="OS2"
-CDEFS+=-D_STLP_DEBUG
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+CDEFS+=-D_DEBUG_RUNTIME
 .ENDIF
 
 .IF "$(CDEFS_PRESET)" != ""
@@ -904,7 +886,11 @@ CDEFS+=-DTIMELOG
 
 CDEFSCXX=
 CDEFSOBJ=
+.IF "$(OS)"=="IOS"
+CDEFSSLO=
+.ELSE
 CDEFSSLO=-DSHAREDLIB -D_DLL_
+.ENDIF
 CDEFSGUI=-DGUI
 CDEFSCUI=-DCUI
 #CDEFSMT=-DMULTITHREAD
@@ -917,9 +903,9 @@ CDEFSOPT=-DOPTIMIZE
 
 MKDEPFLAGS+=-I$(INCDEPN:s/ / -I/:s/-I-I/-I/)
 MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
-MKDEPPREINC=-I$(PREPATH)/$(INPATH)/inc$(UPDMINOREXT)
-MKDEPSOLENV=-I$(SOLARENV)/inc -I$(SOLARENV)/$(GUI)$(CVER)$(COMEX)/inc
-MKDEPSOLVER=-I$(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT) -I$(SOLARVERSION)/$(INPATH)/inc
+MKDEPPREINC=-I$(PREPATH)/$(INPATH)/inc
+MKDEPSOLENV=-I$(SOLARENV)/inc -I$(SOLARENV)/$(GUI)$(COMEX)/inc
+MKDEPSOLVER=-I$(SOLARVERSION)/$(INPATH)/inc
 MKDEPLOCAL=-I$(INCCOM)
 
 .IF "$(MKDEPENDALL)"!=""
@@ -970,10 +956,8 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
     VERBOSITY=-verbose
 .ELSE
     COMMAND_ECHO=@
-    .IF "$(VERBOSE)" == "FALSE"
-        VERBOSITY=-quiet
-        ZIP_VERBOSITY=-q
-    .ENDIF
+    VERBOSITY=-quiet
+    ZIP_VERBOSITY=-q
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
 COMPILE_ECHO_FILE=$(<:f)
@@ -983,7 +967,7 @@ RSCUPDVER=$(RSCREVISION)
 RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
-RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) $(JAVADEF)
+RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) $(JAVADEF)
 
 .IF "$(BUILD_SPECIAL)"!=""
 RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
@@ -1019,9 +1003,7 @@ LNTFLAGSOUTOBJ=-os
 .INCLUDE : unx.mk
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-.INCLUDE : os2.mk
-.ENDIF
+DLLPOSTFIX=lo
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
@@ -1035,32 +1017,43 @@ AUGMENT_LIBRARY_PATH_LOCAL = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 .END
 
-# remove if .Net 2003 support has expired 
-.IF "$(debug)"!=""
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(COMEX)" == "10"
-.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-MAXPROCESS!:=1
-.EXPORT : MAXPROCESS
-.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-.ENDIF			# "$(COMEX)" == "10"
-.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.ENDIF			# "$(debug)"!=""
-
 # for multiprocess building in external modules
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
+GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
+
+#use with export VALGRIND=memcheck, that method of invocation is used because
+#hunspell will aslo run its own unit tests under valgrind when this variable is
+#set.
+.IF "$(VALGRIND)" != ""
+VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50
+.IF "$(VALGRIND)" == "memcheck"
+VALGRINDTOOL+=--leak-check=yes
+G_SLICE*:=always-malloc
+.EXPORT : G_SLICE
+.ENDIF
+.ENDIF
+
 IDLC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/idlc
-REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regmerge
-REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcompare
-REGCOMP*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/regcomp
+REGMERGE*=$(AUGMENT_LIBRARY_PATH) $(VALGRINDTOOL) $(SOLARBINDIR)/regmerge
+REGCOMPARE*=$(AUGMENT_LIBRARY_PATH) $(VALGRINDTOOL) $(SOLARBINDIR)/regcompare
+
+.IF "$(DEBUGREGCOMP)" != "" || "$(debugregcomp)" != ""
+GDBREGCOMPTRACE=$(GDBTRACE)
+.ENDIF
+
+REGCOMP*=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBREGCOMPTRACE) $(SOLARBINDIR)/regcomp
 CPPUMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/cppumaker
 JAVAMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/javamaker
 RDBMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rdbmaker
 CLIMAKER*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/climaker
 
-CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(SOLARBINDIR)/cppunittester
+.IF "$(DEBUGCPPUNIT)" != "" || "$(debugcppunit)" != ""
+GDBCPPUNITTRACE=$(GDBTRACE)
+.ENDIF
+
+CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(SOLARBINDIR)/cppunit/cppunittester
 HELPEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/helpex
 LNGCONVEX=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/lngconvex
 HELPLINKER=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/HelpLinker
@@ -1101,9 +1094,12 @@ CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
+# if debug is enabled, this may enable less debug info than debug, so rely just on debug
+.IF "$(debug)" == ""
 CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
 CFLAGSCXX+=$(CFLAGSENABLESYMBOLS)
 CFLAGSCC+=$(CFLAGSENABLESYMBOLS_CC_ONLY)
+.ENDIF          # "$(DEBUG)" == ""
 .ENDIF          # ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
 
 .IF "$(profile)"!=""
@@ -1173,6 +1169,10 @@ CDEFS+=-DENABLE_LAYOUT_EXPERIMENTAL=1
 CFLAGS+=-DENABLE_LAYOUT_EXPERIMENTAL=0
 .ENDIF # ENABLE_LAYOUT_EXPERIMENTAL != TRUE
 
+.IF "$(ENABLE_GSTREAMER)" == "TRUE"
+CDEFS+=-DGSTREAMER
+.ENDIF
+
 # compose flags and defines for GUI
 .IF "$(TARGETTYPE)"=="GUI"
 CDEFS+= $(CDEFSGUI)
@@ -1209,15 +1209,6 @@ STDSHL=$(STDSHLCUIMT)
 
 .EXPORT : PICSWITCH
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
-LIBSTLPORT=""
-.ENDIF
-
-.IF "$(NO_DEFAULT_STL)"==""
-STDLIB+=$(LIBSTLPORT)
-STDSHL+=$(LIBSTLPORT)
-.ENDIF			# "$(NO_DEFAULT_STL)"==""
-
 # fill up unresolved symbols not found else where
 .IF "$(FILLUPARC)"!=""
 STDLIB+=$(FILLUPARC)
@@ -1234,11 +1225,13 @@ CDEFS+=$(JAVADEF)
 # .mk file for that platform should set COMPILER_WARN_ERRORS=TRUE and no longer
 # set MODULES_WITH_WARNINGS, and once no platform sets MODULES_WITH_WARNINGS any
 # longer, this code can go away:
-.IF "$(MODULES_WITH_WARNINGS)" != ""
+.IF "$(MODULES_WITH_WARNINGS)" == ""
+COMPILER_WARN_ERRORS=TRUE
+.ELSE
 MODULES_WITH_WARNINGS_1 := $(foreach,i,$(MODULES_WITH_WARNINGS) .$(i).)
 MODULES_WITH_WARNINGS_2 := $(subst,.$(PRJNAME)., $(MODULES_WITH_WARNINGS_1))
 .IF "$(MODULES_WITH_WARNINGS_1)" == "$(MODULES_WITH_WARNINGS_2)"
-COMPILER_WARN_ERRORS = TRUE
+COMPILER_WARN_ERRORS=TRUE
 .ENDIF
 .ENDIF
 

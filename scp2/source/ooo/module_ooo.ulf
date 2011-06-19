@@ -55,6 +55,12 @@ en-US = "Afrikaans"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AF]
 en-US = "Afrikaans spell checker"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
+en-US = "Breton"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BR]
+en-US = "Breton spell checker"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_CA]
 en-US = "Catalan"
 
@@ -119,7 +125,7 @@ en-US = "French 'Classic and Reform 1990' spelling, thesaurus and hyphenation"
 en-US = "Galician"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_GL]
-en-US = "Galician spellchecker dictionary for OpenOffice.org"
+en-US = "Galician spellchecker dictionary for %PRODUCTNAME"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HE]
 en-US = "Hebrew"
@@ -132,6 +138,12 @@ en-US = "Hungarian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HU]
 en-US = "Hungarian spelling dictionary, hyphenation patterns, and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_HR]
+en-US = "Croatian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_HR]
+en-US = "Croatian spelling dictionary and hyphenation patterns"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_IT]
 en-US = "Italian"
@@ -169,6 +181,12 @@ en-US = "Norwegian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_NO]
 en-US = "Norwegian dictionaries (Nynorsk and Bokmal)"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_OC]
+en-US = "Occitan"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_OC]
+en-US = "Occitan spell check dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PL]
 en-US = "Polish"
 
@@ -191,7 +209,7 @@ en-US = "Romanian Dictionaries"
 en-US = "Russian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_RU]
-en-US = "Russian hyphenation dictionary and thesaurus"
+en-US = "Russian spell check dictionary, hyphenation rules and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SK]
 en-US = "Slovak"
@@ -228,6 +246,12 @@ en-US = "Thai"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_TH]
 en-US = "Thai spelling dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_UK]
+en-US = "Ukrainian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_UK]
+en-US = "Ukrainian spell check dictionary, hyphenation rules and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_VI]
 en-US = "Vietnamese"

@@ -23,9 +23,6 @@
 --      Use cvs log to obtain detailed change logs.
 */
 
-#if 0
-#include <dir.h>
-#endif
 #include <direct.h>
 #include "extern.h"
 

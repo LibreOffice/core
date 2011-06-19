@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,11 @@
 #undef LSize
 #undef ModalDialog
 #undef SetCursor
-//#undef ShowWindow
 #undef StringPtr
 #undef DirInfo
 //#undef ULONG
 #undef Line
 #undef TimeValue
 #undef Pattern
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

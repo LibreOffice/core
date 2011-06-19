@@ -49,8 +49,10 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Swui,
     gid_File_Lib_Msword,
     gid_File_Lib_Wpft,
-    gid_File_Lib_Writerfilter,
+    gid_File_Lib_Msworks,
     gid_File_Lib_T602Filter,
+    gid_File_Lib_Writerfilter,
+    gid_File_Lib_Wlwp,
     gid_File_Share_Config_Sofficecfg_Writer_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerweb_Menubar_Xml,
     gid_File_Share_Config_Sofficecfg_Writerglobal_Menubar_Xml,
@@ -60,15 +62,6 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Share_Registry_Writer_Xcd,
     gid_File_Tmp_Userinstall_Wrt_Inf);
 End
-
-// Module gid_Module_Prg_Wrt_Help
-//    MOD_NAME_DESC ( MODULE_PRG_WRT_HELP );
-//    ParentID = gid_Module_Prg_Wrt;
-//    Sortkey = "200";
-//    Default = YES;
-//    Minimal = YES;
-//    Files = (gid_File_Help_Swriter_Zip);
-// End
 
 Module gid_Module_Brand_Prg_Wrt
     PackageInfo = "packinfo_brand.txt";
@@ -88,8 +81,7 @@ Module gid_Module_Langpack_Writer_Template
     Name = "gid_Module_Langpack_Writer_Template";
     Description = "gid_Module_Langpack_Writer_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Swriter_Zip,
-             gid_File_Res_T602Filter);
+    Files = (gid_File_Res_T602Filter);
 End
 
 Module gid_Module_Prg_Wrt_MSO_Reg

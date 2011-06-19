@@ -2,6 +2,8 @@
     eval 'exec perl -S $0 ${1+"$@"}'
         if 0;
 
+use strict;
+
 #*************************************************************************
 #
 #    This app makes it easy to link a live build
@@ -33,53 +35,71 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
+# This file substantially, if not wholely written by volunteers, not Oracle
+#
 #*************************************************************************
 
 # ends up in program/ooenv
-( $moz_lib = `pkg-config --variable=libdir mozilla-nss` ) =~ tr/\n/:/;
-$env_script = '
-java_path=`./javaldx`
-export LD_LIBRARY_PATH=".:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
+( my $moz_lib = `pkg-config --variable=libdir mozilla-nss` ) =~ tr/\n/:/;
+my $env_script = '
+java_path=`$thisdir/../basis-link/ure-link/bin/javaldx 2>/dev/null`
+export LD_LIBRARY_PATH="$thisdir:$java_path:' . $moz_lib . '$LD_LIBRARY_PATH"
 ulimit -c unlimited
-export PATH=".:$PATH"
+export PATH="$thisdir/:$thisdir/../basis-link/program:$thisdir/../basis-link/ure-link/bin:$PATH"
 export GNOME_DISABLE_CRASH_DIALOG=1
-export STAR_RESOURCEPATH=`pwd`/resource
+export STAR_RESOURCEPATH=$thisdir/../basis-link/program/resource
 # debugging assistance
-export OOO_FORCE_SYSALLOC=1
+export SAL_DISABLE_FLOATGRAB=1
+export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
+export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
 
-$program_dir = 'program';
-$program_dir = 'MacOS' if ($ENV{OS} eq 'MACOSX');
+my $dry_run = 0;
+my $usage = 0;
+my $LANG;
+my $TARGET;
+my $LIBVER;
+my $OOO_BUILD;
+my $OOO_INSTALL;
+
+my $program_dir = 'basis-link/program';
+my $brand_program_dir = 'program';
+my $ure_misc_dir = 'basis-link/ure-link/share/misc';
+my $ure_java_dir = 'basis-link/ure-link/share/java';
+my $ure_lib_dir = 'basis-link/ure-link/lib';
+
+$program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FIXME probably wrong
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
-%replaceable = (
-	$program_dir => '\.so',
+my %replaceable = (
+    $program_dir => '\.so',
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
-    'share/config' => '\.zip$',
+    'basis-link/share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
 
 # strangely enough, OSX has those small differences...
 $replaceable{$program_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
+$replaceable{$ure_lib_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
-@search_dirs = ( 'lib', 'bin', 'class' );
+my @search_dirs = ( 'lib', 'bin', 'class' );
 
-@known_duplicates = ( 'db.jar', 'libi18n' );
+my @known_duplicates = ( 'db.jar', 'libi18n' );
 
 sub sniff_target($)
 {
     my $build_dir = shift;
     my ($dirhandle, $fname);
-    my ($target, $libver, $lang) = ( 'unxlngi4.pro', '680', 'en-US' ); # defaults
-    
+    my ($target, $libver, $lang) = ( 'unxlngi6.pro', '680', 'en-US' ); # defaults
+
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
 	$fname =~ /Set.sh$/ || next;
-	
+
 	my $file;
 	open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
 	while (<$file>) {
@@ -175,12 +195,45 @@ sub do_link($$$$@)
     }
 }
 
+sub scan_one_dir($$$$)
+{
+    my ($installed_files, $build_files, $path, $solver) = @_;
+
+    for my $elem (@search_dirs) {
+	my $dirh_module;
+	my $module_path = "$path/$elem";
+	if (opendir ($dirh_module, $module_path)) {
+	    while (my $file = readdir ($dirh_module)) {
+		if (defined $installed_files->{$file}) {
+		    if (defined $build_files->{$file}) {
+			my $known = 0;
+			for my $regexp (@known_duplicates) {
+			    if ($file =~ m/$regexp/) {
+				$known = 1;
+			    }
+			}
+			if (!$known && !$solver) {
+			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" . 
+				$build_files->{$file} . "' vs '" .
+				$module_path . "' in module $path\n";
+			    exit (1);
+			}
+		    } else {
+			$build_files->{$file} = $module_path;
+		    }
+		}
+	    }
+	}
+	closedir ($dirh_module);
+    }
+}
+
 sub scan_and_link_files($$$)
 {
     my $build_path = shift;
     my $installed_files = shift;
     my $target = shift;
-    
+
     my @modules = ();
     my $dirh_toplevel;
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
@@ -192,42 +245,21 @@ sub scan_and_link_files($$$)
     }
     closedir ($dirh_toplevel);
 
-# FIXME: re-implement the $product functionality
-    my $module;
+    # Scan the old-style module/$target/lib directories ...
     my %build_files;
-    for $module (@modules) {
-	for $elem (@search_dirs) {
-	    my $dirh_module;
-	    my $module_path = "$module/$elem";
-	    if (opendir ($dirh_module, $module_path)) {
-			while (my $file = readdir($dirh_module)) {
-				if (defined $installed_files->{$file}) {
-					if (defined $build_files{$file}) {
-						my $known = 0;
-						for my $regexp (@known_duplicates) {
-							if ($file =~ m/$regexp/) {
-								$known = 1;
-							}
-						}
-						if (!$known) {
-							print "Unknown duplicate file '$file' in: '" . 
-							$build_files{$file} . "' vs '" .
-							$module_path . "' in module $module\n";
-							exit (1);
-						}
-					}
-					$build_files{$file} = $module_path;
-				}
-			}
-		}
-	    closedir ($dirh_module);
-	}
+    for my $module (@modules) {
+	scan_one_dir ($installed_files, \%build_files, $module, 0);
     }
+
+    # Now scan the solver
+    my $upd = 300;
+    $upd = $ENV{UPD} if (defined $ENV{UPD});
+    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$upd/$target", 1);
 
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
 	my $dest = $installed_files->{$file};
-	
+
 	do_link ($src, $dest, $file, $file);
     }
     print "\n";
@@ -257,8 +289,8 @@ sub evilness($)
 sub link_iso_res()
 {
     print "Special iso.res case: ";
-    my $ooo_res="$OOO_INSTALL/" . $program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
-    my $star_res="$OOO_INSTALL/" . $program_dir . "/resource/iso".$LIBVER.$LANG.".res";
+    my $ooo_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
+    my $star_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/iso".$LIBVER.$LANG.".res";
     if (-l $ooo_res && -l $star_res) {
 	if ($dry_run) {
 	    print "link $ooo_res to $star_res";
@@ -272,39 +304,39 @@ sub link_iso_res()
 }
 
 # Hack for (renamed) types.rdb (types.db)
+sub link_oovbaapi_rdb()
+{
+    print "oovbaapi.rdb case:";
+    my $src  = "$OOO_BUILD/oovbaapi/$TARGET/ucr";
+    my $dest = "$OOO_INSTALL/" . $program_dir;
+    do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
+    print "\n";
+}
+
 sub link_types_rdb()
 {
     print "Types.rdb case:";
     my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/" . $program_dir;
+    my $dest = "$OOO_INSTALL/" . $ure_misc_dir;
     do_link ($src, $dest, 'types.db', 'types.rdb');
     print "\n";
 }
 
-# link installed files back into src tree:
-sub link_soffice_bin_files()
+sub link_pagein_files()
 {
-    my $dest;
-    my $src = "$OOO_INSTALL/" . $program_dir;
-
-    print "soffice files";
-    $dest = "$OOO_BUILD/desktop/$TARGET/bin";
-    do_link ($src, $dest, 'soffice', 'soffice.bin', 1);
-    do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
-    do_link ($src, $dest, 'intro.bmp', 'intro.bmp', 1);
-    do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
-
+    print "pagein case:";
+    my $src  = "$OOO_BUILD/desktop/$TARGET/misc";
+    my $dest = "$OOO_INSTALL/" . $program_dir;
+    for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
+	do_link ($src, $dest, "pagein-$c", "pagein-$c");
+    }
     print "\n";
 }
 
-my $a;
-my $usage = 0;
-for $a (@ARGV) {
+for my $a (@ARGV) {
 
 # options
-    if ($a =~ /--product/) {
-	$product = 1;
-    } elsif ($a =~ /--dry-run/) {
+    if ($a =~ /--dry-run/) {
         $dry_run = 1;
     } elsif (($a eq '--help') || ($a eq '-h')) {
 	$usage = 1;
@@ -325,7 +357,7 @@ if (!defined $OOO_BUILD && defined $ENV{SRC_ROOT}) {
 }
 
 if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
-    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--product] [--dry-run]\n";
+    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--dry-run]\n";
     exit (1);
 }
 
@@ -346,12 +378,16 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
 link_types_rdb();
-link_soffice_bin_files();
+link_oovbaapi_rdb();
+link_pagein_files();
 
-if (!-f "$OOO_INSTALL/" . $program_dir . "/ooenv") {
-    print "Creating '$OOO_INSTALL/", $program_dir, "/ooenv'\n";
-    open ($ooenv, ">$OOO_INSTALL/" . $program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $program_dir . "/ooenv: $!";
+if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
+    my $ooenv;
+    print "Creating '$OOO_INSTALL/", $brand_program_dir, "/ooenv'\n";
+    open ($ooenv, ">$OOO_INSTALL/" . $brand_program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $brand_program_dir . "/ooenv: $!";
+    print $ooenv "thisdir=$OOO_INSTALL/" . $brand_program_dir . "/\n";
     print $ooenv $env_script;
+    print $ooenv "# testtool\nexport SRC_ROOT=$OOO_BUILD\n";
     close ($ooenv);
 }
 

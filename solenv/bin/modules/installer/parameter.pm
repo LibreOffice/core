@@ -69,6 +69,7 @@ The following parameter are needed:
 -ispatchedepm : Usage of a patched (non-standard) epm (opt., non-Windows only)
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
+-helppack : do create a helppack, no product pack (optional)
 -patch : do create a patch (optional)
 -patchinc: Source for the patch include files (Solaris only)
 -dontstrip: No file stripping (Unix only)
@@ -153,13 +154,14 @@ sub getparameter
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
+        elsif ($param eq "-helppack") { $installer::globals::helppack = 1;}
         elsif ($param eq "-patch") { $installer::globals::patch = 1; }
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-dontstrip") { $installer::globals::strip = 0; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
-            $installer::globals::destdir = shift @ARGV;
+            $installer::globals::destdir = Cwd::realpath( shift @ARGV );
         }
         elsif ($param eq "-simple")     # new parameter for simple installer
         {
@@ -299,6 +301,11 @@ sub setglobalvariables
         }
     }
 
+    if ( $installer::globals::compiler =~ /unxobsd/ )
+    {
+            $installer::globals::epmoutpath = "openbsd";
+    }
+
     if ( $installer::globals::compiler =~ /unxfbsd/ )
     {
         $installer::globals::isfreebsdbuild = 1;
@@ -314,12 +321,23 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
 
+    if ($ENV{OS} eq 'AIX')
+    {
+        if ( $installer::globals::packageformat eq "rpm" )
+        {
+            $installer::globals::isrpmbuild = 1;
+            $installer::globals::isxpdplatform = 1;
+            $installer::globals::epmoutpath = "RPMS";
+        }
+        if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
+    }
+
     if ($ENV{OS} eq 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
         {
-            $installer::globals::islinuxrpmbuild = 1;
+            $installer::globals::isrpmbuild = 1;
             $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
@@ -346,8 +364,8 @@ sub setglobalvariables
             my $message = "Creating Debian packages";
             installer::logger::print_message( $message );
             push(@installer::globals::globallogfileinfo, $message);
-            $installer::globals::islinuxrpmbuild = 0;
-            $installer::globals::islinuxdebbuild = 1;
+            $installer::globals::isrpmbuild = 0;
+            $installer::globals::isdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
             {
@@ -379,7 +397,6 @@ sub setglobalvariables
     if ($installer::globals::unpackpath eq "")  # unpackpath not set
     {
         $installer::globals::unpackpath = cwd();
-        if ( $installer::globals::iswin ) { $installer::globals::unpackpath =~ s/\//\\/g; }
     }
 
     if ( $installer::globals::localunpackdir ne "" ) { $installer::globals::unpackpath = $installer::globals::localunpackdir; }
@@ -398,7 +415,7 @@ sub setglobalvariables
 
     # setting jds exclude file list
 
-    if ( $installer::globals::islinuxrpmbuild )
+    if ( $installer::globals::isrpmbuild )
     {
         $installer::globals::jdsexcludefilename = "jds_excludefiles_linux.txt";
     }
@@ -425,8 +442,7 @@ sub setglobalvariables
 
         if ( $installer::globals::compiler =~ /^unxmac/ )
         {
-            my $localcall = "chmod 777 $installer::globals::temppath \>\/dev\/null 2\>\&1";
-            system($localcall);
+            chmod 0777, $installer::globals::temppath;
         }
 
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
@@ -532,7 +548,7 @@ sub control_required_parameter
     # for Solaris packages and Linux
     #######################################
 
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::islinuxdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::isrpmbuild ) && ( ! $installer::globals::isdebbuild ) && ( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::ismacdmgbuild ))
     {
         installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
         usage();
@@ -636,6 +652,7 @@ sub outputparameter
     }
     if ( $installer::globals::is_copy_only_project ) { push(@output, "This is a copy only project!\n"); }
     if ( $installer::globals::languagepack ) { push(@output, "Creating language pack!\n"); }
+    if ( $installer::globals::helppack ) { push(@output, "Creating help pack!\n"); }
     if ( $installer::globals::patch ) { push(@output, "Creating patch!\n"); }
     push(@output, "########################################################\n");
 

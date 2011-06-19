@@ -35,7 +35,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
-    sspretty \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
@@ -43,6 +42,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    adabasui \
     AppleRemote \
 	adabas \
 	adabasui \
@@ -53,41 +53,59 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basebmp \
 	canvastools \
 	cppcanvas \
+    chartcontroller \
+    chartmodel \
+    charttools \
+    chartview \
+    cppcanvas \
     cui \
-	dba \
-	dbaxml \
-	dbmm \
-	dbui \
-	dbpool \
-	dbtools \
+    dba \
+    dbaxml \
+    dbmm \
+    dbtools \
+    dbu \
+
     desktop_detector \
+    doctok \
     drawinglayer \
     editeng \
-    eggtray \
-	file \
-	for \
+    for \
 	forui \
+    frm \
     fwe \
     fwi \
     fwk \
     fwl \
     fwm \
+    hwp \
     i18npaper \
     i18nregexp \
     lng \
+    lwpft \
     msfilter \
     msword \
 	odbc \
 	odbcbase \
 	oox \
+	ooxml \
     qstart_gtk \
-	rpt \
-	rptui \
-	rptxml \
+    resourcemodel \
+    rpt \
+    rptui \
+    rptxml \
     sax \
     sb \
+    sc \
+    scd \
 	sdbc \
 	sdbt \
+    scfilt \
+    scui \
+    sd \
+    sdbt \
+    sdd \
+    sdfilt \
+    sdui \
     sfx \
     sm \
     smd \
@@ -103,17 +121,19 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textconversiondlgs \
     tk \
     tl \
-    utl \
     unordf \
     unoxml \
+    utl \
     vbahelper \
 	writerfilter \
     vcl \
     vclplug_gen \
     vclplug_gtk \
+    vclplug_gtk3 \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \
+    writerfilter \
     xcr \
     xo \
     xof \
@@ -124,7 +144,14 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	test \
     cppunit \
+    crypto \
+    fileacc \
+    icui18n \
+    icule \
+    graphite2_off \
+    ssl \
 ))
 
 
@@ -134,16 +161,11 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     i18nutil \
     jvmaccess \
     ucbhelper \
-    vos3 \
 ))
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
     salhelper \
-))
-
-$(eval $(call gb_Helper_register_libraries,STLLIBS, \
-    stl \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
@@ -156,13 +178,18 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \
-    msforms \
+    lomenubar \
+        msforms \
 	nullcanvas \
+    OGLTrans \
     passwordcontainer \
     productregistration \
 	simplecanvas \
+    slideshow \
+    vbaobj \
     vbaswobj \
 	vclcanvas \
+    writerfilter_uno \
 	writerfilter_debug \
 ))
 
@@ -175,8 +202,14 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	basegfx_s \
+    crypto \
+    graphite2_off \
+    libeay32 \
+    ssleay32 \
     ooopathutils \
     salcpprt \
+    ssl \
+    toolshelpers \
 	vclmain \
 ))
 

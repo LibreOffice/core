@@ -356,9 +356,13 @@ sub create_zip_archive
     foreach ( optimize_zip_layout($zip_hash_ref) ) {
         my $path = $zip_hash_ref->{$_} . "/$_";
         print_message("zipping '$path' ...") if $extra_verbose;
-        my $member = $zip->addFile($path, $_);
-        if ( !$member ) {
-            print_error("can't add file '$path' to image zip archive: $!", 5);
+        if ( -e $path) {
+            my $member = $zip->addFile($path, $_, COMPRESSION_STORED);
+            if ( !$member ) {
+                print_error("can't add file '$path' to image zip archive: $!", 5);
+            }
+        } else {
+                print_message("file '$path' not found");
         }
     }
     my $status = $zip->writeToFileNamed($tmp_out_file);

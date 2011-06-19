@@ -44,7 +44,6 @@ SCP1TARGET = setup_osl
 SCP1FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
              directory_ooo.par             \
-             datacarrier_ooo.par           \
              file_ooo.par                  \
              file_extra_ooo.par            \
              file_font_ooo.par             \
@@ -55,6 +54,8 @@ SCP1FILES  = installation_ooo.par          \
              module_hidden_ooo.par         \
              module_langpack.par           \
              module_lang_template.par      \
+             module_helppack.par           \
+             module_help_template.par      \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
@@ -73,6 +74,11 @@ SCP1FILES  = installation_ooo.par          \
              module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
+             module_extensions.par         \
+             module_extensions_sun_templates.par         \
+             module_extensions_lightproof.par   \
+             directory_extensions.par                     \
+             file_extensions.par           \
              module_testtool.par           \
              file_testtool.par             \
              module_xsltfilter.par         \
@@ -81,6 +87,28 @@ SCP1FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
+             module_accessories.par
+.IF "$(WITH_EXTRA_GALLERY)" != ""
+SCP1FILES +=                               \
+             module_gallery_accessories.par   \
+             file_gallery_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_SAMPLE)" != ""
+SCP1FILES +=                               \
+             module_samples_accessories.par   \
+             file_samples_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_TEMPLATE)" != ""
+SCP1FILES +=                               \
+             module_templates_accessories.par \
+             file_templates_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_FONT)" != ""
+SCP1FILES +=                               \
+             module_font_accessories.par      \
+             file_font_accessories.par
+.ENDIF
+SCP1FILES +=                               \
              ure_into_ooo.par              \
              ure.par                       \
              module_improvement.par        \
@@ -91,7 +119,7 @@ SCP1FILES  = installation_ooo.par          \
 
 .IF "$(OS)"=="MACOSX" 
 SCP1FILES +=                               \
-             directory_ooo_macosx.par      
+             directory_ooo_macosx.par
 .ENDIF
  
 .IF "$(WITH_BINFILTER)" != "NO"
@@ -163,7 +191,7 @@ SCP1FILES += \
              file_gnome.par
 .ENDIF
 
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
 SCP1FILES += \
              module_kde.par     \
              file_kde.par
@@ -176,7 +204,8 @@ SCP1FILES += \
 .ENDIF
 
 SCP1FILES += \
-             vclcanvas.par
+             vclcanvas.par \
+             mtfrenderer.par
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 SCP1FILES += cairocanvas.par
@@ -200,7 +229,6 @@ SCP2TARGET = setup_osljre
 SCP2FILES  = installation_ooo.par          \
              scpaction_ooo.par             \
              directory_ooo.par             \
-             datacarrier_ooo.par           \
              file_ooo.par                  \
              file_extra_ooo.par            \
              file_font_ooo.par             \
@@ -211,6 +239,8 @@ SCP2FILES  = installation_ooo.par          \
              module_hidden_ooo.par         \
              module_langpack.par           \
              module_lang_template.par      \
+             module_helppack.par           \
+             module_help_template.par      \
              module_java.par               \
              profile_ooo.par               \
              profileitem_ooo.par           \
@@ -230,6 +260,11 @@ SCP2FILES  = installation_ooo.par          \
              module_systemint.par          \
              module_graphicfilter.par      \
              file_graphicfilter.par        \
+             module_extensions.par         \
+             module_extensions_sun_templates.par         \
+             module_extensions_lightproof.par  \
+             directory_extensions.par                     \
+             file_extensions.par           \
              module_testtool.par           \
              file_testtool.par             \
              module_xsltfilter.par         \
@@ -238,6 +273,28 @@ SCP2FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
+             module_accessories.par
+.IF "$(WITH_EXTRA_GALLERY)" != ""
+SCP2FILES +=                               \
+             module_gallery_accessories.par   \
+             file_gallery_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_SAMPLE)" != ""
+SCP2FILES +=                               \
+             module_samples_accessories.par   \
+             file_samples_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_TEMPLATE)" != ""
+SCP2FILES +=                               \
+             module_templates_accessories.par \
+             file_templates_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_FONT)" != ""
+SCP2FILES +=                               \
+             module_font_accessories.par      \
+             file_font_accessories.par
+.ENDIF
+SCP2FILES +=                           \
              ure_into_ooo.par              \
              ure.par                       \
              module_improvement.par        \
@@ -316,7 +373,7 @@ SCP2FILES += \
              file_gnome.par
 .ENDIF
 
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
 SCP2FILES += \
              module_kde.par     \
              file_kde.par

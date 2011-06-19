@@ -40,6 +40,18 @@ PATH!:=$(ANT_HOME)/bin:$(PATH)
 ANT*:=$(ANT_HOME)/bin/ant
 ANT_BUILDFILE*=build.xml
 
+.IF "$(ANT_COMPILER_FLAGS)"==""
+.IF "$(JAVACISGCJ)" == "yes"
+ANT_COMPILER_FLAGS=-Dbuild.compiler=gcj
+.ENDIF
+.ENDIF
+
+.IF "$(ANT_JAVA_VER_FLAGS)"==""
+.IF "$(JDK)" != "gcj" && $(JAVACISKAFFE) != "yes"
+ANT_JAVA_VER_FLAGS=-Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER)
+.ENDIF
+.ENDIF
+
 .IF "$(ANT_DEBUG)"==""
 .IF "$(debug)"==""
 ANT_DEBUG=off
@@ -56,26 +68,24 @@ ANT_OPT=on
 .ENDIF
 .ENDIF
 
+.IF "$(VERBOSE)" == "TRUE"
+    ANT_VERBOSE=-v
+.ELSE
+    ANT_VERBOSE=-q
+.ENDIF
+
 .IF "$(JDK)"=="gcj"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
 .ENDIF
 
-.IF "$(JAVACISGCJ)" == "yes"
-ANT_FLAGS!:=-Dbuild.compiler=gcj -Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) \
- -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) \
- -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) \
- -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
+ANT_FLAGS!:=$(ANT_COMPILER_FLAGS) -Dprj=$(PRJ) -Dprjname=$(PRJNAME) $(ANT_JAVA_VER_FLAGS) \
+ -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on \
+ -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) \
+ -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
  -Dcommon.doc=$(SOLARCOMMONDOCDIR) -Dsolar.sourceversion=$(SOURCEVERSION) \
- -Dsolar.lastminor=$(LAST_MINOR) -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-.ELSE
-ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) \
- -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" \
- -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) \
- -Dcommon.jar=$(SOLARCOMMONBINDIR) -Dcommon.doc=$(SOLARCOMMONDOCDIR) \
- -Dsolar.sourceversion=$(SOURCEVERSION) -Dsolar.lastminor=$(LAST_MINOR) \
- -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
-.ENDIF
+ -Dsolar.lastminor=$(LAST_MINOR) -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) \
+ -emacs $(ANT_VERBOSE)
 .ELSE # No java
 ANT=
 ANT_FLAGS=

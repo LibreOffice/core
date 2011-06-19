@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,6 +26,8 @@
  ************************************************************************/
 
 #include "macros.inc"
+
+#ifndef DISABLE_PYUNO
 
 File gid_File_Lib_Pyuno
     TXT_FILE_BODY;
@@ -102,19 +104,10 @@ End
 #endif
 #endif
 
-// Scripting Framework Python script proxy
-
-File gid_File_Py_Pythonscript
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "pythonscript.py";
-    Styles = (PACKED);
-End
- 
 //Scripting Framework Python example scripts
 
 File gid_File_Scripts_Python
-    TXT_FILE_BODY; 
+    TXT_FILE_BODY;
     Styles = (ARCHIVE);
     Dir = gid_Dir_Share_Scripts;
     Name = "ScriptsPython.zip";
@@ -137,6 +130,14 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Python_So
+    FileID = gid_File_Lib_Python_So;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libpython,PYMAJMIN,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif //UNX
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
@@ -299,13 +300,19 @@ End
 
 #ifdef UNX
 
-// pyuno.so even on Mac OS X, because it is a python module
 File gid_File_Pyuno
     TXT_FILE_BODY;
+#ifdef MACOSX
+    // note: Mac OS X use .dylib, even for python modules
+    Name = "pyuno.dylib";
+#else
     Name = "pyuno.so";
+#endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
 
 #endif
 
+// DISABLE_PYUNO
+#endif

@@ -133,7 +133,7 @@ sub copy_one_file
     }
     else
     {
-        $infoline = "Error: Could not copy $source to $dest\n";
+        $infoline = "Error: Could not copy $source to $dest $!\n";
         $returnvalue = 0;
     }
 

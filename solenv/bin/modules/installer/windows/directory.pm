@@ -133,6 +133,8 @@ sub make_short_dir_version
 # Adding unique directory names to the directory collection
 ##############################################################
 
+my $already_checked_the_frigging_directories_for_uniqueness = 0;
+
 sub create_unique_directorynames
 {
     my ($directoryref, $allvariables) = @_;
@@ -161,6 +163,7 @@ sub create_unique_directorynames
         $uniquename =~ s/\.//g;                 # removing dots in directoryname
         $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
         $uniquename =~ s/OpenOffice/OO/g;
+        $uniquename =~ s/LibreOffice/LO/g;
         $uniquename =~ s/_registry/_rgy/g;
         $uniquename =~ s/_registration/_rgn/g;
         $uniquename =~ s/_extension/_ext/g;
@@ -176,7 +179,8 @@ sub create_unique_directorynames
             $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
         }
 
-        if ( exists($installer::globals::alluniquedirectorynames{$uniquename}) )
+        if ( !$already_checked_the_frigging_directories_for_uniqueness &&
+         exists($installer::globals::alluniquedirectorynames{$uniquename}) )
         {
             # This is an error, that must stop the packaging process
             $errorcount++;
@@ -260,6 +264,7 @@ sub check_sourcedir_addon
     if (($installer::globals::addchildprojects) ||
         ($installer::globals::patch) ||
         ($installer::globals::languagepack) ||
+        ($installer::globals::helppack) ||
         ($allvariableshashref->{'CHANGETARGETDIR'}))
     {
         my $sourcediraddon = "\:\.";
@@ -335,7 +340,6 @@ sub create_defaultdir_directorynames
 
         $hostname =~ s/\Q$installer::globals::separator\E\s*$//;
         get_last_directory_name(\$hostname);
-        # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
         my $uniquename = $onedir->{'uniquename'};
         my $shortstring;
         if (( $installer::globals::updatedatabase ) && ( exists($shortdirnamehashref->{$uniquename}) ))
@@ -408,22 +412,15 @@ sub create_directorytable_from_collection
 
 sub add_root_directories
 {
-    my ($directorytableref, $allvariableshashref) = @_;
-
-#   my $sourcediraddon = "";
-#   if (($installer::globals::addchildprojects) ||
-#       ($installer::globals::patch) ||
-#       ($installer::globals::languagepack) ||
-#       ($allvariableshashref->{'CHANGETARGETDIR'}))
-#   {
-#       $sourcediraddon = "\:\.";
-#   }
+    my ($directorytableref, $allvariableshashref, $onelanguage) = @_;
 
     my $oneline = "";
 
-    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
+    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
     {
-        my $productname = $allvariableshashref->{'PRODUCTNAME'};
+        my $productname;
+
+    $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $baseproductversion = $productversion;
 
@@ -459,6 +456,12 @@ sub add_root_directories
     }
 
     $oneline = "TARGETDIR\t\tSourceDir\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "WindowsFolder\tTARGETDIR\tWindows\n";
+    push(@{$directorytableref}, $oneline);
+
+    $oneline = "WindowsShellNewFolder\tWindowsFolder\tShellNew\n";
     push(@{$directorytableref}, $oneline);
 
     $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
@@ -520,7 +523,7 @@ sub add_root_directories
 
 sub create_directory_table
 {
-    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
+    my ($directoryref, $languagesarrayref, $basedir, $allvariableshashref, $shortdirnamehashref, $loggingdir) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -530,28 +533,34 @@ sub create_directory_table
     # Before ":" : [sourcedir]:[destdir] (not programmed yet)
     # After ":" : 8+3 and not 8+3 the destination directory name
 
+    for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
+    {
+        my $onelanguage = ${$languagesarrayref}[$m];
+        $installer::globals::installlocationdirectoryset = 0;
+
     my @directorytable = ();
     my $infoline;
 
     overwrite_programfilesfolder($allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
     create_unique_directorynames($directoryref, $allvariableshashref);
+    $already_checked_the_frigging_directories_for_uniqueness++;
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
     set_installlocation_directory($directoryref, $allvariableshashref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_3.log", $directoryref); }
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
-    add_root_directories(\@directorytable, $allvariableshashref);
+    add_root_directories(\@directorytable, $allvariableshashref, $onelanguage);
     create_directorytable_from_collection(\@directorytable, $directoryref);
 
     # Saving the file
 
-    my $directorytablename = $basedir . $installer::globals::separator . "Director.idt";
+    my $directorytablename = $basedir . $installer::globals::separator . "Director.idt" . "." . $onelanguage;
     installer::files::save_file($directorytablename ,\@directorytable);
     $infoline = "Created idt file: $directorytablename\n";
     push(@installer::globals::logfileinfo, $infoline);
-
+    }
 }
 
 1;

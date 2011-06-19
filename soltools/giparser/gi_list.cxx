@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,9 +143,9 @@ List_GenericInfo::InsertInfoByPath( GenericInfo *       let_dpInfo,
     {
         Simstr aKey( i_sKeyPath,
                      0,
-                     sNextPathSegment -
+                     (int)(sNextPathSegment -
                         ( *sNextPathSegment == 0 ? 0 : 1)
-                        - i_sKeyPath );
+                           - i_sKeyPath ));
 
         GenericInfo * pNew = new GenericInfo(aKey);
         InsertInfo(pNew,false);
@@ -208,7 +209,7 @@ List_GenericInfo::lower_bound( bool &              o_bExists,
                                KeyPath             i_sKeyPath )
 {
     o_sNextPathSegment = strchr(i_sKeyPath, '/');
-    Simstr sKey( i_sKeyPath, (o_sNextPathSegment == 0 ? strlen(i_sKeyPath) : o_sNextPathSegment++ - i_sKeyPath) );
+    Simstr sKey( i_sKeyPath, (int)(o_sNextPathSegment == 0 ? strlen(i_sKeyPath) : o_sNextPathSegment++ - i_sKeyPath) );
     GenericInfo aSearch(sKey);
 
     unsigned low = 0;
@@ -232,3 +233,4 @@ List_GenericInfo::lower_bound( bool &              o_bExists,
     return &aChildren[low];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

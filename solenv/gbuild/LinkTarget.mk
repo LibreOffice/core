@@ -43,6 +43,35 @@ CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 endif
 
+# Overview of dependencies and tasks of LinkTarget
+#
+# target                      task                         depends on
+# LinkTarget                  linking                      CObject CxxObject GenCxxObject ObjCObject ObjCxxObject
+#                                                          LinkTarget/headers
+# LinkTarget/dep              joined dep file              CObject/dep CxxObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep
+#                                                          | LinkTarget/headers
+# LinkTarget/headers          all headers available        LinkTarget/external_headers PCH
+#                              including own generated     own generated headers
+# PCH                         precompiled headers (win)    LinkTarget/external_headers
+# LinkTarget/external_headers all external headers avail.  header files of linked libs
+#
+# CObject                     plain c compile              | LinkTarget/headers
+# CxxObject                   c++ compile                  | LinkTarget/headers
+# GenCxxObject                C++ compile from             | LinkTarget/headers
+#                              generated source
+# ObjCObject                  objective c compile          | LinkTarget/headers
+# ObjCxxObject                objective c++ compile        | LinkTarget/headers
+#
+# CObject/dep                 dependencies                 these targets generate empty dep files
+# CxxObject/dep               dependencies                 that are populated upon compile
+# GenCxxObject/dep            dependencies
+# ObjCObject/dep            dependencies
+# ObjCxxObject/dep            dependencies
+
+# LinkTarget/headers means gb_LinkTarget_get_headers_target etc.
+# dependencies prefixed with | are build-order only dependencies
+
+
 
 # For every object there is a dep file (if gb_FULLDEPS is active).
 # The dep file depends on the object: the Object__command also updates the
@@ -86,7 +115,7 @@ endef
 $(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
 $(call gb_CObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
 
 gb_CObject_CObject =
 
@@ -129,7 +158,7 @@ endef
 
 define gb_CxxObject__rules
 $$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
-    $$(eval $$(gb_CxxObject__set_pchflags))
+	$$(eval $$(gb_CxxObject__set_pchflags))
 	$$(call gb_CxxObject__command,$$@,$$*,$$<,$$(call gb_CxxObject_get_dep_target,$$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -145,7 +174,7 @@ $(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo)))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
 
 endif
 
@@ -194,16 +223,59 @@ $(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(r
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
-    $(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
+	$(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
 endif
 
 gb_ObjCxxObject_ObjCxxObject =
+
+# ObjCObject class
+#
+gb_ObjCObject_REPOS := $(gb_REPOS)
+
+gb_ObjCObject_get_source = $(1)/$(2).m
+# defined by platform
+#  gb_ObjCObject__command
+
+# this rule generates an "always rebuild" dep file, to have something to include.
+# the dep file will be overridden on the fly, when the object is compiled
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_ObjCObject__command_dep
+mkdir -p $(dir $(1)) && \
+	echo '$(call gb_ObjCObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
+endef
+else
+gb_ObjCObject__command_dep =
+endif
+
+define gb_ObjCObject__rules
+$$(call gb_ObjCObject_get_target,%) : $$(call gb_ObjCObject_get_source,$(1),%)
+	$$(call gb_ObjCObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$$(call gb_ObjCObject_get_dep_target,%) : $$(call gb_ObjCObject_get_source,$(1),%)
+	$$(call gb_ObjCObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+endif
+
+endef
+
+$(foreach repo,$(gb_ObjCObject_REPOS),$(eval $(call gb_ObjCObject__rules,$(repo))))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_ObjCObject_get_dep_target,%) :
+	$(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCObject_get_source,,$*) in repositories: $(gb_ObjCObject_REPOS)))
+endif
+
+gb_ObjCObject_ObjCObject =
 
 
 
 # LinkTarget class
 
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
+gb_LinkTarget_OBJECTOWNER :=
+gb_LinkTarget_OBJECTS :=
+
 # defined by platform
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
@@ -212,49 +284,66 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
-    $(call gb_Output_announce,$*,$(false),LNK,4)
-    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
-        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
-        $(call gb_LinkTarget_get_target,$*) \
-        $(call gb_LinkTarget_get_dep_target,$*) \
-        $(call gb_LinkTarget_get_headers_target,$*) \
-        $(call gb_LinkTarget_get_external_headers_target,$*) \
-        $(DLLTARGET) \
-        $(AUXTARGETS)) && \
-    cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -f && \
-    rm -f $${RESPONSEFILE}
+	$(call gb_Output_announce,$*,$(false),LNK,4)
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
+		$(call gb_LinkTarget_get_target,$*) \
+		$(call gb_LinkTarget_get_dep_target,$*) \
+		$(call gb_LinkTarget_get_headers_target,$*) \
+		$(call gb_LinkTarget_get_external_headers_target,$*) \
+		$(call gb_LinkTarget_get_objects_list,$*) \
+		$(DLLTARGET) \
+		$(AUXTARGETS)) && \
+	cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -f && \
+	rm -f $${RESPONSEFILE}
 
 
 # cat the deps of all objects in one file, then we need only open that one file
 define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-        $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
-        $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-         $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
-        ) && \
-    cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
-    rm -f $${RESPONSEFILE}
+	mkdir -p $(dir $(1)) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
+		$(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(5),$(call gb_ObjCObject_get_dep_target,$(object)))\
+		$(foreach object,$(6),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
+		 $(foreach object,$(7),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+		) && \
+	cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
+	rm -f $${RESPONSEFILE}
+
+endef
+
+define gb_LinkTarget__command_objectlist
+TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+	$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
+	$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object)))) && \
+$(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
+mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2)) 
 
 endef
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-    $(call gb_LinkTarget__command,$@,$*)
+	$(call gb_LinkTarget__command,$@,$*)
+	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
-    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
+	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -276,12 +365,12 @@ $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touc
 endef
 
 $(call gb_LinkTarget_get_external_headers_target,%) :
-    $(eval $(gb_LinkTarget__get_external_headers_check))
-    $(COMMAND)
+	$(eval $(gb_LinkTarget__get_external_headers_check))
+	$(COMMAND)
 
 $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && touch $@)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
 
 # Explanation of some of the targets:
 # - gb_LinkTarget_get_external_headers_target is the targets that guarantees all
@@ -328,6 +417,8 @@ $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
@@ -356,12 +447,14 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS := 
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
@@ -374,6 +467,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS := 
 endif
 
 endef
@@ -476,6 +570,14 @@ endif
 
 endef
 
+define gb_LinkTarget_set_objcflags
+$(call gb_LinkTarget_get_target,$(1)) : OBJCFLAGS := $(2)
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCFLAGS := $(2)
+endif
+
+endef
+
 define gb_LinkTarget_set_include
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(2)
@@ -548,6 +650,11 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CObject_get_dep_target,$(2))
 endif
 
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_CObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_CObject_get_target,$(2))
+endif
+
 endef
 
 define gb_LinkTarget_add_cxxobject
@@ -561,6 +668,31 @@ $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
+endif
+
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_CxxObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_CxxObject_get_target,$(2))
+endif
+
+endef
+
+define gb_LinkTarget_add_objcobject
+$(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : OBJCOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCObject_get_target,$(2))
+$(call gb_ObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_ObjCObject_get_target,$(2)) : OBJCFLAGS += $(3)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCObject_get_dep_target,$(2))
+endif
+
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_ObjCObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_ObjCObject_get_target,$(2))
 endif
 
 endef
@@ -578,6 +710,11 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCxxObject_get_dep_target,$(2))
 endif
 
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_ObjCxxObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_ObjCxxObject_get_target,$(2))
+endif
+
 endef
 
 define gb_LinkTarget_add_generated_cxx_object
@@ -591,6 +728,11 @@ $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3) $(CXXFLAGS)
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxObject_get_dep_target,$(2))
+endif
+
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_GenCxxObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_GenCxxObject_get_target,$(2))
 endif
 
 endef
@@ -607,8 +749,34 @@ define gb_LinkTarget_add_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_cobject,$(1),$(obj),$(3)))
 endef
 
+define gb_LinkTarget_add_linktarget_objects
+$(call gb_LinkTarget_get_target,$(1)) : $(foreach linktarget,$(2),$(call gb_LinkTarget_get_target,$(linktarget)))
+$(info gb_LinkTarget_add_linktarget_objects,$(1),$(2))
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS += $(foreach linktarget,$(2),$(call gb_LinkTarget_get_objects_list,$(linktarget)))
+
+endef
+
+define gb_LinkTarget_add_library_objects
+ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+endif
+$(info gb_LinkTarget_add_library_objects,$(1),$(2))
+$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
+
+endef
+
+define gb_LinkTarget_add_executable_objects
+$(call gb_LinkTarget_add_linktarget_objects,$(1),$(foreach exe,$(2),$(call gb_Executable_get_linktargetname,$(lib))))
+
+endef
+
 define gb_LinkTarget_add_cxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_cxxobject,$(1),$(obj),$(3)))
+endef
+
+define gb_LinkTarget_add_objcobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_objcobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_objcxxobjects
@@ -623,8 +791,12 @@ define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
 endef
 
+define gb_LinkTarget_add_generated_cxxobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3)))
+endef
+
 define gb_LinkTarget_add_generated_exception_object
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS))
 endef
 
 define gb_LinkTarget_add_generated_exception_objects
@@ -680,8 +852,8 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(DEFS)
 ifeq ($(gb_FULLDEPS),$(true))
 -include \
-    $(call gb_PrecompiledHeader_get_dep_target,$(3)) \
-    $(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
+	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
+	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
 endif
@@ -708,4 +880,4 @@ gb_LinkTarget_use_externals = \
  $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
 
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

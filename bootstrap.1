@@ -18,7 +18,7 @@ unalias gunzip
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
 # Use spawn instead of fork when building dmake on cygwin. 
-if test "$GUI" = "WNT"; then
+if test "$GUI_FOR_BUILD" = "WNT"; then
     EXEEXT=".exe"
     DMAKE_CONF="--enable-spawn"
 else
@@ -31,18 +31,17 @@ export EXEEXT
 # Build dmake
 
 if test "$BUILD_DMAKE" != "NO"; then
-
-    if test ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
-
+    if test ! -x "$SRC_ROOT/dmake/dmake$EXEEXT"; then
         cd "$SRC_ROOT/dmake" || exit
 
-        # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
-        # but we need a cygwin/gcc build dmake to understand the posix paths
-        if test "$GUI" = "WNT"; then
-            CC=""
-            CXX=""
-            export CC
-            export CXX
+        # If cross-compiling then don't use the cross compilers to build dmake.
+        if test "$GUI_FOR_BUILD" = "WNT"; then
+            # Let the Cygwin gcc be found
+            unset CC CXX AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
+        elif test "$CROSS_COMPILING" = "YES"; then
+            export CC="$CC_FOR_BUILD"
+            export CXX="$CXX_FOR_BUILD"
+            unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
         fi
 
         # For normal unixy systems
@@ -59,33 +58,16 @@ if test "$BUILD_DMAKE" != "NO"; then
         echo "dmake has been successfully built"
 
         cd ..
-
     else
-
-        echo ""
-        echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
-
+        echo "dmake/dmake already built"
     fi
-
 fi
 
-mkdir -p "$SOLARENV/$OUTPATH/bin"
+mkdir -p "$SOLARENV/$OUTPATH_FOR_BUILD/bin"
 if test "$BUILD_DMAKE" != "NO"; then
-    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
+    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH_FOR_BUILD/bin" || exit
     echo ""
-    echo "dmake copied to $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
-fi
-
-if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
-  echo ""
-  echo "Calling $GNUMAKE in guw"
-  cd "$SRC_ROOT/guw" || exit
-  $GNUMAKE || exit
-  echo ""
-  echo "guw has been successfully made"
-  cp -f "$SRC_ROOT/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
-  echo ""
-  echo "guw copied to $SOLARENV/$OUTPATH/bin/guw$EXEEXT"
+    echo "dmake copied to $SOLARENV/$OUTPATH_FOR_BUILD/bin/dmake$EXEEXT"
 fi
 
 #make sure build.pl is executable 
@@ -95,7 +77,10 @@ chmod +x "$SRC_ROOT/solenv/bin/build_client.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
-# fetch or update external tarballs
-if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
-	$SRC_ROOT/fetch_tarballs.sh $SRC_ROOT/ooo.lst
-fi
+# Local Variables:
+# mode: shell-script
+# tab-width: 4
+# indent-tabs-mode: nil
+# End:
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

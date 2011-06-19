@@ -26,16 +26,13 @@
  ************************************************************************/
 #include "macros.inc"
 
-#ifdef WNT
+#if defined SOLAR_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
     Name = "java_uno_accessbridge.dll";
 End
-#endif
-#if ((defined(WNT)) || (defined(LINUX)) || ((defined(SOLARIS)) && (defined(SPARC)))|| defined(NETBSD) )
-STD_LIB_FILE( gid_File_Lib_Adabas, adabas)
 #endif
 
 #if defined(WNT)
@@ -112,9 +109,7 @@ File gid_File_Lib_Cli_Oootypes_Assembly
     Version = "${CLI_OOOTYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -130,9 +125,7 @@ File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     Version = "${CLI_OOOTYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
-#ifndef M1310
     ProcessorArchitecture = "MSIL";
-#endif
 End
 
 #endif
@@ -208,25 +201,18 @@ End
 
 #endif
 
-//#ifdef UNX
-//#ifdef ENABLE_GTK
-//#ifdef ENABLE_SYSTRAY_GTK
-//File gid_File_Lib_Egg_Tray
-// TXT_FILE_BODY;
-// Styles = (PACKED);
-// Dir = SCP2_OOO_BIN_DIR;
-// Name = STRING(CONCAT3(libeggtray,DLLPOSTFIX,UNXSUFFIX));
-//End
-//
-//File gid_File_Lib_QStart_Gtk
-//    Name = LIBNAME(qstart_gtk);
-//    TXT_FILE_BODY;
-//    Styles = (PACKED);
-//    Dir = SCP2_OOO_BIN_DIR;
-//End
-//#endif
-//#endif
-//#endif
+#ifdef UNX
+#ifdef ENABLE_GTK
+#ifdef ENABLE_SYSTRAY_GTK
+File gid_File_Lib_QStart_Gtk
+    Name = LIBNAME(qstart_gtk);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif
+#endif
+#endif
 
 STD_LIB_FILE( gid_File_Lib_Dba, dba)
 
@@ -337,9 +323,9 @@ File gid_File_Lib_Vbaobj
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(libvbaobj,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(vbaobj,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(vbaobj,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(vbaobj,.uno,.dll));
   #endif
 End
 
@@ -537,9 +523,24 @@ File gid_File_Lib_Fps_Kde4
 End
 #endif
 #endif
+#ifdef ENABLE_KDE
+#ifndef MACOSX
+File gid_File_Lib_Fps_Kde
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde.uno);
+End
+File gid_File_Bin_KdeFilePicker
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "kdefilepicker";
+End
+#endif
+#endif
 #endif
 
-#ifdef MACOSX
 #ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
@@ -562,6 +563,9 @@ File gid_File_Lib_avmediaQuickTime
 	Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
+
+#ifdef WNT
+SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_ODMA, fps_odma.uno )
 #endif
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
@@ -586,6 +590,21 @@ File gid_File_Lib_Cairo
     #else
        Name = "cairo.dll";
     #endif
+  #endif
+End
+
+File gid_File_Lib_Pixman
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = "libpixman-1.a";
+    #else
+       Name = STRING(CONCAT3(libpixman-1,UNXSUFFIX,.0));
+    #endif
+  #elif defined(WNT)
+    Name = "libpixman-1-0.dll";
   #endif
 End
 
@@ -772,17 +791,6 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_relnotes
-    BIN_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "relnotes.dll";
-End
-
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Patchmsi
     TXT_FILE_BODY;
     Name = "patchmsi.dll";
@@ -882,9 +890,19 @@ End
 
 STD_LIB_FILE(gid_File_Lib_Wpft,wpft)
 
+STD_LIB_FILE(gid_File_Lib_Msworks,msworks)
+
 STD_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
+STD_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
+
 STD_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
+
+STD_LIB_FILE(gid_File_Lib_Resource,resourcemodel)
+
+STD_LIB_FILE(gid_File_Lib_Doctok,doctok)
+
+STD_LIB_FILE(gid_File_Lib_ooxml,ooxml)
 
 #ifdef WNT
 #if defined(_gcc3)
@@ -896,57 +914,6 @@ File gid_File_Lib_Mingwm10
     Name = "mingwm10.dll";
 End
 
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcr80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr80.dll";
-#else
-    Name = "msvcr80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcp80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp80.dll";
-#else
-    Name = "msvcp80d.dll";
-#endif
-End
-#endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Lib_Msvcm80
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm80.dll";
-#else
-    Name = "msvcm80d.dll";
-#endif
-End
-#endif
 #endif
 #endif
 
@@ -974,23 +941,6 @@ End
 
 #endif
 
-#endif
-
-#if defined(WNT)
-#if defined(M1400)
-#if defined(PROF_EDITION)
-File gid_File_Msvcm80crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC80.CRT.manifest";
-#else
-    Name = "Microsoft.VC80.DebugCRT.manifest";
-#endif
-End
-#endif
-#endif
 #endif
 
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
@@ -1085,6 +1035,14 @@ End
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+#endif
+#ifdef ENABLE_GTK3
+File gid_File_Lib_Vclplug_Gtk3
+    Name = LIBNAME(vclplug_gtk3);
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
@@ -1311,6 +1269,10 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Spl, spl)
 
+#if defined UNX && !defined MACOSX
+STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
+#endif
+
 SPECIAL_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
@@ -1420,6 +1382,10 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
+#ifdef WNT
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
+#endif
+
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1445,17 +1411,6 @@ File gid_File_Lib_Vcl
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-End
-
-File gid_File_Lib_Vos
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libvos3,COMID,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vos3,COMID,.dll));
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
 End
 
 STD_LIB_FILE( gid_File_Lib_Xcr, xcr)
@@ -1508,16 +1463,17 @@ STD_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
 // AVMedia
 STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
-#if defined UNX 
-#if defined ENABLE_GSTREAMER
-SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGst, avmediagst )
-#endif
+#ifdef GSTREAMER
+SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer, avmediagst )
+#else
+#if defined UNX
 #ifdef SOLAR_JAVA
 STD_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
 #endif
 #elif defined WNT
 #ifdef ENABLE_DIRECTX
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
+#endif
 #endif
 #endif
 
@@ -1593,6 +1549,17 @@ File gid_File_Lib_Migrationoo2
   #endif
 End
 
+File gid_File_Lib_Migrationoo3
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(migrationoo3.uno,UNXSUFFIX));
+  #else
+    Name = "migrationoo3.uno.dll";
+  #endif
+End
+
 #ifndef SYSTEM_LIBTEXTCAT
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
@@ -1660,8 +1627,7 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
-    !(defined M1400 && defined PROF_EDITION && !defined _STLP_DEBUG)
+#if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80
@@ -1675,6 +1641,12 @@ File gid_File_Moz_Msvcr80
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcr80");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+File gid_File_Moz_Msvc80crt_Manifest
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "Microsoft.VC80.CRT.manifest";
 End
 #endif
 
@@ -1764,7 +1736,7 @@ File gid_File_Lib_Glib
     #ifdef MACOSX
     Name = "libglib-2.0.0.dylib";
     #elif defined WNT
-    Name = "libglib-2.0-0.dll";
+    Name = "gliblo.dll";
     #endif
 End
 File gid_File_Lib_Gthread
@@ -1774,7 +1746,7 @@ File gid_File_Lib_Gthread
     #ifdef MACOSX
     Name = "libgthread-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgthread-2.0-0.dll";
+    Name = "gthreadlo.dll";
     #endif
 End
 File gid_File_Lib_Gobject
@@ -1784,7 +1756,7 @@ File gid_File_Lib_Gobject
     #ifdef MACOSX
     Name = "libgobject-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgobject-2.0-0.dll";
+    Name = "gobjectlo.dll";
     #endif
 End
 File gid_File_Lib_Gio
@@ -1794,7 +1766,7 @@ File gid_File_Lib_Gio
     #ifdef MACOSX
     Name = "libgio-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgio-2.0-0.dll";
+    Name = "giolo.dll";
     #endif
 End
 File gid_File_Lib_Gmodule
@@ -1804,10 +1776,12 @@ File gid_File_Lib_Gmodule
     #ifdef MACOSX
     Name = "libgmodule-2.0.0.dylib";
     #elif defined WNT
-    Name = "libgmodule-2.0-0.dll";
+    Name = "gmodulelo.dll";
     #endif
 End
 #endif
+
+#if ENABLE_LIBRSVG
 
 #if ! defined SYSTEM_GDKPIXBUF
 File gid_File_Lib_Gdkpixbuf
@@ -1843,7 +1817,7 @@ File gid_File_Lib_Libpango
     #ifdef MACOSX
     Name = "libpango-1.0.0.dylib";
     #elif defined WNT
-    Name = "libpango-1.0-0.dll";
+    Name = "pangolo.dll";
     #endif
 End
 File gid_File_Lib_Libpangocairo
@@ -1853,7 +1827,7 @@ File gid_File_Lib_Libpangocairo
     #ifdef MACOSX
     Name = "libpangocairo-1.0.0.dylib";
     #elif defined WNT
-    Name = "libpangocairo-1.0-0.dll";
+    Name = "pangocairolo.dll";
     #endif
 End
 #if defined WNT
@@ -1861,7 +1835,7 @@ File gid_File_Lib_Libpangowin32
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-    Name = "libpangowin32-1.0-0.dll";
+    Name = "pangowin32lo.dll";
 End
 #endif
 #endif
@@ -1890,3 +1864,17 @@ File gid_File_Lib_Librsvg
 End
 #endif
 
+#endif
+
+#ifdef WNT
+File gid_File_Lib_sellangmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
+    Dir = gid_Dir_Program;
+    Name = "sellangmsi.dll";
+End
+#endif
+
+#ifdef ENABLE_LOMENUBAR
+SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Lomenubar, lomenubar.uno )
+#endif

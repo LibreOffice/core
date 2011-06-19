@@ -27,6 +27,52 @@
 
 #include "macros.inc"
 
+#ifdef AIX
+#ifndef SYSTEM_CURL
+Unixlink gid_Unixlink_File_Lib_Curl
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libcurl,UNXSUFFIX,.3));
+End
+#endif
+#ifndef SYSTEM_REDLAND
+Unixlink gid_Unixlink_File_Lib_Raptor
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libraptor,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libraptor,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rasqal
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librasqal,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librasqal,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rdf
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librdf,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librdf,UNXSUFFIX,.0));
+End
+#endif
+#ifndef SYSTEM_LIBXSLT
+Unixlink gid_Unixlink_File_Lib_Xslt
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
+End
+#endif
+#endif
+
 Module gid_Module_Root_Files_2
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
@@ -37,8 +83,6 @@ Module gid_Module_Root_Files_2
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Bin_Cde_Open_Url,
-	gid_File_Bin_Gnome_Open_Url,
-	gid_File_Bin_Gnome_Open_Url_Bin,
 	gid_File_Bin_Kde_Open_Url,
 	gid_File_Bin_Open_Url,
 	gid_File_Bin_Pagein,
@@ -91,7 +135,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Hsqldb,
 	gid_File_Jar_Hsqldb_Sdbc,
 	gid_File_Jar_Accessbridge,
-	gid_File_Jar_Js,
 	gid_File_Jar_Officebean,
 	gid_File_Jar_Report,
 	gid_File_Jar_Table,
@@ -104,9 +147,7 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Commonwizards,
 	gid_File_Jar_Sandbox,
 	gid_File_Jar_Scriptframework,
-	gid_File_Jar_Scriptproviderforbeanshell,
 	gid_File_Jar_Scriptproviderforjava,
-	gid_File_Jar_Scriptproviderforjavascript,
 	gid_File_Jar_Xml_Apis,
 	gid_File_Jar_Bsh,
 	gid_File_Jar_Classes,
@@ -213,7 +254,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Svx,
 	gid_File_Lib_AVMedia,
 	gid_File_Lib_AVMediaWin,
-	gid_File_Lib_AVMediaGst,
+    gid_File_Lib_AVMediaGStreamer,
 	gid_File_Lib_BaseGfx,
 	gid_File_Lib_Sysdtrans,
 	gid_File_Lib_Sw,
@@ -233,9 +274,9 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Xof,
 	gid_File_Lib_Xsltdlg,
 	gid_File_Lib_Xsltfilter,
+	gid_File_Lib_Odfflatxml,
 	gid_File_Lib_Zip,
 	gid_File_Lib_Vclplug_Gen,
-	gid_File_Lib_Vclplug_Gtk,
 	gid_File_Lib_Vclplug_Kde,
 	gid_File_Lib_Vclplug_Kde4,
 	gid_File_Lib_Vclplug_Svp,
@@ -303,11 +344,11 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Adabas,
 	gid_File_Lib_Cached1,
 	gid_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,
 	gid_File_Lib_Dbpool,
 	gid_File_Lib_Embobj,
 	gid_File_Lib_Emboleobj,
-	gid_File_Lib_Evoab_2,
 	gid_File_Lib_Kab_1,
     gid_File_Lib_Kab_Drv_1,
 	gid_File_Lib_Macab_1,
@@ -315,7 +356,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Evtatt,
 	gid_File_Lib_Fileacc,
 	gid_File_Lib_Filterconfig1,
-	gid_File_Lib_Fps_Gnome,
 	gid_File_Lib_Dbodbcbase,
 	gid_File_Lib_I18npool,
 	gid_File_Lib_I18npaper,
@@ -355,15 +395,18 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Tab,
 	gid_File_Lib_Tab2,
 	gid_File_Lib_Unoxml,
-	gid_File_Lib_Vos,
 	gid_File_Lib_Localebe,
 	gid_File_Lib_Migrationoo2,
+	gid_File_Lib_Migrationoo3,
 	gid_File_Lib_Syssh,
 	gid_File_Ucptdoc1,
 	gid_File_Ucpexpand1,
 	gid_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Raptor,
 	gid_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rasqal,
 	gid_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Rdf,
 	gid_File_Lib_Unordf,
 	gid_File_Lib_Sndfile,
 	gid_File_Lib_Tvhlp1,
@@ -377,6 +420,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ucphier1,
 	gid_File_Lib_Ucppkg1,
 	gid_File_Lib_Xslt,
+	gid_Unixlink_File_Lib_Xslt,
 	gid_File_Lib_LibXMLSec_xmlsecnss,
 	gid_File_Lib_LibXMLSec_xmlseccore,
 	gid_File_Lib_LibXMLSec_xmlsecmscrypto,
@@ -408,8 +452,10 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
 	gid_File_Lib_Lngpckinsthlp,
+#ifdef ENABLE_LOMENUBAR
+	gid_File_Lib_Lomenubar,
+#endif
     gid_File_Lib_sn_tools,
-    gid_File_Lib_relnotes,
     GID_FILE_LIB_WPD,
     gid_File_Lib_Mingw_GccS,
     gid_File_Lib_Mingw_Stdcpp,
@@ -445,6 +491,11 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Config);
+    Unixlinks = (gid_Unixlink_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Xslt);
 End
 
 Module gid_Module_Root_Files_6
@@ -479,19 +530,9 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Gallwwwgraf,
 	gid_File_Extra_Migration,
 	gid_File_Extra_Migration_Lang_Multi,
+	gid_File_Extra_Tpllayoutimpr,
 	gid_File_Extra_Tplwizbitmap,
 	gid_File_Extra_Tplwizletter,
-	gid_File_Extra_Tplwizletter_en_US,
-	gid_File_Extra_Tplwizletter_de,
-	gid_File_Extra_Tplwizletter_fr,
-	gid_File_Extra_Tplwizletter_es,
-	gid_File_Extra_Tplwizletter_it,
-	gid_File_Extra_Tplwizletter_pt_BR,
-	gid_File_Extra_Tplwizletter_sv,
-	gid_File_Extra_Tplwizletter_ja,
-	gid_File_Extra_Tplwizletter_ko,
-	gid_File_Extra_Tplwizletter_zh_CN,
-	gid_File_Extra_Tplwizletter_zh_TW,
 	gid_File_Extra_Tplwizmemo_Lang,
 	gid_File_Extra_Autotextuser_Lang,
 	gid_File_Extra_Dir_Fonts,
@@ -654,6 +695,7 @@ Module gid_Module_Root_Files_6
     gid_File_Share_Registry_Main_Xcd,
     gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
+	gid_File_Pymailmerge_msgbox,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
 	gid_File_Xsl_Export_Common_Body,
@@ -738,13 +780,23 @@ Module gid_Module_Root_Files_Images
 	Sortkey = "2050";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Images_Zip,
+	Files = (
+#ifdef THEME_DEFAULT
+	     gid_File_Images_Zip,
+#endif
+#ifdef THEME_CRYSTAL
              gid_File_ImagesCrystal_Zip,
+#endif
+#ifdef THEME_OXYGEN
              gid_File_ImagesOxygen_Zip,
+#endif
+#ifdef THEME_HICONTRAST
              gid_File_ImagesHicontrast_Zip,
-             gid_File_ImagesIndustrial_Zip,
-             gid_File_ImagesTango_Zip,
-             gid_File_ImagesClassic8_Zip);
+#endif
+#ifdef THEME_TANGO
+             gid_File_ImagesTango_Zip
+#endif
+	);
 End
 
 #ifndef WITHOUT_FONTS

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef COLLECTDIRCONTENT_H
 #define COLLECTDIRCONTENT_H
 
@@ -27,8 +28,6 @@ typedef pair<string, string> PathFilePair;
 struct IncludesCollection {
     private:
     DirMap allIncludes;
-//    bool search(string filePath);
-//    bool add_dir(string dirPath);
     PathFilePair split_path(const string& filePath);
     void add_to_collection(const string& dirPath);
 
@@ -55,4 +54,6 @@ int call_IncludesCollection_exists(struct IncludesCollection* m, const char* fil
 }
 #endif
 
-#endif // COLLECTDIRCONTENT_H
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

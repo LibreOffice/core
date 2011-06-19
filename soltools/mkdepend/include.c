@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* $XConsortium: include.c,v 1.17 94/12/05 19:33:08 gildea Exp $ */
 /*
 
@@ -55,6 +56,7 @@ struct inclist *inc_path(file, include, dot, incCollection)
     register struct inclist *ip;
     struct stat st;
     boolean found = FALSE;
+    (void)dot;
 
     /*
      * Check all previously found include files for a path that
@@ -215,7 +217,7 @@ void remove_dotdot(path)
 int isdot(p)
     register char   *p;
 {
-    if(p && *p++ == '.' && *p++ == '\0')
+    if(p && p[0] == '.' && p[1] == '\0')
         return(TRUE);
     return(FALSE);
 }
@@ -223,7 +225,7 @@ int isdot(p)
 int isdotdot(p)
     register char   *p;
 {
-    if(p && *p++ == '.' && *p++ == '.' && *p++ == '\0')
+    if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
         return(TRUE);
     return(FALSE);
 }
@@ -293,7 +295,7 @@ void included_by(ip, newfile)
     else {
         for (i=0; i<ip->i_listlen; i++)
             if (ip->i_list[ i ] == newfile) {
-                i = strlen(newfile->i_file);
+                i = (int)strlen(newfile->i_file);
                 if (!ip->i_included_sym &&
                 !(i > 2 &&
                   newfile->i_file[i-1] == 'c' &&
@@ -327,3 +329,5 @@ void inc_clean ()
         ip->i_marked = FALSE;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

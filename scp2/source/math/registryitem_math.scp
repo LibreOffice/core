@@ -26,6 +26,8 @@
  ************************************************************************/
 #include "macros.inc"
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 // MSOLE embedded object in SO7 file format
 RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a_
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -264,7 +266,7 @@ RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Versionind
     Value = "opendocument.MathDocument.1";
 End
 
-
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -273,12 +275,16 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_6
     REG_VALUE_LNG(SO60_FORMULA)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "soffice.StarMathDocument.6\CLSID";
     Value = "{D0484DE6-AAEE-468a-991F-8D4B0737B57A}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -523,12 +529,16 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1
     REG_VALUE_LNG(OO_FORMULA)
 End
 
+#ifdef WITH_ACTIVEX_COMPONENT
+
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "opendocument.MathDocument.1\CLSID";
     Value = "{D2D59CD1-0A6A-4D36-AE20-47817077D57C}";
 End
+
+#endif // WITH_ACTIVEX_COMPONENT
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

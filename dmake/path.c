@@ -181,7 +181,7 @@ char *path;
 
 #ifdef HAVE_DRIVE_LETTERS
 
-   /* Change all occurences from DirBrkStr to *DirSepStr. This assumes
+   /* Change all occurrences from DirBrkStr to *DirSepStr. This assumes
     * that when HAVE_DRIVE_LETTERS is set the directory separator is
     * either '\' or '/'. */
    if (*DirSepStr == '/')

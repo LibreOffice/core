@@ -39,11 +39,11 @@ $(eval $(call gb_SrsTarget_SrsTarget,RES/res))
 
 # add any additional include paths here
 $(eval $(call gb_SrsTarget_set_include,RES/res,\
-    $$(INCLUDE) \
+	$$(INCLUDE) \
 ))
 
 # add src files here (complete path relative to repository root)
 $(eval $(call gb_SrsTarget_add_files,RES/res,\
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:

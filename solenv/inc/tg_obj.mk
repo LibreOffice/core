@@ -30,12 +30,6 @@ MKFILENAME:=TG_OBJ.MK
 .IF "$(OBJTARGET)"!=""
 $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="OS2"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
-.ENDIF		# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -62,12 +56,6 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
 $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
     @echo "Making:   " $(@:f)
-.IF "$(GUI)"=="OS2"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
-.ENDIF			# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -85,10 +73,3 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
-
-.IF "$(GUI)"=="OS2"
-.IF "$(LIBTARGET)"!="NO"
-    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIBTARGET)"!="NO"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
-.ENDIF			# "$(GUI)"=="OS2"

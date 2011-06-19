@@ -46,8 +46,7 @@ End
 
 File gid_File_Help_Simpress_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE,DONT_OVERWRITE);
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(simpress);
     Patchfiles = (); 
 End

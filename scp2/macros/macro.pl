@@ -25,9 +25,11 @@
 #
 #*************************************************************************
 
+my $outfile;
+my $destfile;
+my $config_stamp;
+my $lastcompletelangiso_var;
 my $completelangiso_var = $ENV{COMPLETELANGISO_VAR};
-my $lastcompletelangiso_var;;
-my $outfile = "";
 
 if ( !defined $completelangiso_var) {
     print STDERR "ERROR: No language defined!\n";
@@ -35,16 +37,18 @@ if ( !defined $completelangiso_var) {
 }
 
 my $poorhelplocalizations_var = $ENV{WITH_POOR_HELP_LOCALIZATIONS};
+$poorhelplocalizations_var = $completelangiso_var if ( $poorhelplocalizations_var eq "ALL" );
 my %poorhelplocalizations;
 foreach $lang (split (/ /, $poorhelplocalizations_var)) {
+  next if ( $lang eq "en-US");
   $poorhelplocalizations{$lang}++;
 }
 
-startup_check();
-if ( "$completelangiso_var" eq "$lastcompletelangiso_var" ) {
-    print STDERR "No new languages. Keeping old file\n";
+if (!args_require_build()) {
+    print STDERR "No new languages, or config. Keeping old file\n";
     exit 0;
 }
+print STDERR "re-building macros\n";
 
 my @completelangiso = split " +", $completelangiso_var;
 
@@ -73,6 +77,7 @@ write_FILE_ALL_LANG_LETTER();
 
 close OUTFILE;
 
+rename $outfile, $destfile;
 
 sub write_ALL_LANG
 {
@@ -254,25 +259,26 @@ sub write_FILE_ALL_LANG_LETTER
     print OUTFILE "\n\n";
 }
 
-sub startup_check
+sub args_require_build
 {
-    my $i;
-    for ( $i=0; $i <= $#ARGV; $i++) {
-        if ( "$ARGV[$i]" eq "-o" ) {
-            if ( defined $ARGV[ $i + 1] ) {
-                $outfile = $ARGV[ $i + 1];
-            } else {
-                usage();
-            }
-        }
+    while (@ARGV) {
+        $opt = shift @ARGV;
+        $destfile = shift @ARGV if ($opt eq '-o');
+        $config_stamp = shift @ARGV if ($opt eq '-c');
     }
-    usage() if $i<2;
-    usage() if "$outfile" eq "";
-    if ( -f "$outfile" ) {
-        # changed script - run allways
-        return if (stat($0))[9] > (stat("$outfile"))[9] ;
+    usage() if (!defined ($destfile) || !defined ($config_stamp));
+    $outfile = "$destfile.tmp";
 
-        open OLDFILE, "$outfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";
+    if ( -f "$destfile" ) {
+        # changed script - run always
+        return 1 if (stat($0))[9] > (stat("$destfile"))[9] ;
+
+        # changed set_soenv.stamp - run always
+        if (-f "$config_stamp") {
+            return 1 if (stat($config_stamp))[9] > (stat($destfile))[9];
+        }
+
+        open OLDFILE, "$destfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";
         while ( $line = <OLDFILE> ) {
             if ( $line =~ /^\/\/.*completelangiso:/ ) {
                 $lastcompletelangiso_var = $line;
@@ -283,12 +289,15 @@ sub startup_check
 
         }
         close OLDFILE;
+
+        return 0 if ( "$completelangiso_var" eq "$lastcompletelangiso_var" );
     }
+    return 1;
 }
 
 sub usage
 {
     print STDERR "Generate language dependend macros use in *.scp files\n";
-    print STDERR "perl $0 -o outputfile\n";
+    print STDERR "perl $0 -o <outputfile> -c <config_stamp_file>\n";
     exit  1;
 }

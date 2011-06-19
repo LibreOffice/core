@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# create ID file for the whole LibO tree. run it in toplevel dir
+
+. ./*.Set.sh
+
+dirs="*/$INPATH/inc */$INPATH/misc/build `ls -d */* | sed -e '/\(clone\/\|\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^solver\//d'`"
+mkid --lang-map=`dirname $0`/id-lang.map --include='C C++ asm perl make' --statistics $dirs

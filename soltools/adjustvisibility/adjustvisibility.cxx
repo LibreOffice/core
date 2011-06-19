@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,11 +242,12 @@ void processObject(const std::string& rFile, bool bPreserve, bool bVerbose)
 
     if ( bPreserve ) {
         if ( fstat(fd, &aStatBuf) == -1) {
-             std::string sMessage("adjustVisibilty() failed: can't stat file ");
-             sMessage += rFile;
-             sMessage += ": ";
-             sMessage += std::strerror(errno);
-             throw std::runtime_error(sMessage);
+            close(fd);
+            std::string sMessage("adjustVisibilty() failed: can't stat file ");
+            sMessage += rFile;
+            sMessage += ": ";
+            sMessage += std::strerror(errno);
+            throw std::runtime_error(sMessage);
         }
     }
 
@@ -309,3 +311,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

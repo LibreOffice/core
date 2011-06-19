@@ -40,18 +40,19 @@ NO_DEFAULT_STL=TRUE
 # --- Files --------------------------------------------------------
 
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"!="YES"
 LIBSALCPPRT=$(0)
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
 DEPOBJFILES	=	$(APP1OBJS) 
-.IF "$(OS)"!="FREEBSD" && "$(OS)"!="MACOSX" && "$(OS)"!="NETBSD"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="MACOSX" && "$(OS)"!="NETBSD" \
+	&& "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 STDLIB += -ldl
 .ENDIF
 .IF "$(OS)"=="NETBSD"
 APP1STDLIBS	+= -Wl,--whole-archive -lgcc -Wl,--no-whole-archive
 .ENDIF
-.ENDIF # "$(GUI)"=="UNX"
+.ENDIF # "$(GUI)"=="UNX" && "$(CROSS_COMPILING)"!="YES"
 
 # --- Targets ------------------------------------------------------
 

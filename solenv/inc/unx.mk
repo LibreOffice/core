@@ -35,22 +35,6 @@
 
 # --- Compiler ---
 
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISS"
-.INCLUDE : unxsols2.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "C50SOLARISI"
-.INCLUDE : unxsoli2.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS3"
-.INCLUDE : unxsols3.mk
-.ENDIF
-
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI3"
-.INCLUDE : unxsoli3.mk
-.ENDIF
-
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 .INCLUDE : unxsols4.mk
 .ENDIF
@@ -63,20 +47,12 @@
 .INCLUDE : unxsolu4.mk
 .ENDIF
 
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISX4"
-.INCLUDE : unxsolx4.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
 .INCLUDE : unxsogs.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISI"
 .INCLUDE : unxsogi.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCSCOI"
-.INCLUDE : unxscoi.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
@@ -99,6 +75,10 @@
 .INCLUDE : unxlngppc64.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCAIXP"
+.INCLUDE : unxaigppc.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
 .INCLUDE : unxlngs390.mk
 .ENDIF
@@ -111,40 +91,28 @@
 .INCLUDE : unxlngr.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCANDROIDR"
+.INCLUDE : unxandr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
 .INCLUDE : unxlnga.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
-.INCLUDE : unxhpxr.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCHPUXR"
-.INCLUDE : unxhpgr.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
-.INCLUDE : unxbsda.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "ICCAIXP"
-.INCLUDE : unxaixp.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC295NETBSDI"
-.INCLUDE : unxbsdi.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC300NETBSDI"
-.INCLUDE : unxbsdi2.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
-.INCLUDE : unxbsds.mk
+.IF "$(COM)$(OS)" == "GCCNETBSD"
+.INCLUDE : unxnbsd.mk
 .ENDIF
 
 .IF "$(COM)$(OS)" == "GCCFREEBSD"
 .INCLUDE : unxfbsd.mk
+.ENDIF
+
+.IF "$(COM)$(OS)" == "GCCOPENBSD"
+.INCLUDE : unxobsd.mk
+.ENDIF
+
+.IF "$(COM)$(OS)" == "GCCDRAGONFLY"
+.INCLUDE : unxdfly.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
@@ -153,6 +121,10 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXI"
 .INCLUDE : unxmacxi.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCIOSR"
+.INCLUDE : unxiosr.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
@@ -186,11 +158,13 @@ YACCFLAGS*=-d -t
 EXECPOST=
 SCPPOST=.ins
 DLLDEST=$(LB)
-SOLARSHAREDBIN=$(SOLARLIBDIR)
+SOLARSHAREDBIN=$(SOLARLIBDIR_FOR_BUILD)
 SONAME_SWITCH*=-h
 
 .IF "$(UNIXVERSIONNAMES)"!=""
+.IF "$(OS)"!="IOS"
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
+.ENDIF
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
 # enable building/linking KDE-dependent code in both OOo and SO build environment

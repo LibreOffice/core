@@ -37,12 +37,6 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
@@ -58,7 +52,7 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
     @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo $(RANLIB) $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(VERBOSE)" == "TRUE"
     @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
@@ -90,17 +84,6 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ELSE
     @nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
-
-.ELIF "$(GUI)"=="OS2"
-    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES)
-    @+-$(RM) $(@:s/.lib/.lin/)
-.IF "$(LIB$(TNR)OBJFILES)"!=""    
-    @+$(TYPE) $(mktmp $(LIB$(TNR)OBJFILES)) > $(null,$(LIB$(TNR)OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
-.ENDIF          # "$(LIB$(TNR)OBJFILES)"!=""    
-.IF "$(LIB$(TNR)FILES)"!=""    
-    @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
-.ENDIF          # "$(LIB$(TNR)FILES)"!=""    
-    @+$(ECHONL)
 
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"

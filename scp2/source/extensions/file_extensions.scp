@@ -1,0 +1,347 @@
+/*************************************************************************
+*
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: file_extensions.scp,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: KAMI $ $Date: 2010/10/31 04:58:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 3.
+ *
+ *
+ *    GNU Lesser General Public License Version 3
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+/* *** Additional Extensions *** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
+/* ** Presentation Minimizer ** */
+
+#ifndef WITHOUT_EXTENSION_MINIMIZER
+
+File gid_File_Oxt_Presentation_Minimizer
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Presentation_Minimizer;
+    Name = "presentation-minimizer.oxt";
+End
+
+#endif
+
+/* ** Report Builder ** */
+
+#ifndef WITHOUT_EXTENSION_REPORTDESIGN
+
+File gid_File_Oxt_Report_Builder
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Report_Builder;
+    Name = "report-builder.oxt";
+End
+
+#endif
+
+/* ** MediaWiki Publisher** */
+
+#ifndef WITHOUT_EXTENSION_MEDIAWIKI
+
+File gid_File_Oxt_MediaWiki
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_MediaWiki;
+    Name = "wiki-publisher.oxt";
+End
+
+#endif
+
+/* ** Presenter Screen ** */
+
+#ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
+
+File gid_File_Oxt_Presenter_Screen
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Presenter_Screen;
+    Name = "presenter-screen.oxt";
+End
+
+#endif
+
+/* ** PDF Import ** */
+
+#ifndef WITHOUT_EXTENSION_PDFIMPORT
+
+File gid_File_Oxt_PDF_Import
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_PDF_Import;
+    Name = "pdfimport.oxt";
+End
+
+#endif
+
+/* ** Lightproof ** */
+
+#ifdef WITH_EXTENSION_LIGHTPROOF
+
+File gid_File_Oxt_LightProof
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_LightProof;
+    Name (en-US) = "lightproof-en-US.oxt";
+    Name (hu) = "lightproof-hu.oxt";
+End
+
+#endif
+
+/* ** Numbertext ** */
+
+#ifdef WITH_EXTENSION_NUMBERTEXT
+
+File gid_File_Oxt_NumberText
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_NumberText;
+    Name = "numbertext.oxt";
+End
+
+#endif
+
+/* ** ConvertTextToNumber ** */
+
+#ifdef WITH_EXTENSION_CT2N
+
+File gid_File_Oxt_CT2N
+	TXT_FILE_BODY;
+	Styles = (PACKED, ARCHIVE);
+	Dir = gid_Brand_Dir_Share_Extensions_CT2N;
+	Name = "ConvertTextToNumber.oxt";
+End
+
+#endif
+
+/* ** Hungarian Cross-reference Toolbar** */
+
+#ifdef WITH_EXTENSION_HUNART
+
+File gid_File_Oxt_HunArt
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_HunArt;
+    Name = "hunart.oxt";
+End
+
+#endif
+
+/* ** Typography Toolbar** */
+
+#ifdef WITH_EXTENSION_TYPO
+
+File gid_File_Oxt_Typo
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Typo;
+    Name = "typo.oxt";
+End
+
+#endif
+
+/* ** Watch Window ** */
+
+#ifdef WITH_EXTENSION_WATCH_WINDOW
+
+File gid_File_Oxt_Watch_Window
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Watch_Window;
+    Name = "WatchWindow.oxt";
+End
+
+#endif
+
+/* ** Diagram ** */
+
+#ifdef WITH_EXTENSION_DIAGRAM
+
+File gid_File_Oxt_Diagram
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Diagram;
+    Name = "Diagram.oxt";
+End
+
+#endif
+
+/* ** Validator ** */
+
+#ifdef WITH_EXTENSION_VALIDATOR
+
+File gid_File_Oxt_Validator
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Validator;
+    Name = "Validator.oxt";
+End
+
+#endif
+
+/* ** Barcode ** */
+
+#ifdef WITH_EXTENSION_BARCODE
+
+File gid_File_Oxt_Barcode
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Barcode;
+    Name = "Barcode.oxt";
+End
+
+#endif
+
+/* ** Google Docs ** */
+
+#ifdef WITH_EXTENSION_GOOGLE_DOCS
+
+File gid_File_Oxt_Google_Docs
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Google_Docs;
+    Name = "gdocs.oxt";
+End
+
+#endif
+
+/* ** NLPSolver ** */
+
+#ifdef WITH_EXTENSION_NLPSOLVER
+
+File gid_File_Oxt_NLPSolver
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_NLPSolver;
+    Name = "NLPSolver.oxt";
+End
+
+#endif
+
+/* ** LanguageTool ** */
+
+#ifdef WITH_EXTENSION_LANGUAGETOOL
+
+File gid_File_Oxt_LanguageTool
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_LanguageTool;
+    Name = "LanguageTool.oxt";
+End
+
+#endif
+
+/* ** MySQL Connector ** */
+
+#ifdef WITH_EXTENSION_MYSQLC
+
+File gid_File_Oxt_MySQLConnector
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_MySQLConnector;
+    Name = "mysql-connector-ooo.oxt";
+End
+
+#endif
+
+/* ** oooblogger ** */
+
+#ifdef WITH_EXTENSION_OOOBLOGGER
+
+File gid_File_Oxt_OOoBlogger
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_OOoBlogger;
+    Name = "oooblogger.oxt";
+End
+
+#endif
+
+/* ** Sun Template Pack ** */
+
+#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
+
+File gid_File_Optional_Extensions_Sun_Template_Pack
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Sun_Template_Pack;
+    Name (en-US) = "Sun-ODF-Template-Pack-en-US.oxt";
+    Name (de) = "Sun-ODF-Template-Pack-de.oxt";
+    Name (it) = "Sun-ODF-Template-Pack-it.oxt";
+    Name (fr) = "Sun-ODF-Template-Pack-fr.oxt";
+    Name (es) = "Sun-ODF-Template-Pack-es.oxt";
+    Name (hu) = "Sun-ODF-Template-Pack-hu.oxt";
+End
+
+#endif
+
+/* ** Script provider for BeanShell ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+
+File gid_File_Oxt_Script_Provider_For_Beanshell
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell;
+    Name = "script-provider-for-beanshell.oxt";
+End
+
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+
+File gid_File_Oxt_Script_Provider_For_Javascript
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript;
+    Name = "script-provider-for-javascript.oxt";
+End
+
+#endif
+
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+
+File gid_File_Oxt_Script_Provider_For_Python
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python;
+    Name = "script-provider-for-python.oxt";
+End
+
+#endif
+
+#endif

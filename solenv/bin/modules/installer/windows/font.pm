@@ -58,7 +58,6 @@ sub create_font_table
             my %font = ();
 
             $font{'File_'} = $onefile->{'uniquename'};
-            # $font{'FontTitle'} = $onefile->{'FontName'};  # results in a warning during validation
             $font{'FontTitle'} = "";
 
             my $oneline = $font{'File_'} . "\t" . $font{'FontTitle'} . "\n";

@@ -1,0 +1,115 @@
+AC_INIT([LibreOffice], [3.4],,, [http://documentfoundation.org/])
+AC_PREREQ(2.50)
+
+echo "********************************************************************"
+echo "*"
+echo "*   Running the post download checks."
+echo "*"
+echo "********************************************************************"
+
+dnl ===================================================================
+dnl The following is a list of supported systems.
+dnl ===================================================================
+AC_CANONICAL_SYSTEM
+case "$host_os" in
+    solaris*)
+        _os=SunOS
+        ;;
+    linux-gnu*|k*bsd*-gnu*)
+        _os=Linux
+        ;;
+    gnu)
+        _os=GNU
+        ;;
+    cygwin*|mingw32*) # Windows
+        _os=WINNT
+        ;;
+    darwin*) # Mac OS X or iOS
+        _os=Darwin
+        ;;
+    freebsd*)
+        _os=FreeBSD
+        ;;
+    *netbsd*)
+        _os=NetBSD
+        ;;
+    aix*)
+        _os=AIX
+        ;;
+    openbsd*)
+        _os=OpenBSD
+        ;;
+    dragonfly*)
+        _os=DragonFly
+        ;;
+    androideabi*)
+        _os=Android
+        ;;
+   *)
+   AC_MSG_ERROR([$host_os operating system is not suitable for LibreOffice!])
+   ;;
+esac
+
+dnl ===================================================================
+dnl Windows builds need dbghelp.dll in external/dbghelp/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for dbghelp.dll])
+   if test -f ./external/dbghelp/dbghelp.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([dbghelp.dll is missing in external/dbghelp/.
+Get it from the Microsoft site and put it into external/dbghelp.
+(Note: Microsoft seems to enjoy changing the exact location of this file. You
+may have to search Microsoft's website.) Last time it was seen at:
+<http://www.microsoft.com/downloads/release.asp?releaseid=30682>.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds - use oowintool to copy CRT dlls and manifest
+dnl ===================================================================
+if test "$COM" = "MSC"; then
+   if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
+       :
+    else
+       AC_MSG_ERROR([oowintool failed to copy CRT])
+    fi
+fi
+
+dnl ===================================================================
+dnl Windows builds need gdiplus.dll in external/gdiplus/
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for gdiplus.dll])
+   if test -x ./external/gdiplus/gdiplus.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
+Get it from the Microsoft site and put it into external/gdiplus.
+You may have to search Microsoft's website. Last time it was seen at:
+<http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>.])
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds need vcredist_x86.exe and vcredist_x64.exe in external/vcredist/
+dnl ===================================================================
+if test "$COM" = "MSC"; then
+   AC_MSG_CHECKING([for vcredist_x86.exe])
+   if test -e ./external/vcredist/vcredist_x86.exe; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([vcredist_x86.exe is missing in external/vcredist/.
+Get the version corresponding to your Visual Studio from the Microsoft site
+and put it into external/vcredist.])
+   fi
+   AC_MSG_CHECKING([for vcredist_x64.exe])
+   if test -e ./external/vcredist/vcredist_x64.exe; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([vcredist_x64.exe is missing in external/vcredist/.
+Get the version corresponding to your Visual Studio from the Microsoft site
+and put it into external/vcredist.])
+   fi
+fi

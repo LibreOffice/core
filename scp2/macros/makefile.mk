@@ -45,5 +45,4 @@ ALLTAR : $(INCCOM)$/langmacros.inc
 .PHONY $(INCCOM)$/langmacros.inc:
     @echo ------------------------------
     @echo Making: $@  
-    @@-$(RENAME) $@ $@.tmp
-    $(COMMAND_ECHO)$(PERL) macro.pl $(VERBOSITY) -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
+    $(COMMAND_ECHO)$(PERL) macro.pl $(VERBOSITY) -o $@ -c $(SOLARSRC)/set_soenv.stamp
