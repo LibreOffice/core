@@ -33,15 +33,14 @@
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
 
-static ResMgr* pResMgr=0;
-
 // struct DialogsResMgr --------------------------------------------------
 ResMgr* CuiResMgr::GetResMgr()
 {
+    static ResMgr* pResMgr=0;
+
     if ( !pResMgr )
     {
-        ByteString aName( "cui" );
-        pResMgr = ResMgr::CreateResMgr( aName.GetBuffer(), Application::GetSettings().GetUILocale() );
+        pResMgr = ResMgr::CreateResMgr("cui", Application::GetSettings().GetUILocale());
     }
 
     return pResMgr;
