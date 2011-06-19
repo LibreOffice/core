@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_sdb_SingleSelectQueryComposer_idl__
 #define __com_sun_star_sdb_SingleSelectQueryComposer_idl__
 
-#ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
 #include <com/sun/star/sdb/SingleSelectQueryAnalyzer.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 
@@ -59,7 +55,7 @@ service SingleSelectQueryComposer
 
     interface XSingleSelectQueryComposer;
 
-    /** is the orignal SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
+    /** is the original SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
     */
     [readonly, property] string Original;
 };

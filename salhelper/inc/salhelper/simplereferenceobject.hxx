@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,6 +121,12 @@ private:
      */
     void operator =(SimpleReferenceObject);
 
+#ifdef _MSC_VER
+/* We can't now have these private with MSVC2008 at least, it leads to
+   compilation errors in xmloff and other places.
+*/
+protected:
+#endif
     /** not implemented (see general class documentation)
         @internal
      */
@@ -134,3 +141,5 @@ private:
 }
 
 #endif // _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

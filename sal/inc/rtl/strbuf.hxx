@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -274,6 +275,11 @@ public:
      */
     const sal_Char* getStr() const { return pData->buffer; }
 
+    /**
+        Return a OString instance reflecting the current content
+        of this OStringBuffer.
+     */
+    const OString toString() const { return OString(pData->buffer); }
 
     /**
         The character at the specified index of this string buffer is set
@@ -663,3 +669,4 @@ private:
 #endif  /* _RTL_STRBUF_HXX_ */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
 #endif /* __cpluscplus */
 
 #endif /* INCLUDED_RTL_TEXTENC_CONVERTER_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

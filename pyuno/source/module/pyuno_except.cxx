@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -166,7 +167,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyTuple_SetItem( args.get(), 2, PyDict_New() );
 
     PyRef ret(
-        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyClass_Type) , args.get()),
+        PyObject_CallObject(reinterpret_cast<PyObject *>(&PyType_Type) , args.get()),
         SAL_NO_ACQUIRE );
 
     // now overwrite ctor and attrib functions
@@ -249,3 +250,5 @@ PyRef getClass( const OUString & name , const Runtime &runtime)
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

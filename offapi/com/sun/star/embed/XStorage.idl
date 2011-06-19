@@ -27,61 +27,20 @@
 #ifndef __com_sun_star_embed_XStorage_idl__
 #define __com_sun_star_embed_XStorage_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_XStream_idl__
 #include <com/sun/star/io/XStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_StorageWrappedTargetException_idl__
 #include <com/sun/star/embed/StorageWrappedTargetException.idl>
-#endif
-
-#ifndef __com_sun_star_embed_InvalidStorageException_idl__
 #include <com/sun/star/embed/InvalidStorageException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_WrongPasswordException_idl__
 #include <com/sun/star/packages/WrongPasswordException.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoEncryptionException_idl__
 #include <com/sun/star/packages/NoEncryptionException.idl>
-#endif
-
-#ifndef __com_sun_star_packages_NoRawFormatException_idl__
 #include <com/sun/star/packages/NoRawFormatException.idl>
-#endif
 
 
 //============================================================================
@@ -110,7 +69,7 @@ published interface XStorage
     interface ::com::sun::star::container::XNameAccess;
 
     // -----------------------------------------------------------------------
-    /** allows to controll and track lifetime of the storage.
+    /** allows to control and track lifetime of the storage.
 
         <p>
         In case a storage is disposed any call to it's methods should result
@@ -214,7 +173,7 @@ published interface XStorage
             can be a combination of <type>ElementModes</type> values
 
         @param sPassword
-            this parameter allowes to specify a reading password for the
+            this parameter allows to specify a reading password for the
             stream, the password must be a correct one, otherwise an
             exception will be thrown
 
@@ -251,8 +210,8 @@ published interface XStorage
     /** allows to get access to a child storage.
 
         <p>
-        The opened substorage must support specified in 'nOpenMode' access
-        modes. It can support 'read' mode in addition. But any child element
+        The opened substorage must support specified in "nOpenMode" access
+        modes. It can support "read" mode in addition. But any child element
         can support one of those modes only in case this mode is supported by
         parent storage.
         </p>
@@ -340,7 +299,7 @@ published interface XStorage
             the name of the substream that should be copied
 
         @param sPassword
-            this parameter allowes to specify a reading password for the
+            this parameter allows to specify a reading password for the
             stream, the password must be a correct one, otherwise an
             exception will be thrown
 
@@ -376,7 +335,7 @@ published interface XStorage
     /** allows to get copy of this storage at the state of it's last commit.
 
         <p>
-        This method makes sence only for services implementations that allow
+        This method makes sense only for services implementations that allow
         transaction in the storage.
         </p>
 
@@ -406,7 +365,7 @@ published interface XStorage
     /** allows to get copy of a child storage at the state of it's last commit.
 
         <p>
-        This method makes sence only for services implementations that allow
+        This method makes sense only for services implementations that allow
         transaction in the storage.
         </p>
 
@@ -505,7 +464,7 @@ published interface XStorage
             the name of the element to remove
 
         @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for eny reason
+            this storage is in invalid state for any reason
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             an illegal argument is provided
@@ -537,7 +496,7 @@ published interface XStorage
             the new name of the element to rename
 
         @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for eny reason
+            this storage is in invalid state for any reason
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             an illegal argument is provided
@@ -581,7 +540,7 @@ published interface XStorage
             the name of the result element in destination storage
 
         @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for eny reason
+            this storage is in invalid state for any reason
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no specified source element in this storage
@@ -625,7 +584,7 @@ published interface XStorage
             the name of the result element in destination storage
 
         @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for eny reason
+            this storage is in invalid state for any reason
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no specified source element in this storage

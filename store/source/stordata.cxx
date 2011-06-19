@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -723,31 +724,6 @@ OStoreDirectoryPageObject::scope (
     return page::SCOPE_UNREACHABLE;
 }
 
-#if 0  /* NYI */
-/*
- * chunk (external data page).
- */
-inode::ChunkDescriptor OStoreDirectoryPageObject::chunk (sal_uInt32 nOffset)
-{
-    // @@@ INSUFFICIENT: NEED SCOPE AS WELL @@@
-    sal_uInt32 nCapacity = m_rPage.capacity();
-    if (nOffset < nCapacity)
-        // Internal scope (inode page).
-        return inode::ChunkDescriptor (nOffset, nCapacity);
-    else
-        // External scope (data page).
-        return inode::ChunkDescriptor (nOffset - nCapacity, data::capacity(m_rPage.m_aDescr));
-
-    inode::ChunkScope eScope = m_rPage.scope(nOffset);
-    if (eScope == inode::SCOPE_INTERNAL)
-        // Inode page (internal scope).
-        return inode::ChunkDescriptor (nOffset, m_rPage.capacity());
-    else
-        // Data page (external scope).
-        return inode::ChunkDescriptor (nOffset - m_rPage.capacity(), data::capacity(m_rPage.m_aDescr));
-}
-#endif /* NYI */
-
 /*
  * read (external data page).
  */
@@ -1128,3 +1104,5 @@ storeError OStoreDirectoryPageObject::truncate (
     // Invalid scope.
     return store_E_InvalidAccess;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

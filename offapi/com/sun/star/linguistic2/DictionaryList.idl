@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_linguistic2_DictionaryList_idl__
 #define __com_sun_star_linguistic2_DictionaryList_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
 //=============================================================================
 
@@ -44,7 +40,7 @@ module com { module sun { module star { module linguistic2 {
 /** is the list of personal dictionaries.
 
      <P>The active dictionaries of this list will be used for
-     spellchecking and hyphenation.</P>
+     spell checking and hyphenation.</P>
 
     @see <type scope="com::sun::star::linguistic2">XDictionary</type>
     @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>

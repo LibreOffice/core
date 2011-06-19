@@ -45,22 +45,24 @@ module com { module sun { module star { module i18n {
     ATTENTION: This interface is marked <em>internal</em> and does not
     have the <em>published</em> flag, which means it is subject to
     change without notice and should not be used outside the OOo core.
-    The current version is a draft and works only for English language
-    locales. Future enhancements adding functionality for other locales
-    should use the 'ordinal' RuleBasedNumberFormat of the ICU if
-    possible, see
-    http://icu.sourceforge.net/apiref/icu4c/classRuleBasedNumberFormat.html
-    which might make it necessary to change the interface.
  */
 
 interface XOrdinalSuffix : com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
-    /** Returns the ordinal suffix for the number, for example,
-        "<b>st</b>", "<b>nd</b>", "<b>rd</b>", "<b>th</b>"
-        in an English locale.
+    /** Returns all the possible ordinal suffixes for the number.
+
+        This method will provide "<b>st</b>", "<b>nd</b>", "<b>rd</b>",
+        "<b>th</b>" for an English locale, depending on the provided number.
+        In some locales like French, Italian or Spanish it ca return several
+        suffixes for one number.
+
+        Examples: for the number '1', the values will be <b>st</b> in
+        English, but <b>er</b> and <b>re</b> in French. All these values
+        may depend on the underlying version of ICU.
+
      */
-    string getOrdinalSuffix( [in] long nNumber, [in] com::sun::star::lang::Locale aLocale );
+    sequence< string > getOrdinalSuffix( [in] long nNumber, [in] com::sun::star::lang::Locale aLocale );
 };
 
 //============================================================================

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #include <sys/stat.h>
 #include <external/glibc/getopt.h>
@@ -246,3 +247,5 @@ void *
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

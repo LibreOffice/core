@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -332,15 +333,9 @@ public:
 
     @see VolumeInfo
 */
-#ifdef OS2
-class VolumeInfo;
-#endif
 
 class VolumeDevice : public FileBase
 {
-#ifdef OS2
-public:
-#endif
     oslVolumeDeviceHandle   _aHandle;
 
 public:
@@ -440,15 +435,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#define VolumeInfoMask_Attributes             osl_VolumeInfo_Mask_Attributes
-#define VolumeInfoMask_TotalSpace             osl_VolumeInfo_Mask_TotalSpace
-#define VolumeInfoMask_UsedSpace              osl_VolumeInfo_Mask_UsedSpace
-#define VolumeInfoMask_FreeSpace              osl_VolumeInfo_Mask_FreeSpace
-#define VolumeInfoMask_MaxNameLength          osl_VolumeInfo_Mask_MaxNameLength
-#define VolumeInfoMask_MaxPathLength          osl_VolumeInfo_Mask_MaxPathLength
-#define VolumeInfoMask_FileSystemName         osl_VolumeInfo_Mask_FileSystemName
-#define VolumeInfoMask_FileSystemCaseHandling osl_VolumeInfo_Mask_FileSystemCaseHandling
-
 class Directory;
 
 /** The VolumeInfo class.
@@ -480,7 +466,7 @@ public:
     /** Constructor.
 
         @param nMask
-        Set of flaggs decribing the demanded information.
+        Set of flags decribing the demanded information.
     */
 
     VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
@@ -690,32 +676,6 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-
-#define FileStatusMask_Type             osl_FileStatus_Mask_Type
-#define FileStatusMask_Attributes       osl_FileStatus_Mask_Attributes
-#define FileStatusMask_CreationTime     osl_FileStatus_Mask_CreationTime
-#define FileStatusMask_AccessTime       osl_FileStatus_Mask_AccessTime
-#define FileStatusMask_ModifyTime       osl_FileStatus_Mask_ModifyTime
-#define FileStatusMask_FileSize         osl_FileStatus_Mask_FileSize
-#define FileStatusMask_FileName         osl_FileStatus_Mask_FileName
-#define FileStatusMask_FileURL          osl_FileStatus_Mask_FileURL
-#define FileStatusMask_LinkTargetURL    osl_FileStatus_Mask_LinkTargetURL
-#define FileStatusMask_All              osl_FileStatus_Mask_All
-#define FileStatusMask_Validate         osl_FileStatus_Mask_Validate
-
-#define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
-#define Attribute_Hidden       osl_File_Attribute_Hidden
-#define Attribute_Executable   osl_File_Attribute_Executable
-#define Attribute_GrpWrite     osl_File_Attribute_GrpWrite
-#define Attribute_GrpRead      osl_File_Attribute_GrpRead
-#define Attribute_GrpExe       osl_File_Attribute_GrpExe
-#define Attribute_OwnWrite     osl_File_Attribute_OwnWrite
-#define Attribute_OwnRead      osl_File_Attribute_OwnRead
-#define Attribute_OwnExe       osl_File_Attribute_OwnExe
-#define Attribute_OthWrite     osl_File_Attribute_OthWrite
-#define Attribute_OthRead      osl_File_Attribute_OthRead
-#define Attribute_OthExe       osl_File_Attribute_OthExe
-
 class DirectoryItem;
 
 /** The FileStatus class.
@@ -754,7 +714,7 @@ public:
     /** Constructor.
 
         @param nMask
-        Set of flaggs decribing the demanded information.
+        Set of flags decribing the demanded information.
     */
 
     FileStatus( sal_uInt32 nMask ): _nMask( nMask )
@@ -797,7 +757,7 @@ public:
     */
     inline Type getFileType() const
     {
-        return (_aStatus.uValidFields & FileStatusMask_Type) ?  (Type) _aStatus.eType : Unknown;
+        return (_aStatus.uValidFields & osl_FileStatus_Mask_Type) ?  (Type) _aStatus.eType : Unknown;
     }
 
     /** Get the file attributes.
@@ -936,11 +896,6 @@ public:
         close();
     }
 
-    #define OpenFlag_Read   osl_File_OpenFlag_Read
-    #define OpenFlag_Write  osl_File_OpenFlag_Write
-    #define OpenFlag_Create osl_File_OpenFlag_Create
-    #define OpenFlag_NoLock osl_File_OpenFlag_NoLock
-
     /** Open a regular file.
 
         Open a file. Only regular files can be openend.
@@ -1015,11 +970,6 @@ public:
 
         return (RC) Error;
     }
-
-
-    #define Pos_Absolut osl_Pos_Absolut
-    #define Pos_Current osl_Pos_Current
-    #define Pos_End     osl_Pos_End
 
     /** Set the internal position pointer of an open file.
 
@@ -1599,7 +1549,7 @@ public:
 class DirectoryCreationObserver
 {
 public:
-    virtual ~DirectoryCreationObserver() {};
+    virtual ~DirectoryCreationObserver() {}
 
     /** This method will be called when a new directory has been
         created and needs to be overwritten by derived classes.
@@ -1697,7 +1647,7 @@ public:
         @see close()
     */
 
-    inline sal_Bool isOpen() { return _pData != NULL; };
+    inline sal_Bool isOpen() { return _pData != NULL; }
 
     /** Close a directory.
 
@@ -1951,3 +1901,4 @@ public:
 #endif  /* __cplusplus */
 #endif  /* _OSL_FILE_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

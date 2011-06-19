@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_control_CommandButton_idl__
 #define __com_sun_star_form_control_CommandButton_idl__
 
-#ifndef __com_sun_star_awt_UnoControlButton_idl__
 #include <com/sun/star/awt/UnoControlButton.idl>
-#endif
-
-#ifndef __com_sun_star_form_XApproveActionBroadcaster_idl__
 #include <com/sun/star/form/XApproveActionBroadcaster.idl>
-#endif
 
 //=============================================================================
 

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ui_XUIConfigurationManagerSupplier_idl__
 #define __com_sun_star_ui_XUIConfigurationManagerSupplier_idl__
 
-#ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
 #include <com/sun/star/ui/XUIConfigurationManager.idl>
-#endif
 
 module com { module sun { module star { module ui {
 

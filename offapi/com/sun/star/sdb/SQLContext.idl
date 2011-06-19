@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_SQLContext_idl__
 #define __com_sun_star_sdb_SQLContext_idl__
 
-#ifndef __com_sun_star_sdbc_SQLWarning_idl__
 #include <com/sun/star/sdbc/SQLWarning.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 
@@ -48,7 +46,7 @@ published exception SQLContext: com::sun::star::sdbc::SQLWarning
 {
     /** provides special info about the details where a
         <type scope="com::sun::star::sdbc">SQLException</type>
-        occured.
+        occurred.
         As usual for SQLExceptions, several SQLContext-objects may be chained, then the
         most recent context is appended to the list's tail
      */

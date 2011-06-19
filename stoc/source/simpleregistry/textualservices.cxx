@@ -283,13 +283,7 @@ void Parser::handleComponent() {
                     css::uno::Reference< css::uno::XInterface >());
             }
         } else {
-            throw css::registry::InvalidRegistryException(
-                (reader_.getUrl() +
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         ": expected <component> attribute \"uri\" or"
-                         " \"loader\""))),
-                css::uno::Reference< css::uno::XInterface >());
+          OSL_FAIL ("unexpected component attribute, expected 'uri' or 'loader'");
         }
     }
     if (attrUri_.getLength() == 0) {

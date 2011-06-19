@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_XUIElementSettings_idl__
 #define __com_sun_star_ui_XUIElementSettings_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 //=============================================================================
 
@@ -67,7 +62,7 @@ published interface XUIElementSettings : com::sun::star::uno::XInterface
         type supports it.
 
         @param bWriteable
-            must be <TRUE/> if the retrieved settings should be a writeable.
+            must be <TRUE/> if the retrieved settings should be a writable.
             Otherwise <FALSE/> should be provided to get a shareable reference
             to the settings data.
 

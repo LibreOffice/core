@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_ContentHandler_idl__
 #define __com_sun_star_frame_ContentHandler_idl__
 
-#ifndef __com_sun_star_frame_XNotifyingDispatch_idl__
 #include <com/sun/star/frame/XNotifyingDispatch.idl>
-#endif
 
 //=============================================================================
 
@@ -55,7 +53,7 @@ published service ContentHandler
 
         <p>
         Base interface of <type>XNotifyingDispatch</type> is <type>XDispatch</type>
-        and can be called for requests if result isn't neccessary for dispatch operation.
+        and can be called for requests if result isn't necessary for dispatch operation.
         </p>
 
         @see XDispatch

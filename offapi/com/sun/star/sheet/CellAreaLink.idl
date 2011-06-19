@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_CellAreaLink_idl__
 #define __com_sun_star_sheet_CellAreaLink_idl__
 
-#ifndef __com_sun_star_sheet_XAreaLink_idl__
 #include <com/sun/star/sheet/XAreaLink.idl>
-#endif
-
-#ifndef __com_sun_star_util_XRefreshable_idl__
 #include <com/sun/star/util/XRefreshable.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

@@ -39,6 +39,8 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE :  ..$/version.mk
 
+.IF "$(OS)"!="IOS"
+
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=$(EMQ)"$(DLLPOSTFIX)$(EMQ)"
 
@@ -84,5 +86,7 @@ APP5STDLIBS=\
             $(REGLIB)
 
 OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS)
+
+.ENDIF
 
 .INCLUDE :  target.mk

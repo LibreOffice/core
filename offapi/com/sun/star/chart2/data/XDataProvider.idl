@@ -29,11 +29,8 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/chart2/data/XDataSource.idl>
-
 #include <com/sun/star/beans/PropertyValue.idl>
-
 #include <com/sun/star/sheet/XRangeSelection.idl>
 
 module com
@@ -70,7 +67,7 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
             given range.  The properties should be defined in a
             separate service.
 
-            <p>For spreadsheets and textdocument tables there exists a
+            <p>For spreadsheets and text document tables there exists a
             service <type>TabularDataProviderArguments</type>
             describing valid values for this list.</p>
 

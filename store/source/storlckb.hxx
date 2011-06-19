@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.6.8.1 $"
+#define _STORE_STORLCKB_HXX_
 
 #include "sal/types.h"
 
@@ -169,3 +170,4 @@ SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*)
 
 #endif /* !_STORE_STORLCKB_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

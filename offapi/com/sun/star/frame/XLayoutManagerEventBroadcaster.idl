@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_XLayoutManagerEventBroadcaster_idl__
 #define __com_sun_star_frame_XLayoutManagerEventBroadcaster_idl__
 
-#ifndef __com_sun_star_frame_XLayoutManagerListener_idl__
 #include <com/sun/star/frame/XLayoutManagerListener.idl>
-#endif
 
 //=============================================================================
 

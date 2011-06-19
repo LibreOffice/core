@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_BoundVolume_idl__
 #define __com_sun_star_drawing_BoundVolume_idl__
 
-#ifndef __com_sun_star_drawing_Position3D_idl__
 #include <com/sun/star/drawing/Position3D.idl>
-#endif
 
 //=============================================================================
 

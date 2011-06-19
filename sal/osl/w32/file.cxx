@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -424,7 +425,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 return osl_File_E_None;
             }
 
-            SIZE_T const bytes = std::min(m_buflen - bufpos, nBytesRequested);
+            SIZE_T const bytes = std::min(m_buflen - bufpos, (SIZE_T) nBytesRequested);
             memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
             nBytesRequested -= bytes, *pBytesRead += bytes, nOffset += bytes;
         }
@@ -494,7 +495,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
 
-            SIZE_T const bytes = std::min(m_bufsiz - bufpos, nBytesToWrite);
+            SIZE_T const bytes = std::min(m_bufsiz - bufpos, (SIZE_T) nBytesToWrite);
             memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
             nBytesToWrite -= bytes, *pBytesWritten += bytes, nOffset += bytes;
 
@@ -825,13 +826,6 @@ SAL_CALL osl_mapFile(
     if (uLength > nLimit)
         return osl_File_E_OVERFLOW;
     SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
-
-    OSVERSIONINFO osinfo;
-    osinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    (void)::GetVersionEx(&osinfo);
-
-    if (VER_PLATFORM_WIN32_NT != osinfo.dwPlatformId)
-        return osl_File_E_NOSYS; // Unsupported
 
     FileMapping aMap( ::CreateFileMapping (pImpl->m_hFile, NULL, SEC_COMMIT | PAGE_READONLY, 0, 0, NULL) );
     if (!IsValidHandle(aMap.m_handle))
@@ -1192,3 +1186,5 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     return error;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

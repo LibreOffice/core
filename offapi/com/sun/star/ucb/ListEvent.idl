@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_ListEvent_idl__
 #define __com_sun_star_ucb_ListEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ListAction_idl__
 #include <com/sun/star/ucb/ListAction.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +42,7 @@ published struct ListEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** If you apply the given <type>ListAction</type>s one after the other
-        to the old version of an resultset in given order, you will get the
+        to the old version of an result set in given order, you will get the
         positions in the new version.
     */
     sequence<ListAction> Changes;

@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_datatransfer_clipboard_XClipboard_idl__
 #define __com_sun_star_datatransfer_clipboard_XClipboard_idl__
 
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -88,7 +83,7 @@ published interface XClipboard: com::sun::star::uno::XInterface
         @returns
         The name of this clipboard object.
         <p>If the returned string is empty the
-        clipboard instance ist the system clipboard.</p>
+        clipboard instance is the system clipboard.</p>
     */
     string getName();
 };

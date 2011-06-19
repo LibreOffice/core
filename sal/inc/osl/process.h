@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@ typedef sal_uInt32 oslProcessExitCode;
 typedef enum {
     osl_Process_E_None,                 /* no error */
     osl_Process_E_NotFound,             /* image not found */
-    osl_Process_E_TimedOut,             /* timout occured */
+    osl_Process_E_TimedOut,             /* timout occurred */
     osl_Process_E_NoPermission,         /* permission denied */
     osl_Process_E_Unknown,              /* unknown error */
     osl_Process_E_InvalidError,         /* unmapped error */
@@ -89,8 +90,6 @@ typedef sal_Int32 oslDescriptorFlag;
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 typedef struct {
@@ -103,7 +102,7 @@ typedef struct {
     sal_uInt32              HeapUsage;
 } oslProcessInfo;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #   pragma pack(pop)
 #endif
 
@@ -322,7 +321,7 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
     @return
     osl_Process_E_None on success
     osl_Process_E_TimedOut waiting for the child process timed out
-    osl_Process_E_Unknown an error occured or the parameter are invalid
+    osl_Process_E_Unknown an error occurred or the parameter are invalid
 
     @see osl_executeProcess
 */
@@ -441,3 +440,4 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe Pipe);
 
 #endif    /* _OSL_PROCESS_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

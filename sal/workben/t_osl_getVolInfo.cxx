@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,10 +49,6 @@
 #   define  TEST_PATH_6 "/blah"
 #endif
 
-//------------------------------
-//
-//------------------------------
-
 void test_getVolumeInformation(const rtl::OUString& path_url)
     {
         oslVolumeInfo vi;
@@ -78,10 +75,6 @@ void test_getVolumeInformation(const rtl::OUString& path_url)
         );
     }
 
-//------------------------------
-//
-//------------------------------
-
 class TestClass_osl_getVolumeInformation : public CppUnit::TestFixture
 {
 public:
@@ -95,28 +88,28 @@ public:
 
     void test_osl_getVolumeInformation()
     {
-        rtl::OUString path = rtl::OUString::createFromAscii(TEST_PATH_1);
+        rtl::OUString path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_1));
         rtl::OUString path_url;
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString::createFromAscii(TEST_PATH_2);
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_2));
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString::createFromAscii(TEST_PATH_3);
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_3));
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString::createFromAscii(TEST_PATH_4);
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_4));
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString::createFromAscii(TEST_PATH_5);
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_5));
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
 
-        path = rtl::OUString::createFromAscii(TEST_PATH_6);
+        path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TEST_PATH_6));
         osl_getFileURLFromSystemPath(path.pData, &path_url.pData);
         test_getVolumeInformation(path_url);
     }
@@ -130,3 +123,4 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TestClass_osl_getVolumeInformation, "Test
 
 NOADDITIONAL;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

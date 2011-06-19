@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_MenuBar_idl__
 #define __com_sun_star_awt_MenuBar_idl__
 
-#ifndef __com_sun_star_awt_XMenuBar_idl__
 #include <com/sun/star/awt/XMenuBar.idl>
-#endif
 
 //=============================================================================
 

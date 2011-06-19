@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
 #define __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
 
-#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__
 #include <com/sun/star/awt/tree/XTreeDataModel.idl>
-#endif
-
-#ifndef __com_sun_star_awt_tree_XMutableTreeNode_idl__
 #include <com/sun/star/awt/tree/XMutableTreeNode.idl>
-#endif
 
 //=============================================================================
 
@@ -44,15 +39,15 @@ module com {  module sun {  module star {  module awt {  module tree {
 /** This is the editable version of the <type>XTreeDataModel</type>.
 
     <p>Note that only <type>XTreeNode</type> created from the same instance with <member>createNode</member>
-    are valids nodes for this instance.</p>
+    are valid nodes for this instance.</p>
  */
 published interface XMutableTreeDataModel : XTreeDataModel
 {
     /** creates a new tree node with the given value and given settings.
 
         @param DisplayValue
-            should be convertable to a string and is used by the <type>XTreeControl</type>
-            as a textual represenation of the created node.
+            should be convertible to a string and is used by the <type>XTreeControl</type>
+            as a textual representation of the created node.
 
         @param ChildrenOnDemand
             if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf

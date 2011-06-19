@@ -27,37 +27,21 @@
 #ifndef __com_sun_star_awt_XWindow_idl__
 #define __com_sun_star_awt_XWindow_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XWindowListener_idl__
 #include <com/sun/star/awt/XWindowListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XFocusListener_idl__
 #include <com/sun/star/awt/XFocusListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XKeyListener_idl__
 #include <com/sun/star/awt/XKeyListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XMouseListener_idl__
 #include <com/sun/star/awt/XMouseListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
 #include <com/sun/star/awt/XMouseMotionListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XPaintListener_idl__
 #include <com/sun/star/awt/XPaintListener.idl>
-#endif
 
 
 //=============================================================================

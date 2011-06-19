@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_sdb_application_XCopyTableWizard_idl__
 #define __com_sun_star_sdb_application_XCopyTableWizard_idl__
 
-#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_beans_Optional_idl__
 #include <com/sun/star/beans/Optional.idl>
-#endif
 
 //=============================================================================
 
@@ -85,7 +79,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         set raises ( ::com::sun::star::lang::IllegalArgumentException );
     };
 
-    /** specfies the name of the table in the destination database.
+    /** specifies the name of the table in the destination database.
 
         <p>At initialization time, you can use this attribute to control the
         initial table name as suggested to the user.</p>

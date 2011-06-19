@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_drawing_FillProperties_idl__
 #define __com_sun_star_drawing_FillProperties_idl__
 
-#ifndef __com_sun_star_drawing_FillStyle_idl__
 #include <com/sun/star/drawing/FillStyle.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Gradient_idl__
 #include <com/sun/star/awt/Gradient.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Hatch_idl__
 #include <com/sun/star/drawing/Hatch.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_BitmapMode_idl__
 #include <com/sun/star/drawing/BitmapMode.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XBitmap_idl__
 #include <com/sun/star/awt/XBitmap.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_RectanglePoint_idl__
 #include <com/sun/star/drawing/RectanglePoint.idl>
-#endif
 
 
 //=============================================================================
@@ -132,7 +112,7 @@ published service FillProperties
     [property] boolean FillBackground;
 
     //-------------------------------------------------------------------------
-    /** If the property <memebr>FillStyle</member> is set to <const>
+    /** If the property <member>FillStyle</member> is set to <const>
         FillStyle::BITMAP</const>, this is the name of the used fill bitmap
         style.
     */
@@ -166,7 +146,7 @@ published service FillProperties
 
     //-------------------------------------------------------------------------
     /** Every second line of tiles is moved the given percent of the
-        witdh of the bitmap.
+        width of the bitmap.
     */
     [property] short FillBitmapOffsetX;
 
@@ -235,7 +215,7 @@ published service FillProperties
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
-        to <const>BitmapMode::STRETCH</const>. BUT: behaviour is undefined, if
+        to <const>BitmapMode::STRETCH</const>. BUT: behavior is undefined, if
         the property <member>FillBitmapTile</member> is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property
@@ -253,7 +233,7 @@ published service FillProperties
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
-        to <const>BitmapMode::REPEAT</const>. BUT: behaviour is undefined, if
+        to <const>BitmapMode::REPEAT</const>. BUT: behavior is undefined, if
         the property <member>FillBitmapStretch</member> is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property

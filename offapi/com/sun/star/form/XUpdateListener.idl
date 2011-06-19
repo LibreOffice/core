@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XUpdateListener_idl__
 #define __com_sun_star_form_XUpdateListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 
 //=============================================================================
@@ -55,10 +51,10 @@ published interface XUpdateListener: com::sun::star::lang::XEventListener
     /** is invoked to check the current data.
 
         <p>For a given update process, if one of the <type>XUpdateListener</type>s
-        vetos the change, the update is canceled, and no further notification happens.</p>
+        vetoes the change, the update is canceled, and no further notification happens.</p>
 
         @param aEvent
-            An event dedscriptor specifying the broadcaster of the change.
+            An event descriptor specifying the broadcaster of the change.
 
         @returns
             <TRUE/> when the update was approved, otherwise <FALSE/>.
@@ -71,7 +67,7 @@ published interface XUpdateListener: com::sun::star::lang::XEventListener
         the data has been successfully written.
 
         @param aEvent
-            A event dedscriptor specifying the broadcaster of the change.
+            A event descriptor specifying the broadcaster of the change.
      */
     void updated( [in] com::sun::star::lang::EventObject aEvent );
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,37 +86,18 @@ static Mutex & getInitMutex();
 
 static Sequence< OUString > loader_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
-            seqNames.getArray()[1] = OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(2);
+    seqNames.getArray()[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
+    seqNames.getArray()[1] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
+    return seqNames;
 }
 
 static OUString loader_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.stoc.JavaComponentLoader" ) );
 }
 
 class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo>
@@ -466,15 +448,17 @@ extern "C"
 // NOTE: component_canUnload is not exported, as the library cannot be unloaded.
 
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_view_PrinterDescriptor_idl__
 #define __com_sun_star_view_PrinterDescriptor_idl__
 
-#ifndef __com_sun_star_view_PaperOrientation_idl__
 #include <com/sun/star/view/PaperOrientation.idl>
-#endif
 
-#ifndef __com_sun_star_view_PaperFormat_idl__
 #include <com/sun/star/view/PaperFormat.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
 
 
 //=============================================================================

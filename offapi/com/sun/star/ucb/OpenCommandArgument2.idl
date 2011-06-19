@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_OpenCommandArgument2_idl__
 #define __com_sun_star_ucb_OpenCommandArgument2_idl__
 
-#ifndef __com_sun_star_ucb_OpenCommandArgument_idl__
 #include <com/sun/star/ucb/OpenCommandArgument.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_NumberedSortingInfo_idl__
 #include <com/sun/star/ucb/NumberedSortingInfo.idl>
-#endif
 
 //=============================================================================
 
@@ -42,7 +37,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** The argument for commands like "open", "update", and "synchronize".
 
-    <p>This strcut extends the original OpenCommandArgument, which must not be
+    <p>This struct extends the original OpenCommandArgument, which must not be
     changed for compatibility reasons.
 
     @see XCommandProcessor
@@ -53,7 +48,7 @@ published struct OpenCommandArgument2 : OpenCommandArgument
     /** The sort criteria for the rows of the returned
         <type>ContentResultSet</type>.
 
-        <p>The resultset implementation may ignore this parameter, if it
+        <p>The result set implementation may ignore this parameter, if it
         cannot sort the data by the given criteria in an efficient way (i.e.
         directly using the underlying data source -> SQL-database -> ORDER BY).
     */

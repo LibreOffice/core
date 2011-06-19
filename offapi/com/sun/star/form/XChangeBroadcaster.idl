@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XChangeBroadcaster_idl__
 #define __com_sun_star_form_XChangeBroadcaster_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_form_XChangeListener_idl__
 #include <com/sun/star/form/XChangeListener.idl>
-#endif
 
 
 //=============================================================================

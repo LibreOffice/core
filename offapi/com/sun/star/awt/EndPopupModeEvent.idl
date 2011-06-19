@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_EndPopupModeEvent_idl__
 #define __com_sun_star_awt_EndPopupModeEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
 
 //=============================================================================
 
@@ -41,13 +36,13 @@
 
 //=============================================================================
 
-/** specifies an end popup mode event.
+/** specifies an end pop-up mode event.
  */
 struct EndPopupModeEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** specifies how the popup mode was ended
+    /** specifies how the pop-up mode was ended
         <TRUE/> means the window should be teared-off and positioned at FloatingPosition
         <FALSE/> means the window was closed
      */

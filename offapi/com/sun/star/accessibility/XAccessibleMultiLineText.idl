@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_accessibility_XAccessibleMultiLineText_idl__
 #define __com_sun_star_accessibility_XAccessibleMultiLineText_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
 #include <com/sun/star/accessibility/XAccessibleText.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -73,7 +67,7 @@ interface XAccessibleMultiLineText
     long getLineNumberAtIndex([in] long nIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Retuns the text of the specified line.
+    /** Returns the text of the specified line.
 
         <p>Returns the substring of text that makes up the specified line
         number.</p>

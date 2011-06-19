@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
 #define __com_sun_star_frame_XDispatchProviderInterception_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterceptor_idl__
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
-#endif
 
 
 //=============================================================================
@@ -61,7 +56,7 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
         the first interceptor in the chain of registered interceptors.
 
         @param Interceptor
-            the interceptor which whish to be registered
+            the interceptor which wishes to be registered
 
         @see XDispatchProviderInterception::releaseDispatchProviderInterceptor()
      */
@@ -76,7 +71,7 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
         </p>
 
         @param Interceptor
-            the interceptor which whish to be unregistered
+            the interceptor which wishes to be unregistered
 
         @see XDispatchProviderInterception::registerDispatchProviderInterceptor()
      */

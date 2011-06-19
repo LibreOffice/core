@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_XCachedDynamicResultSetFactory_idl__
 #define __com_sun_star_ucb_XCachedDynamicResultSetFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifierMapping_idl__
 #include <com/sun/star/ucb/XContentIdentifierMapping.idl>
-#endif
 
 //=============================================================================
 
@@ -46,7 +38,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** creates a <type>CachedDynamicResultSet</type>.
 
-    <p>Pay attention to instanciate this helper on clientside where your want
+    <p>Pay attention to instantiate this helper on client side where your want
     to read the data respectively where you have instantiated the listener to
     the <type>XDynamicResultSet</type>.
 
@@ -67,7 +59,7 @@ published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterf
 
         @param ContentIdentifierMapping
         is not required, but can be set if it is necessary to change the
-        identity of the contents accessable via the interface
+        identity of the contents accessible via the interface
         <type>XContentAccess</type> of the <type>ContentResultSet</type>
         (e.g., if merging two sources of the same type).
 

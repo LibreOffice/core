@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,6 @@
 #ifndef _SAL_CONFIG_H_
 #define _SAL_CONFIG_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
 #define INCLUDED_STDLIB_H
@@ -48,7 +41,6 @@ extern "C" {
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
 #define SAL_CONFIGFILE( name ) name ".ini"
-#define SAL_SYSCONFIGFILE( name ) name ".ini"
 
 #ifdef _MSC_VER
 
@@ -82,24 +74,8 @@ extern "C" {
 
 #endif /* defined WIN32 */
 
-/* BR: 16bit fuer Borland-Compiler */
-#ifdef __BORLANDC__
-#define SAL_W16
-#define SAL_DLLEXTENSION ".dll"
-#endif
-/* BR: 16bit fuer Borland-Compiler */
-
-#ifdef OS2
-#define SAL_OS2
-#define SAL_DLLEXTENSION ".dll"
-#define SAL_PRGEXTENSION ".exe"
-#define SAL_PATHSEPARATOR ';'
-#define SAL_PATHDELIMITER '\\'
-#define SAL_CONFIGFILE( name ) name ".ini"
-#define SAL_SYSCONFIGFILE( name ) name ".ini"
-#endif
-
-#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(SCO)
+#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
+    defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"
@@ -107,7 +83,6 @@ extern "C" {
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef MACOSX
@@ -118,16 +93,22 @@ extern "C" {
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
-#ifdef HPUX
+#ifdef IOS
 #define SAL_UNX
-#define SAL_DLLEXTENSION ".sl"
+/* SAL_DLLEXTENSION should not really be used on iOS, as iOS apps are
+ * not allowed to load own dynamic libraries.
+ */
+#define SAL_DLLEXTENSION ".dylib"
 #define SAL_DLLPREFIX "lib"
+/* This is fairly pointless too, an iOS app consists of a single
+ * executable (plus data files).
+ */
 #define SAL_PRGEXTENSION ".bin"
+#define SAL_PATHSEPARATOR ':'
+#define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef sun
@@ -150,3 +131,4 @@ extern "C" {
 #endif /*_SAL_CONFIG_H_ */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,12 +33,12 @@ TARGET=reg
 UNIXVERSIONNAMES=UDK
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
 
 USE_LDUMP2=TRUE
-#USE_DEFFILE=TRUE
 LDUMP2=LDUMP3
 
 DOCPPFILES= $(INC)$/registry$/registry.hxx \

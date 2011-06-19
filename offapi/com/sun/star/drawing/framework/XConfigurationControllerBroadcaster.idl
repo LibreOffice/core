@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
 #define __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -61,7 +57,7 @@ published interface XConfigurationControllerBroadcaster
             will be called for all types of event.
         @param aUserData
             Arbitrary data that is passed to the listener when it is called
-            for the specified event type.  When one listener is regisered
+            for the specified event type.  When one listener is registered
             for more than one event type then different user data objects
             may be given as well.  Supplying unique integer values allows
             the listener to use a switch statement to distinguish between

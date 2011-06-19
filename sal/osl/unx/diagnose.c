@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -254,8 +255,10 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* output message buffer */
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
-    /* output backtrace */
-    osl_diagnose_backtrace_Impl(f);
+    /* should we output backtrace? */
+    char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
+    if( envBacktrace != NULL && *envBacktrace != '\0' )
+        osl_diagnose_backtrace_Impl(f);
 
     /* release lock and leave */
     pthread_mutex_unlock(&g_mutex);
@@ -314,3 +317,5 @@ void osl_trace(char const * pszFormat, ...) {
     printTrace((unsigned long) getpid(), pszFormat, args);
     va_end(args);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

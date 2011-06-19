@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_text_XAutoTextContainer_idl__
 #define __com_sun_star_text_XAutoTextContainer_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
 
-#ifndef __com_sun_star_text_XAutoTextGroup_idl__
 #include <com/sun/star/text/XAutoTextGroup.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 
 //=============================================================================

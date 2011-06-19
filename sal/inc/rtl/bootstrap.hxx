@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ namespace rtl
             an arbitrary value
 
             @return
-            the given value, with all occurences of special characters ("$" and
+            the given value, with all occurrences of special characters ("$" and
             "\") escaped
 
             @since UDK 3.2.9
@@ -232,3 +233,5 @@ namespace rtl
     }
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

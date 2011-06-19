@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -312,3 +313,4 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
 
 #endif /* OSL_USE_SYS_V_SEMAPHORE */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,11 @@ namespace css = com::sun::star;
 namespace ucss = unoidl::com::sun::star;
 
 using namespace cli_uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
 extern "C"
 {
 //------------------------------------------------------------------------------
@@ -305,8 +310,8 @@ bool UnoInterfaceProxy::CanCastTo(System::Type* fromType,
     catch (BridgeRuntimeError& e)
     {
         (void) e; // avoid warning
-        OSL_ENSURE(
-            0, OUStringToOString(
+        OSL_FAIL(
+            OUStringToOString(
                 e.m_message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     catch (System::Exception* e)
@@ -316,14 +321,14 @@ bool UnoInterfaceProxy::CanCastTo(System::Type* fromType,
             S"UnoInterfaceProxy::CanCastTo().  Original"
             S"message: \n");
         msg= System::String::Concat(msg, e->get_Message());
-        OSL_ENSURE(
-            0, OUStringToOString(
+        OSL_FAIL(
+            OUStringToOString(
                 mapCliString(msg), RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     catch (...)
     {
-        OSL_ENSURE(
-            0, "An unexpected native C++ exception occurred in "
+        OSL_FAIL(
+            "An unexpected native C++ exception occurred in "
             "UnoInterfaceProxy::CanCastTo()" );
     }
     __finally
@@ -860,7 +865,6 @@ sr::MethodInfo* CliProxy::getMethodInfo(int nUnoFunctionPos,
                                 "cli object does not implement interface method: "));
             buf.append(usMethodName);
             throw BridgeRuntimeError(buf.makeStringAndClear());
-            return 0;
         }
         m_arUnoPosToCliPos[nUnoFunctionPos] = indexCliMethod;
         ret = m_arMethodInfos[indexCliMethod];
@@ -1106,7 +1110,7 @@ void SAL_CALL cli_proxy_dispatch(
                     {
                         uno_any_construct( (uno_Any *)uno_ret, 0, 0, 0 );
                     }
-                    // no excetpion occured
+                    // no excetpion occurred
                     *uno_exc = 0;
                 }
                 else
@@ -1167,7 +1171,7 @@ void SAL_CALL cli_proxy_dispatch(
 #if OSL_DEBUG_LEVEL >= 1
         OString cstr_msg(OUStringToOString(exc.Message,
                                              RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE(0, cstr_msg.getStr());
+        OSL_FAIL(cstr_msg.getStr());
 #endif
     }
 }
@@ -1176,3 +1180,4 @@ void SAL_CALL cli_proxy_dispatch(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

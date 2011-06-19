@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_MediaTypeDetectionHelper_idl__
 #define __com_sun_star_frame_MediaTypeDetectionHelper_idl__
 
-#ifndef __com_sun_star_util_XStringMapping_idl__
 #include <com/sun/star/util/XStringMapping.idl>
-#endif
 
 //=============================================================================
 
@@ -45,7 +43,7 @@ published service MediaTypeDetectionHelper
     /** provides a mapping from <atom>string<atom> to <atom>string<atom>
 
         <p>
-        Order of given and their returned coressponding strings is important.
+        Order of given and their returned corresponding strings is important.
         Don't pack or optimize it. Every item of [in] list must match
         to an item of [out] list.
         </p>

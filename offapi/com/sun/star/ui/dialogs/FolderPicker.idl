@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_ui_dialogs_FolderPicker_idl__
 #define __com_sun_star_ui_dialogs_FolderPicker_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XTypeProvider_idl__
 #include <com/sun/star/lang/XTypeProvider.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCancellable_idl__
 #include <com/sun/star/util/XCancellable.idl>
-#endif
 
 //=============================================================================
 
@@ -76,7 +65,7 @@ published service FolderPicker
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
-        <p>This may be usefull for automatic test tools for instance.</p>
+        <p>This may be useful for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 };

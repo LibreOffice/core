@@ -36,6 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -43,7 +45,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 SHL1OBJS=  \
     $(SLO)$/osl_File.obj
 SHL1TARGET= osl_File
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
@@ -54,7 +56,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 SHL2OBJS=$(SLO)$/test_cpy_wrt_file.obj
 SHL2TARGET=tcwf
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
@@ -67,7 +69,7 @@ DEF2NAME    =$(SHL2TARGET)
 SHL3OBJS=  \
     $(SLO)$/osl_old_test_file.obj
 SHL3TARGET= osl_old_test_file
-SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL3IMPLIB= i$(SHL3TARGET)
 
@@ -79,7 +81,9 @@ SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
 # do this here, so we get right dependencies
 SLOFILES=$(SHL1OBJS)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XCachedDynamicResultSetStubFactory_idl__
 #define __com_sun_star_ucb_XCachedDynamicResultSetStubFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_NumberedSortingInfo_idl__
 #include <com/sun/star/ucb/NumberedSortingInfo.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XAnyCompareFactory_idl__
 #include <com/sun/star/ucb/XAnyCompareFactory.idl>
-#endif
 
 //=============================================================================
 
@@ -52,14 +41,14 @@ module com { module sun { module star { module ucb {
     optimized <type>DynamicResultSet</type> to a remote optimized
     <type>CachedDynamicResultSet</type>.
 
-    <p>Pay attention to instanciate this helper on serverside where your source
-    <type>DynamicResultSet</type> was instanciated.
+    <p>Pay attention to instantiate this helper on server side where your source
+    <type>DynamicResultSet</type> was instantiated.
 
     <p>Method
     <member>XCachedDynamicResultSetStubFactory::createCachedDynamicResultSetStub</member>
-    can be used to create a stub on serverside.
+    can be used to create a stub on server side.
 
-    <p>If you have instanciated a <type>CachedDynamicResultSet</type> on client
+    <p>If you have instantiated a <type>CachedDynamicResultSet</type> on client
     side already, use method <member>connectToCache</member> to connect your
     given DynamicResultSet with this Cache.
 
@@ -83,7 +72,7 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
                 [in] com::sun::star::ucb::XDynamicResultSet Source );
 
     //-------------------------------------------------------------------------
-    /** If you have instanciated a <type>CachedDynamicResultSet</type> on
+    /** If you have instantiated a <type>CachedDynamicResultSet</type> on
         client side already, use this to connect your given Source on server
         side to the TargetCache.
 
@@ -99,7 +88,7 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
 
         @param CompareFactory
         will be ignored unless SortingInfo is not empty. Then the supplied
-        factory will be used to instanciate objects used to compare the
+        factory will be used to instantiate objects used to compare the
         properties that are involved in sorting.
 
         @throws ListenerAlreadySetException

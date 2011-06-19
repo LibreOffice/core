@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
-//#include "libxml/xpathinternals.h"
 #include "rtl/ustring.hxx"
 namespace jfw
 {
@@ -49,7 +49,7 @@ public:
      */
     CXPathObjectPtr & operator = (xmlXPathObject* pObj);
     xmlXPathObject* operator -> ();
-    operator xmlXPathObject* ();
+    operator xmlXPathObject* () const;
 };
 
 //===========================================================
@@ -65,7 +65,7 @@ public:
     CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
     xmlXPathContext* operator -> ();
-    operator xmlXPathContext* ();
+    operator xmlXPathContext* () const;
 };
 
 //===========================================================
@@ -84,26 +84,8 @@ public:
     CXmlDocPtr & operator = (xmlDoc* pObj);
     ~CXmlDocPtr();
     xmlDoc* operator -> ();
-    operator xmlDoc* ();
+    operator xmlDoc* () const;
 };
-
-//===========================================================
-// class CXmlNsPtr
-// {
-//     xmlNs* _object;
-
-//     CXmlNsPtr(const CXmlNsPtr&);
-//     CXmlNsPtr & operator = (const CXmlNsPtr&);
-// public:
-//     CXmlNsPtr();
-//     CXmlNsPtr(xmlNs* aDoc);
-//     /** Takes ownership of xmlDoc
-//      */
-//     CXmlNsPtr & operator = (xmlNs* pObj);
-//     ~CXmlNsPtr();
-//     xmlNs* operator -> ();
-//     operator xmlNs* ();
-// };
 
 //===========================================================
 class CXmlCharPtr
@@ -118,8 +100,7 @@ public:
     CXmlCharPtr(const ::rtl::OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
-//    xmlChar* operator -> ();
-    operator xmlChar* ();
+    operator xmlChar* () const;
     operator ::rtl::OUString ();
     operator ::rtl::OString ();
 };
@@ -127,3 +108,5 @@ public:
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

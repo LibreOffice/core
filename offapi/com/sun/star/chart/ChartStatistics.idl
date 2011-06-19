@@ -27,22 +27,10 @@
 #ifndef __com_sun_star_chart_ChartStatistics_idl__
 #define __com_sun_star_chart_ChartStatistics_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartErrorCategory_idl__
 #include <com/sun/star/chart/ChartErrorCategory.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartErrorIndicatorType_idl__
 #include <com/sun/star/chart/ChartErrorIndicatorType.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartRegressionCurveType_idl__
 #include <com/sun/star/chart/ChartRegressionCurveType.idl>
-#endif
-
 #include <com/sun/star/chart/ErrorBarStyle.idl>
 
 //=============================================================================
@@ -120,7 +108,7 @@ published service ChartStatistics
     /** specifies the percentage that is used to display error bars.
 
         <p>The length of the error indicators is calculated for each
-        data point by taking the given percentatge of its value.</p>
+        data point by taking the given percentage of its value.</p>
 
         <p>this setting is effective if the
         <member>ChartStatistics::ErrorCategory</member> is set to
@@ -163,7 +151,7 @@ published service ChartStatistics
      */
     [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
 
-    /** contains a cell range string for positve error bars. This
+    /** contains a cell range string for positive error bars. This
         property is used when the <type>ErrorBarCategory</type> is set
         to <member>ErrorBarCategory::FROM_DATA</member>.
      */

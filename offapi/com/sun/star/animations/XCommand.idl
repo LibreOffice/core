@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_animations_XCommand_idl__
 #define __com_sun_star_animations_XCommand_idl__
 
-#ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
-#endif
 
 //=============================================================================
 
@@ -37,7 +35,7 @@
 
 //=============================================================================
 
-/** Execution of the XCommand animation node causes the slideshow component
+/** Execution of the XCommand animation node causes the slide show component
     to call back the application to perform the command.
 */
 interface XCommand : XAnimationNode

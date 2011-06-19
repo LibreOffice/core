@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #endif
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #ifdef CONTEXT_DIAG
 #include <map>
 #endif
@@ -63,7 +64,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
-#include <hash_map>
 #include <memory>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
@@ -362,7 +362,7 @@ protected:
             , lateInit( lateInit_ )
             {}
     };
-    typedef ::std::hash_map< OUString, ContextEntry * , OUStringHash > t_map;
+    typedef ::boost::unordered_map< OUString, ContextEntry * , OUStringHash > t_map;
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;
@@ -615,7 +615,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         Any caught( getCaughtException() );
         OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "exception occured raising singleton \"") );
+                             "exception occurred raising singleton \"") );
         buf.append( rName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": ") );
         buf.append( exc.Message );
@@ -851,7 +851,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         catch (Exception & exc)
         {
             (void) exc; // avoid warning about unused variable
-            OSL_ENSURE( 0, OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             xContext.clear();
         }
@@ -860,8 +860,6 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
     {
         xContext = xDelegate;
     }
-
-    delete[] pEntries;
 
     *ppContext = pTarget2curr->mapInterface(xContext.get(), ::getCppuType(&xContext));
 }}
@@ -892,8 +890,11 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     void * mapped_delegate = curr2source.mapInterface(xDelegate.get(), ::getCppuType(&xDelegate));
     XComponentContext * pXComponentContext = NULL;
     source_env.invoke(s_createComponentContext_v, mapped_entries, nEntries, mapped_delegate, &pXComponentContext, &source2curr);
+    delete[] mapped_entries;
 
     return Reference<XComponentContext>(pXComponentContext, SAL_NO_ACQUIRE);
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,14 +26,8 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_CONDITION_CONST_H_
 #define _OSL_CONDITION_CONST_H_
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -56,7 +51,9 @@
 #include <unistd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )
@@ -70,3 +67,5 @@ const char pTestString[17] = "Sun Microsystems";
 
 
 #endif /* _OSL_CONDITION_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

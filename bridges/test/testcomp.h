@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,12 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//#include <com/sun/star/bridge/XServer.hpp>
-//#include <com/sun/star/bridge/XClient.hpp>
+
 #include <stdio.h>
 
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
-//#include <com/sun/star/bridge/XConnectionAdministration.hpp>
 #include <osl/thread.hxx>
 
 
@@ -154,3 +153,5 @@ public:
 };
 
 void testRemote( const Reference< XInterface > &rRemote );
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

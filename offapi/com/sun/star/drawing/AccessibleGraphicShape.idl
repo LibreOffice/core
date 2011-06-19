@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_drawing_AccessibleGraphicShape_idl__
 #define __com_sun_star_drawing_AccessibleGraphicShape_idl__
 
-#ifndef __com_sun_star_drawing_AccessibleShape_idl__
 #include <com/sun/star/drawing/AccessibleShape.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleImage_idl__
 #include <com/sun/star/accessibility/XAccessibleImage.idl>
-#endif
 
 module com {  module sun {  module star {  module drawing {
 
@@ -42,7 +37,7 @@ module com {  module sun {  module star {  module drawing {
     graphic object shapes shapes com.sun.star.drawing.GraphicObjectShape and
     com.sun.star.presentation.GraphicObjectShape.
 
-    <p>It differs from the included <type>AccessibleShape</type> 'base'
+    <p>It differs from the included <type>AccessibleShape</type> "base"
     service by the additional support of the
     <type
     scope="::com::sun::star::accessibility">XAccessibleImage</type>

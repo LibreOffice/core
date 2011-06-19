@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_linguistic2_XThesaurus_idl__
 #define __com_sun_star_linguistic2_XThesaurus_idl__
 
-#ifndef __com_sun_star_linguistic2_XSupportedLocales_idl__
 #include <com/sun/star/linguistic2/XSupportedLocales.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XMeaning_idl__
 #include <com/sun/star/linguistic2/XMeaning.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
 
 //=============================================================================
 

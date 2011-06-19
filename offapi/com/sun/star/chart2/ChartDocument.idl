@@ -29,11 +29,9 @@
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-
 #include <com/sun/star/chart2/XChartDocument.idl>
 #include <com/sun/star/chart2/XUndoSupplier.idl>
 #include <com/sun/star/chart2/data/XDataReceiver.idl>
-
 #include <com/sun/star/chart2/XTitled.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define _REGIMPL_HXX_
 
 #include <set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include    <registry/registry.h>
 #include    <rtl/ustring.hxx>
@@ -60,9 +61,6 @@
 
 #define REG_GUARD(mutex) \
     osl::Guard< osl::Mutex > aGuard( mutex );
-
-// @@@ using namespace rtl;
-// @@@ using namespace osl;
 
 class ORegKey;
 class RegistryTypeReader;
@@ -122,7 +120,7 @@ public:
 
     ORegKey*    getRootKey();
 
-    const store::OStoreFile& getStoreFile()
+    const store::OStoreFile& getStoreFile() const
         { return m_file; }
 
     const rtl::OUString&    getName() const
@@ -167,7 +165,7 @@ private:
                         const rtl::OUString& sName,
                         sal_Int16 nSpace) const;
 
-    typedef std::hash_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
+    typedef boost::unordered_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;
@@ -182,3 +180,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

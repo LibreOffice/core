@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
+#include <boost/unordered_map.hpp>
+
 #include <cxxabi.h>
-#include <hash_map>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -45,7 +47,6 @@
 #include <uno/any2.h>
 
 #include "share.hxx"
-
 
 using namespace ::std;
 using namespace ::osl;
@@ -102,7 +103,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 //==================================================================================================
 class RTTI
 {
-    typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
@@ -118,7 +119,11 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
+#if defined(FREEBSD) && __FreeBSD_version < 702104
+    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
+#else
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
+#endif
 {
 }
 //__________________________________________________________________________________________________
@@ -153,7 +158,11 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
+#if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
+        rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
+#else
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+#endif
 
         if (rtti)
         {
@@ -229,7 +238,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
+    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
 #endif
     void * pCppExc;
     type_info * rtti;
@@ -294,7 +303,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
         return;
     }
@@ -303,7 +312,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if OSL_DEBUG_LEVEL > 1
     OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
+    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
 #endif
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
@@ -315,7 +324,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
         OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
     }
     else
@@ -328,3 +337,4 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_accessibility_XAccessibleTextMarkup_idl__
 #define __com_sun_star_accessibility_XAccessibleTextMarkup_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
 #include <com/sun/star/accessibility/XAccessibleText.idl>
-#endif
-#ifndef __com_sun_star_accessibility_TextSegment_idl__
 #include <com/sun/star/accessibility/TextSegment.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -125,7 +115,7 @@ interface XAccessibleTextMarkup
 
         @return
             If character index is in range [0..number of characters in the text-1],
-            a seguence of <type>TextSegment</type>s of the text markups at
+            a sequence of <type>TextSegment</type>s of the text markups at
             given character index of the given text markup type are returned.
             The sequence is empty, if no such text markup is found.
     */

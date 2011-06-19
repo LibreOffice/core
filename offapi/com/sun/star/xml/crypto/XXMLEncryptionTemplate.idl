@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -34,7 +34,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
 #include <com/sun/star/xml/crypto/XXMLSecurityTemplate.idl>
 
@@ -44,19 +43,19 @@ module com { module sun { module star { module xml { module crypto {
  * Interface of XML encryption template
  *
  * <p>This interface represents a encryption template, which is the same as the
- * desired xml encryption element[ EncryptedType ] but some of the nodes may be
+ * desired XML encryption element[ EncryptedType ] but some of the nodes may be
  * empty. The empty entities include CipherValue, which is a subset of
  * EncryptedData or EncryptedKey. Empty entities are not allowed in a encryption
  * template when performing decryption.</p>
  *
- * <p>In some cases, the encrypter or decrypter can dertermine and locate the
- * EncrytedKey from the encryption template by dereference the RetrievalMethod
+ * <p>In some cases, the encryptor or decryptor can determine and locate the
+ * EncryptedKey from the encryption template by dereference the RetrievalMethod
  * inside EncryptedData.</p>
  *
  * <p>In some cases, the EncryptedKey need to be clearly pointed out by the
  * encryption template.</p>
  *
- * <p>With the help of encryption context, the encrypter or decrypter specifies
+ * <p>With the help of encryption context, the encryptor or decryptor specifies
  * the key from the KeyInfo in the encryption template.</p>
  *
  *
@@ -67,12 +66,12 @@ module com { module sun { module star { module xml { module crypto {
  * except that the high level application tell the mechanism and parameters.
  *
  * So I think it will be more simple that the application set the encrypted key
- * information. In this case, the application only need to know the xml schema
+ * information. In this case, the application only need to know the XML schema
  * or DTD and the encryption device. If so, the high level application takes the
  * action of build the EncryptedKey template and references it in the element of
  * EncryptedData. And in this case, the calling to set up EncryptedKey template
- * and target is not necessary, because the encrypter or decrypter can determine
- * and locate the EncrypedKet from the encryption template of EncryptedData by
+ * and target is not necessary, because the encryptor or decryptor can determine
+ * and locate the EncryptedKey from the encryption template of EncryptedData by
  * dereference the RetrievalMethod.
  *
  * In some situation, the high level applications do not want to know anything
@@ -83,7 +82,7 @@ module com { module sun { module star { module xml { module crypto {
 interface XXMLEncryptionTemplate : XXMLSecurityTemplate
 {
     /**
-     * Get the target xml element, i.e. the element to be encrypted
+     * Get the target XML element, i.e. the element to be encrypted
      */
     com::sun::star::xml::wrapper::XXMLElementWrapper getTarget(
     ) ;

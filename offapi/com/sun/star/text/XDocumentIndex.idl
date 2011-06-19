@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_XDocumentIndex_idl__
 #define __com_sun_star_text_XDocumentIndex_idl__
 
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
 
 
 //=============================================================================
@@ -69,7 +67,7 @@ published interface XDocumentIndex: com::sun::star::text::XTextContent
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XDocumentIndex::update
-    /** initiates an upate to the document index.
+    /** initiates an update to the document index.
      */
     void update();
 

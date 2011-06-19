@@ -28,33 +28,13 @@
 #ifndef __com_sun_star_frame_LayoutManager_idl__
 #define __com_sun_star_frame_LayoutManager_idl__
 
-#ifndef __com_sun_star_frame_XLayoutManager_idl__
 #include <com/sun/star/frame/XLayoutManager.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrameActionListener_idl__
 #include <com/sun/star/frame/XFrameActionListener.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationListener_idl__
 #include <com/sun/star/ui/XUIConfigurationListener.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XInplaceLayout_idl__
 #include <com/sun/star/frame/XInplaceLayout.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XMenuBarMergingAcceptor_idl__
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XLayoutManagerEventBroadcaster_idl__
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
-#endif
 
 //=============================================================================
 

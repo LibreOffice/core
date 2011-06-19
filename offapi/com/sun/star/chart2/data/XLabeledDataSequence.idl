@@ -29,7 +29,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/chart2/data/XDataSequence.idl>
-// #include <com/sun/star/lang/IllegalArgumentException.idl>
 
 module com
 {
@@ -42,7 +41,7 @@ module chart2
 module data
 {
 
-/** allows acces to a one-dimensional sequence of data.
+/** allows access to a one-dimensional sequence of data.
 
     <p>The data that is stored in this container may contain different
     types.</p>

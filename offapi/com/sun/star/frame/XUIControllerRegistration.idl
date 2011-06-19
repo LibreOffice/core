@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_frame_XUIControllerRegistration_idl__
 #define __com_sun_star_frame_XUIControllerRegistration_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -73,7 +71,7 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
         and a command URL and optional module.
 
         @param aCommandURL
-            a command URL which specifies an action which shoudl be associated with a user
+            a command URL which specifies an action which should be associated with a user
             interface controller.
 
         @param aModelName
@@ -90,7 +88,7 @@ published interface XUIControllerRegistration : com::sun::star::uno::XInterface
         implementation and a command URL and optional module.
 
         @param aCommandURL
-            a command URL which specifies an action which shoudl be associated with a user
+            a command URL which specifies an action which should be associated with a user
             interface controller.
 
         @param aModelName

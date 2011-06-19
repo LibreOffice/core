@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_configuration_backend_XMultiLayerStratum_idl__
 #define __com_sun_star_configuration_backend_XMultiLayerStratum_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XUpdatableLayer_idl__
 #include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
 
 //=============================================================================
 
@@ -90,7 +73,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @return
                 a list of layer identifiers that can be used to
                 retrieve <type>Layer</type> objects.
-                <p> The list ist ordered by priority. Typically
+                <p> The list is ordered by priority. Typically
                    the most general layers (global defaults,
                    entire organization) are first, more specific layers
                    (associated to specific groups or roles) are next

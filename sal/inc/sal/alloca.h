@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,14 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (SOLARIS) || defined (LINUX) || defined(__EMX__)
+#if defined (SOLARIS) || defined (LINUX) || defined(__EMX__) || defined(AIX) || defined(ANDROID)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>
 #define INCLUDED_ALLOCA_H
 #endif
 
-#elif defined (FREEBSD) || defined(NETBSD)
+#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
@@ -43,6 +44,13 @@
 #endif
 
 #elif defined (MACOSX)
+
+#ifndef INCLUDED_SYS_TYPES_H
+#include <sys/types.h>
+#define INCLUDED_SYS_TYPES_H
+#endif
+
+#elif defined (IOS)
 
 #ifndef INCLUDED_SYS_TYPES_H
 #include <sys/types.h>
@@ -64,3 +72,4 @@
 
 #endif  /* INCLUDED_SAL_ALLOCA_H */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

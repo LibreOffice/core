@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_PropertiesManager_idl__
 #define __com_sun_star_ucb_PropertiesManager_idl__
 
-#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
 #include <com/sun/star/beans/XPropertySetInfo.idl>
-#endif
 
 //=============================================================================
 
@@ -37,7 +35,7 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** This service provides access to the meta data of the well known
-    (prefdefined) UCB properties.
+    (predefined) UCB properties.
 
     @see com::sun::star::ucb::UniversalContentBroker
     @see com::sun::star::ucb::ContentProvider
@@ -47,7 +45,7 @@ published service PropertiesManager
 {
     //-------------------------------------------------------------------------
     /** This interface provides access to the meta data of the well known
-        (prefdefined) UCB properties.
+        (predefined) UCB properties.
      */
     interface com::sun::star::beans::XPropertySetInfo;
 };

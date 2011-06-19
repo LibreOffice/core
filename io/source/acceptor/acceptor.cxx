@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -300,18 +301,9 @@ namespace io_acceptor
 
     Sequence< OUString > acceptor_getSupportedServiceNames()
     {
-        static Sequence < OUString > *pNames = 0;
-        if( ! pNames )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( !pNames )
-            {
-                static Sequence< OUString > seqNames(1);
-                seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
-                pNames = &seqNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > seqNames(1);
+        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+        return seqNames;
     }
 
         OUString OAcceptor::getImplementationName() throw()
@@ -360,13 +352,13 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 }
 
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
@@ -375,3 +367,4 @@ void * SAL_CALL component_getFactory(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

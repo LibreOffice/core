@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XLoadListener_idl__
 #define __com_sun_star_form_XLoadListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 
 //=============================================================================
@@ -58,7 +54,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
     /** is invoked when the object has successfully connected to a datasource.
 
         @param aEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void loaded( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -69,7 +65,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         the event source before the object is unloaded.</p>
 
         @param aEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void unloading( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -78,7 +74,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
     /** is invoked after the object has disconnected from a datasource.
 
         @param aEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void unloaded( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -90,7 +86,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
         to the event source until they get the reloaded event.</p>
 
         @param aEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void reloading( [in] com::sun::star::lang::EventObject aEvent );
 
@@ -99,7 +95,7 @@ published interface XLoadListener: com::sun::star::lang::XEventListener
     /** is invoked when the object has been reloaded.
 
         @param aEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void reloaded( [in] com::sun::star::lang::EventObject aEvent );
 };

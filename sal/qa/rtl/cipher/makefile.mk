@@ -37,6 +37,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -48,7 +50,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_cipher.obj
 
 SHL1TARGET= rtl_cipher
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -63,8 +65,9 @@ SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # do this here, so we get right dependencies
 # SLOFILES=$(SHL1OBJS)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

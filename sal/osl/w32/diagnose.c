@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,6 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
     HWND hWndParent;
     UINT nFlags;
-    int  nCode;
 
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
@@ -111,6 +111,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
         {
             TCHAR   szBoxMessage[1024];
+            int     nCode;
 
             /* active popup window for the current thread */
             hWndParent = GetActiveWindow();
@@ -156,8 +157,6 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
     if (hWndParent != NULL)
         hWndParent = GetLastActivePopup(hWndParent);
 
-    nType = nType; /* avoid warnings */
-
     /* set message box flags */
     nFlags = MB_TASKMODAL | MB_ICONERROR | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
     if (hWndParent == NULL)
@@ -165,7 +164,8 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 
     // display the assert
     nDisposition = MessageBox(hWndParent, pszMessage, "Exception!", nFlags);
-
+    (void)nType; //unused, but part of public API/ABI
     return nDisposition;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

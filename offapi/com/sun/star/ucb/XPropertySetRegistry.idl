@@ -27,20 +27,15 @@
 #ifndef __com_sun_star_ucb_XPropertySetRegistry_idl__
 #define __com_sun_star_ucb_XPropertySetRegistry_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XPersistentPropertySet_idl__
 #include <com/sun/star/ucb/XPersistentPropertySet.idl>
-#endif
 
 //=============================================================================
 
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A registry (storage medium) for persistent propertysets.
+/** A registry (storage medium) for persistent property sets.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -49,26 +44,26 @@ module com { module sun { module star { module ucb {
 published interface XPropertySetRegistry : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a new or opens an existing propertyset in the registry.
+    /** creates a new or opens an existing property set in the registry.
 
         @param key
-        The key to use for addressing the propertyset.
+        The key to use for addressing the property set.
 
         @param create
         Indicates whether a new set shall be created in case there
         does not already exist one for the given key.
 
         @returns
-        The propertyset.
+        The property set.
       */
     com::sun::star::ucb::XPersistentPropertySet
     openPropertySet( [in] string key, [in] boolean create );
 
     //-------------------------------------------------------------------------
-    /** removes a propertyset from the registry.
+    /** removes a property set from the registry.
 
         @param key
-        The key to use for addressing the propertyset.
+        The key to use for addressing the property set.
       */
     [oneway] void removePropertySet( [in] string key );
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,16 +26,11 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
-
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <sal/cppunit.h>
+
 #include <osl_Mutex_Const.h>
 
 using namespace osl;
@@ -76,7 +72,7 @@ namespace ThreadHelper
 #ifdef WNT                               //Windows
         Sleep( _nSec * 1000 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
+#if ( defined UNX )                     //Unix
         sleep( _nSec );
 #endif
         // printf("# done\n" );
@@ -86,7 +82,7 @@ namespace ThreadHelper
 #ifdef WNT      //Windows
             Sleep(_nTenthSec * 100 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )                     //Unix
             TimeValue nTV;
             nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
             nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
@@ -512,15 +508,6 @@ namespace osl_Mutex
         // how about release twice?
         void release_002()
         {
-// LLA: is this a real test?
-#if 0
-            Mutex aMutex;
-            sal_Bool bRes1 = aMutex.release( );
-            sal_Bool bRes2 = aMutex.release( );
-
-            CPPUNIT_ASSERT_MESSAGE( "release Mutex: mutex should not be released without aquire, should not release twice. although the behaviour is still under discussion, this test is passed on (LINUX), not passed on (SOLARIS)&(WINDOWS)",
-                bRes1 == sal_False && bRes2 == sal_False );
-#endif
         }
 
         CPPUNIT_TEST_SUITE( release );
@@ -947,3 +934,5 @@ CPPUNIT_PLUGIN_IMPLEMENT();
 // Local Variables:
 // tab-width:4
 // End:
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,16 +25,14 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for xml security module
 
 /** -- idl definition -- **/
 
 #ifndef __com_sun_star_security_CertificateException_idl__
 #define __com_sun_star_security_CertificateException_idl__
 
-#ifndef __com_sun_star_uno_SecurityException_idl__
 #include <com/sun/star/uno/SecurityException.idl>
-#endif
 
 //=============================================================================
 

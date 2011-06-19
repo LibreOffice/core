@@ -27,37 +27,20 @@
 #ifndef __com_sun_star_lang_ServiceManager_idl__
 #define __com_sun_star_lang_ServiceManager_idl__
 
-#ifndef __com_sun_star_lang_MultiServiceFactory_idl__
 #include <com/sun/star/lang/MultiServiceFactory.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_container_XSet_idl__
 #include <com/sun/star/container/XSet.idl>
-#endif
 
-#ifndef __com_sun_star_container_XContentEnumerationAccess_idl__
 #include <com/sun/star/container/XContentEnumerationAccess.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XMultiComponentFactory_idl__
 #include <com/sun/star/lang/XMultiComponentFactory.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

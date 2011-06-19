@@ -46,337 +46,337 @@ published enum FadeEffect
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Left'.
+    /** use the fade effect "Fade from Left".
      */
     FADE_FROM_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Top'.
+    /** use the fade effect "Fade from Top".
      */
     FADE_FROM_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Right'.
+    /** use the fade effect "Fade from Right".
      */
     FADE_FROM_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Bottom'.
+    /** use the fade effect "Fade from Bottom".
      */
     FADE_FROM_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade to Center'.
+    /** use the fade effect "Fade to Center".
      */
     FADE_TO_CENTER,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Center'.
+    /** use the fade effect "Fade from Center".
      */
     FADE_FROM_CENTER,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Left'.
+    /** use the fade effect "Move from Left".
      */
     MOVE_FROM_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Top'.
+    /** use the fade effect "Move from Top".
      */
     MOVE_FROM_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Right'.
+    /** use the fade effect "Move from Right".
      */
     MOVE_FROM_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Bottom'.
+    /** use the fade effect "Move from Bottom".
      */
     MOVE_FROM_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Roll from Left'.
+    /** use the fade effect "Roll from Left".
      */
     ROLL_FROM_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Roll from Top'.
+    /** use the fade effect "Roll from Top".
      */
     ROLL_FROM_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Roll from Right'.
+    /** use the fade effect "Roll from Right".
      */
     ROLL_FROM_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Roll from Bottom'.
+    /** use the fade effect "Roll from Bottom".
      */
     ROLL_FROM_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Vertical Stripes'.
+    /** use the fade effect "Vertical Stripes".
      */
     VERTICAL_STRIPES,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Horizontal Stripes'.
+    /** use the fade effect "Horizontal Stripes".
      */
     HORIZONTAL_STRIPES,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Clockwise'.
+    /** use the fade effect "Clockwise".
      */
     CLOCKWISE,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Counter Clockwise'.
+    /** use the fade effect "Counter Clockwise".
      */
     COUNTERCLOCKWISE,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Upper Left'.
+    /** use the fade effect "Fade from Upper Left".
      */
     FADE_FROM_UPPERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Upper Right'.
+    /** use the fade effect "Fade from Upper Right".
      */
     FADE_FROM_UPPERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Lower Left'.
+    /** use the fade effect "Fade from Lower Left".
      */
     FADE_FROM_LOWERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Fade from Lower Right'.
+    /** use the fade effect "Fade from Lower Right".
      */
     FADE_FROM_LOWERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Close Vertical'.
+    /** use the fade effect "Close Vertical".
      */
     CLOSE_VERTICAL,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Close Horizontal'.
+    /** use the fade effect "Close Horizontal".
      */
     CLOSE_HORIZONTAL,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Open Vertical'.
+    /** use the fade effect "Open Vertical".
      */
     OPEN_VERTICAL,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Open Horizontal'.
+    /** use the fade effect "Open Horizontal".
      */
     OPEN_HORIZONTAL,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Spiral Inward Left'.
+    /** use the fade effect "Spiral Inward Left".
      */
     SPIRALIN_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Spiral Inward Right'.
+    /** use the fade effect "Spiral Inward Right".
      */
     SPIRALIN_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Spiral Outward Left'.
+    /** use the fade effect "Spiral Outward Left".
      */
     SPIRALOUT_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Spiral Outward Right'.
+    /** use the fade effect "Spiral Outward Right".
      */
     SPIRALOUT_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Dissolve'.
+    /** use the fade effect "Dissolve".
      */
     DISSOLVE,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Wavy Line from Left'.
+    /** use the fade effect "Wavy Line from Left".
      */
     WAVYLINE_FROM_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Wavy Line from Top'.
+    /** use the fade effect "Wavy Line from Top".
      */
     WAVYLINE_FROM_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Wavy Line from Right'.
+    /** use the fade effect "Wavy Line from Right".
      */
     WAVYLINE_FROM_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Wavy Line from Bottom'.
+    /** use the fade effect "Wavy Line from Bottom".
      */
     WAVYLINE_FROM_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Random'.
+    /** use the fade effect "Random".
      */
     RANDOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Stretch from Left'.
+    /** use the fade effect "Stretch from Left".
      */
     STRETCH_FROM_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Stretch from Top'.
+    /** use the fade effect "Stretch from Top".
      */
     STRETCH_FROM_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Stretch from Right'.
+    /** use the fade effect "Stretch from Right".
      */
     STRETCH_FROM_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Stretch from Bottom'.
+    /** use the fade effect "Stretch from Bottom".
      */
     STRETCH_FROM_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Vertical Lines'.
+    /** use the fade effect "Vertical Lines".
      */
     VERTICAL_LINES,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Horizontal Lines'.
+    /** use the fade effect "Horizontal Lines".
      */
     HORIZONTAL_LINES,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Upper Left'.
+    /** use the fade effect "Move from Upper Left".
      */
     MOVE_FROM_UPPERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Upper Right'.
+    /** use the fade effect "Move from Upper Right".
      */
     MOVE_FROM_UPPERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Lower Right'.
+    /** use the fade effect "Move from Lower Right".
      */
     MOVE_FROM_LOWERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Move from Lower Left'.
+    /** use the fade effect "Move from Lower Left".
      */
     MOVE_FROM_LOWERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Left'.
+    /** use the fade effect "Uncover to Left".
      */
     UNCOVER_TO_LEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Upper Left'.
+    /** use the fade effect "Uncover to Upper Left".
      */
     UNCOVER_TO_UPPERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Top'.
+    /** use the fade effect "Uncover to Top".
      */
     UNCOVER_TO_TOP,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Upper Right'.
+    /** use the fade effect "Uncover to Upper Right".
      */
     UNCOVER_TO_UPPERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Right'.
+    /** use the fade effect "Uncover to Right".
      */
     UNCOVER_TO_RIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Lower Right'.
+    /** use the fade effect "Uncover to Lower Right".
      */
     UNCOVER_TO_LOWERRIGHT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Bottom'.
+    /** use the fade effect "Uncover to Bottom".
      */
     UNCOVER_TO_BOTTOM,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Uncover to Lower Left'.
+    /** use the fade effect "Uncover to Lower Left".
      */
     UNCOVER_TO_LOWERLEFT,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Vertical Checkerboard'.
+    /** use the fade effect "Vertical Checkerboard".
      */
     VERTICAL_CHECKERBOARD,
 
     //-------------------------------------------------------------------------
 
-    /** use the fade effect 'Horizontal Checkerboard'.
+    /** use the fade effect "Horizontal Checkerboard".
      */
     HORIZONTAL_CHECKERBOARD
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include "rtl/string.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace rtl { class OUString; }
 class TypeManager;
@@ -52,7 +53,7 @@ public:
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef std::hash_map< rtl::OString, Kind, rtl::OStringHash > Map;
+    typedef boost::unordered_map< rtl::OString, Kind, rtl::OStringHash > Map;
 
     /**
        Constructs the dependencies for a given type.
@@ -147,3 +148,5 @@ private:
 }
 
 #endif // INCLUDED_CODEMAKER_DEPENDENCIES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

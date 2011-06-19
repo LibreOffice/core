@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #ifdef __cplusplus
 
-#ifndef _RTL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
@@ -222,6 +221,22 @@ public:
                 object.
     */
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
+
+    /**
+      Checks if a string is empty.
+
+      @return   sal_True if the string is empty;
+                sal_False, otherwise.
+
+      @since LibreOffice 3.4
+    */
+    sal_Bool isEmpty() const SAL_THROW(())
+    {
+        if ( pData->length )
+            return sal_False;
+        else
+            return sal_True;
+    }
 
     /**
       Returns a pointer to the characters of this string.
@@ -423,7 +438,7 @@ public:
 
       @return   a hash code value for this object.
 
-      @see rtl::OStringHash for convenient use of STLPort's hash_map
+      @see rtl::OStringHash for convenient use of boost::unordered_map
     */
     sal_Int32 hashCode() const SAL_THROW(())
     {
@@ -915,7 +930,7 @@ public:
 /** A helper to use OStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
-    hash function arguments to STLPort's hash_map and similar constructs.
+    hash function arguments to boost::unordered_map and similar constructs.
  */
 struct OStringHash
 {
@@ -939,3 +954,5 @@ struct OStringHash
 #endif /* __cplusplus */
 
 #endif /* _RTL_STRING_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_document_DocumentEvent_idl__
 #define __com_sun_star_document_DocumentEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-#ifndef __com_sun_star_frame_XController2_idl__
 #include <com/sun/star/frame/XController2.idl>
-#endif
 
 //=============================================================================
 

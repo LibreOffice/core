@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,11 +43,11 @@
 
 #include "reflcnst.hxx"
 
-using namespace rtl;
+using ::rtl::OString;
+
 
 namespace {
 
-// Throws std::bad_alloc:
 inline rtl::OString toByteString(rtl_uString const * str) {
     return rtl::OString(
         str->buffer, str->length, RTL_TEXTENCODING_UTF8,
@@ -56,10 +57,6 @@ inline rtl::OString toByteString(rtl_uString const * str) {
 }
 
 static sal_Unicode NULL_WSTRING[1] = { 0 };
-
-#if defined ( GCC ) && ( defined ( SCO ) )
-ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
-#endif
 
 #define BLOP_OFFSET_MAGIC       0
 #define BLOP_OFFSET_SIZE        (BLOP_OFFSET_MAGIC + sizeof(sal_uInt32))
@@ -1489,3 +1486,5 @@ RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

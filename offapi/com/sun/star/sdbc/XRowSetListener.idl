@@ -27,20 +27,18 @@
 #ifndef __com_sun_star_sdbc_XRowSetListener_idl__
 #define __com_sun_star_sdbc_XRowSetListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbc {
 
 
 /** is used for receiving "cursorMoved", "rowChanged", and "rowSetChanged" events
-    posted by, for example, a rowset.
+    posted by, for example, a row set.
  */
 published interface XRowSetListener: com::sun::star::lang::XEventListener
 {
 
-    /** is called when a rowset's cursor is moved.
+    /** is called when a row set's cursor is moved.
         @param event
             contains information about the event
      */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -100,7 +101,7 @@ namespace CPPU_CURRENT_NAMESPACE
     //=====================================================================
     class RTTI
     {
-        typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
+        typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
         Mutex m_mutex;
         t_rtti_map m_rttis;
@@ -227,7 +228,7 @@ namespace CPPU_CURRENT_NAMESPACE
             OUStringToOString(
                 *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
                 RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
+        fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
 #endif
         void * pCppExc;
         type_info * rtti;
@@ -298,7 +299,7 @@ namespace CPPU_CURRENT_NAMESPACE
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
             OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
+            OSL_FAIL( cstr.getStr() );
 #endif
             return;
         }
@@ -307,7 +308,7 @@ namespace CPPU_CURRENT_NAMESPACE
         OUString unoName( toUNOname( header->exceptionType->name() ) );
 #if OSL_DEBUG_LEVEL > 1
         OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
+        fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
 #endif
         typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
         if (0 == pExcTypeDescr)
@@ -319,7 +320,7 @@ namespace CPPU_CURRENT_NAMESPACE
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
 #if OSL_DEBUG_LEVEL > 0
             OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
+            OSL_FAIL( cstr.getStr() );
 #endif
         }
         else
@@ -331,4 +332,4 @@ namespace CPPU_CURRENT_NAMESPACE
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

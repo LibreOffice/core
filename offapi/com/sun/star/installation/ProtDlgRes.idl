@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-/** contains the status of a dialog with an 'always display Checkbox'.
+/** contains the status of a dialog with an "always display Checkbox".
 
     @deprecated
  */

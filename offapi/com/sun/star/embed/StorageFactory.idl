@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_embed_StorageFactory_idl__
 #define __com_sun_star_embed_StorageFactory_idl__
 
-#ifndef __com_sun_star_lang_XSingleServiceFactory_idl__
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
-#endif
 
 
 //============================================================================
@@ -49,7 +47,7 @@ published service StorageFactory
         <p>
         In case
         <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
-        call is used the result storage will be open in readwrite mode based
+        call is used the result storage will be open in read-write mode based
         on an arbitrary medium.
         </p>
 
@@ -82,7 +80,7 @@ published service StorageFactory
 
             <dt>parameter 3</dt>
             <dd>
-                      this paramenter represents
+                      this parameter represents
                       <type scope="com::sun::star::uno">Any</type>
                       containing a sequence of
                       <type scope="com::sun::star::beans">PropertyValue</type>.<br>
@@ -93,7 +91,7 @@ published service StorageFactory
                       <type scope="com::sun::star::task">XInteractionHandler</type>
                       implementation, password for the storage and repair
                       package flag.<br>
-                      Additionaly the parameter might contain property with the name
+                      Additionally the parameter might contain property with the name
                       "StorageFormat" that can take values from
                       <type scope="com::sun::star::embed">StorageFormats</type>.
                       If the property is not provided a storage of package format

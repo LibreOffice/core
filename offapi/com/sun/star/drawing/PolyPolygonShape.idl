@@ -27,33 +27,18 @@
 #ifndef __com_sun_star_drawing_PolyPolygonShape_idl__
 #define __com_sun_star_drawing_PolyPolygonShape_idl__
 
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
 #include <com/sun/star/drawing/LineProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_FillProperties_idl__
 #include <com/sun/star/drawing/FillProperties.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_PolyPolygonDescriptor_idl__
 #include <com/sun/star/drawing/PolyPolygonDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_Text_idl__
 #include <com/sun/star/drawing/Text.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_ShadowProperties_idl__
 #include <com/sun/star/drawing/ShadowProperties.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
 #include <com/sun/star/drawing/RotationDescriptor.idl>
-#endif
 
 
 //=============================================================================
@@ -63,7 +48,7 @@
 //=============================================================================
 
 /** This service is for a polygon shape.
-    <p>A polypolygon has 2 or more straight lines, with the first and
+    <p>A poly-polygon has 2 or more straight lines, with the first and
     last point connected by a straight line.</p>
  */
 published service PolyPolygonShape

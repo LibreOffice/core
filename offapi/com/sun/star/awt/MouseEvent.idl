@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_MouseEvent_idl__
 #define __com_sun_star_awt_MouseEvent_idl__
 
-#ifndef __com_sun_star_awt_InputEvent_idl__
 #include <com/sun/star/awt/InputEvent.idl>
-#endif
 
 
 //=============================================================================
@@ -40,7 +38,7 @@
 
 /** specifies an event from the mouse.
 
-    <p>This event is also used for popup menu requests on objects.
+    <p>This event is also used for pop-up menu requests on objects.
     See <member>PopupTrigger</member> for details.</p>
 
     @see XMouseListener
@@ -78,9 +76,9 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
 
     //-------------------------------------------------------------------------
 
-    /** specifies if this event is a popup-menu trigger event.
+    /** specifies if this event is a pop-up menu trigger event.
 
-        <p>If this member is <TRUE/>, the event describes a request for a popup menu,
+        <p>If this member is <TRUE/>, the event describes a request for a pop-up menu,
         also known as context menu, on an object.</p>
 
         <p>In this case, <member>X</member> and <member>Y</member> describe the position

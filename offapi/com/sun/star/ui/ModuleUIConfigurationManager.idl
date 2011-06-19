@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_ui_ModuleUIConfigurationManager_idl__
 #define __com_sun_star_ui_ModuleUIConfigurationManager_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
 #include <com/sun/star/ui/XUIConfigurationManager.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
 #include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XModuleUIConfigurationManager_idl__
 #include <com/sun/star/ui/XModuleUIConfigurationManager.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfiguration_idl__
 #include <com/sun/star/ui/XUIConfiguration.idl>
-#endif
 
 module com { module sun { module star { module ui {
 
@@ -53,7 +39,7 @@ module com { module sun { module star { module ui {
     configuration data of a module.
 
     <p>
-    A module user interface configuratio manager supports two layers of configuration settings
+    A module user interface configuration manager supports two layers of configuration settings
     data:<br/>
     1. Layer: A module default user interface configuration which describe all user interface
     elements settings that are used by OpenOffice. It is not possible to insert, remove or change

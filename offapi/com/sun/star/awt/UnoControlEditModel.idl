@@ -27,21 +27,12 @@
 #ifndef __com_sun_star_awt_UnoControlEditModel_idl__
 #define __com_sun_star_awt_UnoControlEditModel_idl__
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
-#ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
-#endif
 
 //=============================================================================
 
@@ -69,7 +60,7 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** If set to true an horizontal scrollbar will be added automaticly
+    /** If set to true an horizontal scrollbar will be added automatically
         when needed.
 
         @since OOo 2.3
@@ -78,7 +69,7 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** If set to true an vertical scrollbar will be added automaticly
+    /** If set to true an vertical scrollbar will be added automatically
         when needed.
 
         @since OOo 2.3

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #   include <io.h>
 #else
 #   include <unistd.h>
@@ -36,13 +37,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
-#ifdef SCO
-#define _IBCS2
-#endif
 #include <limits.h>
 
 #include "cpp.h"
@@ -53,11 +47,7 @@ Wraplist wraplist[NINCLUDE];
 void
     doinclude(Tokenrow * trp, int depth, int import)
 {
-#ifdef OS2
-    char fname[_MAX_PATH], iname[_MAX_PATH];
-#else
     char fname[PATH_MAX], iname[PATH_MAX];
-#endif
     Includelist *ip;
     int angled, len, fd, i;
 
@@ -254,3 +244,4 @@ void
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

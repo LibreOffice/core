@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,9 @@
 #include <osl/process.h>
 #include <rtl/memory.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+    defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
+    defined(DRAGONFLY)
 #include <pthread.h>
 #ifndef MACOSX
  #include <locale.h>
@@ -39,7 +42,7 @@
 #include <osl/module.h>
 #include <osl/thread.h>
 #endif  /* !MACOSX */
-#endif  /* LINUX || SOLARIS || NETBSD || MACOSX */
+#endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
 #include <string.h>
 
@@ -231,7 +234,8 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+    defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -301,7 +305,7 @@ const _pair _nl_language_list[] = {
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
 
-#elif defined(LINUX) || defined(NETBSD)
+#elif defined(LINUX)
 
 const _pair _nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
@@ -310,7 +314,7 @@ const _pair _nl_language_list[] = {
     { "BALTIC",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
     { "BIG5",                       RTL_TEXTENCODING_BIG5 },        /* locale: zh_TW */
     { "BIG5-HKSCS",                 RTL_TEXTENCODING_BIG5_HKSCS },  /* locale: zh_CN.BIG5HK */
-    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* depricated */
+    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5_HKSCS },  /* deprecated */
     { "BS_4730",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
     { "BS_VIEWDATA",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
     { "CP1250",                     RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
@@ -483,7 +487,7 @@ const _pair _nl_language_list[] = {
     { "WIN-SAMI-2",                 RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
 };
 
-#elif defined(FREEBSD)
+#elif defined(FREEBSD) || defined(DRAGONFLY)
 
 const _pair _nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
@@ -512,15 +516,46 @@ const _pair _nl_language_list[] = {
 const _pair _nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
     { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "Big5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "Big5-HKSCS",    RTL_TEXTENCODING_BIG5_HKSCS     }, /* locale: zh_CN.BIG5HK */
+    { "Big5HKSCS",     RTL_TEXTENCODING_BIG5_HKSCS     }, /* deprecated */
     { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
     { "CP866",         RTL_TEXTENCODING_IBM_866        }, /* CP866 866 */
     { "CTEXT",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
+    { "eucCN",         RTL_TEXTENCODING_EUC_CN         }, /* China - Simplified Chinese */
+    { "eucJP",         RTL_TEXTENCODING_EUC_JP         }, /* Japan */
+    { "eucKR",         RTL_TEXTENCODING_EUC_KR         }, /* Korea */
+    { "eucTW",         RTL_TEXTENCODING_EUC_TW         }, /* China - Traditional Chinese */
+    { "GB18030",       RTL_TEXTENCODING_GB_18030       }, /* locale: zh_CN.gb18030 */
+    { "GB2312",        RTL_TEXTENCODING_GB_2312        }, /* locale: zh_CN */
+    { "ISO-2022-JP",   RTL_TEXTENCODING_DONTKNOW       }, /* */
+    { "ISO-2022-JP-2", RTL_TEXTENCODING_DONTKNOW       }, /* */
+    { "ISO8859-1",     RTL_TEXTENCODING_ISO_8859_1     }, /* Western */
+    { "ISO8859-13",    RTL_TEXTENCODING_ISO_8859_13    }, /* ISO-IR-179 LATIN7 */
+    { "ISO8859-15",    RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
+    { "ISO8859-2",     RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
+    { "ISO8859-4",     RTL_TEXTENCODING_ISO_8859_4     }, /* LATIN4 L4 */
+    { "ISO8859-5",     RTL_TEXTENCODING_ISO_8859_5     }, /* Cyrillic */
+    { "ISO8859-7",     RTL_TEXTENCODING_ISO_8859_7     }, /* Greek */
+    { "ISO8859-9",     RTL_TEXTENCODING_ISO_8859_9     }, /* Turkish */
+    { "KOI8-R",        RTL_TEXTENCODING_KOI8_R         }, /* KOI8-R */
+    { "KOI8-U",        RTL_TEXTENCODING_KOI8_U         }, /* KOI8-U */
+    { "PT154",         RTL_TEXTENCODING_PT154          }, /* */
+    { "SJIS",          RTL_TEXTENCODING_SHIFT_JIS      }, /* Japan */
+    { "US-ASCII",      RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
+    { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
+};
+
+#elif defined(OPENBSD)
+
+const _pair _nl_language_list[] = {
+    { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
+    { "BIG5",          RTL_TEXTENCODING_BIG5           }, /* China - Traditional Chinese */
+    { "CP1251",        RTL_TEXTENCODING_MS_1251        }, /* MS-CYRL */
+    { "CP866",         RTL_TEXTENCODING_IBM_866        }, /* CP866 866 */
     { "EUCCN",         RTL_TEXTENCODING_EUC_CN         }, /* China - Simplified Chinese */
     { "EUCJP",         RTL_TEXTENCODING_EUC_JP         }, /* Japan */
     { "EUCKR",         RTL_TEXTENCODING_EUC_KR         }, /* Korea */
-    { "EUCTW",         RTL_TEXTENCODING_EUC_TW         }, /* China - Traditional Chinese */
-    { "ISO-2022-JP",   RTL_TEXTENCODING_DONTKNOW       }, /* */
-    { "ISO-2022-JP-2", RTL_TEXTENCODING_DONTKNOW       }, /* */
     { "ISO8859-1",     RTL_TEXTENCODING_ISO_8859_1     }, /* Western */
     { "ISO8859-15",    RTL_TEXTENCODING_ISO_8859_15    }, /* Western Updated (w/Euro sign) */
     { "ISO8859-2",     RTL_TEXTENCODING_ISO_8859_2     }, /* Central European */
@@ -535,7 +570,7 @@ const _pair _nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD */
+#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD OPENBSD */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -826,7 +861,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 /* OS X locale discovery function */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
@@ -908,6 +942,12 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
  set the current process locale
  *****************************************************************************/
 
+static int
+_setenv (const char* name, const char* value)
+{
+    return setenv (name, value, 1);
+}
+
 int _imp_setProcessLocale( rtl_Locale * pLocale )
 {
     char locale_buf[64];
@@ -916,34 +956,20 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     if( NULL != _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* only change env vars that exist already */
-        if( getenv( "LC_ALL" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
-            setenv( "LC_ALL", locale_buf, 1);
-#else
-            setenv( "LC_ALL", locale_buf );
-#endif
-        }
+        if( getenv( "LC_ALL" ) )
+            _setenv( "LC_ALL", locale_buf );
 
-        if( getenv( "LC_CTYPE" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
-            setenv("LC_CTYPE", locale_buf, 1 );
-#else
-            setenv( "LC_CTYPE", locale_buf );
-#endif
-        }
+        if( getenv( "LC_CTYPE" ) )
+            _setenv("LC_CTYPE", locale_buf );
 
-        if( getenv( "LANG" ) ) {
-#if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX )
-            setenv("LC_CTYPE", locale_buf, 1 );
-#else
-            setenv( "LANG", locale_buf );
-#endif
-        }
+        if( getenv( "LANG" ) )
+            _setenv( "LANG", locale_buf );
     }
 
     return 0;
 }
 
-#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
+#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD || AIX */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

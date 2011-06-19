@@ -71,10 +71,10 @@ constants InterpolationMode
 
     //-------------------------------------------------------------------------
 
-    /** Perform a cubic bezier spline interpolation.<p>
+    /** Perform a cubic Bezier spline interpolation.<p>
 
         That is, when interpolating at position t, take the three
-        closest data points v0, v1, and v2, fit a cubic bezier spline
+        closest data points v0, v1, and v2, fit a cubic Bezier spline
         through them, and take the interpolated value from this cubic
         curve.<p>
      */
@@ -82,10 +82,10 @@ constants InterpolationMode
 
     //-------------------------------------------------------------------------
 
-    /** Perform a quadric bezier spline interpolation.<p>
+    /** Perform a quadric Bezier spline interpolation.<p>
 
         That is, when interpolating at position t, take the four
-        closest data points v0, v1, v2, and v3, fit a quadric bezier
+        closest data points v0, v1, v2, and v3, fit a quadric Bezier
         spline through them, and take the interpolated value from this
         quadric curve.<p>
      */

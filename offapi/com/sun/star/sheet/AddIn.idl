@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_AddIn_idl__
 #define __com_sun_star_sheet_AddIn_idl__
 
-#ifndef __com_sun_star_lang_XServiceName_idl__
 #include <com/sun/star/lang/XServiceName.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XAddIn_idl__
 #include <com/sun/star/sheet/XAddIn.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCompatibilityNames_idl__
 #include <com/sun/star/sheet/XCompatibilityNames.idl>
-#endif
 
 //=============================================================================
 

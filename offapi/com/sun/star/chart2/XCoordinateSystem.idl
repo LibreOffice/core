@@ -27,14 +27,8 @@
 #ifndef com_sun_star_chart2_XCoordinateSystem_idl
 #define com_sun_star_chart2_XCoordinateSystem_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
 #include <com/sun/star/chart2/XAxis.idl>
 
 module com
@@ -55,7 +49,7 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
      */
     long getDimension();
 
-    /** identifies the type of coordinate system (e.g. cartesian, polar ...)
+    /** identifies the type of coordinate system (e.g. Cartesian, polar ...)
     */
     string getCoordinateSystemType();
 
@@ -63,8 +57,8 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
     */
     string getViewServiceName();
 
-    /** The dimension says wether it is a x, y or z axis.
-        The index says wether it is a primary or a secondary axis.
+    /** The dimension says whether it is a x, y or z axis.
+        The index says whether it is a primary or a secondary axis.
         Use nIndex == 0 for a primary axis.
      */
     void setAxisByDimension( [in] long nDimension,
@@ -72,8 +66,8 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
                               [in] long nIndex )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** The dimension says wether it is a x, y or z axis.
-        The index indicates wether it is a primary or a secondary axis or maybe more in future.
+    /** The dimension says whether it is a x, y or z axis.
+        The index indicates whether it is a primary or a secondary axis or maybe more in future.
         Use nIndex == 0 for a primary axis.
         An empty Reference will be returned if the given nDimension and nIndex are in the valid range but no axis is set for those values.
         An IndexOutOfBoundsException will be thrown if nDimension is lower than 0 or greater than the value returned by getDimension()
@@ -84,7 +78,7 @@ interface XCoordinateSystem : ::com::sun::star::uno::XInterface
 
     /** In one dimension there could be several axes to enable main and secondary axis and maybe more in future.
         This method returns the maximum index at which an axis exists for the given dimension.
-        It is allowed that some indexes inbetween do not have an axis.
+        It is allowed that some indexes in between do not have an axis.
     /*/
     long getMaximumAxisIndexByDimension( [in] long nDimension )
         raises( com::sun::star::lang::IndexOutOfBoundsException );

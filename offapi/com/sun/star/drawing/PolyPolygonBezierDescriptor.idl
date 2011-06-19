@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_PolyPolygonBezierDescriptor_idl__
 #define __com_sun_star_drawing_PolyPolygonBezierDescriptor_idl__
 
-#ifndef __com_sun_star_drawing_PolygonKind_idl__
 #include <com/sun/star/drawing/PolygonKind.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
-#endif
 
 
 //=============================================================================
@@ -43,7 +39,7 @@
 //=============================================================================
 
 /** This service describes a polypolygonbezier.
-    <p>A polypolygonbezier consists of multiple bezier polygons combined
+    <p>A polypolygonbezier consists of multiple Bezier polygons combined
     in one.</p>
  */
 published service PolyPolygonBezierDescriptor
@@ -56,13 +52,13 @@ published service PolyPolygonBezierDescriptor
 
     //-------------------------------------------------------------------------
 
-    /** These are the bezier points of this polygon.
+    /** These are the Bezier points of this polygon.
      */
     [property] com::sun::star::drawing::PolyPolygonBezierCoords PolyPolygonBezier;
 
     //-------------------------------------------------------------------------
 
-    /** These are the untransformed bezier coordinates of this polygon.
+    /** These are the untransformed Bezier coordinates of this polygon.
      */
     [property] com::sun::star::drawing::PolyPolygonBezierCoords Geometry;
 };

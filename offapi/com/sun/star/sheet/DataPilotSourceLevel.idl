@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_sheet_DataPilotSourceLevel_idl__
 #define __com_sun_star_sheet_DataPilotSourceLevel_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XMembersSupplier_idl__
 #include <com/sun/star/sheet/XMembersSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotMemberResults_idl__
 #include <com/sun/star/sheet/XDataPilotMemberResults.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_GeneralFunction_idl__
 #include <com/sun/star/sheet/GeneralFunction.idl>
-#endif
 
 //=============================================================================
 

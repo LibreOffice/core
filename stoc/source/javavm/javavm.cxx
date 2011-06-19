@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -534,10 +535,11 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     char * p = tmData->tm_zone;
 #else
     char * p = tzname[0];
+    (void)tmData;
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp(rtl::OUString::createFromAscii("user.timezone=ECT"));
+        pjvm->pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user.timezone=ECT")));
 }
 
 void initVMConfiguration(
@@ -607,14 +609,13 @@ private:
 
 }
 
-extern "C" void SAL_CALL
-component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(sal_Char const ** pEnvTypeName,
                                        uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                                                 void * pServiceManager,
                                                 void * pRegistryKey)
 {
@@ -772,7 +773,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         rtl::OString sJavaOption("-");
         typedef std::vector<rtl::OUString>::const_iterator cit;
         int index = 0;
-        for (cit i = props.begin(); i != props.end(); i++)
+        for (cit i = props.begin(); i != props.end(); ++i)
         {
             rtl::OString sOption = rtl::OUStringToOString(
                 *i, osl_getThreadTextEncoding());
@@ -1386,7 +1387,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
     if (m_xJavaConfiguration.is())
         // We should never get here, but just in case...
@@ -1396,7 +1397,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
 }
 
@@ -1623,12 +1624,11 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     }
     catch (css::uno::RuntimeException &)
     {
-        OSL_ENSURE(false, "RuntimeException");
+        OSL_FAIL("RuntimeException");
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_ENSURE(false,
-                   "jvmaccess::VirtualMachine::AttachGuard::CreationException");
+        OSL_FAIL("jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
 }
 
@@ -1774,3 +1774,5 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
             RTL_CONSTASCII_USTRINGPARAM("JNI exception occurred")),
         static_cast< cppu::OWeakObject * >(this));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

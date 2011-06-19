@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #define __com_sun_star_ucb_XContentProviderManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProvider_idl__
 #include <com/sun/star/ucb/XContentProvider.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_DuplicateProviderException_idl__
 #include <com/sun/star/ucb/DuplicateProviderException.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ContentProviderInfo_idl__
 #include <com/sun/star/ucb/ContentProviderInfo.idl>
-#endif
 
 
 //=============================================================================
@@ -112,7 +101,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         (<code>&lt;simple-authority&gt:</code>), or by arbitrary characters not
         including any of '/', '?', or '#', followed by a given string literal,
         followed by arbitrary characters that start with one of '/', '?', or
-        '#', if any. The comparision of string literals is done ignoring the
+        '#', if any. The comparison of string literals is done ignoring the
         case of ASCII letters.  The <code>&lt;translation&gt:</code> regexps
         match the same URLs as their <code>&lt;simple&gt:</code> counterparts,
         but they also describe how a (local) URL is mapped to another (remote)

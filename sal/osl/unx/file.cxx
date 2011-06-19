@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,12 +59,14 @@
 #endif /* MACOSX */
 
 #ifdef DEBUG_OSL_FILE
-#   define OSL_FILE_TRACE 0 ? (void)(0) : osl_trace
+#   define OSL_FILE_TRACE osl_trace
 #   define PERROR( a, b ) perror( a ); fprintf( stderr, b )
 #else
-#   define OSL_FILE_TRACE 1 ? (void)(0) : osl_trace
+#   define OSL_FILE_TRACE(fmt, ...)
 #   define PERROR( a, b )
 #endif
+
+
 
 /*******************************************************************
  *
@@ -272,7 +275,8 @@ void FileHandle_Impl::operator delete (void * p, size_t)
 
 size_t FileHandle_Impl::getpagesize()
 {
-#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) || \
+    defined(OPENBSD) || defined(DRAGONFLY)
     return sal::static_int_cast< size_t >(::getpagesize());
 #else /* POSIX */
     return sal::static_int_cast< size_t >(::sysconf(_SC_PAGESIZE));
@@ -1396,3 +1400,5 @@ SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
 
     return pImpl->setSize (uSize);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

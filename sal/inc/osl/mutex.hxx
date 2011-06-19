@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -246,8 +247,35 @@ namespace osl
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
+
+    /** SolarMutex interface, needed for SolarMutex.
+        Deprecated, used just for Application::GetSolarMutex().
+    */
+    class SolarMutex
+    {
+        public:
+            /** Blocks if mutex is already in use
+            */
+            virtual void SAL_CALL acquire() = 0;
+
+            /** Tries to get the mutex without blocking.
+            */
+            virtual sal_Bool SAL_CALL tryToAcquire() = 0;
+
+            /** Releases the mutex.
+            */
+            virtual void SAL_CALL release() = 0;
+
+        protected:
+            SolarMutex() {}
+            virtual ~SolarMutex() {}
+    };
+    typedef osl::Guard< SolarMutex > SolarGuard;
+    typedef osl::ClearableGuard< SolarMutex > ClearableSolarGuard;
+    typedef osl::ResettableGuard< SolarMutex > ResettableSolarGuard;
 }
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_MUTEX_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

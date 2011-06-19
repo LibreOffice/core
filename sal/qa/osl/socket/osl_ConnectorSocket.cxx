@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,13 +59,15 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 
 using namespace osl;
-using namespace rtl;
+using ::rtl::OUString;
 
 #define IP_PORT_MYPORT2 8883
 #define IP_PORT_FTP     21
@@ -157,9 +160,9 @@ namespace osl_ConnectorSocket
 
         void connect_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT2 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT2 );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -186,9 +189,9 @@ namespace osl_ConnectorSocket
         //non-blocking mode connect?
         void connect_002()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
 
             asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
             asAcceptorSocket.enableNonBlockingMode( sal_True );
@@ -212,8 +215,8 @@ namespace osl_ConnectorSocket
         // how to design senarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
         void connect_003()
         {
-            ::osl::SocketAddr saTargetSocketAddr1( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr2( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr1( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr2( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT3 );
 
             csConnectorSocket.enableNonBlockingMode( sal_False );
 
@@ -230,7 +233,7 @@ namespace osl_ConnectorSocket
         // really an error in non-blocking mode
         void connect_004()
         {
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT3 );
 
             csConnectorSocket.enableNonBlockingMode( sal_True );
 
@@ -252,8 +255,8 @@ namespace osl_ConnectorSocket
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::ctors, "osl_ConnectorSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::connect, "osl_ConnectorSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_ConnectorSocket::connect);
 
 } // namespace osl_ConnectorSocket
 
@@ -261,4 +264,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::connect, "osl_Connect
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

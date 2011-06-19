@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_text_AccessibleTextEmbeddedObjectView_idl__
 #define __com_sun_star_text_AccessibleTextEmbeddedObjectView_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleImage_idl__
 #include <com/sun/star/accessibility/XAccessibleImage.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
 
 
 
@@ -55,7 +44,7 @@ module com {  module sun {  module star {  module text {
     object gets active, the active document gets an accessible object
     tree of its own. This tree is not a subtree of the object that supports
     this service but of the document service itself. The tree exist only
-    until the ovject is deactivated.
+    until the object is deactivated.
 
      @since OOo 1.1.2
  */

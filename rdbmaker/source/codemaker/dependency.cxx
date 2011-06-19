@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #include    <rtl/alloc.h>
 #include    <codemaker/dependency.hxx>
 
-using namespace rtl;
-
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 TypeDependency::TypeDependency()
 {
     m_pImpl = new TypeDependencyImpl();
@@ -299,3 +300,4 @@ sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencie
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

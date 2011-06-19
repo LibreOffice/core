@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_tree_XTreeControl_idl__
 #define __com_sun_star_awt_tree_XTreeControl_idl__
 
-#ifndef __com_sun_star_awt_XControl_idl__
 #include <com/sun/star/awt/XControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_tree_XTreeExpansionListener_idl__
 #include <com/sun/star/awt/tree/XTreeExpansionListener.idl>
-#endif
-
-#ifndef __com_sun_star_view_XMultiSelectionSupplier_idl__
 #include <com/sun/star/view/XMultiSelectionSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__
 #include <com/sun/star/awt/tree/XTreeEditListener.idl>
-#endif
 
 //=============================================================================
 
@@ -61,7 +50,7 @@ published interface XTreeControl
         <type>XTreeNode</type> or sequence&lt;<type>XTreeNode</type>&gt;.</p>
 
         <method scope="::com::sun::star::view">XSelectionSupplier::getSelection()</method>
-        returns an emtpy any for no selection, an any with <type>XTreeNode</type> for
+        returns an empty any for no selection, an any with <type>XTreeNode</type> for
         a single selection and a sequence&lt;<type>XTreeNode</type>&gt; for a multiselection.
     */
     interface ::com::sun::star::view::XMultiSelectionSupplier;
@@ -179,14 +168,14 @@ published interface XTreeControl
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before expanded non leaf nodes.
 
-        <p>This can be overriden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
+        <p>This can be overridden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
     */
     [attribute] string DefaultExpandedGraphicURL;
 
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before collapsed non leaf nodes.
 
-        <p>This can be overriden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
+        <p>This can be overridden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
     */
     [attribute] string DefaultCollapsedGraphicURL;
 

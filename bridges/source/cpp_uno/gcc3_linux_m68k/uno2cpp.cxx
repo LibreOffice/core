@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ void callVirtualMethod(
         memcpy( stack, pStack, nStackBytes );
     }
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
                 fprintf( stderr, "\nStack (%d): ", nStack );
@@ -228,7 +229,7 @@ static void cpp_call(
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
                 INSERT_INT64( pCppArgs[nPos], pStack );
@@ -236,7 +237,7 @@ static void cpp_call(
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
                 INSERT_INT32( pCppArgs[nPos], pStack );
@@ -301,7 +302,7 @@ static void cpp_call(
             pStackStart,
             (pStack - pStackStart));
 
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -490,4 +491,4 @@ void unoInterfaceProxyDispatch(
 
 } } }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

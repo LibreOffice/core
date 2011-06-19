@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
 #define __com_sun_star_sheet_XDataPilotDescriptor_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 //=============================================================================
 

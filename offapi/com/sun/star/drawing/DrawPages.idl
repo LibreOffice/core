@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_drawing_DrawPages_idl__
 #define __com_sun_star_drawing_DrawPages_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPages_idl__
 #include <com/sun/star/drawing/XDrawPages.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XDrawPageSummarizer_idl__
 #include <com/sun/star/drawing/XDrawPageSummarizer.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XDrawPageExpander_idl__
 #include <com/sun/star/drawing/XDrawPageExpander.idl>
-#endif
 
 
 //=============================================================================

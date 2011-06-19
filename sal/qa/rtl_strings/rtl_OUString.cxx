@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,24 +30,20 @@
 #include "precompiled_sal.hxx"
 #include <sal/types.h>
 
-//# #ifndef _RTL_TRES_H_
 //#     #include <rtl/tres.h>
-//# #endif
 #include <testshl/tresstatewrapper.hxx>
 #include "stringhelper.hxx"
 #include <rtl/string.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <osl/thread.h>
 #include <rtl_String_Const.h>
 #include <rtl_String_Utils.hxx>
 
 
-
-    using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 //------------------------------------------------------------------------
 // test classes
@@ -3856,3 +3853,5 @@ void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
         (_pFunc)(&test_rtl_OUString, "");
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

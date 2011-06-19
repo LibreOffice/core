@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@
  Constants
  ******************************************************************/
 
-const rtl::OUString BACKSLASH = rtl::OUString::createFromAscii("\\");
-const rtl::OUString SLASH     = rtl::OUString::createFromAscii("/");
+const rtl::OUString BACKSLASH (RTL_CONSTASCII_USTRINGPARAM("\\"));
+const rtl::OUString SLASH     (RTL_CONSTASCII_USTRINGPARAM("/"));
 
 /*******************************************************************
  osl_systemPathEnsureSeparator
@@ -116,3 +117,4 @@ sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPat
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

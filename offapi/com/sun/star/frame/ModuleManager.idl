@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_frame_ModuleManager_idl__
 #define __com_sun_star_frame_ModuleManager_idl__
 
-#ifndef __com_sun_star_frame_XModuleManager_idl__
 #include <com/sun/star/frame/XModuleManager.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
 
 //===============================================
 
@@ -66,7 +61,7 @@ published service ModuleManager
         (which is used inside configuration as set node name too)
         and is further represented by a sequence of elements of type
         <type scope="com::sun::star::beans">PropertyValue</type>.
-        A list of properties can be getted from the configuration template
+        A list of properties can be gotten from the configuration template
         org.openoffice.Setup/Factory.
         </p>
      */

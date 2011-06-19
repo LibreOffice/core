@@ -49,7 +49,7 @@ published constants LinkUpdateModes
     const long AUTO = 2;
 
     /** use the setting that is configured in your installed
-        application.  This may be one of the above behaviours.
+        application.  This may be one of the above behaviors.
      */
     const long GLOBAL_SETTING = 3;
 };

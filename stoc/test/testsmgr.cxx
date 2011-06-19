@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ OUString getExePath()
 
     OSL_VERIFY( osl_getExecutableFile( &exe.pData) == osl_Process_E_None);
 
-#if defined(WIN32) || defined(__OS2__) || defined(WNT)
+#if defined(WIN32) || defined(WNT)
     exe = exe.copy(0, exe.getLength() - 16);
 #else
     exe = exe.copy(0, exe.getLength() - 12);
@@ -79,7 +80,7 @@ void setStarUserRegistry()
     RegistryKey rootKey, rKey, rKey2;
 
     OUString userReg = getExePath();
-    userReg += OUString::createFromAscii("user.rdb");
+    userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
     if(myRegistry->open(userReg, REG_READWRITE))
     {
         TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
@@ -103,3 +104,5 @@ SAL_IMPLEMENT_MAIN()
     printf( "ServiceManagerTest : OK\n" );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

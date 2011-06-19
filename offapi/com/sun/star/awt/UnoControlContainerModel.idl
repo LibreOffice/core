@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_UnoControlContainerModel_idl__
 #define __com_sun_star_awt_UnoControlContainerModel_idl__
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 
 //=============================================================================

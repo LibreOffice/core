@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -312,7 +313,7 @@ namespace
     fprintf(stderr,"cpp2uno_call2,after dispatch\n");
 #endif
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
       // destruct temporary in/inout params
@@ -332,7 +333,7 @@ namespace
       // is here for dummy
       return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
       // temporary params
       for ( ; nTempIndizes--; )
@@ -426,7 +427,7 @@ namespace
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
       throw RuntimeException(
-          rtl::OUString::createFromAscii("illegal vtable index!"),
+          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
           (XInterface *)pThis );
     }
 
@@ -539,7 +540,7 @@ namespace
     fprintf(stderr,"cpp_mediate6\n");
 #endif
           throw RuntimeException(
-              rtl::OUString::createFromAscii("no member description found!"),
+              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
               (XInterface *)pThis );
           // is here for dummy
           eRet = typelib_TypeClass_VOID;
@@ -801,3 +802,4 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
   return code;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

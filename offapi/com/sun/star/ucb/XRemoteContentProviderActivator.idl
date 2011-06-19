@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ucb_XRemoteContentProviderActivator_idl__
 #define __com_sun_star_ucb_XRemoteContentProviderActivator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com { module sun { module star { module ucb {
 
@@ -43,7 +41,7 @@ module com { module sun { module star { module ucb {
     <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>.
 
     The way this works might change, therefore this interface is marked as
-    deprectated.
+    deprecated.
 
     @deprecated
  */
@@ -57,7 +55,7 @@ published interface XRemoteContentProviderActivator: com::sun::star::uno::XInter
 
         <p>This allows for
         <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>
-        to be implemented in a layz fashion (remember the remote content
+        to be implemented in a lazy fashion (remember the remote content
         providers, but do not register them right away), which can increase
         performance in certain situations.  But it is not required that an
         implementation of <type>XRemoteContentProviderAcceptor</type> uses this

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,8 +37,6 @@ extern "C" {
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 /**
@@ -66,7 +65,7 @@ typedef struct _rtl_Locale
     sal_Int32       HashCode;
 } rtl_Locale;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -138,3 +137,4 @@ sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  );
 #endif /* _RTL_LOCALE_H_ */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

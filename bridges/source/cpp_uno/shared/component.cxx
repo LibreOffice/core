@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,8 +148,8 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
-            OSL_ENSURE(
-                0, "### RuntimeException occured udring queryInterface()!" );
+            OSL_FAIL(
+                "### RuntimeException occurred udring queryInterface()!" );
         }
     }
 }
@@ -270,3 +271,5 @@ void SAL_CALL uno_ext_getMapping(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

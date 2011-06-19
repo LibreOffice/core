@@ -28,17 +28,9 @@
 #define com_sun_star_chart2_XChartTypeContainer_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-
-#ifndef com_sun_star_chart_XChartType_idl
 #include <com/sun/star/chart2/XChartType.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 module com
 {
@@ -59,7 +51,7 @@ interface XChartTypeContainer : com::sun::star::uno::XInterface
     void addChartType( [in] XChartType aChartType )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** removes one data deries from the chart type container.
+    /** removes one data series from the chart type container.
      */
     void removeChartType( [in] XChartType aChartType )
         raises( com::sun::star::container::NoSuchElementException );

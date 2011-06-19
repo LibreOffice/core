@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_linguistic2_XDictionaryEntry_idl__
 #define __com_sun_star_linguistic2_XDictionaryEntry_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 //=============================================================================
 
@@ -42,19 +37,19 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** This interfaces gives access to a dictionary entry.
 
-    <P>A dictionary entry can supply a word and its hyhenation
+    <P>A dictionary entry can supply a word and its hyphenation
     and indicate if it is a negative word.
     If it is a negative entry it may supply a replacement text to
     be used instead of the entry word.</P>
 
-     <P>Hyphenation positions are represented by an '=' in the word.
-     If the '=' is the last character of the word this means it should not
-     be hyphenated. If there is no '=' charcter in the word, hyphenation
+     <P>Hyphenation positions are represented by an "=" in the word.
+     If the "=" is the last character of the word this means it should not
+     be hyphenated. If there is no "=" charter in the word, hyphenation
      positions will be determined automatically (i.e., from the hyphenator
     service alone).</P>
 
      <P>Entries whose words only differ in hyphenation are considered
-     to be equal. Also a '.' at the end of the word will make no
+     to be equal. Also a "." at the end of the word will make no
      difference.</P>
 
     @see    <type scope="com::sun::star::linguistic2">XDictionary</type>

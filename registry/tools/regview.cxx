@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 using rtl::OUString;
 using namespace registry::tools;
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -113,3 +114,4 @@ int _cdecl main( int argc, char * argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

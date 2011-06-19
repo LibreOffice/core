@@ -60,9 +60,9 @@ published interface XDatabaseDocumentUI
     */
     [attribute, readonly] com::sun::star::sdbc::XDataSource DataSource;
 
-    /** provides access to the applicatio's main window
+    /** provides access to the application's main window
 
-        <p>Note that reading this atttribute is equivalent to querying the component
+        <p>Note that reading this attribute is equivalent to querying the component
         for the <type scope="com::sun::star::frame">XController</type> interface,
         asking the controller for its frame, and asking this frame for its
         container window.</p>
@@ -76,7 +76,7 @@ published interface XDatabaseDocumentUI
 
         <p>Note that the connection returned here is really the working connection
         of the application. Clients should not misuse it, in particular, closing
-        the connection can yield unexpected results and should definately be
+        the connection can yield unexpected results and should definitely be
         avoided. If you need a separate connection to the data source, use
         <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>.</p>
     */
@@ -127,7 +127,7 @@ published interface XDatabaseDocumentUI
             a record describing the sub component. The first element of the returned pair is the type
             of the component, denoted by one of the <type>DatabaseObject</type> constants. The second
             element is the name of the component. For object types which support nested structures (forms
-            and reports, actually), this might be a hierachical name. If the sub component has been newly created,
+            and reports, actually), this might be a hierarchical name. If the sub component has been newly created,
             and not yet saved, this name is empty.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -187,7 +187,7 @@ published interface XDatabaseDocumentUI
             constants.
 
         @param ObjectName
-            specifies the name of the object. In case hierachical objects are supported
+            specifies the name of the object. In case hierarchical objects are supported
             (as is the case form forms and reports), hierarchical names are supported here, too.
 
         @param ForEditing

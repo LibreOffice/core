@@ -29,7 +29,7 @@
 
 module com {  module sun {  module star {  module ui {
 
-/** Determins the type of an item.
+/** Determines the type of an item.
 
     @since OOo 2.0
  */
@@ -40,15 +40,15 @@ constants ItemType
      */
     const short DEFAULT = 0;
     //-------------------------------------------------------------------------
-    /** a separarator is inserted as a line.
+    /** a separator is inserted as a line.
      */
     const short SEPARATOR_LINE = 1;
     //-------------------------------------------------------------------------
-    /** a separarator is inserted as a space.
+    /** a separator is inserted as a space.
      */
     const short SEPARATOR_SPACE = 2;
     //-------------------------------------------------------------------------
-    /** a linebreak is inserted.
+    /** a line break is inserted.
      */
     const short SEPARATOR_LINEBREAK = 3;
 

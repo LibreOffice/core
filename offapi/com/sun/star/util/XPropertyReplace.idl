@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_util_XPropertyReplace_idl__
 #define __com_sun_star_util_XPropertyReplace_idl__
 
-#ifndef __com_sun_star_util_XReplaceDescriptor_idl__
 #include <com/sun/star/util/XReplaceDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 
 //=============================================================================

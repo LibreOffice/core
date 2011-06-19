@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-
 #include <jni.h>
 
-//#include <iostream>
 #include <stdio.h>
 #include <sal/main.h>
 #include <rtl/process.h>
@@ -47,17 +46,17 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 
-//#include <cppuhelper/implbase1.hxx>
-
 using namespace std;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-//using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
@@ -80,7 +79,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     Any anyVM = xVM->getJavaVM( Sequence<sal_Int8>(arId, 16));
     if ( ! anyVM.hasValue())
     {
-        OSL_ENSURE(0,"could not get Java VM");
+        OSL_FAIL("could not get Java VM");
         return sal_False;
     }
 
@@ -104,44 +103,15 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     if( _jvm->AttachCurrentThread((void**) &p_env, 0))
         return sal_False;
 
-//  jclass aJProg = p_env->FindClass("TestJavaVM");
-//  if( p_env->ExceptionOccurred()){
-//      p_env->ExceptionDescribe();
-//      p_env->ExceptionClear();
-//  }
-//
-//  jmethodID mid= p_env->GetStaticMethodID( aJProg,"main", "([Ljava/lang/String;)V");
-
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
         OSL_TRACE( "Can't find Prog class\n");
         exit(1);
     }
 
-//   jmethodID methid = p_env->GetStaticMethodID( cls, "main", "([Ljava/lang/String;)V");
-//    if (methid == 0) {
-//        OSL_TRACE("Can't find Prog.main\n");
-//        exit(1);
-//    }
-
-//    jstring jstr = p_env->NewStringUTF(" from C!");
-//    if (jstr == 0) {
-//        OSL_TRACE("Out of memory\n");
-//        exit(1);
-//    }
-//    jobjectArray args = p_env->NewObjectArray( 1,
-//                        p_env->FindClass("java/lang/String"), jstr);
-//    if (args == 0) {
-//        OSL_TRACE( "Out of memory\n");
-//        exit(1);
-//    }
-//    p_env->CallStaticVoidMethod( cls, methid, args);
-
-
     jmethodID id = p_env->GetStaticMethodID( cls, "getInt", "()I");
     if( id)
     {
-//      jint _i= p_env->CallStaticIntMethod(cls, id);
         p_env->CallStaticIntMethod(cls, id);
     }
 
@@ -185,18 +155,18 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occured!" );
+        OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "### exception occurred: " );
+        OSL_TRACE( "%s", aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 
     Reference< XComponent > xCompContext( context, UNO_QUERY );
     xCompContext->dispose();
     printf("javavm %s", bSucc ? "succeeded" : "failed");
-//  cout << "javavm " << (bSucc ? "succeeded" : "failed") << " !" << endl;
     return (bSucc ? 0 : -1);
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

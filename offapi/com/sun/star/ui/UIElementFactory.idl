@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ui_UIElementFactory_idl__
 #define __com_sun_star_ui_UIElementFactory_idl__
 
-#ifndef __com_sun_star_ui_XUIElementFactory_idl__
 #include <com/sun/star/ui/XUIElementFactory.idl>
-#endif
 
 //=============================================================================
 
@@ -54,7 +52,7 @@ module com { module sun { module star { module ui {
 
 published service UIElementFactory
 {
-    /** this interface provides a function to create and initalize new
+    /** this interface provides a function to create and initialize new
         instances of user interface elements.
 
         @see XUIElementFactory

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #endif
 
 
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
 #include <machine/param.h>
 #endif
 
@@ -63,6 +64,7 @@
 #include <grp.h>
 
 #include "procimpl.h"
+#include "readwrite_helper.h"
 #include "sockimpl.h"
 #include "secimpl.h"
 
@@ -70,7 +72,7 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD)
+#if defined(MACOSX) || defined(IOS) || defined(IORESOURCE_TRANSFER_BSD) || defined(AIX)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 
@@ -281,15 +283,15 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
         OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
     }
 
-    nSend=read(PipeFD,&RetCode,sizeof(RetCode));
+    bRet = safeRead(PipeFD, &RetCode, sizeof(RetCode));
 
-    if ( nSend > 0 && RetCode == 1 )
+    if ( bRet && RetCode == 1 )
     {
         OSL_TRACE("sendFdPipe : resource was received\n");
     }
     else
     {
-        OSL_TRACE("sendFdPipe : resource wasn't received\n");
+        OSL_TRACE("sendFdPipe : resource wasn't received (error %s)\n", strerror(errno));
     }
 
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
@@ -373,7 +375,18 @@ static oslSocket receiveFdPipe(int PipeFD)
     }
 
     OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
-    nRead=write(PipeFD,&nRetCode,sizeof(nRetCode));
+    if ( !safeWrite(PipeFD, &nRetCode, sizeof(nRetCode)) )
+        OSL_TRACE("write failed (%s)", strerror(errno));
+
+    if ( nRead < 0 )
+    {
+        OSL_TRACE("write failed (%s)", strerror(errno));
+    }
+    else if ( nRead != sizeof(nRetCode) )
+    {
+        // TODO: Handle this case.
+        OSL_TRACE("partial write: wrote %d out of %d)", nRead, sizeof(nRetCode));
+    }
 
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
     free(cmptr);
@@ -442,6 +455,9 @@ static void ChildStatusProc(void *pData)
        in our child process */
     memcpy(&data, pData, sizeof(data));
 
+#ifdef NO_CHILD_PROCESSES
+#define fork() (errno = EINVAL, -1)
+#endif
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
         status = errno;
 
@@ -465,7 +481,6 @@ static void ChildStatusProc(void *pData)
     {
         /* Child */
         int chstatus = 0;
-        sal_Int32 nWrote;
 
         if (channel[0] != -1) close(channel[0]);
 
@@ -475,7 +490,7 @@ static void ChildStatusProc(void *pData)
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)\n", errno, strerror(errno));
-#if defined(LINUX) || defined (FREEBSD)
+#if defined(LINUX) || defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
             unsetenv("HOME");
 #else
             putenv("HOME=");
@@ -533,8 +548,9 @@ static void ChildStatusProc(void *pData)
                 if (stdError[1] != -1) close( stdError[1] );
             }
 
-            pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
-
+            // No need to check the return value of execv. If we return from
+            // it, an error has occurred.
+            execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
         }
 
         OSL_TRACE("Failed to exec, errno=%d (%s)\n", errno, strerror(errno));
@@ -542,11 +558,11 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        nWrote = write(channel[1], &errno, sizeof(errno));
-        if (nWrote != sizeof(errno))
+        if ( !safeWrite(channel[1], &errno, sizeof(errno)) )
             OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
-        if (channel[1] != -1) close(channel[1]);
+        if ( channel[1] != -1 )
+            close(channel[1]);
 
         _exit(255);
     }
@@ -1166,7 +1182,7 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatbuf[512];
         memset(prstatbuf,0,512);
-        bRet = read(fd,prstatbuf,511) == 511;
+        bRet = safeRead(fd, prstatbuf, 511);
 
         close(fd);
         /*printf("%s\n\n",prstatbuf);*/
@@ -1220,7 +1236,7 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatusbuf[512];
         memset(prstatusbuf,0,512);
-        bRet = read(fd,prstatusbuf,511) == 511;
+        bRet = safeRead(fd, prstatusbuf, 511);
 
         close(fd);
 
@@ -1348,32 +1364,6 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
             }
             else
                 close(fd);
-        }
-
-#elif defined(HPUX)
-
-        struct pst_status prstatus;
-
-        if (pstat_getproc(&prstatus, sizeof(prstatus), (size_t)0, pid) == 1)
-        {
-            if (Fields & osl_Process_CPUTIMES)
-            {
-                pInfo->UserTime.Seconds   = prstatus.pst_utime;
-                pInfo->UserTime.Nanosec   = 500000L;
-                pInfo->SystemTime.Seconds = prstatus.pst_stime;
-                pInfo->SystemTime.Nanosec = 500000L;
-
-                pInfo->Fields |= osl_Process_CPUTIMES;
-            }
-
-            if (Fields & osl_Process_HEAPUSAGE)
-            {
-                pInfo->HeapUsage = prstatus.pst_vdsize*PAGESIZE;
-
-                pInfo->Fields |= osl_Process_HEAPUSAGE;
-            }
-
-            return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
         }
 
 #elif defined(LINUX)
@@ -1534,3 +1524,5 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
     return osl_joinProcessWithTimeout(Process, NULL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

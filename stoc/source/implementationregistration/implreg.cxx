@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,8 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
@@ -62,7 +59,7 @@
 
 #include "mergekeys.hxx"
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #endif
 
@@ -76,10 +73,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 #define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
 #define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
 namespace stoc_impreg
@@ -144,18 +141,9 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > impreg_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = stoc_impreg::spool().sServiceName;
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = stoc_impreg::spool().sServiceName;
+    return seqNames;
 }
 
 OUString impreg_getImplementationName()
@@ -490,14 +478,9 @@ static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                                 const OUString& linkName,
                                 const OUString& linkTarget,
                                 const OUString& implName)
-    // throw ( InvalidRegistryException, RuntimeException )
 {
-    sal_Bool ret = sal_False;
-
     Reference < XRegistryKey > xRootKey;
 
-//      try
-//      {
     xRootKey = xDest->getRootKey();
 
     if (xRootKey->getKeyType(linkName) == RegistryKeyType_LINK)
@@ -510,23 +493,9 @@ static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                 linkName + spool().colon_old ), oldImplName);
         }
     }
-//      }
-//      catch (InvalidRegistryException&)
-//      {
-//      }
 
-//      try
-//      {
     if (xRootKey->isValid())
-    {
-        ret = xRootKey->createLink(linkName, linkTarget);
-    }
-//      }
-//      catch(InvalidRegistryException&)
-//      {
-//      }
-
-//      return ret;
+        xRootKey->createLink(linkName, linkTarget);
 }
 
 //*************************************************************************
@@ -670,7 +639,6 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
                                 const Reference < XRegistryKey >& xKey,
                                 const OUString& implName,
                                 sal_Bool bRegister)
-    // throw ( InvalidRegistryException, RuntimeException )
 {
     sal_Bool hasSubKeys = sal_False;
 
@@ -738,7 +706,6 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
             }
         }
     }
-    return;
 }
 
 //*************************************************************************
@@ -1686,7 +1653,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         {
             // no way to transport the error, as no exception is specified and a runtime
             // exception is not appropriate.
-            OSL_ENSURE( 0 , "InvalidRegistryException during revokeImplementation" );
+            OSL_FAIL( "InvalidRegistryException during revokeImplementation" );
         }
     }
 
@@ -1783,7 +1750,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUString&)
     throw ( RuntimeException )
 {
-    OSL_ENSURE( sal_False, "ImplementationRegistration::checkInstantiation not implemented" );
+    OSL_FAIL( "ImplementationRegistration::checkInstantiation not implemented" );
     return Sequence<OUString>();
 }
 
@@ -1923,3 +1890,4 @@ Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

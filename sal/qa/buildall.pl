@@ -150,11 +150,6 @@ sub initEnvironment()
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
           last SWITCH;
       }
-      if ( $gui eq "OS2" ) {
-          $FS             = "\\";
-          $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "c:${FS}tmp${FS}";
-          last SWITCH;
-      }
       if ( $gui eq "UNX" ) {
           $FS             = "/";
           $g_sTempDir         = $ENV{TMP}  ? "$ENV{TMP}${FS}" : "${FS}tmp${FS}";
@@ -181,7 +176,7 @@ sub getLibName($)
     {
         return "lib" . $sFile . ".so";
     }
-    if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
+    if ($OSNAME eq "MSWin32")
     {
         return $sFile . ".dll";
     }
@@ -272,7 +267,7 @@ sub giveOutFailures($$)
     if ($nFailures > 0)
     {
         # extra return for a better output
-        print "\nFailures occured: $nFailures\n";
+        print "\nFailures occurred: $nFailures\n";
         print "The whole output can be found in $sFailureFile\n";
         print "\n";
 
@@ -320,7 +315,7 @@ sub runASingleTest($$)
 #     }
 #     else
 #     {
-#         if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
+#         if ($OSNAME eq "MSWin32")
 #         {
 #             # test
 #             $redirect = ">>$sLogFile 2>>$sLogFile";
@@ -488,7 +483,7 @@ $/)
 
     if ($nGlobalFailures > 0)
     {
-        print "\nFailures over all occured: $nGlobalFailures\n";
+        print "\nFailures over all occurred: $nGlobalFailures\n";
         print "\nPASSED FAILED.\n";
     }
     else

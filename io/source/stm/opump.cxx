@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,12 +53,15 @@
 
 using namespace osl;
 using namespace std;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #include "factreg.hxx"
 
@@ -279,7 +283,7 @@ void Pump::run()
             if( ! rInput.is() )
             {
                 NotConnectedException exception(
-                    OUString::createFromAscii( "no input stream set" ) , Reference<XInterface>((OWeakObject*)this) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("no input stream set")) , Reference<XInterface>((OWeakObject*)this) );
                 throw exception;
             }
             Sequence< sal_Int8 > aData;
@@ -288,7 +292,7 @@ void Pump::run()
                 if( ! rOutput.is() )
                 {
                     NotConnectedException exception(
-                        OUString::createFromAscii( "no output stream set" ) , Reference<XInterface>( (OWeakObject*)this) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("no output stream set")) , Reference<XInterface>( (OWeakObject*)this) );
                     throw exception;
                 }
                 rOutput->writeBytes( aData );
@@ -502,3 +506,4 @@ Sequence<OUString> OPumpImpl_getSupportedServiceNames(void)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

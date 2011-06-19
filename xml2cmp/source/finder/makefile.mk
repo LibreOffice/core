@@ -37,7 +37,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -45,13 +48,10 @@ OBJFILES= \
     $(OBJ)$/dependy.obj	\
     $(OBJ)$/dep_main.obj
 
-
 # --- Targets ------------------------------------------------------
 
 APP1TARGET=	$(TARGET)
-.IF "$(GUI)"!="OS2"
 APP1STACK=	1000000
-.ENDIF
 
 LIBSALCPPRT=$(0)
 
@@ -59,11 +59,7 @@ LIBSALCPPRT=$(0)
 UWINAPILIB=$(0)
 .ENDIF
 
-
 APP1LIBS=	$(LB)$/$(TARGET).lib $(LB)$/x2c_xcdl.lib $(LB)$/x2c_support.lib
 APP1DEPN=	$(LB)$/$(TARGET).lib $(LB)$/x2c_xcdl.lib $(LB)$/x2c_support.lib
 
-
 .INCLUDE :  target.mk
-
-

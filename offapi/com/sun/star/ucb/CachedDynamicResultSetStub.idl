@@ -27,20 +27,15 @@
 #ifndef __com_sun_star_ucb_CachedDynamicResultSetStub_idl__
 #define __com_sun_star_ucb_CachedDynamicResultSetStub_idl__
 
-#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
 #include <com/sun/star/ucb/XDynamicResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XSourceInitialization_idl__
 #include <com/sun/star/ucb/XSourceInitialization.idl>
-#endif
 
 //=============================================================================
 
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** provides read access to a static or dynamicallly changing
+/** provides read access to a static or dynamically changing
     <type>ContentResultSet</type>.
 
     <p>For example, a <type>DynamicResultSet</type> is returned from the

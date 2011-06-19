@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_SearchCriterium_idl__
 #define __com_sun_star_ucb_SearchCriterium_idl__
 
-#ifndef __com_sun_star_ucb_RuleTerm_idl__
 #include <com/sun/star/ucb/RuleTerm.idl>
-#endif
 
 
 //=============================================================================
@@ -37,7 +35,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** a criterium describing how an object must match some rules that specify
+/** a criterion describing how an object must match some rules that specify
     (part of) a search.
 */
 published struct SearchCriterium

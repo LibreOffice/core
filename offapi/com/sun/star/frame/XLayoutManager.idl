@@ -28,37 +28,14 @@
 #ifndef __com_sun_star_frame_XLayoutManager_idl__
 #define __com_sun_star_frame_XLayoutManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIElement_idl__
 #include <com/sun/star/ui/XUIElement.idl>
-#endif
-
-#ifndef __com_sun_star_ui_DockingArea_idl__
 #include <com/sun/star/ui/DockingArea.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XDockingAreaAcceptor_idl__
 #include <com/sun/star/ui/XDockingAreaAcceptor.idl>
-#endif
 
 //=============================================================================
 
@@ -73,21 +50,21 @@ module com { module sun { module star { module frame {
     Every user interface element which is controlled by a layout manager has
     a unique identifier called resource URL.
 
-    A resourcce URL must meet the following syntax:
-    "private:resource/$type/$name". It is only allowed to use ascii characters
+    A resource URL must meet the following syntax:
+    "private:resource/$type/$name". It is only allowed to use ASCII characters
     for type and name.
 
     Currently the following user interface element types are defined:
     <ul>
-        <li><b>menubar</b>A configurable user interface element representing
+        <li><b>menubar</b> A configurable user interface element representing
         a menu bar.</li>
-        <li><b>popupmenu</b>A configurable user interface element representing
-        a popup menu.</li>
-        <li><b>toolbar</b>A configurable user interface element a tool
+        <li><b>popupmenu</b> A configurable user interface element representing
+        a pop-up menu.</li>
+        <li><b>toolbar</b> A configurable user interface element a tool
         bar.</li>
-        <li><b>statusbar</b>A configurable user interfave element representing
+        <li><b>statusbar</b> A configurable user interface element representing
         a status bar.</li>
-        <li><b>floater</b>A basic user interface element representing a
+        <li><b>floater</b> A basic user interface element representing a
         floating window.</li>
     </ul>
 
@@ -171,8 +148,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** creates a new user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be created. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be created. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
     */
     void createElement( [in] string ResourceURL );
@@ -180,8 +157,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** destroys a user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be destroyed. A resourcce URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii
+            specifies which user interface element should be destroyed. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII
             characters for type and name.
     */
     void destroyElement( [in] string ResourceURL );
@@ -189,9 +166,9 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** request to make a user interface element visible if it is not in hidden state.
 
         @param ResourceURL
-            specifies which user interface element should be made visible. A resourcce URL must
+            specifies which user interface element should be made visible. A resource URL must
             meet the following syntax: "private:resource/$type/$name". It is only allowed to use
-            ascii characters for type and
+            ASCII characters for type and
             name.
 
         @return
@@ -210,8 +187,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** retrieves a user interface element which has been created before.
 
         @param ResourceURL
-            specifies which user interface element should be retrieved. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be retrieved. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         <p>
@@ -221,7 +198,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     */
     com::sun::star::ui::XUIElement getElement( [in] string ResourceURL );
 
-    /** retrieves all user interface elements which are currently instanciated.
+    /** retrieves all user interface elements which are currently instantiated.
 
         @return
             a sequence of user interface elements providing <type scope="com::sun::star::ui">XUIElement</type>
@@ -237,8 +214,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** shows a user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be shown. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be shown. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -249,8 +226,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** hides a user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be hidden. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be hidden. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -261,8 +238,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** docks a window based user interface element to a specified docking area.
 
         @param ResourceURL
-            specifies which user interface element should be docked. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be docked. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @param DockingArea
@@ -294,8 +271,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** forces a window based user interface element to float.
 
         @param ResourceURL
-            specifies which user interface element should be float. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be float. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -306,8 +283,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** locks a window based user interface element if it's in a docked state.
 
         @param ResourceURL
-            specifies which user interface element should be locked. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be locked. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -318,9 +295,9 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** unlocks a window based user interface element if it's in a docked state.
 
         @param ResourceURL
-            specifies which user interface element should be unlocked. A resourcce URL must
+            specifies which user interface element should be unlocked. A resource URL must
             meet the following syntax: "private:resource/$type/$name". It is only allowed
-            to use ascii characters for type and name.
+            to use ASCII characters for type and name.
 
         @return
             returns <TRUE/> if the user interface element has been unlocked, otherwise
@@ -331,8 +308,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** sets a new size for a window based user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be resized. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be resized. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @param Size
@@ -348,8 +325,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** sets a new position for a window based user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be moved. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be moved. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @param Pos
@@ -365,8 +342,8 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** sets a new position and size for a window based user interface element.
 
         @param ResourceURL
-            specifies which user interface element should be moved and resized. A resourcce URL must meet the following
-            syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            specifies which user interface element should be moved and resized. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @param Pos
@@ -386,7 +363,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the visibility state should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -398,7 +375,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the floating state should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -410,7 +387,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the docking state should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -422,7 +399,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the lock state should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -434,7 +411,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the current size should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -446,7 +423,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies for which user interface element the current position should be retrieved. A resource URL must meet
-            the following syntax: "private:resource/$type/$name". It is only allowed to use ascii characters for type and
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
             name.
 
         @return
@@ -457,7 +434,7 @@ published interface XLayoutManager : com::sun::star::uno::XInterface
     /** prohibit all layout updates until unlock is called again.
 
         <p>
-        This call can be used to speed up the creation process of serveral user interface elements. Otherwise the layout manager
+        This call can be used to speed up the creation process of several user interface elements. Otherwise the layout manager
         would calculate the layout for every creation.
         </p>
     */

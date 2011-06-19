@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,8 @@
 #include <osl/time.h>
 
 /* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || defined(LINUX)
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
+    defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define STRUCT_TM_HAS_GMTOFF 1
 
 #elif defined(SOLARIS)
@@ -267,3 +269,5 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
 
   return ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

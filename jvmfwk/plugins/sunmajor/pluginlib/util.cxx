@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include "rtl/byteseq.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"
+#include <salhelper/linkhelper.hxx>
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -58,9 +60,15 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
-using namespace rtl;
+
 using namespace osl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 
 #define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -86,12 +94,14 @@ char const *g_arJavaNames[] = {
  */
 char const *g_arCollectDirs[] = {
     "",
+#ifndef JVM_ONE_PATH_CHECK
     "j2re/",
     "j2se/",
     "j2sdk/",
     "jdk/",
     "jre/",
     "java/",
+#endif
     "jvm/"
 };
 
@@ -103,6 +113,7 @@ char const *g_arSearchPaths[] = {
     "",
     "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
 #else
+#ifndef JVM_ONE_PATH_CHECK
     "",
     "usr/",
     "usr/local/",
@@ -113,6 +124,9 @@ char const *g_arSearchPaths[] = {
 #endif
     "usr/lib/",
     "usr/bin/"
+#else
+    JVM_ONE_PATH_CHECK
+#endif
 #endif
 };
 }
@@ -151,7 +165,6 @@ namespace
    {
        OUString const & operator()()
        {
-           //  osl::Guard<osl::Mutex> g(osl::GetGlobalMutex());
            static OUString sIni;
             rtl::OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
@@ -198,7 +211,7 @@ inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
     {
         if (osl_closeFile(m_rHandle) != osl_File_E_None)
         {
-            OSL_ENSURE(false, "unexpected situation");
+            OSL_FAIL("unexpected situation");
         }
     }
 }
@@ -363,6 +376,9 @@ void AsynchReader::run()
 
 
 bool getJavaProps(const OUString & exePath,
+#ifdef JVM_ONE_PATH_CHECK
+                  const OUString & homePath,
+#endif
                   std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
                   bool * bProcessRun)
 {
@@ -450,8 +466,6 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-//         JFW_TRACE2(OString("[Java framework] line:\" ")
-//                + aLine + OString(" \".\n"));
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
@@ -466,10 +480,19 @@ bool getJavaProps(const OUString & exePath,
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);
 
+#ifdef JVM_ONE_PATH_CHECK
+        //replace absolute path by linux distro link
+        OUString sHomeProperty(RTL_CONSTASCII_USTRINGPARAM("java.home"));
+        if(sHomeProperty.equals(sKey))
+        {
+            sVal = homePath + OUString::createFromAscii("/jre");
+        }
+#endif
+
         props.push_back(std::make_pair(sKey, sVal));
     }
 
-    if (rs != FileHandleReader::RESULT_ERROR && props.size()>0)
+    if (rs != FileHandleReader::RESULT_ERROR && !props.empty())
         ret = true;
 
     //process error stream data
@@ -509,7 +532,6 @@ bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
     } while (nIndex >= 0);
 
     *out = buff.makeStringAndClear();
-//    JFW_TRACE2(*out);
     return true;
 }
 
@@ -553,7 +575,6 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         DWORD dwIndex = 0;
         const DWORD BUFFSIZE = 1024;
         wchar_t bufVersion[BUFFSIZE];
-//      char bufVersion[BUFFSIZE];
         DWORD nNameLen = BUFFSIZE;
         FILETIME fileTime;
         nNameLen = sizeof(bufVersion);
@@ -630,7 +651,7 @@ bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
 
 void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 {
-    if(vec.size() == 0)
+    if(vec.empty())
         return;
     int size= vec.size() - 1;
     int cIter= 0;
@@ -675,7 +696,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
                 vec.at(j)= less;
             }
         }
-        cIter++;
+        ++cIter;
     }
 }
 
@@ -704,7 +725,7 @@ bool getJREInfoFromBinPath(
             sBinPath = path.copy(0, path.getLength() - 1);
 
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //the map contains e.g. jre/bin/java.exe
             //get the directory where the executable is contained
@@ -750,10 +771,12 @@ vector<Reference<VendorBase> > getAllJREInfos()
     createJavaInfoFromWinReg(vecInfos);
 #endif // WNT
 
+#ifndef JVM_ONE_PATH_CHECK
     createJavaInfoFromJavaHome(vecInfos);
     //this function should be called after createJavaInfoDirScan.
     //Otherwise in SDKs Java may be started twice
      createJavaInfoFromPath(vecInfos);
+#endif
 
 #ifdef UNX
     createJavaInfoDirScan(vecInfos);
@@ -800,28 +823,20 @@ bool getJREInfoByPath(const rtl::OUString& path,
 OUString resolveDirPath(const OUString & path)
 {
     OUString ret;
-    OUString sResolved;
-    //getAbsoluteFileURL also resolves links
-    if (File::getAbsoluteFileURL(
-            OUSTR("file:///"), path, sResolved) != File::E_None)
-        return OUString();
-
-    //check if this is a valid path and if it is a directory
-    DirectoryItem item;
-    if (DirectoryItem::get(sResolved, item) == File::E_None)
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_Type |
+                                       osl_FileStatus_Mask_FileURL);
+    if (aResolver.fetchFileStatus(path) == osl::FileBase::E_None)
     {
-        FileStatus status(FileStatusMask_Type |
-                          FileStatusMask_LinkTargetURL |
-                          FileStatusMask_FileURL);
-
-        if (item.getFileStatus(status) == File::E_None
-            && status.getFileType() == FileStatus::Directory)
+        //check if this is a directory
+        if (aResolver.m_aStatus.getFileType() == FileStatus::Directory)
         {
-            ret = sResolved;
+#ifndef JVM_ONE_PATH_CHECK
+            ret = aResolver.m_aStatus.getFileURL();
+#else
+            ret = path;
+#endif
         }
     }
-    else
-        return OUString();
     return ret;
 }
 /** Checks if the path is a file. If it is a link to a file than
@@ -830,28 +845,20 @@ OUString resolveDirPath(const OUString & path)
 OUString resolveFilePath(const OUString & path)
 {
     OUString ret;
-    OUString sResolved;
-
-    if (File::getAbsoluteFileURL(
-            OUSTR("file:///"), path, sResolved) != File::E_None)
-        return OUString();
-
-    //check if this is a valid path to a file or and if it is a link
-    DirectoryItem item;
-    if (DirectoryItem::get(sResolved, item) == File::E_None)
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_Type |
+                                       osl_FileStatus_Mask_FileURL);
+    if (aResolver.fetchFileStatus(path) == osl::FileBase::E_None)
     {
-        FileStatus status(FileStatusMask_Type |
-                          FileStatusMask_LinkTargetURL |
-                          FileStatusMask_FileURL);
-        if (item.getFileStatus(status) == File::E_None
-            && status.getFileType() == FileStatus::Regular)
+        //check if this is a file
+        if (aResolver.m_aStatus.getFileType() == FileStatus::Regular)
         {
-            ret = sResolved;
+#ifndef JVM_ONE_PATH_CHECK
+            ret = aResolver.m_aStatus.getFileURL();
+#else
+            ret = path;
+#endif
         }
     }
-    else
-        return OUString();
-
     return ret;
 }
 
@@ -900,7 +907,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
         bool bBreak = false;
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //if the path is a link, then resolve it
             //check if the executable exists at all
@@ -941,7 +948,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             }
 
             bool bProcessRun= false;
-            if (getJavaProps(sFilePath, props, & bProcessRun) == false)
+            if (getJavaProps(sFilePath,
+#ifdef JVM_ONE_PATH_CHECK
+                             sResolvedDir,
+#endif
+                             props, & bProcessRun) == false)
             {
                 //The java executable could not be run or the system properties
                 //could not be retrieved. We can assume that this java is corrupt.
@@ -960,7 +971,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                     //invoked to build the path to the executable. It we start the script directy as .java_wrapper
                     //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
                     //is named java, must be used to start the script.
-                    getJavaProps(sFullPath, props, & bProcessRun);
+                    getJavaProps(sFullPath,
+#ifdef JVM_ONE_PATH_CHECK
+                                 sResolvedDir,
+#endif
+                                 props, & bProcessRun);
                     // Either we found a working 1.3.1
                     //Or the java is broken. In both cases we stop searchin under this "root" directory
                     bBreak = true;
@@ -985,7 +1000,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             break;
     }
 
-    if (props.size() == 0)
+    if (props.empty())
         return rtl::Reference<VendorBase>();
 
     //find java.vendor property
@@ -993,7 +1008,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     OUString sVendor(RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
     OUString sVendorName;
 
-    for (c_ip i = props.begin(); i != props.end(); i++)
+    for (c_ip i = props.begin(); i != props.end(); ++i)
     {
         if (sVendor.equals(i->first))
         {
@@ -1120,7 +1135,7 @@ bool makeDriveLetterSame(OUString * fileURL)
     DirectoryItem item;
     if (DirectoryItem::get(*fileURL, item) == File::E_None)
     {
-        FileStatus status(FileStatusMask_FileURL);
+        FileStatus status(osl_FileStatus_Mask_FileURL);
         if (item.getFileStatus(status) == File::E_None)
         {
             *fileURL = status.getFileURL();
@@ -1209,7 +1224,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                     File::RC errNext = File::E_None;
                     while( (errNext = aCollectionDir.getNextItem(curIt)) == File::E_None)
                     {
-                        FileStatus aStatus(FileStatusMask_FileURL);
+                        FileStatus aStatus(osl_FileStatus_Mask_FileURL);
                         File::RC errStatus = File::E_None;
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
@@ -1265,3 +1280,5 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 #endif // ifdef SOLARIS
 #endif // ifdef UNX
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

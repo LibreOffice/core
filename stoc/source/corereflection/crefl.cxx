@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 #include <cppuhelper/queryinterface.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
@@ -41,7 +40,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #include "base.hxx"
 
@@ -60,33 +62,14 @@ static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static Sequence< OUString > core_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    return seqNames;
 }
 
 static OUString core_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
@@ -103,7 +86,6 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
 {
-    TRACE( "> IdlReflectionServiceImpl dtor <\n" );
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -174,7 +156,6 @@ Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
 void IdlReflectionServiceImpl::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    TRACE( "> disposing corereflection... <" );
     OComponentHelper::dispose();
 
     MutexGuard aGuard( _aComponentMutex );
@@ -271,7 +252,7 @@ inline Reference< XIdlClass > IdlReflectionServiceImpl::constructClass(
 #if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( "### corereflection type unsupported: " );
         OString aName( OUStringToOString( pTypeDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( aName.getStr() );
+        OSL_TRACE( "%s", aName.getStr() );
         OSL_TRACE( "\n" );
 #endif
         return Reference< XIdlClass >();
@@ -500,15 +481,17 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 }
 
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

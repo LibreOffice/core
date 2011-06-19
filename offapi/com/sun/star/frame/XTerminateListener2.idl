@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_XTerminateListener2_idl__
 #define __com_sun_star_frame_XTerminateListener2_idl__
 
-#ifndef __com_sun_star_frame_XTerminateListener_idl__
 #include <com/sun/star/frame/XTerminateListener.idl>
-#endif
 
 //=============================================================================
 
@@ -37,23 +35,23 @@
 
 //=============================================================================
 /** extend interface XTerminateListener so a listener will be informed
-    in case termination process was cancelled by other reasons.
+    in case termination process was canceled by other reasons.
  */
 interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
 {
     //-------------------------------------------------------------------------
-    /** is called when the master environment (e.g., desktop) was cancelled in
+    /** is called when the master environment (e.g., desktop) was canceled in
         it's terminate request.
 
         <p>
         Termination can be intercepted by throwing <type>TerminationVetoException</type>.
-        But if a listener was queried for termination .. doesnt throwed a veto exception ...
-        it doesnt know if termination will be real next time.
+        But if a listener was queried for termination .. doesn't throw a veto exception ...
+        it doesn't know if termination will be real next time.
         Because any other listener can throw those exception too ... and so it can happen
-        that after queryTermination() no notifyTermination() will occure. But these listener
-        doesnt know if its allowed to start new processes then.
+        that after queryTermination() no notifyTermination() will occur. But these listener
+        don't know if its allowed to start new processes then.
         Using this optional(!) interface will make it possible to be informed about
-        cancelled termination requests also.
+        canceled termination requests also.
         </p>
 
         @param Event

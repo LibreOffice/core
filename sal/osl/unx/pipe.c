@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,10 @@
  *
  ************************************************************************/
 
-
 #include "system.h"
 
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
-/*#include <osl/signal.h>*/
 #include <osl/thread.h>
 #include <osl/interlck.h>
 
@@ -44,9 +43,6 @@
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
-
-/*#define DEBUG_OSL_PIPE*/
-/*#define TRACE_OSL_PIPE*/
 
 
 /*****************************************************************************/
@@ -170,6 +166,8 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
+    size_t nNameLength = 0;
+    int bNameTooLong = 0;
     oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)
@@ -180,25 +178,40 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {
         strncpy(name, PIPEALTERNATEPATH, sizeof(name));
     }
+    name[sizeof(name) - 1] = '\0';  // ensure the string is NULL-terminated
+    nNameLength = strlen(name);
+    bNameTooLong = nNameLength > sizeof(name) - 2;
 
-
-    strncat(name, "/", sizeof(name));
-
-    if (Security)
+    if (!bNameTooLong)
     {
-        sal_Char Ident[256];
+        size_t nRealLength = 0;
 
-        Ident[0] = '\0';
+        strcat(name, "/");
+        ++nNameLength;
 
-        OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+        if (Security)
+        {
+            sal_Char Ident[256];
 
-        snprintf(&name[strlen(name)], sizeof(name), SECPIPENAMEMASK, Ident, pszPipeName);
+            Ident[0] = '\0';
+
+            OSL_VERIFY(osl_psz_getUserIdent(Security, Ident, sizeof(Ident)));
+
+            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, SECPIPENAMEMASK, Ident, pszPipeName);
+        }
+        else
+        {
+            nRealLength = snprintf(&name[nNameLength], sizeof(name) - nNameLength, PIPENAMEMASK, pszPipeName);
+        }
+
+        bNameTooLong = nRealLength > sizeof(name) - nNameLength - 1;
     }
-    else
+
+    if (bNameTooLong)
     {
-        snprintf(&name[strlen(name)], sizeof(name), PIPENAMEMASK, pszPipeName);
+        OSL_TRACE("osl_createPipe: pipe name too long");
+        return NULL;
     }
-
 
     /* alloc memory */
     pPipe= __osl_createPipeImpl();
@@ -363,12 +376,10 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
-#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
-            perror("connect in osl_destroyPipe");
+            OSL_TRACE("connect in osl_destroyPipe failed with error: %s", strerror(errno));
         }
-#endif /* OSL_DEBUG_LEVEL */
         close(fd);
     }
 #endif /* LINUX */
@@ -539,7 +550,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
 
@@ -550,7 +561,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
         RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -566,7 +577,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
 sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
 
@@ -576,7 +587,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
         sal_Int32 RetVal;
         RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -590,3 +601,4 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

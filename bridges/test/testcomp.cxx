@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -684,7 +685,7 @@ void testRemote( const Reference< XInterface > &rRemote )
       //--------------------
       // Test attributes
       //----------------------
-       OUString ow = OUString::createFromAscii( "dum didel dum dideldei" );
+       OUString ow( RTL_CONSTASCII_USTRINGPARAM( "dum didel dum dideldei" ));
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
 
@@ -773,7 +774,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         // erst registrieren
         Reference < XImplementationRegistration > rReg (
             rSMgr->createInstance(
-                OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" ))),
             UNO_QUERY );
 
         OSL_ASSERT( rReg.is() );
@@ -782,7 +783,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         try
         {
             rReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
                 aDllName,
                 Reference< XSimpleRegistry > () );
             rInterface = rSMgr->createInstance( sService );
@@ -797,3 +798,4 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

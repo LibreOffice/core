@@ -98,13 +98,13 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** A transliteration module will be used to produce numbers in
-        chinese, japanese, etc.
+        Chinese, Japanese, etc.
      */
 
     const short TRANSLITERATION = 11;
 
     //-------------------------------------------------------------------------
-    /** The nativenumbersupplier service will be called to produce numbers in
+    /** The NativeNumberSupplier service will be called to produce numbers in
         native languages.
      */
     const short NATIVE_NUMBERING = 12;
@@ -179,7 +179,7 @@ published constants NumberingType
     const short NUMBER_UPPER_KO = 25;
 
     //-------------------------------------------------------------------------
-    /** Numbering for Korean hangul number
+    /** Numbering for Korean Hangul number
         as "일,이,삼..."
      */
     const short NUMBER_HANGUL_KO = 26;
@@ -470,6 +470,20 @@ published constants NumberingType
         CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Greek alphabet upper case letters
+
+        @since OOo 3.3
+     */
+    const short CHARS_GREEK_UPPER_LETTER = 52;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Greek alphabet lower case letters
+
+        @since OOo 3.3
+     */
+    const short CHARS_GREEK_LOWER_LETTER = 53;
 
 };
 

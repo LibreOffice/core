@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_rendering_FontInfo_idl__
 #define __com_sun_star_rendering_FontInfo_idl__
 
-#ifndef __com_sun_star_util_TriState_idl__
 #include <com/sun/star/util/TriState.idl>
-#endif
-
-#ifndef __com_sun_star_rendering_Panose_idl__
 #include <com/sun/star/rendering/Panose.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {
@@ -57,7 +52,7 @@ published struct FontInfo
         The family name is the one normally associated to a font, such
         as Times New Roman, Thorndale, Andale or Arial.<p>
 
-        Note: outlined fonts are now specified with 'outline' as part
+        Note: outlined fonts are now specified with "outline" as part
         of the family name.<p>
      */
     string                              FamilyName;
@@ -72,10 +67,10 @@ published struct FontInfo
 
     //-------------------------------------------------------------------------
 
-    /** This value specifies which unicode ranges are supported by
+    /** This value specifies which Unicode ranges are supported by
         this font.<p>
 
-        This is to be interpreted as a split-up 128bit value, see <a
+        This is to be interpreted as a split-up 128-bit value, see <a
         href=http://partners.adobe.com/asn/tech/type/opentype/os2.jsp#ur>Adobe's
         OpenType specification</a> for the specific meaning of each
         bit. UnicodeRanges0 contains the least significant bits,

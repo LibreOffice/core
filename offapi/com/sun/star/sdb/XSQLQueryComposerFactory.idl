@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_XSQLQueryComposerFactory_idl__
 #define __com_sun_star_sdb_XSQLQueryComposerFactory_idl__
 
-#ifndef __com_sun_star_sdb_XSQLQueryComposer_idl__
 #include <com/sun/star/sdb/XSQLQueryComposer.idl>
-#endif
 
 //=============================================================================
  module com {  module sun {  module star {  module sdb {

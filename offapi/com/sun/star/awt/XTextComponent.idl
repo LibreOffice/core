@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_awt_XTextComponent_idl__
 #define __com_sun_star_awt_XTextComponent_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XTextListener_idl__
 #include <com/sun/star/awt/XTextListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Selection_idl__
 #include <com/sun/star/awt/Selection.idl>
-#endif
 
 
 //=============================================================================

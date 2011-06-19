@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
 #define __com_sun_star_configuration_backend_MalformedDataException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //=============================================================================
 
@@ -69,7 +67,7 @@ published exception MalformedDataException: ::com::sun::star::uno::Exception
             <dd>for properties that are not in the schema.</dd>
 
             <dt><type scope="com::sun::star::lang">IllegalArgumentException</type></dt>
-            <dd>for data values (names,attibutes,etc.) that are invalid.</dd>
+            <dd>for data values (names,attributes,etc.) that are invalid.</dd>
 
             <dt><type scope="com::sun::star::lang">IllegalAccessException</type></dt>
             <dd>for changes that violate access restrictions.</dd>

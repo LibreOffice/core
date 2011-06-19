@@ -41,25 +41,25 @@ published constants EmbedMapUnits
 {
     // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-hundredth
-        of milimetre.
+        of millimeter.
      */
     const long ONE_100TH_MM = 0;
 
     // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one-tenth
-        of milimetre.
+        of millimeter.
      */
     const long ONE_10TH_MM = 1;
 
     // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one
-        milimetre.
+        millimeter.
      */
     const long ONE_MM = 2;
 
     // ----------------------------------------------------------------------
     /** In this type of map mode one logical point is equal to one
-        centimetre.
+        centimeter.
      */
     const long ONE_CM = 3;
 

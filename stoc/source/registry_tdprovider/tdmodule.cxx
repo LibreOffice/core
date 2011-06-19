@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,8 +99,7 @@ ModuleTypeDescriptionImpl::getMembers()
             }
             catch ( NoSuchElementException const & )
             {
-                OSL_ENSURE( sal_False,
-                    "ModuleTypeDescriptionImpl::getMembers - "
+                OSL_FAIL( "ModuleTypeDescriptionImpl::getMembers - "
                     " Caught NoSuchElementException!" );
             }
         }
@@ -124,3 +124,5 @@ ModuleTypeDescriptionImpl::getMembers()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

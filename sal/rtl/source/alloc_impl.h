@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -196,7 +197,7 @@ lowbit(sal_Size n)
 /** rtl_memory_lock_type
  *  (platform dependent)
  */
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 
 #include <unistd.h>
 #include <pthread.h>
@@ -269,3 +270,5 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #endif
 
 #endif /* INCLUDED_RTL_ALLOC_IMPL_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

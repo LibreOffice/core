@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_table_TableSortDescriptor2_idl__
 #define __com_sun_star_table_TableSortDescriptor2_idl__
 
-#ifndef __com_sun_star_util_SortDescriptor2_idl__
 #include <com/sun/star/util/SortDescriptor2.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_table_TableSortField_idl__
 #include <com/sun/star/table/TableSortField.idl>
-#endif
 
 //=============================================================================
 

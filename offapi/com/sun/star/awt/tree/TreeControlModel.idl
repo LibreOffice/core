@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_tree_TreeControlModel_idl__
 #define __com_sun_star_awt_tree_TreeControlModel_idl__
 
-#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__
 #include <com/sun/star/awt/tree/XTreeDataModel.idl>
-#endif
-
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_view_SelectionType_idl__
 #include <com/sun/star/view/SelectionType.idl>
-#endif
 
 //=============================================================================
 
@@ -73,7 +65,7 @@ service TreeControlModel
     [property] boolean RootDisplayed;
 
     /** Specifies whether the node handles should be displayed.
-        <p>The handles are doted lines that visualize the tree like hirarchie<p>
+        <p>The handles are doted lines that visualize the tree like hierarchy<p>
         <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowsHandles;

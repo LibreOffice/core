@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,3 +63,5 @@ sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
 #endif /* __cplusplus */
 
 #endif /* INCLUDED_RTL_SOURCE_STRIMP_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

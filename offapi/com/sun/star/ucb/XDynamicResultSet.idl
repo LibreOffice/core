@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
 #define __com_sun_star_ucb_XDynamicResultSet_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XDynamicResultSetListener_idl__
 #include <com/sun/star/ucb/XDynamicResultSetListener.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ListenerAlreadySetException_idl__
 #include <com/sun/star/ucb/ListenerAlreadySetException.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_AlreadyInitializedException_idl__
 #include <com/sun/star/ucb/AlreadyInitializedException.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ServiceNotFoundException_idl__
 #include <com/sun/star/ucb/ServiceNotFoundException.idl>
-#endif
 
 //=============================================================================
 
@@ -88,7 +71,7 @@ module com { module sun { module star { module ucb {
     <p>
     The calling of <member>XDynamicResultSetListener::notify</member> has
     to happen in an own thread, because it could take a longer time and any
-    actions til the listener returns the call. So don't block the notify-causing
+    actions ??? until the listener returns the call. So don't block the notify-causing
     action.
     </p>
 
@@ -100,7 +83,7 @@ module com { module sun { module star { module ucb {
       <li> The listener is allowed to access both <type>ContentResultSet</type>s,
          they must be both valid.</li>
       <li> It is not allowed to start a second notify-call.</li>
-      <li> All addditional things we want to send as notification are to be
+      <li> All additional things we want to send as notification are to be
          queued.</li>
       <li> Any other calls are to be accepted and treated.</li>
     </ol>
@@ -147,7 +130,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         at the listener
 
         @param Listener
-        a listener for resultset notifications
+        a listener for result set notifications
 
         @throws ListenerAlreadySetException
         if this method is called more than once during the life of the

@@ -27,9 +27,7 @@
 #ifndef com_sun_star_chart_StandardDiagramCreationParameters_idl
 #define com_sun_star_chart_StandardDiagramCreationParameters_idl
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 module com
 {

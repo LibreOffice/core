@@ -28,35 +28,16 @@
 #ifndef __com_sun_star_xml_dom_XDocumentBuilder_idl__
 #define __com_sun_star_xml_dom_XDocumentBuilder_idl__
 
-#ifndef __com_sun_star_uno__XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_xml_dom_XDocument_idl__
 #include <com/sun/star/xml/dom/XDocumentType.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XDOMImplementation_idl__
 #include <com/sun/star/xml/dom/XDOMImplementation.idl>
-#endif
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
 #include <com/sun/star/xml/sax/XErrorHandler.idl>
-#endif
-#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
 #include <com/sun/star/xml/sax/XEntityResolver.idl>
-#endif
 
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
 module com { module sun { module star { module xml { module dom {
 

@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
 #define __com_sun_star_rendering_XPolyPolygon2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_FillRule_idl__
 #include <com/sun/star/rendering/FillRule.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 
@@ -58,7 +48,7 @@ published interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         that they participate in mutual fill rule calculations like
         the polygons inside a single poly-polygon do. When rendering
         such a poly-polygon without transparency, it will look like the
-        constituing poly-polygons rendered separately on top of
+        constituting poly-polygons rendered separately on top of
         another. Alas, when rendering with transparency, separate
         rendering will combine the alpha of overlapping areas, whereas
         addPolyPolygon results in constant alpha, regardless how many

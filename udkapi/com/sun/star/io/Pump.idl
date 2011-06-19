@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_io_Pipe_idl__
 #define __com_sun_star_io_Pipe_idl__
 
-#ifndef __com_sun_star_io_XActiveDataSource_idl__
 #include <com/sun/star/io/XActiveDataSource.idl>
-#endif
 
-#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
-#endif
 
-#ifndef __com_sun_star_io_XActiveDataControl_idl__
 #include <com/sun/star/io/XActiveDataControl.idl>
-#endif
 
 
 //=============================================================================

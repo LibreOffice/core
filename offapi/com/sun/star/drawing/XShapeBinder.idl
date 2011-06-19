@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_drawing_XShapeBinder_idl__
 #define __com_sun_star_drawing_XShapeBinder_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapes_idl__
 #include <com/sun/star/drawing/XShapes.idl>
-#endif
 
 
 //=============================================================================
@@ -55,7 +49,7 @@ published interface XShapeBinder: com::sun::star::uno::XInterface
     /** binds <type>Shape</type>s together.
 
         @param xShapes
-            a container with <type>Shape</type>s that will be bind toghether.
+            a container with <type>Shape</type>s that will be bind together.
             All <type>Shapes</type> will be converted to a <type>PolyPolygonBezierShape</type>
             and the lines will be connected. The <type>Shape</types>s in xShape will be
             removed from the <type>GenericDrawPage</type> and disposed.

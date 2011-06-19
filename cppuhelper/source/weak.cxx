@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 #include <osl/mutex.hxx>
-#ifndef _CPPU_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
-#endif
-#ifndef _CPPU_HELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
 #include "cppuhelper/exc_hlp.hxx"
 
 using namespace osl;
@@ -229,8 +226,8 @@ void OWeakObject::disposeWeakConnectionPoint()
             p->dispose();
         }
         catch (RuntimeException const& exc) {
-            OSL_ENSURE(
-                false, OUStringToOString(
+            OSL_FAIL(
+                OUStringToOString(
                     exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             static_cast<void>(exc);
         }
@@ -293,16 +290,6 @@ Any OWeakAggObject::queryInterface( const Type & rType ) throw(::com::sun::star:
 {
     Reference< XInterface > x( xDelegator ); // harden ref
     return (x.is() ? x->queryInterface( rType ) : queryAggregation( rType ));
-
-//      // set rOut to zero, if failed
-//      if( !xDelegator.queryHardRef( aUik, rOut ) )
-//      {
-//          XInterfaceRef x;
-//          if( !xDelegator.queryHardRef( ((XInterface*)0)->getSmartUik(), x ) )
-//              // reference is not valid
-//              queryAggregation( aUik, rOut );
-//      }
-//      return rOut.is();
 }
 
 // XAggregation
@@ -551,3 +538,4 @@ Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

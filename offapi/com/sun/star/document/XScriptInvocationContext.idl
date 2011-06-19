@@ -29,9 +29,7 @@
 #define __com_sun_star_document_XScriptInvocationContext_idl__
 
 
-#ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #include <com/sun/star/document/XEmbeddedScripts.idl>
-#endif
 
 //=============================================================================
 
@@ -50,7 +48,7 @@ module com { module sun { module star { module document {
     then this other document is denoted by <member>ScriptContainer</member>.</p>
 
     <p>If the interface is implemented by a controller, then <member>ScriptContainer</member>
-    refers to the document which supports embedding scripts, and which is unambiguosly
+    refers to the document which supports embedding scripts, and which is unambiguously
     associated with the controller. This must not necessarily be the model returned by
     <member scope="com::sun::star::frame">XController::getModel</member>.</p>
 
@@ -59,7 +57,7 @@ module com { module sun { module star { module document {
 interface XScriptInvocationContext
 {
     /** denotes the document which contains the scripts which are to be invoked from
-    the component implementing the XScriptInvocationContext inteface.
+    the component implementing the XScriptInvocationContext interface.
     */
     [attribute, readonly] XEmbeddedScripts ScriptContainer;
 };

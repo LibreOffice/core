@@ -66,29 +66,13 @@ LIB1FILES=	\
     $(SLB)$/cpprtl.lib	\
     $(SLB)$/textenc.lib 
 
-#.IF "$(GUI)"=="UNX"
-#LIB1FILES+=$(SLB)$/systoolsunx.lib
-#.ENDIF # UNX
-
-
-LIB3TARGET=$(LB)$/a$(TARGET).lib
-LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
-LIB3FILES=	\
-    $(LB)$/oslall.lib	\
-    $(LB)$/cpposl.lib	\
-    $(LB)$/cpprtl.lib	\
-    $(LB)$/textenc.lib
-
-#.IF "$(GUI)"=="UNX"
-#LIB3FILES+=$(LB)$/systoolsunx.lib
-#.ENDIF # UNX
-
-.IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
+.IF "$(COM)" == "MSC"
 SHL1TARGET= $(TARGET)
+SHL1IMPLIB= i$(TARGET)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
+SHL1IMPLIB= $(SHL1TARGET)
 .ENDIF
-SHL1IMPLIB= i$(TARGET)
 SHL1VERSIONMAP=	$(TARGET).map
 SHL1RPATH=URELIB
 
@@ -103,7 +87,7 @@ UWINAPILIB=     $(LB)$/uwinapi.lib
 SHL1STDLIBS=	\
                 $(UWINAPILIB)\
                 $(ADVAPI32LIB)\
-                $(WSOCK32LIB)\
+                $(WS2_32LIB)\
                 $(MPRLIB)\
                 $(SHELL32LIB)\
                 $(COMDLG32LIB)\
@@ -125,42 +109,9 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # SOLARIS
 .ENDIF # UNX
 
-.IF "$(GUI)"=="OS2"
-SHL1STDLIBS=pthread.lib
-.ENDIF # OS2
-
-# If we compile sal with STLport checking iterators
-# we need to link against the STLport
-.IF "$(USE_STLP_DEBUG)" != ""
-SHL1STDLIBS+=$(LIBSTLPORT)
-.ENDIF
-
-#The irony that using the system STL instead of
-#stlport requires that we link libsal with the
-#LIBSTLPORT alias which is not required when using
-#stlport is not lost on me
-.IF "$(USE_SYSTEM_STL)"=="YES"
-SHL1STDLIBS+=$(LIBSTLPORT)
-.ENDIF
-
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
 .ENDIF
-
-.IF "$(OS)" == "LINUX"
-.IF "$(PAM_LINK)" == "YES"
-SHL1STDLIBS+=-lpam
-.ENDIF
-.IF "$(CRYPT_LINK)" == "YES"
-SHL1STDLIBS+=-lcrypt
-.ENDIF
-.ENDIF
-
-# #i105898# required for LD_PRELOAD libsalalloc_malloc.so
-#           if sal is linked with -Bsymbolic-functions
-.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
-SHL1LINKFLAGS+=-Wl,--dynamic-list=salalloc.list
-.ENDIF # .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
@@ -182,24 +133,6 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
 
-#
-# This part builds a tiny extra lib,
-# containing an alloc.c which uses system 
-# heap instead of our own mem management. 
-# This is e.g. useful for proper valgrinding
-# the office.
-#
-.IF "$(OS)"=="LINUX"
-
-TARGET2 = salalloc_malloc
-SHL2TARGET= $(TARGET2)
-SHL2IMPLIB= i$(TARGET2)
-SHL2VERSIONMAP=	salalloc.map
-
-SHL2LIBS+=$(SLB)$/SYSALLOC_cpprtl.lib
-
-.ENDIF # .IF "$(OS)"=="LINUX"
-
 # --- Coverage -----------------------------------------------------
 # LLA: 20040304 The follows lines are an additional which is only need if we run
 #               coverage tests. For normal test runs this feature is not used.
@@ -218,6 +151,15 @@ SHL1STDLIBS+=-lgcc
 .ENDIF
 .ENDIF
 .ENDIF
+
+SHL4DEPN+=$(SHL1TARGETN)
+SHL4LIBS=$(SLB)$/textenc_tables.lib
+SHL4TARGET=sal_textenc
+SHL4STDLIBS=$(SALLIB)
+SHL4VERSIONMAP=saltextenc.map
+
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=$(SHL4TARGET)
 
 # --- Targets ------------------------------------------------------
 

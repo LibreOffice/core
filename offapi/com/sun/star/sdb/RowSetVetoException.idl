@@ -27,14 +27,12 @@
 #ifndef __com_sun_star_sdb_RowSetVetoException_idl__
 #define __com_sun_star_sdb_RowSetVetoException_idl__
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 
 
-/** is an exception fired whenever a rowset operation was cancelled because of
+/** is an exception fired whenever a row set operation was cancelled because of
     of a veto of an approved listener.
     @see com::sun::star::sdb::XRowSetApproveListener
  */

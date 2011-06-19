@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,9 @@
 #include <rtl/unload.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "rtl/allocator.hxx"
 
 #include <functional>
@@ -108,19 +110,14 @@ static sal_Bool hasEnoughTimePassed( const TimeValue* unusedSince, const TimeVal
     return retval;
 }
 
-static osl::Mutex* getUnloadingMutex()
+namespace
 {
-    static osl::Mutex * g_pMutex= NULL;
-    if (!g_pMutex)
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if (!g_pMutex)
-        {
-            static osl::Mutex g_aMutex;
-            g_pMutex= &g_aMutex;
-        }
-    }
-    return g_pMutex;
+    class theUnloadingMutex : public rtl::Static<osl::Mutex, theUnloadingMutex>{};
+}
+
+static osl::Mutex& getUnloadingMutex()
+{
+    return theUnloadingMutex::get();
 }
 
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
@@ -156,7 +153,7 @@ struct hashModule
     }
 };
 
-typedef std::hash_map<
+typedef boost::unordered_map<
     oslModule,
     std::pair<sal_uInt32, component_canUnloadFunc>,
     hashModule,
@@ -305,7 +302,7 @@ struct hashListener
     }
 };
 
-typedef std::hash_map<
+typedef boost::unordered_map<
     sal_Int32,
     std::pair<rtl_unloadingListenerFunc, void*>,
     hashListener,
@@ -415,3 +412,5 @@ static void rtl_notifyUnloadingListeners()
         callbackFunc( it->second.second);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

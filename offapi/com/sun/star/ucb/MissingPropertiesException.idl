@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ucb_MissingPropertiesException_idl__
 #define __com_sun_star_ucb_MissingPropertiesException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //=============================================================================
 
@@ -40,7 +38,7 @@ module com { module sun { module star { module ucb {
 /** This exception is used to indicate that there are properties missing.
 
     <p>For example, to create a new resource, usually one ore more property
-    values must be set prior to executing the command 'insert', which makes
+    values must be set prior to executing the command "insert", which makes
     the new resource persistent.
 
     @version    1.0

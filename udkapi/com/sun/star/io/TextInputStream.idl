@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_io_TextInputStream_idl__
 #define __com_sun_star_io_TextInputStream_idl__
 
-#ifndef __com_sun_star_io_XTextInputStream_idl__
 #include <com/sun/star/io/XTextInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
-#endif
 
-#ifndef __com_sun_star_io_XConnectable_idl__
 #include <com/sun/star/io/XConnectable.idl>
-#endif
 
 
 //=============================================================================

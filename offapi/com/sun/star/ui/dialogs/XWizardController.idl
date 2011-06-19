@@ -71,7 +71,7 @@ published interface XWizardController
 
     /** called when the wizard is about to be finished.
 
-        <p>This method allows the controller to do any final checks, and ultimatively veto finishing the wizard.</p>
+        <p>This method allows the controller to do any final checks, and ultimately veto finishing the wizard.</p>
     */
     boolean confirmFinish();
 };

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ void Service::connect(rtl::OUString const & rConnection,
         css::connection::Connector::create(m_xContext)->connect(rConnection));
     css::uno::Reference< css::bridge::XBridgeFactory > xBridgeFactory(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            rtl::OUString::createFromAscii("com.sun.star.bridge.BridgeFactory"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.BridgeFactory" )),
             m_xContext),
         css::uno::UNO_QUERY);
     m_xBridge = xBridgeFactory->createBridge(rtl::OUString(), rProtocol,
@@ -138,8 +139,7 @@ Service::get(rtl::OUString const & rName) throw (css::uno::RuntimeException)
 css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static()
 {
     css::uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString::createFromAscii(
-        "com.sun.star.test.bridges.testequals");
+    aNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.test.bridges.testequals" ));
     return aNames;
 }
 
@@ -162,13 +162,13 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     return static_cast< cppu::OWeakObject * >(new Service(rContext));
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     sal_Char const ** pEnvTypeName, uno_Environment **)
 {
     *pEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
                                                 void * pServiceManager, void *)
 {
     void * pFactory = 0;
@@ -196,9 +196,9 @@ namespace {
 bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
                css::uno::Sequence< rtl::OUString > const & rServiceNames)
 {
-    rtl::OUString aKeyName(rtl::OUString::createFromAscii("/"));
+    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
     aKeyName += rtl::OUString::createFromAscii(pImplementationName);
-    aKeyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
+    aKeyName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
     css::uno::Reference< css::registry::XRegistryKey > xKey;
     try
     {
@@ -230,3 +230,5 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void *, void * pRegistryKey)
         && writeInfo(pRegistryKey, Service::getImplementationName_static(),
                      Service::getSupportedServiceNames_static());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

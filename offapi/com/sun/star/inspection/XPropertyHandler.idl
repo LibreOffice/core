@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_inspection_XPropertyHandler_idl__
 #define __com_sun_star_inspection_XPropertyHandler_idl__
 
-#ifndef __com_sun_star_beans_PropertyState_idl__
 #include <com/sun/star/beans/PropertyState.idl>
-#endif
-#ifndef __com_sun_star_beans_Property_idl__
 #include <com/sun/star/beans/Property.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
-#ifndef __com_sun_star_inspection_LineDescriptor_idl__
 #include <com/sun/star/inspection/LineDescriptor.idl>
-#endif
-#ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_inspection_InteractiveSelectionResult_idl__
 #include <com/sun/star/inspection/InteractiveSelectionResult.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
@@ -233,7 +217,7 @@ published interface XPropertyHandler
 
         <p>If a handler implementation supports property change listeners, it must be able to cope
         with a call to <member>addPropertyChangeListener</member> even if currently no component is
-        being inspected. In this case, the listener must become active as soon as a new introspectee
+        being inspected. In this case, the listener must become active as soon as a new introspection
         is set in the next <member>inspect</member> call.</p>
 
         @param Listener
@@ -255,7 +239,7 @@ published interface XPropertyHandler
     /** returns the properties which the handler can handle
 
         <p>A handler is allowed to return an empty sequence here, indicating that for
-        the given introspectee, no properties handling can be provided. This might happen
+        the given introspection, no properties handling can be provided. This might happen
         when a fixed set of property handlers is used for a variety of components to inspect,
         where not all handlers can really cope with all components.</p>
 
@@ -278,8 +262,8 @@ published interface XPropertyHandler
         <p>In such a case, simply return those properties here.</p>
 
         <p>There is a precedence in the property handlers used by an <type>ObjectInspector</type>,
-        which also is important for the superseded properties. This precendence is implied by the
-        precendence of factories to create the property handlers, as denoted in the
+        which also is important for the superseded properties. This precedence is implied by the
+        precedence of factories to create the property handlers, as denoted in the
         <member>XObjectInspectorModel::HandlerFactories</member> attribute.</p>
 
         <p>With this in mind, property handlers can only supersede properties which are supported
@@ -334,7 +318,7 @@ published interface XPropertyHandler
     boolean isComposable( [in] string PropertyName )
         raises (::com::sun::star::beans::UnknownPropertyException);
 
-    /** called when a browse button belonging to a property UI represenation has been clicked
+    /** called when a browse button belonging to a property UI representation has been clicked
 
         <p>Property handlers can raise a dedicated UI for entering or somehow changing a property value.
         Usually, this will be a modal dialog, but it can also be a non-modal user interface component.</p>
@@ -347,7 +331,7 @@ published interface XPropertyHandler
         property value, and return the result of this (see <type>InteractiveSelectionResult</type>).</p>
 
         <p>It is recommended that property handlers do not directly set the property value which has
-        been obatined from the user, but store it in the output-parameter Data, and return
+        been obtained from the user, but store it in the output-parameter Data, and return
         <member>InteractiveSelectionResult::ObtainedValue</member>.</p>
 
         <p>If a handler sets the new property value directly, and returns
@@ -357,7 +341,7 @@ published interface XPropertyHandler
         will be called at one handler only, however the new property would have to be forwarded to
         all handlers.</p>
 
-        <p>If a property is not composeable, directly setting the new property value does not yield any problem,
+        <p>If a property is not composable, directly setting the new property value does not yield any problem,
         as long as property listeners are properly notified of the change.</p>
 
         @param PropertyName
@@ -420,7 +404,7 @@ published interface XPropertyHandler
             <br/>
             In some cases it may be necessary to differentiate between both situations. For instance,
             if you want to set the value of another property when an actuating property's value changed,
-            you should definately not do this when <arg>FirstTimeInit</arg> is <TRUE/>.
+            you should definitely not do this when <arg>FirstTimeInit</arg> is <TRUE/>.
         @throws com::sun::star::lang::NullPointerException
             if <arg>InspectorUI</arg> is <NULL/>
     */

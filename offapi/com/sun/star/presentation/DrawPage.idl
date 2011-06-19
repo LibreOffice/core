@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_presentation_DrawPage_idl__
 #define __com_sun_star_presentation_DrawPage_idl__
 
-#ifndef __com_sun_star_drawing_DrawPage_idl__
 #include <com/sun/star/drawing/DrawPage.idl>
-#endif
 
-#ifndef __com_sun_star_document_LinkTarget_idl__
 #include <com/sun/star/document/LinkTarget.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_FadeEffect_idl__
 #include <com/sun/star/presentation/FadeEffect.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
 #include <com/sun/star/presentation/AnimationSpeed.idl>
-#endif
 
 
 //=============================================================================
@@ -111,7 +103,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a header textfield rendered on this
+    /** defines the text that is displayed in a header textfield rendered on this
         page.
     */
     [optional, property] string HeaderText;
@@ -126,7 +118,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a footer textfield rendered on this
+    /** defines the text that is displayed in a footer textfield rendered on this
         page.
     */
     [optional, property] string FooterText;
@@ -157,7 +149,7 @@ published service DrawPage
 
     //-------------------------------------------------------------------------
 
-    /** defines the text that is displayd in a date and time textfield rendered on this
+    /** defines the text that is displayed in a date and time textfield rendered on this
         page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
     */
     [optional, property] string DateTimeText;

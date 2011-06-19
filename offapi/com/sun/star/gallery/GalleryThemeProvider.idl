@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_gallery_GalleryThemeProvider_idl__
 #define __com_sun_star_gallery_GalleryThemeProvider_idl__
 
-#ifndef __com_sun_star_gallery_XGalleryThemeProvider_idl__
 #include <com/sun/star/gallery/XGalleryThemeProvider.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

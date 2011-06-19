@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_DispatchHelper_idl__
 #define __com_sun_star_frame_DispatchHelper_idl__
 
-#ifndef __com_sun_star_frame_XDispatchHelper_idl__
 #include <com/sun/star/frame/XDispatchHelper.idl>
-#endif
 
 //=============================================================================
 
@@ -39,7 +37,7 @@ module com {  module sun {  module star {  module frame {
 /** provides an easy way to dispatch an URL using one call instead of multiple ones.
 
     <p>
-    Normaly a complete dispatch is splitted into different parts:
+    Normally a complete dispatch is split into different parts:
     - converting and parsing the URL
     - searching for a valid dispatch object available on a dispatch provider
     - dispatching of the URL and it's parameters

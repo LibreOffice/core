@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_sheet_AccessibleSpreadsheet_idl__
 #define __com_sun_star_sheet_AccessibleSpreadsheet_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleTable_idl__
 #include <com/sun/star/accessibility/XAccessibleTable.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
 #include <com/sun/star/accessibility/XAccessibleSelection.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
 
 //=============================================================================
 
@@ -86,7 +72,7 @@ published service AccessibleSpreadsheet
             the order on the screen. This means that the first cell is the
             cell in the left top edge of the table and the last one is the
             cell in the right bottom edge of the table. The second is the
-            cell in the first row and second xolumn and so on.</li>
+            cell in the first row and second column and so on.</li>
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name.</li>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -171,7 +172,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
         break;
     }
     default:
-        OSL_ENSURE( sal_False, "### illegal member typeclass!" );
+        OSL_FAIL( "### illegal member typeclass!" );
         abort();
     }
 
@@ -492,7 +493,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
         *ppException = 0;
     }
-    else // exception occured
+    else // exception occurred
     {
         for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
         {
@@ -528,3 +529,4 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                    ppException);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

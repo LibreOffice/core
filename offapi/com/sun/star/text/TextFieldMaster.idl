@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_text_TextFieldMaster_idl__
 #define __com_sun_star_text_TextFieldMaster_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_text_XDependentTextField_idl__
 #include <com/sun/star/text/XDependentTextField.idl>
-#endif
 
 //=============================================================================
 
@@ -50,7 +46,7 @@ published service TextFieldMaster
      */
     [optional] interface com::sun::star::beans::XPropertySet;
     //------------------------------------------------------------------------
-    /** determins the name of the field master. The name is void as long as the
+    /** determines the name of the field master. The name is void as long as the
      instance is not member of the document structure. When the value is being set
      the instance is inserted into the document and the name cannot be changed afterwards.
      That does not apply to the Database text field master.

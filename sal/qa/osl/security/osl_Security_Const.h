@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,22 +26,13 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_SECURITY_CONST_H_
 #define _OSL_SECURITY_CONST_H_
 
 #if ( defined WNT )                     // Windows
-//#define UNICODE
-#include <tools/prewin.h>
-// #include <windows.h>
 #include <io.h>
-#include <tools/postwin.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
@@ -49,14 +41,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
 #include <unistd.h>
 #include <pwd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
-// LLA: #include <testshl2/cmdlinebits.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/plugin/TestPlugInDefaultImpl.h>
 
+#define t_print printf
 
 #define BUFSIZE 1024
 const char pTestString[17] = "Sun Microsystems";
@@ -78,3 +73,5 @@ OSLTEST_DECLARE_USTRING( NullURL,  "" );
 sal_Bool isAdmin = sal_False;
 
 #endif /* _OSL_SECURITY_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

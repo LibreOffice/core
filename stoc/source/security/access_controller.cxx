@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,8 @@
 
 #include "lru_cache.h"
 #include "permissions.h"
+#include "bootstrapservices.hxx"
+
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.AccessController"
@@ -79,11 +82,7 @@ namespace stoc_sec
 {
 // static stuff initialized when loading lib
 static OUString s_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-static OUString s_implName = OUSTR(IMPL_NAME);
-static OUString s_serviceName = OUSTR(SERVICE_NAME);
 static OUString s_acRestriction = OUSTR("access-control.restriction");
-
-static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 //##################################################################################################
 
@@ -617,13 +616,13 @@ static void dumpPermissions(
             RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
     }
     OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( str.getStr() );
+    OSL_TRACE( "%s", str.getStr() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
     {
         OString str( ::rtl::OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
     }
     OSL_TRACE( "> permission dump done" );
 }
@@ -690,7 +689,7 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
             break;
         }
         default:
-            OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+            OSL_FAIL( "### this should never be called in this ac mode!" );
             break;
         }
     }
@@ -744,7 +743,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         break;
     }
     default:
-        OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+        OSL_FAIL( "### this should never be called in this ac mode!" );
         return PermissionCollection();
     }
 
@@ -765,7 +764,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
         OString str(
             ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
 #endif
         return PermissionCollection( new AllPermission() );
     }
@@ -853,7 +852,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         clearPostPoned(); // safety: exception could have happened before checking postponed?
         OUStringBuffer buf( 64 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occured): ") );
+            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occurred): ") );
         buf.append( exc.Message );
         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
     }
@@ -1008,14 +1007,15 @@ Reference< security::XAccessControlContext > AccessController::getContext()
 OUString AccessController::getImplementationName()
     throw (RuntimeException)
 {
-    return s_implName;
+    return stoc_bootstrap::ac_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool AccessController::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    OUString const * pNames = s_serviceNames.getConstArray();
-    for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pNames = aSNL.getConstArray();
+    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
     {
         if (serviceName.equals( pNames[ nPos ] ))
         {
@@ -1028,7 +1028,7 @@ sal_Bool AccessController::supportsService( OUString const & serviceName )
 Sequence< OUString > AccessController::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return s_serviceNames;
+    return stoc_bootstrap::ac_getSupportedServiceNames();
 }
 }
 //##################################################################################################
@@ -1043,12 +1043,15 @@ Reference< XInterface > SAL_CALL ac_create(
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
 {
-    return stoc_sec::s_serviceNames;
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+    return aSNS;
 }
 //--------------------------------------------------------------------------------------------------
 OUString ac_getImplementationName() SAL_THROW( () )
 {
-    return stoc_sec::s_implName;
+    static OUString s_implName = OUSTR(IMPL_NAME);
+    return s_implName;
 }
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(
@@ -1059,3 +1062,5 @@ Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

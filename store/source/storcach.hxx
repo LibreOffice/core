@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.6.8.2 $"
+#define _STORE_STORCACH_HXX
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -110,3 +111,4 @@ PageCache_createInstance (
 
 #endif /* !_STORE_STORCACH_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

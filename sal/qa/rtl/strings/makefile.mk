@@ -34,6 +34,8 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -41,15 +43,16 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET := $(TARGET)
 SHL1OBJS := \
-    $(SLO)$/test_oustringbuffer_utf32.obj \
     $(SLO)$/test_oustring_compare.obj \
     $(SLO)$/test_oustring_convert.obj \
     $(SLO)$/test_oustring_endswith.obj \
     $(SLO)$/test_oustring_noadditional.obj
 SHL1IMPLIB := i$(SHL1TARGET)
-SHL1STDLIBS := $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS := $(SALLIB) $(CPPUNITLIB)
 SHL1VERSIONMAP := $(PRJ)$/qa$/export.map
 DEF1NAME := $(SHL1TARGET)
 
+.ENDIF
+
 .INCLUDE: target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk

@@ -31,7 +31,7 @@ TARGET = $(PRJNAME)
 
 ENABLE_EXCEPTIONS = TRUE
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "OS2"
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES = UDK
 .ENDIF # WNT
 
@@ -53,6 +53,8 @@ SHL1RPATH = URELIB
 
 .IF "$(COMNAME)" == "msci"
 SHL1VERSIONMAP = msvc_win32_intel.map
+.ELIF "$(COMNAME)" == "mscx"
+SHL1VERSIONMAP = msvc_win32_x86-64.map
 .ELIF "$(COMNAME)" == "sunpro5"
 SHL1VERSIONMAP = cc5_solaris_sparc.map
 .ELIF "$(GUI)$(COM)" == "WNTGCC"

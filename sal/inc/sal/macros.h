@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,54 @@
 #ifndef _SAL_MACROS_H_
 #define _SAL_MACROS_H_
 
+#include <stddef.h>
+
 #ifndef SAL_MAX
-#   define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
+#    define SAL_MAX(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
+
 #ifndef SAL_MIN
-#   define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
+#    define SAL_MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifndef SAL_FIELDOFFSET
-#   define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
+#    define SAL_FIELDOFFSET(type, field) ((sal_Int32)(&((type *)16)->field) - 16)
+#endif
+
+#ifndef SAL_N_ELEMENTS
+#    if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__)
+        /*
+         * Magic template to calculate at compile time the number of elements
+         * in an array. Enforcing that the argument must be a array and not
+         * a pointer, e.g.
+         *  char *pFoo="foo";
+         *  SAL_N_ELEMENTS(pFoo);
+         * fails while
+         *  SAL_N_ELEMENTS("foo");
+         * or
+         *  char aFoo[]="foo";
+         *  SAL_N_ELEMENTS(aFoo);
+         * pass
+         *
+         * Unfortunately if arr is an array of an anonymous class then we need
+         * C++0x, i.e. see
+         * http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#757
+         */
+         template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
+#        define SAL_N_ELEMENTS(arr)     (sizeof(sal_n_array_size(arr)))
+#    else
+#        define SAL_N_ELEMENTS(arr)     (sizeof (arr) / sizeof ((arr)[0]))
+#    endif
 #endif
 
 #ifndef SAL_BOUND
-#   define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
+#    define SAL_BOUND(x,l,h)        ((x) <= (l) ? (l) : ((x) >= (h) ? (h) : (x)))
 #endif
 
-#ifndef SAL_SWAP
-#   define SAL_SWAP(a,b)           ((a) ^= (b) ^= (a) ^= (b))
+#ifndef SAL_ABS
+#    define SAL_ABS(a)              (((a) < 0) ? (-(a)) : (a))
 #endif
 
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

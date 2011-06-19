@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_resource_XStringResourceResolver_idl__
 #define __com_sun_star_resource_XStringResourceResolver_idl__
 
-#ifndef __com_sun_star_resource_MissingResourceException_idl__
 #include <com/sun/star/resource/MissingResourceException.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 
 //=============================================================================
@@ -64,7 +56,7 @@ published interface XStringResourceResolver: com::sun::star::util::XModifyBroadc
 {
     /**
         Resolves the passed ResoureID for the current locale. This
-        locale is set during initalisation of the object implementing
+        locale is set during initialization of the object implementing
         this interface or - in case that also the interface
         <type scope="com::sun::star::resource">XStringResourceManager</type>
         is supported - by using the <code>XStringResourceManager::setLocale</code>

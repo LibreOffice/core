@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,8 +67,6 @@ typedef enum
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 typedef struct
@@ -77,7 +76,7 @@ typedef struct
     void*       UserData;
 } oslSignalInfo;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #   pragma pack(pop)
 #endif
 
@@ -112,3 +111,4 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable );
 #endif  /* _OSL_SIGNAL_H_ */
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

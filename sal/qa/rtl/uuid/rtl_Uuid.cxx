@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,9 @@
 #include <time.h>
 #endif
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 /** print a UNI_CODE String. And also print some comments of the string.
 */
 inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
@@ -153,7 +155,7 @@ namespace ThreadHelper
 #ifdef WNT      //Windows
         Sleep(_nSec * 10 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )
         sleep( _nSec );
 #endif
     }
@@ -226,3 +228,4 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Uuid::createNamedUuid, "rtl_Uuid");
 NOADDITIONAL;
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

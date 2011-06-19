@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,12 @@
 #include <stdio.h>
 #endif
 
+#ifdef AIX
+#include <sys/ldr.h>
+#endif
+
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
-
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 
 /*****************************************************************************/
 /* osl_loadModule */
@@ -63,7 +66,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
         char buffer[PATH_MAX];
 
         if (UnicodeToText(buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length))
-            pModule = osl_psz_loadModule(buffer, nRtldMode);
+            pModule = osl_loadModuleAscii(buffer, nRtldMode);
         rtl_uString_release(ustrTmp);
     }
 
@@ -71,21 +74,21 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 }
 
 /*****************************************************************************/
-/* osl_psz_loadModule */
+/* osl_loadModuleAscii */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode)
 {
     OSL_ASSERT(
         (nRtldMode & SAL_LOADMODULE_LAZY) == 0 ||
         (nRtldMode & SAL_LOADMODULE_NOW) == 0); /* only either LAZY or NOW */
-    if (pszModuleName)
+    if (pModuleName)
     {
 #ifndef NO_DL_FUNCTIONS
         int rtld_mode =
             ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
-        void* pLib = dlopen(pszModuleName, rtld_mode);
+        void* pLib = dlopen(pModuleName, rtld_mode);
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)
@@ -109,7 +112,11 @@ sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     (void) pModuleName; /* avoid warning about unused parameter */
+#ifndef NO_DL_FUNCTIONS
     *pResult = (oslModule) RTLD_DEFAULT;
+#else
+    *pResult = NULL;
+#endif
     return sal_True;
 }
 
@@ -201,6 +208,68 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
+#ifndef NO_DL_FUNCTIONS
+#if defined(AIX)
+    int i;
+    int size = 4 * 1024;
+    char *buf, *filename=NULL;
+    struct ld_info *lp;
+
+    if ((buf = malloc(size)) == NULL)
+        return result;
+
+    while((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM)
+    {
+        size += 4 * 1024;
+        if ((buf = malloc(size)) == NULL)
+            break;
+    }
+
+    lp = (struct ld_info*) buf;
+    while (lp)
+    {
+        unsigned long start = (unsigned long)lp->ldinfo_dataorg;
+        unsigned long end = start + lp->ldinfo_datasize;
+        if (start <= (unsigned long)addr && end > (unsigned long)addr)
+        {
+            filename = lp->ldinfo_filename;
+            break;
+        }
+        if (!lp->ldinfo_next)
+            break;
+        lp = (struct ld_info*) ((char *) lp + lp->ldinfo_next);
+    }
+
+    if (filename)
+    {
+        rtl_uString * workDir = NULL;
+        osl_getProcessWorkingDir(&workDir);
+        if (workDir)
+        {
+#if OSL_DEBUG_LEVEL > 1
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", filename);
+#endif
+            rtl_string2UString(ppLibraryUrl,
+                               filename,
+                               strlen(filename),
+                               osl_getThreadTextEncoding(),
+                               OSTRING_TO_OUSTRING_CVTFLAGS);
+
+            OSL_ASSERT(*ppLibraryUrl != NULL);
+            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+
+            rtl_uString_release(workDir);
+            result = sal_True;
+        }
+        else
+        {
+            result = sal_False;
+        }
+    }
+
+    free(buf);
+#else
     Dl_info dl_info;
 
     if ((result = dladdr(addr, &dl_info)) != 0)
@@ -230,6 +299,8 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
             result = sal_False;
         }
     }
+#endif
+#endif
     return result;
 }
 
@@ -240,3 +311,5 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, r
 {
     return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

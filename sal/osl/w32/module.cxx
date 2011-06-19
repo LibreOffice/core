@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,13 @@
 *
 ************************************************************************/
 
+#ifdef __MINGW32__
+extern "C" {
+#endif
 #include "system.h"
+#ifdef __MINGW32__
+}
+#endif
 #include <tlhelp32.h>
 
 #include "file_url.h"
@@ -46,10 +53,12 @@
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
-oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode )
+oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
     HINSTANCE hInstance;
+#if OSL_DEBUG_LEVEL < 2
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
+#endif
     rtl_uString* Module = NULL;
     oslModule ret = 0;
     oslFileError    nError;
@@ -57,8 +66,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %S", (LPTSTR)&strModuleName->buffer );
 
     OSL_ASSERT(strModuleName);
-
-    nRtldMode = nRtldMode; /* avoid warnings */
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
 
@@ -80,13 +87,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     {
         std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
-                                      &vec[0], Module->length + 1);
+                                      reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
         if (len )
         {
-            hInstance = LoadLibraryW(&vec[0]);
+            hInstance = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
 
             if (hInstance == NULL)
-                hInstance = LoadLibraryExW(&vec[0], NULL,
+                hInstance = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }
@@ -97,9 +104,42 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
 
     ret = (oslModule) hInstance;
     rtl_uString_release(Module);
+#if OSL_DEBUG_LEVEL < 2
     SetErrorMode(errorMode);
+#endif
 
     RTL_LOGFILE_TRACE1( "} osl_loadModule end: %S", (LPTSTR)&strModuleName->buffer );
+
+    return ret;
+}
+
+/*****************************************************************************/
+/* osl_loadModuleAscii */
+/*****************************************************************************/
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode )
+{
+    (void) nRtldMode; /* avoid warnings */
+
+    HINSTANCE hInstance;
+    UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
+    oslModule ret = 0;
+
+    RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %s", pModuleName );
+
+    OSL_ASSERT(pModuleName);
+
+    hInstance = LoadLibrary(pModuleName);
+    if (hInstance == NULL)
+        hInstance = LoadLibraryEx(pModuleName, NULL,
+                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
+        hInstance = 0;
+
+    ret = (oslModule) hInstance;
+    SetErrorMode(errorMode);
+
+    RTL_LOGFILE_TRACE1( "} osl_loadModule end: %s", pModuleName );
 
     return ret;
 }
@@ -206,73 +246,6 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 #ifdef LPMODULEENTRY32
 #undef LPMODULEENTRY32
 #endif
-
-typedef HANDLE (WINAPI *CreateToolhelp32Snapshot_PROC)( DWORD dwFlags, DWORD th32ProcessID );
-typedef BOOL (WINAPI *Module32First_PROC)( HANDLE   hSnapshot, LPMODULEENTRY32 lpme32 );
-typedef BOOL (WINAPI *Module32Next_PROC)( HANDLE    hSnapshot, LPMODULEENTRY32 lpme32 );
-
-static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString **pustrURL )
-{
-    sal_Bool    bSuccess        = sal_False;    /* Assume failure */
-    HMODULE     hModKernel32    = GetModuleHandleA( "KERNEL32.DLL" );
-
-    if ( hModKernel32 )
-    {
-        CreateToolhelp32Snapshot_PROC   lpfnCreateToolhelp32Snapshot = (CreateToolhelp32Snapshot_PROC)GetProcAddress( hModKernel32, "CreateToolhelp32Snapshot" );
-        Module32First_PROC              lpfnModule32First = (Module32First_PROC)GetProcAddress( hModKernel32, "Module32First" );
-        Module32Next_PROC               lpfnModule32Next = (Module32Next_PROC)GetProcAddress( hModKernel32, "Module32Next" );
-
-        if ( lpfnCreateToolhelp32Snapshot && lpfnModule32First && lpfnModule32Next )
-        {
-            HANDLE  hModuleSnap = NULL;
-            DWORD   dwProcessId = GetCurrentProcessId();
-
-            // Take a snapshot of all modules in the specified process.
-
-            hModuleSnap = lpfnCreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwProcessId );
-
-            if ( INVALID_HANDLE_VALUE != hModuleSnap )
-            {
-                MODULEENTRY32   me32    = {0};
-
-                // Fill the size of the structure before using it.
-
-                me32.dwSize = sizeof(MODULEENTRY32);
-
-                // Walk the module list of the process, and find the module of
-                // interest. Then copy the information to the buffer pointed
-                // to by lpMe32 so that it can be returned to the caller.
-
-                if ( lpfnModule32First(hModuleSnap, &me32) )
-                {
-                    do
-                    {
-                        if ( (BYTE *)pv >= (BYTE *)me32.hModule && (BYTE *)pv < (BYTE *)me32.hModule + me32.modBaseSize )
-                        {
-                            rtl_uString *ustrSysPath = NULL;
-
-                            rtl_string2UString( &ustrSysPath, me32.szExePath, strlen(me32.szExePath), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-                            OSL_ASSERT(ustrSysPath != NULL);
-                            osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
-                            rtl_uString_release( ustrSysPath );
-
-                            bSuccess = sal_True;
-                        }
-
-                    } while ( !bSuccess && lpfnModule32Next( hModuleSnap, &me32 ) );
-                }
-
-
-                // Do not forget to clean up the snapshot object.
-
-                CloseHandle (hModuleSnap);
-            }
-
-        }
-    }
-
-    return  bSuccess;
-}
 
 /***************************************************************************************/
 /* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
@@ -411,8 +384,6 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
   DWORD cb                 // size of the structure
 );
 
-#define bufsizeof(buffer) (sizeof(buffer) / sizeof((buffer)[0]))
-
 /* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Libary 6.0a say so */
 
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pustrURL )
@@ -475,10 +446,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     /* Use ..._NT first because ..._NT4 is much slower */
-    if ( IS_NT )
-        return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
-    else
-        return _osl_addressGetModuleURL_Windows( pv, pustrURL );
+    return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
 }
 
 /*****************************************************************************/
@@ -501,3 +469,4 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, 
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

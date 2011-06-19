@@ -28,18 +28,10 @@
 #ifndef __offapi_com_sun_star_view_XFormLayerAccess_idl__
 #define __offapi_com_sun_star_view_XFormLayerAccess_idl__
 
-#ifndef __com_sun_star_view_XControlAccess_idl__
 #include <com/sun/star/view/XControlAccess.idl>
-#endif
-#ifndef __com_sun_star_form_XForm_idl__
 #include <com/sun/star/form/XForm.idl>
-#endif
-#ifndef __com_sun_star_form_runtime_XFormController_idl__
 #include <com/sun/star/form/runtime/XFormController.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

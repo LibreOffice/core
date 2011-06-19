@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __SAMPLELIBRTTI_HXX_
 #define __SAMPLELIBRTTI_HXX_
 
@@ -8,8 +9,6 @@ public:
     virtual void  funcB();
 protected:
     virtual void  funcC();
-private:
-    virtual void  funcD();
 };
 
 
@@ -20,9 +19,8 @@ public:
     virtual void  funcB();
 protected:
     virtual void  funcC();
-private:
-    virtual void  funcD();
-
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

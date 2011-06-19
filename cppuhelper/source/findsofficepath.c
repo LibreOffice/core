@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
  * @param subKeyName  name of the subkey to open
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
 {
@@ -86,11 +87,11 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
  * Gets the installation path from the Windows Registry.
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* platformSpecific()
 {
-    const char* SUBKEYNAME = "Software\\OpenOffice.org\\UNO\\InstallPath";
+    const char* SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
 
     char* path = NULL;
 
@@ -118,14 +119,14 @@ static char* platformSpecific()
  * is in one of the directories listed in the PATH environment variable.</p>
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* platformSpecific()
 {
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/soffice";
+    const char* APPENDIX = "/libreoffice";
 
     char* path = NULL;
     char* env = NULL;
@@ -196,10 +197,10 @@ char const* cppuhelper_detail_findSofficePath()
     /* get the installation path from the UNO_PATH environment variable */
     path = getenv( UNOPATHVARNAME );
 
-    if ( path == NULL || strlen( path ) == 0 )
-    {
+    if (!path || !path[0])
         path = platformSpecific();
-    }
 
     return path;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

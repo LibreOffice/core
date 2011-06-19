@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ oslModule SAL_CALL osl_loadModuleRelative(
     ::rtl::OUString abs;
     try {
         abs = ::rtl::Uri::convertRelToAbs(base, relativePath);
-    } catch (::rtl::MalformedUriException & e) {
+    } catch (const ::rtl::MalformedUriException & e) {
         (void) e; // avoid warnings
         OSL_TRACE(
             "rtl::MalformedUriException <%s>",
@@ -69,3 +70,5 @@ oslModule SAL_CALL osl_loadModuleRelative(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

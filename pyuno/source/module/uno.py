@@ -27,7 +27,12 @@
 import sys
 
 import pyuno
-import __builtin__
+
+try:
+    import __builtin__
+except ImportError:
+    import builtins as __builtin__
+
 import socket # since on Windows sal3.dll no longer calls WSAStartup
 
 # all functions and variables starting with a underscore (_) must be considered private
@@ -149,9 +154,9 @@ class Bool(object):
        Note: This class is deprecated. Use python's True and False directly instead
     """
     def __new__(cls, value):
-        if isinstance(value, (str, unicode)) and value == "true":
+        if isinstance(value, str) and value == "true":
             return True
-        if isinstance(value, (str, unicode)) and value == "false":
+        if isinstance(value, str) and value == "false":
             return False
         if value:
             return True
@@ -161,7 +166,7 @@ class Char:
     "Represents a UNO char, use an instance of this class to explicitly pass a char to UNO"
     # @param value pass a Unicode string with length 1
     def __init__(self,value):
-        assert isinstance(value, unicode)
+        assert isinstance(value, str)
         assert len(value) == 1
         self.value=value
 
@@ -169,7 +174,7 @@ class Char:
         return "<Char instance %s>" % (self.value, )
         
     def __eq__(self, that):
-        if isinstance(that, (str, unicode)):
+        if isinstance(that, str):
             if len(that) > 1:
                 return False
             return self.value == that[0]
@@ -260,7 +265,7 @@ def _uno_import( name, *optargs, **kwargs ):
     mod = None
     d = sys.modules
     for x in modnames:
-        if d.has_key(x):
+        if x in d:
            mod = d[x]
         else:
            mod = pyuno.__class__(x)  # How to create a module ??
@@ -268,25 +273,25 @@ def _uno_import( name, *optargs, **kwargs ):
 
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
     for x in fromlist:
-       if not d.has_key(x):
+       if x not in d:
           if x.startswith( "typeOf" ):
              try: 
                 d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
-             except RuntimeException,e:
+             except RuntimeException as e:
                 raise ImportError( "type " + name + "." + x[6:len(x)] +" is unknown" )
           else:
             try:
                 # check for structs, exceptions or interfaces
                 d[x] = pyuno.getClass( name + "." + x )
-            except RuntimeException,e:
+            except RuntimeException as e:
                 # check for enums 
                 try:
                    d[x] = Enum( name , x )
-                except RuntimeException,e2:
+                except RuntimeException as e2:
                    # check for constants
                    try:
                       d[x] = getConstantByName( name + "." + x )
-                   except RuntimeException,e3:
+                   except RuntimeException as e3:
                       # no known uno type !
                       raise ImportError( "type "+ name + "." +x + " is unknown" )
     return mod
@@ -296,7 +301,7 @@ __builtin__.__dict__["__import__"] = _uno_import
         
 # private function, don't use
 def _impl_extractName(name):
-    r = range (len(name)-1,0,-1)
+    r = list(range(len(name)-1,0,-1))
     for i in r:
         if name[i] == ".":
            name = name[i+1:len(name)]
@@ -336,7 +341,7 @@ def _uno_extract_printable_stacktrace( trace ):
     mod = None
     try:
         mod = __import__("traceback")
-    except ImportError,e:
+    except ImportError as e:
         pass
     ret = ""
     if mod:

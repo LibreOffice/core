@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,9 +56,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
 using namespace com::sun::star::registry;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
-
+using ::rtl::OUString;
 #define SERVICENAME "com.sun.star.script.Converter"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
@@ -68,33 +68,14 @@ namespace stoc_services
 {
 Sequence< OUString > tcv_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-    MutexGuard guard( Mutex::getGlobalMutex() );
-    if( !pNames )
-    {
-        static Sequence< OUString > seqNames(1);
-        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-        pNames = &seqNames;
-    }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 OUString tcv_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-    MutexGuard guard( Mutex::getGlobalMutex() );
-    if( ! pImplName )
-    {
-        static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-        pImplName = &implName;
-    }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 }
 
@@ -901,7 +882,9 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
 
         case TypeClass_BOOLEAN:
-            aRet <<= OUString::createFromAscii( (*(sal_Bool *)rVal.getValue() ? "true" : "false") );
+            aRet <<= (*(sal_Bool *)rVal.getValue()) ?
+                OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
+                OUString(RTL_CONSTASCII_USTRINGPARAM("false"));
             break;
         case TypeClass_CHAR:
             aRet <<= OUString( (sal_Unicode *)rVal.getValue(), 1 );
@@ -961,3 +944,4 @@ Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
 }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

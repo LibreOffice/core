@@ -27,18 +27,14 @@
 #ifndef __com_sun_star_sdb_QueryDescriptor_idl__
 #define __com_sun_star_sdb_QueryDescriptor_idl__
 
-#ifndef __com_sun_star_sdbcx_Descriptor_idl__
 #include <com/sun/star/sdbcx/Descriptor.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
  published interface XDataDescriptorFactory;
  published interface XColumnsSupplier;
 };};};};
 
-#ifndef __com_sun_star_sdb_DataSettings_idl__
 #include <com/sun/star/sdb/DataSettings.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 

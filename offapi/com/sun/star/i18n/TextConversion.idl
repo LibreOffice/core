@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_i18n_TextConversion_idl__
 #define __com_sun_star_i18n_TextConversion_idl__
 
-#ifndef __com_sun_star_i18n_XTextConversion_idl__
 #include <com/sun/star/i18n/XTextConversion.idl>
-#endif
 
 //=============================================================================
 
@@ -38,7 +36,7 @@ module com { module sun { module star { module i18n {
 //=============================================================================
 /** offers generic text conversion.
 
-    <p>This is an abstract service which does not make sense to be instatiated.
+    <p>This is an abstract service which does not make sense to be instantiated.
 
      @since OOo 1.1.2
 */

@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_awt_tree_XTreeExpansionListener_idl__
 #define __com_sun_star_awt_tree_XTreeExpansionListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_tree_TreeExpansionEvent_idl__
 #include <com/sun/star/awt/tree/TreeExpansionEvent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_tree_ExpandVetoException_idl__
 #include <com/sun/star/awt/tree/ExpandVetoException.idl>
-#endif
 
 //=============================================================================
 
@@ -55,7 +48,7 @@ published interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 {
     /** Invoked when a node with children on demand is about to be expanded.
 
-        <p>This event is invoked befor the <method>treeExpanding()</method>
+        <p>This event is invoked before the <method>treeExpanding()</method>
         event.</p>
     */
     void requestChildNodes( [in] TreeExpansionEvent Event );
@@ -64,7 +57,7 @@ published interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 
         @throws ExpandVetoException
             to notify the calling <type>XTreeControl</type> that expanding
-            <member>TreeExpansionEvent::Node</member> should faild.
+            <member>TreeExpansionEvent::Node</member> should fail.
     */
     void treeExpanding( [in] TreeExpansionEvent Event )
         raises ( ExpandVetoException );
@@ -73,15 +66,15 @@ published interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 
         @throws ExpandVetoException
             to notify the calling <type>XTreeControl</type> that collapsing
-            <member>TreeExpansionEvent::Node</member> should faild.
+            <member>TreeExpansionEvent::Node</member> should fail.
     */
     void treeCollapsing( [in] TreeExpansionEvent Event )
         raises ( ExpandVetoException );
 
-    /** Called whenever a node in the tree has been succesfully expanded. */
+    /** Called whenever a node in the tree has been successfully expanded. */
     void treeExpanded( [in] TreeExpansionEvent Event );
 
-    /** Called whenever a node in the tree has been succesfully collapsed. */
+    /** Called whenever a node in the tree has been successfully collapsed. */
     void treeCollapsed( [in] TreeExpansionEvent Event );
 };
 

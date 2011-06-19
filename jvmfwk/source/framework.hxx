@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,6 @@ public:
     void attach(::JavaInfo* pInfo);
     ::JavaInfo * detach();
     const ::JavaInfo* operator ->() const;
-//    ::JavaInfo** operator & ();
     operator ::JavaInfo* ();
     operator ::JavaInfo const * () const;
     ::JavaInfo* cloneJavaInfo() const;
@@ -126,3 +126,5 @@ public:
 };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

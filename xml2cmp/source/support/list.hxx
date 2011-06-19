@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,9 +73,6 @@ class List
 
     unsigned            size() const            { return len; }
     unsigned            space() const           { return allocated; }
-    bool                is_valid_index(
-                            unsigned            n) const
-                                                { return n < len; }
     // ACCESS
     XX &                front()                 { return elem(0); }
     XX &                back()                  { return elem(len-1); }
@@ -167,7 +165,7 @@ template <class XX>
 void
 List<XX>::checkSize(unsigned newLength)
 {
-   // neuen Platzbedarf pruefen:
+   // test new size requirement:
    unsigned newSpace = space();
    if (newLength > newSpace)
    {
@@ -186,7 +184,7 @@ List<XX>::checkSize(unsigned newLength)
       }
    }
 
-   // Veraenderung ?:
+   // change?
    if (newSpace != space())
       alloc(newSpace,true);
 }
@@ -238,7 +236,7 @@ template <class XY>
 void
 DynamicList<XY>::remove( unsigned           pos )
 {
-    if (!this->is_valid_index(pos) )
+    if (pos >= this->len)
         return;
     this->len--;
     delete this->inhalt[pos];
@@ -249,3 +247,4 @@ DynamicList<XY>::remove( unsigned           pos )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

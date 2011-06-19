@@ -39,18 +39,18 @@ module com { module sun { module star { module rendering {
  */
 constants AnimationRepeat
 {
-    /** The [0,1] parameter range is sweeped through exactly once.<p>
+    /** The [0,1] parameter range is swept through exactly once.<p>
 
-        The [0,1] parameter range is sweeped through exactly once,
+        The [0,1] parameter range is swept through exactly once,
         starting with 0 and ending with 1.<p>
     */
     const byte ONE_SHOT=0;
 
     //-------------------------------------------------------------------------
 
-    /** The [0,1] parameter range is sweeped through exactly twice.<p>
+    /** The [0,1] parameter range is swept through exactly twice.<p>
 
-        The [0,1] parameter range is sweeped through exactly twice,
+        The [0,1] parameter range is swept through exactly twice,
         starting with 0, going to 1, and going back to 0. When
         plotting the value over time, this yields a triangle curve.<p>
     */
@@ -58,9 +58,9 @@ constants AnimationRepeat
 
     //-------------------------------------------------------------------------
 
-    /** The [0,1] parameter range is sweeped through infinitely.<p>
+    /** The [0,1] parameter range is swept through infinitely.<p>
 
-        The [0,1] parameter range is sweeped through infinitely,
+        The [0,1] parameter range is swept through infinitely,
         starting with 0, going to 1, and going back to 0, and then
         starting again. When plotting the value over time, this yields
         a repeated triangle curve.<p>
@@ -69,9 +69,9 @@ constants AnimationRepeat
 
     //-------------------------------------------------------------------------
 
-    /** The [0,1] parameter range is sweeped through infinitely.<p>
+    /** The [0,1] parameter range is swept through infinitely.<p>
 
-        The [0,1] parameter range is sweeped through infinitely,
+        The [0,1] parameter range is swept through infinitely,
         starting with 0, going to 1, and starting with 0 again. When
         plotting the value over time, this yields a repeated saw-tooth
         curve.<p>

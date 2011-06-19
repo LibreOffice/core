@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "share.hxx"
-// #include <stdio.h>
 
 
 using namespace ::com::sun::star::uno;
@@ -48,7 +48,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-//==================================================================================================
 static typelib_TypeClass cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
@@ -296,7 +295,7 @@ static typelib_TypeClass cpp2uno_call(
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -316,7 +315,7 @@ static typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )
@@ -396,7 +395,7 @@ static typelib_TypeClass cpp_mediate(
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("illegal vtable index!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
             (XInterface *)pThis );
     }
 
@@ -489,7 +488,7 @@ static typelib_TypeClass cpp_mediate(
     default:
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("no member description found!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pThis );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;
@@ -793,3 +792,4 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

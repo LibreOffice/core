@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 #include <osl/mutex.hxx>
-#ifndef _OSL_DIAGNOSE_HXX_
 #include <osl/diagnose.h>
-#endif
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase3.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <registry/registry.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -58,8 +55,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
-
+using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.registry.NestedRegistry"
 #define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
@@ -70,33 +66,14 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > defreg_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 OUString defreg_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 }
 
@@ -1291,7 +1268,7 @@ void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'open' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'open' method is not specified for a nested registry")),
             Reference< XInterface >() );
 }
 
@@ -1327,7 +1304,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
     }
 /*
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'close' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'close' method is not specified for a nested registry")),
             Reference< XInterface >() );
 */
 }
@@ -1337,7 +1314,7 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'destroy' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'destroy' method is not specified for a nested registry")),
             Reference< XInterface >() );
 }
 
@@ -1421,3 +1398,4 @@ Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XC
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

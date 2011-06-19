@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,3 +47,5 @@ extern "C" t_throws_exc SAL_CALL get_thrower()
 {
     return throws_exc;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

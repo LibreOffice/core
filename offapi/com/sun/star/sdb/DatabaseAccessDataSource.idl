@@ -27,27 +27,16 @@
 #ifndef __com_sun_star_sdb_DatabaseAccessDataSource_idl__
 #define __com_sun_star_sdb_DatabaseAccessDataSource_idl__
 
-#ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_RememberAuthentication_idl__
 #include <com/sun/star/ucb/RememberAuthentication.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XDataSource_idl__
 #include <com/sun/star/sdbc/XDataSource.idl>
-#endif
 
 module com { module sun { module star { module sdb {
 
  published interface XCompletedConnection;
 
-/** is a factory to create data access beans. Data access beans are shared amoung
+/** is a factory to create data access beans. Data access beans are shared among
     components, so if an already existing bean is requested, the existing one is returned.
 
     @deprecated

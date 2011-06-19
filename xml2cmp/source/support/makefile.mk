@@ -31,15 +31,16 @@ PRJNAME=xml2cmp
 TARGET=x2c_support
 TARGETTYPE=CUI
 
-
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -50,12 +51,7 @@ OBJFILES= \
     $(OBJ)$/syshelp.obj		\
     $(OBJ)$/badcast.obj
 
-
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
 

@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for xml security module
 
 /** -- idl definition -- **/
 
@@ -38,7 +38,7 @@
 module com { module sun { module star { module security {
 
 /**
- * Constant definiton of a certificate characters.
+ * Constant definition of a certificate characters.
  *
  * The certificate characters will be defined as bit-wise constants.
  */

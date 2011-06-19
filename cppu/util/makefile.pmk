@@ -26,7 +26,3 @@
 #*************************************************************************
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF

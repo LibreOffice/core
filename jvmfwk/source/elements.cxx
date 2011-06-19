@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,6 @@
 #include "rtl/bootstrap.hxx"
 #include "boost/optional.hpp"
 #include <string.h>
-// #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
-// #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
 
 using namespace osl;
@@ -175,13 +174,12 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<javaInfo xsi:nil="true"  autoSelect="true">
+    //<javaInfo xsi:nil="true">
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-//    xmlSetProp(nodeJava,(xmlChar*) "autoSelect",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
@@ -213,7 +211,7 @@ rtl_uString** VersionInfo::getExcludeVersions()
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = vecExcludeVersions.begin(); i != vecExcludeVersions.end();
-         i++, j++)
+         ++i, ++j)
     {
         arVersions[j] = vecExcludeVersions[j].pData;
     }
@@ -274,7 +272,7 @@ void NodeJava::load()
     }
     else
     {
-        OSL_ASSERT("[Java framework] Unknown enum used.");
+        OSL_FAIL("[Java framework] Unknown enum used.");
     }
 
 
@@ -402,7 +400,7 @@ void NodeJava::load()
     case INSTALL: ret = getInstallSettingsPath(); break;
     case SHARED: ret = getSharedSettingsPath(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsPath()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsPath()");
     }
     return ret;
 }
@@ -416,7 +414,7 @@ void NodeJava::load()
     case INSTALL: ret = BootParams::getInstallData(); break;
     case SHARED: ret = BootParams::getSharedData(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsURL()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsURL()");
     }
     return ret;
 }
@@ -551,7 +549,7 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); i++)
+        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
                             CXmlCharPtr(*i));
@@ -592,7 +590,7 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); i++)
+        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
                             CXmlCharPtr(*i));
@@ -752,9 +750,9 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
     if (File::E_None == rc)
     {
         ::osl::FileStatus stat(
-            FileStatusMask_Validate
-            | FileStatusMask_CreationTime
-            | FileStatusMask_ModifyTime);
+            osl_FileStatus_Mask_Validate
+            | osl_FileStatus_Mask_CreationTime
+            | osl_FileStatus_Mask_ModifyTime);
         File::RC rc_stat = item.getFileStatus(stat);
         if (File::E_None == rc_stat)
         {
@@ -769,7 +767,6 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                 //that after removing the file and shortly later creating it again
                 //did not change the creation time. That is the newly created file
                 //had the creation time of the former file.
-                // ::TimeValue modTime = stat.getModifyTime();
                 ::TimeValue curTime = {0,0};
                 ret = FILE_OK;
                 if (sal_True == ::osl_getSystemTime(& curTime))
@@ -791,7 +788,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
 #endif
                         //delete file
                         File f(sURL);
-                        if (File::E_None == f.open(OpenFlag_Write | OpenFlag_Read)
+                        if (File::E_None == f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read)
                             && File::E_None == f.setPos(0, 0)
                             && File::E_None == f.setSize(0))
                                     ret = FILE_DOES_NOT_EXIST;
@@ -1139,11 +1136,10 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 
 sal_uInt32 NodeJava::getModifiedTime() const
 {
-    sal_uInt32 ret = 0;
     if (m_layer != INSTALL)
     {
         OSL_ASSERT(0);
-        return ret;
+        return 0;
     }
     rtl::OString modTimeSeconds = getElementModified();
     return (sal_uInt32) modTimeSeconds.toInt64();
@@ -1260,7 +1256,7 @@ void MergedSettings::getVmParametersArray(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_vmParams.begin(); i != m_vmParams.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parParams)[j] = i->pData;
         rtl_uString_acquire(i->pData);
@@ -1282,7 +1278,7 @@ void MergedSettings::getJRELocations(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parLocations)[j] = i->pData;
         rtl_uString_acquire(i->pData);
@@ -1294,3 +1290,5 @@ const std::vector<rtl::OUString> & MergedSettings::getJRELocations() const
     return m_JRELocations;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

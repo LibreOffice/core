@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_LayerManager_idl__
 #define __com_sun_star_drawing_LayerManager_idl__
 
-#ifndef __com_sun_star_drawing_XLayerManager_idl__
 #include <com/sun/star/drawing/XLayerManager.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
 
 
 //=============================================================================

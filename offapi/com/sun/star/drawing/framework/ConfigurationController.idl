@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_drawing_framework_ConfigurationController_idl__
 #define __com_sun_star_drawing_framework_ConfigurationController_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
 #include <com/sun/star/drawing/framework/XConfigurationController.idl>
-#endif
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -46,7 +40,7 @@ module com { module sun { module star { module drawing { module framework {
     <p>This service is used at the moment by the
     <type>XControllerManager</type> to create a configuration controller.
     This allows developers to replace the default implementation of the
-    configuration controller with their own.  This may not be a usefull
+    configuration controller with their own.  This may not be a useful
     feature.  Furthermore the sub controllers may need a tighter coupling
     than the interfaces allow.  These are reasons for removing this service
     in the future and let the controller manager create the sub controllers

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <idlc/astconstant.hxx>
 #include <idlc/astattribute.hxx>
 #include <idlc/astinterfacemember.hxx>
-#ifndef _IDLC_ASTSERVICEEMEMBER_HXX_
 #include <idlc/astservicemember.hxx>
-#endif
 #include <idlc/astobserves.hxx>
 #include <idlc/astneeds.hxx>
 #include <idlc/astsequence.hxx>
@@ -452,3 +451,5 @@ const sal_Char* AstSequence::getRelativName() const
 
     return m_pRelativName->getStr();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

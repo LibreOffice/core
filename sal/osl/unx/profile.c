@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 
 #include "system.h"
+#include "readwrite_helper.h"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -196,10 +198,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 {
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
-    sal_Char          Filename[PATH_MAX];
     sal_Bool bRet = sal_False;
-
-    Filename[0] = '\0';
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
@@ -245,6 +244,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 
     if ( pProfile == 0 )
     {
+        closeFileImpl(pFile, Flags);
         return 0;
     }
 
@@ -275,7 +275,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
-    sal_Bool bRet = sal_False;
+    osl_TProfileImpl* pTmpProfile;
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_closeProfile\n");
@@ -305,21 +305,22 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 
     if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) && ( pProfile->m_Flags & FLG_MODIFIED ) )
     {
-        pProfile = acquireProfile(Profile,sal_True);
+        pTmpProfile = acquireProfile(Profile,sal_True);
 
-        if ( pProfile != 0 )
+        if ( pTmpProfile != 0 )
         {
-            bRet=storeProfile(pProfile, sal_True);
+            sal_Bool bRet = storeProfile(pTmpProfile, sal_True);
             OSL_ASSERT(bRet);
+            (void)bRet;
         }
     }
     else
     {
-        pProfile = acquireProfile(Profile,sal_False);
+        pTmpProfile = acquireProfile(Profile,sal_False);
     }
 
 
-    if ( pProfile == 0 )
+    if ( pTmpProfile == 0 )
     {
         pthread_mutex_unlock(&(pProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
@@ -327,6 +328,8 @@ sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile)
 #endif
         return sal_False;
     }
+
+    pProfile = pTmpProfile;
 
     if (pProfile->m_pFile != NULL)
         closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
@@ -438,7 +441,6 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
 
 static sal_Bool writeProfileImpl(osl_TFile* pFile)
 {
-    int BytesWritten=0;
 #if OSL_DEBUG_LEVEL > 1
     unsigned int nLen=0;
 #endif
@@ -460,18 +462,11 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
     OSL_ASSERT(nLen == (pFile->m_nWriteBufLen - pFile->m_nWriteBufFree));
 #endif
 
-    BytesWritten = write(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);
-
-    if ( BytesWritten <= 0 )
+    if ( !safeWrite(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree) )
     {
         OSL_TRACE("write failed '%s'\n",strerror(errno));
         return (sal_False);
     }
-
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ASSERT(
-        BytesWritten >= 0 && SAL_INT_CAST(unsigned int, BytesWritten) == nLen);
-#endif
 
     free(pFile->m_pWriteBuf);
     pFile->m_pWriteBuf=0;
@@ -560,6 +555,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
+    (void)bRet;
 
     if ( pStr == 0 )
     {
@@ -1016,6 +1012,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
+    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -1107,6 +1104,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
 
     bRet=releaseProfile(pProfile);
     OSL_ASSERT(bRet);
+    (void)bRet;
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -2103,7 +2101,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 {
     osl_TProfileImpl* pProfile = (osl_TProfileImpl*)Profile;
     oslProfileOption PFlags=0;
-    sal_Bool bRet=sal_False;
 
     if ( bWriteable )
     {
@@ -2148,10 +2145,13 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
                 if (memcmp(&Stamp, &(pProfile->m_Stamp), sizeof(osl_TStamp)))
                 {
+                    sal_Bool bRet=sal_False;
+
                     pProfile->m_Stamp = Stamp;
 
                     bRet=loadProfile(pProfile->m_pFile, pProfile);
                     OSL_ASSERT(bRet);
+                    (void)bRet;
                 }
             }
             else
@@ -2173,8 +2173,6 @@ static osl_TProfileImpl* acquireProfile(oslProfile Profile, sal_Bool bWriteable)
 
 static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 {
-    sal_Bool bRet=sal_False;
-
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  releaseProfile\n");
 #endif
@@ -2203,10 +2201,10 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
         {
             if (pProfile->m_Flags & FLG_MODIFIED)
             {
-                bRet=storeProfile(pProfile, sal_False);
+                sal_Bool bRet=storeProfile(pProfile, sal_False);
                 OSL_ASSERT(bRet);
+                (void)bRet;
             }
-
 
             closeFileImpl(pProfile->m_pFile,pProfile->m_Flags);
             pProfile->m_pFile = NULL;
@@ -2218,3 +2216,5 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 #endif
     return (sal_True);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,17 +28,14 @@
 #ifndef __com_sun_star_rdf_ParseException_idl__
 #define __com_sun_star_rdf_ParseException_idl__
 
-#ifndef __com_sun_star_uno_Eception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
-
 
 //=============================================================================
 
 module com {   module sun {   module star {   module rdf {
 
 //=============================================================================
-/** represents an error condition that is signalled on parsing an RDF file.
+/** represents an error condition that is signaled on parsing an RDF file.
 
     @since OOo 3.0
 

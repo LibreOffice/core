@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _PYUNO_PYUNO_HXX_
 #define _PYUNO_PYUNO_HXX_
 
@@ -44,8 +45,12 @@
     preconditions: python has been initialized before and
                    the global interpreter lock is held
 */
-extern "C" PY_DLLEXPORT void SAL_CALL initpyuno();
-
+extern "C" PY_DLLEXPORT
+#if PY_MAJOR_VERSION >= 3
+    PyObject* SAL_CALL PyInit_pyuno();
+#else
+   void SAL_CALL initpyuno();
+#endif
 
 namespace pyuno
 {
@@ -294,3 +299,5 @@ public:
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

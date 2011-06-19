@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -350,7 +351,7 @@ static inline bool idefaultConstructElements(
         }
         break;
     default:
-        OSL_ENSURE( 0, "### unexpected element type!" );
+        OSL_FAIL( "### unexpected element type!" );
         pSeq = 0;
         break;
     }
@@ -664,7 +665,7 @@ static inline bool icopyConstructFromElements(
         break;
     }
     default:
-        OSL_ENSURE( 0, "### unexpected element type!" );
+        OSL_FAIL( "### unexpected element type!" );
         pSeq = 0;
         break;
     }
@@ -1014,3 +1015,5 @@ void SAL_CALL uno_type_sequence_assign(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

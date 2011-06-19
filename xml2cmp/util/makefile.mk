@@ -36,15 +36,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-# --- Files --------------------------------------------------------
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
+# --- Files --------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 APP1TARGET=	$(TARGET)
-.IF "$(GUI)"!="OS2"
 APP1STACK=	1000000
-.ENDIF
 
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
@@ -54,5 +56,3 @@ APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1RPATH=  NONE
 
 .INCLUDE :  target.mk
-
-

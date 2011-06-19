@@ -27,24 +27,16 @@
 #ifndef __com_sun_star_drawing_OLE2Shape_idl__
 #define __com_sun_star_drawing_OLE2Shape_idl__
 
-#ifndef __com_sun_star_drawing_XShapeDescriptor_idl__
 #include <com/sun/star/drawing/XShapeDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 //=============================================================================
 
 module com { module sun { module star { module drawing {
 
 //=============================================================================
-/** This service is for an ole shape.
+/** This service is for an OLE shape.
 */
 published service OLE2Shape
 {
@@ -67,7 +59,7 @@ published service OLE2Shape
     //-------------------------------------------------------------------------
 
     /** This is the model for the OLE2 inside this shape.
-        <p>This property returns an empty reference if the ole2 is not an
+        <p>This property returns an empty reference if the OLE2 is not an
         Office component.
 
     */

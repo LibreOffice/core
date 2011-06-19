@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ Create_AccessMethod( const char *           i_pOutputFileName,
     int    sDescrLen = (int) strlen(sDescrLineChange);
 
     std::ofstream aFile(i_pOutputFileName, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
     );
@@ -91,8 +92,6 @@ Create_AccessMethod( const char *           i_pOutputFileName,
                         break;
             case '\r':  aFile.write( "\\r", 2);
                         break;
-//          case '\t':  aFile.write( "\\t", 2);
-//                      break;
             default:    aFile.write( pTrans, 1);
         }
     }   /* end for */
@@ -104,3 +103,4 @@ Create_AccessMethod( const char *           i_pOutputFileName,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_InteractiveNetworkResolveNameException_idl__
 #define __com_sun_star_ucb_InteractiveNetworkResolveNameException_idl__
 
-#ifndef __com_sun_star_ucb_InteractiveNetworkException_idl__
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
-#endif
 
 
 //=============================================================================
@@ -37,7 +35,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing a name resolution failure.
+/** A network error specifying a name resolution failure.
 */
 published exception InteractiveNetworkResolveNameException: com::sun::star::ucb::InteractiveNetworkException
 {

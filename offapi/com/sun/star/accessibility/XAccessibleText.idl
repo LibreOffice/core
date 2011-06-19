@@ -28,31 +28,14 @@
 #ifndef __com_sun_star_accessibility_XAccessibleText_idl__
 #define __com_sun_star_accessibility_XAccessibleText_idl__
 
-#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
 #include <com/sun/star/accessibility/AccessibleTextType.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_accessibility_TextSegment_idl__
 #include <com/sun/star/accessibility/TextSegment.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -169,7 +152,7 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
             character then they are ignored, too.
 
             <p>An empty sequence signals the callers interest in all the
-            attributes.  This is usefull in two cases: a) Simply as a way to
+            attributes.  This is useful in two cases: a) Simply as a way to
             avoid passing a potentially large array to the called object or
             b) when the caller does not know what attributes the called
             objects supports but is interested in all of them
@@ -204,13 +187,13 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
         represents the current input position and will therefore typically
         be queried by AT more often than other positions.  Because it does
         not represent an existing character its bounding box is defined in
-        relation to preceding characters.  It should be rougly equivalent to
+        relation to preceding characters.  It should be roughly equivalent to
         the bounding box of some character when inserted at the end of the
         text.  Its height typically being the maximal height of all the
         characters in the text or the height of the preceding character, its
         width being at least one pixel so that the bounding box is not
         degenerate.<br>
-        Note that the index 'length' is not always valid.  Whether it is
+        Note that the index "length" is not always valid.  Whether it is
         or not is implementation dependent.  It typically is when text is
         editable or otherwise when on the screen the caret can be placed
         behind the text.  You can be sure that the index is valid after you
@@ -316,7 +299,7 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
             The first character of the new selection.
             The valid range is 0..length.
 
-        @parm nEndIndex
+        @param nEndIndex
             The position after the last character of the new selection.
             The valid range is 0..length.
 

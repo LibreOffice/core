@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_ucb_FileContentProvider_idl__
 #define __com_sun_star_ucb_FileContentProvider_idl__
 
-#ifndef __com_sun_star_ucb_XContentProvider_idl__
 #include <com/sun/star/ucb/XContentProvider.idl>
-#endif
-#ifndef __com_sun_star_ucb_XFileIdentifierConverter_idl__
 #include <com/sun/star/ucb/XFileIdentifierConverter.idl>
-#endif
-#ifndef __com_sun_star_ucb_XContentIdentifierFactory_idl__
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +43,7 @@ module com { module sun { module star { module ucb {
     <p>The served contents enable access to the local file system.
 
     <p>The FCP is able to restrict access to the local file system to a number
-    of directories shown to the client under configurable aliasnames.
+    of directories shown to the client under configurable alias names.
 
     @see com::sun::star::ucb::Content
 */

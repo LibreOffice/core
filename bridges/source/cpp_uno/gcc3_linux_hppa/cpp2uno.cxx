@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #include <malloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
@@ -64,7 +65,7 @@ namespace
         void ** startovrflw = ovrflw;
         int nregs = 0; //number of words passed in registers
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp2uno_call\n");
 #endif
         // return
@@ -80,14 +81,14 @@ namespace
         {
             if (hppa::isRegisterReturn(pReturnTypeRef))
             {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "simple return\n");
 #endif
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else
             {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "complex return via r8\n");
 #endif
                 pCppReturn = (void *)r8;
@@ -294,18 +295,18 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "before dispatch\n");
 #endif
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "after dispatch\n");
 #endif
 
-        // in case an exception occured...
+        // in case an exception occurred...
         if (pUnoExc)
         {
             // destruct temporary in/inout params
@@ -326,7 +327,7 @@ namespace
             // is here for dummy
             return typelib_TypeClass_VOID;
         }
-        else // else no exception occured...
+        else // else no exception occurred...
         {
             // temporary params
             for ( ; nTempIndizes--; )
@@ -383,7 +384,7 @@ namespace
 
     {
     void ** ovrflw = (void**)(sp);
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp_mediate with\n");
     fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
     fprintf(stderr, "and %x %x\n", (long)(ovrflw[0]), (long)(ovrflw[-1]));
@@ -406,14 +407,14 @@ namespace
         {
         nFunctionIndex &= 0x7fffffff;
         pThis = gpreg[1];
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "pThis is gpreg[1]\n");
 #endif
         }
         else
         {
         pThis = gpreg[0];
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "pThis is gpreg[0]\n");
 #endif
         }
@@ -431,7 +432,7 @@ namespace
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException(
-                OUString::createFromAscii("illegal vtable index!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
                 (XInterface *)pCppI );
         }
 
@@ -530,7 +531,7 @@ namespace
         default:
         {
             throw RuntimeException(
-                OUString::createFromAscii("no member description found!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
                 (XInterface *)pCppI );
             // is here for dummy
             eRet = typelib_TypeClass_VOID;
@@ -577,7 +578,7 @@ sal_Int64 cpp_vtable_call( sal_uInt32 in0, sal_uInt32 in1, sal_uInt32 in2, sal_u
     register double d3 asm("fr7"); dpreg[3] = d3;
 
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "got to cpp_vtable_call with %x %x\n", functionIndex, vtableOffset);
     for (int i = 0; i < hppa::MAX_GPR_REGS; ++i)
     fprintf(stderr, "reg %d is %d %x\n", i, gpreg[i], gpreg[i]);
@@ -722,4 +723,4 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

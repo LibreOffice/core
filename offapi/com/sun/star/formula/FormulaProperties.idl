@@ -169,7 +169,7 @@ published service FormulaProperties
     [property] string   Formula;
     //-------------------------------------------------------------------------
 
-    /** decides if all brackets (even those without 'left'/'right'
+    /** decides if all brackets (even those without "left"/"right"
         modifier) are scaled.
      */
     [property] boolean  IsScaleAllBrackets;

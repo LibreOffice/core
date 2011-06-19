@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_system_XProxySettings_idl__
 #define __com_sun_star_system_XProxySettings_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -50,16 +45,16 @@ module com { module sun { module star { module system {
 published interface XProxySettings: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Access to the Ftp proxy address.
+    /** Access to the FTP proxy address.
         @returns
-        The address of the ftp proxy server, if any has been specified.
+        The address of the FTP proxy server, if any has been specified.
     */
     string getFtpProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /** Access to the Ftp proxy port.
+    /** Access to the FTP proxy port.
         @returns
-        The port of the ftp proxy server, if any has been specified.
+        The port of the FTP proxy server, if any has been specified.
     */
     string getFtpProxyPort( );
 
@@ -92,16 +87,16 @@ published interface XProxySettings: com::sun::star::uno::XInterface
     string getHttpProxyPort( );
 
     //-------------------------------------------------------------------------
-    /** Access to the Https proxy address.
+    /** Access to the HTTPS proxy address.
         @returns
-        The address of the https proxy server, if any has been specified.
+        The address of the HTTPS proxy server, if any has been specified.
     */
     string getHttpsProxyAddress( );
 
     //-------------------------------------------------------------------------
-    /** Access to the Https proxy port.
+    /** Access to the HTTPS proxy port.
         @returns
-        The port of the https proxy server, if any has been specified.
+        The port of the HTTPS proxy server, if any has been specified.
     */
     string getHttpsProxyPort( );
 
@@ -122,7 +117,7 @@ published interface XProxySettings: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** Access to the Proxy-Bypass address.
         @returns
-        A string of ';' separated addresses for which no proxy server
+        A string of ";" separated addresses for which no proxy server
         should be used.
     */
     string getProxyBypassAddress( );

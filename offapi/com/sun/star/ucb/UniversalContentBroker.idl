@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_ucb_UniversalContentBroker_idl__
 #define __com_sun_star_ucb_UniversalContentBroker_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
 #include <com/sun/star/ucb/XCommandProcessor.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
 #include <com/sun/star/ucb/XCommandProcessor2.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #include <com/sun/star/ucb/XContentProviderManager.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentProvider_idl__
 #include <com/sun/star/ucb/XContentProvider.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifierFactory_idl__
 #include <com/sun/star/ucb/XContentIdentifierFactory.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 
@@ -69,7 +49,7 @@ module com { module sun { module star { module ucb {
     <type scope="com::sun::star::lang">XInitialization</type> interface for
     details.
 
-    <p>If the instance is created without arguments, the newly instatiated
+    <p>If the instance is created without arguments, the newly instantiated
     broker is not configured.
 */
 published service UniversalContentBroker
@@ -78,7 +58,7 @@ published service UniversalContentBroker
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
-        <p>Those references i.e. may occure if content provider implementations
+        <p>Those references i.e. may occur if content provider  implementations
         hold references to the Broker. The Broker itself always holds its
         providers. If the Broker shall be released,
         <member scope="com::sun::star::lang">XComponent::dispose</member>
@@ -153,7 +133,7 @@ published service UniversalContentBroker
                 [parameter type and name]
 
         -----------------------------------------------------------------------
-        Requiered commands:
+        Required commands:
         -----------------------------------------------------------------------
 
         // This command obtains an interface which allows to query
@@ -167,7 +147,7 @@ published service UniversalContentBroker
         // Additionally, it can be used to create a link to a Content.
         // The implementation must be able to handle Contents provided
         // by any Content Provider. This is different from the command
-        // 'transfer' that can be supported by a Content. That command
+        // "transfer" that can be supported by a Content. That command
         // typically can only handle <type>Content</type>s provided by one
         // <type>ContentProvider</type>.
 

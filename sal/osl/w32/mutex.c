@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,66 +37,18 @@
     CRITICAL_SECTION structure.
 */
 
-typedef struct _oslMutexImpl {
-    CRITICAL_SECTION    m_Mutex;
-    int                 m_Locks;
-    DWORD               m_Owner;
-    DWORD               m_Requests;
-} oslMutexImpl;
-
-static BOOL (WINAPI *lpfTryEnterCriticalSection)(LPCRITICAL_SECTION)
-    = (BOOL (WINAPI *)(LPCRITICAL_SECTION))0xFFFFFFFF;
-
-static CRITICAL_SECTION MutexLock;
-
 /*****************************************************************************/
 /* osl_createMutex */
 /*****************************************************************************/
 oslMutex SAL_CALL osl_createMutex(void)
 {
-    oslMutexImpl *pMutexImpl;
+    CRITICAL_SECTION *pMutexImpl;
 
-    /* Window 95 does not support "TryEnterCriticalSection" */
-
-    if (lpfTryEnterCriticalSection ==
-                (BOOL (WINAPI *)(LPCRITICAL_SECTION))0xFFFFFFFF)
-    {
-        OSVERSIONINFO VersionInformation =
-
-        {
-            sizeof(OSVERSIONINFO),
-            0,
-            0,
-            0,
-            0,
-            "",
-        };
-
-        /* ts: Window 98 does not support "TryEnterCriticalSection" but export the symbol !!!
-           calls to that symbol always returns FALSE */
-        if (
-            GetVersionEx(&VersionInformation) &&
-            (VersionInformation.dwPlatformId == VER_PLATFORM_WIN32_NT)
-           )
-        {
-            lpfTryEnterCriticalSection = (BOOL (WINAPI *)(LPCRITICAL_SECTION))
-                    GetProcAddress(GetModuleHandle("KERNEL32"),
-                                   "TryEnterCriticalSection");
-        }
-        else
-        {
-            lpfTryEnterCriticalSection = (BOOL (WINAPI *)(LPCRITICAL_SECTION))NULL;
-        }
-
-
-        InitializeCriticalSection(&MutexLock);
-    }
-
-    pMutexImpl= calloc(sizeof(oslMutexImpl), 1);
+    pMutexImpl = calloc(sizeof(CRITICAL_SECTION), 1);
 
     OSL_ASSERT(pMutexImpl); /* alloc successful? */
 
-    InitializeCriticalSection(&pMutexImpl->m_Mutex);
+    InitializeCriticalSection(pMutexImpl);
 
     return (oslMutex)pMutexImpl;
 }
@@ -105,11 +58,11 @@ oslMutex SAL_CALL osl_createMutex(void)
 /*****************************************************************************/
 void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 {
-    oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
 
     if (pMutexImpl)
     {
-        DeleteCriticalSection(&pMutexImpl->m_Mutex);
+        DeleteCriticalSection(pMutexImpl);
         free(pMutexImpl);
     }
 }
@@ -119,26 +72,11 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
-    oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
 
     OSL_ASSERT(Mutex);
 
-    if (lpfTryEnterCriticalSection == NULL)
-    {
-        EnterCriticalSection(&MutexLock);
-        pMutexImpl->m_Requests++;
-        LeaveCriticalSection(&MutexLock);
-
-        EnterCriticalSection(&pMutexImpl->m_Mutex);
-
-        EnterCriticalSection(&MutexLock);
-        pMutexImpl->m_Requests--;
-        if (pMutexImpl->m_Locks++ == 0)
-            pMutexImpl->m_Owner = GetCurrentThreadId();
-        LeaveCriticalSection(&MutexLock);
-    }
-    else
-        EnterCriticalSection(&pMutexImpl->m_Mutex);
+    EnterCriticalSection(pMutexImpl);
 
     return sal_True;
 }
@@ -148,25 +86,11 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
-    sal_Bool     ret = sal_False;
-    oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
 
     OSL_ASSERT(Mutex);
 
-    if (lpfTryEnterCriticalSection != NULL)
-        return (sal_Bool)(lpfTryEnterCriticalSection(&pMutexImpl->m_Mutex) != FALSE);
-    else
-    {
-        EnterCriticalSection(&MutexLock);
-
-        if ( ((pMutexImpl->m_Requests == 0) && (pMutexImpl->m_Locks == 0)) ||
-             (pMutexImpl->m_Owner == GetCurrentThreadId()) )
-            ret = osl_acquireMutex(Mutex);
-
-        LeaveCriticalSection(&MutexLock);
-    }
-
-    return ret;
+    return (sal_Bool)(TryEnterCriticalSection(pMutexImpl) != FALSE);
 }
 
 /*****************************************************************************/
@@ -174,21 +98,11 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
-    oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
+    CRITICAL_SECTION *pMutexImpl = (CRITICAL_SECTION *)Mutex;
 
     OSL_ASSERT(Mutex);
 
-    if (lpfTryEnterCriticalSection == NULL)
-    {
-        EnterCriticalSection(&MutexLock);
-
-        if (--(pMutexImpl->m_Locks) == 0)
-            pMutexImpl->m_Owner = 0;
-
-        LeaveCriticalSection(&MutexLock);
-    }
-
-    LeaveCriticalSection(&pMutexImpl->m_Mutex);
+    LeaveCriticalSection(pMutexImpl);
 
     return sal_True;
 }
@@ -204,3 +118,5 @@ oslMutex * SAL_CALL osl_getGlobalMutex(void)
 {
     return &g_Mutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

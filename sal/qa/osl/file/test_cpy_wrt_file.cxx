@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,73 +29,65 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 
 using namespace osl;
-using namespace rtl;
 
-//########################################
-#ifdef UNX
-#   define COPY_SOURCE_PATH "/home/tr109510/ucbhelper.cxx"
-#   define COPY_DEST_PATH "/mnt/mercury08/ucbhelper.cxx"
-#else /* if WNT */
-#   define COPY_SOURCE_PATH "d:\\msvcr70.dll"
-#   define COPY_DEST_PATH "x:\\tra\\msvcr70.dll"
-#endif
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
-class test_osl_copyFile : public CppUnit::TestFixture
+//Use to silence OSL_ warnings for a deliberate error
+extern "C" void SAL_CALL suppressOslDebugMessage( const sal_Char *, sal_Int32, const sal_Char * )
 {
-public:
-    void cp_file()
-    {
-        rtl::OUString src_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_SOURCE_PATH), src_url);
-
-        rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_DEST_PATH), dest_url);
-
-        FileBase::RC err = File::copy(src_url, dest_url);
-        CPPUNIT_ASSERT_MESSAGE("Copy didn't recognized disk full", err != FileBase::E_None);
-    }
-
-    CPPUNIT_TEST_SUITE(test_osl_copyFile);
-    CPPUNIT_TEST(cp_file);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-//########################################
-#ifdef UNX
-#   define WRITE_DEST_PATH "/mnt/mercury08/muell.tmp"
-#else /* if WNT */
-#   define WRITE_DEST_PATH "d:\\tmp_data.tmp"
-#endif
+}
 
 class test_osl_writeFile : public CppUnit::TestFixture
 {
 public:
     void wrt_file()
     {
-        rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
+        FileBase::RC err;
 
-        File tmp_file(dest_url);
-        rtl::OUString suErrorMsg = rtl::OUString::createFromAscii("File creation failed: ")+ dest_url;
-        FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+        //create a tempfile
+        rtl::OUString aTmpFile;
+        err = FileBase::createTempFile(NULL, NULL, &aTmpFile);
+        CPPUNIT_ASSERT_MESSAGE("temp File creation failed", err == osl::FileBase::E_None);
 
-        CPPUNIT_ASSERT_MESSAGE( suErrorMsg, err == FileBase::E_None || err == FileBase::E_EXIST );
+        //now attempt to open with Create flag an existing file, should get E_EXIST
+        File tmp_file(aTmpFile);
+        err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
-        char buffer[50000];
+        rtl::OString sErrorMsg = "Expected that '";
+        sErrorMsg += rtl::OUStringToOString(aTmpFile, RTL_TEXTENCODING_ASCII_US);
+        sErrorMsg += "' would exist!";
+        CPPUNIT_ASSERT_MESSAGE(sErrorMsg.getStr(), err == FileBase::E_EXIST);
+
+        //deliberate errors, suppress run-time warning for operations on
+        //un-opened File
+        pfunc_osl_printDetailedDebugMessage pOldDebugMessageFunc =
+            osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage );
+
+        char buffer[1];
         sal_uInt64 written = 0;
         err = tmp_file.write((void*)buffer, sizeof(buffer), written);
+        CPPUNIT_ASSERT_MESSAGE("write on unconnected file should fail",
+            err != osl::FileBase::E_None && written == 0);
 
         err = tmp_file.sync();
+        CPPUNIT_ASSERT_MESSAGE("sync on unconnected file should fail", err != FileBase::E_None);
+        err = tmp_file.close();
+        CPPUNIT_ASSERT_MESSAGE("close on unconnected file should fail", err != FileBase::E_None);
 
-        CPPUNIT_ASSERT_MESSAGE("Write didn't recognized disk full", err != FileBase::E_None);
+        osl_setDetailedDebugMessageFunc( pOldDebugMessageFunc );
 
-        tmp_file.close();
+        err = ::osl::File::remove(aTmpFile);
+        CPPUNIT_ASSERT_MESSAGE("temp file should have existed", err == FileBase::E_None);
     }
 
     CPPUNIT_TEST_SUITE(test_osl_writeFile);
@@ -104,8 +97,8 @@ public:
 
 //#####################################
 // register test suites
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_writeFile, "test_osl_writeFile");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_copyFile,  "test_osl_copyFile");
+CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_writeFile);
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

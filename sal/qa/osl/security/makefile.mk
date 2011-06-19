@@ -36,6 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -45,7 +47,7 @@ SHL1OBJS=  \
     $(SLO)$/osl_Security.obj
 
 SHL1TARGET= osl_Security
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
 .ENDIF
@@ -58,7 +60,9 @@ SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # auto generated Target:Security
 # END ------------------------------------------------------------------
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

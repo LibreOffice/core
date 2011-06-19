@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -89,7 +90,7 @@ int main (int argc, char **argv)
         for( int n = 2 ; n <argc ; n ++ ) {
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
             xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                 aDllName,
                 xSimpleReg );
         }
@@ -107,16 +108,16 @@ int main (int argc, char **argv)
         sTestName = "test";
         sTestName += argv[2];
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
-        OUString aDllName = OUString::createFromAscii("lib");
+        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM("lib"));
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += OUString::createFromAscii(".so");
+        aDllName += OUString(RTL_CONSTASCII_USTRINGPARAM(".so"));
 #endif
 
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ) ,
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ,
             aDllName,
             xSimpleReg );
     }
@@ -215,3 +216,5 @@ int main (int argc, char **argv)
     rComp->dispose();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

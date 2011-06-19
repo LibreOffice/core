@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@ using namespace ::com::sun::star::uno;
 namespace io_stm {
 
 void MemFIFO::write( const Sequence< sal_Int8 > &seq )
-    throw ( IFIFO_OutOfMemoryException,
-            IFIFO_OutOfBoundsException )
+    throw ( I_FIFO_OutOfMemoryException,
+            I_FIFO_OutOfBoundsException )
 {
     try
     {
@@ -52,15 +53,15 @@ void MemFIFO::write( const Sequence< sal_Int8 > &seq )
     }
     catch( IRingBuffer_OutOfMemoryException & )
     {
-        throw IFIFO_OutOfMemoryException();
+        throw I_FIFO_OutOfMemoryException();
     }
     catch( IRingBuffer_OutOfBoundsException & )
     {
-        throw IFIFO_OutOfBoundsException();
+        throw I_FIFO_OutOfBoundsException();
     }
 }
 
-void MemFIFO::read( Sequence<sal_Int8> &seq , sal_Int32 nBufferLen ) throw (IFIFO_OutOfBoundsException)
+void MemFIFO::read( Sequence<sal_Int8> &seq , sal_Int32 nBufferLen ) throw (I_FIFO_OutOfBoundsException)
 {
     try
     {
@@ -69,11 +70,11 @@ void MemFIFO::read( Sequence<sal_Int8> &seq , sal_Int32 nBufferLen ) throw (IFIF
     }
     catch ( IRingBuffer_OutOfBoundsException & )
     {
-        throw IFIFO_OutOfBoundsException();
+        throw I_FIFO_OutOfBoundsException();
     }
 }
 
-void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( IFIFO_OutOfBoundsException )
+void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( I_FIFO_OutOfBoundsException )
 {
     try
     {
@@ -81,7 +82,7 @@ void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( IFIFO_OutOfBoundsException 
     }
     catch( IRingBuffer_OutOfBoundsException & )
     {
-        throw IFIFO_OutOfBoundsException();
+        throw I_FIFO_OutOfBoundsException();
     }
 }
 
@@ -242,3 +243,5 @@ void MemRingBuffer::shrink() throw ()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

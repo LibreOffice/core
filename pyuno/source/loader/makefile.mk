@@ -32,46 +32,46 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE : settings.mk
 .IF "$(L10N_framework)"==""
-DLLPRE = 
+DLLPRE =
 
 #-------------------------------------------------------------------
 
 .IF "$(OS)$(COMEX)" == "SOLARIS4"
 # no -Bdirect for SunWS CC
-DIRECT = $(LINKFLAGSDEFS)
+DIRECT= $(LINKFLAGSDEFS)
 .ENDIF
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 PYTHONLIB=$(PYTHON_LIBS)
 CFLAGS+=$(PYTHON_CFLAGS)
 .IF "$(EXTRA_CFLAGS)"!=""
-PYTHONLIB+=-framework Python
+PYTHONLIB+= -framework Python
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ELSE
-.INCLUDE :  pyversion.mk
+.INCLUDE : pyversion.mk
 
-CFLAGS+=-I$(SOLARINCDIR)$/python
+CFLAGS+= -I$(SOLARINCDIR)$/python
 .ENDIF
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)		\
-        $(PYUNOLIB)		\
+        $(CPPULIB) \
+        $(CPPUHELPERLIB) \
+        $(SALLIB) \
+        $(PYUNOLIB) \
         $(PYTHONLIB)
 
-SHL1VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL1VERSIONMAP= $(SOLARENV)$/src$/component.map
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB= i$(TARGET)
+SHL1LIBS= $(SLB)$/$(TARGET).lib
+SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=	$(SHL1TARGET)
-SLOFILES=       $(SLO)$/pyuno_loader.obj
+DEF1NAME= $(SHL1TARGET)
+SLOFILES= $(SLO)$/pyuno_loader.obj
 
 # --- Targets ------------------------------------------------------
 

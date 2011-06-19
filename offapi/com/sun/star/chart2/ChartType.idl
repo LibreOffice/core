@@ -28,7 +28,6 @@
 #define com_sun_star_chart2_ChartType_idl
 
 #include <com/sun/star/beans/XPropertySet.idl>
-
 #include <com/sun/star/chart2/XChartType.idl>
 #include <com/sun/star/chart2/XDataSeriesContainer.idl>
 

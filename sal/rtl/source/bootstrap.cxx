@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@
 
 #include "macro.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #define MY_STRING_(x) # x
@@ -272,7 +273,7 @@ static OUString & getIniFileName_Impl()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-            progExt = OUString::createFromAscii(".exe");
+            progExt = OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
             if(fileName.getLength() > progExt.getLength()
             && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
@@ -310,9 +311,6 @@ inline void EnsureNoFinalSlash (rtl::OUString & url)
         url = url.copy(0, i - 1);
     }
 }
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 
 struct Bootstrap_Impl
 {
@@ -355,7 +353,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 {
     OUString base_ini( getIniFileName_Impl() );
     // normalize path
-    FileStatus status( FileStatusMask_FileURL );
+    FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None == DirectoryItem::get( base_ini, dirItem ) &&
         DirectoryItem::E_None == dirItem.getFileStatus( status ))
@@ -603,15 +601,10 @@ void Bootstrap_Impl::expandValue(
              requestFile, requestKey, requestStack)).pData);
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-
 namespace {
 
 struct bootstrap_map {
-    // map<> may be preferred here, but hash_map<> is implemented fully inline,
-    // thus there is no need to link against the stlport:
-    typedef std::hash_map<
+    typedef boost::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString >,
         rtl::Allocator< OUString > > t;
@@ -652,7 +645,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     OUString iniName( pIniName );
 
     // normalize path
-    FileStatus status( FileStatusMask_FileURL );
+    FileStatus status( osl_FileStatus_Mask_FileURL );
     DirectoryItem dirItem;
     if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
         DirectoryItem::E_None != dirItem.getFileStatus( status ))
@@ -984,7 +977,7 @@ rtl::OUString expandMacros(
                         rtl::OUString line;
                         rtl::OUString url;
                         // Silently ignore any errors (is that good?):
-                        if (f.open(OpenFlag_Read) == osl::FileBase::E_None &&
+                        if (f.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None &&
                             f.readLine(seq) == osl::FileBase::E_None &&
                             rtl_convertStringToUString(
                                 &line.pData,
@@ -1000,7 +993,7 @@ rtl::OUString expandMacros(
                             try {
                                 buf.append(
                                     rtl::Uri::convertRelToAbs(seg[1], url));
-                            } catch (rtl::MalformedUriException &) {}
+                            } catch (const rtl::MalformedUriException &) {}
                         }
                     } else {
                         buf.append(
@@ -1057,3 +1050,5 @@ rtl::OUString expandMacros(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

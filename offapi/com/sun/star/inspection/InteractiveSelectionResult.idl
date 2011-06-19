@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module inspection {
 */
 published enum InteractiveSelectionResult
 {
-    /** The interactive selection of a property value was cancelled.
+    /** The interactive selection of a property value was canceled.
     */
     Cancelled,
 

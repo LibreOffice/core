@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ extern "C" {
 #define SAL_MODULENAME(name) name SAL_DLLEXTENSION
 #endif
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
 
 #elif defined(SAL_UNX)
@@ -73,6 +74,13 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
+
+/** Load a shared library or module.
+    @param pModuleName denotes the name of the module to be loaded.
+    @return NULL if the module could not be loaded, otherwise a handle to the module.
+    @since UDK 3.6
+*/
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode);
 
 /** Load a module located relative to some other module.
 
@@ -209,3 +217,5 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction pf, rt
 #endif
 
 #endif  /* _OSL_MODULE_H_  */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

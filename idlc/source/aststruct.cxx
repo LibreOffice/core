@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
 #include <idlc/aststruct.hxx>
-#ifndef _IDLC_ASTMember_HXX_
 #include <idlc/astmember.hxx>
-#endif
 
 #include "registry/version.h"
 #include "registry/writer.hxx"
@@ -189,3 +188,4 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

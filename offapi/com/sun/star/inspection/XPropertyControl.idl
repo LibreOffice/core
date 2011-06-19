@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_inspection_XPropertyControl_idl__
 #define __com_sun_star_inspection_XPropertyControl_idl__
 
-#ifndef __com_sun_star_beans_IllegalTypeException_idl__
 #include <com/sun/star/beans/IllegalTypeException.idl>
-#endif
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {

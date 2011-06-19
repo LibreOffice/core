@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_datatransfer_clipboard_XClipboardOwner_idl__
 #define __com_sun_star_datatransfer_clipboard_XClipboardOwner_idl__
 
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +46,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 published interface XClipboardOwner: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Notifies the tranferable object source that it is no longer the owner of
+    /** Notifies the transferable object source that it is no longer the owner of
         the clipboard.
 
         @param xClipboard

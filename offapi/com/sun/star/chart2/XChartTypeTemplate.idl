@@ -27,17 +27,9 @@
 #ifndef com_sun_star_chart_XChartTypeTemplate_idl
 #define com_sun_star_chart_XChartTypeTemplate_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
 #include <com/sun/star/chart2/XDiagram.idl>
 #include <com/sun/star/chart2/data/XDataSource.idl>
 #include <com/sun/star/chart2/XChartType.idl>
@@ -150,7 +142,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             that the template matches more accurately.  E.g. for a
             line-chart with symbols the property "Symbol" would be set
             to <TRUE/>.  If this parameter is <FALSE/> the template
-            itselfs stays unmodified.
+            itself stays unmodified.
 
         @return
             <TRUE/> if the diagram given is structurally identical to
@@ -167,7 +159,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         series.
 
         @param aFormerlyUsedChartTypes
-            The list can be used to copy some aspects from old charttypes during the creation of a new chart type.
+            The list can be used to copy some aspects from old chart types during the creation of a new chart type.
             The list might be empty.
      */
     XChartType getChartTypeForNewSeries( [in] sequence< XChartType > aFormerlyUsedChartTypes );

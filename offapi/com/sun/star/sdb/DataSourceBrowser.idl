@@ -29,21 +29,11 @@
 #ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
 #define __com_sun_star_sdb_DataSourceBrowser_idl__
 
-#ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-#ifndef __com_sun_star_form_FormController_idl__
 #include <com/sun/star/form/FormController.idl>
-#endif
-#ifndef __com_sun_star_ui_XContextMenuInterception_idl__
 #include <com/sun/star/ui/XContextMenuInterception.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 
@@ -76,7 +66,7 @@ module com {  module sun {  module star {  module sdb {
     </p>
 
     <p>
-    Some aspects of the browser can be controlled from outside, eg.,
+    Some aspects of the browser can be controlled from outside, e.g.,
     it is possible to dispatch a sort or filter
     request, if a table or query is being displayed.
     </p>
@@ -88,19 +78,19 @@ module com {  module sun {  module star {  module sdb {
     <type scope="com::sun::star::frame">XDispatchProvider</type>
     interface the service exports (Please see below for more details on this).
     <br/>
-    The way <em>out</em> works in another way. There are several URL's which an external
+    The way <em>out</em> works in another way. There are several URLs which an external
     instance can provide dispatches for (usually by implementing a
     <type scope="com::sun::star::frame">XDispatchProviderInterceptor</type>
     for the parent frame of the browser), thus indicating that the browser should provide special functionality.
     <br/>
     In this case, the browser displays and maintains some additional slots (to be more concrete: toolbox items), which,
     upon triggering, call the
-    <member scope="com::sun::star::frame">XDispatch::dispatch()</member>methodoftheobject
+    <member scope="com::sun::star::frame">XDispatch::dispatch()</member> method of the object
     provided by the external instance.
     </p>
 
     <p>
-        In particular, the supported URL's for communicating to an external instance are:
+        In particular, the supported URLs for communicating to an external instance are:
         <ul>
             <li><b>.uno:DataSourceBrowser/InsertColumns</b>
             <br/>
@@ -129,7 +119,7 @@ module com {  module sun {  module star {  module sdb {
             <li><b>.uno:DataSourceBrowser/FormLetter</b>
             <br/>
             Available whenever an external instance provides a dispatcher (
-            <type scope="com::sun::star::frame">XDispatch</type>)forthisURL.
+            <type scope="com::sun::star::frame">XDispatch</type>) for this URL.
             <br/>
             It is the task of the external instance to provide functionality for this URL, but usually it is used
             to implement some kind of "Form Letter" functionality.
@@ -137,7 +127,7 @@ module com {  module sun {  module star {  module sdb {
             </li>
         </ul>
     </p>
-    <p>For all kinds of URL's, the parameters supplied during dispatching build up a <type>DataAccessDescriptor</type>,
+    <p>For all kinds of URLs, the parameters supplied during dispatching build up a <type>DataAccessDescriptor</type>,
     where the following properties are present:
     <ul>
         <li><member>DataAccessDescriptor::DataSourceName</member></li>
@@ -169,7 +159,7 @@ published service DataSourceBrowser
             </li>
             <li>the data form used for displaying objects. As always for components implementing this service,
             the object returned by
-            <method scope="com::sun::star::awt">XTabController::getModel</method>is a dataform.
+            <method scope="com::sun::star::awt">XTabController::getModel</method> is a dataform.
             </li>
         </ul>
         </p>
@@ -272,7 +262,7 @@ published service DataSourceBrowser
 
     /** allows to intercept user-triggered context menus in the data source browser
 
-        <p>Context menu interception is currently supported only for the brower control where the registered
+        <p>Context menu interception is currently supported only for the browser control where the registered
         data sources and all their tables and queries are displayed in a tree view.</p>
 
         <p>The selection supplied by <member scope="com::sun::star::ui">ContextMenuExecuteEvent::Selection</member>,

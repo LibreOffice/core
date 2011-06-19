@@ -27,29 +27,12 @@
 #ifndef __com_sun_star_ui_XAcceleratorConfiguration_idl__
 #define __com_sun_star_ui_XAcceleratorConfiguration_idl__
 
-#ifndef __com_sun_star_ui_XUIConfiguration_idl__
 #include <com/sun/star/ui/XUIConfiguration.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
 #include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
 #include <com/sun/star/ui/XUIConfigurationStorage.idl>
-#endif
-
-#ifndef __com_sun_star_awt_KeyEvent_idl__
 #include <com/sun/star/awt/KeyEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 
@@ -67,7 +50,7 @@ module com {  module sun {  module star {  module ui {
 
     <p>
     Note further:<br>
-    All changes you made on this configration access modify the
+    All changes you made on this configuration access modify the
     the configuration set inside memory only. You have to use
     the <type scope="com::sun::star::util">XFlushable</type> interface
     (which must be available at the same implementation object too), to
@@ -83,11 +66,11 @@ interface XAcceleratorConfiguration
 {
     //-------------------------------------------
     /** return the list of all key events, which
-        are available at this configration set.
+        are available at this configuration set.
 
         <p>
         The key events are the "primary keys" of this configuration sets.
-        Means: Commands are registerd for key events.
+        Means: Commands are registered for key events.
         </p>
 
         <p>
@@ -108,7 +91,7 @@ interface XAcceleratorConfiguration
         This function can be used to:<br>
         <ul>
             <li>by a generic service, which can execute commands if a
-                keyboard event occures.</li>
+                keyboard event occurs.</li>
             <li>or to iterate over the whole container and change some
                 accelerator bindings.</li>
         </ul>
@@ -157,7 +140,7 @@ interface XAcceleratorConfiguration
                 the new command for the specified key event.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-                if the key event isnt a valid one. Commands can be
+                if the key event isn't a valid one. Commands can be
                 checked only, if they are empty. Because every URL schema can be used
                 by commands in general, so its not possible to validate it.
      */
@@ -179,7 +162,7 @@ interface XAcceleratorConfiguration
 
     //-------------------------------------------
     /** optimized access to the relation "command-key" instead
-        of "key-command" which is provided normaly by this interface.
+        of "key-command" which is provided normally by this interface.
 
         <p>
         It can be used to implement collision handling, if more then one
@@ -192,15 +175,15 @@ interface XAcceleratorConfiguration
                 the command, where key bindings are searched for.
 
         @return A list of <type scope="com::sun::star::awt">KeyEvent</type> structures,
-                where the pecified command is registered for.
+                where the specified command is registered for.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if the specified command is empty. It cant be checked, if a command
                 is valid - because every URL schema can be used here.
 
         @throws ::com::sun::star::container::NoSuchElementException
-                if the specified command isnt empty but does not
-                occure inside this configuration set.
+                if the specified command isn't empty but does not
+                occur inside this configuration set.
      */
     sequence< com::sun::star::awt::KeyEvent > getKeyEventsByCommand( [in] string sCommand )
         raises(com::sun::star::lang::IllegalArgumentException   ,
@@ -226,7 +209,7 @@ interface XAcceleratorConfiguration
 
         @attention  Because its not defined, that any command (e.g. configured inside a menu)
                     must have an accelerator - we cant reject the call if at least one command
-                    does not occure inside this configuration set ...
+                    does not occur inside this configuration set ...
                     We handle it more gracefully - and return an empty item instead of throwing
                     and exception.
 
@@ -258,7 +241,7 @@ interface XAcceleratorConfiguration
 
         <p>
         This is an optimized method, which can perform removing of commands
-        from this configuration set. Because normaly Commands are "foreign keys"
+        from this configuration set. Because normally Commands are "foreign keys"
         and key identifier the "primary keys" - it needs some work to remove
         all commands outside this container ...
         </p>
@@ -270,7 +253,7 @@ interface XAcceleratorConfiguration
                 if the specified command is empty.
 
         @throws ::com::sun::star::container::NoSuchElementException
-                if the specified command isnt used inside this configuration set.
+                if the specified command isn't used inside this configuration set.
      */
     void removeCommandFromAllKeyEvents( [in] string sCommand )
         raises(com::sun::star::lang::IllegalArgumentException   ,

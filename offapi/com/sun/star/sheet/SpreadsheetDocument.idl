@@ -28,91 +28,31 @@
 #ifndef __com_sun_star_sheet_SpreadsheetDocument_idl__
 #define __com_sun_star_sheet_SpreadsheetDocument_idl__
 
-#ifndef __com_sun_star_document_OfficeDocument_idl__
 #include <com/sun/star/document/OfficeDocument.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
 #include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
-#endif
 
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-
-#ifndef __com_sun_star_document_XActionLockable_idl__
 #include <com/sun/star/document/XActionLockable.idl>
-#endif
-
-#ifndef __com_sun_star_document_XLinkTargetSupplier_idl__
 #include <com/sun/star/document/XLinkTargetSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XProtectable_idl__
 #include <com/sun/star/util/XProtectable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSpreadsheetDocument_idl__
 #include <com/sun/star/sheet/XSpreadsheetDocument.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCalculatable_idl__
 #include <com/sun/star/sheet/XCalculatable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDocumentAuditing_idl__
 #include <com/sun/star/sheet/XDocumentAuditing.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XConsolidatable_idl__
 #include <com/sun/star/sheet/XConsolidatable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XGoalSeek_idl__
 #include <com/sun/star/sheet/XGoalSeek.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
 #include <com/sun/star/drawing/XDrawPagesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
 #include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
 
 
-#ifndef __com_sun_star_sheet_XNamedRanges_idl__
 #include <com/sun/star/sheet/XNamedRanges.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDatabaseRanges_idl__
 #include <com/sun/star/sheet/XDatabaseRanges.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XLabelRanges_idl__
 #include <com/sun/star/sheet/XLabelRanges.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XAreaLinks_idl__
 #include <com/sun/star/sheet/XAreaLinks.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XExternalDocLinks_idl__
 #include <com/sun/star/sheet/XExternalDocLinks.idl>
-#endif
 
 //=============================================================================
 

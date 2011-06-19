@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_resource_OfficeResourceLoader_idl__
 #define __com_sun_star_resource_OfficeResourceLoader_idl__
 
-#ifndef __com_sun_star_resource_XResourceBundleLoader_idl__
 #include <com/sun/star/resource/XResourceBundleLoader.idl>
-#endif
 
 //=============================================================================
 module com { module sun { module star { module resource {
@@ -40,12 +38,12 @@ module com { module sun { module star { module resource {
     resource files.
 
     <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
-    format, located insisde the installation's program/resource directory. The <type>OfficeResoureLoader</type>
+    format, located inside the installation's program/resource directory. The <type>OfficeResoureLoader</type>
     singleton (available at a component context as value with the key
     <code>/singletons/com.sun.star.resource.OfficeResourceLoader</code>), provides access to some
     types of resources within those files.</p>
 
-    <p>Clients have to specifiy the resource file base name in the call to
+    <p>Clients have to specify the resource file base name in the call to
     <member>XResourceBundleLoader::loadBundle</member> resp. <member>XResourceBundleLoader::loadBundle_Default</member>
     method. The loader will extent this base name so that the resulting name conforms to the OpenOffice.org
     resource file naming conventions, and look up the respective resource file, for the requested locale,

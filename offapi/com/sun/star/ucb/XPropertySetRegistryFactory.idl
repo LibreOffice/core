@@ -27,20 +27,15 @@
 #ifndef __com_sun_star_ucb_XPropertySetRegistryFactory_idl__
 #define __com_sun_star_ucb_XPropertySetRegistryFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XPropertySetRegistry_idl__
 #include <com/sun/star/ucb/XPropertySetRegistry.idl>
-#endif
 
 //=============================================================================
 
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A factory for propertyset registries.
+/** A factory for property set registries.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -48,7 +43,7 @@ module com { module sun { module star { module ucb {
 published interface XPropertySetRegistryFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a propertyset registry.
+    /** creates a property set registry.
 
         @param URL
         The identifier of the registry to create ( e.g. file-URL ). The

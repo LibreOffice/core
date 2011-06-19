@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_view_RenderOptions_idl__
 #define __com_sun_star_view_RenderOptions_idl__
 
-#ifndef __com_sun_star_awt_XDevice_idl__
 #include <com/sun/star/awt/XDevice.idl>
-#endif
 
 //=============================================================================
 
@@ -80,7 +78,7 @@ published service RenderOptions
 
     /** specifies if empty pages should be skipped.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has
+        <p>Tells the PDF export to skip empty pages. This flag also has
         to be passed to the ::render function, in order to calculate to
         correct page numbers during the export of hyperlinks, notes, and
         outlines.
@@ -93,7 +91,7 @@ published service RenderOptions
 
     /** specifies the page ranges to be rendered.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has
+        <p>Tells the PDF export to skip empty pages. This flag also has
         to be passed to the ::render function, in order to calculate to
         correct page numbers during the export of hyperlinks, notes,
         and outlines.

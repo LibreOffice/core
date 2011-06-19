@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_inspection_XPropertyControlFactory_idl__
 #define __com_sun_star_inspection_XPropertyControlFactory_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {

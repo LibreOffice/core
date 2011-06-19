@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -230,7 +231,7 @@ static sal_Bool checkSingletons(Options_Impl const & options, RegistryKey& singl
     return bRet;
 }
 
-#if (defined UNX) || (defined OS2) || (defined __MINGW32__)
+#if (defined UNX) || (defined __MINGW32__)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -307,7 +308,7 @@ int _cdecl main( int argc, char * argv[] )
     }
 
     RegistryKey singletonKey;
-    if ( indexRoot.createKey(OUString::createFromAscii("SINGLETONS"), singletonKey) )
+    if ( indexRoot.createKey(OUString(RTL_CONSTASCII_USTRINGPARAM("SINGLETONS")), singletonKey) )
     {
         fprintf(stderr, "%s: open/create SINGLETONS key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getIndexReg().c_str());
@@ -342,3 +343,5 @@ int _cdecl main( int argc, char * argv[] )
         return (11);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

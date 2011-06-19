@@ -159,7 +159,7 @@ published constants ZipConstants
     const short LOCTIM = 10;
 
     //-------------------------------------------------------------------------
-    /** LOC header field "crc of uncompressed data" offset
+    /** LOC header field "CRC of uncompressed data" offset
      */
     const short LOCCRC = 14;
 
@@ -184,7 +184,7 @@ published constants ZipConstants
     const short LOCEXT = 28;
 
     //-------------------------------------------------------------------------
-    /** EXT header field "crc of uncompressed data" offsets
+    /** EXT header field "CRC of uncompressed data" offsets
      */
     const short EXTCRC = 4;
 
@@ -229,7 +229,7 @@ published constants ZipConstants
     const short CENDAT = 14;
 
     //-------------------------------------------------------------------------
-    /** CEN header field "crc of uncompressed data" offset
+    /** CEN header field "CRC of uncompressed data" offset
      */
     const short CENCRC = 16;
 

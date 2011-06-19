@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ui_dialogs_XFilePicker_idl__
 #define __com_sun_star_ui_dialogs_XFilePicker_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#endif
 
 //=============================================================================
 
@@ -51,14 +43,14 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
 {
 
     //-------------------------------------------------------------------------
-    /** Enable/disable multiselection mode
+    /** Enable/disable multi-selection mode
 
-        <p>If the multiselection mode is enabled, multiple files
+        <p>If the multi-selection mode is enabled, multiple files
         may be selected by the user else only one file selection at a time is possible</p>
 
         @param bMode
-        <p>A value of <TRUE/> enables the multiselection mode.</p>
-        <p>A value of <FALSE/> disables the multiselection mode, this is the default.</p>
+        <p>A value of <TRUE/> enables the multi-selection mode.</p>
+        <p>A value of <FALSE/> disables the multi-selection mode, this is the default.</p>
     */
     void setMultiSelectionMode( [in] boolean bMode );
 
@@ -114,11 +106,11 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
         <p> The complete path of the file or directory currently selected
             in URL format. There are two different cases:
             <ol>
-                <li>Multiselection is disabled:
+                <li>Multi-selection is disabled:
                 The first and only entry of the sequence contains the complete
                 path/filename in URL format.</li>
 
-                <li>Multiselection is enabled:
+                <li>Multi-selection is enabled:
                 If only one file is selected, the first entry
                 of the sequence contains the complete path/filename in URL format.
                 If multiple files are selected, the first entry of the sequence contains

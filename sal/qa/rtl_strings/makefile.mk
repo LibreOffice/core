@@ -45,7 +45,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_OString.obj
 
 SHL1TARGET= rtl_OString
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -64,7 +64,7 @@ SHL2OBJS=  \
     $(SLO)$/rtl_OUString.obj
 
 SHL2TARGET= rtl_OUString
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 # SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
@@ -83,7 +83,7 @@ SHL3OBJS=  \
     $(SLO)$/rtl_OUStringBuffer.obj
 
 SHL3TARGET= rtl_OUStringBuffer
-SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL3IMPLIB= i$(SHL3TARGET)
 # SHL3DEF=    $(MISC)$/$(SHL3TARGET).def
@@ -100,7 +100,7 @@ SHL4OBJS=  \
     $(SLO)$/rtl_old_teststrbuf.obj
 
 SHL4TARGET= rtl_old_teststrbuf
-SHL4STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL4STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL4IMPLIB= i$(SHL4TARGET)
 DEF4NAME    =$(SHL4TARGET)
@@ -113,7 +113,7 @@ SHL5OBJS=  \
     $(SLO)$/rtl_old_testowstring.obj
 
 SHL5TARGET= rtl_old_testowstring
-SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL5IMPLIB= i$(SHL5TARGET)
 DEF5NAME    =$(SHL5TARGET)
@@ -126,7 +126,7 @@ SHL6OBJS=  \
     $(SLO)$/rtl_old_testostring.obj
 
 SHL6TARGET= rtl_old_testostring
-SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL6IMPLIB= i$(SHL6TARGET)
 DEF6NAME    =$(SHL6TARGET)
@@ -147,6 +147,4 @@ SLOFILES=\
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

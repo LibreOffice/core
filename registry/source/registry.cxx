@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include "regimpl.hxx"
 #include "regkey.hxx"
 
-#if defined(WIN32) || defined(WNT) || defined(OS2)
+#if defined(WIN32) || defined(WNT)
 #include <io.h>
 #endif
 
@@ -44,10 +45,6 @@
 #if defined(UNX)
 #include <stdlib.h>
 #include <unistd.h>
-#endif
-
-#if defined ( GCC ) && ( defined ( SCO ) )
-ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
 #endif
 
 extern "C" {
@@ -630,3 +627,4 @@ RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

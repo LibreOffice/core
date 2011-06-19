@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,10 @@
 #include "precompiled_sal.hxx"
 #include "sal/config.h"
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -45,7 +50,6 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
-#include "preextstl.h"
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
@@ -53,7 +57,6 @@
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/PlugInManager.h"
 #include "cppunit/portability/Stream.h"
-#include "postextstl.h"
 
 namespace {
 
@@ -76,32 +79,21 @@ std::string convertLazy(rtl::OUString const & s16) {
     return std::string(
         s8.getStr(),
         ((static_cast< sal_uInt32 >(s8.getLength())
-          > std::numeric_limits< std::string::size_type >::max())
-         ? std::numeric_limits< std::string::size_type >::max()
+          > (std::numeric_limits< std::string::size_type >::max)())
+         ? (std::numeric_limits< std::string::size_type >::max)()
          : static_cast< std::string::size_type >(s8.getLength())));
-}
-
-std::string convertStrict(rtl::OUString const & s16) {
-    rtl::OString s8;
-    if (!s16.convertToString(
-            &s8, osl_getThreadTextEncoding(),
-            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-        || (static_cast< sal_uInt32 >(s8.getLength())
-            > std::numeric_limits< std::string::size_type >::max()))
-    {
-        std::cerr
-            << "Failure converting argument from UTF-16 back to system encoding"
-            << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    return std::string(
-        s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
 }
 
 SAL_IMPLEMENT_MAIN() {
+#ifdef WNT
+    //Disable Dr-Watson in order to crash simply without popup dialogs under
+    //windows
+    DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+    SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
+#endif
+
     CppUnit::TestResult result;
     sal_uInt32 index = 0;
     for (; index < rtl_getAppCommandArgCount(); index += 3) {
@@ -128,11 +120,27 @@ SAL_IMPLEMENT_MAIN() {
         }
         result.pushProtector(p);
     }
-    if (rtl_getAppCommandArgCount() - index != 1) {
+    if (rtl_getAppCommandArgCount() - index < 1) {
         usageFailure();
     }
+
+    std::string testlib;
+    {
+        rtl::OUString path;
+        rtl_getAppCommandArg(index, &path.pData);
+        testlib = rtl::OUStringToOString(path, osl_getThreadTextEncoding()).getStr();
+    }
+    std::string args = testlib;
+    for (sal_uInt32 i = index + 1; i < rtl_getAppCommandArgCount(); ++i)
+    {
+        rtl::OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        args += ' ';
+        args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+    }
+
     CppUnit::PlugInManager manager;
-    manager.load(convertStrict(getArgument(index)));
+    manager.load(testlib, args);
     CppUnit::TestRunner runner;
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
     CppUnit::TestResultCollector collector;
@@ -141,3 +149,5 @@ SAL_IMPLEMENT_MAIN() {
     CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
     return collector.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

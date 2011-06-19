@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_chart_ChartData_idl__
 #define __com_sun_star_chart_ChartData_idl__
 
-#ifndef __com_sun_star_chart_XChartData_idl__
 #include <com/sun/star/chart/XChartData.idl>
-#endif
 
 
 //=============================================================================

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,10 @@
 #include "osl/thread.h"
 #include "otherjre.hxx"
 
-using namespace rtl;
 using namespace std;
 
-
+using ::rtl::OUString;
+using ::rtl::Reference;
 namespace jfw_plugin
 {
 
@@ -47,7 +48,7 @@ Reference<VendorBase> OtherInfo::createInstance()
 char const* const* OtherInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "bin/java.exe",
         "jre/bin/java.exe"
 #elif UNX
@@ -67,10 +68,6 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
     "/bin/jrockit/jvm.dll"
-#elif defined(OS2)
-        "/bin/classic/jvm.dll",
-        "/bin/client/jvm.dll",
-        "/bin/hotspot/jvm.dll"
 #elif UNX
 #ifdef MACOSX
         "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
@@ -128,3 +125,5 @@ int OtherInfo::compareVersions(const rtl::OUString& /*sSecond*/) const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

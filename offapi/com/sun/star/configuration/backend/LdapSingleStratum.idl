@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_LdapSingleStratum_idl__
 #define __com_sun_star_configuration_backend_LdapSingleStratum_idl__
 
-#ifndef __com_sun_star_configuration_backend_SingleLayerStratum_idl__
 #include <com/sun/star/configuration/backend/SingleLayerStratum.idl>
-#endif
 
 //=============================================================================
 
@@ -39,7 +37,7 @@ module com { module sun { module star { module configuration { module backend {
 
 /**
    implements <type>SingleLayerStratum</type> that
-    provides access to a single layer of configuration data from ldap source
+    provides access to a single layer of configuration data from LDAP source
 */
 service LdapSingleStratum
 {

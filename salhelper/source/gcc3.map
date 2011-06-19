@@ -70,4 +70,27 @@ UDK_3.1 {
         _ZN9salhelper15ConditionWaiter8timedoutD2Ev;
         # _ZTIN9salhelper15ConditionWaiter8timedoutE;
         # _ZTSN9salhelper15ConditionWaiter8timedoutE;
+
+
+    _ZN9salhelper5TimerC1ERKNS_10TTimeValueE;
+    _ZN9salhelper5TimerC1ERKNS_10TTimeValueES3_;
+    _ZN9salhelper5TimerC1Ev;
+    _ZN9salhelper5TimerC2ERKNS_10TTimeValueE;
+    _ZN9salhelper5TimerC2ERKNS_10TTimeValueES3_;
+    _ZN9salhelper5TimerC2Ev;
+    _ZN9salhelper5TimerD0Ev;
+    _ZN9salhelper5TimerD1Ev;
+    _ZN9salhelper5TimerD2Ev;
+    _ZN9salhelper5Timer5startEv;
+    _ZN9salhelper5Timer4stopEv;
+    _ZNK9salhelper5Timer9isTickingEv;
+    _ZNK9salhelper5Timer9isExpiredEv;
+    _ZNK9salhelper5Timer13expiresBeforeEPKS0_;
+    _ZN9salhelper5Timer15setAbsoluteTimeERKNS_10TTimeValueE;
+    _ZN9salhelper5Timer16setRemainingTimeERKNS_10TTimeValueE;
+    _ZN9salhelper5Timer16setRemainingTimeERKNS_10TTimeValueES3_;
+    _ZN9salhelper5Timer7addTimeERKNS_10TTimeValueE;
+    _ZNK9salhelper5Timer16getRemainingTimeEv;
+
+
 } UDK_3_0_0;

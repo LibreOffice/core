@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_xml_dom_XNodeList_idl__
 #define __com_sun_star_xml_dom_XNodeList_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 module com { module sun { module star { module xml { module dom {
@@ -44,7 +42,7 @@ interface XNodeList : com::sun::star::uno::XInterface
     */
     long getLength();
     /**
-    Returns the indexth item in the collection.
+    Returns a node specified by index in the collection.
     */
     XNode item([in] long index);
 };

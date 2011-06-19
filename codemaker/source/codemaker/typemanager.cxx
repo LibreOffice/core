@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,10 @@
 #include "registry/reader.hxx"
 #include "registry/version.h"
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 TypeManager::TypeManager()
 {
@@ -58,7 +62,7 @@ sal_Int32 TypeManager::release()
     {
         delete m_pImpl;
     }
-    return refCount;;
+    return refCount;
 }
 
 sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
@@ -401,3 +405,5 @@ RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) co
 
     return keyList;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

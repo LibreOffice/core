@@ -36,7 +36,7 @@
 
 /** These values are used to specify the decorations of a window.
 
-    <p><b>IMPORTANT:</b> These constands have to be disjunct with
+    <p><b>IMPORTANT:</b> These constants have to be disjunct with
     constants in <type>VclWindowPeerAttribute</type>.</p>
  */
 published constants WindowAttribute

@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_report_XReportControlModel_idl__
 #define __com_sun_star_report_XReportControlModel_idl__
 
-#ifndef __com_sun_star_report_XReportComponent_idl__
 #include <com/sun/star/report/XReportComponent.idl>
-#endif
-#ifndef __com_sun_star_report_XReportControlFormat_idl__
 #include <com/sun/star/report/XReportControlFormat.idl>
-#endif
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_report_XFormatCondition_idl__
 #include <com/sun/star/report/XFormatCondition.idl>
-#endif
 //=============================================================================
 
  module com {  module sun {  module star {  module report {

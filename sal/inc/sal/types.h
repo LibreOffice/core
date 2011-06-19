@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,12 @@
 #define _SAL_TYPES_H_
 
 #include <sal/config.h>
+#include <sal/macros.h>
 
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
-#elif defined(WNT) || defined(OS2)
+#elif defined(WNT)
   /* FIXME: autogeneration of type sizes on Win32/Win64? */
   #define SAL_TYPES_ALIGNMENT2      1
   #define SAL_TYPES_ALIGNMENT4      1
@@ -41,8 +43,12 @@
   #define SAL_TYPES_SIZEOFSHORT     2
   #define SAL_TYPES_SIZEOFINT       4
   #define SAL_TYPES_SIZEOFLONG      4
-  #define SAL_TYPES_SIZEOFLONGLONG      8
-  #define SAL_TYPES_SIZEOFPOINTER       4
+  #define SAL_TYPES_SIZEOFLONGLONG  8
+  #ifdef _WIN64
+    #define SAL_TYPES_SIZEOFPOINTER 8
+  #else
+    #define SAL_TYPES_SIZEOFPOINTER 4
+  #endif
 #endif
 
 #ifdef __cplusplus
@@ -99,7 +105,7 @@ typedef unsigned char       sal_uInt8;
     #define SAL_PRIuUINT64 "I64u"
     #define SAL_PRIxUINT64 "I64x"
     #define SAL_PRIXUINT64 "I64X"
-#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
+#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (sgi)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
         typedef unsigned long int       sal_uInt64;
@@ -233,7 +239,7 @@ typedef void *                   sal_Handle;
 #define SAL_MAX_SIZE        SAL_MAX_UINT64
 #endif
 
-#if defined(SAL_W32) || defined(SAL_OS2) || defined(SAL_UNX)
+#if defined(SAL_W32) || defined(SAL_UNX)
 #   define SAL_MAX_ENUM 0x7fffffff
 #elif defined(SAL_W16)
 #   define SAL_MAX_ENUM 0x7fff
@@ -254,13 +260,6 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
 #endif
-#elif defined SAL_OS2 // YD
-/* YD 25/09/2007 gcc doesn't like imports inside class members */
-#   define SAL_DLLPUBLIC_EXPORT
-#   define SAL_DLLPUBLIC_IMPORT
-#   define SAL_DLLPRIVATE
-#   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
 #elif defined SAL_UNX
 #   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
@@ -311,8 +310,6 @@ typedef void *                   sal_Handle;
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 /** This is the binary specification of a SAL sequence.
@@ -333,7 +330,7 @@ typedef struct _sal_Sequence
 
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -343,7 +340,9 @@ typedef struct _sal_Sequence
     lack RTTI support, dynamic_cast is not included here).
  */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD || defined AIX || defined OS2
+#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || \
+    defined FREEBSD || defined NETBSD || defined AIX || \
+    defined OPENBSD || defined DRAGONFLY
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
@@ -433,3 +432,4 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #endif /*_SAL_TYPES_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

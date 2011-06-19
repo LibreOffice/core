@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,11 +61,16 @@ extern "C" {
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
 #if defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
-#elif defined OS2
-#define SAL_MATH_FINITE(x)              \
-    ((sizeof (x) == sizeof (float)) ? __isfinitef(x)    \
-    : (sizeof (x) == sizeof (double)) ? __isfinite(x)   \
-    : __isfinitel(x))
+#elif defined IOS
+/* C++ is so nice. This is the only way I could come up with making
+ * this actually work in all cases (?), even when <cmath> has been
+ * included which #undefs isfinite: copy the definition of isfinite()
+ * from <architecture/arm/math.h>
+ */
+#define SAL_MATH_FINITE(d) \
+  ( sizeof (d) == sizeof(float ) ?  __inline_isfinitef((float)(d)) \
+  : sizeof (d) == sizeof(double) ?  __inline_isfinited((double)(d)) \
+                                 :  __inline_isfinite ((long double)(d)))
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
 #else /* WNT, LINUX, UNX */
@@ -145,3 +151,5 @@ union sal_math_Double
 #endif /* __cplusplus */
 
 #endif /* INCLUDED_SAL_MATHCONF_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

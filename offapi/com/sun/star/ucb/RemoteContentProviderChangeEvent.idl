@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_ucb_RemoteContentProviderChangeEvent_idl__
 #define __com_sun_star_ucb_RemoteContentProviderChangeEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-#ifndef __com_sun_star_ucb_RemoteContentProviderChangeAction_idl__
 #include <com/sun/star/ucb/RemoteContentProviderChangeAction.idl>
-#endif
 
 module com { module sun { module star { module ucb {
 

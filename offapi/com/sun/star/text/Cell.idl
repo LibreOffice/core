@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_text_Cell_idl__
 #define __com_sun_star_text_Cell_idl__
 
-#ifndef __com_sun_star_text_CellProperties_idl__
 #include <com/sun/star/text/CellProperties.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellProperties_idl__
 #include <com/sun/star/table/CellProperties.idl>
-#endif
-
-#ifndef __com_sun_star_table_XCell_idl__
 #include <com/sun/star/table/XCell.idl>
-#endif
-
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
 
 //=============================================================================
 
@@ -64,7 +53,7 @@ service Cell
     //-------------------------------------------------------------------------
     /** contains properties from table cells.
 
-        <p>All of these properties are either already availbale in the
+        <p>All of these properties are either already available in the
         service
         <type scope="com::sun::star::text">CellProperties</type>,
         or get matched against one of those or are implemented
@@ -73,8 +62,8 @@ service Cell
         <p>The complete list is as follows:</p>
         <ul>
             <li>CellStyle: optional property, not implemented.</li>
-            <li>CellBackColor: matched to 'BackColor'.</li>
-            <li>IsCellBackgroundTransparent: matched to 'BackTransparent'.</li>
+            <li>CellBackColor: matched to "BackColor".</li>
+            <li>IsCellBackgroundTransparent: matched to "BackTransparent".</li>
             <li>HoriJustify: non-functional implementation.</li>
             <li>VertJustify: non-functional implementation.</li>
             <li>IsTextWrapped: non-functional implementation.</li>

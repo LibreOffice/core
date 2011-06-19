@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_document_Events_idl__
 #define __com_sun_star_document_Events_idl__
 
-#ifndef __com_sun_star_container_XNameReplace_idl__
 #include <com/sun/star/container/XNameReplace.idl>
-#endif
 
 //=============================================================================
 

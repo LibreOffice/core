@@ -28,9 +28,7 @@
 #ifndef __offapi_com_sun_star_logging_XConsoleHandler_idl__
 #define __offapi_com_sun_star_logging_XConsoleHandler_idl__
 
-#ifndef __com_sun_star_logging_XLogHandler_idl__
 #include <com/sun/star/logging/XLogHandler.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +45,7 @@ module com { module sun { module star { module logging {
  */
 interface XConsoleHandler : XLogHandler
 {
-    /** renotes the <type>LogLevel</type> threshold used to determine to which
+    /** denotes the <type>LogLevel</type> threshold used to determine to which
         console the events should be logged.
 
         <p>Events with a level greater or equal to <code>Threshold</code> will be

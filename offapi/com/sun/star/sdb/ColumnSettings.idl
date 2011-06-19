@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_ColumnSettings_idl__
 #define __com_sun_star_sdb_ColumnSettings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 
@@ -51,7 +49,7 @@ published service ColumnSettings
         <p>
         If the value is
         <void/>
-        , a default numberformat should be used according to the datatype of the column.
+        , a default number format should be used according to the datatype of the column.
         </p>
 
     */
@@ -102,7 +100,7 @@ published service ColumnSettings
     [property] boolean Hidden;
 
 
-    /** indicates a control model whichs defines the settings for layouting.
+    /** indicates a control model which defines the settings for layouting.
         The default is
         <NULL/>
         .

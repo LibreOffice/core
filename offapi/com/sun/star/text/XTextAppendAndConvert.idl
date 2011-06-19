@@ -28,15 +28,9 @@
 #define __com_sun_star_text_XTextAppendAndConvert_idl__
 
 
-#ifndef __com_sun_star_text_XTextAppend_idl__
 #include <com/sun/star/text/XTextAppend.idl>
-#endif
-#ifndef __com_sun_star_text_XTextContentAppend_idl__
 #include <com/sun/star/text/XTextContentAppend.idl>
-#endif
-#ifndef __com_sun_star_text_XTextConvert_idl__
 #include <com/sun/star/text/XTextConvert.idl>
-#endif
 
 //=============================================================================
 

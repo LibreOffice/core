@@ -25,10 +25,6 @@
 #
 #***********************************************************************/
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ = ../..
 PRJNAME = sal
 TARGET = qa_ByteSequence
@@ -38,6 +34,8 @@ ENABLE_EXCEPTIONS = TRUE
 .INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(CROSS_COMPILING)"!="YES"
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLO)/ByteSequence.obj
@@ -49,7 +47,7 @@ DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)
 
-.INCLUDE: target.mk
-.INCLUDE: _cppunit.mk
+.ENDIF
 
-.END
+.INCLUDE: target.mk
+.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_frame_XFrameLoader_idl__
 #define __com_sun_star_frame_XFrameLoader_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XLoadEventListener_idl__
 #include <com/sun/star/frame/XLoadEventListener.idl>
-#endif
 
 
 //=============================================================================
@@ -53,7 +42,7 @@
 
     <p>
     It's an asynchronous loading. For synchronous processes use <type>XSynchronousFrameLoader</type>
-    instead of this one. The generic load algorithm of the office supports both ones - but prefered
+    instead of this one. The generic load algorithm of the office supports both ones - but preferred
     the synchronous interface.
     </p>
 
@@ -68,7 +57,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
             specifies the loading target
 
         @param URL
-            describes the ressource of loading component
+            describes the resource of loading component
             Support of special protocols are implementation details
             and depends from the environment.
 

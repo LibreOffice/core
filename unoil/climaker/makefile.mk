@@ -34,7 +34,6 @@ TARGET = unotypes
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-#.INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
 .INCLUDE : version.txt

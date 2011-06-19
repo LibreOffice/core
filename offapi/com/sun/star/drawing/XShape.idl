@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_drawing_XShape_idl__
 #define __com_sun_star_drawing_XShape_idl__
 
-#ifndef __com_sun_star_drawing_XShapeDescriptor_idl__
 #include <com/sun/star/drawing/XShapeDescriptor.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
 
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
 #include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
 
 
 //=============================================================================

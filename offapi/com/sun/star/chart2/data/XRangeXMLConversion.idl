@@ -50,7 +50,7 @@ interface XRangeXMLConversion : ::com::sun::star::uno::XInterface
 
         <p>For example spreadsheet ranges consisting of more than one
         consecutive region are usually separated by a semicolon
-        whereas in XML you separate multiple regions by a spacce.</p>
+        whereas in XML you separate multiple regions by a space.</p>
      */
     string convertRangeToXML( [in] string aRangeRepresentation )
         raises( com::sun::star::lang::IllegalArgumentException );

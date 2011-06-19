@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_sheet_XSheetFilterableEx_idl__
 #define __com_sun_star_sheet_XSheetFilterableEx_idl__
 
-#ifndef __com_sun_star_sheet_XSheetFilterable_idl__
 #include <com/sun/star/sheet/XSheetFilterable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
-#endif
 
 
 //=============================================================================

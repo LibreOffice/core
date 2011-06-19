@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 #
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,22 +26,13 @@
  *
 #*************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _RTL_STRING_UTILS_HXX_
 #define _RTL_STRING_UTILS_HXX_
 
 #ifdef __cplusplus
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #include <math.h>
 #include <stdlib.h>
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #ifndef _SAL_TYPES_H_
     #include <sal/types.h>
@@ -54,8 +46,6 @@
     #include <rtl/string.hxx>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src );
 sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt );
 
@@ -122,9 +112,6 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
                                 const sal_uInt32   nSrcLen
                               );
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #endif /* __cplusplus */
 
 #endif /* _RTL_STRING_UTILS_HXX */
@@ -135,3 +122,4 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

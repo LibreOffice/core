@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include "rtl/logfile.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <memory>
 
 namespace
@@ -246,7 +247,7 @@ void LogProbe(
         rtl_logfile_longTrace( "} LogBridge () %s",sTemp.getStr());
         if ( ppException && *ppException )
         {
-            rtl_logfile_trace( " excption occured : ");
+            rtl_logfile_trace( " excption occurred : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));
@@ -275,3 +276,5 @@ extern "C" void SAL_DLLPUBLIC_EXPORT SAL_CALL uno_ext_getMapping(uno_Mapping    
 {
     cppu::helper::purpenv::createMapping(ppMapping, pFrom, pTo,LogProbe);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

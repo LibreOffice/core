@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_PrintPreviewSettings_idl__
 #define __com_sun_star_text_PrintPreviewSettings_idl__
 
-#ifndef __com_sun_star_text_NotePrintMode_idl__
 #include <com/sun/star/text/NotePrintMode.idl>
-#endif
 
 
 //=============================================================================
@@ -44,7 +42,7 @@
  */
 published service PrintPreviewSettings
 {
-    /** All properties have the property attribute 'maybevoid'
+    /** All properties have the property attribute "maybevoid"
     meaning: if none of them have been set, they all will return a void value, if any
     one of them has been set, then none of them will be void any longer */
 

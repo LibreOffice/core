@@ -27,45 +27,16 @@
 #ifndef __com_sun_star_style_PageProperties_idl__
 #define __com_sun_star_style_PageProperties_idl__
 
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-
-#ifndef __com_sun_star_style_PageStyleLayout_idl__
 #include <com/sun/star/style/PageStyleLayout.idl>
-#endif
-
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextColumns_idl__
 #include <com/sun/star/text/XTextColumns.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_text_WritingMode2_idl__
 #include <com/sun/star/text/WritingMode2.idl>
-#endif
 
 //=============================================================================
 
@@ -94,30 +65,30 @@ published service PageProperties
  */
 [property] string BackGraphicFilter;
 //-----------------------------------------------------------------------------
-/** determins the location of the background graphic.
+/** determines the location of the background graphic.
  */
 [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 //-----------------------------------------------------------------------------
-/** determins if the background color is transparent.
+/** determines if the background color is transparent.
 
     <p>If this property is set to <TRUE/>,
     <member>PageStyle::BackColor</member> will not be used.</p>
  */
 [property] boolean BackTransparent;
 //-----------------------------------------------------------------------------
-/** determins the left margin of the page.
+/** determines the left margin of the page.
  */
 [property] long LeftMargin;
 //-----------------------------------------------------------------------------
-/** determins the right margin of the page.
+/** determines the right margin of the page.
  */
 [property] long RightMargin;
 //-----------------------------------------------------------------------------
-/** determins the top margin of the page.
+/** determines the top margin of the page.
  */
 [property] long TopMargin;
 //-----------------------------------------------------------------------------
-/** determins the bottom margin of the page.
+/** determines the bottom margin of the page.
  */
 [property] long BottomMargin;
 //-----------------------------------------------------------------------------
@@ -137,35 +108,35 @@ published service PageProperties
  */
 [property] com::sun::star::table::BorderLine BottomBorder;
 //-----------------------------------------------------------------------------
-/** determins the left border distance of the page.
+/** determines the left border distance of the page.
  */
 [property] long LeftBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the right border distance of the page.
+/** determines the right border distance of the page.
  */
 [property] long RightBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the top border distance of the page.
+/** determines the top border distance of the page.
  */
 [property] long TopBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the bottom border distance of the page.
+/** determines the bottom border distance of the page.
  */
 [property] long BottomBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the shadow of the page.
+/** determines the shadow of the page.
  */
 [property] com::sun::star::table::ShadowFormat ShadowFormat;
 //-----------------------------------------------------------------------------
-/** determins if the page format is landscape.
+/** determines if the page format is landscape.
  */
 [property] boolean IsLandscape;
 //-----------------------------------------------------------------------------
-/** determins the default numbering type for this page.
+/** determines the default numbering type for this page.
  */
 [property] short NumberingType;
 //-----------------------------------------------------------------------------
-/** determins the layout of the page.
+/** determines the layout of the page.
  */
 [property] com::sun::star::style::PageStyleLayout PageStyleLayout;
 //-----------------------------------------------------------------------------
@@ -173,7 +144,7 @@ published service PageProperties
  */
 [property] string PrinterPaperTray;
 //-----------------------------------------------------------------------------
-/** determins if the register mode is active on that page.
+/** determines if the register mode is active on that page.
  */
 [optional, property] boolean RegisterModeActive;
 //-----------------------------------------------------------------------------
@@ -423,6 +394,13 @@ of the current page is used as limit.
 /** contains the weight of the separator line between the text and the footnote area.
  */
 [optional,property] short FootnoteLineWeight;
+//-----------------------------------------------------------------------------
+/** contains the style of the separator line between the text and the footnote area.
+
+    @see com::sun::star::style::FootnoteLineStyle
+        for the possible values.
+ */
+[optional,property] short FootnoteLineStyle;
 //-----------------------------------------------------------------------------
 /** contains the color of the separator line between the text and the footnote area..
  */

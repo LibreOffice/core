@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,3 +30,4 @@
 
 IMPLEMENT_THUNK( kernel32, WINDOWS, DWORD, WINAPI, GetLongPathNameA, ( LPCTSTR lpShortPath, LPTSTR lpLongPath, DWORD cchBuffer ) )
 #include "GetLongPathName.cpp"
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

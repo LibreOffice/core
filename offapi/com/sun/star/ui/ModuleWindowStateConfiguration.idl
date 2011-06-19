@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ui_ModuleUICommandDescription_idl__
 #define __com_sun_star_ui_ModuleUICommandDescription_idl__
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 
@@ -42,7 +40,7 @@ module com { module sun { module star { module ui {
     elements of a single application module.
 
     <p>
-    Every OpenOffice.org module has an amout of user interface elements that can
+    Every OpenOffice.org module has an amount of user interface elements that can
     be positioned, resized, closed and their style can be changed. This service
     provides access to the window based information of available user interface
     elements which are part of a single OpenOffice.org module, like Writer or

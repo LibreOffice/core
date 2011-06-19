@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XErrorBroadcaster_idl__
 #define __com_sun_star_form_XErrorBroadcaster_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_form_XErrorListener_idl__
 #include <com/sun/star/form/XErrorListener.idl>
-#endif
 
 
 //=============================================================================
@@ -44,7 +40,7 @@
 
 /** provides the possibility of receiving database error events.
 
-    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseded
     by <type scope="com::sun::star::sdb">XSQLErrorBroadcaster</type>.</p>
 
     @deprecated

@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_XBackendChangesNotifier_idl__
 #define __com_sun_star_configuration_backend_XBackendChangesNotifier_idl__
 
-#ifndef __com_sun_star_configuration_backend_XBackendChangesListener_idl__
 #include <com/sun/star/configuration/backend/XBackendChangesListener.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -48,7 +43,7 @@ module com {  module sun {  module star {  module configuration {  module backen
 interface XBackendChangesNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** adds the specified listener to receive events when changes occured.
+    /** adds the specified listener to receive events when changes occurred.
         @param aListener
             specifies the listener object.
 

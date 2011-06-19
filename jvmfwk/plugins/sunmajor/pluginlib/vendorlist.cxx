@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,11 @@
 #include <stdio.h>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OString;
 
 namespace jfw_plugin
 {
@@ -89,3 +94,5 @@ bool isVendorSupported(const rtl::OUString& sVendor)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

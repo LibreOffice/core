@@ -52,7 +52,7 @@ service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecuta
         @param xParent
                parent window
         @param focussedContext
-               context to be focussed
+               context to be focused
     */
     create( [in] com::sun::star::awt::XWindow xParent,
             [in] string focussedContext );

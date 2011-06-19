@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_ui_ActionTriggerContainer_idl__
 #define __com_sun_star_ui_ActionTriggerContainer_idl__
 
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 
@@ -88,7 +80,7 @@ published service ActionTriggerContainer
     */
     [optional] interface ::com::sun::star::container::XEnumerationAccess;
 
-    /** allows foreign components to register themself as listener for the container
+    /** allows foreign components to register themselves as listener for the container
         structure.
     */
     [optional] interface ::com::sun::star::container::XContainer;

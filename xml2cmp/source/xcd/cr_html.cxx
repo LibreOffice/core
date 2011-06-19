@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
                           const XmlElement &        i_rDocument,
                           const Simstr &            i_sIDL_BaseDirectory )
     :   aFile(i_pOutputFileName, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
                                                              ),
@@ -266,3 +267,4 @@ HtmlCreator::WriteElementName( const Simstr & i_sName,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_TitleChangedEvent_idl__
 #define __com_sun_star_frame_TitleChangedEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 //=============================================================================
 

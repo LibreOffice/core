@@ -35,6 +35,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -51,7 +53,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_doublelocking.obj
 
 SHL1TARGET= rtl_doublelocking
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -64,7 +66,9 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 SLOFILES=$(SHL1OBJS)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

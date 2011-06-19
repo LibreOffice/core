@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module i18n {
 //=============================================================================
 
 //--------------------------------------------------------------------------
-/** These constansts specifiy the conversion type to be used with
+/** These constants specify the conversion type to be used with
     <type>XTextConversion</type>.
 
      @since OOo 1.1.2

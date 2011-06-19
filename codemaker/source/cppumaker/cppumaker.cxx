@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,8 @@
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OUString;
 
 namespace {
 
@@ -242,3 +244,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

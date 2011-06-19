@@ -27,16 +27,10 @@
 #ifndef __com_sun_star_sdb_ParametersRequest_idl__
 #define __com_sun_star_sdb_ParametersRequest_idl__
 
-#ifndef __com_sun_star_task_ClassifiedInteractionRequest_idl__
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
-#endif
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XConnection_idl__
 #include <com/sun/star/sdbc/XConnection.idl>
-#endif
 
 //=============================================================================
 

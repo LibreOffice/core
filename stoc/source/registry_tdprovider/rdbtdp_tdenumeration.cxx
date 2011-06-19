@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,8 +153,7 @@ TypeDescriptionEnumerationImpl::createInstance(
                 }
                 else
                 {
-                    OSL_ENSURE(
-                        sal_False,
+                    OSL_FAIL(
                         "TypeDescriptionEnumerationImpl::createInstance "
                         "- Invalid registry key!" );
                 }
@@ -163,12 +163,11 @@ TypeDescriptionEnumerationImpl::createInstance(
         {
             // openKey, getValueType, getBinaryValue
 
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::createInstance "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::createInstance "
                         "- Caught InvalidRegistryException!" );
         }
 
-        it++;
+        ++it;
     }
 
     if ( !bOpenKeySucceeded )
@@ -217,8 +216,7 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
         catch (...)
         {
             // No exceptions from dtors, please!
-            OSL_ENSURE( sal_False,
-            "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
             "- Caught exception!" );
         }
 
@@ -237,12 +235,11 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
         catch (Exception &)
         {
             // No exceptions from dtors, please!
-            OSL_ENSURE( sal_False,
-            "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
             "- Caught exception!" );
         }
 
-        it++;
+        ++it;
     }
 
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
@@ -289,8 +286,8 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xTD;
 
     throw container::NoSuchElementException(
-        rtl::OUString::createFromAscii(
-            "No further elements in enumeration!" ),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("No further elements in enumeration!") ),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -434,8 +431,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False,
-                            "TypeDescriptionEnumerationImpl::queryMore "
+                        OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                             "- Invalid registry key!" );
                     }
 
@@ -444,8 +440,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 {
                     // getValueType, getBinaryValue
 
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
 
                     // Don't stop iterating!
@@ -464,8 +459,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 }
                 catch ( registry::InvalidRegistryException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
                 }
             }
@@ -531,8 +525,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 {
                     // getBinaryValue
 
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
                 }
             }
@@ -550,8 +543,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
         }
         catch ( registry::InvalidRegistryException const & )
         {
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryMore "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                         "- Caught InvalidRegistryException!" );
         }
 */
@@ -613,8 +605,7 @@ TypeDescriptionEnumerationImpl::queryNext()
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryNext "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryNext "
                         "- Invalid registry key!" );
                 }
             }
@@ -623,8 +614,7 @@ TypeDescriptionEnumerationImpl::queryNext()
         {
             // getValueType, getBinaryValue
 
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryNext "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryNext "
                         "- Caught InvalidRegistryException!" );
         }
 
@@ -641,3 +631,4 @@ TypeDescriptionEnumerationImpl::queryNext()
 
 } // namespace stoc_rdbtdp
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

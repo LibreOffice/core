@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #ifdef SAL_UNX
 #include <sal/alloca.h>
 #endif
-#if !(defined(MACOSX) || defined(FREEBSD))
+#if !(defined(MACOSX) || defined(IOS) || defined(FREEBSD))
 #include <malloc.h>
 #endif
 #include <rtl/alloc.h>
@@ -334,7 +335,7 @@ void IdlAttributeFieldImpl::checkException(
             throw WrappedTargetRuntimeException(
                 OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "non-RuntimeException occured when accessing an"
+                        "non-RuntimeException occurred when accessing an"
                         " interface type attribute")),
                 context, e);
         }
@@ -748,7 +749,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
 
             InvocationTargetException aExc;
             aExc.Context = *(const Reference< XInterface > *)rObj.getValue();
-            aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during invocation!") );
+            aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred during invocation!") );
             uno_any_destruct(
                 &aExc.TargetException,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
@@ -991,3 +992,4 @@ void InterfaceIdlClassImpl::createObject( Any & rObj )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

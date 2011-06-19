@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ namespace cli_ure {
     WCHAR * resolveLink(WCHAR * path);
 }
 
-#define INSTALL_PATH L"Software\\OpenOffice.org\\UNO\\InstallPath"
+#define INSTALL_PATH L"Software\\LibreOffice\\UNO\\InstallPath"
 #define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
@@ -73,7 +74,7 @@ namespace
  * @param subKeyName  name of the subkey to open
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
 {
@@ -431,3 +432,5 @@ Bootstrap::defaultBootstrap_InitialComponentContext()
 
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

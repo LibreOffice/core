@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_sdb_XSQLErrorListener_idl__
 #define __com_sun_star_sdb_XSQLErrorListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_sdb_SQLErrorEvent_idl__
 #include <com/sun/star/sdb/SQLErrorEvent.idl>
-#endif
 
  module com {  module sun {  module star {  module sdb {
 
@@ -48,7 +44,7 @@ published interface XSQLErrorListener: com::sun::star::lang::XEventListener
         <type scope="com::sun::star::sdbc">SQLException</type>
         is thrown to the application.
         @param aEvent
-            the event which occured
+            the event which occurred
      */
     void errorOccured([in]com::sun::star::sdb::SQLErrorEvent aEvent);
 };

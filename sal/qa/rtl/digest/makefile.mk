@@ -36,10 +36,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
+DLLPRE = # no leading "lib" on .so files
 
 #----------------------------------- OStringBuffer -----------------------------------
 
@@ -47,18 +45,17 @@ SHL1OBJS= \
     $(SLO)$/rtl_digest.obj
 
 SHL1TARGET= rtl_digest
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME=    $(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 #------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
+SLOFILES= \
+    $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

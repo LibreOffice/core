@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-/** These constants define character compression in asian text.
+/** These constants define character compression in Asian text.
  */
 published constants CharacterCompressionType
 {
@@ -49,7 +49,7 @@ published constants CharacterCompressionType
     const short PUNCTUATION_ONLY = 1;
 
     //-------------------------------------------------------------------------
-    /** punctuation and japanese kana are compressed.
+    /** punctuation and Japanese Kana are compressed.
      */
     const short PUNCTUATION_AND_KANA = 2;
 

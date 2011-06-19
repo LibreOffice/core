@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_sheet_SpreadsheetDrawPage_idl__
 #define __com_sun_star_sheet_SpreadsheetDrawPage_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShapeGrouper_idl__
 #include <com/sun/star/drawing/XShapeGrouper.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
 //=============================================================================
 

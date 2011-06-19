@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_RTL_SOURCE_HASH_H
 #define INCLUDED_RTL_SOURCE_HASH_H
 
@@ -19,3 +20,5 @@ void             rtl_str_hash_remove (rtl_uString       *pString);
 #endif /* __cplusplus */
 
 #endif /* INCLUDED_RTL_SOURCE_HASH_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

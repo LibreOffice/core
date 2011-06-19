@@ -28,41 +28,15 @@
 #ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
 #define __com_sun_star_ui_XUIConfigurationManager_idl__
 
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIConfigurationListener_idl__
 #include <com/sun/star/ui/XUIConfigurationListener.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalAccessException_idl__
 #include <com/sun/star/lang/IllegalAccessException.idl>
-#endif
 
 module com { module sun { module star { module ui {
 
@@ -130,8 +104,8 @@ published interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param ResourceURL
             a resource URL which identifies the user interface element. A
-            resourcce URL must meet the following syntax:
-            "private:resource/$type/$name. It is only allowed to use ascii
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
             characters for type and name.
 
         @return
@@ -143,12 +117,12 @@ published interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param ResourceURL
             a resource URL which identifies the user interface element. A
-            resourcce URL must meet the following syntax:
-            "private:resource/$type/$name. It is only allowed to use ascii
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
             characters for type and name.
 
         @param bWriteable
-            must be <TRUE/> if the retrieved settings should be a writeable.
+            must be <TRUE/> if the retrieved settings should be a writable.
             Otherwise <FALSE/> should be provided to get a shareable reference
             to the settings data.
 

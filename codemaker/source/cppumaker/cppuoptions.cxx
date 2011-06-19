@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,13 +35,15 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+
 #ifdef SAL_UNX
 #define SEPARATOR '/'
 #else
 #define SEPARATOR '\\'
 #endif
-
-using namespace rtl;
 
 sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     throw( IllegalArgument )
@@ -360,3 +363,5 @@ OString CppuOptions::prepareVersion()
 }
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

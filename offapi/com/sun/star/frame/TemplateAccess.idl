@@ -27,20 +27,15 @@
 #ifndef __com_sun_star_frame_TemplateAccess_idl__
 #define __com_sun_star_frame_TemplateAccess_idl__
 
-#ifndef __com_sun_star_lang_XLocalizable_idl__
 #include <com/sun/star/lang/XLocalizable.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDocumentTemplates_idl__
 #include <com/sun/star/frame/XDocumentTemplates.idl>
-#endif
 
 //=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** provides a high level api to organize document templates
+/** provides a high level API to organize document templates
  */
 published service TemplateAccess
 {

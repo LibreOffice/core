@@ -43,14 +43,11 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-
 #RTTI on
 .IF "$(OS)" == "WNT"
 CFLAGS+= -GR
 .ENDIF
 
-
-# UNOTYPES= com.sun.star.lang.XInitialization \
 #---------------------------------------------------------------------------
 # Build the test library which is loaded by the 
 # RealDynamicLoader
@@ -79,8 +76,6 @@ DEF1NAME=	$(SHL1TARGET)
 DEFLIB1NAME =$(TARGET1)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
-#DEF1EXPORTFILE=	exports.dxp
-
 # ------------------------------------------------------------------------------
 
 APP1NOSAL=TRUE
@@ -93,8 +88,6 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)
-
-#APP1LIBS=	$(LB)$/isalhelper.lib
 
 .IF "$(OS)" == "WNT"
 APP1STDLIBS+=   $(LB)$/isalhelper.lib
@@ -113,5 +106,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo __CT>>$@
-
 

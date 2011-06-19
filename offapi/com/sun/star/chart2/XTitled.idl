@@ -27,10 +27,7 @@
 #ifndef com_sun_star_chart_XTitled_idl
 #define com_sun_star_chart_XTitled_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
 #include <com/sun/star/chart2/XTitle.idl>
 
 module com

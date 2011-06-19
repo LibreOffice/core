@@ -26,12 +26,13 @@
  ************************************************************************/
 
 #include "sal/config.h"
+#include "sal/macros.h"
 
 #include <cstddef>
 #include <functional>
 #include <memory>
 #include <new>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "com/sun/star/lang/XMain.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -104,9 +105,9 @@ private:
     { // check for stlport
         osl::Mutex m;
         std::auto_ptr< cppu::OMultiTypeInterfaceContainerHelperVar<
-            int, std::hash< int >, std::equal_to< int > > > dummy(
+            int, boost::hash< int >, std::equal_to< int > > > dummy(
                 new cppu::OMultiTypeInterfaceContainerHelperVar<
-                int, std::hash< int >, std::equal_to< int > >(m));
+                int, boost::hash< int >, std::equal_to< int > >(m));
     }
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
@@ -151,26 +152,6 @@ private:
         "com.sun.star.uri.UriReferenceFactory",
         "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript",
         "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"
-        // "com.sun.star.beans.PropertyBag",
-        // "com.sun.star.beans.PropertySet",
-        // "com.sun.star.bridge.OleApplicationRegistration",
-        // "com.sun.star.bridge.OleBridgeSupplier",
-        // "com.sun.star.bridge.OleBridgeSupplier2",
-        // "com.sun.star.bridge.OleBridgeSupplierVar1",
-        // "com.sun.star.bridge.OleObjectFactory",
-        // "com.sun.star.bridge.oleautomation.ApplicationRegistration",
-        // "com.sun.star.bridge.oleautomation.BridgeSupplier",
-        // "com.sun.star.bridge.oleautomation.Factory",
-        // "com.sun.star.loader.Dynamic",
-        // "com.sun.star.registry.DefaultRegistry",
-        // "com.sun.star.script.AllListenerAdapter",
-        // "com.sun.star.script.Engine",
-        // "com.sun.star.script.JavaScript",
-        // "com.sun.star.test.TestFactory",
-        // "com.sun.star.util.BootstrapMacroExpander",
-        // "com.sun.star.util.MacroExpander",
-        // "com.sun.star.util.logging.Logger",
-        // "com.sun.star.util.logging.LoggerRemote"
     };
     ::css::uno::Reference< ::css::lang::XMultiComponentFactory > manager(
         context_->getServiceManager());
@@ -179,7 +160,7 @@ private:
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no service manager")),
             static_cast< ::cppu::OWeakObject * >(this));
     }
-    for (::std::size_t i = 0; i < sizeof services / sizeof services[0]; ++i) {
+    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::css::uno::Reference< ::css::uno::XInterface > instance;
         try {
             instance = manager->createInstanceWithContext(
@@ -200,7 +181,7 @@ private:
     }
     static char const * const singletons[] = {
         "com.sun.star.util.theMacroExpander" };
-    for (::std::size_t i = 0; i < sizeof singletons / sizeof singletons[0]; ++i)
+    for (::std::size_t i = 0; i < SAL_N_ELEMENTS(singletons); ++i)
     {
         ::rtl::OUStringBuffer b;
         b.appendAscii(RTL_CONSTASCII_STRINGPARAM("/singletons/"));
@@ -278,14 +259,14 @@ extern "C" ::sal_Bool SAL_CALL component_writeInfo(
         serviceManager, registryKey, entries);
 }
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return ::cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** envTypeName, ::uno_Environment **)
 {
     *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;

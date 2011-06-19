@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_XSheetCellRanges_idl__
 #define __com_sun_star_sheet_XSheetCellRanges_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellRangeAddress_idl__
 #include <com/sun/star/table/CellRangeAddress.idl>
-#endif
 
 //=============================================================================
 

@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module i18n {
 //--------------------------------------------------------------------------
 /** Text conversion options to be used with <type>XTextConversion</type>.
 
-    <p>These text conversion options are usuall selected by end users.
+    <p>These text conversion options are usually selected by end users.
     The options can be combined and may be related to
     <type>TextConversionType</type>. </p>
 
@@ -57,7 +57,7 @@ published constants TextConversionOption
     const long  IGNORE_POST_POSITIONAL_WORD     = 2;    // (1 << 1)
 
     /** Use Taiwan, HongKong SAR, and Macao SAR character variants for
-        Simplified to Traditionary Chinese conversion
+        Simplified to Traditional Chinese conversion
 
         @since OOo 2.0
     */

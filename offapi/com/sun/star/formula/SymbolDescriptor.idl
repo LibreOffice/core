@@ -53,7 +53,7 @@ published struct SymbolDescriptor
     */
     string sSymbolSet;
 
-    /** Specifies the unicode character of the symbol.
+    /** Specifies the Unicode character of the symbol.
     */
     long nCharacter;
 

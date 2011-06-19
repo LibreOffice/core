@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,8 +77,7 @@ sal_Int32 Server::get() throw (css::uno::RuntimeException) {
         context->getServiceManager());
     if (!factory.is()) {
         throw new css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
-                "no component context service manager"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no component context service manager" )),
             static_cast< cppu::OWeakObject * >(this));
     }
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
@@ -86,23 +86,19 @@ sal_Int32 Server::get() throw (css::uno::RuntimeException) {
         source
             = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
                 css::bridge::UnoUrlResolver::create(context)->resolve(
-                    rtl::OUString::createFromAscii(
-                        "uno:socket,host=127.0.0.1,port=3831;urp;test")),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uno:socket,host=127.0.0.1,port=3831;urp;test" ))),
                 css::uno::UNO_QUERY_THROW);
     } catch (css::connection::NoConnectException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     } catch (css::connection::ConnectionSetupException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     } catch (css::lang::IllegalArgumentException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     }
     return source->get();
@@ -116,8 +112,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
 }
 
 rtl::OUString SAL_CALL getImplementationName() {
-    return rtl::OUString::createFromAscii(
-        "test.javauno.nativethreadpool.server");
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "test.javauno.nativethreadpool.server" ));
 }
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {
@@ -132,15 +127,17 @@ cppu::ImplementationEntry entries[] = {
 
 }
 
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(
         implName, serviceManager, registryKey, entries);
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     char const ** envTypeName, uno_Environment **)
 {
     *envTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

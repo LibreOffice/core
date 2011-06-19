@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 
 #if defined WIN32
 #define THIS_OS "Windows"
-#elif defined OS2
-#define THIS_OS "OS2"
 #elif defined SOLARIS
 #define THIS_OS "Solaris"
 #elif defined LINUX
@@ -44,12 +43,22 @@
 #else
 #define THIS_OS "Linux"
 #endif
+#elif defined ANDROID
+#define THIS_OS "Android"
 #elif defined MACOSX
 #define THIS_OS "MacOSX"
+#elif defined IOS
+#define THIS_OS "iOS"
 #elif defined NETBSD
 #define THIS_OS "NetBSD"
 #elif defined FREEBSD
 #define THIS_OS "FreeBSD"
+#elif defined AIX
+#define THIS_OS "AIX"
+#elif defined OPENBSD
+#define THIS_OS "OpenBSD"
+#elif defined DRAGONFLY
+#define THIS_OS "DragonFly"
 #endif
 
 #if ! defined THIS_OS
@@ -104,7 +113,4 @@ this is inserted for the case that the preprocessor ignores error
 
 #endif
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

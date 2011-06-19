@@ -49,7 +49,7 @@ published interface XCertificateContainer
     boolean addCertificate( [in] string url,
                               [in] string cert, [in] boolean trust );
 
-    /** Sheck if a certificate was stored earlier before.
+    /** Check if a certificate was stored earlier before.
         @param url
         @param cert
         @return CertificateContainerStatus

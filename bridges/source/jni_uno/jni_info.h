@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #if ! defined INCLUDED_JNI_INFO_H
 #define INCLUDED_JNI_INFO_H
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "jni_base.h"
 
@@ -120,7 +121,7 @@ struct JNI_type_info_holder
         {}
 };
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
 
 //==============================================================================
@@ -373,3 +374,5 @@ inline void JNI_info::append_sig(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

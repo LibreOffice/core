@@ -106,7 +106,7 @@ published struct URL
         <strong>Attention:</strong>A service implementing the <type>XURLTransformer</type> interface
         will normally not detect if the last segment is a folder or a file. So it is possible that
         the last segment describes a folder. If you want to be sure that a file URL that references
-        a folder will be correctly put into the URL fields you should append a '/' at the end of the
+        a folder will be correctly put into the URL fields you should append a "/" at the end of the
         hierarchical path.
         </p>
      */

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
 #define __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -40,7 +38,7 @@ published interface XConfigurationChangeRequest;
     changes to the current configuration.
 
     <p>This interface allows callers to add requests to the back of the
-    queue and to determine wheter the queue is empty.  Using this interace
+    queue and to determine whether the queue is empty.  Using this interface
     should normally not be necessary for anyone else than the
     <type>XConfigurationController</type>.  It may be removed in the future.</p>
 */
@@ -56,7 +54,7 @@ published interface XConfigurationControllerRequestQueue
 
     /** Add a request for a configuration change to the request queue.
         <p>This method should not be called from outside the drawing
-        famework.  Other sub conrollers of the drawing framework are typical
+        framework.  Other sub controllers of the drawing framework are typical
         callers.  They can add change requests that can not be made with the
         <member>requestResourceActivation()</member> and
         <member>requestResourceDeactivation()</member> methods.</p>

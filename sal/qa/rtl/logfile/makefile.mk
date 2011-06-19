@@ -45,7 +45,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 SHL1OBJS=  \
     $(SLO)$/rtl_logfile.obj
 SHL1TARGET= rtl_logfile
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
@@ -60,4 +60,4 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

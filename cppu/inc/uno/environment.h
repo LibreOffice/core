@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,6 @@ struct _uno_ExtEnvironment;
 struct _typelib_InterfaceTypeDescription;
 
 #if defined( SAL_W32)
-#pragma pack(push, 8)
-#elif defined(SAL_OS2)
 #pragma pack(push, 8)
 #endif
 
@@ -255,7 +254,7 @@ typedef struct _uno_ExtEnvironment
 
 } uno_ExtEnvironment;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -383,3 +382,5 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

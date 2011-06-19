@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_chart_AccessibleChartElement_idl__
 #define __com_sun_star_chart_AccessibleChartElement_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessible_idl__
 #include <com/sun/star/accessibility/XAccessible.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
-#endif
 
 
 module com {  module sun {  module star {  module chart {
@@ -57,7 +51,7 @@ module com {  module sun {  module star {  module chart {
 
     <p>The
        <type scope="::com::sun::star::accessibility">XAccessibleExtendedComponent</type>
-       is suported by all chart elements.</p>
+       is supported by all chart elements.</p>
 
     @since OOo 1.1.2
 */
@@ -97,7 +91,7 @@ published service AccessibleChartElement
              contain children, all other objects in a chart do not, i.e., are
              leaves in the document representation tree.</dd>
          <dt>Parent</dt>
-             <dd>Because the <code>setParent</code> method from the JAA has
+             <dd>Because the <code>setParent</code> method from the JAVA has
              been removed, the reference to the parent has to be provided in an
              implementation specific way.</dd>
          <dt>Relations</dt>

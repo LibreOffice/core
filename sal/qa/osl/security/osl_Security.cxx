@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,9 @@
 //------------------------------------------------------------------------
 // header file
 //------------------------------------------------------------------------
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <osl_Security_Const.h>
 
 using namespace osl;
@@ -193,30 +197,6 @@ namespace osl_Security
     }; // class getUserName
 
 
-
-    /** testing the method:
-        inline sal_Bool SAL_CALL getHomeDir( ::rtl::OUString& strDirectory) const;
-    */
-    class getHomeDir : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1;
-
-        void getHomeDir_001( )
-        {
-            ::osl::Security aSec;
-            ::rtl::OUString strHome;
-            bRes = aSec.getHomeDir( strHome );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strHomeDirectory.equals( strHome ) ) && ( sal_True == bRes ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getHomeDir );
-        CPPUNIT_TEST( getHomeDir_001 );
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class getHomeDir
-
     /** testing the method:
         inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
     */
@@ -231,8 +211,8 @@ namespace osl_Security
             ::rtl::OUString strConfig;
             bRes = aSec.getConfigDir( strConfig );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strConfigDirectory.equals( strConfig ) ) && ( sal_True == bRes ) );
+            CPPUNIT_ASSERT_MESSAGE( "failed to find a ConfigDir!",
+                                     ( sal_True == bRes ));
         }
 
         CPPUNIT_TEST_SUITE( getConfigDir );
@@ -333,33 +313,37 @@ namespace osl_Security
     }; // class loginUserOnFileServer
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::ctors, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::logonUser, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserIdent, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserName, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHomeDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getConfigDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::isAdministrator, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHandle, "osl_Security");
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::UserProfile, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::loginUserOnFileServer, "osl_Security");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserName);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getConfigDir);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::isAdministrator);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Security
 
 
-// -----------------------------------------------------------------------------
+/* This defines an own TestPlugIn implementation with an own initialize()
+    method that will be called after loading the PlugIn
+    */
+#include <cppunit/plugin/TestPlugInDefaultImpl.h>
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
+{
+    public:
+    MyTestPlugInImpl() {};
+    void initialize( CPPUNIT_NS::TestFactoryRegistry *registry,
+                   const CPPUNIT_NS::PlugInParameters &parameters );
+};
 
-/** to do some initialized work, we replace the NOADDITIONAL macro with the initialize work which
-      get current user name, .
-*/
 
-void RegisterAdditionalFunctions(FktRegFuncPtr)
+void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
+                   const CPPUNIT_NS::PlugInParameters & parameters)
 {
     /// start message
     t_print("#Initializing ...\n" );
@@ -370,7 +354,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     t_print("#if no text forwarded, this function will be skipped.\n" );
 
     /// get system information
-#if ( defined UNX ) || ( defined OS2 )
+#if ( defined UNX )
     /// some initialization work for UNIX OS
 
 
@@ -384,8 +368,11 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
 
     /// get home directory;
+    char *pw_dir = pw->pw_dir;
+    if( getenv( "FAKEROOTKEY" ) )
+        pw_dir = getenv("HOME");
     CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw->pw_dir ), strHomeDirectory ) );
+                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);
@@ -454,7 +441,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     LPCWSTR wszAccName = ( LPWSTR ) strUserName.getStr( );
 
     // Create buffers for the SID and the domain name.
-    PSID pSid = (PSID) new WIN_BYTE[dwSidBufferSize];
+    PSID pSid = (PSID) new BYTE[dwSidBufferSize];
     CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
     memset( pSid, 0, dwSidBufferSize);
 
@@ -492,7 +479,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
                 // Reallocate memory for the SID buffer.
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
-                pSid = (PSID) new WIN_BYTE[cbSid];
+                pSid = (PSID) new BYTE[cbSid];
                 CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= NULL );
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
@@ -540,21 +527,21 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     {
         dwSidSize+=wsprintf(Ident + strlen(Ident),
                     TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
-                    (USHORT)psia->Value[0],
-                    (USHORT)psia->Value[1],
-                    (USHORT)psia->Value[2],
-                    (USHORT)psia->Value[3],
-                    (USHORT)psia->Value[4],
-                    (USHORT)psia->Value[5]);
+                    (sal_uInt16)psia->Value[0],
+                    (sal_uInt16)psia->Value[1],
+                    (sal_uInt16)psia->Value[2],
+                    (sal_uInt16)psia->Value[3],
+                    (sal_uInt16)psia->Value[4],
+                    (sal_uInt16)psia->Value[5]);
     }
     else
     {
         dwSidSize+=wsprintf(Ident + strlen(Ident),
                     TEXT("%lu"),
-                    (ULONG)(psia->Value[5]      )   +
-                    (ULONG)(psia->Value[4] <<  8)   +
-                    (ULONG)(psia->Value[3] << 16)   +
-                    (ULONG)(psia->Value[2] << 24)   );
+                    (sal_uInt32)(psia->Value[5]      )   +
+                    (sal_uInt32)(psia->Value[4] <<  8)   +
+                    (sal_uInt32)(psia->Value[3] << 16)   +
+                    (sal_uInt32)(psia->Value[2] << 24)   );
     }
 
     /* loop through SidSubAuthorities */
@@ -573,7 +560,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
     /// check if logged in user is administrator:
 
-    WIN_BOOL b;
+    BOOL b;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
     b = AllocateAndInitializeSid(
@@ -601,43 +588,42 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
     t_print("Computer Name:              ");
     if ( strComputerName == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strComputerName );
 
     t_print("Current User Name:          ");
     if ( strUserName == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strUserName );
 
     t_print("Current User Home Directory:");
     if ( strHomeDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strHomeDirectory );
 
     t_print("Current Config Directory:   ");
     if ( strConfigDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strConfigDirectory );
 
     t_print("Current UserID:             ");
     if ( strUserID == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strUserID );
 
-    t_print("Current User is");
+    t_print("Current User is:            ");
     if ( isAdmin == sal_False )
-        t_print(" NOT Administrator.\n" );
+        t_print("NOT Administrator.\n" );
     else
-        t_print(" Administrator.\n" );
-
+        t_print("Administrator.\n" );
 
     /// get and display forwarded text if available.
-    aStringForward = ::rtl::OUString::createFromAscii( getForwardString() );
+    aStringForward = ::rtl::OUString::createFromAscii( parameters.getCommandLine().c_str() );
     if ( !aStringForward.equals( aNullURL ) && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 )
     {
         sal_Int32 nFirstSpacePoint = aStringForward.indexOf( (sal_Unicode)' ' );;
@@ -651,7 +637,8 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, aStringForward.getLength( ) - 1 );
             t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, t_print("*") );
+            for (int i = nFirstSpacePoint+1; i <= aStringForward.getLength()-1; ++i)
+                t_print("*");
             t_print("\n" );
         }
         else
@@ -663,7 +650,8 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, nLastSpacePoint );
             t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, t_print("*") );
+            for (int i = nFirstSpacePoint+1; i <= nLastSpacePoint; ++i)
+                t_print("*");
             t_print("\n" );
 
             aFileServer = aStringForward.copy( nLastSpacePoint +1, aStringForward.getLength( ) - 1 );
@@ -676,3 +664,14 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     t_print("#\n#Initialization Done.\n" );
 
 }
+
+/* Instantiate and register the own TestPlugIn and instantiate the default
+    main() function.
+    (This is done by CPPUNIT_PLUGIN_IMPLEMENT() for TestPlugInDefaultImpl)
+    */
+
+CPPUNIT_PLUGIN_EXPORTED_FUNCTION_IMPL( MyTestPlugInImpl );
+CPPUNIT_PLUGIN_IMPLEMENT_MAIN();
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

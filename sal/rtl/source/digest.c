@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_ "$Revision: 1.9 $"
+#define _RTL_DIGEST_C_
 
 #include <sal/types.h>
 #include <sal/macros.h>
@@ -706,7 +707,7 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
         case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
-        case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
+        case 3: X[i] |= ((sal_uInt32)(*p)) << 24L;
     }
 
     i += 1;
@@ -2116,3 +2117,5 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
  * The End.
  *
  *======================================================================*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_WebDocument_idl__
 #define __com_sun_star_text_WebDocument_idl__
 
-#ifndef __com_sun_star_text_GenericTextDocument_idl__
 #include <com/sun/star/text/GenericTextDocument.idl>
-#endif
 
 //=============================================================================
 

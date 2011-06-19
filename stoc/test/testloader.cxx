@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <stdio.h>
 
 #include <sal/main.h>
-#ifndef _OSL_MODULE_H_
 #include <osl/module.hxx>
-#endif
 #include <osl/diagnose.h>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -53,8 +52,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
@@ -92,7 +92,7 @@ SAL_IMPLEMENT_MAIN()
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getFunctionSymbol( OUString(RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY)) );
 
         if (pCompFactoryFunc)
         {
@@ -135,3 +135,4 @@ SAL_IMPLEMENT_MAIN()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

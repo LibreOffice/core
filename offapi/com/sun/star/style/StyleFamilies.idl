@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_style_StyleFamilies_idl__
 #define __com_sun_star_style_StyleFamilies_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 
 //=============================================================================

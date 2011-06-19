@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_plugin_PluginException_idl__
 #define __com_sun_star_plugin_PluginException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 
 //=============================================================================
@@ -38,7 +36,7 @@
 
 //=============================================================================
 
-/** Indicates that an error occured in an NPN or NPP function call.
+/** Indicates that an error occurred in an NPN or NPP function call.
 
     @see XPlugin
     @see XPluginContext

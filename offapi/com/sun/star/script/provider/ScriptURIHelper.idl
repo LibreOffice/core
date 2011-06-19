@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_script_provider_ScriptURIHelper_idl__
 #define __com_sun_star_script_provider_ScriptURIHelper_idl__
 
-#ifndef __com_sun_star_script_provider_XScriptURIHelper_idl__
 #include <com/sun/star/script/provider/XScriptURIHelper.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //===========================================================================
 

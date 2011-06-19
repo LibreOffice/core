@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,6 +69,7 @@
 #include <osl/signal.h>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <sal/macros.h>
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>
 
@@ -134,7 +136,7 @@ plan to have the new handler use this signal*/
     { SIGWINCH,  ACT_IGNORE, NULL },    /* window size change */
     { SIGURG,    ACT_EXIT,   NULL },    /* urgent socket condition */
 #ifdef SIGPOLL
-    { SIGPOLL,   ACT_EXIT,   NULL },    /* pollable event occured */
+    { SIGPOLL,   ACT_EXIT,   NULL },    /* pollable event occurred */
 #endif
     { SIGSTOP,   ACT_SYSTEM, NULL },    /* stop (cannot be caught or ignored) */
     { SIGTSTP,   ACT_SYSTEM, NULL },    /* user stop requested from tty */
@@ -572,7 +574,7 @@ static int ReportCrash( int Signal )
 
                 void *stackframes[MAX_STACK_FRAMES];
                 int  iFrame;
-                int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
+                int  nFrames = backtrace( stackframes, SAL_N_ELEMENTS(stackframes) );
 
                 FILE *xmlout = NULL, *stackout = NULL, *checksumout = NULL;
                 int fdxml, fdstk, fdchksum;
@@ -755,7 +757,7 @@ static int ReportCrash( int Signal )
                     rtl_uString_release(crashrep_url);
                     rtl_uString_release(crashrep_path);
 #if defined INCLUDE_BACKTRACE && (defined LINUX || defined MACOSX)
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -xml %s -chksum %s -stack %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(),
@@ -765,7 +767,7 @@ static int ReportCrash( int Signal )
                         pStackTempName,
                         bAutoCrashReport ? " -send" : "" );
 #elif defined INCLUDE_BACKTRACE && defined SOLARIS
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -xml %s -chksum %s -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(),
@@ -774,7 +776,7 @@ static int ReportCrash( int Signal )
                         pChecksumTempName,
                         bAutoCrashReport ? " -send" : "" );
 #else
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                    snprintf( szShellCmd, SAL_N_ELEMENTS(szShellCmd),
                         "%s -p %d -s %d -noui%s",
                         rtl_string_getStr(crashrep_path_system),
                         getpid(), Signal, bAutoCrashReport ? " -send" : "" );
@@ -818,21 +820,23 @@ static int ReportCrash( int Signal )
 
 static void PrintStack( int sig )
 {
-#if ! defined(MACOSX) || defined(INCLUDE_BACKTRACE)
+#ifdef INCLUDE_BACKTRACE
     void *buffer[MAX_STACK_FRAMES];
-    int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
+    int size = backtrace( buffer, SAL_N_ELEMENTS(buffer) );
 #endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
-#if defined(MACOSX) && ! defined(INCLUDE_BACKTRACE)
+#if defined( MACOSX ) && !defined( INCLUDE_BACKTRACE )
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
 #else
+#ifdef INCLUDE_BACKTRACE
     if ( size > 0 )
     {
         fputs( "Stack:\n", stderr );
         backtrace_symbols_fd( buffer, size, fileno(stderr) );
     }
+#endif
 #endif
 }
 
@@ -1091,3 +1095,5 @@ sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 
     return bOld;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

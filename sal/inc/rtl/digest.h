@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.8 $"
+#define _RTL_DIGEST_H_
 
 #include <sal/types.h>
 
@@ -637,3 +638,4 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
 
 #endif /* _RTL_DIGEST_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

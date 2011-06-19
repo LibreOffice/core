@@ -38,7 +38,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXXgcc3"
+.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXXgcc3" || \
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCOPENBSDXgcc3" || \
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDXgcc3" || \
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDXgcc3"  || \
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCDRAGONFLYXgcc3" \
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
@@ -46,7 +50,7 @@ CFLAGS += -DLEAK_STATIC_DATA
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
-CFLAGSCXX += -fno-omit-frame-pointer
+CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
 SLOFILES= \
     $(SLO)$/abi.obj			\

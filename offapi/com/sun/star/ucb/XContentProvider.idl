@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XContentProvider_idl__
 #define __com_sun_star_ucb_XContentProvider_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentIdentifier_idl__
 #include <com/sun/star/ucb/XContentIdentifier.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_IllegalIdentifierException_idl__
 #include <com/sun/star/ucb/IllegalIdentifierException.idl>
-#endif
 
 //=============================================================================
 
@@ -87,7 +76,7 @@ published interface XContentProvider: com::sun::star::uno::XInterface
 
         @returns
         <code>0</code> is returned, if the identifiers are equal.
-        A value less than <code>0</code> indiactes, that the Id1
+        A value less than <code>0</code> indicates, that the Id1
         is less than Id2. A value greater than <code>0</code>
         is returned, if Id1 is greater than Id2.
     */

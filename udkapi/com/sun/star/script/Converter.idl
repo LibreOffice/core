@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_script_Converter_idl__
 #define __com_sun_star_script_Converter_idl__
 
-#ifndef __com_sun_star_script_XTypeConverter_idl__
 #include <com/sun/star/script/XTypeConverter.idl>
-#endif
 
 
 //=============================================================================

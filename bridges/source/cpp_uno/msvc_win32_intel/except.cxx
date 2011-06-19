@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_bridges.hxx"
 
 #pragma warning( disable : 4237 )
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sal/config.h>
 #include <malloc.h>
 #include <new.h>
@@ -96,7 +97,7 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 //##################################################################################################
 
 
-typedef hash_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
+typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
 //==================================================================================================
 class RTTInfos
@@ -619,7 +620,7 @@ int msci_filterCppException(
     RuntimeException exc(
         OUString( RTL_CONSTASCII_USTRINGPARAM(
                       "[msci_uno bridge error] unexpected "
-                      "C++ exception occured!") ),
+                      "C++ exception occurred!") ),
         Reference< XInterface >() );
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );
@@ -630,3 +631,4 @@ int msci_filterCppException(
 
 #pragma pack(pop)
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

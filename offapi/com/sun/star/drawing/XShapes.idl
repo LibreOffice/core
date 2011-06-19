@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_XShapes_idl__
 #define __com_sun_star_drawing_XShapes_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
 
 //=============================================================================

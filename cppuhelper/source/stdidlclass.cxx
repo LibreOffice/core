@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace cppu {
 
@@ -257,3 +259,5 @@ XIdlClass *  SAL_CALL createStandardClassWithSequence(
 }
 
 } //end namespace cppu
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

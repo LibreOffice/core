@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,50 @@
 #define _OSL_DIAGNOSE_H_
 
 #include <sal/types.h>
+
+/** provides simple diagnostic support
+
+    The functions defined in this header are not intended to be used directly,
+    but through defined macros. The macros can be divided into three categories:
+    assertions, traces and other stuff .-) Their usability depends on the value
+    of OSL_DEBUG_LEVEL macro: assertions are only active if OSL_DEBUG_LEVEL is 1
+    or greater, traces if OSL_DEBUG_LEVEL is 2 or greater.
+
+    Assertions (cond is bool, msg is char*):
+    OSL_ASSERT(cond)
+        If cond is false, reports an error.
+
+    OSL_ENSURE(cond, msg)
+        If cond is false, reports an error with message msg.
+
+    OSL_FAIL(msg)
+        Reports an error with message msg unconditionally.
+
+    OSL_PRECOND(cond, msg)
+    OSL_POSTCOND(cond, msg)
+        These two are functionally equivalent to OSL_ENSURE(cond, msg). They are
+        intended to be used for checking pre- and postconditions of functions.
+
+    Traces:
+    OSL_TRACE(fmt, args...)
+        Prints trace message. The arguments have the same meaning as the
+        arguments of printf.
+
+    Other:
+    OSL_VERIFY(expr)
+        Evaluates the expression and if it is false, reports an error. The
+        expression is evaluated once without regard of the value of
+        OSL_DEBUG_LEVEL.
+
+        Example:
+
+        void extractBool(Any const& rAny, bool& rBool)
+        {
+            OSL_VERIFY(rAny >>= rBool);
+        }
+
+    OSL_DEBUG_ONLY(expr)
+ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,9 +122,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_THIS_FILE       __FILE__
 
-/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
-#define OSL_THIS_FUNC "<unknown>"
-
 /* the macro OSL_TO_STRING is intended to be an office internal macro for now */
 #define OSL_TO_STRING( x ) #x
 
@@ -87,12 +129,13 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_MACRO_VALUE_TO_STRING( x ) OSL_TO_STRING( x )
 
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
-#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_THIS_FUNC ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
+#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE
-#define OSL_ASSERT(c)       _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)
+#define OSL_ASSERT(c)       _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, 0)
 #define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
+#define OSL_FAIL(m)        _OSL_ENSURE(0, OSL_THIS_FILE, __LINE__, m)
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
@@ -105,25 +148,9 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define _OSL_GLOBAL
 #endif  /* __cplusplus */
 
-#ifdef _WIN16
-#if OSL_DEBUG_LEVEL > 0
-#undef OSL_DEBUG_LEVEL
-#define OSL_DEBUG_LEVEL 0
-#endif
-#endif
-
-
-
 #if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)
-#define _OSL_ASSERT(c, f, l) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, 0)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
-
 #define _OSL_ENSURE(c, f, l, m) \
     do \
     {  \
@@ -134,7 +161,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #else
 
 #define _OSL_DEBUG_ONLY(f)          ((void)0)
-#define _OSL_ASSERT(c, f, l)        ((void)0)
 #define _OSL_ENSURE(c, f, l, m)     ((void)0)
 
 #endif /* OSL_DEBUG_LEVEL */
@@ -149,4 +175,29 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #endif /* OSL_DEBUG_LEVEL */
 
+/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
+/* copied from boost/current_function.hpp to make it usable from C
+ * sources as well
+ *
+ * Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+ *
+ * Distributed under the Boost Software License, Version 1.0. (See
+ * accompanying file LICENSE_1_0.txt or copy at
+ * http://www.boost.org/LICENSE_1_0.txt) */
+#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600))
+#define OSL_THIS_FUNC __PRETTY_FUNCTION__
+#elif defined(__DMC__) && (__DMC__ >= 0x810)
+#define OSL_THIS_FUNC __PRETTY_FUNCTION__
+#elif defined(__FUNCSIG__)
+#define OSL_THIS_FUNC __FUNCSIG__
+#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+#define OSL_THIS_FUNC __FUNCTION__
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+#define OSL_THIS_FUNC __func__
+#else
+#define OSL_THIS_FUNC ""
+#endif
+
 #endif /* _OSL_DIAGNOSE_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

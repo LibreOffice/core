@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
 #define __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
-#ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
-#endif
 
 //=============================================================================
 
@@ -70,7 +62,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs
             or the statement isn't valid
-            or the statement isn't parseable.
+            or the statement isn't parsable.
      */
     void setFilter([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
@@ -79,7 +71,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     /** appends a new set of filter criteria which is split into levels.
         @param filter
             The filter criteria is split into levels. Each level represents the
-            OR criterias. Within each level, the filters are provided as an AND criteria
+            OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
 
@@ -113,13 +105,13 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     //-------------------------------------------------------------------------
 
 
-    /** makes it possibile to set a group for the query.
+    /** makes it possible to set a group for the query.
         @param group
             the group part to set
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs
             or the statement isn't valid
-            or the statement isn't parseable..
+            or the statement isn't parsable.
      */
     void setGroup([in] string group)
             raises (com::sun::star::sdbc::SQLException);
@@ -146,7 +138,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs
             or the statement isn't valid
-            or the statement isn't parseable.
+            or the statement isn't parsable.
      */
     void setHavingClause([in] string filter)
             raises (com::sun::star::sdbc::SQLException);
@@ -156,7 +148,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     /** appends a new set of HAVING filter criteria which is split into levels.
         @param filter
             The HAVING filter criteria is split into levels. Each level represents the
-            OR criterias. Within each level, the filters are provided as an AND criteria
+            OR criteria. Within each level, the filters are provided as an AND criteria
             with the name of the column and the filter condition. The filter condition
             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
 
@@ -188,13 +180,13 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
     // ORDER BY
     //-------------------------------------------------------------------------
 
-    /** makes it possibile to set a sort condition for the query.
+    /** makes it possible to set a sort condition for the query.
         @param order
             the order part to set
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs
             or the order isn't valid
-            or the statement isn't parseable.
+            or the statement isn't parsable.
      */
     void setOrder([in] string order)
             raises (com::sun::star::sdbc::SQLException);
@@ -215,7 +207,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
             raises (com::sun::star::sdbc::SQLException);
 
     //-------------------------------------------------------------------------
-    // culmulative composing
+    // cumulative composing
     //-------------------------------------------------------------------------
 
     /** sets a new elementary query for the composer
@@ -232,7 +224,7 @@ published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         <member>XSingleSelectQueryAnalyzer::getQueryWithSubstitution</member>, which always returns
         the complete composed query.</p>
 
-        <p>As a result, you can use the composer to build culmulative filter expressions. That
+        <p>As a result, you can use the composer to build cumulative filter expressions. That
         is, you can set <member>ElementaryQuery</member> to a statement already containing
         filters, and then use <member>setFilter</member> to append additional filters.</p>
 

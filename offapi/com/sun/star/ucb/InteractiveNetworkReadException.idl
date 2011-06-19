@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_InteractiveNetworkReadException_idl__
 #define __com_sun_star_ucb_InteractiveNetworkReadException_idl__
 
-#ifndef __com_sun_star_ucb_InteractiveNetworkException_idl__
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
-#endif
 
 
 //=============================================================================
@@ -37,13 +35,13 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing a read failure.
+/** A network error specifying a read failure.
 */
 published exception InteractiveNetworkReadException: com::sun::star::ucb::InteractiveNetworkException
 {
     //-------------------------------------------------------------------------
     /** Any diagnostic message about the failure (which will typically be an
-        english phrase or sentence).
+        English phrase or sentence).
     */
     string Diagnostic;
 

@@ -27,31 +27,14 @@
 #ifndef __com_sun_star_text_XTextConvert_idl__
 #define __com_sun_star_text_XTextConvert_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextRange_idl__
 #include <com/sun/star/text/XTextRange.idl>
-#endif
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
-#ifndef __com_sun_star_text_XTextTable_idl__
 #include <com/sun/star/text/XTextTable.idl>
-#endif
 
 
 
@@ -90,7 +73,7 @@ interface XTextConvert : com::sun::star::uno::XInterface
 
 
         @param TableRanges contains the TextRange interfaces of the paragraphs, cells and rows of the table.
-            <p>The innter sequence contains the start and end paragraphs of each table cell.
+            <p>The inner sequence contains the start and end paragraphs of each table cell.
             The next sequence groups the cells to a row and the outer sequence groups the rows of the table.</p>
 
         @param CellProperties contains the properties of each cell.

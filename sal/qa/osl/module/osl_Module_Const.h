@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,15 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )                      //Unix
 #   include <unistd.h>
 #endif
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-// #    include <windows.h>
 #   include <io.h>
-#include <tools/postwin.h>
 #endif
 
 #   define FILE_PREFIX          "file:///"
@@ -64,3 +64,5 @@ typedef sal_Bool (* FuncPtr )( sal_Bool );
 
 
 #endif /* _OSL_MODULE_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

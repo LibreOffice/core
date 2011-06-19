@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_linguistic2_Hyphenator_idl__
 #define __com_sun_star_linguistic2_Hyphenator_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceDisplayName_idl__
 #include <com/sun/star/lang/XServiceDisplayName.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_XContentIdentifierMapping_idl__
 #define __com_sun_star_ucb_XContentIdentifierMapping_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +45,7 @@ module com { module sun { module star { module ucb {
     between <type>XContent</type>s identified by source/target
     XContentIdentifiers is also supported.
 
-    <p>This interface can be useful in cases where the identifieres (and
+    <p>This interface can be useful in cases where the identifiers (and
     associated contents) returned by the various methods of an
     <type>XContentAccess</type> need to be mapped to some other space of
     identifiers (and associated contents).
@@ -106,12 +104,12 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
         of the XRow (the first column goes into the zeroth position of the
         sequence, and so on).  On output, the same sequence, but with the
         entries mapped as necessary.  This is an inout parameter rather than a
-        comination of in parameter and return value for performance reasons
+        combination of in parameter and return value for    performance reasons
         (assuming that in most cases most elements in the input sequence will
         be returned unmodified).
 
         @returns  <TRUE/> if any of the columns contain data that (potentially)
-        needs mapping (though maybe no mapping occured for the concrete input
+        needs mapping (though maybe no mapping occurred for the concrete input
         data of this call).  This information can be useful to decide whether,
         for another row, a call to this function is at all necessary.
     */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,14 +39,14 @@
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 #define OUSTR(x) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 static bool findAndSelect(JavaInfo**);
-//static sal_Bool printPaths(const OUString& sPathFile);
 
 #define HELP_TEXT    \
 "\njavaldx is necessary to make Java work on some UNIX platforms." \
@@ -81,12 +82,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     JavaInfo * pInfo = NULL;
     errcode = jfw_getSelectedJRE( & pInfo);
 
-    if (errcode == JFW_E_INVALID_SETTINGS)
-    {
-        fprintf(stderr,"javaldx failed. User must select a JRE from options dialog!");
-        return -1;
-    }
-    else if (errcode != JFW_E_NONE)
+    if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
     {
         fprintf(stderr,"javaldx failed! \n");
         return -1;
@@ -186,3 +182,4 @@ static bool findAndSelect(JavaInfo ** ppInfo)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

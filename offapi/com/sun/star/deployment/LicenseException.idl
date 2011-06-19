@@ -33,7 +33,7 @@
 
 module com { module sun { module star { module deployment {
 
-/** A LicenseException reflects the necessity of someone aggreeing to a license.
+/** A LicenseException reflects the necessity of someone agreeing to a license.
 
     @since OOo 2.0.4
  */

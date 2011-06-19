@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <systools/win32/uwinapi.h>
+#include <sal/macros.h>
 #include "secimpl.h"
 
 /*****************************************************************************/
@@ -83,7 +85,6 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
 /* Static Module Function Declarations */
 /*****************************************************************************/
 
-static sal_Bool isWNT(void);
 static sal_Bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
 static BOOL Privilege(LPTSTR pszPrivilege, BOOL bEnable);
 static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, sal_Bool bIncludeDomain);
@@ -108,54 +109,46 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
 {
     oslSecurityError ret;
 
-    if (!isWNT())
+    sal_Unicode*    strUser;
+    sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
+    HANDLE  hUserToken;
+
+    #if OSL_DEBUG_LEVEL > 0
+        LUID luid;
+    #endif
+
+    if (NULL != (strUser = wcschr(strDomain, L'/')))
+        *strUser++ = L'\0';
+    else
     {
-        *pSecurity = osl_getCurrentSecurity();
+        strUser   = strDomain;
+        strDomain = NULL;
+    }
+
+    // this process must have the right: 'act as a part of operatingsystem'
+    OSL_ASSERT(LookupPrivilegeValue(NULL, SE_TCB_NAME, &luid));
+
+    if (LogonUserW(strUser, strDomain ? strDomain : L"", rtl_uString_getStr(strPasswd),
+                  LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT,
+                   &hUserToken))
+    {
+        oslSecurityImpl* pSecImpl = malloc(sizeof(oslSecurityImpl));
+
+        pSecImpl->m_pNetResource = NULL;
+        pSecImpl->m_hToken = hUserToken;
+        pSecImpl->m_hProfile = NULL;
+        wcscpy(pSecImpl->m_User, strUser);
+
+        *pSecurity = (oslSecurity)pSecImpl;
         ret = osl_Security_E_None;
     }
     else
-    {
-        sal_Unicode*    strUser;
-        sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
-        HANDLE  hUserToken;
+        ret = osl_Security_E_UserUnknown;
 
-        #if OSL_DEBUG_LEVEL > 0
-            LUID luid;
-        #endif
-
-        if (NULL != (strUser = wcschr(strDomain, L'/')))
-            *strUser++ = L'\0';
-        else
-        {
-            strUser   = strDomain;
-            strDomain = NULL;
-        }
-
-        // this process must have the right: 'act as a part of operatingsystem'
-        OSL_ASSERT(LookupPrivilegeValue(NULL, SE_TCB_NAME, &luid));
-
-        if (LogonUserW(strUser, strDomain ? strDomain : L"", rtl_uString_getStr(strPasswd),
-                      LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT,
-                       &hUserToken))
-        {
-            oslSecurityImpl* pSecImpl = malloc(sizeof(oslSecurityImpl));
-
-            pSecImpl->m_pNetResource = NULL;
-            pSecImpl->m_hToken = hUserToken;
-            pSecImpl->m_hProfile = NULL;
-            wcscpy(pSecImpl->m_User, strUser);
-
-            *pSecurity = (oslSecurity)pSecImpl;
-            ret = osl_Security_E_None;
-        }
-        else
-            ret = osl_Security_E_UserUnknown;
-
-        if (strDomain)
-            free(strDomain);
-        else
-            free(strUser);
-    }
+    if (strDomain)
+        free(strDomain);
+    else
+        free(strUser);
 
     return ret;
 }
@@ -250,56 +243,48 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != NULL)
     {
-        /* ts: on Window 95 systems any user seems to be an adminstrator */
-        if (!isWNT())
+        HANDLE                      hImpersonationToken = NULL;
+        PSID                        psidAdministrators;
+        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
+        sal_Bool                    bSuccess = sal_False;
+
+
+        /* If Security contains an access token we need to duplicate it to an impersonation
+           access token. NULL works with CheckTokenMembership() as the current effective
+           impersonation token
+         */
+
+        if ( ((oslSecurityImpl*)Security)->m_hToken )
         {
-            return(sal_True);
+            if ( !DuplicateToken (((oslSecurityImpl*)Security)->m_hToken, SecurityImpersonation, &hImpersonationToken) )
+                return sal_False;
         }
-        else
+
+        /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
+           and also works on Vista to retrieve the effective user rights. Just checking for
+           membership of Administrators group is not enough on Vista this would require additional
+           complicated checks as described in KB arcticle Q118626: http://support.microsoft.com/kb/118626/en-us
+        */
+
+        if (AllocateAndInitializeSid(&siaNtAuthority,
+                                     2,
+                                      SECURITY_BUILTIN_DOMAIN_RID,
+                                      DOMAIN_ALIAS_RID_ADMINS,
+                                      0, 0, 0, 0, 0, 0,
+                                      &psidAdministrators))
         {
-            HANDLE                      hImpersonationToken = NULL;
-            PSID                        psidAdministrators;
-            SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
-            sal_Bool                    bSuccess = sal_False;
+            BOOL    fSuccess = FALSE;
 
+            if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
+                bSuccess = sal_True;
 
-            /* If Security contains an access token we need to duplicate it to an impersonation
-               access token. NULL works with CheckTokenMembership() as the current effective
-               impersonation token
-             */
-
-            if ( ((oslSecurityImpl*)Security)->m_hToken )
-            {
-                if ( !DuplicateToken (((oslSecurityImpl*)Security)->m_hToken, SecurityImpersonation, &hImpersonationToken) )
-                    return sal_False;
-            }
-
-            /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
-               and also works on Vista to retrieve the effective user rights. Just checking for
-               membership of Administrators group is not enough on Vista this would require additional
-               complicated checks as described in KB arcticle Q118626: http://support.microsoft.com/kb/118626/en-us
-            */
-
-            if (AllocateAndInitializeSid(&siaNtAuthority,
-                                         2,
-                                          SECURITY_BUILTIN_DOMAIN_RID,
-                                          DOMAIN_ALIAS_RID_ADMINS,
-                                          0, 0, 0, 0, 0, 0,
-                                          &psidAdministrators))
-            {
-                BOOL    fSuccess = FALSE;
-
-                if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
-                    bSuccess = sal_True;
-
-                FreeSid(psidAdministrators);
-            }
-
-            if ( hImpersonationToken )
-                CloseHandle( hImpersonationToken );
-
-            return (bSuccess);
+            FreeSid(psidAdministrators);
         }
+
+        if ( hImpersonationToken )
+            CloseHandle( hImpersonationToken );
+
+        return (bSuccess);
     }
     else
         return (sal_False);
@@ -353,7 +338,17 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -756,7 +751,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                                    &hRegKey) == ERROR_SUCCESS)
                     {
                         LONG lRet;
-                        DWORD lSize = elementsof(PathA);
+                        DWORD lSize = SAL_N_ELEMENTS(PathA);
                         DWORD Type = REG_SZ;
 
                         switch (nFolder)
@@ -823,38 +818,6 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 }
 
 
-static sal_Bool isWNT(void)
-{
-    static sal_Bool isInit = sal_False;
-    static sal_Bool isWNT = sal_False;
-
-    if (!isInit)
-    {
-        OSVERSIONINFO VersionInformation =
-
-        {
-            sizeof(OSVERSIONINFO),
-            0,
-            0,
-            0,
-            0,
-            "",
-        };
-
-        if (
-            GetVersionEx(&VersionInformation) &&
-            (VersionInformation.dwPlatformId == VER_PLATFORM_WIN32_NT)
-           )
-        {
-            isWNT = sal_True;
-        }
-
-        isInit = sal_True;
-    }
-
-    return(isWNT);
-}
-
 static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
 {
     HANDLE           hToken;
@@ -911,7 +874,17 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                    pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
+                {
+                    UCHAR* pTmp = realloc(pInfoBuffer, nInfoBuffer);
+                    if (pTmp)
+                        pInfoBuffer = pTmp;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = NULL;
+                        break;
+                    }
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -989,3 +962,4 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

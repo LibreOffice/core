@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module inspection {
 /** describes pre-defined possible control types to be used to display and enter
     property values within a <type>ObjectInspector</type>.
 
-    <p>The type of a control determines its visual appearance, its behaviour, and - important
+    <p>The type of a control determines its visual appearance, its behavior, and - important
     for property handlers using a control - the expected type when reading and writing the
     control's value.</p>
 
@@ -102,7 +102,7 @@ published constants PropertyControlType
         <member>XPropertyControl::Value</member>, and if this string has previously been added to the list
         using the <type>XStringListControl</type> interface, this string is selected. Vice versa, if the user
         selects one of those non-color strings in the list, then reading <member>XPropertyControl::Value</member>
-        will retrieve you this stting.</p>
+        will retrieve you this string.</p>
     */
     const short ColorListBox = 7;
 

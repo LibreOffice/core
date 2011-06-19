@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -101,7 +102,7 @@ static OUString toUNOname( char const * p ) SAL_THROW( () )
 //==================================================================================================
 class RTTI
 {
-    typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
@@ -284,4 +285,5 @@ void fillUnoException( __cxa_exception * header, uno_Any * pExc, uno_Mapping * p
 }
 
 }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
 #define __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
 
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_drawing_Position3D_idl__
 #include <com/sun/star/drawing/Position3D.idl>
-#endif
-#ifndef __com_sun_star_drawing_Direction3D_idl__
 #include <com/sun/star/drawing/Direction3D.idl>
-#endif
-#ifndef __com_sun_star_drawing_ProjectionMode_idl__
 #include <com/sun/star/drawing/ProjectionMode.idl>
-#endif
-#ifndef __com_sun_star_drawing_ShadeMode_idl__
 #include <com/sun/star/drawing/ShadeMode.idl>
-#endif
-#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_idl__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
-#endif
 
 //=============================================================================
 

@@ -138,7 +138,7 @@ interface XPackageManager
     /** adds an extension.
 
         This copies the extension. If it was from the same repository,
-        which is represented by this XPackageManager insterface, then
+        which is represented by this XPackageManager interface, then
         nothing happens.
 
         @param extension
@@ -265,7 +265,7 @@ interface XPackageManager
             removed extensions which must be revoked
        @return
             If true - then at least one extension was removed or added. Otherwise
-            nothing was chaned.
+            nothing was changed.
     */
     boolean synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
                      [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )

@@ -28,49 +28,17 @@
 #ifndef __com_sun_star_form_control_GridControl_idl__
 #define __com_sun_star_form_control_GridControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_form_XGrid_idl__
 #include <com/sun/star/form/XGrid.idl>
-#endif
-
-#ifndef __com_sun_star_form_XBoundComponent_idl__
 #include <com/sun/star/form/XBoundComponent.idl>
-#endif
-
-#ifndef __com_sun_star_form_XGridFieldDataSupplier_idl__
 #include <com/sun/star/form/XGridFieldDataSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModeSelector_idl__
 #include <com/sun/star/util/XModeSelector.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
-#endif
-
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
 //=============================================================================
 
@@ -125,7 +93,7 @@ published service GridControl
 
     /** is used to switch the operating modes of the control.
 
-        <p>Besides the normal opreration mode (which is used to display the database form's data) the control may
+        <p>Besides the normal operation mode (which is used to display the database form's data) the control may
         for instance support a filter mode.</p>
     */
     [optional] interface com::sun::star::util::XModeSelector;
@@ -142,9 +110,9 @@ published service GridControl
     /** allows external components to register dispatchers for some common form actions.
 
         <p>A grid control can contain own UI elements for traveling within the database form it belongs to (This
-        concept seems to make sense, as a grid control - in opposite to other data aware controls - displayes
+        concept seems to make sense, as a grid control - in opposite to other data aware controls - displays
         not only one record at a time, but a larger number of records of the database form.)<br/>
-        With the help of this interface, external components which wish to handle such travelings themself can
+        With the help of this interface, external components which wish to handle such travelings themselves can
         register interceptors for the actions in question.</p>
 
         <p>Usual URLs to use include

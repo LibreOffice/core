@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_MergeImporter_idl__
 #define __com_sun_star_configuration_backend_MergeImporter_idl__
 
-#ifndef __com_sun_star_configuration_backend_Importer_idl__
 #include <com/sun/star/configuration/backend/Importer.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 

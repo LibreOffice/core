@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_resource_StringResourceManager_idl__
 #define __com_sun_star_resource_StringResourceManager_idl__
 
-#ifndef __com_sun_star_resource_XStringResourcePersistence_idl__
 #include <com/sun/star/resource/XStringResourcePersistence.idl>
-#endif
 
 
 //=============================================================================

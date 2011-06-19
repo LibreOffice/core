@@ -28,27 +28,21 @@
 #ifndef __com_sun_star_drawing_AccessibleShape_idl__
 #define __com_sun_star_drawing_AccessibleShape_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessible_idl__
 #include <com/sun/star/accessibility/XAccessible.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
-#endif
 
 module com {  module sun {  module star {  module drawing {
 
 /** The <type>AccessibleShape</type> service is implemented by UNO shapes to
-    provide accessibility information that describe the shapes' features.
+    provide accessibility information that describe the shape's features.
     A UNO shape is any object that implements the <type
     scope="::com::sun::star::drawing">XShape</type> interface.
 
     <p>The content of a draw page is modeled as tree of accessible shapes
     and accessible text paragraphs.  The root of this (sub-)tree is the
     accessible draw document view.  An accessible shape implements either
-    this service or one of the 'derived' services
+    this service or one of the "derived" services
     <type>AccessibleGraphicShape</type> or <type>AccessibleOLEShape</type>.
     See the section Children in the description of the
     <type scope="::com::sun::star::accessibility"
@@ -122,8 +116,8 @@ published service AccessibleShape
                 exceptions.</p>
                 <p>If this state is set then no other of the states below is
                 set.  This  is also true for the states that are otherwise
-                allways set (which  makes 'allways' more of a sort of
-                'normally').</p></li>
+                always set (which  makes "always" more of a sort of
+                "normally").</p></li>
             <li><const scope="com::sun::star::accessibility"
                 >AccessibleStateType::EDITABLE</const></li> is always set.
                 This state is interpreted to mean that not only text but

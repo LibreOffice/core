@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_sdb_RowSet_idl__
 #define __com_sun_star_sdb_RowSet_idl__
 
-#ifndef __com_sun_star_sdbc_RowSet_idl__
 #include <com/sun/star/sdbc/RowSet.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;
 };};};};
-
-#ifndef __com_sun_star_sdb_ResultSet_idl__
 #include <com/sun/star/sdb/ResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XCompletedExecution_idl__
 #include <com/sun/star/sdb/XCompletedExecution.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 published interface XDeleteRows;
@@ -55,9 +47,9 @@ published interface XParametersSupplier;
 
 
 /** is a client side RowSet, which use retrieves is data based on a database table,
-    a query or a SQL command or by a rowset reader, who mustn't support SQL.
-    The connection of the rowset is typically a named DataSource or a DataAccess component
-    or a previous instanciated connection.
+    a query or a SQL command or by a row set reader, who mustn't support SQL.
+    The connection of the row set is typically a named DataSource or a DataAccess component
+    or a previous instantiated connection.
     <p>
     Depending on the
     <type scope="com::sun::star::sdbc">ResultSetConcurrency</type>
@@ -89,7 +81,7 @@ published interface XParametersSupplier;
             </td>
         </tr>
         <tr><td valign="top"><em>column values</em></td>
-            <td valign="top">If the opration includes changes in the values of the columns of the row set, then these are
+            <td valign="top">If the operation includes changes in the values of the columns of the row set, then these are
             notified before anything else (except requests for approval).
             @see ResultSet
             @see com::sun::star::sdbcx::XColumnsSupplier
@@ -167,7 +159,7 @@ published interface XParametersSupplier;
     <type>RowSet</type>. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
     <member scope="com::sun::star::sdbc">XResultSet::rowDeleted</member> will return <TRUE/>. The deleted row "vanishes" from
     the <type>RowSet</type> as soon as the cursor is moved away from it.<br/>
-    As a consequence, the behaviour of several other methods is affected:<br/>
+    As a consequence, the behavior of several other methods is affected:<br/>
     <dl>
         <dt><member scope="com::sun::star::sdbc">XResultSet::getRow</member></dt>
         <dd>returns the position of the cursor, which has not been changed by the deletion.</dd>
@@ -223,9 +215,9 @@ published service RowSet
     */
     interface com::sun::star::sdb::XCompletedExecution;
 
-    /** approving of actions performed on the rowset.
+    /** approving of actions performed on the row set.
 
-        <p>The support of this interface implies a sematical extension to the <type scope="com::sun::star::sdbc">XResultSetUpdate</type>
+        <p>The support of this interface implies a semantical extension to the <type scope="com::sun::star::sdbc">XResultSetUpdate</type>
         interface which is supported via the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
 
         @see XResultSetUpdate
@@ -237,7 +229,7 @@ published service RowSet
         <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
 
         <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
-        in a sematical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
+        in a semantical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
         <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> and <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>
         will now throw the <type>RowSetVetoException</type> if the action which is to be performed was vetoed
         by one of the <type>XRowSetApproveListener</type>'s.</p>
@@ -249,7 +241,7 @@ published service RowSet
         <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbcx">ResultSet</type> service.</p>
 
         <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
-        in a sematical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
+        in a semantical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
         will now throw the <type>RowSetVetoException</type> if the deletion was vetoed
         by one of the <type>XRowSetApproveListener</type>'s.</p>
      */
@@ -327,7 +319,7 @@ published service RowSet
     [property] boolean IgnoreResult;
 
 
-    /** additional filter for a rowset.
+    /** additional filter for a row set.
      */
     [property] string Filter;
 
@@ -345,7 +337,7 @@ published service RowSet
      */
     [optional,property] string GroupBy;
 
-    /** is a additional sort order definition for a rowset.
+    /** is a additional sort order definition for a row set.
      */
     [property] string Order;
 
@@ -371,7 +363,7 @@ published service RowSet
     [readonly, property] long RowCount;
 
 
-    /** indicates that all rows of te row set have been counted.
+    /** indicates that all rows of the row set have been counted.
      */
     [readonly, property] boolean IsRowCountFinal;
 

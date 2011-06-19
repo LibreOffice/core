@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,6 +62,7 @@ extern "C" {
 #define VALIDATEPATH_ALLOW_ELLIPSE          0x0002
 #define VALIDATEPATH_ALLOW_RELATIVE         0x0004
 #define VALIDATEPATH_ALLOW_UNC              0x0008
+#define VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD 0x0010
 
 #define MAX_LONG_PATH 32767
 
@@ -94,3 +96,5 @@ oslFileError _osl_getFileURLFromSystemPath (
 #endif
 
 #endif /* INCLUDED_OSL_FILE_URL_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

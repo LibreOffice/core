@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -764,7 +765,7 @@ Assembly * TypeEmitter::type_resolve(
 
             typedef std::vector<Reference<reflection::XInterfaceTypeDescription2> >::const_iterator it;
             int index = 0;
-            for (it i = vecBaseTypes.begin(); i != vecBaseTypes.end(); i++, index++)
+            for (it i = vecBaseTypes.begin(); i != vecBaseTypes.end(); ++i, ++index)
                 base_interfaces[ index ] = get_type( *i );
             type_builder = m_module_builder->DefineType(
                 cts_name, attr, 0, base_interfaces );
@@ -2321,3 +2322,5 @@ resolveInterfaceTypedef(
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

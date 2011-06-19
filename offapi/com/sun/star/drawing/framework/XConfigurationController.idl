@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
 #define __com_sun_star_drawing_framework_XConfigurationController_idl__
 
-#ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
 #include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
 #include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_XResourceFactoryManager_idl__
 #include <com/sun/star/drawing/framework/XResourceFactoryManager.idl>
-#endif
-#ifndef __com_sun_star_drawing_framework_ResourceActivationMode_idl__
 #include <com/sun/star/drawing/framework/ResourceActivationMode.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -65,7 +55,7 @@ published interface XResource;
 
     <p>When the two configurations differ then the current configuration is
     updated eventually to reflect the requested configuration.  An update
-    takes place when the following three conditions are fullfilled.
+    takes place when the following three conditions are fulfilled.
     <ol>
     <li>when the last pending request for configuration changes has been
     processed,</li>
@@ -108,7 +98,7 @@ published interface XResource;
     temporarily or permanently unavailable.  For example, during the
     start-up of a new Impress application the side panes are displayed
     with a visible delay because they are not provided sooner by the
-    underlying framework.  Such anavailable resources are not forgotten but
+    underlying framework.  Such unavailable resources are not forgotten but
     remain in the requested configuration.  Every time the configuration
     controller updates its current configuration these resources are
     requested once more.</li></ol></p>
@@ -252,12 +242,12 @@ published interface XConfigurationController
         allows the saving and restoring of configurations.  However, the
         given configuration can have other origins then these methods.</p>
         <p>The given configuration is transformed into a list of of change
-        requests so that the resulting reqeusted configuration equals the
+        requests so that the resulting requested configuration equals the
         given configuration.  This has the advantage that not only the
         resource activations and deactivations but all configuration
         changes are properly broadcasted.</p>
         <p>Note that because of the configuration change notifications
-        listeners can make more configuratio change requests, so that the
+        listeners can make more configuration change requests, so that the
         resulting requested configuration can be different from the given
         configuration.</p>
         @param xConfiguration

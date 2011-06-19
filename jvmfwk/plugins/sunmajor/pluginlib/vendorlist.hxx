@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,17 +35,8 @@
 namespace jfw_plugin
 {
 
-//extern VendorSupportMapEntry gVendorMap[];
-
 typedef char  const * const * (* getJavaExePaths_func)(int*);
 typedef rtl::Reference<VendorBase> (* createInstance_func) ();
-
-// struct Blas
-// {
-//         char const * sVendorName;
-//     getJavaExePaths_func getJavaFunc;
-//     createInstance_func  createFunc;
-// };
 
 struct VendorSupportMapEntry
 {
@@ -73,3 +65,5 @@ bool isVendorSupported(const rtl::OUString & sVendor);
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

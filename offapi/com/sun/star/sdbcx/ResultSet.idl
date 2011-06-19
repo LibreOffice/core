@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbcx_ResultSet_idl__
 #define __com_sun_star_sdbcx_ResultSet_idl__
 
-#ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 
@@ -37,7 +35,7 @@
  published interface XDeleteRows;
 
 
-/** extends the SDBC ResultSet by the possibility of bookmark positioning, cancelling
+/** extends the SDBC ResultSet by the possibility of bookmark positioning, canceling
     the positioning, and updating of rows.
  */
 published service ResultSet
@@ -45,7 +43,7 @@ published service ResultSet
     service com::sun::star::sdbc::ResultSet;
 
 
-    /** could be used for cancelling the execution of SQL statements if both
+    /** could be used for canceling the execution of SQL statements if both
  the DBMS and the driver support aborting of navigation commands.
  The implementation is optional.
      */
@@ -63,12 +61,12 @@ published service ResultSet
     [optional] interface XDeleteRows;
 
 
-    /** returns if the resultset supports bookmark navigation.
+    /** returns if the result set supports bookmark navigation.
      */
     [readonly, property] boolean IsBookmarkable;
 
 
-    /** returns whether the resultset supports updating of newly inserted rows.
+    /** returns whether the result set supports updating of newly inserted rows.
         This may not work, as the result set may contain automatic generated data
         which is used as key information.
      */

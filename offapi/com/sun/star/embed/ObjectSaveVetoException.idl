@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_embed_ObjectSaveVetoException_idl__
 #define __com_sun_star_embed_ObjectSaveVetoException_idl__
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
 
 //============================================================================
@@ -38,7 +36,7 @@
 
 //============================================================================
 
-/** This exception can be thrown in case container whants to avoid objects
+/** This exception can be thrown in case container wants to avoid objects
     saving.
 
     @see XEmbeddedClient

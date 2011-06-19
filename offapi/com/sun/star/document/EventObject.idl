@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_document_EventObject_idl__
 #define __com_sun_star_document_EventObject_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +45,7 @@ module com {   module sun {   module star {   module document {
 published struct EventObject: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** specifies the name of the occured event
+    /** specifies the name of the occurred event
 
         <p>
         For a list of possible event names see <type>Events</type>.

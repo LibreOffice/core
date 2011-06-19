@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_drawing_XSlideRenderer_idl__
 #define __com_sun_star_drawing_XSlideRenderer_idl__
 
-#ifndef __com_sun_star_awt_XBitmap_idl__
 #include <com/sun/star/awt/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
 #include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
 #include <com/sun/star/rendering/XSpriteCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module drawing {
@@ -74,7 +66,7 @@ interface XSlideRenderer
             memory consumption and longer runtime.
             This value is an attempt to provide some antialiasing and so to
             provide more readable slide previews.  May become obsolete in
-            the future when true antialiasing suppport will be integrated.
+            the future when true antialiasing support will be integrated.
     */
     com::sun::star::awt::XBitmap createPreview (
         [in] XDrawPage xSlide,

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 
 #ifndef _RTL_PROCESS_CONST_H_
 #define _RTL_PROCESS_CONST_H_
@@ -12,11 +13,10 @@ extern "C"
 {
 #endif
 //------------------------------------------------------------------------
-//::rtl::OUString suParam[4];
-::rtl::OUString suParam0 = ::rtl::OUString::createFromAscii("-join");
-::rtl::OUString suParam1 = OUString::createFromAscii("-with");
-::rtl::OUString suParam2 = OUString::createFromAscii("-child");
-::rtl::OUString suParam3 = OUString::createFromAscii("-process");
+::rtl::OUString suParam0(RTL_CONSTASCII_USTRINGPARAM("-join"));
+::rtl::OUString suParam1(RTL_CONSTASCII_USTRINGPARAM("-with"));
+::rtl::OUString suParam2(RTL_CONSTASCII_USTRINGPARAM("-child"));
+::rtl::OUString suParam3(RTL_CONSTASCII_USTRINGPARAM("-process"));
 
 //------------------------------------------------------------------------
 #ifdef __cplusplus
@@ -24,3 +24,5 @@ extern "C"
 #endif
 
 #endif /* RTL_PROCESS_CONST_H*/
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

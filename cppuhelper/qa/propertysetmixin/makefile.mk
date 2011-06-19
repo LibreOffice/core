@@ -41,6 +41,11 @@ my_components = $(TARGET).cpp $(TARGET).java
 
 .INCLUDE: settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 my_file = file:///
 .ELSE

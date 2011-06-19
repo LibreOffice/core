@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_animations_XTransitionFilter_idl__
 #define __com_sun_star_animations_XTransitionFilter_idl__
 
-#ifndef __com_sun_star_animations_XAnimate_idl__
 #include <com/sun/star/animations/XAnimate.idl>
-#endif
 
 //=============================================================================
 

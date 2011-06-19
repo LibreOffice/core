@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,8 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
+#if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || \
+    defined (MACOSX) || defined (OPENBSD) || defined(DRAGONFLY)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -465,19 +467,6 @@ static sal_uInt32 g_nSocketImpl = 0;
 static sal_uInt32 g_nSocketAddr = 0;
 
 /* sorry, must be implemented otherwise */
-#if 0
-struct LeakWarning
-{
-    ~LeakWarning()
-    {
-        if( g_nSocketImpl )
-            OSL_TRACE( "sal_socket: %d socket instances leak\n" , g_nSocketImpl );
-        if( g_nSocketAddr )
-            OSL_TRACE( "sal_socket: %d socket address instances leak\n" , g_nSocketAddr );
-    }
-};
-LeakWarning socketWarning;
-#endif
 
 #endif /* OSL_DEBUG_LEVEL */
 
@@ -605,16 +594,22 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
-    OSL_ASSERT((0 != Addr1) && (0 != Addr2));
-    if ((0 != Addr1) || (0 != Addr2))
-    {
-      struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
-      struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
+    OSL_ASSERT(Addr1);
+    OSL_ASSERT(Addr2);
+    struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
+    struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
-      if (pAddr1->sa_family == pAddr2->sa_family)
-      {
-          switch (pAddr1->sa_family)
-          {
+    OSL_ASSERT(pAddr1);
+    OSL_ASSERT(pAddr2);
+    if (pAddr1 == pAddr2)
+    {
+        return (sal_True);
+    }
+
+    if (pAddr1->sa_family == pAddr2->sa_family)
+    {
+        switch (pAddr1->sa_family)
+        {
             case AF_INET:
             {
                 struct sockaddr_in* pInetAddr1= (struct sockaddr_in*)pAddr1;
@@ -623,16 +618,16 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                  return (sal_True);
+                    return (sal_True);
             }
 
             default:
             {
                 return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
             }
-          }
-      }
+        }
     }
+
     return (sal_False);
 }
 
@@ -796,12 +791,16 @@ static struct hostent* _osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103))
+#if defined(LINUX) || defined(ANDROID) || (defined(FREEBSD) && (__FreeBSD_version >= 601103)) || defined(DRAGONFLY)
     struct hostent *__result; /* will be the same as result */
     int __error;
     __error = gethostbyname_r (name, result, buffer, buflen,
                  &__result, h_errnop);
     return __error ? NULL : __result ;
+#elif defined(AIX)
+    *h_errnop = gethostbyname_r (name, result, (struct hostent_data *)buffer);
+    (void)buflen;
+    return *h_errnop ? NULL : result ;
 #else
     return gethostbyname_r( name, result, buffer, buflen, h_errnop);
 #endif
@@ -867,9 +866,6 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     static sal_Char    *pDomainName = NULL;
 
     sal_Char  *pFullQualifiedName;
-#if 0  /* OBSOLETE */
-    FILE      *pPipeToDomainnameExe;
-#endif /* OBSOLETE */
 
     /* get a '\0' terminated domainname */
 
@@ -886,7 +882,6 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
         }
     }
 
-#if 1  /* NEW */
     if (nLengthOfDomainName == 0)
     {
         sal_Char pDomainNameBuffer[ DOMAINNAME_LENGTH ];
@@ -899,74 +894,6 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
             nLengthOfDomainName = strlen (pDomainName);
         }
     }
-
-#endif /* NEW */
-#if 0  /* OBSOLETE */
-#ifdef SCO
-
-    /* call 'domainname > /usr/tmp/some-tmp-file', since
-       popen read pclose do block or core-dump,
-       (even the pipe-stuff that comes with pthreads) */
-    if (nLengthOfDomainName == 0)
-    {
-        sal_Char  tmp_name[ L_tmpnam ];
-        FILE     *tmp_file;
-        sal_Char  domain_call [ L_tmpnam + 16 ] = "domainname > ";
-
-        tmp_name[0] = '\0';
-
-        tmpnam ( tmp_name );
-        strcat ( domain_call, tmp_name );
-        if (   (system ( domain_call ) == 0)
-            && ((tmp_file = fopen( tmp_name, "r" )) != NULL ) )
-        {
-            sal_Char  pDomainNameBuffer[ DOMAINNAME_LENGTH ];
-
-            pDomainNameBuffer[0] = '\0';
-
-            if ( fgets ( pDomainNameBuffer, DOMAINNAME_LENGTH, tmp_file ) )
-            {
-                pDomainName = strdup( pDomainNameBuffer );
-                nLengthOfDomainName = strlen( pDomainName );
-                if (   ( nLengthOfDomainName > 0 )
-                    && ( pDomainName[ nLengthOfDomainName - 1] == '\n' ) )
-                    pDomainName[ --nLengthOfDomainName ] = '\0';
-            }
-            fclose ( tmp_file );
-        }
-        unlink( tmp_name );
-    }
-
-#else /* !SCO */
-
-    /* read the domainname from pipe to the program domainname */
-    if (   (nLengthOfDomainName == 0)
-        && (pPipeToDomainnameExe = popen( "domainname", "r")) )
-    {
-        sal_Char  c;
-        sal_Char  pDomainNameBuffer[ DOMAINNAME_LENGTH ];
-        sal_Char *pDomainNamePointer;
-
-        pDomainNameBuffer[0] = '\0';
-
-        pDomainNamePointer = pDomainNameBuffer;
-        while (    ((c = getc( pPipeToDomainnameExe )) != EOF)
-                && (nLengthOfDomainName < (DOMAINNAME_LENGTH - 1)) )
-        {
-            if (! isspace(c))
-            {
-                 nLengthOfDomainName++ ;
-                   *pDomainNamePointer++ = (sal_Char)c;
-            }
-        }
-        *pDomainNamePointer = '\0';
-        pDomainName = strdup( pDomainNameBuffer );
-
-        pclose( pPipeToDomainnameExe );
-    }
-
-#endif /* !SCO */
-#endif /* OBSOLETE */
 
     /* compose hostname and domainname */
     nLengthOfHostName = strlen( pHostName );
@@ -1038,12 +965,16 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
          * full qualified name to the unqualified host name */
         if ( !bHostsAreEqual )
         {
+            sal_Char *pTmp;
+
             OSL_TRACE("_osl_getFullQualifiedDomainName: "
                       "suspect FQDN: %s\n", pFullQualifiedName);
 
             pFullQualifiedName[ nLengthOfHostName ] = '\0';
-            pFullQualifiedName = (sal_Char*)realloc ( pFullQualifiedName,
+            pTmp = (sal_Char*)realloc ( pFullQualifiedName,
                                 (nLengthOfHostName + 1) * sizeof( sal_Char ));
+            if (pTmp)
+                pFullQualifiedName = pTmp;
         }
     }
 
@@ -1404,43 +1335,7 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 
             if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != NULL)
             {
-#if 0  /* OBSOLETE */
-                sal_Char* pChr;
-#endif /* OBSOLETE */
                 strcpy(LocalHostname, pStr);
-
-#if 0  /* OBSOLETE */
-                /* already done by _osl_getFullQualifiedDomainName() with
-                   much better heuristics, so this may be contraproductive */
-
-                /* no FQDN, last try append domain name */
-                if ((pChr = strchr(LocalHostname, '.')) == NULL)
-                {
-                    FILE *fp;
-
-                    pChr = &LocalHostname[strlen(LocalHostname)];
-
-                    if ( (fp = popen("domainname", "r")) != 0 )
-                    {
-                        int c;
-
-                        *pChr++ = '.';
-
-                        while ((c = getc(fp)) != EOF)
-                        {
-                            if (! isspace(c))
-                                *pChr++ = (sal_Char)c;
-                        }
-
-                        *pChr = '\0';
-
-                        fclose(fp);
-                    }
-                    else
-                        LocalHostname[0] = '\0';
-                }
-#endif /* OBSOLETE */
-
             }
             osl_destroyHostAddr(Addr);
         }
@@ -1699,71 +1594,6 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAd
     return osl_Socket_Error;
 }
 
-#if 0  /* OBSOLETE */
-/*****************************************************************************/
-/* osl_getIpxNetNumber  */
-/*****************************************************************************/
-oslSocketResult SAL_CALL osl_getIpxNetNumber(oslSocketAddr Addr,
-                                    oslSocketIpxNetNumber NetNumber)
-
-{
-    struct sockaddr_ipx* pAddr;
-
-    pAddr= (struct sockaddr_ipx*)Addr;
-
-    OSL_ASSERT(pAddr);
-
-    if (pAddr && (pAddr->sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyIpx)))
-     {
-         memcpy(NetNumber, pAddr->sa_netnum, sizeof(NetNumber));
-
-          return osl_Socket_Ok;
-      }
-      else
-          return osl_Socket_Error;
-}
-
-
-/*****************************************************************************/
-/* osl_getIpxNodeNumber  */
-/*****************************************************************************/
-oslSocketResult SAL_CALL osl_getIpxNodeNumber(oslSocketAddr Addr,
-                                     oslSocketIpxNodeNumber NodeNumber)
-
-{
-      struct sockaddr_ipx* pAddr;
-
-      pAddr= (struct sockaddr_ipx*)Addr;
-
-      OSL_ASSERT(pAddr);
-
-      if (pAddr && (pAddr->sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyIpx)))
-      {
-          memcpy(NodeNumber, pAddr->sa_nodenum, sizeof(NodeNumber));
-
-          return osl_Socket_Ok;
-      }
-      else
-          return osl_Socket_Error;
-}
-
-
-/*****************************************************************************/
-/* osl_getIpxSocketNumber  */
-/*****************************************************************************/
-sal_Int32 SAL_CALL osl_getIpxSocketNumber(oslSocketAddr Addr)
-{
-    struct sockaddr_ipx* pAddr= (struct sockaddr_ipx*)Addr;
-    OSL_ASSERT(pAddr);
-
-     if (pAddr && (pAddr->sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyIpx)))
-          return pAddr->sa_socket;
-      else
-          return OSL_INVALID_IPX_SOCKET_NO;
-}
-
-#endif /* OBSOLETE */
-
 /*****************************************************************************/
 /* osl_createSocket  */
 /*****************************************************************************/
@@ -1831,7 +1661,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
-        OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
+        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
 #endif /* LINUX */
@@ -1875,12 +1705,10 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         socklen_t nSockLen = sizeof(s.aSockAddr);
 
         nRet = getsockname(nFD, &s.aSockAddr, &nSockLen);
-#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
-            perror("getsockname");
+            OSL_TRACE("getsockname call failed with error: %s", strerror(errno));
         }
-#endif /* OSL_DEBUG_LEVEL */
 
         if ( s.aSockAddr.sa_family == AF_INET )
         {
@@ -1890,20 +1718,16 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             }
 
             nConnFD = socket(AF_INET, SOCK_STREAM, 0);
-#if OSL_DEBUG_LEVEL > 1
             if ( nConnFD < 0 )
             {
-                perror("socket");
+                OSL_TRACE("socket call failed with error: %s", strerror(errno));
             }
-#endif /* OSL_DEBUG_LEVEL */
 
             nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
-#if OSL_DEBUG_LEVEL > 1
             if ( nRet < 0 )
             {
-                perror("connect");
+                OSL_TRACE("connect call failed with error: %s", strerror(errno));
             }
-#endif /* OSL_DEBUG_LEVEL */
             close(nConnFD);
         }
         pSocket->m_bIsAccepting = sal_False;
@@ -2458,7 +2282,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 
     OSL_ASSERT( pSocket);
 
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
@@ -2467,7 +2291,7 @@ sal_Int32 SAL_CALL osl_readSocket (
                                    BytesToRead,
                                    osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -2487,7 +2311,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 sal_Int32 SAL_CALL osl_writeSocket(
     oslSocket pSocket, const void *pBuffer, sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
     sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
@@ -2500,7 +2324,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
 
         RetVal= osl_sendSocket( pSocket,Ptr,BytesToSend,osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -3065,3 +2889,4 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
                   pTimeout ? &tv : 0);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

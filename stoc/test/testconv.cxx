@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 #include <stdio.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -51,6 +51,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 const double MIN_DOUBLE     = -DBL_MAX;
 const double MAX_DOUBLE     = DBL_MAX;
@@ -81,7 +84,7 @@ static void printValue( const Any & rVal )
         char ar[2];
         ar[0] = (char)*(sal_Unicode *)rVal.getValue();
         ar[1] = 0;
-        printf( ar );
+        printf( "%s", ar );
         break;
     }
     case TypeClass_BYTE:
@@ -305,66 +308,66 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     sal_uInt32 nElems = 0;
 
     // ==BYTE==
-    aVal <<= OUString::createFromAscii( "0xff" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0xff"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "255" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("255"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)0xffu;
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "0x80" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x80"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "128" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("128"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 0x80u );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "0x7f" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x7f"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "127" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("127"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 0x7f );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "5" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("5"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "+5" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("+5"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (sal_Int8)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "-5" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-5"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (sal_Int8)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "256" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("256"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==UINT16==
-    aVal <<= OUString::createFromAscii( "65535" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("65535"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0xffff" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0xffff"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0xffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "32768" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("32768"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x8000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "32767" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("32767"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0x7fff" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x7fff"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x7fff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "256" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("256"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0x100" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x100"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt16)( 0x100 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0 );
@@ -395,33 +398,33 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==UINT32==
-    aVal <<= OUString::createFromAscii( "+4294967295" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("+4294967295"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "4294967295" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("4294967295"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0xffffffff" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0xffffffff"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0xffffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "-2147483648" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-2147483648"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "-0x80000000" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-0x80000000"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (sal_uInt32)( 0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "2147483647" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("2147483647"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0x7fffffff" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x7fffffff"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0x7fffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "65536" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("65536"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
-    aVal <<= OUString::createFromAscii( "0x10000" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x10000"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( 0x10000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
@@ -432,7 +435,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_uInt32)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "0xfffffffb" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0xfffffffb"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (sal_uInt32)( -5 ); // is 0xfffffffb
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
@@ -460,27 +463,27 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==FLOAT==
-    aVal <<= OUString::createFromAscii( "-3.4e+38" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-3.4e+38"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (float)( MIN_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "+3.4e+38" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("+3.4e+38"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (float)( MAX_FLOAT );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "9e-20" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("9e-20"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( 9e-20 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "+.7071067811865" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("+.7071067811865"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( .7071067811865 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "3.14159265359" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("3.14159265359"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
     aVal <<= (float)( 3.14159265359 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
@@ -489,12 +492,12 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==DOUBLE==
-    aVal <<= OUString::createFromAscii( "-1.7976931348623155e+308" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-1.7976931348623155e+308"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MIN_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "1.7976931348623155e+308" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("1.7976931348623155e+308"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MAX_DOUBLE );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
@@ -520,12 +523,10 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (double)( 0xffffffff );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "0x100000000" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0x100000000"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-#ifndef OS2
     aVal <<= (double)( SAL_CONST_INT64(0x100000000) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-#endif
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (double)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
@@ -535,20 +536,20 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal.setValue( &c, ::getCharCppuType() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "A" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("A"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==BOOL==
-    aVal <<= OUString::createFromAscii( "0" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "1" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "False" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("False"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "true" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
 
@@ -560,17 +561,17 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= OUString();
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "-" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "-0" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("-0"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     // ==TYPECLASS ENUM==
-    aVal <<= OUString::createFromAscii( "eNuM" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("eNuM"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= OUString::createFromAscii( "DOUBLE" );
+    aVal <<= OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     int e = 1;
@@ -600,19 +601,19 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 ), aAnySeq3( 2 );
     Any * pAnySeq    = aAnySeq.getArray();
     pAnySeq[0]       = makeAny( aINT32Seq );
-    pAnySeq[1]       = makeAny( OUString::createFromAscii("lala") );
+    pAnySeq[1]       = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("lala")) );
     aVal <<= aAnySeq;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     pAnySeq = aAnySeq2.getArray();
     pAnySeq[0]       <<= (sal_Int32)4711;
-    pAnySeq[1]       <<= OUString::createFromAscii("0815");
+    pAnySeq[1]       <<= OUString(RTL_CONSTASCII_USTRINGPARAM("0815"));
     aVal <<= aAnySeq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     pAnySeq = aAnySeq3.getArray();
-    pAnySeq[0]       <<= OUString::createFromAscii("TypeClass_UNION");
-    pAnySeq[1]       <<= OUString::createFromAscii("TypeClass_ENUM");
+    pAnySeq[0]       <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TypeClass_UNION"));
+    pAnySeq[1]       <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TypeClass_ENUM"));
     aVal <<= aAnySeq3;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -625,7 +626,7 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
     printf( "test_Conversion(): start...\n" );
 
     Reference< XTypeConverter > xConverter( xMgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.script.Converter" ) ), UNO_QUERY );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ), UNO_QUERY );
 
     ConvBlock * pTestBlocks = new ConvBlock[256];
     sal_Int32 nPos = initBlocks( pTestBlocks );
@@ -675,31 +676,33 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
 
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
+    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb")) ) );
 
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+            xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         OUString aLibName(
             RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION) );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
             aLibName, Reference< XSimpleRegistry >() );
 
         test_Conversion( xMgr );
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occured!" );
+        OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "### exception occurred: " );
+        OSL_TRACE( "%s", aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

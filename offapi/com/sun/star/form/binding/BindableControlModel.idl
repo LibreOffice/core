@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_form_binding_BindableControlModel_idl__
 #define __com_sun_star_form_binding_BindableControlModel_idl__
 
-#ifndef __com_sun_star_form_binding_XBindableValue_idl__
 #include <com/sun/star/form/binding/XBindableValue.idl>
-#endif
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
 
 //=============================================================================
 

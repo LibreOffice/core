@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_dialogs_XControlAccess_idl__
 #define __com_sun_star_ui_dialogs_XControlAccess_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -46,7 +41,7 @@ module com { module sun { module star { module ui { module dialogs {
     <p>Use this interface to access user interface controls supported
         by the implementing service. The supported controls, control
         properties and the appropriate values are documented in the
-        decription of the implementing service.</p>
+        description of the implementing service.</p>
 
     @see com::sun::star::ui::dialogs::FilePicker
     @see com::sun::star::ui::dialogs::FilePicker
@@ -60,11 +55,11 @@ published interface XControlAccess: com::sun::star::uno::XInterface
 
     @param aControlName
         The name of the control. Common control names are for
-        instance 'OkButton' or 'CancelButton'.
+        instance "OkButton" or "CancelButton".
 
     @param aControlProperty
         The control property to manipulate. Common control properties
-        are for instance 'Label' or 'State'.
+        are for instance "Label" or "State".
 
     @param aValue
         A value appropriated for the property.
@@ -81,11 +76,11 @@ void setControlProperty( [in] string aControlName, [in] string aControlProperty,
 
     @param aControlName
        The name of the control. Common control names are for
-        instance 'OkButton' or 'CancelButton'.
+        instance "OkButton" or "CancelButton".
 
     @param aControlProperty
         The requested control property. Common control properties
-        are for instance 'Label' or 'State'.
+        are for instance "Label" or "State".
 
     @returns
         the requested value.

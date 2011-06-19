@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_awt_XSystemChildFactory_idl__
 #define __com_sun_star_awt_XSystemChildFactory_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -53,7 +51,7 @@ published interface XSystemChildFactory : com::sun::star::uno::XInterface
         the created window.
 
         @param Parent
-        a sytem-specific handle to a window.
+        a system-specific handle to a window.
 
         <p>You must check the machine ID and the process ID.<BR>
         WIN32: HWND.<BR>
@@ -62,7 +60,6 @@ published interface XSystemChildFactory : com::sun::star::uno::XInterface
         JAVA: global reference to a java.awt.Component
         object provided from the JNI-API.<BR>
 
-        OS2: HWND.<BR>
         MAC: Not supported.<BR></p>
 
         @param ProcessId

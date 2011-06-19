@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_script_provider_ScriptFrameworkErrorException_idl__
 #define __com_sun_star_script_provider_ScriptFrameworkErrorException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //===========================================================================
 
@@ -42,7 +40,7 @@ module com { module sun { module star { module script { module provider {
         by the Scripting Framework whilst executing a script
 */
 exception ScriptFrameworkErrorException : com::sun::star::uno::Exception {
-    /** Name of script where error occured
+    /** Name of script where error occurred
      */
     string scriptName;
     /** Scripting language of script that generated exception

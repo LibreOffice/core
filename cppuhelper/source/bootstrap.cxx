@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -172,7 +173,7 @@ void addFactories(
             buf.append( ppNames[ -2 ] );
             buf.append( "\"!!!" );
             OString str( buf.makeStringAndClear() );
-            OSL_ENSURE( 0, str.getStr() );
+            OSL_FAIL( str.getStr() );
         }
 #endif
     }
@@ -272,7 +273,7 @@ OUString findBoostrapArgument(
 }
 
 Reference< registry::XSimpleRegistry > nestRegistries(
-    const OUString baseDir,
+    const OUString &baseDir,
     const Reference< lang::XSingleServiceFactory > & xSimRegFac,
     const Reference< lang::XSingleServiceFactory > & xNesRegFac,
     OUString csl_rdbs,
@@ -351,14 +352,6 @@ Reference< registry::XSimpleRegistry > nestRegistries(
         }
         catch(registry::InvalidRegistryException & invalidRegistryException)
         {
-            if (! optional)
-            {
-                // if a registry was explicitly given, the exception shall fly
-                if( ! bFallenBack )
-                    throw;
-            }
-
-            (void) invalidRegistryException;
 #if OSL_DEBUG_LEVEL > 1
             OString rdb_name_tmp = OUStringToOString(
                 rdb_name, RTL_TEXTENCODING_ASCII_US );
@@ -368,6 +361,14 @@ Reference< registry::XSimpleRegistry > nestRegistries(
                 "warning: couldn't open %s cause of %s",
                 rdb_name_tmp.getStr(), message_dbg.getStr() );
 #endif
+            if (! optional)
+            {
+                // if a registry was explicitly given, the exception shall fly
+                if( ! bFallenBack )
+                    throw;
+            }
+
+            (void) invalidRegistryException;
         }
     }
     while(index != -1 && csl_rdbs.getLength()); // are there more rdbs in list?
@@ -608,7 +609,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             case osl_Process_E_NotFound:
                 throw BootstrapException( OUSTR( "image not found!" ) );
             case osl_Process_E_TimedOut:
-                throw BootstrapException( OUSTR( "timout occured!" ) );
+                throw BootstrapException( OUSTR( "timout occurred!" ) );
             case osl_Process_E_NoPermission:
                 throw BootstrapException( OUSTR( "permission denied!" ) );
             case osl_Process_E_Unknown:
@@ -668,3 +669,5 @@ OUString bootstrap_expandUri(OUString const & uri) {
 }
 
 } // namespace cppu
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

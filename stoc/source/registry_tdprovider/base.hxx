@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include "registry/refltype.hxx"
 
@@ -63,13 +62,14 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
 
 //--------------------------------------------------------------------------------------------------
 
@@ -135,7 +135,7 @@ inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
     case RT_TYPE_UINT32:
         return rVal.m_value.aULong;
     default:
-        OSL_ENSURE( sal_False, "### unexpected value type!" );
+        OSL_FAIL( "### unexpected value type!" );
         return 0;
     }
 }
@@ -170,7 +170,7 @@ inline Any getRTValue( const RTConstValue & rVal )
         return Any( &aStr, ::getCppuType( (const OUString *)0 ) );
     }
     default:
-        OSL_ENSURE( sal_False, "### unexpected RTValue!" );
+        OSL_FAIL( "### unexpected RTValue!" );
         return Any();
     }
 }
@@ -645,3 +645,5 @@ public:
 }
 
 #endif /* _STOC_RDBTDP_BASE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

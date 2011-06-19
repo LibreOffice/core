@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include "osl/file.hxx"
 
 #include <string.h>
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 
 #include <direct.h>
@@ -151,7 +152,7 @@ OString createFileNameFromType( const OString& destination,
             continue;
         }
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
         if (mkdir((char*)nameBuffer.getStr()) == -1)
@@ -447,3 +448,5 @@ FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s) {
         o.m_file, s.getStr(), s.getLength() * sizeof(sal_Char), &writtenBytes);
     return o;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

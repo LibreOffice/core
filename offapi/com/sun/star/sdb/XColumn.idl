@@ -27,25 +27,15 @@
 #ifndef __com_sun_star_sdb_XColumn_idl__
 #define __com_sun_star_sdb_XColumn_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
-#ifndef __com_sun_star_util_Date_idl__
 #include <com/sun/star/util/Date.idl>
-#endif
 
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
 
-#ifndef __com_sun_star_util_Time_idl__
 #include <com/sun/star/util/Time.idl>
-#endif
 
  module com {  module sun {  module star {  module io {
  published interface XInputStream;

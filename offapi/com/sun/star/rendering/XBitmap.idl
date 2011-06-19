@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XBitmap_idl__
 #define __com_sun_star_rendering_XBitmap_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
 #include <com/sun/star/geometry/IntegerSize2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealSize2D_idl__
 #include <com/sun/star/geometry/RealSize2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
 #include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 

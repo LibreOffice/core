@@ -28,27 +28,13 @@
 #ifndef __com_sun_star_awt_AccessibleCheckBox_idl__
 #define __com_sun_star_awt_AccessibleCheckBox_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
 #include <com/sun/star/accessibility/XAccessibleText.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleAction_idl__
 #include <com/sun/star/accessibility/XAccessibleAction.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleValue_idl__
 #include <com/sun/star/accessibility/XAccessibleValue.idl>
-#endif
 
 module com { module sun { module star { module awt {
 

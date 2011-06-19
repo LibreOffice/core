@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#include <osl_Module_Const.h>
+
 #include <stdio.h>
 #include <sal/types.h>
-#include <testshl/simpleheader.hxx>
+
+// This module contains no tests. It is loaded as a dynamic library by
+// osl_Module.
+// But we instatiate a test plugin to fake the build process.
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {
@@ -41,3 +48,4 @@ extern "C" void SAL_CALL secondfunc()
    printf("second func called.\n");
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

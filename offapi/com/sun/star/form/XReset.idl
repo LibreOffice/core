@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XReset_idl__
 #define __com_sun_star_form_XReset_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_form_XResetListener_idl__
 #include <com/sun/star/form/XResetListener.idl>
-#endif
 
 
 //=============================================================================
@@ -44,7 +40,7 @@
 
 /** provides functionality to reset components to some default values.
 
-    <p>The semantincs of <em>default value</em> depends on the providing service.</p>
+    <p>The semantics of <em>default value</em> depends on the providing service.</p>
  */
 published interface XReset: com::sun::star::uno::XInterface
 {

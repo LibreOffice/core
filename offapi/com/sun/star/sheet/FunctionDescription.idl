@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_FunctionDescription_idl__
 #define __com_sun_star_sheet_FunctionDescription_idl__
 
-#ifndef __com_sun_star_sheet_FunctionArgument_idl__
 #include <com/sun/star/sheet/FunctionArgument.idl>
-#endif
 
 //=============================================================================
 

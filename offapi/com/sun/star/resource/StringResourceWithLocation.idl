@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_resource_StringResourceWithLocation_idl__
 #define __com_sun_star_resource_StringResourceWithLocation_idl__
 
-#ifndef __com_sun_star_resource_XStringResourceWithLocation_idl__
 #include <com/sun/star/resource/XStringResourceWithLocation.idl>
-#endif
 
 
 //=============================================================================
@@ -63,7 +61,7 @@ published service StringResourceWithLocation : com::sun::star::resource::XString
         @param BaseName
             Base string for the file names used to store the locale data.
             The locale data is stored in Java properties files also following
-            the corresponding naming sceme. The files will be named like this:
+            the corresponding naming scheme. The files will be named like this:
             "[BaseName]_[Language]_[Country].properties",
             e.g. "MyBaseName_en_US.properties"
             If an empty string is passed for BaseName, "strings" will be used
@@ -72,8 +70,8 @@ published service StringResourceWithLocation : com::sun::star::resource::XString
         @param Comment
             Comment stored first in each properties file followed by a line
             feed character. The line feed character is added automatically
-            and hasn't to be part of the comment string. The caller is re-
-            sponsible that the passed string is a valid comment in a Java
+            and hasn't to be part of the comment string. The caller is
+            responsible that the passed string is a valid comment in a Java
             properties file, e.g. "# My strings". The string may be empty.
 
         @param Handler

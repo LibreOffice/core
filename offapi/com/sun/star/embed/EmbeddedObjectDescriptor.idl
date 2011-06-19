@@ -27,30 +27,12 @@
 #ifndef __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
 #define __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
-
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
-#endif
-
-#ifndef __com_sun_star_task_XStatusIndicator_idl__
 #include <com/sun/star/task/XStatusIndicator.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterceptor_idl__
 #include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
-#endif
-
 #include <com/sun/star/embed/XStorage.idl>
 
 //============================================================================
@@ -64,7 +46,7 @@ module com { module sun { module star { module embed {
     This service may be represented by a
     <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
     Such descriptors will be passed to different functions, included into
-    possible load/save proccesses. Every member of such process can use
+    possible load/save processes. Every member of such process can use
     this descriptor and may change it to actualize the informations about
     the object. So this descriptor should be used as an in/out parameter.
     </p>
@@ -78,7 +60,7 @@ published service EmbeddedObjectDescriptor
 
         <p>
         Setting of this property to true tells the embedded object that
-        controlls the document to store or not to store the graphical
+        controls the document to store or not to store the graphical
         representation of the document in to the object persistence.
         If this property is not set the object makes the decision itself.
         </p>

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_InteractiveCHAOSException_idl__
 #define __com_sun_star_ucb_InteractiveCHAOSException_idl__
 
-#ifndef __com_sun_star_task_ClassifiedInteractionRequest_idl__
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
-#endif
 
 
 //=============================================================================
@@ -46,13 +44,13 @@ published exception InteractiveCHAOSException: com::sun::star::task::ClassifiedI
     //-------------------------------------------------------------------------
     /** The error ID.
 
-        <p>For a 'dynamic' error (with extra textual arguments), this ID
-        does not contain the 'dynamic bits'.
+        <p>For a "dynamic" error (with extra textual arguments), this ID
+        does not contain the "dynamic bits".
     */
     long ID;
 
     //-------------------------------------------------------------------------
-    /** Any textual arguments of a 'dynamic' error (which will get merged into
+    /** Any textual arguments of a "dynamic" error (which will get merged into
         the error message).
 
         <p>This sequence should contain at most two elements.

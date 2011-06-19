@@ -27,29 +27,17 @@
 #ifndef __com_sun_star_script_XInvocation_idl__
 #define __com_sun_star_script_XInvocation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XIntrospectionAccess_idl__
 #include <com/sun/star/beans/XIntrospectionAccess.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_script_CannotConvertException_idl__
 #include <com/sun/star/script/CannotConvertException.idl>
-#endif
 
-#ifndef __com_sun_star_reflection_InvocationTargetException_idl__
 #include <com/sun/star/reflection/InvocationTargetException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
 #include <com/sun/star/beans/UnknownPropertyException.idl>
-#endif
 
 
 //=============================================================================

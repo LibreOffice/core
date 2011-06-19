@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ui_dialogs_XFilePicker2_idl__
 #define __com_sun_star_ui_dialogs_XFilePicker2_idl__
 
-#ifndef __com_sun_star_ui_dialogs_XFilePicker_idl__
 #include <com/sun/star/ui/dialogs/XFilePicker.idl>
-#endif
 
 //=============================================================================
 
@@ -53,11 +51,11 @@ interface XFilePicker2 : ::com::sun::star::ui::dialogs::XFilePicker
         @attention
         <p>
         Instead to the method getFiles() of base interface XFilePicker the new method return
-        full qualified URL's for every selected file.
+        full qualified URLs for every selected file.
         </p>
 
         @returns
-        <p>A list of all selected file as complete URL's.</p>
+        <p>A list of all selected file as complete URLs.</p>
         <br/>
 
         <p><strong>Notes for the implementation of a FileSave dialog:</strong>If there exists

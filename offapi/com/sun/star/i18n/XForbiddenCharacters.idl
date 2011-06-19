@@ -28,13 +28,8 @@
 #define __com_sun_star_i18n_XForbiddenCharacters_idl__
 
 #include <com/sun/star/i18n/ForbiddenCharacters.idl>
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 
 //============================================================================

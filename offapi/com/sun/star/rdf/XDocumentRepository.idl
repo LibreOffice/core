@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_rdf_XDocumentRepository_idl__
 #define __com_sun_star_rdf_XDocumentRepository_idl__
 
-#ifndef __com_sun_star_beans_Pair_idl__
 #include <com/sun/star/beans/Pair.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XMetadatable_idl__
 #include <com/sun/star/rdf/XMetadatable.idl>
-#endif
-
-#ifndef __com_sun_star_rdf_XRepository_idl__
 #include <com/sun/star/rdf/XRepository.idl>
-#endif
 
 
 //=============================================================================

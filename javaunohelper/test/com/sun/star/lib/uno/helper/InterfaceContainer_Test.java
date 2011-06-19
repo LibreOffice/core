@@ -983,7 +983,7 @@ public class InterfaceContainer_Test
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
         if ( ! bOk )
-            System.out.println("Test finished.\nErrors occured!!!");
+            System.out.println("Test finished.\nErrors occurred!!!");
         else
             System.out.println("Test finished. \nNo errors.");
 

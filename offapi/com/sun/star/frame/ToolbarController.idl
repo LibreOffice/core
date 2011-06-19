@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_frame_ToolbarController_idl__
 #define __com_sun_star_frame_ToolbarController_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_util_XUpdatable_idl__
 #include <com/sun/star/util/XUpdatable.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStatusListener_idl__
 #include <com/sun/star/frame/XStatusListener.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XToolbarController_idl__
 #include <com/sun/star/frame/XToolbarController.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XSubToolbarController_idl__
 #include <com/sun/star/frame/XSubToolbarController.idl>
-#endif
 
 //=============================================================================
 
@@ -105,7 +91,7 @@ service ToolbarController
 
         <p>
         A toolbar controller instance is ready for use after this call has been made
-        the first time. The toolbar implementation guarentees that the controller's
+        the first time. The toolbar implementation guarantees that the controller's
         item window has been added to the toolbar and its reference is held by it.
         </p>
     */
@@ -117,7 +103,7 @@ service ToolbarController
 
         <p>
         Mostly used by a toolbar implementation to forward information to and request
-        services from a toolbar controller component. This interface must be useable
+        services from a toolbar controller component. This interface must be usable
         after <member scope="com::sun::star::lang">XInitialitation::initialize</member>
         has been called.  The behavior of the interface is undefined if the controller
         component hasn't been initialized.

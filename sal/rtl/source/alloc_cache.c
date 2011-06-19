@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,11 +41,6 @@
 #include <stdio.h>
 #endif
 
-#ifdef OS2
-#undef OSL_TRACE
-#define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
-#endif
-
 /* ================================================================= *
  *
  * cache internals.
@@ -59,7 +55,7 @@ struct rtl_cache_list_st
     rtl_memory_lock_type m_lock;
     rtl_cache_type       m_cache_head;
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
     pthread_t            m_update_thread;
     pthread_cond_t       m_update_cond;
 #elif defined(SAL_W32)
@@ -96,13 +92,6 @@ static rtl_cache_type * gp_cache_slab_cache = 0;
  *  @internal
  */
 static rtl_cache_type * gp_cache_bufctl_cache = 0;
-
-
-/** rtl_cache_init()
- *  @internal
- */
-static int
-rtl_cache_init (void);
 
 
 /* ================================================================= */
@@ -988,6 +977,7 @@ rtl_cache_deactivate (
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
     OSL_PRECOND(active, "rtl_cache_deactivate(): orphaned cache.");
+    (void)active;
 
     /* cleanup magazine layer */
     if (cache->m_magazine_cache != 0)
@@ -1117,6 +1107,8 @@ rtl_cache_deactivate (
  *
  * ================================================================= */
 
+extern void ensureCacheSingleton();
+
 /** rtl_cache_create()
  */
 rtl_cache_type *
@@ -1174,7 +1166,8 @@ try_alloc:
     }
     else if (gp_cache_arena == 0)
     {
-        if (rtl_cache_init())
+        ensureCacheSingleton();
+        if (gp_cache_arena)
         {
             /* try again */
             goto try_alloc;
@@ -1210,10 +1203,9 @@ SAL_CALL rtl_cache_alloc (
     if (cache == 0)
         return (0);
 
+    RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
     if (cache->m_cpu_curr != 0)
     {
-        RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-
         for (;;)
         {
             /* take object from magazine layer */
@@ -1259,9 +1251,8 @@ SAL_CALL rtl_cache_alloc (
             /* no full magazine: fall through to slab layer */
             break;
         }
-
-        RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
     }
+    RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
     /* alloc buffer from slab layer */
     obj = rtl_cache_slab_alloc (cache);
@@ -1380,7 +1371,7 @@ rtl_cache_wsupdate_fini (void);
 
 /* ================================================================= */
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 
 #include <sys/time.h>
 
@@ -1546,7 +1537,7 @@ rtl_cache_wsupdate (
 /** rtl_cache_wsupdate_all()
  *
  */
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
 static void *
 #elif defined(SAL_W32)
 static DWORD WINAPI
@@ -1583,8 +1574,8 @@ rtl_cache_wsupdate_all (void * arg)
  *
  * ================================================================= */
 
-static void
-rtl_cache_once_init (void)
+void
+rtl_cache_init (void)
 {
     {
         /* list of caches */
@@ -1680,35 +1671,10 @@ rtl_cache_once_init (void)
     }
 
     rtl_cache_wsupdate_init();
-}
-
-static int
-rtl_cache_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_cache_once_init);
-    return (gp_cache_arena != 0);
+    OSL_TRACE("rtl_cache_init completed");
 }
 
 /* ================================================================= */
-
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_cache_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
-static void rtl_cache_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_cache_fini)
-static void rtl_cache_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
 
 void
 rtl_cache_fini (void)
@@ -1765,6 +1731,9 @@ rtl_cache_fini (void)
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
+    OSL_TRACE("rtl_cache_fini completed");
 }
 
 /* ================================================================= */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_InteractiveNetworkOffLineException_idl__
 #define __com_sun_star_ucb_InteractiveNetworkOffLineException_idl__
 
-#ifndef __com_sun_star_ucb_InteractiveNetworkException_idl__
 #include <com/sun/star/ucb/InteractiveNetworkException.idl>
-#endif
 
 
 //=============================================================================
@@ -37,7 +35,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing an off line condition.
+/** A network error specifying an off line condition.
 */
 published exception InteractiveNetworkOffLineException: com::sun::star::ucb::InteractiveNetworkException
 {

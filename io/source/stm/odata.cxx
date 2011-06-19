@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 // streams
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -807,16 +808,13 @@ void ODataOutputStream::writeUTF(const OUString& Value)
             writeByte(sal_Int8(0xE0 | ((c >> 12) & 0x0F)));
             writeByte(sal_Int8(0x80 | ((c >>  6) & 0x3F)));
             writeByte(sal_Int8(0x80 | ((c >>  0) & 0x3F)));
-            //written += 2;
         }
         else
         {
             writeByte(sal_Int8(0xC0 | ((c >>  6) & 0x1F)));
             writeByte(sal_Int8(0x80 | ((c >>  0) & 0x3F)));
-            //written += 1;
         }
     }
-    //written += strlen + 2;
 }
 
 // XActiveDataSource
@@ -950,7 +948,7 @@ struct hashObjectContainer_Impl
     }
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     Reference< XInterface >,
     sal_Int32,
@@ -1662,3 +1660,5 @@ Sequence<OUString> OObjectInputStream_getSupportedServiceNames(void)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

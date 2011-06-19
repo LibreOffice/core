@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_form_binding_ValueBinding_idl__
 #define __com_sun_star_form_binding_ValueBinding_idl__
 
-#ifndef __com_sun_star_util_XValueBinding_idl__
 #include <com/sun/star/form/binding/XValueBinding.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
 
 //=============================================================================
 
@@ -112,7 +104,7 @@ service ValueBinding
         the <type>ValueBinding</type> for whatever reasons (e.g. because the data model
         which the binding reflected died). For this reason, a <type>ValueBinding</type>
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoletion to other interested parties, such as <type>XBindableValue</type>s.</p>
+        obsoleteness to other interested parties, such as <type>XBindableValue</type>s.</p>
     */
     interface com::sun::star::lang::XComponent;
 };

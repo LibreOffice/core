@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_presentation_Presentation2_idl__
 #define __com_sun_star_presentation_Presentation2_idl__
 
-#ifndef __com_sun_star_presentation_Presentation_idl__
 #include <com/sun/star/presentation/Presentation.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XPresentation2_idl__
 #include <com/sun/star/presentation/XPresentation2.idl>
-#endif
 
 //=============================================================================
 

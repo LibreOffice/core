@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_text_NumberingLevel_idl__
 #define __com_sun_star_text_NumberingLevel_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XBitmap_idl__
 #include <com/sun/star/awt/XBitmap.idl>
-#endif
 
 //=============================================================================
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@
 #include <stdio.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace ModuleA;
@@ -73,6 +73,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 
 //==================================================================================================
@@ -105,23 +109,23 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     Reference< XHierarchicalNameAccess > xHNameAccess( xRefl, UNO_QUERY );
     TEST_ENSHURE(xHNameAccess.is(), "### cannot get XHierarchicalNameAccess!" );
 
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleA.StructA"))->getName() == OUString::createFromAscii("ModuleA.StructA"), "test_RegCoreReflection(): error 2b");
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleA.ExceptionB"))->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 2c");
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleA.ModuleB.EnumA")).is(), "test_RegCoreReflection(): error 2e");
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA")))->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA")), "test_RegCoreReflection(): error 2b");
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ExceptionB")))->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 2c");
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ModuleB.EnumA"))).is(), "test_RegCoreReflection(): error 2e");
     // const
 
-    TEST_ENSHURE(*(const sal_Bool *)xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstBoolean")).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
-    TEST_ENSHURE(*(const sal_Int8 *)xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstByte")).getValue() == aConstByte, "test_RegCoreReflection(): error 4e");
-    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstShort")) == aConstShort, "test_RegCoreReflection(): error 4g");
-    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstUShort")) == aConstUShort, "test_RegCoreReflection(): error 4i");
-    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstLong")) == aConstLong, "test_RegCoreReflection(): error 4k");
-    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstULong")) == aConstULong, "test_RegCoreReflection(): error 4m");
-//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstFloat")) == aConstFloat, "test_RegCoreReflection(): error 4o");
-//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString::createFromAscii("ModuleC.aConstDouble")) == aConstDouble, "test_RegCoreReflection(): error 4q");
+    TEST_ENSHURE(*(const sal_Bool *)xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstBoolean"))).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
+    TEST_ENSHURE(*(const sal_Int8 *)xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstByte"))).getValue() == aConstByte, "test_RegCoreReflection(): error 4e");
+    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstShort"))) == aConstShort, "test_RegCoreReflection(): error 4g");
+    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstUShort"))) == aConstUShort, "test_RegCoreReflection(): error 4i");
+    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstLong"))) == aConstLong, "test_RegCoreReflection(): error 4k");
+    TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstULong"))) == aConstULong, "test_RegCoreReflection(): error 4m");
+//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstFloat"))) == aConstFloat, "test_RegCoreReflection(): error 4o");
+//      TEST_ENSHURE(xHNameAccess->getByHierarchicalName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.aConstDouble"))) == aConstDouble, "test_RegCoreReflection(): error 4q");
 
     // Enums
 
-    xClass = xRefl->forName(OUString::createFromAscii("ModuleA.ModuleB.EnumA"));
+    xClass = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ModuleB.EnumA")));
 
     TEST_ENSHURE(xClass.is(), "test_RegCoreReflection(): error 5");
 
@@ -140,9 +144,9 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     // Interface
 
-    Reference< XIdlClass > xA = xRefl->forName( OUString::createFromAscii("ModuleC.XInterfaceB") );
+    Reference< XIdlClass > xA = xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceB")) );
 
-    xClass = xRefl->forName(OUString::createFromAscii("ModuleC.XInterfaceB"));
+    xClass = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceB")));
 
     TEST_ENSHURE(xClass == xA, "test_RegCoreReflection(): error 7");
     TEST_ENSHURE(xClass.is(), "test_RegCoreReflection(): error 7a");
@@ -158,10 +162,10 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     typelib_typedescription_release( pTD );
 
     TEST_ENSHURE(xClass->getSuperclasses().getLength() == 1, "test_RegCoreReflection(): error 9");
-    TEST_ENSHURE(xClass->getSuperclasses().getArray()[0]->getName() == OUString::createFromAscii("ModuleC.XInterfaceA"), "test_RegCoreReflection(): error 10");
+    TEST_ENSHURE(xClass->getSuperclasses().getArray()[0]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")), "test_RegCoreReflection(): error 10");
     TEST_ENSHURE(xClass->getMethods().getLength() == 7, "test_RegCoreReflection(): error 11");
     TEST_ENSHURE(xA->getMethods().getLength() == 7, "test_RegCoreReflection(): error 11a");
-    TEST_ENSHURE(xClass->getMethods().getArray()[3]->getName() == OUString::createFromAscii("methodA"), "test_RegCoreReflection(): 12");
+    TEST_ENSHURE(xClass->getMethods().getArray()[3]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("methodA")), "test_RegCoreReflection(): 12");
     TEST_ENSHURE(xClass->getMethods().getArray()[3]->getReturnType()->getTypeClass() == TypeClass_VOID, "test_RegCoreReflection(): error 13");
     TEST_ENSHURE(xClass->getMethods().getArray()[3]->getParameterTypes().getLength() == 0, "test_RegCoreReflection(): error 14");
     TEST_ENSHURE(xClass->getMethods().getArray()[3]->getExceptionTypes().getLength() == 0, "test_RegCoreReflection(): error 15");
@@ -174,44 +178,44 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     TEST_ENSHURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aType == xRefl->forName( OUString( RTL_CONSTASCII_USTRINGPARAM("short") ) ), "test_RegCoreReflection(): error 18b");
     TEST_ENSHURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aMode == ParamMode_IN, "test_RegCoreReflection(): error 18c");
     TEST_ENSHURE(xClass->getMethods().getArray()[4]->getExceptionTypes().getLength() == 0, "test_RegCoreReflection(): error 19");
-    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getName() == OUString::createFromAscii("methodC"), "test_RegCoreReflection(): error 20");
+    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("methodC")), "test_RegCoreReflection(): error 20");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getMode() == MethodMode_TWOWAY, "test_RegCoreReflection(): error 20a");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 21");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getReturnType()->getComponentType()->getTypeClass() == TypeClass_STRUCT, "test_RegCoreReflection(): error 22");
-    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getReturnType()->getComponentType()->getName() == OUString::createFromAscii("ModuleA.StructB"), "test_RegCoreReflection(): error 23");
+    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getReturnType()->getComponentType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructB")), "test_RegCoreReflection(): error 23");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getLength() == 2, "test_RegCoreReflection(): error 24");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[0]->getTypeClass() == TypeClass_STRUCT, "test_RegCoreReflection(): error 25");
-    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[0]->getName() == OUString::createFromAscii("ModuleA.StructC"), "test_RegCoreReflection(): error 26");
+    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[0]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")), "test_RegCoreReflection(): error 26");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[1]->getTypeClass() == TypeClass_STRUCT, "test_RegCoreReflection(): error 27");
-    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[1]->getName() == OUString::createFromAscii("ModuleA.StructA"), "test_RegCoreReflection(): error 28");
+    TEST_ENSHURE(xClass->getMethods().getArray()[5]->getParameterTypes().getArray()[1]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA")), "test_RegCoreReflection(): error 28");
     TEST_ENSHURE(xClass->getMethods().getArray()[5]->getExceptionTypes().getLength() == 0, "test_RegCoreReflection(): error 29");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getName() == OUString::createFromAscii("methodD"), "test_RegCoreReflection(): error 30");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("methodD")), "test_RegCoreReflection(): error 30");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getReturnType()->getTypeClass() == TypeClass_INTERFACE, "test_RegCoreReflection(): error 31");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getReturnType()->getName() == OUString::createFromAscii("ModuleC.XInterfaceA"), "test_RegCoreReflection(): error 32");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getReturnType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")), "test_RegCoreReflection(): error 32");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getParameterTypes().getLength() == 1, "test_RegCoreReflection(): error 33");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getParameterTypes().getArray()[0]->getTypeClass() == TypeClass_ENUM, "test_RegCoreReflection(): error 34");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getParameterTypes().getArray()[0]->getName() == OUString::createFromAscii("ModuleA.ModuleB.EnumA"), "test_RegCoreReflection(): error 35");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getParameterTypes().getArray()[0]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ModuleB.EnumA")), "test_RegCoreReflection(): error 35");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getLength() == 3, "test_RegCoreReflection(): error 36");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[0]->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 37");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[0]->getName() == OUString::createFromAscii("ModuleA.ExceptionA"), "test_RegCoreReflection(): error 38");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[0]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ExceptionA")), "test_RegCoreReflection(): error 38");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[1]->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 38");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[1]->getName() == OUString::createFromAscii("ModuleA.ExceptionB"), "test_RegCoreReflection(): error 39");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[1]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ExceptionB")), "test_RegCoreReflection(): error 39");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 40");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getName() == OUString::createFromAscii("ModuleA.ExceptionC"), "test_RegCoreReflection(): error 41");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.ExceptionC")), "test_RegCoreReflection(): error 41");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getLength() == 3, "test_RegCoreReflection(): error 42");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[0]->getType()->getTypeClass() == TypeClass_BOOLEAN, "test_RegCoreReflection(): error 43");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[0]->getType()->getName() == OUString::createFromAscii("boolean"), "test_RegCoreReflection(): error 43a");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[0]->getType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("boolean")), "test_RegCoreReflection(): error 43a");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[1]->getType()->getTypeClass() == TypeClass_STRUCT, "test_RegCoreReflection(): error 44");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[1]->getType()->getName() == OUString::createFromAscii("ModuleA.StructC"), "test_RegCoreReflection(): error 45");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[1]->getType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")), "test_RegCoreReflection(): error 45");
     TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[2]->getType()->getTypeClass() == TypeClass_INTERFACE, "test_RegCoreReflection(): error 46");
-    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[2]->getType()->getName() == OUString::createFromAscii("ModuleA.XInterface1"), "test_RegCoreReflection(): error 47");
+    TEST_ENSHURE(xClass->getMethods().getArray()[6]->getExceptionTypes().getArray()[2]->getFields().getArray()[2]->getType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.XInterface1")), "test_RegCoreReflection(): error 47");
 
     // SequenceReflections
 
-    TEST_ENSHURE(xRefl->forName( OUString::createFromAscii("[]ModuleA.StructA") )->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
-    TEST_ENSHURE(xRefl->forName( OUString::createFromAscii("[]ModuleA.StructA") )->getComponentType().is(), "test_RegCoreReflection(): error 49");
-    TEST_ENSHURE(xRefl->forName( OUString::createFromAscii("[][]ModuleA.StructA") )->getComponentType()->getComponentType()->getName() == OUString::createFromAscii("ModuleA.StructA"), "test_RegCoreReflection(): error 50");
-    TEST_ENSHURE(xRefl->forName( OUString::createFromAscii("[]com.sun.star.uno.XInterface") ) == xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC") ))->getField(OUString::createFromAscii("aInterfaceSeq"))->getType(), "test_RegCoreReflection(): error 51");
+    TEST_ENSHURE(xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[]ModuleA.StructA")) )->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
+    TEST_ENSHURE(xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[]ModuleA.StructA")) )->getComponentType().is(), "test_RegCoreReflection(): error 49");
+    TEST_ENSHURE(xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[][]ModuleA.StructA")) )->getComponentType()->getComponentType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA")), "test_RegCoreReflection(): error 50");
+    TEST_ENSHURE(xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[]com.sun.star.uno.XInterface")) ) == xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC") ))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aInterfaceSeq")))->getType(), "test_RegCoreReflection(): error 51");
 
     StructC aStructC;
     aStructC.aLong = aConstLong;
@@ -222,7 +226,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     Any aAny;
 
-    xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aInterfaceSeq"))->getType()->createObject(aAny);
+    xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aInterfaceSeq")))->getType()->createObject(aAny);
 
     TEST_ENSHURE(aAny.getValueType() == ::getCppuType( (const Sequence<Reference< XInterface > > *)0 ), "test_RegCoreReflection(): error 51a");
 
@@ -233,33 +237,33 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     TEST_ENSHURE(*(sal_Int32*)xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA") ))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->get(
         Any(&aStructC, ::getCppuType( (const StructC *)0 ))).getValue() == aConstLong, "test_RegCoreReflection(): error 52");
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleA.StructA"))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->getAccessMode() == FieldAccessMode_READWRITE, "test_RegCoreReflection(): error 52a");
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructA")))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->getAccessMode() == FieldAccessMode_READWRITE, "test_RegCoreReflection(): error 52a");
     Reference< XIdlField2 > rField ( xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC") ))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") )) , UNO_QUERY );
     rField->set(aStructAny, aAny);
-    TEST_ENSHURE(*(sal_Int32*)xRefl->forName(OUString::createFromAscii("ModuleA.StructB"))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->get(aStructAny).getValue() == *(sal_Int32*)aAny.getValue(), "test_RegCoreReflection(): error 53");
+    TEST_ENSHURE(*(sal_Int32*)xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructB")))->getField(OUString( RTL_CONSTASCII_USTRINGPARAM("aLong") ))->get(aStructAny).getValue() == *(sal_Int32*)aAny.getValue(), "test_RegCoreReflection(): error 53");
 
-    xRefl->forName( OUString::createFromAscii("[]ModuleA.StructA") )->createObject(aAny);
+    xRefl->forName( OUString(RTL_CONSTASCII_USTRINGPARAM("[]ModuleA.StructA")) )->createObject(aAny);
 
     TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]ModuleA.StructA")), "test_RegCoreReflection(): error 54");
-    xRefl->forName(OUString::createFromAscii("[][]ModuleA.StructA"))->createObject(aAny);
+    xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("[][]ModuleA.StructA")))->createObject(aAny);
 
     TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[][]ModuleA.StructA") ), "test_RegCoreReflection(): error 56");
 
 //      xClass = xRefl->forName(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.XIntroTest") ));
 
 //      TEST_ENSHURE(xClass.is(), "test_RegCoreReflection(): error 58");
-//      TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 59");
-//      TEST_ENSHURE(xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->getComponentType()->getName() == OUString::createFromAscii("string"), "test_RegCoreReflection(): error 60");
+//      TEST_ENSHURE(xClass->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings")))->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 59");
+//      TEST_ENSHURE(xClass->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings")))->getReturnType()->getComponentType()->getName() == OUString(RTL_CONSTASCII_USTRINGPARAM("string")), "test_RegCoreReflection(): error 60");
 
-//      xClass->getMethod(OUString::createFromAscii("getStrings"))->getReturnType()->createObject(aAny);
+//      xClass->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings")))->getReturnType()->createObject(aAny);
 //      TEST_ENSHURE(aAny.getValueTypeName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("[]string") ),  "test_RegCoreReflection(): error 61");
 
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("[][][]unsigned long"))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("[][][]unsigned long")))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
 
     try
     {
         fprintf( stderr, "%1\n" );
-        Any bla = xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->get(Any());
+        Any bla = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString")))->get(Any());
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 63");
         return sal_False;
     }
@@ -273,9 +277,9 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any blup;
         blup <<= aStructC;
         Any gulp;
-        rField = Reference< XIdlField2 > ( xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString")) , UNO_QUERY);
+        rField = Reference< XIdlField2 > ( xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString"))) , UNO_QUERY);
         rField->set( blup, gulp);
-//          xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
+//          xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString")))->set(blup, gulp);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
     }
@@ -291,8 +295,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any blup;
         blup <<= aStructC;
         rField = Reference< XIdlField2 > (
-            xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString")) , UNO_QUERY);
-        xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
+            xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString"))) , UNO_QUERY);
+        xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString")))->set(blup, gulp);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 65");
         return sal_False;
     }
@@ -301,10 +305,10 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     }
 
     Any gulp;
-    gulp <<= OUString(OUString::createFromAscii("Test"));
+    gulp <<= OUString(OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
     Any blup;
     blup <<= aStructC;
-    xRefl->forName(OUString::createFromAscii("ModuleA.StructC"))->getField(OUString::createFromAscii("aString"))->set(blup, gulp);
+    xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleA.StructC")))->getField(OUString(RTL_CONSTASCII_USTRINGPARAM("aString")))->set(blup, gulp);
 
     Reference< XInterfaceA > xAI = new OInterfaceA();
 
@@ -315,7 +319,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString::createFromAscii("ModuleC.XInterfaceA"))->getMethod(OUString::createFromAscii("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")))->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("methodC")))->invoke(a, params);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 66");
         return sal_False;
     }
@@ -333,7 +337,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString::createFromAscii("ModuleC.XInterfaceA"))->getMethod(OUString::createFromAscii("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")))->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("methodC")))->invoke(a, params);
     }
     try
     {
@@ -344,7 +348,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString::createFromAscii("ModuleC.XInterfaceA"))->getMethod(OUString::createFromAscii("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")))->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("methodC")))->invoke(a, params);
         TEST_ENSHURE(sal_False, "test_RegCoreReflection(): error 67");
         return sal_False;
     }
@@ -359,7 +363,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     Any a;
     a <<= xAI;
-    TEST_ENSHURE(xRefl->forName(OUString::createFromAscii("ModuleC.XInterfaceA"))->getMethod(OUString::createFromAscii("methodC"))->invoke(a, params).getValueType()
+    TEST_ENSHURE(xRefl->forName(OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleC.XInterfaceA")))->getMethod(OUString(RTL_CONSTASCII_USTRINGPARAM("methodC")))->invoke(a, params).getValueType()
         == ::getCppuType( (const Sequence<StructB> *)0 ), "test_RegCoreReflection(): error 68");
 
     return sal_True;
@@ -399,14 +403,16 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occured!" );
+        OSL_FAIL( "### exception occurred!" );
         OString aMsg(
             OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "### exception occurred: " );
+        OSL_TRACE( "%s", aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 
     printf( "testcorefl %s !\n", (bSucc ? "succeeded" : "failed") );
     return (bSucc ? 0 : -1);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

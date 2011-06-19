@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_XTextTableCursor_idl__
 #define __com_sun_star_text_XTextTableCursor_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -38,7 +36,7 @@ module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-/** The TextTableCursor provide methods to navigate throught the table structure, to merge and split cells
+/** The TextTableCursor provide methods to navigate through the table structure, to merge and split cells
 
     @see com::sun::star::text::TextTable
     @see com::sun::star::text::TextTableCursor
@@ -52,7 +50,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     /** @returns
                 the name of the cell range that is selected by this cursor.
                 <p>The name is the cell name of the top left table cell of the range
-                 contatenated by ':' with the table cell name of the bottom left table cell of the cell range.
+                 concatenated by ":" with the table cell name of the bottom left table cell of the cell range.
                 If the range consists of one table cell only then the name of that table cell is returned.
              </p>
         @see com::sun:star::text::CellRange
@@ -67,7 +65,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             specifies the name of the cell to go to.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
 
         @see com::sun::star::text::Cell
      */
@@ -82,7 +80,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goLeft( [in] short nCount,
              [in] boolean bExpand );
@@ -95,7 +93,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goRight( [in] short nCount,
              [in] boolean bExpand );
@@ -108,7 +106,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goUp( [in] short nCount,
              [in] boolean bExpand );
@@ -121,7 +119,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             the number of cells to move.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     boolean goDown( [in] short nCount,
              [in] boolean bExpand );
@@ -131,7 +129,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     /** moves the cursor to the top left cell of the table.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     void gotoStart( [in] boolean bExpand );
 
@@ -140,7 +138,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
     /** moves the cursor to the bottom right cell of the table.
 
         @param bExpand
-            determines wether the selection is to be expanded.
+            determines whether the selection is to be expanded.
      */
     void gotoEnd( [in] boolean bExpand );
 

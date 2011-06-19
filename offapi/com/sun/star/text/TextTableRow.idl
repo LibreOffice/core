@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_text_TextTableRow_idl__
 #define __com_sun_star_text_TextTableRow_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-
-#ifndef __com_sun_star_text_TableColumnSeparator_idl__
 #include <com/sun/star/text/TableColumnSeparator.idl>
-#endif
 
 
 //=============================================================================

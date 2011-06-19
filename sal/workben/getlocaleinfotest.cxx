@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,8 @@
 
 int _cdecl main( int argc, char * argv[] )
 {
-    rtl::OUString lang = rtl::OUString::createFromAscii( "de" );
-    rtl::OUString country = rtl::OUString::createFromAscii( "DE" );
+    rtl::OUString lang(RTL_CONSTASCII_USTRINGPARAM("de"));
+    rtl::OUString country(RTL_CONSTASCII_USTRINGPARAM("DE"));
     rtl_TextEncoding rtlTextEnc;
 
     rtl_Locale* rtlLocale =
@@ -48,3 +49,4 @@ int _cdecl main( int argc, char * argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_DataPilotTable_idl__
 #define __com_sun_star_sheet_DataPilotTable_idl__
 
-#ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
 #include <com/sun/star/sheet/XDataPilotDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotTable_idl__
 #include <com/sun/star/sheet/XDataPilotTable.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
 
 //=============================================================================
 

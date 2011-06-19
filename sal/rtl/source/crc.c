@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_CRC_C_ "$Revision: 1.3 $"
+#define _RTL_CRC_C_
 
 #include <sal/types.h>
 #include <rtl/crc.h>
@@ -162,3 +163,4 @@ sal_uInt32 SAL_CALL rtl_crc32 (
     return Crc;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

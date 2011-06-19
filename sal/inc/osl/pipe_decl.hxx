@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -133,8 +134,8 @@ public:
 
 
     /** Delivers a constant decribing the last error for the pipe system.
-        @return ENONE if no error occured, invalid_PipeError if
-        an unknown (unmapped) error occured, otherwise an enum describing the
+        @return ENONE if no error occurred, invalid_PipeError if
+        an unknown (unmapped) error occurred, otherwise an enum describing the
         error.
     */
     inline oslPipeError SAL_CALL getError() const;
@@ -233,3 +234,5 @@ public:
 
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

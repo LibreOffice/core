@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,8 +62,8 @@ extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile
 //#################################################
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
-const rtl::OUString ENV_COMSPEC = rtl::OUString::createFromAscii("COMSPEC");
-const rtl::OUString QUOTE = rtl::OUString::createFromAscii("\"");
+const rtl::OUString ENV_COMSPEC (RTL_CONSTASCII_USTRINGPARAM("COMSPEC"));
+const rtl::OUString QUOTE(RTL_CONSTASCII_USTRINGPARAM("\""));
 
 namespace /* private */
 {
@@ -314,7 +315,7 @@ namespace /* private */
             std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(path.getLength() + 1);
             //GetShortPathNameW only works if the file can be found!
             const DWORD len = GetShortPathNameW(
-                path.getStr(), &vec[0], path.getLength() + 1);
+                reinterpret_cast<LPCWSTR>(path.getStr()), reinterpret_cast<LPWSTR>(&vec[0]), path.getLength() + 1);
 
             if (!len && GetLastError() == ERROR_FILE_NOT_FOUND
                 && extension.getLength())
@@ -323,7 +324,7 @@ namespace /* private */
                 std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec2(
                     extPath.getLength() + 1);
                 const DWORD len2 = GetShortPathNameW(
-                    extPath.getStr(), &vec2[0], extPath.getLength() + 1);
+                    reinterpret_cast<LPCWSTR>(extPath.getStr()), reinterpret_cast<LPWSTR>(&vec2[0]), extPath.getLength() + 1);
                 ret = rtl::OUString(&vec2[0], len2);
             }
             else
@@ -626,7 +627,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         }
     }
 
-    /* if an error occured we have to close the server side pipe ends too */
+    /* if an error occurred we have to close the server side pipe ends too */
 
     if (hInputWrite)
         CloseHandle(hInputWrite);
@@ -639,3 +640,5 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     return osl_Process_E_Unknown;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

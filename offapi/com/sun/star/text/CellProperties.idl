@@ -27,29 +27,13 @@
 #ifndef __com_sun_star_text_CellProperties_idl__
 #define __com_sun_star_text_CellProperties_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextSection_idl__
 #include <com/sun/star/text/XTextSection.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#endif
 
 
 //=============================================================================
@@ -98,7 +82,7 @@ published service CellProperties
     [property] string BackGraphicFilter;
 
     //-------------------------------------------------------------------------
-    /** determins the position of the background graphic.
+    /** determines the position of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
@@ -108,7 +92,7 @@ published service CellProperties
     [property] long NumberFormat;
 
     //-------------------------------------------------------------------------
-    /** determins whether the background is transparent.
+    /** determines whether the background is transparent.
      */
     [property] boolean BackTransparent;
 
@@ -158,7 +142,7 @@ published service CellProperties
     [readonly, property]com::sun::star::text::XTextSection TextSection;
 
     //-------------------------------------------------------------------------
-    /** determins whether the cell is write protected or not.
+    /** determines whether the cell is write protected or not.
      */
     [property] boolean IsProtected;
 

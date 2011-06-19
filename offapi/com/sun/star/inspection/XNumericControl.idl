@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_inspection_XNumericControl_idl__
 #define __com_sun_star_inspection_XNumericControl_idl__
 
-#ifndef __com_sun_star_inspection_XPropertyControl_idl__
 #include <com/sun/star/inspection/XPropertyControl.idl>
-#endif
-#ifndef __com_sun_star_beans_Optional_idl__
 #include <com/sun/star/beans/Optional.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
@@ -66,7 +60,7 @@ published interface XNumericControl : XPropertyControl
 
         <p>Only a certain set of <type scope="com::sun::star::util">MeasureUnit</type> values is
         supported. In particular, every value which denotes a fraction of another
-        unit (like 100th millimiters) cannot be used as DisplayUnit.</p>
+        unit (like 100th millimeters) cannot be used as DisplayUnit.</p>
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the caller attempts to set an unsupported <type scope="com::sun::star::util">MeasureUnit</type>
@@ -77,7 +71,7 @@ published interface XNumericControl : XPropertyControl
     };
 
     /** describes a <type scope="com::sun::star::util">MeasureUnit</type> to be
-        applied for transfering values.
+        applied for transferring values.
 
         <p>The core measurement unit for a property value might differ from the unit which
         is used by the control to display it. For instance, your property value might require

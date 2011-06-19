@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,10 +50,6 @@ static sal_Unicode NULL_WSTRING[1] = { 0 };
 const sal_uInt32    magic = 0x12345678;
 const sal_uInt16 minorVersion = 0x0000;
 const sal_uInt16 majorVersion = 0x0001;
-
-#if defined ( GCC ) && ( defined ( SCO ) )
-ORealDynamicLoader* ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
-#endif
 
 /**************************************************************************
 
@@ -1772,3 +1769,5 @@ RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ static typelib_TypeClass cpp2uno_call(
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)(pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -181,7 +182,7 @@ static typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )
@@ -255,7 +256,7 @@ static typelib_TypeClass cpp_mediate(
                  "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii("illegal vtable index!"), (XInterface *)pCppI );
+        throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )), (XInterface *)pCppI );
     }
 
     // determine called method
@@ -350,7 +351,7 @@ static typelib_TypeClass cpp_mediate(
     }
     default:
     {
-        throw RuntimeException(rtl::OUString::createFromAscii("no member description found!"), (XInterface *)pCppI );
+        throw RuntimeException(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )), (XInterface *)pCppI );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;
     }
@@ -562,3 +563,5 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
       {
         //TODO: IZ 25819  flush the instruction cache (there probably is OS support for this)
     }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

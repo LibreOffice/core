@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_CachedContentResultSet_idl__
 #define __com_sun_star_ucb_CachedContentResultSet_idl__
 
-#ifndef __com_sun_star_ucb_ContentResultSet_idl__
 #include <com/sun/star/ucb/ContentResultSet.idl>
-#endif
 
 //=============================================================================
 
@@ -52,7 +50,7 @@ published service CachedContentResultSet
     service com::sun::star::ucb::ContentResultSet;
 
     //-------------------------------------------------------------------------
-    /** contains the number of result set rows that should be fethched from
+    /** contains the number of result set rows that should be fetched from
     an underlying database.
 
     <p>The default fetch size is implementation specific.

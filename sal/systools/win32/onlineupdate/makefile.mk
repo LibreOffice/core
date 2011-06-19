@@ -66,11 +66,7 @@ DEF1DEPN=\
 
 SHL1OBJS=$(SLOFILES)
 
-#No default libraries
-#STDSHL=
-
 SHL1STDLIBS=\
-        $(UNICOWSLIB)\
         $(KERNEL32LIB)\
         $(LIBCMT)\
         $(WININETLIB)

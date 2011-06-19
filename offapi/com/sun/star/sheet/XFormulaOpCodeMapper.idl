@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
 #define __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
 
-#ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -52,7 +47,7 @@ published interface XFormulaOpCodeMapper
 
         <p>Needed to be able to identify which of the function names map to an
         Add-In implementation where this OpCode is used in the returned
-        mapping and the programmatical name is available as additional
+        mapping and the programmatic name is available as additional
         information.</p>
      */
     [attribute, readonly] long OpCodeExternal;
@@ -102,7 +97,7 @@ published interface XFormulaOpCodeMapper
             <p>Additional information in <member>FormulaToken::Data</member>
             is returned for:
             <ul>
-            <li>Add-in names: the programmatical name. The OpCode value used
+            <li>Add-in names: the programmatic name. The OpCode value used
             for add-ins can be queried with the <member>OpCodeExternal</member>
             getter method.</li>
             </ul></p>

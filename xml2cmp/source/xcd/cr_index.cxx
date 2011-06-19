@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -158,7 +159,7 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
     }
 
     strcpy( o_sOutputHtml, sOutputDirectory.str() );        // STRCPY SAFE HERE
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     strcat(o_sOutputHtml, "\\");                            // STRCAT SAFE HERE
 #elif defined(UNX)
     strcat(o_sOutputHtml, "/");                             // STRCAT SAFE HERE
@@ -240,7 +241,7 @@ Index::WriteHeap( std::ostream &    o_rOut,
 
 
 
-/** Übersicht der Struktur
+/** Structure overview
 
 MODULEDESCRIPTION
 {
@@ -273,3 +274,4 @@ MODULEDESCRIPTION
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

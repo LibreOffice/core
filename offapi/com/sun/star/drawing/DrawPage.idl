@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_drawing_DrawPage_idl__
 #define __com_sun_star_drawing_DrawPage_idl__
 
-#ifndef __com_sun_star_drawing_GenericDrawPage_idl__
 #include <com/sun/star/drawing/GenericDrawPage.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XMasterPageTarget_idl__
 #include <com/sun/star/drawing/XMasterPageTarget.idl>
-#endif
-
-#ifndef __com_sun_star_form_XFormsSupplier_idl__
 #include <com/sun/star/form/XFormsSupplier.idl>
-#endif
 
 
 //=============================================================================

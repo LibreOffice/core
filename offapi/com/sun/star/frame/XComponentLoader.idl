@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_frame_XComponentLoader_idl__
 #define __com_sun_star_frame_XComponentLoader_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 
 //=============================================================================
@@ -145,7 +131,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     Should be used for viewable components only. It is not allowed to dispose
                     it after use directly, because the frame containing the component is its owner.
                     Because the frame object is not accessible through the interface too,
-                    only an interacting user can do this by closing the frames' window.
+                    only an interacting user can do this by closing the frame's window.
                 </li>
                 <li>
                     <type>XController</type> for richer components<br/>

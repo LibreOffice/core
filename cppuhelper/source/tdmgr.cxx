@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -523,8 +524,7 @@ inline static typelib_TypeDescription * createCTD(
             0, 0 );
 
         // cleanup
-        if (pRefType)
-            typelib_typedescription_release( pRefType );
+        typelib_typedescription_release( pRefType );
     }
     return pRet;
 }
@@ -782,3 +782,4 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
 
 } // end namespace cppu
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

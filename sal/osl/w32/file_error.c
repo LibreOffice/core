@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,14 @@
 
 #define UNICODE
 #define _UNICODE
-#define _WIN32_WINNT_0x0500
+#define _WIN32_WINNT 0x0500
 #include "systools/win32/uwinapi.h"
 
 #include "file_error.h"
 
 #include "osl/diagnose.h"
 #include "osl/thread.h"
+#include <sal/macros.h>
 
 /* OS error to oslFileError values mapping table */
 struct osl_file_error_entry
@@ -108,7 +110,7 @@ static const struct osl_file_error_entry errtable[] = {
 
 oslFileError oslTranslateFileError (/*DWORD*/ unsigned long dwError)
 {
-    static const int n = sizeof(errtable)/sizeof(errtable[0]);
+    static const int n = SAL_N_ELEMENTS(errtable);
 
     int i;
     for (i = 0; i < n; ++i )
@@ -146,6 +148,8 @@ void _osl_warnFile( const char *message, rtl_uString *ustrFile )
 
         message = szBuffer;
     }
-    OSL_ENSURE( 0, message );
+    OSL_FAIL( message );
 }
 #endif /* OSL_DEBUG_LEVEL */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

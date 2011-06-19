@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_validation_XValidator_idl__
 #define __com_sun_star_form_validation_XValidator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
 
 //=============================================================================
 
@@ -71,7 +66,7 @@ interface XValidator : com::sun::star::uno::XInterface
     @param aValue
         the value which has been recognized as being invalid
     @return
-        a human-readable string, which explains why the given valus is considered invalid.
+        a human-readable string, which explains why the given value is considered invalid.
     */
     string explainInvalid( [in] any Value );
 
@@ -80,7 +75,7 @@ interface XValidator : com::sun::star::uno::XInterface
     <p>Usually, an <type>XValidatable</type> instance will also add itself as validity listener,
     as soon as the validator is introduced to it.</p>
 
-    <p>Implementations which do not support dynamic validity contraints should simply ignore this
+    <p>Implementations which do not support dynamic validity constraints should simply ignore this
     call.</p>
 
     @throws <type scope="com::sun::star::lang">NullPointerException</type>

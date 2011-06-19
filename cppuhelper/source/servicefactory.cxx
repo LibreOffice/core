@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif
@@ -160,7 +161,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif
@@ -659,3 +660,5 @@ Reference< XComponentContext > SAL_CALL bootstrap_InitialComponentContext(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

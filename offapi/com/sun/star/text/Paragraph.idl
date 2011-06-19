@@ -27,49 +27,18 @@
 #ifndef __com_sun_star_text_Paragraph_idl__
 #define __com_sun_star_text_Paragraph_idl__
 
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
 #include <com/sun/star/style/ParagraphPropertiesAsian.idl>
-#endif
-#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
 #include <com/sun/star/style/ParagraphPropertiesComplex.idl>
-#endif
-
-#ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
-#endif
-#ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#endif
-#ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextTable_idl__
 #include <com/sun/star/text/TextTable.idl>
-#endif
 
 
 //=============================================================================

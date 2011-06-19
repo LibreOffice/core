@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_BezierPoint_idl__
 #define __com_sun_star_drawing_BezierPoint_idl__
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
 
 
 //=============================================================================
@@ -39,9 +37,9 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::BezierPoint
-/** This is a point on a bezier curve.
+/** This is a point on a Bezier curve.
 
-    <p>The two control points specify how the bezier curve
+    <p>The two control points specify how the Bezier curve
     goes through the given position.</p>
 
     @deprecated

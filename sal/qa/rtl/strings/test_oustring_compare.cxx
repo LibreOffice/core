@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
@@ -39,14 +41,14 @@ class Compare: public CppUnit::TestFixture
 private:
     void equalsIgnoreAsciiCaseAscii();
 
-    CPPUNIT_TEST_SUITE(Compare);
-    CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-    CPPUNIT_TEST_SUITE_END();
+CPPUNIT_TEST_SUITE(Compare);
+CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
+CPPUNIT_TEST_SUITE_END();
 };
 
 } }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Compare, "alltest");
+CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Compare);
 
 void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
 {
@@ -65,3 +67,5 @@ void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
     CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
                    equalsIgnoreAsciiCaseAscii("abcd"));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

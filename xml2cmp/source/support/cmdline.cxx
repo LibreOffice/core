@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ CommandLine::ParseIndexCommand( int                 argc,
                     argv  );
 
     sIndexFile = sOutputDirectory;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     sIndexFile+= "\\xmlindex.html";
 #elif defined(UNX)
     sIndexFile+= "/xmlindex.html";
@@ -220,3 +221,5 @@ CommandLine::ParseSingleFileCommand( int                argc,
         }
     }   /* end for */
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ xmlXPathObject* CXPathObjectPtr::operator ->()
 {
     return _object;
 }
-CXPathObjectPtr::operator xmlXPathObject*()
+CXPathObjectPtr::operator xmlXPathObject*() const
 {
     return _object;
 }
@@ -91,7 +92,7 @@ xmlXPathContext* CXPathContextPtr::operator ->()
     return _object;
 }
 
-CXPathContextPtr::operator xmlXPathContext*()
+CXPathContextPtr::operator xmlXPathContext*() const
 {
     return _object;
 }
@@ -123,7 +124,7 @@ xmlDoc* CXmlDocPtr::operator ->()
     return _object;
 }
 
-CXmlDocPtr::operator xmlDoc*()
+CXmlDocPtr::operator xmlDoc*() const
 {
     return _object;
 }
@@ -158,7 +159,7 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
     return *this;
 }
 
-CXmlCharPtr::operator xmlChar*()
+CXmlCharPtr::operator xmlChar*() const
 {
     return _object;
 }
@@ -182,3 +183,5 @@ CXmlCharPtr::operator ::rtl::OString()
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

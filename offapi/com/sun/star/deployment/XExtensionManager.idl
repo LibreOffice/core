@@ -218,7 +218,7 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all extensions with the same identifer from all repositories.
+    /** gets all extensions with the same identifier from all repositories.
 
         The extension at the first position in the returned sequence represents
         the extension from the user repository. The next element is from the shared
@@ -238,7 +238,7 @@ interface XExtensionManager
     /** returns a sequence containing all installed extensions.
 
         The members of the returned sequence correspond to an extension with a
-        particular extension identifer. The members are also sequences which
+        particular extension identifier. The members are also sequences which
         contain as many elements as there are repositories. Those are ordered
         according to the priority of the repository. That is, the first member
         is the extension from the user repository, the second is from the shared
@@ -277,7 +277,7 @@ interface XExtensionManager
 
 
     /** synchronizes the extension database with the contents of the extensions
-       folder of shared and bundled extensinos.
+       folder of shared and bundled extensions.
 
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
@@ -286,7 +286,7 @@ interface XExtensionManager
 
        @return
               If true - then at least one extension was removed or added. Otherwise
-              nothing was chaned.
+              nothing was changed.
     */
     boolean synchronize(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,

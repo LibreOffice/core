@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -443,7 +444,7 @@ static void cpp_call(
             pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr->eTypeClass, pParamType,
             (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -507,7 +508,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "unoInterfaceProxyDispatch\n");
 #endif
 
@@ -632,4 +633,5 @@ void unoInterfaceProxyDispatch(
 }
 
 } } }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

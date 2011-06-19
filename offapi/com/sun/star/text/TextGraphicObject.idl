@@ -27,26 +27,12 @@
 #ifndef __com_sun_star_text_TextGraphicObject_idl__
 #define __com_sun_star_text_TextGraphicObject_idl__
 
-#ifndef __com_sun_star_text_BaseFrame_idl__
 #include <com/sun/star/text/BaseFrame.idl>
-#endif
-
-#ifndef __com_sun_star_text_GraphicCrop_idl__
 #include <com/sun/star/text/GraphicCrop.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_PointSequenceSequence_idl__
 #include <com/sun/star/drawing/PointSequenceSequence.idl>
-#endif
-#ifndef __com_sun_star_drawing_ColorMode_idl__
 #include <com/sun/star/drawing/ColorMode.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 
@@ -59,7 +45,7 @@
 published service TextGraphicObject
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
-     graphic objects and embeddedobjects.
+     graphic objects and embedded objects.
      */
     service BaseFrame;
     //-------------------------------------------------------------------------
@@ -148,11 +134,11 @@ published service TextGraphicObject
      */
     [property] short AdjustBlue;
     //-------------------------------------------------------------------------
-    /** determins the gamma value of the graphic.
+    /** determines the gamma value of the graphic.
      */
     [property] double Gamma;
     //-------------------------------------------------------------------------
-    /** determins if the graphic is display in inverted colors.
+    /** determines if the graphic is display in inverted colors.
          It contains percentage values between -100 and +100.
      */
     [property] boolean GraphicIsInverted;

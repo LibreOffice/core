@@ -27,27 +27,20 @@
 #ifndef __com_sun_star_ui_XContextMenuInterceptor_idl__
 #define __com_sun_star_ui_XContextMenuInterceptor_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ui_ContextMenuInterceptorAction_idl__
 #include <com/sun/star/ui/ContextMenuInterceptorAction.idl>
-#endif
-#ifndef __com_sun_star_ui_ContextMenuExecuteEvent_idl__
 #include <com/sun/star/ui/ContextMenuExecuteEvent.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 
-/** This interface enables the object to be registerd as interceptor to
- change context menues or prevent them from being executed.
+/** This interface enables the object to be registered as interceptor to
+ change context menus or prevent them from being executed.
  */
 published interface XContextMenuInterceptor : ::com::sun::star::uno::XInterface
 {
     /** notifies the interceptor about the request to execute a ContextMenu.
      The interceptor has to decide whether the menu should be executed with or without
-     beeing modified or may ignore the call.
+     being modified or may ignore the call.
     */
     ContextMenuInterceptorAction notifyContextMenuExecute([in]ContextMenuExecuteEvent aEvent);
 };

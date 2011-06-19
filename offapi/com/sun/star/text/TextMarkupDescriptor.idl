@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_text_TextMarkupDescriptor_idl__
 #define __com_sun_star_text_TextMarkupDescriptor_idl__
 
-#ifndef __com_sun_star_container_XStringKeyMap_idl__
 #include <com/sun/star/container/XStringKeyMap.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextMarkupType_idl__
 #include <com/sun/star/text/TextMarkupType.idl>
-#endif
 
 
 //=============================================================================

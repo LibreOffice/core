@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,7 @@
  ************************************************************************/
 
 #include <rtl/alloc.h>
-#ifndef __REGISTRY_REFLWRIT_HXX__
 #include <registry/reflwrit.hxx>
-#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
@@ -51,8 +50,8 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
-//using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 static Reference< XHierarchicalNameAccess > xNameAccess;
 
@@ -156,21 +155,6 @@ sal_uInt32 getInheritedMemberCount( Reference< XTypeDescription >& xType )
 
         memberCount += xIFace->getMembers().getLength();
     }
-//  } else
-//  if ( xType->getTypeClass() == TypeClass_Struct || xType->getTypeClass() == TypeClass_Exception )
-//  {
-//      Reference< XCompoundTypeDescription > xComp(xType, UNO_QUERY);
-//
-//      if ( xComp.is() )
-//          return membercount;
-//
-//      Reference< XTypeDescription > xSuperType = xComp->getBaseType();
-//
-//      if ( xSuperType.is() )
-//          memberCount = getInheritedMemberCount( xSuperType );
-//
-//      memberCount += xComp->getMemberNames().getLength();
-//  }
 
     return memberCount;
 }
@@ -533,3 +517,5 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XCloneable.idl>
-
 #include <com/sun/star/awt/grid/XGridColumn.idl>
 #include <com/sun/star/container/XContainer.idl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>

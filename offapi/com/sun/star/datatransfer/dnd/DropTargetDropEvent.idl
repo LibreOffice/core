@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_datatransfer_dnd_DropTargetDropEvent_idl__
 #define __com_sun_star_datatransfer_dnd_DropTargetDropEvent_idl__
 
-#ifndef __com_sun_star_datatransfer_dnd_DropTargetEvent_idl__
 #include <com/sun/star/datatransfer/dnd/DropTargetEvent.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
 
 //=============================================================================
 
@@ -73,13 +68,13 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** The cursor's current x location within the windows' coordinates.
+    /** The cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
     //-------------------------------------------------------------------------
-    /** The cursor's current y location within the windows' coordinates.
+    /** The cursor's current y location within the window's coordinates.
      */
 
     long LocationY;

@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_FunctionAccess_idl__
 #define __com_sun_star_sheet_FunctionAccess_idl__
 
-#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
 #include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XFunctionAccess_idl__
 #include <com/sun/star/sheet/XFunctionAccess.idl>
-#endif
 
 //=============================================================================
 
@@ -48,7 +43,7 @@ published service FunctionAccess
 {
     //-------------------------------------------------------------------------
 
-    /** contributes properties to control the behaviour of some functions
+    /** contributes properties to control the behavior of some functions
         (i.e. NullDate, IgnoreCase, RegularExpressions).
      */
     service com::sun::star::sheet::SpreadsheetDocumentSettings;

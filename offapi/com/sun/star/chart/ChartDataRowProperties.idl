@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_chart_ChartDataRowProperties_idl__
 #define __com_sun_star_chart_ChartDataRowProperties_idl__
 
-#ifndef __com_sun_star_chart_ChartDataPointProperties_idl__
 #include <com/sun/star/chart/ChartDataPointProperties.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartStatistics_idl__
 #include <com/sun/star/chart/ChartStatistics.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 

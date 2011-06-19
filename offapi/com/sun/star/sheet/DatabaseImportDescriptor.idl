@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_DatabaseImportDescriptor_idl__
 #define __com_sun_star_sheet_DatabaseImportDescriptor_idl__
 
-#ifndef __com_sun_star_sheet_DataImportMode_idl__
 #include <com/sun/star/sheet/DataImportMode.idl>
-#endif
 
 //=============================================================================
 

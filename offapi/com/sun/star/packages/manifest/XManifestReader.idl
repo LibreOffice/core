@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_packages_manifest_XManifestReader_idl__
 #define __com_sun_star_packages_manifest_XManifestReader_idl__
 
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
 //=============================================================================
 
@@ -41,7 +36,7 @@ module com {  module sun {  module star {   module packages {  module manifest {
 
 //=============================================================================
 /** This interface reads the manifest data from a file. The user
-    must supply an XInputStream when calling readManifestSequence() to recieve
+    must supply an XInputStream when calling readManifestSequence() to receive
     a sequence of manifest entries. Each manifest entry is represented by
     a sequence of PropertyValues. */
 //=============================================================================

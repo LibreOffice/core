@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_text_LineNumberingProperties_idl__
 #define __com_sun_star_text_LineNumberingProperties_idl__
 
-#ifndef __com_sun_star_text_XLineNumberingProperties_idl__
 #include <com/sun/star/text/XLineNumberingProperties.idl>
-#endif
 
 //=============================================================================
 
@@ -101,7 +99,7 @@ published service LineNumberingProperties
     /** specifies if the line numbering should start from the
         beginning at each page.
 
-        <p>If set to <FALSE/> the line numbering will be continous.</p>
+        <p>If set to <FALSE/> the line numbering will be continuous.</p>
 
         @since OOo 2.0
      */

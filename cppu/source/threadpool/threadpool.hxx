@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <osl/conditn.h>
 
@@ -59,7 +60,7 @@ namespace cppu_threadpool {
             }
     };
 
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
     <
         ByteSequence, // ThreadID
         ::std::pair < JobQueue * , JobQueue * >,
@@ -138,3 +139,5 @@ namespace cppu_threadpool {
     };
 
 } // end namespace cppu_threadpool
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

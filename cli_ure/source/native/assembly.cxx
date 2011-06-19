@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,3 +35,5 @@
 [assembly:System::Reflection::AssemblyDescription( "CLI-UNO Helper Library" )];
 [assembly:System::Reflection::AssemblyDelaySign(true)];
 [assembly:System::Reflection::AssemblyCompany( "OpenOffice.org" )];
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

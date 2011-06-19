@@ -50,7 +50,7 @@ published interface XFunctionCategory
     interface com::sun::star::container::XIndexAccess;
 
     /** same as getByIndex.
-        @see com.ssun.star.container.XIndexAccess
+        @see com.sun.star.container.XIndexAccess
     */
     XFunctionDescription getFunction([in] long position)
         raises( com::sun::star::lang::IndexOutOfBoundsException,

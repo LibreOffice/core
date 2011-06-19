@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_i18n_XNumberFormatCode_idl__
 #define __com_sun_star_i18n_XNumberFormatCode_idl__
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/i18n/NumberFormatCode.idl>
 

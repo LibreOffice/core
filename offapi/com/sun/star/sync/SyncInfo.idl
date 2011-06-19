@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sync_SyncInfo_idl__
 #define __com_sun_star_sync_SyncInfo_idl__
 
-#ifndef __com_sun_star_sync_SyncScheme_idl__
 #include <com/sun/star/sync/SyncScheme.idl>
-#endif
 
 //=============================================================================
 

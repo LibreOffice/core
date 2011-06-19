@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE3_HXX
 #include <cppuhelper/implbase3.hxx>
-#endif
 #include <cppuhelper/typeprovider.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/unload.h>
 
 #include "cppuhelper/propshlp.hxx"
@@ -56,19 +56,17 @@
 
 
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::registry;
 
+using ::rtl::OUString;
+
 namespace cppu
 {
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class OSingleFactoryHelper
     : public XServiceInfo
     , public XSingleServiceFactory
@@ -276,10 +274,6 @@ Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames(void)
     return aServiceNames;
 }
 
-
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
 struct OFactoryComponentHelper_Mutex
 {
     Mutex   aMutex;
@@ -428,20 +422,16 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
     return Sequence< Type >( ar, m_fptr ? 4 : 3 );
 }
 
+namespace
+{
+    class theOFactoryComponentHelperImplementationId :
+        public rtl::Static<OImplementationId, theOFactoryComponentHelperImplementationId>{};
+}
+
 Sequence< sal_Int8 > OFactoryComponentHelper::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return theOFactoryComponentHelperImplementationId::get().getImplementationId();
 }
 
 // XSingleServiceFactory
@@ -552,10 +542,6 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
                                public OPropertySetHelper
 
@@ -710,7 +696,7 @@ sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
     Any &, Any &, sal_Int32, Any const & )
     throw (lang::IllegalArgumentException)
 {
-    OSL_ENSURE( 0, "unexpected!" );
+    OSL_FAIL( "unexpected!" );
     return false;
 }
 
@@ -874,7 +860,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             // one implementation found -> try to activate
             aLocation = xLocationKey->getAsciiValue();
 
-            // search protocol delemitter
+            // search protocol delimiter
             sal_Int32 nPos = aLocation.indexOf(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("://") ) );
             if( nPos != -1 )
@@ -962,10 +948,6 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
     }
     return retVal;
 }
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
@@ -1056,10 +1038,6 @@ sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun:
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,
@@ -1094,8 +1072,6 @@ Reference<XSingleServiceFactory > SAL_CALL createOneInstanceFactory(
 {
     return new OFactoryComponentHelper(
         rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
-//  return new OFactoryUnloadableComponentHelper(
-//      rServiceManager, rImplementationName, pCreateFunction, 0, &rServiceNames, pModCount, sal_True );
 }
 
 // global function
@@ -1146,3 +1122,4 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFa
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

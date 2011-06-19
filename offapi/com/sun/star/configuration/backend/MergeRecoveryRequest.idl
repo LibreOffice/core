@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_configuration_backend_MergeRecoveryRequest_idl__
 #define __com_sun_star_configuration_backend_MergeRecoveryRequest_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 //=============================================================================
 
@@ -71,9 +69,9 @@ exception MergeRecoveryRequest: ::com::sun::star::uno::Exception
     string ErrorLayerId;
 
     /**
-        specifies whether the requestor wants to remove or skip the invalid layer.
+        specifies whether the requester wants to remove or skip the invalid layer.
 
-        <p> If <TRUE/> the requestor wants to remove the underlying data of
+        <p> If <TRUE/> the requester wants to remove the underlying data of
             the layer.<BR/>
             If <FALSE/> the request is to skip the underlying data this time,
             but without removing it.

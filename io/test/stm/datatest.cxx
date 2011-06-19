@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,6 @@
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
-//using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -122,7 +122,7 @@ void ODataStreamTest::testInvariant(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ) {
+    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ) {
         Reference < XConnectable > connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSink > active( TestObject , UNO_QUERY );
         Reference < XInputStream >  input( TestObject , UNO_QUERY );
@@ -135,7 +135,7 @@ void ODataStreamTest::testInvariant(
 
 
     }
-    else if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ) {
+    else if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ) {
         Reference < XConnectable >  connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSource > active( TestObject , UNO_QUERY );
         Reference < XOutputStream > output( TestObject , UNO_QUERY );
@@ -153,7 +153,7 @@ void ODataStreamTest::testInvariant(
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString::createFromAscii("bla bluzb") ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString(RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) , "XServiceInfo test failed" );
     }
 
 }
@@ -166,8 +166,8 @@ sal_Int32 ODataStreamTest::test(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ||
-        OUString::createFromAscii("com.sun.star.io.DataOutputStream") == TestName )  {
+    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream")) == TestName ||
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream")) == TestName )  {
 
         try
         {
@@ -292,8 +292,8 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     rOutput->writeHyper( 0x123456789abcdefLL );
     ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdefLL , "int64 read/write mismatch" );
 
-    rOutput->writeUTF( OUString::createFromAscii("Live long and prosper !") );
-    ERROR_ASSERT( rInput->readUTF() == OUString::createFromAscii("Live long and prosper !") ,
+    rOutput->writeUTF( OUString(RTL_CONSTASCII_USTRINGPARAM("Live long and prosper !")) );
+    ERROR_ASSERT( rInput->readUTF() == OUString(RTL_CONSTASCII_USTRINGPARAM("Live long and prosper !")) ,
                     "UTF read/write mismatch" );
 
     Sequence<sal_Unicode> wc(0x10001);
@@ -386,14 +386,6 @@ OUString    ODataStreamTest_getImplementationName( int i) throw ()
     }
 }
 
-
-/**------------------------------------------------------
-*
-*
-*
-*
-*
-*------------------------------------------------------*/
 class MyPersistObject : public WeakImplHelper2< XPersistObject , XPropertySet >
 {
 public:
@@ -657,9 +649,6 @@ OUString    OMyPersistObject_getImplementationName( ) throw ()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.io.PersistTest" ) );
 }
 
-
-// ---------------------------------------------
-// -----------------------------------------------
 class OObjectStreamTest :
         public ODataStreamTest
 {
@@ -717,7 +706,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString::createFromAscii("bla bluzb") ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString(RTL_CONSTASCII_USTRINGPARAM("bla bluzb")) ) , "XServiceInfo test failed" );
     }
 
 }
@@ -835,8 +824,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue( OUString::createFromAscii("long") ).getValueType() == getCppuVoidType() ||
-        r2->getPropertyValue( OUString::createFromAscii("long") ).getValueType() == getCppuVoidType() ) {
+    if( r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ).getValueType() == getCppuVoidType() ||
+        r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ).getValueType() == getCppuVoidType() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );
@@ -1004,8 +993,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         ERROR_ASSERT( compareMyPropertySet( rProp , rPropRead ) , "objects has not been read properly !" );
 
         // destroy selfreferences
-        rProp->setPropertyValue( OUString::createFromAscii("object"), Any() );
-        rPropRead->setPropertyValue( OUString::createFromAscii("object"), Any() );
+        rProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")), Any() );
+        rPropRead->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")), Any() );
     }
 
     {
@@ -1016,7 +1005,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         // buffering and marks work correctly
         for( int i = 0 ; i < 2000 ; i ++ ) {
 
-            Reference < XInterface > x = m_rFactory->createInstance(OUString::createFromAscii("test.com.sun.star.io.PersistTest"));
+            Reference < XInterface > x = m_rFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest")));
             Reference< XPersistObject >  persistRef( x , UNO_QUERY );
 
             Reference < XPropertySet >  rProp( persistRef , UNO_QUERY );
@@ -1051,13 +1040,13 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             any <<= str;
             rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("string")) , any );
 
-            x = m_rFactory->createInstance(OUString::createFromAscii("test.com.sun.star.io.PersistTest"));
+            x = m_rFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.io.PersistTest")));
             Reference <XPersistObject > persist2ndRef( x , UNO_QUERY );
 
             // Note : persist2ndRef contains coincident values, but also coincident values must be
             // saved properly !
             any <<= persist2ndRef;
-            rProp->setPropertyValue( OUString::createFromAscii("object") , any );
+            rProp->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) , any );
 
             // simply test, if markable operations and object operations do not interfere
             sal_Int32 nMark = markableOut->createMark();
@@ -1121,3 +1110,4 @@ OUString    OObjectStreamTest_getImplementationName( int i) throw ()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

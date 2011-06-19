@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ class Simstr;
 template <class XY> class List;
 
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 const char   C_sSLASH[] = "\\";
 const char   C_cSLASH = '\\';
 #elif defined(UNX)
@@ -83,3 +84,4 @@ void                GatherSubDirectories(
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,36 +33,41 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
-DLLPRE = # no leading "lib" on .so files
+CFLAGSCXX+=$(CPPUNIT_CFLAGS)
 
-INCPRE += $(MISC)$/$(TARGET)$/inc
+DLLPRE=# no leading "lib" on .so files
+
+INCPRE+=$(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)_any
 SHL1OBJS = $(SLO)$/test_any.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
+SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
 SHL2TARGET = $(TARGET)_unotype
 SHL2OBJS = $(SLO)$/test_unotype.obj
-SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
+SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL2VERSIONMAP = version.map
 SHL2IMPLIB = i$(SHL2TARGET)
 DEF2NAME = $(SHL2TARGET)
 
 SHL3TARGET = $(TARGET)_reference
 SHL3OBJS = $(SLO)$/test_reference.obj
-SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
+SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL3VERSIONMAP = version.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 
 SHL4TARGET = $(TARGET)_recursion
 SHL4OBJS = $(SLO)$/test_recursion.obj
-SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
+SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL4VERSIONMAP = version.map
 SHL4IMPLIB = i$(SHL4TARGET)
 DEF4NAME = $(SHL4TARGET)
@@ -71,9 +76,13 @@ SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
 $(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
+$(SHL2OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
+$(SHL3OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+
+$(SHL4OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
@@ -82,15 +91,11 @@ $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     $(TOUCH) $@
 
 $(MISC)$/$(TARGET).rdb: $(MISC)$/$(TARGET)$/types.urd
-    - rm $@
+    - $(RM) $@
     $(REGMERGE) $@ /UCR $<
 
 $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(SHL4TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL2TARGETN)
-    $(TESTSHL2) $(SHL3TARGETN)
-    $(TESTSHL2) $(SHL4TARGETN)
+.INCLUDE : _cppunit.mk

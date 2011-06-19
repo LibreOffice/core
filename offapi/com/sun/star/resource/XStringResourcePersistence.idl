@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_resource_XStringResourcePersistence_idl__
 #define __com_sun_star_resource_XStringResourcePersistence_idl__
 
-#ifndef __com_sun_star_resource_XStringResourceManager_idl__
 #include <com/sun/star/resource/XStringResourceManager.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XStorage_idl__
 #include <com/sun/star/embed/XStorage.idl>
-#endif
-
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
 #include <com/sun/star/task/XInteractionHandler.idl>
-#endif
 
 
 //=============================================================================
@@ -48,7 +40,7 @@ module com { module sun { module star { module resource {
 /**
     Interface derived from XStringResourceManager containing
     basic persistence functionality limited to operations that
-    are independend from a associated location or storage.
+    are independent from a associated location or storage.
 
     @see <type>XStringResourceManager</type>.
 */
@@ -64,12 +56,12 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
         <type>StringResourceWithLocation</type> and
         <type>StringResourceWithStorage</type>
 
-        The StringResourceWithLocation is initialised with an URL
+        The StringResourceWithLocation is initialized with an URL
         specifying a location used to load data from and store data to,
         see <type>StringResourceWithLocation</type>.
 
-        The StringResourceWithStorage is initialised with an in-
-        stance of <type scope="com::sun::star::embed">XStorage</type>
+        The StringResourceWithStorage is initialized with an instance
+        of <type scope="com::sun::star::embed">XStorage</type>
         used to load data from and store data to,
         see <type>StringResourceWithStorage</type>.
 
@@ -83,7 +75,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
         not handled by a previously specified
         <type scope="com::sun::star::task">XInteractionHandler</type>.
         The handler to be used for the store operation can be specified
-        during initialisation of <type>StringResourceWithLocation</type>.
+        during initialization of <type>StringResourceWithLocation</type>.
 
         @throws <type scope="com::sun::star::lang">NoSupportException</type>
             if no URL or no valid storage are provided.
@@ -109,15 +101,15 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
         Sets the comment stored first in each locale data file.
 
         This interface method can be used to overwrite the comment used
-        during initialisation of the services
+        during initialization of the services
         <type>StringResourceWithLocation</type> or
         <type>StringResourceWithStorage</type>
 
         @param Comment
             Comment stored first in each properties file followed by a line
             feed character. The line feed character is added automatically
-            and hasn't to be part of the comment string. The caller is re-
-            sponsible that the passed string is a valid comment in a Java
+            and hasn't to be part of the comment string. The caller is
+            responsible that the passed string is a valid comment in a Java
             properties file, e.g. "# My strings". The string may be empty.
     */
     void setComment( [in] string Comment );
@@ -128,7 +120,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
 
         Calling this method does not affect the association with a location
         (in case of a <type>StringResourceWithLocation</type> instance)
-        repectively with a storage (in case of a
+        respectively with a storage (in case of a
         <type>StringResourceWithStorage</type> instance).
         The modified state isn't affected either.
 
@@ -142,7 +134,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
         @param BaseName
             Base string for the file names used to store the locale data.
             The locale data is stored in Java properties files also following
-            the corresponding naming sceme. The files will be named like this:
+            the corresponding naming scheme. The files will be named like this:
             "[BaseName]_[Language]_[Country].properties",
             e.g. "MyBaseName_en_US.properties"
             If an empty string is passed for BaseName, "strings" will be used
@@ -166,7 +158,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
 
         Calling this method does not affect the association with a location
         (in case of a <type>StringResourceWithLocation</type> instance)
-        repectively with a storage (in case of a
+        respectively with a storage (in case of a
         <type>StringResourceWithStorage</type> instance).
         The modified state isn't affected either.
 
@@ -179,7 +171,7 @@ published interface XStringResourcePersistence: com::sun::star::resource::XStrin
         @param BaseName
             Base string for the file names used to store the locale data.
             The locale data is stored in Java properties files also following
-            the corresponding naming sceme. The files will be named like this:
+            the corresponding naming scheme. The files will be named like this:
             "[BaseName]_[Language]_[Country].properties",
             e.g. "MyBaseName_en_US.properties"
             If an empty string is passed for BaseName, "strings" will be used

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,7 @@ Includes::Includes(
     m_includeRtlTextencH(false), m_includeRtlUstrbufHxx(false),
     m_includeRtlUstringH(false),
     m_includeRtlUstringHxx(dependencies.hasStringDependency()),
+    m_includeRtlInstanceHxx(false),
     m_includeSalTypesH(
         dependencies.hasBooleanDependency() || dependencies.hasByteDependency()
         || dependencies.hasShortDependency()
@@ -249,6 +251,10 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
         dumpEmptyLineBeforeFirst(out, &first);
         out << ("#include \"rtl/ustring.hxx\"\n");
     }
+    if (m_includeRtlInstanceHxx) {
+        dumpEmptyLineBeforeFirst(out, &first);
+        out << "#include \"rtl/instance.hxx\"\n";
+    }
     if (m_includeSalTypesH) {
         dumpEmptyLineBeforeFirst(out, &first);
         out << "#include \"sal/types.h\"\n";
@@ -278,3 +284,5 @@ void Includes::dumpInclude(
 bool Includes::isInterfaceType(rtl::OString const & registryType) const {
     return m_manager.getTypeClass(registryType) == RT_TYPE_INTERFACE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

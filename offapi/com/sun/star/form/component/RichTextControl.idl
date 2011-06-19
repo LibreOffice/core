@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_form_component_RichTextControl_idl__
 #define __com_sun_star_form_component_RichTextControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlEditModel_idl__
 #include <com/sun/star/awt/UnoControlEditModel.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
-#endif
 
 //=============================================================================
 

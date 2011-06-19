@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_text_AccessibleEndnoteView_idl__
 #define __com_sun_star_text_AccessibleEndnoteView_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
 
 
 //=============================================================================
@@ -116,7 +108,7 @@ published service AccessibleEndnoteView
                         >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, asian or complex default language of the document.
+                the western, Asian or complex default language of the document.
         </ul>
 
      */

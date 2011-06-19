@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_form_control_PatternField_idl__
 #define __com_sun_star_form_control_PatternField_idl__
 
-#ifndef __com_sun_star_awt_UnoControlPatternField_idl__
 #include <com/sun/star/awt/UnoControlPatternField.idl>
-#endif
-
-#ifndef __com_sun_star_form_XBoundControl_idl__
 #include <com/sun/star/form/XBoundControl.idl>
-#endif
 
 //=============================================================================
 

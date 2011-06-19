@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_mozilla_XPluginInstance_idl__
 #define __com_sun_star_mozilla_XPluginInstance_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
 //=============================================================================
 
@@ -43,7 +38,7 @@
 
 
 // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
-/** Allows to controll an office side plugin instance and to communicate with it.
+/** Allows to control an office side plugin instance and to communicate with it.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstance: com::sun::star::uno::XInterface
@@ -117,7 +112,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     /** Notifies the plugin of a new url to open as document.
 
         @param MIMEDesc     [in]:   the MIMEtype of the data stream
-        @param theURL       [in]:   the URL to be openend
+        @param theURL       [in]:   the URL to be opened
         @param filter       [in]:   a filter string to suggest a component that should handle the document
         @param sessiondata  [in]:   the data specifying the current session
 
@@ -128,7 +123,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from idl: method com::sun::star::mozilla::XPluginInstance::getHttpServerURL
-    /** Retrieves the URL of the HTTP Loadbalancing Slave.
+    /** Retrieves the URL of the HTTP Load balancing Slave.
 
         @param aURL     [out]:  the full qualified host name of the LBS
         @param aPort    [out]:  the port number

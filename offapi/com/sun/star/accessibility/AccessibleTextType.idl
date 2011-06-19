@@ -51,7 +51,7 @@ published constants AccessibleTextType
 
         <p>Indicates that single words are used.  The definition of what a
         word is is implementation and language/locale dependent.  While in
-        english a word is ended by a space or a special character like a
+        English a word is ended by a space or a special character like a
         comma or a period, this is not necessarily true in other
         languages.</p>
     */
@@ -61,7 +61,7 @@ published constants AccessibleTextType
 
         <p>Indicates that single sentences are used.  The definition of what
         a sentence is is implementation and language/locale dependent.
-        While in english a sentence is ended by a period, this is not
+        While in English a sentence is ended by a period, this is not
         necessarily true in other languages.</p>
     */
     const short SENTENCE = 3;

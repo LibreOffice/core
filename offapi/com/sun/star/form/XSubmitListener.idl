@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XSubmitListener_idl__
 #define __com_sun_star_form_XSubmitListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 
 //=============================================================================
@@ -42,9 +38,9 @@
 
 //=============================================================================
 
-/** receives notifications about data beeing submitted.
+/** receives notifications about data being submitted.
 
-    <p>The submission may be cancelled, so the listener has the possibility
+    <p>The submission may be canceled, so the listener has the possibility
     of verifying the data before submission.</p>
 
     @see XSubmit
@@ -60,7 +56,7 @@ published interface XSubmitListener: com::sun::star::lang::XEventListener
     /** is invoked when a component is about to submit it's data.
 
         @param aEvent
-            the event happend
+            the event happened
 
         @returns
             <TRUE/> when submitting was approved, otherwise <FALSE/>.

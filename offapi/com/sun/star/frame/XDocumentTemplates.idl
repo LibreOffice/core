@@ -27,20 +27,15 @@
 #ifndef __com_sun_star_frame_XDocumentTemplates_idl__
 #define __com_sun_star_frame_XDocumentTemplates_idl__
 
-#ifndef __com_sun_star_frame_XStorable_idl__
 #include <com/sun/star/frame/XStorable.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContent_idl__
 #include <com/sun/star/ucb/XContent.idl>
-#endif
 
 //=============================================================================
 
 module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** provides a high level api to organize document templates
+/** provides a high level API to organize document templates
 
     <p>
     Template informations are saved as links to the original content
@@ -54,7 +49,7 @@ module com {  module sun {  module star {  module frame {
 published interface XDocumentTemplates:  com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** privides access to the root of internal used hierarchy
+    /** provides access to the root of internal used hierarchy
 
         <p>
         This content can be used for accessing the groups directly.
@@ -79,7 +74,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the target
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
 
@@ -104,7 +99,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the position of template
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
 
@@ -125,7 +120,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for delete
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
      */
@@ -143,7 +138,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for renaming
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
      */
@@ -159,7 +154,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be created
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
     */
@@ -172,7 +167,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be removed
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
      */
@@ -188,7 +183,7 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the new name of the group
 
         @return
-            <TRUE/> if operation was sucessfully
+            <TRUE/> if operation was successful
             <br>
             <FALSE/> otherwise
      */

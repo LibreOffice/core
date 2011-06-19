@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,11 @@
 // includes
 
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
 #   define UNICODE
 #   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
+#   include <windows.h>
 #   include <tchar.h>
-#include <tools/postwin.h>
 #else
 #   include <unistd.h>
 #endif
@@ -47,8 +46,18 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 #include <rtl/ustring.hxx>
+
+#ifdef UNX
+#if defined( MACOSX )
+# include <crt_externs.h>
+# define environ (*_NSGetEnviron())
+# else
+    extern char** environ;
+# endif
+#endif
 
 //########################################
 // defines
@@ -87,45 +96,32 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
         while (size_t l = _tcslen(reinterpret_cast<wchar_t*>(p)))
         {
             w_to_a(p, buffer, sizeof(buffer));
-            file << buffer << std::endl;
+            file << buffer << '\0';
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
     }
 #else
-    extern char** environ;
-
     void dump_env(char* file_path)
     {
         std::ofstream file(file_path);
-        for (int i = 0; NULL != environ[i]; i++)
-            file << environ[i] << std::endl;
+        for (int i = 0; NULL != environ[i]; ++i)
+            file << environ[i] << '\0';
     }
 #endif
 
 //########################################
 int main(int argc, char* argv[])
 {
-    rtl::OUString s;
-
-    //t_print("Parameter: ");
-    printf("child process Parameter: ");
-    for (int i = 1; i < argc; i++)
-        printf("%s ", argv[i]);
-    printf("\n");
-
     if (argc > 2)
     {
         if (0 == strcmp("-join", argv[1]))
-        {
             wait_for_seconds(argv[2]);
-        }
         else if (0 == strcmp("-env", argv[1]))
-        {
             dump_env(argv[2]);
-        }
     }
 
-    return (0);
+    return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

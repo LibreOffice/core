@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_text_TextField_idl__
 #define __com_sun_star_text_TextField_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextField_idl__
 #include <com/sun/star/text/XTextField.idl>
-#endif
 
 
 //=============================================================================

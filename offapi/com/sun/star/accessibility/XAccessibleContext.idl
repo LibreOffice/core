@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #define __com_sun_star_accessibility_XAccessibleContext_idl__
 
-#ifndef __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyChangeListener_idl__
 #include <com/sun/star/beans/XPropertyChangeListener.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -51,7 +40,7 @@ module com { module sun { module star { module accessibility {
  published interface XAccessibleSelection;
  published interface XAccessibleStateSet;
 
-/** Implement this interface for exposing various aspects of a class'
+/** Implement this interface for exposing various aspects of a class's
     content.
 
     <p>This interface serves two purposes: On the one hand it gives access
@@ -60,8 +49,8 @@ module com { module sun { module star { module accessibility {
     hand it gives access to objects that expose the represented content.
     That are role, state, name, description, and relations to other objects.
     Take an OK button of a dialog as an example.  Its role is
-    <const>AccessibleRole::BUTTON</const>, its name is 'OK', and its description
-    is something like 'Accepts all changes made in the dialog'.</p>
+    <const>AccessibleRole::BUTTON</const>, its name is "OK", and its description
+    is something like "Accepts all changes made in the dialog".</p>
 
     @since OOo 1.1.2
 */
@@ -79,7 +68,7 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
     /** Returns the i-th child of this object.
 
         <p>The order in which the children are enumerated is implementation
-        dependend.</p>
+        dependent.</p>
 
         @param i
             The index may have any value.  If it is outside the range from 0
@@ -162,16 +151,16 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
     /** Returns the set of relations defined for this object.
 
-        <p>The returned set of relations is a copy of this objects relation
-        set: changing the returned object does not change this objects
+        <p>The returned set of relations is a copy of this object's relation
+        set: changing the returned object does not change this object's
         relations.</p>
 
-        <p>aThere are two ways to represent an empty list of relations:
+        <p>There are two ways to represent an empty list of relations:
         Return an empty reference or return a valid object that contains an
         empty list.
 
         @return
-           The returned value is either an empty referece or a reference to
+           The returned value is either an empty reference or a reference to
            a valid object that represents a copy of the objects list of
            relations.
     */
@@ -181,7 +170,7 @@ published interface XAccessibleContext : ::com::sun::star::uno::XInterface
         object.
 
         <p>The returned state set is a copy: Changing the returned state set
-        will not be refelected by changing the object's set of states.  See
+        will not be reflected by changing the object's set of states.  See
         the documentation of <type>XAccessibleStateSet</type> for a
         description of the individual states.</p>
 

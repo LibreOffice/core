@@ -41,7 +41,7 @@ PROJECTPCHSOURCE=cont_pch
 
 TARGETTYPE=CUI
 
-
+ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -79,10 +79,9 @@ SLOFILES= \
             $(SLO)$/file_volume.obj \
             $(SLO)$/uunxapi.obj\
             $(SLO)$/process_impl.obj\
-            $(SLO)$/salinit.obj
+            $(SLO)$/salinit.obj \
+            $(SLO)$/readwrite_helper.obj
 
-
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
             $(OBJ)$/semaphor.obj \
@@ -110,15 +109,17 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file_volume.obj \
             $(OBJ)$/uunxapi.obj\
             $(OBJ)$/process_impl.obj\
-            $(OBJ)$/salinit.obj
+            $(OBJ)$/salinit.obj \
+            $(OBJ)$/readwrite_helper.obj
             
-#.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
+    "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX" || \
+    "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
@@ -129,23 +130,12 @@ OBJFILES += $(OBJ)$/backtrace.obj
 APP1STDLIBS+=-lC
 .ENDIF
 
-.IF "$(OS)" == "LINUX"
-.IF "$(PAM)" == "NO"
-CFLAGS+=-DNOPAM
-.IF "$(NEW_SHADOW_API)" == "YES"
-CFLAGS+=-DNEW_SHADOW_API
-.ENDIF
-.ENDIF
-.IF "$(PAM_LINK)" == "YES"
-CFLAGS+=-DPAM_LINK
-.ENDIF
-.IF "$(CRYPT_LINK)" == "YES"
-CFLAGS+=-DCRYPT_LINK
-.ENDIF
-.ENDIF
-
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 CFLAGS+=-DSAL_ENABLE_CRASH_REPORT
+.ENDIF
+
+.IF "$(OS)" == "IOS"
+CFLAGS+=-DNO_DL_FUNCTIONS -DNO_CHILD_PROCESSES
 .ENDIF
 
 .INCLUDE :  target.mk

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ namespace cppu_threadpool
 
         sal_Bool isEmpty();
         sal_Bool isCallstackEmpty();
-        sal_Bool isBusy();
+        sal_Bool isBusy() const;
 
     private:
         ::osl::Mutex m_mutex;
@@ -83,3 +84,5 @@ namespace cppu_threadpool
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

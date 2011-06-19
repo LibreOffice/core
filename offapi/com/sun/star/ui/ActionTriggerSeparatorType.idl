@@ -29,20 +29,20 @@
 
 module com {  module sun {  module star {  module ui {
 
-/** Determins the type of a separator in an ActionTriggerContainer.
+/** Determines the type of a separator in an ActionTriggerContainer.
  */
 published constants ActionTriggerSeparatorType
 {
     //-------------------------------------------------------------------------
-    /** a separarator is inserted as a line.
+    /** a separator is inserted as a line.
      */
     const short LINE = 0;
     //-------------------------------------------------------------------------
-    /** a separarator is inserted as a space.
+    /** a separator is inserted as a space.
      */
     const short SPACE = 1;
     //-------------------------------------------------------------------------
-    /** a linebreak is inserted.
+    /** a line break is inserted.
      */
     const short LINEBREAK = 2;
 

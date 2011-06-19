@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include "file_path_helper.hxx"
 #include "file_url.h"
 #include "uunxapi.hxx"
+#include "readwrite_helper.h"
 
 #include <sys/types.h>
 #include <errno.h>
@@ -69,16 +71,6 @@ typedef struct
     rtl_uString* ustrPath;           /* holds native directory path */
     DIR*         pDirStruct;
 } oslDirectoryImpl;
-
-#if 0
-/* FIXME: reintroducing this may save some extra bytes per Item */
-typedef struct
-{
-    rtl_uString* ustrFileName;       /* holds native file name */
-    rtl_uString* ustrDirPath;        /* holds native dir path */
-    sal_uInt32   RefCount;
-} oslDirectoryItemImpl;
-#endif
 
 DirectoryItem_Impl::DirectoryItem_Impl(
     rtl_uString * ustrFilePath, unsigned char DType)
@@ -704,8 +696,7 @@ static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszD
 
     if ( tErr != osl_File_E_None )
     {
-        oslFileError tErrRemove;
-        tErrRemove=osl_psz_removeFile(pszDestPath);
+        osl_psz_removeFile(pszDestPath);
         return tErr;
     }
 
@@ -1020,31 +1011,27 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    size_t nWritten = 0;
     size_t nRemains = nSourceSize;
 
     if ( nRemains )
     {
         /* mmap has problems, try the direct streaming */
-        char pBuffer[0x8000];
-        size_t nRead = 0;
-
-        nRemains = nSourceSize;
+        char pBuffer[0x7FFF];
 
         do
         {
-            nRead = 0;
-            nWritten = 0;
+            size_t nToRead = std::min( sizeof(pBuffer), nRemains );
+            sal_Bool succeeded = safeRead( SourceFileFD, pBuffer, nToRead );
+            if ( !succeeded )
+                break;
 
-            size_t nToRead = std::min( (size_t)0x8000, nRemains );
-            nRead = read( SourceFileFD, pBuffer, nToRead );
-            if ( (size_t)-1 != nRead )
-                nWritten = write( DestFileFD, pBuffer, nRead );
+            succeeded = safeWrite( DestFileFD, pBuffer, nToRead );
+            if ( !succeeded )
+                break;
 
-            if ( (size_t)-1 != nWritten )
-                nRemains -= nWritten;
+            nRemains -= nToRead;
         }
-        while( nRemains && (size_t)-1 != nRead && nRead == nWritten );
+        while( nRemains );
     }
 
     if ( nRemains )
@@ -1062,3 +1049,4 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

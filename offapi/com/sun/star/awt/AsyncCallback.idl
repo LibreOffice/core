@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_awt_AsyncCallback_idl__
 #define __com_sun_star_awt_AsyncCallback_idl__
 
-#ifndef __com_sun_star_awt_XRequestCallback_idl__
 #include <com/sun/star/awt/XRequestCallback.idl>
-#endif
 
 module com { module sun { module star { module awt {
 

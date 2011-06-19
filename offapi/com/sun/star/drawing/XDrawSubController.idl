@@ -28,19 +28,11 @@
 #ifndef __com_sun_star_drawing_XDrawSubController_idl__
 #define __com_sun_star_drawing_XDrawSubController_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-#ifndef __com_sun_star_drawing_XDrawView_idl__
 #include <com/sun/star/drawing/XDrawView.idl>
-#endif
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
 
 

@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_presentation_SlideNumberShape_idl__
 #define __com_sun_star_presentation_SlideNumberShape_idl__
 
-#ifndef __com_sun_star_presentation_Shape_idl__
 #include <com/sun/star/presentation/Shape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_TextShape_idl__
 #include <com/sun/star/drawing/TextShape.idl>
-#endif
 
 
 //=============================================================================
@@ -45,7 +41,7 @@
 /** This service is implemented by the slide number presentation shape.
 
     <p>Presentation shapes can be used in a presentation
-    page layouts and theire position and size is by default set
+    page layouts and their position and size is by default set
     by the presentation shapes on the <type scope="com::sun::star::drawing">MasterPage</type>.
  */
 service SlideNumberShape

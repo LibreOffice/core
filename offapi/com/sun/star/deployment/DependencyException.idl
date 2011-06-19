@@ -56,11 +56,11 @@ exception DependencyException: com::sun::star::uno::Exception {
        namespace name
        <code>http://openoffice.org/extensions/description/2006</code> and the
        local part <code>name</code> and whose value is a human-readable
-       (english) description of the dependency.  If an instance of OOo does not
+       (English) description of the dependency.  If an instance of OOo does not
        know more about a specific kind of dependency, it should display the
        value of that attribute to the user.</p>
 
-       <p>The sequence must not be emtpy, and none of the elements may be
+       <p>The sequence must not be empty, and none of the elements may be
        <NULL/>.</p>
     */
     sequence< com::sun::star::xml::dom::XElement > UnsatisfiedDependencies;

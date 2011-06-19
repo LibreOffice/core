@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,9 @@
 #ifndef _CODEMAKER_DEPENDENCY_HXX_
 #define _CODEMAKER_DEPENDENCY_HXX_
 
-#include    <hash_map>
+#include    <boost/unordered_map.hpp>
 #include    <registry/registry.hxx>
-#ifndef __REGISTRY_REFLREAD_HXX__
 #include    <registry/reflread.hxx>
-#endif
 #include    <codemaker/typemanager.hxx>
 #include    <codemaker/global.hxx>
 #include <osl/diagnose.h>
@@ -81,26 +80,7 @@ struct LessTypeUsing
 typedef ::std::set< TypeUsing, LessTypeUsing > TypeUsingSet;
 
 
-#if (defined( _MSC_VER ) && ( _MSC_VER < 1200 ))
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    TypeUsingSet,
-    HashString,
-    EqualString,
-    NewAlloc
-> DependencyMap;
-
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    sal_uInt16,
-    HashString,
-    EqualString,
-    NewAlloc
-> GenerationMap;
-#else
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     TypeUsingSet,
@@ -108,15 +88,13 @@ typedef ::std::hash_map
     EqualString
 > DependencyMap;
 
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     sal_uInt16,
     HashString,
     EqualString
 > GenerationMap;
-
-#endif
 
 struct TypeDependencyImpl
 {
@@ -168,3 +146,5 @@ protected:
 sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencies, const ::rtl::OString& type, sal_Bool bDepend = sal_False);
 
 #endif // _CODEMAKER_DEPENDENCY_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

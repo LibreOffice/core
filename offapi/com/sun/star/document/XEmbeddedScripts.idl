@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #define __com_sun_star_document_XEmbeddedScripts_idl__
 
-#ifndef __com_sun_star_script_XStorageBasedLibraryContainer_idl__
 #include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
-#endif
 
 //=============================================================================
 
@@ -38,7 +36,7 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 
-/** is suppoerted by <type>OfficeDocument</type>s which allow to embed scripts
+/** is supported by <type>OfficeDocument</type>s which allow to embed scripts
 
     @since OOo 2.4
  */

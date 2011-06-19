@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
 #define __com_sun_star_ucb_XCommandProcessor2_idl__
 
-#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
 #include <com/sun/star/ucb/XCommandProcessor.idl>
-#endif
 
 module com { module sun { module star { module ucb {
 
@@ -42,7 +40,7 @@ module com { module sun { module star { module ucb {
 published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
 {
     //------------------------------------------------------------------------
-    /** releases a command identifier obtainded through
+    /** releases a command identifier obtained through
         <member>XCommandProcessor::createCommandIdentifier</member> when it is
         no longer used.
 
@@ -59,7 +57,7 @@ published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
         identifier is invalid (not obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> or already
         handed to <member>XCommandProcessor2::releaseCommandIdentifier</member>
-        before), the behaviour is undefined.
+        before), the behavior is undefined.
      */
     [oneway] void releaseCommandIdentifier([in] long CommandId);
 };

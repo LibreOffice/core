@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -231,10 +232,10 @@ namespace {
     Some comments:
 
     For any instantiation of rtl_Instance, at most one call to a create method
-    may occur in the program code:  Each occurance of a create method within
+    may occur in the program code:  Each occurrence of a create method within
     the program code is supposed to return a fresh object instance on the
     first call, and that same object instance on subsequent calls; but
-    independent occurances of create methods are supposed to return
+    independent occurrences of create methods are supposed to return
     independent object instances.  Since there is a one-to-one correspondence
     between object instances and instantiations of rtl_Instance, the
     requirement should be clear.  One measure to enforce the requirement is
@@ -244,7 +245,7 @@ namespace {
     needs a funny "hand coded" prefix "rtl_" instead of a proper namespace
     prefix like "::rtl::".
 
-    A known problem with this template is when two occurences of calls to
+    A known problem with this template is when two occurrences of calls to
     create methods with identical template arguments appear in one translation
     unit.  Those two places will share a single object instance.  This can be
     avoided by using different Init structs (see the above code samples) in
@@ -322,6 +323,31 @@ public:
         return p;
     }
 
+    static inline Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor,
+                                const Data &rData)
+    {
+#if defined _MSC_VER
+        static Inst * m_pInstance = 0;
+#endif // _MSC_VER
+        Inst * p = m_pInstance;
+        if (!p)
+        {
+            Guard aGuard(aGuardCtor());
+            p = m_pInstance;
+            if (!p)
+            {
+                p = aInstCtor(rData);
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                m_pInstance = p;
+            }
+        }
+        else
+        {
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
+        return p;
+    }
+
 private:
 #if !defined _MSC_VER
     static Inst * m_pInstance;
@@ -360,6 +386,22 @@ namespace rtl {
               using the outer class
               (the one that derives from this base class)
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename Unique>
+class Static {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get() {
+        static T instance;
+        return instance;
+    }
+};
+#else
 template<typename T, typename Unique>
 class Static {
 public:
@@ -383,6 +425,100 @@ private:
         }
     };
 };
+#endif
+
+/** Helper base class for a late-initialized (default-constructed)
+    static variable, implementing the double-checked locking pattern correctly.
+
+    @derive
+    Derive from this class (common practice), e.g.
+    <pre>
+    struct MyStatic : public rtl::Static<MyType, MyStatic> {};
+    ...
+    MyType & rStatic = MyStatic::get();
+    ...
+    </pre>
+
+    @tplparam T
+              variable's type
+    @tplparam Unique
+              Implementation trick to make the inner static holder unique,
+              using the outer class
+              (the one that derives from this base class)
+*/
+#if (__GNUC__ >= 4)
+template<typename T, typename Data, typename Unique>
+class StaticWithArg {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get(const Data& rData) {
+        static T instance(rData);
+        return instance;
+    }
+
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get(Data& rData) {
+        static T instance(rData);
+        return instance;
+    }
+};
+#else
+template<typename T, typename Data, typename Unique>
+class StaticWithArg {
+public:
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get(const Data& rData) {
+        return *rtl_Instance<
+            T, StaticInstanceWithArg,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data >::create( StaticInstanceWithArg(),
+                                      ::osl::GetGlobalMutex(),
+                                      rData );
+    }
+
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get(Data& rData) {
+        return *rtl_Instance<
+            T, StaticInstanceWithArg,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data >::create( StaticInstanceWithArg(),
+                                      ::osl::GetGlobalMutex(),
+                                      rData );
+    }
+private:
+    struct StaticInstanceWithArg {
+        T * operator () (const Data& rData) {
+            static T instance(rData);
+            return &instance;
+        }
+
+        T * operator () (Data& rData) {
+            static T instance(rData);
+            return &instance;
+         }
+    };
+};
+#endif
 
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
@@ -392,6 +528,23 @@ private:
     @tplparam InitAggregate
               initializer functor class
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename InitAggregate>
+class StaticAggregate {
+public:
+    /** Gets the static aggregate, late-initializing.
+        Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                aggregate
+    */
+    static T * get() {
+        static T *instance = InitAggregate()();
+        return instance;
+    }
+};
+#else
 template<typename T, typename InitAggregate>
 class StaticAggregate {
 public:
@@ -408,7 +561,7 @@ public:
                 InitAggregate(), ::osl::GetGlobalMutex() );
     }
 };
-
+#endif
 /** Helper base class for a late-initialized static variable,
     implementing the double-checked locking pattern correctly.
 
@@ -440,6 +593,23 @@ public:
               Initializer functor's return type.
               Default is T (common practice).
 */
+#if (__GNUC__ >= 4)
+template<typename T, typename InitData,
+         typename Unique = InitData, typename Data = T>
+class StaticWithInit {
+public:
+    /** Gets the static.  Mutual exclusion is implied by a functional
+        -fthreadsafe-statics
+
+        @return
+                static variable
+    */
+    static T & get() {
+        static T instance = InitData()();
+        return instance;
+    }
+};
+#else
 template<typename T, typename InitData,
          typename Unique = InitData, typename Data = T>
 class StaticWithInit {
@@ -466,7 +636,9 @@ private:
         }
     };
 };
-
+#endif
 } // namespace rtl
 
 #endif // INCLUDED_RTL_INSTANCE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

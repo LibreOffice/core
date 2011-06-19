@@ -47,7 +47,7 @@ published constants FocusChangeReason
 
     //-------------------------------------------------------------------------
 
-    /** Focus changed because KeyLeft/Right/Up/Down was pressed.
+    /** Focus changed because Key Left/Right/Up/Down was pressed.
      */
     const long CURSOR = 2;
 

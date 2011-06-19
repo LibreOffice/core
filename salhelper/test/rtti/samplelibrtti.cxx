@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "samplelibrtti.hxx"
 #include <stdio.h>
 
@@ -12,10 +13,6 @@ void MyClassA::funcB()
 }
 
 void MyClassA::funcC()
-{
-}
-
-void MyClassA::funcD()
 {
 }
 
@@ -34,6 +31,4 @@ void MyClassB::funcC()
 {
 }
 
-void MyClassB::funcD()
-{
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@ using namespace ::com::sun::star::uno;
 
 class TestListener : public WeakImplHelper1< XVetoableChangeListener >
 {
+public:
     // Methods
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw(::com::sun::star::uno::RuntimeException)
         {
@@ -54,7 +56,6 @@ class TestListener : public WeakImplHelper1< XVetoableChangeListener >
         {
 
         }
-
 };
 
 void test_interfacecontainer()
@@ -151,3 +152,5 @@ void test_interfacecontainer()
         helper.disposeAndClear( EventObject() );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

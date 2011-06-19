@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,6 @@
     #include <sal/types.h>
 #endif
 
-// #ifndef _RTL_TRES_H_
-//     #include <rtl/tres.h>
-// #endif
-
 #include <testshl/tresstatewrapper.hxx>
 
 #ifndef _RTL_STRING_HXX_
@@ -52,8 +49,7 @@
 #endif
 #include <rtl/ustring.h>
 
-using namespace rtl;
-
+using ::rtl::OString;
 //------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------
@@ -3603,3 +3599,5 @@ D:\local\644\SRX644\sal\qa\rtl_OString.cxx(3559) : error C2664:
         This conversion requires a reinterpret_cast, a C-style cast or function-
 style cast
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

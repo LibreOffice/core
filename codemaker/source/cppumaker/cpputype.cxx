@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,8 +51,11 @@
 #include "dumputils.hxx"
 #include "includes.hxx"
 
-using namespace rtl;
 using namespace codemaker::cpp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 namespace {
 
@@ -359,6 +363,7 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     const
 {
     //TODO: Only include what is really needed
+    includes.addRtlInstanceHxx();
     includes.addOslMutexHxx();
     includes.addType();
     if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE) {
@@ -589,16 +594,21 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
 
 void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    dumpGetCppuTypePreamble(o);
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
-    o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
-
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
+    OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
+    OString sStaticTypeClass = "the" + sType + "Type";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "{\n";
     inc();
-    o << indent() << "::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );\n";
-
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
+    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "{\n";
     inc();
+
     o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
       << m_typeName.replace('/', '.') << "\") );\n\n";
 
@@ -675,8 +685,8 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     } else {
         o << indent() << count << ",\n" << indent() << "0 );\n\n";
     }
-
     dec();
+
     o << indent()
       << ("typelib_typedescription_register( (typelib_TypeDescription**)&pTD"
           " );\n\n");
@@ -684,15 +694,24 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "static ::com::sun::star::uno::Type the_staticType( "
+    o << indent() << "::com::sun::star::uno::Type the_staticType( "
       << getTypeClass(m_typeName) << ", sTypeName );\n";
-    o << indent() << "the_pType = &the_staticType;\n";
+    o << indent() << "return the_staticType;\n";
 
     dec();
     o << indent() << "}\n";
     dec();
-    o << indent() << "}\n\n";
-    o << indent() << "return *the_pType;\n";
+    o << indent() << "};\n\n";
+
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+
+    o << " }\n\n";
+
+    dumpGetCppuTypePreamble(o);
+    o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
     dumpGetCppuTypePostamble(o);
 }
 
@@ -1200,7 +1219,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
             {
                 ::rtl::OUString aUStr(constValue.m_value.aString);
                 ::rtl::OString aStr = ::rtl::OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US);
-                o << "::rtl::OUString::createFromAscii(\"" << aStr.getStr() << "\")";
+                o << "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"" << aStr.getStr() << "\"))";
             }
             break;
     }
@@ -1515,15 +1534,20 @@ void InterfaceType::dumpNormalGetCppuType(FileStream& o)
 
 void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    dumpGetCppuTypePreamble(o);
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
-    o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
-
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
+    OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
+    OString sStaticTypeClass = "the" + sType + "Type";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "{\n";
     inc();
-    o << indent() << "::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );\n";
+    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "{\n";
 
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
     inc();
     o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
       << m_typeName.replace('/', '.') << "\") );\n\n";
@@ -1595,9 +1619,38 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
       << ("typelib_typedescription_release( (typelib_TypeDescription*)pTD"
           " );\n\n");
 
-    o << indent() << "static ::com::sun::star::uno::Type the_staticType( "
+    o << indent() << "::com::sun::star::uno::Type the_staticType( "
       << getTypeClass(m_typeName) << ", sTypeName );\n";
-    o << indent() << "the_pType = &the_staticType;\n";
+
+    o << indent() << "return the_staticType;\n";
+
+    dec();
+
+    o << indent() << "}\n";
+    dec();
+    o << indent() << "};\n\n";
+
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+    o << " }\n\n";
+
+    dumpGetCppuTypePreamble(o);
+    o  << indent() << "const ::com::sun::star::uno::Type &rRet = detail::" << sStaticTypeClass << "::get();\n";
+
+    o << indent() << "// End inline typedescription generation\n";
+
+    o  << indent() << "static bool bInitStarted = false;\n";
+    o  << indent() << "if (!bInitStarted)\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );\n";
+    o  << indent() << "if (!bInitStarted)\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
+    o  << indent() << "bInitStarted = true;\n";
 
     StringSet   aTypes;
     // type for RuntimeException is always needed
@@ -1615,14 +1668,18 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
         dumpCppuMethods(o, index);
     }
 
-    o << indent() << "// End inline typedescription generation\n";
-
     dec();
-    o << indent() << "}\n";
+    o  << indent() << "}\n";
     dec();
-    o << indent() << "}\n\n"
-      << indent() << "return *the_pType;\n";
+    o  << indent() << "}\n";
+    o  << indent() << "else\n";
+    o  << indent() << "{\n";
+    inc();
+    o  << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
+    dec();
+    o  << indent() << "}\n";
 
+    o  << indent() << "return rRet;\n";
     dumpGetCppuTypePostamble(o);
 }
 
@@ -1831,6 +1888,10 @@ void InterfaceType::dumpCppuAttributes(FileStream& o, sal_uInt32& index)
             inc();
             o << indent() << "::rtl::OUString sAttributeType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
               << fieldType.replace('/', '.') << "\") );\n";
+
+            o << indent() << "::rtl::OUString sAttributeName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
+              << scope.replace('/', '.') << "::" << fieldName << "\") );\n";
+
             sal_Int32 getExceptions = dumpAttributeExceptionTypeNames(
                 o, "get", name, RT_MODE_ATTRIBUTE_GET);
             sal_Int32 setExceptions = dumpAttributeExceptionTypeNames(
@@ -1873,6 +1934,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
     if (m_hasMethods)
     {
         o << "\n" << indent() << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
+        OString             scope = m_typeName.replace('/', '.');
 
         for (sal_uInt16 i=0; i < methodCount; i++)
         {
@@ -1942,6 +2004,9 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 
             o << indent() << "::rtl::OUString sReturnType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
               << returnType.replace('/', '.') << "\") );\n";
+            o << indent() << "::rtl::OUString sMethodName" << i <<
+                "( RTL_CONSTASCII_USTRINGPARAM(\""
+              << scope.replace('/', '.') << "::" << methodName << "\") );\n";
             o << indent() << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
             inc();
             o << indent() << absoluteIndex++ << ", ";
@@ -1949,6 +2014,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                 o << "sal_True,\n";
             else
                 o << "sal_False,\n";
+
             o << indent() << "sMethodName" << i << ".pData,\n";
             o << indent() << "(typelib_TypeClass)" << getTypeClass(returnType)
               << ", sReturnType" << i << ".pData,\n";
@@ -2366,8 +2432,6 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 {
     o << "\n#ifdef SAL_W32\n"
       << "#   pragma pack(push, 8)\n"
-      << "#elif defined(SAL_OS2)\n"
-      << "#   pragma pack(8)\n"
       << "#endif\n\n";
 
     OSL_ASSERT(!isPolymorphic() || m_reader.getSuperTypeCount() == 0); //TODO
@@ -2444,8 +2508,6 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
 
     o << "#ifdef SAL_W32\n"
       << "#   pragma pack(pop)\n"
-      << "#elif defined(SAL_OS2)\n"
-      << "#   pragma pack()\n"
       << "#endif\n\n";
 
     return sal_True;
@@ -2781,14 +2843,30 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
     dumpGetCppuTypePostamble(out);
 }
 
-void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
-    dumpGetCppuTypePreamble(out);
-    out << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n"
-        << indent() << "if (the_pType == 0) {\n";
+void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
+{
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(out, m_typeName, false);
+    else
+        out << "namespace cppu { ";
+    out << " namespace detail {\n\n";
+
+    OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
+    OString sStaticTypeClass = "the" + sType + "Type";
+    out << indent();
+    if (isPolymorphic())
+        dumpTemplateHead(out);
+    out << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, ";
+    out << sStaticTypeClass;
+    if (isPolymorphic())
+        dumpTemplateParameters(out);
+    out << " >\n";
+
+    out << indent() << "{\n";
     inc();
-    out << indent()
-        << "::osl::MutexGuard the_guard(::osl::Mutex::getGlobalMutex());\n"
-        << indent() << "if (the_pType == 0) {\n";
+    out << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    out << indent() << "{\n";
+
     inc();
     if (isPolymorphic()) {
         out << indent() << "::rtl::OUStringBuffer the_buffer;\n" << indent()
@@ -2912,18 +2990,26 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << ", " << fields << ", the_members);\n";
     out << indent() << "::typelib_typedescription_register(&the_newType);\n";
     out << indent() << "::typelib_typedescription_release(the_newType);\n";
-    out << indent() << "static ::com::sun::star::uno::Type the_staticType("
+
+    out << indent() << "::com::sun::star::uno::Type the_staticType("
         << getTypeClass(m_typeName) << ", the_name);\n";
-    out << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
-    out << indent() << "the_pType = &the_staticType;\n";
+    out << indent() << "return the_staticType;\n";
     dec();
     out << indent() << "}\n";
     dec();
-    out << indent() << "} else {\n";
-    inc();
-    out << indent() << "OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();\n";
-    dec();
-    out << indent() << "}\n" << indent() << "return *the_pType;\n";
+    out << indent() << "};\n";
+
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(out, m_typeName, false);
+    else
+        out << " }";
+    out << " }\n\n";
+
+    dumpGetCppuTypePreamble(out);
+    out  << indent() << "return detail::" << sStaticTypeClass;
+    if (isPolymorphic())
+        dumpTemplateParameters(out);
+    out  << "::get();\n";
     dumpGetCppuTypePostamble(out);
 }
 
@@ -3017,7 +3103,7 @@ void StructureType::addComprehensiveGetCppuTypeIncludes(
 {
     includes.addType();
     includes.addCppuUnotypeHxx();
-    includes.addOslDoublecheckedlockingH();
+    includes.addRtlInstanceHxx();
     includes.addOslMutexHxx();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
@@ -3584,15 +3670,20 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
 
 void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
 {
-    dumpGetCppuTypePreamble(o);
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false);
+    else
+        o << "namespace cppu { ";
+    o << " namespace detail {\n\n";
 
-    o << indent() << "static ::com::sun::star::uno::Type * the_pType = 0;\n";
-
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
+    OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
+    OString sStaticTypeClass = "the" + sType + "Type";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "{\n";
     inc();
-    o << indent() << "::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );\n";
+    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "{\n";
 
-    o << indent() << "if (the_pType == 0)\n" << indent() << "{\n";
     inc();
     o << indent() << "::rtl::OUString sTypeName( RTL_CONSTASCII_USTRINGPARAM(\""
       << m_typeName.replace('/', '.') << "\") );\n\n";
@@ -3644,16 +3735,23 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "static ::com::sun::star::uno::Type the_staticType( "
+    o << indent() << "::com::sun::star::uno::Type the_staticType( "
       << getTypeClass(m_typeName) << ", sTypeName );\n";
-    o << indent() << "the_pType = &the_staticType;\n";
+    o << indent() << "return the_staticType;\n";
 
     dec();
     o << indent() << "}\n";
     dec();
-    o << indent() << "}\n\n"
-      << indent() << "return *the_pType;\n";
+    o << indent() << "};\n\n";
 
+    if (!isPolymorphic())
+        codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false);
+    else
+        o << " }";
+    o << " }\n\n";
+
+    dumpGetCppuTypePreamble(o);
+    o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
     dumpGetCppuTypePostamble(o);
 }
 
@@ -4502,3 +4600,5 @@ OString scopedName(const OString& scope, const OString& type,
     return tmpBuf.makeStringAndClear();
 }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

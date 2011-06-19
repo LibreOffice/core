@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_XSystemDependentMenuPeer_idl__
 #define __com_sun_star_awt_XSystemDependentMenuPeer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -51,7 +49,7 @@ interface XSystemDependentMenuPeer: com::sun::star::uno::XInterface
     /** returns a system-specific window handle.
 
         @returns
-        a sytem-specific handle to a menu
+        a system-specific handle to a menu
         or 0 if the menu is not in the same process.
 
         <p>You must check the machine ID and the process ID.<BR>

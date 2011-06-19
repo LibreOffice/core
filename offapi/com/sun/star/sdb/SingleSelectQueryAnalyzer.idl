@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
 #define __com_sun_star_sdb_SingleSelectQueryAnalyzer_idl__
 
-#ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 interface XTablesSupplier;

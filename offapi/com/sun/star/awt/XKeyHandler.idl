@@ -28,13 +28,9 @@
 #ifndef __com_sun_star_awt_XKeyHandler_idl__
 #define __com_sun_star_awt_XKeyHandler_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_KeyEvent_idl__
 #include <com/sun/star/awt/KeyEvent.idl>
-#endif
 
 
 module com {  module sun {  module star {  module awt {
@@ -61,7 +57,7 @@ published interface XKeyHandler : ::com::sun::star::lang::XEventListener
         when known, with that of other handlers.</p>
 
         <p>Consuming this event does not prevent the pending key-release
-        event from beeing broadcasted.</p>
+        event from being broadcasted.</p>
 
         @param aEvent
             The key event informs about the pressed key.
@@ -81,7 +77,7 @@ published interface XKeyHandler : ::com::sun::star::lang::XEventListener
         handling by the broadcaster will take place.
 
         <p>Consume the event if the action performed by the implementation
-        is mutualy exclusive with the default action of the broadcaster or,
+        is mutually exclusive with the default action of the broadcaster or,
         when known, with that of other handlers.</p>
 
         @param aEvent

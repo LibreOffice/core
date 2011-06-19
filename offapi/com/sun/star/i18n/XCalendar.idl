@@ -63,7 +63,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** Returns the ID string of the loaded calendar, for example,
-        <b>"gregorian"</b>
+        <b>"Gregorian"</b>
      */
     string  getUniqueID();
 

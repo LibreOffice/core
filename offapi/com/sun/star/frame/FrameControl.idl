@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_FrameControl_idl__
 #define __com_sun_star_frame_FrameControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 
@@ -45,7 +40,7 @@
     <p>
     If the control is visible and has a valid (loadable) component URL,
     then the <member>FrameControl::Frame</member> property is set.
-    Normaly this control can be used for preview functionality inside
+    Normally this control can be used for preview functionality inside
     any UI.
     </p>
  */

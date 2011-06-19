@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_text_RedlinePortion_idl__
 #define __com_sun_star_text_RedlinePortion_idl__
 
-#ifndef __com_sun_star_text_TextPortion_idl__
 #include <com/sun/star/text/TextPortion.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValues_idl__
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
 
 //=============================================================================
 

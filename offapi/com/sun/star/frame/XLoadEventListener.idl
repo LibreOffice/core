@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_XLoadEventListener_idl__
 #define __com_sun_star_frame_XLoadEventListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
 //=============================================================================
 
@@ -53,7 +51,7 @@ published interface XLoadEventListener: com::sun::star::lang::XEventListener
     [oneway] void loadFinished( [in] XFrameLoader Loader );
 
     //-------------------------------------------------------------------------
-    /** is called when a frame load is cancelled or failed.
+    /** is called when a frame load is canceled or failed.
 
         @param Loader
             the source of this event

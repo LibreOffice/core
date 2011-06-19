@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,7 +218,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(
     an arbitrary, non-NULL value
 
     @param encoded
-    non-NULL out parameter, receiving the given value with all occurences of
+    non-NULL out parameter, receiving the given value with all occurrences of
     special characters ("$" and "\") escaped
 
     @since UDK 3.2.9
@@ -231,3 +232,5 @@ void SAL_CALL rtl_bootstrap_encode(
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

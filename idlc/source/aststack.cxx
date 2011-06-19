@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,11 +124,9 @@ AstStack* AstStack::push(AstScope* pScope)
 
 void AstStack::pop()
 {
-    AstScope *pScope;
-
     if (m_top < 1)
         return;
-    pScope = m_stack[--m_top];
+    --m_top;
 }
 
 void AstStack::clear()
@@ -135,3 +134,4 @@ void AstStack::clear()
     m_top = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

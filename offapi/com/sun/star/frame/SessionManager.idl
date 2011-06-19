@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_SessionManager_idl__
 #define __com_sun_star_frame_SessionManager_idl__
 
-#ifndef __com_sun_star_frame_XSessionManagerClient_idl__
 #include <com/sun/star/frame/XSessionManagerClient.idl>
-#endif
 
 //=============================================================================
 
@@ -53,7 +51,7 @@
         <ul>
         <li>The application may request to interact with the user (e.g. to ask
         where to save documents). This request is necessary because at any one
-        time only one application can iteract with the user. The session manager
+        time only one application can interact with the user. The session manager
         coordinates these requests and grants every application in need of user
         interaction a timeslot in which it may interact with the user</li>
         <li>try to cancel the whole shutdown; the session manager may or may

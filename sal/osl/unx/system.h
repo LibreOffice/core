@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,9 +111,13 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif __BYTE_ORDER == __PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
@@ -130,8 +135,28 @@
 
 #endif
 
+#ifdef ANDROID
+#   include <pthread.h>
+#   include <sys/file.h>
+#   include <sys/ioctl.h>
+#   include <sys/uio.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <dlfcn.h>
+#   include <endian.h>
+#   include <sys/time.h>
+#   include <semaphore.h>
+#   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
+#   define  pthread_testcancel()
+#   define  NO_PTHREAD_PRIORITY
+#endif
+
 #ifdef NETBSD
-#   define  ETIME ETIMEDOUT
+#   include <sys/param.h>
+#       ifndef ETIME
+#     define  ETIME ETIMEDOUT
+#       endif
 #   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
 #   include <netdb.h>
@@ -192,84 +217,74 @@
 #   define  NO_PTHREAD_RTL
 #endif
 
-#ifdef SCO
-#   define AF_IPX -1
-#   include <strings.h>
+#ifdef OPENBSD
+#   define  ETIME ETIMEDOUT
+#   define _POSIX_THREAD_SYSCALL_SOFT 1
 #   include <pthread.h>
-#   include <shadow.h>
-#   include <netdb.h>
-#   include <sys/un.h>
-#   include <sys/netinet/tcp.h>
-#   include <sys/types.h>
-#   include <sys/byteorder.h>
+#   include <sys/sem.h>
+#   include <semaphore.h>
 #   include <dlfcn.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#   define  sched_yield()               pthread_yield()
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_RTL
-#   define  NO_PTHREAD_PRIORITY
-extern int pthread_cancel(pthread_t);
-extern unsigned int nanosleep(unsigned int);
-#   define  SLEEP_TIMESPEC(timespec)    (timespec .tv_sec > 0) ? sleep(timespec .tv_sec), nanosleep(timespec .tv_nsec) : nanosleep(timespec .tv_nsec)
-#   define  PATH_MAX                    _POSIX_PATH_MAX
-#   define  S_ISSOCK                    S_ISFIFO
-#   define  PTHREAD_SIGACTION           pthread_sigaction
-#   define  STAT_PARENT                 stat
+#   include <sys/filio.h>
+#   include <sys/ioctl.h>
+#   include <sys/param.h>
+#   include <sys/time.h>
+#   include <sys/uio.h>
+#   include <sys/exec.h>
+#       include <sys/un.h>
+#   include <netinet/tcp.h>
+#       define  IORESOURCE_TRANSFER_BSD
+#   include <machine/endian.h>
+#      define  PTR_SIZE_T(s)   ((size_t *)&(s))
+#       define  IORESOURCE_TRANSFER_BSD
+#       define  IOCHANNEL_TRANSFER_BSD_RENO
+#       define  pthread_testcancel()
+#       define  NO_PTHREAD_PRIORITY
+#       define  NO_PTHREAD_RTL
+#       define  PTHREAD_SIGACTION                       pthread_sigaction
+#endif
+
+#ifdef DRAGONFLY
+#   define  ETIME ETIMEDOUT
+#   include <pthread.h>
+#   include <sys/sem.h>
+#   include <semaphore.h>
+#   include <dlfcn.h>
+#   include <sys/filio.h>
+#   include <sys/ioctl.h>
+#   include <sys/param.h>
+#   include <sys/time.h>
+#   include <sys/uio.h>
+#   include <sys/exec.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <machine/endian.h>
+#   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
 #endif
 
 #ifdef AIX
 #   define AF_IPX -1
 #   include <strings.h>
 #   include <pthread.h>
+#   include <dlfcn.h>
 #   include <sys/time.h>
 #   include <sys/un.h>
 #   include <netinet/tcp.h>
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#   define  sched_yield()               pthread_yield()
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
 #   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
-#endif
-
-#ifdef HPUX
-#   define  AF_IPX -1
-#   undef   howmany
-#   undef   MAXINT
-#   include <pthread.h>
-#   include <sys/un.h>
-#   include <sys/sched.h>
-#   include <sys/xti.h>
-#   include <sys/pstat.h>
-#   include <shadow.h>
-#   include <crypt.h>
-#   include <machine/param.h>
-#   define  LIBPATH "SHLIB_PATH"
-#   define  PTR_FD_SET(s)               ((int *)&(s))
-#   define  PTHREAD_VALUE(t)            ((t).field2)
-#   define  PTHREAD_NONE_INIT           { 0, -1 }
-#   define  PTHREAD_ATTR_DEFAULT        pthread_attr_default
-#   define  PTHREAD_MUTEXATTR_DEFAULT   pthread_mutexattr_default
-#   define  PTHREAD_CONDATTR_DEFAULT    pthread_condattr_default
-#   define  pthread_detach(t)           pthread_detach(&(t))
-#   define  NO_PTHREAD_PRIORITY
-#   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
-#   undef   sigaction
-#   define  PTHREAD_SIGACTION           cma_sigaction
 #endif
 
 #ifdef SOLARIS
@@ -335,10 +350,42 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 #endif
 
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
-    !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(MACOSX)
+#ifdef IOS
+#   ifndef ETIME
+#       define  ETIME ETIMEDOUT
+#   endif
+#   include <pthread.h>
+#   include <sys/file.h>
+#   include <sys/ioctl.h>
+#   include <sys/uio.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <machine/endian.h>
+#   include <sys/time.h>
+#   include <sys/semaphore.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#       endif
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#       endif
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
+#       define _PDP_ENDIAN
+#       endif
+#   endif
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
+#   define  NO_PTHREAD_RTL
+#endif
+
+#if !defined(_WIN32)  && \
+    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
+    !defined(AIX)     && \
+    !defined(SOLARIS) && !defined(MACOSX) && \
+    !defined(OPENBSD) && !defined(DRAGONFLY) && \
+    !defined(IOS) && !defined(ANDROID)
 #   error "Target platform not specified!"
 #endif
 
@@ -478,7 +525,9 @@ extern int sem_post(sem_t* sem);
 
 #ifdef NO_PTHREAD_RTL
 #if !defined FREEBSD || (__FreeBSD_version < 500112)
+#if !defined NETBSD
 struct passwd *getpwent_r(struct passwd *pwd, char *buffer,  int buflen);
+#endif
 extern struct spwd *getspnam_r(const char *name, struct spwd *result,
                                char *buffer, int buflen);
 
@@ -493,3 +542,4 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
 #endif /* __OSL_SYSTEM_H__ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

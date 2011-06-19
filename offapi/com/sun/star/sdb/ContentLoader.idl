@@ -29,9 +29,7 @@
 #ifndef __com_sun_star_sdb_ContentLoader_idl__
 #define __com_sun_star_sdb_ContentLoader_idl__
 
-#ifndef __com_sun_star_frame_Frame_idl__
 #include <com/sun/star/frame/FrameLoader.idl>
-#endif
 
 module com {  module sun {  module star {  module sdb {
 
@@ -89,7 +87,7 @@ published service ContentLoader
 
         The parameters passed to the
         <member scope="com::sun::star::frame">XFrameLoader::load()</member>
-        are forwarded to the object beeing created,
+        are forwarded to the object being created,
         in particular to it's
         <type scope="com::sun::star::lang">XInitialization</type>
         interface.

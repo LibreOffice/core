@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterRetur
     register float fret asm("$f0");
     register double dret asm("$f0");
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr,"Mapping Return with %lx %ld %f\n", r0, r0, dret);
 #endif
     switch (eTypeClass)
@@ -84,7 +85,7 @@ void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterRetur
     default:
             break;
     }
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "end of MapReturn with %x\n", pRegisterReturn ? *pRegisterReturn : 0);
 #endif
 }
@@ -145,7 +146,7 @@ void callVirtualMethod(
     if ( nGPR > axp::MAX_GPR_REGS )
         nGPR = axp::MAX_GPR_REGS;
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
             fprintf( stderr, "= nStack is %d\n", nStack );
@@ -341,7 +342,7 @@ static void cpp_call(
             pStackStart, (pStack - pStackStart),
             pGPR, nRegs,
             pFPR, nRegs );
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -405,7 +406,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "unoInterfaceProxyDispatch\n");
 #endif
 
@@ -529,4 +530,5 @@ void unoInterfaceProxyDispatch(
 }
 
 } } }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

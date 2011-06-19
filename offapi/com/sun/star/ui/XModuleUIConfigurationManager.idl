@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_ui_XModuleUIConfigurationManager_idl__
 #define __com_sun_star_ui_XModuleUIConfigurationManager_idl__
 
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalAccessException_idl__
 #include <com/sun/star/lang/IllegalAccessException.idl>
-#endif
 
 module com { module sun { module star { module ui {
 
@@ -55,12 +41,12 @@ module com { module sun { module star { module ui {
 
     <p>
     A module user interface configuration manager supports, unlike a
-    document based ui configration manager, two layers of configuration
+    document based ui configuration manager, two layers of configuration
     settings data:<br/>
     1. Layer: A module default user interface configuration which
               describe all user interface elements settings that are
               used by OpenOffice. It is not possible to insert, remove
-              or changeelements settings in this layer through the
+              or change elements settings in this layer through the
               interfaces.</br>
     2. Layer: A module user interface configuration which only contains
               customized user interface elements and user-defined ones.
@@ -79,8 +65,8 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param ResourceURL
             a resource URL which identifies the user interface element. A
-            resourcce URL must meet the following syntax:
-            "private:resource/$type/$name. It is only allowed to use ascii
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
             characters for type and name.
 
         @return
@@ -94,8 +80,8 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param ResourceURL
             a resource URL which identifies the user interface element. A
-            resourcce URL must meet the following syntax:
-            "private:resource/$type/$name. It is only allowed to use ascii
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
             characters for type and name.
 
         @return

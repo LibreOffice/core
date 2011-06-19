@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_io_Pipe_idl__
 #define __com_sun_star_io_Pipe_idl__
 
-#ifndef __com_sun_star_io_XOutputStream_idl__
 #include <com/sun/star/io/XOutputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
 
 //=============================================================================

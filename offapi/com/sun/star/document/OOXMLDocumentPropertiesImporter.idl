@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_document_OOXMLDocumentPropertiesImporter_idl__
 #define __com_sun_star_document_OOXMLDocumentPropertiesImporter_idl__
 
-#ifndef __com_sun_star_document_XOOXMLDocumentPropertiesImporter_idl__
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.idl>
-#endif
 
 //=============================================================================
 

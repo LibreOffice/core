@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_sdbc_XResultSet_idl__
 #define __com_sun_star_sdbc_XResultSet_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbc {
 
@@ -50,7 +46,7 @@
     <p>
     A ResultSet maintains a cursor pointing to its current row of
     data. Initially the cursor is positioned before the first row.
-    The 'next' method moves the cursor to the next row.
+    The "next" method moves the cursor to the next row.
     </p>
  */
 published interface XResultSet: com::sun::star::uno::XInterface

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_embed_FileSystemStorageFactory_idl__
 #define __com_sun_star_embed_FileSystemStorageFactory_idl__
 
-#ifndef __com_sun_star_lang_XSingleServiceFactory_idl__
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
-#endif
 
 
 //============================================================================
@@ -50,7 +48,7 @@ published service FileSystemStorageFactory
         <p>
         In case
         <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
-        call is used the result storage will be open in readwrite mode based
+        call is used the result storage will be open in read-write mode based
         on an arbitrary file system folder.
         </p>
 
@@ -75,7 +73,7 @@ published service FileSystemStorageFactory
 
             <dt>parameter 3</dt>
             <dd>
-                      allowes to provide
+                      allows to provide
                       <type scope="com::sun::star::document">MediaDescryptor</type>
                       to the storage so some parts can be used for
                       initialization, it can be for example

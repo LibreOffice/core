@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include "registry/registry.hxx"
 #include "registry/types.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 namespace typereg { class Reader; }
@@ -42,24 +43,13 @@ typedef ::std::vector< Registry* >  RegistryList;
 typedef ::std::pair< RegistryKey, sal_Bool >    KeyPair;
 typedef ::std::vector< KeyPair >    RegistryKeyList;
 
-#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
-    EqualString,
-    NewAlloc
-> T2TypeClassMap;
-#else
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
     HashString,
     EqualString
 > T2TypeClassMap;
-#endif
 
 struct TypeManagerImpl
 {
@@ -180,3 +170,5 @@ protected:
 };
 
 #endif // INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

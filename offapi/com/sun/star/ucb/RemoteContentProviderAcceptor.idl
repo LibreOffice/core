@@ -50,7 +50,7 @@ published service RemoteContentProviderAcceptor
         for this service, which can improve performance in certain situations.
 
         <p>The way this works might change, therefore this interface is marked
-        as deprectated.
+        as deprecated.
 
         @deprecated
      */

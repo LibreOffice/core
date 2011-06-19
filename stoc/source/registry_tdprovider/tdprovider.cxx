@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,33 +68,14 @@ namespace stoc_bootstrap
 {
 uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 OUString rdbtdp_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 }
 
@@ -418,8 +400,7 @@ Any ProviderImpl::getByHierarchicalNameImpl( const OUString & rName )
         }
         catch ( InvalidRegistryException const & )
         {
-            OSL_ENSURE( sal_False,
-                        "ProviderImpl::getByHierarchicalName "
+            OSL_FAIL( "ProviderImpl::getByHierarchicalName "
                         "- Caught InvalidRegistryException!" );
 
             // openKey, closeKey, getValueType, getBinaryValue, isValid
@@ -598,11 +579,11 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         case RT_TYPE_INVALID:
         case RT_TYPE_OBJECT:      // deprecated and not used
         case RT_TYPE_UNION:       // deprecated and not used
-            OSL_ENSURE( sal_False, "createTypeDescription - Unsupported Type!" );
+            OSL_FAIL( "createTypeDescription - Unsupported Type!" );
             break;
 
         default:
-            OSL_ENSURE( sal_False, "createTypeDescription - Unknown Type!" );
+            OSL_FAIL( "createTypeDescription - Unknown Type!" );
             break;
     }
 
@@ -627,3 +608,5 @@ com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create(
     return com::sun::star::uno::Reference< XInterface >( *new stoc_rdbtdp::ProviderImpl( xContext ) );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

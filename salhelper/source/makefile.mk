@@ -33,7 +33,7 @@ ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
+.IF "$(OS)" != "WNT"
 UNIXVERSIONNAMES=UDK
 .ENDIF # WNT
 
@@ -46,20 +46,20 @@ UNIXVERSIONNAMES=UDK
 SLOFILES=	\
     $(SLO)$/condition.obj \
     $(SLO)$/dynload.obj \
-    $(SLO)$/simplereferenceobject.obj
+    $(SLO)$/simplereferenceobject.obj \
+    $(SLO)$/timer.obj
 
-.IF "$(GUI)" == "WNT"
+.IF "$(COM)" == "MSC"
 SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COMID)
-.ELIF "$(GUI)" == "OS2"
-SHL1TARGET=	salhelp$(UDK_MAJOR)
+SHL1IMPLIB=	i$(TARGET)
 .ELSE
 SHL1TARGET=	uno_$(TARGET)$(COMID)
+SHL1IMPLIB=	$(SHL1TARGET)
 .ENDIF
 
 SHL1STDLIBS=$(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1RPATH=  URELIB
@@ -68,8 +68,8 @@ DEF1NAME=	$(SHL1TARGET)
 
 .IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msci.map
-.ELIF "$(GUI)"=="OS2"
-SHL1VERSIONMAP=gcc3os2.map
+.ELIF "$(COMNAME)"=="mscx"
+SHL1VERSIONMAP=mscx.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=sols.map
 .ELIF "$(COMNAME)"=="gcc3"

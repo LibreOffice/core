@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_util_XModifiable2_idl__
 #define __com_sun_star_util_XModifiable2_idl__
 
-#ifndef __com_sun_star_util_XModifiable_idl__
 #include <com/sun/star/util/XModifiable.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
 #include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
 
 
 //=============================================================================
@@ -48,7 +44,7 @@ module com {  module sun {  module star {  module util {
     This interface allows to prevent changing of the modified state of the
     object. It is introduced for performance optimizations, to allow to prevent
     unnecessary updates, for example while importing a document.
-    Please use this interface very carefuly.
+    Please use this interface very carefully.
     </p>
  */
 published interface XModifiable2: com::sun::star::util::XModifiable
@@ -56,7 +52,7 @@ published interface XModifiable2: com::sun::star::util::XModifiable
     //-------------------------------------------------------------------------
     /** disable possibility to change modified state of the document
 
-        @retuns the value that says whether the modified state change was
+        @returns the value that says whether the modified state change was
                 enabled before the call
             <TRUE/> the changing of the modified state was already disabled
             <FALSE/> the changing of the modified state was enabled
@@ -67,7 +63,7 @@ published interface XModifiable2: com::sun::star::util::XModifiable
     //-------------------------------------------------------------------------
     /** enable possibility to change modified state of the document
 
-        @retuns the value that says whether the modified state change was
+        @returns the value that says whether the modified state change was
                 enabled before the call
             <TRUE/> the changing of the modified state was disabled
             <FALSE/> the changing of the modified state was already enabled

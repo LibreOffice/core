@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XSheetFilterable_idl__
 #define __com_sun_star_sheet_XSheetFilterable_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
-#endif
 
 //=============================================================================
 
@@ -42,7 +37,7 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** represents something that can be filtered using an XSheetFilterDesriptor.
+/** represents something that can be filtered using an XSheetFilterDescriptor.
 
     @see com::sun::star::sheet::XSheetFilterableEx
  */
@@ -62,7 +57,7 @@ published interface XSheetFilterable: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** performa a filter operation, using the settings of the passed filter
+    /** performs a filter operation, using the settings of the passed filter
         descriptor.
 
         @param xDescriptor

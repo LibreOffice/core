@@ -27,37 +27,14 @@
 #ifndef __com_sun_star_drawing_Shape_idl__
 #define __com_sun_star_drawing_Shape_idl__
 
-#ifndef __com_sun_star_document_LinkTarget_idl__
 #include <com/sun/star/document/LinkTarget.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_style_XStyle_idl__
 #include <com/sun/star/style/XStyle.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
 #include <com/sun/star/drawing/HomogenMatrix3.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XGluePointsSupplier_idl__
 #include <com/sun/star/drawing/XGluePointsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#endif
 
 //=============================================================================
 
@@ -179,7 +156,7 @@ published service Shape
     /** this property lets you get and set the transformation matrix
         for this shape.
 
-        The transformation is a 3x3 homogen matrix and can contain
+        The transformation is a 3x3 homogeneous matrix and can contain
         translation, rotation, shearing and scaling.
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
@@ -200,6 +177,10 @@ published service Shape
         the z-order.
     */
     [optional, property] long NavigationOrder;
+
+    /** this property lets you get and set a hyperlink for this shape.
+     */
+    [optional, property] string Hyperlink;
 };
 
 //=============================================================================

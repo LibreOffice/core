@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_drawing_ShapeCollection_idl__
 #define __com_sun_star_drawing_ShapeCollection_idl__
 
-#ifndef __com_sun_star_drawing_Shapes_idl__
 #include <com/sun/star/drawing/Shapes.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
 //=============================================================================
 

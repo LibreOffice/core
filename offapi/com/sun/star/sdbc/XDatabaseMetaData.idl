@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_sdbc_XDatabaseMetaData_idl__
 #define __com_sun_star_sdbc_XDatabaseMetaData_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
 
 
  module com {  module sun {  module star {  module sdbc {
@@ -58,7 +54,7 @@
     <type scope="com::sun::star::sdbc">SQLException</type>
     .
     That a value of <type scope="com::sun::star::sdbc">XResultSet</type> is <NULL/>
-    can be chaked with the method <member scope="com::sun::star::sdbc">XResultSet::wasNull()</member>.
+    can be checked with the method <member scope="com::sun::star::sdbc">XResultSet::wasNull()</member>.
     In the text only "(may be <NULL/>)" is mentioned for this case.
     </p>
     <p>Some of these methods take arguments that are String patterns. These
@@ -207,7 +203,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean usesLocalFilePerTable() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    /** use the database 'mixed case unquoted SQL identifiers' case sensitive.
+    /** use the database "mixed case unquoted SQL identifiers" case sensitive.
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -349,15 +345,15 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** gets the string that can be used to escape wildcard characters.
-        This is the string that can be used to escape '_' or '%' in
+        This is the string that can be used to escape "_" or "%" in
         the string pattern style catalog search parameters.
 
 
         <p>
-        The '_' character represents any single character.
+        The "_" character represents any single character.
         </p>
         <p>
-        The '%' character represents any sequence of zero or
+        The "%" character represents any sequence of zero or
         more characters.
         </p>
         @returns
@@ -829,7 +825,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean supportsSubqueriesInComparisons() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    /** Are subqueries in 'exists' expressions supported?
+    /** Are subqueries in "exists" expressions supported?
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -838,7 +834,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean supportsSubqueriesInExists() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    /** Are subqueries in 'in' statements supported?
+    /** Are subqueries in "in" statements supported?
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -1514,7 +1510,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <ul>
         <li> NO_NULLS - might not allow NULL values
         </li>
-        <li> NULABLE - definitely allows NULL values
+        <li> NULLABLE - definitely allows NULL values
         </li>
         <li> NULLABLE_UNKNOWN - nullability unknown
         </li>
@@ -1571,7 +1567,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         Only privileges matching the column name criteria are
         returned. They are ordered by COLUMN_NAME and PRIVILEGE.
         </p>
-        <p>Each privilige description has the following columns:
+        <p>Each privilege description has the following columns:
         </p>
         <ol>
         <li>
@@ -1587,7 +1583,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>GRANTOR</b> => grantor of access (may be <NULL/>)
+        <b>GRANTOR</b> => granter of access (may be <NULL/>)
         </li>
         <li>
         <b>GRANTEE</b> string => grantee of access
@@ -1621,7 +1617,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets a description of the access rights for each table available
         in a catalog. Note that a table privilege applies to one or
         more columns in the table. It would be wrong to assume that
-        this priviledge applies to all columns (this may be <TRUE/> for
+        this privilege applies to all columns (this may be <TRUE/> for
         some systems but is not <TRUE/> for all.)
 
 
@@ -1629,7 +1625,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         criteria are returned. They are ordered by TABLE_SCHEM,
         TABLE_NAME, and PRIVILEGE.
         </p>
-        <p>Each privilige description has the following columns:
+        <p>Each privilege description has the following columns:
         </p>
         <ol>
         <li>
@@ -1642,7 +1638,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>GRANTOR</b> => grantor of access (may be <NULL/>)
+        <b>GRANTOR</b> => granter of access (may be <NULL/>)
         </li>
         <li>
         <b>GRANTEE</b> string => grantee of access
@@ -2323,7 +2319,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>TYPE</b> short => index type:
         <ul>
         <li> 0 - this identifies table statistics that are
-        returned in conjuction with a table's index descriptions
+        returned in conjunction with a table's index descriptions
         </li>
         <li> CLUSTERED - this is a clustered index
         </li>
@@ -2384,7 +2380,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database support the given result set type?
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2397,10 +2393,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         with the given result set type?
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @param concurrency
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetConcurrency</type>
+            <type scope="com::sun::star::sdbc">ResultSetConcurrency</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2414,7 +2410,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own updates are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2426,7 +2422,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own deletes are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2438,7 +2434,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether a result set's own inserts are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2450,7 +2446,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether updates made by others are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2462,7 +2458,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether deletes made by others are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2474,7 +2470,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** indicates whether inserts made by others are visible.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2488,7 +2484,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <code>XResultSet.rowUpdated</code>.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2504,7 +2500,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         returns <FALSE/>, then deleted rows are removed from the result set.
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException
@@ -2518,7 +2514,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <member scope="com::sun::star::sdbc">XResultSet::rowInserted().</member>
         @param setType
             defined in
-            <type scop="com::sun::star::sdbc">ResultSetType</type>
+            <type scope="com::sun::star::sdbc">ResultSetType</type>
         @returns
             <TRUE/> if so
         @throws SQLException

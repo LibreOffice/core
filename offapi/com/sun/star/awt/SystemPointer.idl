@@ -52,7 +52,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a waiting symbol as a mouse pointer (for example hourglas).
+    /** specifies a waiting symbol as a mouse pointer (for example hourglass).
      */
     const long WAIT = 2;
 
@@ -64,7 +64,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer for online help.
+    /** specifies a mouse pointer for on-line help.
      */
     const long HELP = 4;
 
@@ -191,7 +191,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes horzizontal splitting.
+    /** specifies a mouse pointer which symbolizes horizontal splitting.
      */
     const long HSPLIT = 23;
 
@@ -287,7 +287,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes moving a bezier weight.
+    /** specifies a mouse pointer which symbolizes moving a Bezier weight.
      */
     const long MOVEBEZIERWEIGHT = 39;
 
@@ -389,7 +389,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer which symbolizes drawing a bezier.
+    /** specifies a mouse pointer which symbolizes drawing a Bezier.
      */
     const long DRAW_BEZIER = 56;
 

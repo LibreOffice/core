@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -182,15 +183,6 @@ static void __store_string_newFromUnicode_WithLength (
         OUSTRING_TO_OSTRING_CVTFLAGS);
 }
 
-#if 0  /* UNSUSED */
-static void __store_string_newFromUnicode (
-    rtl_String **newString, const rtl_uString *value)
-{
-    __store_string_newFromUnicode_WithLength (
-        newString, value->buffer, value->length);
-}
-#endif /* UNUSED */
-
 static void __store_string_newFromUnicode (
     rtl_String **newString, const sal_Unicode *value)
 {
@@ -369,3 +361,5 @@ int SAL_CALL main (int argc, char **argv)
     xBIOS.clear();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

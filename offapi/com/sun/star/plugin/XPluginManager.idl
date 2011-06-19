@@ -27,33 +27,19 @@
 #ifndef __com_sun_star_plugin_XPluginManager_idl__
 #define __com_sun_star_plugin_XPluginManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_plugin_XPluginContext_idl__
 #include <com/sun/star/plugin/XPluginContext.idl>
-#endif
 
-#ifndef __com_sun_star_plugin_PluginDescription_idl__
 #include <com/sun/star/plugin/PluginDescription.idl>
-#endif
 
-#ifndef __com_sun_star_plugin_XPlugin_idl__
 #include <com/sun/star/plugin/XPlugin.idl>
-#endif
 
-#ifndef __com_sun_star_plugin_PluginException_idl__
 #include <com/sun/star/plugin/PluginException.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XToolkit_idl__
 #include <com/sun/star/awt/XToolkit.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XWindowPeer_idl__
 #include <com/sun/star/awt/XWindowPeer.idl>
-#endif
 
 
 //=============================================================================

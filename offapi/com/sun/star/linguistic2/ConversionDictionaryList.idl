@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_linguistic2_ConversionDictionaryList_idl__
 #define __com_sun_star_linguistic2_ConversionDictionaryList_idl__
 
-#ifndef __com_sun_star_linguistic2_XConversionDictionaryList_idl__
 #include <com/sun/star/linguistic2/XConversionDictionaryList.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
 //=============================================================================
 

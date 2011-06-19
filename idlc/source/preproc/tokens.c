@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -477,7 +478,7 @@ void
             if (write(1, wbuf, OBS) != OBS)
                 error(ERROR, "short write!");
             if (wbp > &wbuf[OBS])
-                memcpy(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
+                memmove(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
             wbp -= OBS;
         }
     }
@@ -532,3 +533,5 @@ uchar *
     ns[l + o] = '\0';
     return (uchar *) strncpy((char *) ns + o, (char *) s, l) - o;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

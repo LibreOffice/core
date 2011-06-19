@@ -28,33 +28,15 @@
 #ifndef __com_sun_star_xml_dom_XDocument_idl__
 #define __com_sun_star_xml_dom_XDocument_idl__
 
-#ifndef __com_sun_star_xml_dom_XNode_idl__
 #include <com/sun/star/xml/dom/XNode.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XAttr_idl__
 #include <com/sun/star/xml/dom/XAttr.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XCDATASection_idl__
 #include <com/sun/star/xml/dom/XCDATASection.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XComment_idl__
 #include <com/sun/star/xml/dom/XComment.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XDocumentFragemnt_idl__
 #include <com/sun/star/xml/dom/XDocumentFragment.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XEntityReference_idl__
 #include <com/sun/star/xml/dom/XEntityReference.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XProcessingInstruction_idl__
 #include <com/sun/star/xml/dom/XProcessingInstruction.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XDocumentType_idl__
 #include <com/sun/star/xml/dom/XDocumentType.idl>
-#endif
-#ifndef __com_sun_star_xml_dom_XDOMImplementation_idl__
 #include <com/sun/star/xml/dom/XDOMImplementation.idl>
-#endif
 
 module com { module sun { module star { module xml { module dom {
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1061,7 +1062,7 @@ double SAL_CALL rtl_ustr_toDouble( const sal_Unicode * str ) SAL_THROW_EXTERN_C(
 
 /* ======================================================================= */
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #pragma pack(push, 4)
 #endif
 
@@ -1076,7 +1077,7 @@ typedef struct _rtl_uString
     sal_Unicode         buffer[1];
 } rtl_uString;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -1448,7 +1449,7 @@ sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * s
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(sizeof(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
+#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 
@@ -1658,3 +1659,5 @@ sal_Bool SAL_CALL rtl_convertStringToUString(
 #endif
 
 #endif /* _RTL_USTRING_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

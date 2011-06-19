@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_resource_XStringResourceWithStorage_idl__
 #define __com_sun_star_resource_XStringResourceWithStorage_idl__
 
-#ifndef __com_sun_star_resource_XStringResourcePersistence_idl__
 #include <com/sun/star/resource/XStringResourcePersistence.idl>
-#endif
 
 
 //=============================================================================
@@ -70,7 +68,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         force the implementation to reload data from the previous storage
         before releasing it. The StringResourceManager will be modified
         after calling this method as the data isn't stored to the new
-        storage yet. <member>storeAsStorage</member> should be prefered
+        storage yet. <member>storeAsStorage</member> should be preferred
         as it directly stores the data to the new storage and afterwards
         this storage is in sync with the resource data.
         </p>

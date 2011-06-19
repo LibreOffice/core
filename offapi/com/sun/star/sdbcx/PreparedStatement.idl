@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbcx_PreparedStatement_idl__
 #define __com_sun_star_sdbcx_PreparedStatement_idl__
 
-#ifndef __com_sun_star_sdbc_PreparedStatement_idl__
 #include <com/sun/star/sdbc/PreparedStatement.idl>
-#endif
 
 module com { module sun { module star { module sdbcx {
 
@@ -44,7 +42,7 @@ published service PreparedStatement
 {
     service com::sun::star::sdbc::PreparedStatement;
     /**
-     returns if a resultset should allow the navigation with bookmarks
+     returns if a result set should allow the navigation with bookmarks
      or not. The default is
      <FALSE/>
      .

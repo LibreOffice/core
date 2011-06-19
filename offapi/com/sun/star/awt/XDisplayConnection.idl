@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_awt_XDisplayConnection_idl__
 #define __com_sun_star_awt_XDisplayConnection_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -66,8 +64,8 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
     /** removes a eventHandler from the handler list.
 
         @param window
-        the platform specific window id the handler should be deregistered for.
-        If empty, the handler should be deregistered completly.
+        the platform specific window id the handler should be unregistered for.
+        If empty, the handler should be unregistered completely.
 
         @param eventHandler
         the handler to remove.
@@ -96,7 +94,7 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
 
     /** returns a identifier.
 
-        @returns a unique platform dependend identifier for a display connection.
+        @returns a unique platform dependent identifier for a display connection.
     */
     any getIdentifier();
 

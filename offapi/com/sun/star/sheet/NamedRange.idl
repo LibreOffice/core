@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sheet_NamedRange_idl__
 #define __com_sun_star_sheet_NamedRange_idl__
 
-#ifndef __com_sun_star_sheet_XNamedRange_idl__
 #include <com/sun/star/sheet/XNamedRange.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeReferrer_idl__
 #include <com/sun/star/sheet/XCellRangeReferrer.idl>
-#endif
 
 //=============================================================================
 

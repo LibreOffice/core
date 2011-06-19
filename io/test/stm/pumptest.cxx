@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -322,7 +323,7 @@ private:
     Reference< XOutputStream > createPipe()
     {
         Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-             OUString::createFromAscii( "com.sun.star.io.Pipe" )),UNO_QUERY);
+             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))),UNO_QUERY);
         return rOut;
     }
 };
@@ -414,9 +415,9 @@ void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
     Reference< XActiveDataControl > rControl( r, UNO_QUERY );
 
     Reference< XInputStream > rIn( m_rSmgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.io.DataInputStream" )),UNO_QUERY);
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataInputStream"))),UNO_QUERY);
     Reference< XOutputStream > rOut( m_rSmgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.io.DataOutputStream" )),UNO_QUERY);
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.DataOutputStream"))),UNO_QUERY);
 
     rSink->setInputStream( rIn );
     rSource->setOutputStream( rOut );
@@ -447,3 +448,5 @@ OUString    OPumpTest_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.comp.io.Pump") );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

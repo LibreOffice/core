@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_SetAccess_idl__
 #define __com_sun_star_configuration_SetAccess_idl__
 
-#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
 #include <com/sun/star/configuration/HierarchyAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_SimpleSetAccess_idl__
 #include <com/sun/star/configuration/SimpleSetAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
 
 //=============================================================================
 

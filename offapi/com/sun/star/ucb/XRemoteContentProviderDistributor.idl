@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_ucb_XRemoteContentProviderDistributor_idl__
 #define __com_sun_star_ucb_XRemoteContentProviderDistributor_idl__
 
-#ifndef __com_sun_star_connection_ConnectionSetupException_idl__
 #include <com/sun/star/connection/ConnectionSetupException.idl>
-#endif
-
-#ifndef __com_sun_star_connection_NoConnectException_idl__
 #include <com/sun/star/connection/NoConnectException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -49,7 +38,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Distribute a content broker to variuos
+/** Distribute a content broker to various
     <type>XRemoteContentProviderAcceptor</type>s.
 
     @version 1.0
@@ -71,7 +60,7 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
         @param Identifier  An identifier handed to the
         <type>XRemoteContentProviderAcceptor</type>.
 
-        @returns success indicator.  Escpecially, if there's already a
+        @returns success indicator.  Especially, if there's already a
         connection to the given Url, the call will fail, no matter whether
         that connection uses the same identifier as the given one or not.
     */

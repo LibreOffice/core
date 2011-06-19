@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,9 @@
 #include <codemaker/typemanager.hxx>
 #include <codemaker/dependency.hxx>
 
-#ifndef _RTL_OSTRINGBUFFER_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #include <direct.h>
 #include <errno.h>
@@ -54,8 +53,13 @@
 
 #define PATH_DELEMITTER '/'
 
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 FileStream          listFile;
 RegistryKey         rootKey;
@@ -143,7 +147,7 @@ sal_Bool checkFilterTypes(const OString& type)
             return sal_True;
         }
 
-        iter++;
+        ++iter;
     }
 
     return sal_False;
@@ -186,12 +190,12 @@ void cleanUp( sal_Bool bError)
     StringList::reverse_iterator iter = dirEntries.rbegin();
     while ( iter != dirEntries.rend() )
     {
-           if (rmdir((char*)(*iter).getStr()) == -1)
+        if (rmdir((char*)(*iter).getStr()) == -1)
         {
             break;
         }
 
-        iter++;
+        ++iter;
     }
 }
 
@@ -222,7 +226,7 @@ OString createFileName(const OString& path)
             continue;
         }
 
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX)
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
            if (mkdir((char*)nameBuffer.getStr()) == -1)
@@ -293,7 +297,7 @@ sal_Bool produceAllTypes(const OString& typeName,
 }
 
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -506,3 +510,4 @@ int _cdecl main( int argc, char * argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

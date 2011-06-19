@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_XDynamicResultSetListener_idl__
 #define __com_sun_star_ucb_XDynamicResultSetListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_ListEvent_idl__
 #include <com/sun/star/ucb/ListEvent.idl>
-#endif
 
 //=============================================================================
 
@@ -46,7 +41,7 @@ module com { module sun { module star { module ucb {
 published interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
-    /** A method used to propagate changes of a resultset.
+    /** A method used to propagate changes of a result set.
 
         <p>In the first notify-call the listener gets two(!)
         <type scope="com::sun::star::sdbc">XResultSet</type>s and has to hold
@@ -59,11 +54,11 @@ published interface XDynamicResultSetListener: com::sun::star::lang::XEventListe
         returning.
 
         <p>While in notify-call the listener is allowed to read from old and
-        new resultset, except in the first call, where only the new resultset
+        new result set, except in the first call, where only the new result set
         is valid.
 
         <p>The Listener is allowed to stay (block) this call, until he really
-        wants to use the new resultset. The only situation, where the listener
+        wants to use the new result set. The only situation, where the listener
         has to return immediately is while he disposes his broadcaster or while
         he is removing himself as listener (otherwise you deadlock)!!!
 

@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_text_Shape_idl__
 #define __com_sun_star_text_Shape_idl__
 
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-#ifndef __com_sun_star_text_XTextFrame_idl__
 #include <com/sun/star/text/XTextFrame.idl>
-#endif
-#ifndef __com_sun_star_text_XTextRange_idl__
 #include <com/sun/star/text/XTextRange.idl>
-#endif
-#ifndef __com_sun_star_drawing_Shape_idl__
 #include <com/sun/star/drawing/Shape.idl>
-#endif
-#ifndef __com_sun_star_text_TextContentAnchorType_idl__
 #include <com/sun/star/text/TextContentAnchorType.idl>
-#endif
-#ifndef __com_sun_star_text_WrapTextMode_idl__
 #include <com/sun/star/text/WrapTextMode.idl>
-#endif
 
 //=============================================================================
 

@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_frame_XModuleManager_idl__
 #define __com_sun_star_frame_XModuleManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_frame_UnknownModuleException_idl__
 #include <com/sun/star/frame/UnknownModuleException.idl>
-#endif
 
 //===============================================
 
@@ -80,7 +72,7 @@ published interface XModuleManager : com::sun::star::uno::XInterface
                    </li>
                    <li>
                        <b><type scope="com::sun::star::frame">XModel</type></b><br>
-                       A model represent a module everytimes and can be used for
+                       A model represent a module everytime and can be used for
                        identification directly.
                    </li>
                </ul>
@@ -90,7 +82,7 @@ published interface XModuleManager : com::sun::star::uno::XInterface
                <ul>
                    <li>an empty one</li>
                    <li>or does not provide one of the needed interface
-                       XFrame, XControllerm, XModel</li>
+                       XFrame, XController, XModel</li>
                    <li>or does not provide the needed interface XServiceInfo.</li>
                </ul>
 
@@ -100,7 +92,7 @@ published interface XModuleManager : com::sun::star::uno::XInterface
                a document, this exception is thrown too!
 
        @return An identifier for the given module.
-               Note: This value is valie everytimes. Error will be transported
+               Note: This value varies everytime. Error will be transported
                by thrown exceptions!
      */
     string identify( [in] ::com::sun::star::uno::XInterface Module )

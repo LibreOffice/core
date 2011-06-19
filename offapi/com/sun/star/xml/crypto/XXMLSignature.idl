@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -34,7 +34,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/SecurityException.idl>
-
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.idl>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.idl>
 #include <com/sun/star/xml/crypto/XMLSignatureException.idl>
@@ -44,12 +43,12 @@ module com { module sun { module star { module xml { module crypto {
 /**
  * Interface of XML signature
  *
- * <p>This interface represents a xml signer or vertifier.</p>
+ * <p>This interface represents a XML signer or verifier.</p>
  *
- * <p>The signer or vertifier concrete a key by retrieve signature context and
+ * <p>The signer or verifier concrete a key by retrieve signature context and
  * signature template.</p>
  *
- * <p>In some cases, the signer or vertifier can dertermine and locate the
+ * <p>In some cases, the signer or verifier can determine and locate the
  * contents to be signed from the signature template by dereference the URI.</p>
  *
  * <p>In some cases, the contents to be signed need to be clearly pointed out by

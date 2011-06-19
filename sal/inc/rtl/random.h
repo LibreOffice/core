@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_ "$Revision: 1.7 $"
+#define _RTL_RANDOM_H_
 
 #include <sal/types.h>
 
@@ -112,3 +113,4 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
 
 #endif /* _RTL_RANDOM_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

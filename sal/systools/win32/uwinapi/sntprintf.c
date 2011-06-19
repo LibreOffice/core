@@ -1,8 +1,13 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #define _SNPRINTF_DLLIMPORT __declspec( dllexport )
 
 #include <stdarg.h>
 #include <stdio.h>
 
+#ifdef __MINGW32__
+/* MinGW-w64 doesn't have a _tcsinc() inline or library function */
+#define _MB_MAP_DIRECT
+#endif
 #include <tchar.h>
 #include <systools/win32/snprintf.h>
 
@@ -116,3 +121,5 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

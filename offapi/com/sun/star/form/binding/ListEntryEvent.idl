@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_form_binding_ListEntryEvent_idl__
 #define __com_sun_star_form_binding_ListEntryEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 //=============================================================================
 
@@ -39,14 +37,14 @@ module com {  module sun {  module star {  module form { module binding {
 //=============================================================================
 
 /** specifies the event which is notified when a change in a string entry
-    list occured
+    list occurred
 
     @see XListEntrySource
     @see XListEntryListener
 */
 struct ListEntryEvent : com::sun::star::lang::EventObject
 {
-    /** denotes the position where a change occured.
+    /** denotes the position where a change occurred.
 
         <p>The concrete semantics of the value depends on the concrete
         event being notified.</p>

@@ -27,30 +27,16 @@
 #ifndef __com_sun_star_report_XReportComponent_idl__
 #define __com_sun_star_report_XReportComponent_idl__
 
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_util_XCloneable_idl__
 #include <com/sun/star/util/XCloneable.idl>
-#endif
-#ifndef __com_sun_star_awt_XControlModel_idl__
 #include <com/sun/star/awt/XControlModel.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
 //=============================================================================
 
@@ -158,7 +144,7 @@ published interface XReportComponent
     /**is used for subreports and contains the names of the columns of the subreport
     which are related to the master fields of the parent report.
     <p>Entries in this sequence can either denote column names in the sub report,
-    or paramater names.<br/>
+    or parameter names.<br/>
     For instance, you could base the report on the SQL statement
     <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
     to the DetailFields property. In this case, the parameter will be filled from
@@ -170,7 +156,7 @@ published interface XReportComponent
     master field.<br/>
     If a string in this property denotes both a column name and a parameter name, it
     is undefined which way it is interpreted, but implementations of the service are required
-    to either decide for the paramter or the column, and proceed as usual.
+    to either decide for the parameter or the column, and proceed as usual.
     </p>
     <p>The columns specified herein typically represent a part of the primary key
     fields or their aliases of the detail report.</p>
@@ -186,7 +172,7 @@ published interface XReportComponent
 
 
     /** Specifies the section where the control belongs to.
-        This is a shortcut to get control hierachy up.
+        This is a shortcut to get control hierarchy up.
         This value is <NULL/> when the control was not inserted in any section.
     */
     [attribute,readonly] com::sun::star::report::XSection Section;

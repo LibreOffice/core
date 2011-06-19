@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#if defined OS2
-#define INCL_DOS
-#define INCL_DOSMISC
-#endif
-
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "guardedarray.hxx"
@@ -49,13 +45,14 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <new>
 #include <vector>
 
 #if defined SAL_UNX
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 #include <sys/mman.h>
 #elif defined SAL_W32
 #define WIN32_LEAN_AND_MEAN
@@ -66,10 +63,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-#elif defined SAL_OS2
-#define INCL_DOS
-#define INCL_DOSMISC
-#include <os2.h>
 #else
 #error Unsupported platform
 #endif
@@ -81,7 +74,7 @@ namespace {
 extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     sal_Size pagesize;
 #if defined SAL_UNX
-#if defined FREEBSD || defined NETBSD
+#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
     pagesize = getpagesize();
 #else
     pagesize = sysconf(_SC_PAGESIZE);
@@ -90,10 +83,6 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     SYSTEM_INFO info;
     GetSystemInfo(&info);
     pagesize = info.dwPageSize;
-#elif defined(SAL_OS2)
-    ULONG ulPageSize;
-    DosQuerySysInfo(QSV_PAGE_SIZE, QSV_PAGE_SIZE, &ulPageSize, sizeof(ULONG));
-    pagesize = (sal_Size)ulPageSize;
 #else
 #error Unsupported platform
 #endif
@@ -113,9 +102,6 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     }
 #elif defined SAL_W32
     p = VirtualAlloc(0, n, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-#elif defined(SAL_OS2)
-    p = 0;
-    DosAllocMem( &p, n, PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_ANY);
 #endif
     if (p != 0) {
         *size = n;
@@ -131,8 +117,6 @@ extern "C" void SAL_CALL freeExec(
 #elif defined SAL_W32
     (void) size; // unused
     VirtualFree(address, 0, MEM_RELEASE);
-#elif defined(SAL_OS2)
-    (void) DosFreeMem( address);
 #endif
 }
 
@@ -174,7 +158,7 @@ private:
     sal_Int32 calculate(
         typelib_InterfaceTypeDescription * type, sal_Int32 offset);
 
-    typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash > Map;
 
     Map m_map;
 };
@@ -262,14 +246,14 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     for (int i = strDirectory.getLength() == 0 ? 1 : 0; i < 2; ++i)
     {
         if (!strDirectory.getLength())
-            strDirectory = rtl::OUString::createFromAscii("/tmp");
+            strDirectory = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/tmp" ));
 
-        strDirectory += rtl::OUString::createFromAscii("/.execoooXXXXXX");
+        strDirectory += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.execoooXXXXXX" ));
         rtl::OString aTmpName = rtl::OUStringToOString(strDirectory, osl_getThreadTextEncoding());
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
         if ((block.fd = mkstemp(tmpfname)) == -1)
-            perror("creation of executable memory area failed");
+            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname, strerror(errno));
         if (block.fd == -1)
         {
             delete[] tmpfname;
@@ -380,3 +364,5 @@ void VtableFactory::createVtables(
         createVtables(blocks, baseOffset, type->ppBaseTypes[i], i != 0);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

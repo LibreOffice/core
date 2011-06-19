@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_io.hxx"
 #include "acceptor.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <algorithm>
 
 #include <rtl/ustrbuf.hxx>
@@ -67,7 +68,7 @@ namespace io_acceptor {
     };
 
 
-    typedef ::std::hash_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+    typedef ::boost::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
                              ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;
@@ -414,3 +415,4 @@ namespace io_acceptor {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

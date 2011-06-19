@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -609,3 +610,5 @@ void bridges::cpp_uno::shared::VtableFactory::flushCode(
 {
     bridges::cpp_uno::cc5_solaris_sparc64::flushCode(begin, end);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

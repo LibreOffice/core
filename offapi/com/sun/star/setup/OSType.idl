@@ -28,8 +28,8 @@
 #define __com_sun_star_setup_OSType_idl__
 
 // dear porters: please do not apply any patches for new platforms here
-//               it depricated anyway and any patches will cause API
-//       incompatibity errors  mh
+//               it deprecated anyway and any patches will cause API
+//       incompatibility errors  mh
 
 module com {  module sun {  module star {  module setup {
 
@@ -41,9 +41,6 @@ published enum OSType
 
     // DocMerge: empty anyway
     WIN,
-
-    // DocMerge: empty anyway
-    OS2,
 
     // DocMerge: empty anyway
     MAC,

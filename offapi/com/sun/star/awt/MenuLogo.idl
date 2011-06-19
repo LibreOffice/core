@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_MenuLogo_idl__
 #define __com_sun_star_awt_MenuLogo_idl__
 
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-
-#ifndef __com_sun_star_util_color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 //=============================================================================
 

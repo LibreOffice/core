@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
 #define __com_sun_star_xml_sax_XEntityResolver_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_InputSource_idl__
 #include <com/sun/star/xml/sax/InputSource.idl>
-#endif
 
 
 //=============================================================================
@@ -42,12 +38,12 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 //=============================================================================
 
-/** makes it possible to modify the behaviour of resolving external
+/** makes it possible to modify the behavior of resolving external
     preferences.
 
-    <p>Usually, the parser has a default behaviour of resolving external
+    <p>Usually, the parser has a default behavior of resolving external
     references (See documentation of the parser implementation).
-    Use this interface to modify or reimplement this behaviour.</p>
+    Use this interface to modify or reimplement this behavior.</p>
  */
 published interface XEntityResolver: com::sun::star::uno::XInterface
 {
@@ -58,7 +54,7 @@ published interface XEntityResolver: com::sun::star::uno::XInterface
 
         <p>If <var>aInputStream</var> is a valid reference to an input stream,
         the parser uses this <type>InputSource</type>. Otherwise the
-        parser seeks for the entity using its default behaviour.
+        parser seeks for the entity using its default behavior.
      */
     InputSource resolveEntity( [in] string sPublicId, [in] string sSystemId );
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,11 +72,11 @@ oslMutex SAL_CALL osl_createMutex()
     pthread_mutexattr_init(&aMutexAttr);
 
     nRet = pthread_mutexattr_settype(&aMutexAttr, PTHREAD_MUTEX_RECURSIVE);
-
-    nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
+    if( nRet == 0 )
+        nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
     if ( nRet != 0 )
     {
-        OSL_TRACE("osl_createMutex : mutex init failed. Errno: %d; %s\n",
+        OSL_TRACE("osl_createMutex : mutex init/setattr failed. Errno: %d; %s\n",
                   nRet, strerror(nRet));
 
         free(pMutex);
@@ -219,3 +220,5 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
 
     return &globalMutex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,16 +25,14 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
 #ifndef __com_sun_star_xml_crypto_XMLSignatureException_idl__
 #define __com_sun_star_xml_crypto_XMLSignatureException_idl__
 
-#ifndef __com_sun_star_security_SignatureException_idl__
 #include <com/sun/star/security/SignatureException.idl>
-#endif
 
 
 //=============================================================================

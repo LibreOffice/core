@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 #
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #include <math.h>
 #include <stdlib.h>
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #ifndef _SAL_TYPES_H_
     #include <sal/types.h>
@@ -49,18 +44,11 @@
     #include <rtl/string.hxx>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _RTL_STRING_UTILS_CONST_H_
     #include <rtl_String_Utils_Const.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
-using namespace rtl;
-
+using ::rtl::OString;
 sal_uInt32 AStringLen( const sal_Char *pAStr )
 {
     sal_uInt32  nStrLen = 0;
@@ -88,8 +76,9 @@ sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
     const sal_Char* psrc = src;
     sal_Char* pdst = dst;
 
-    while( (*pdst++ = *psrc++) );
-    return ( dst );
+    while( (*pdst++ = *psrc++) ) {}
+
+    return dst;
 }
 
 sal_Char* cpynstr( sal_Char* dst, const sal_Char* src, sal_uInt32 cnt )
@@ -275,11 +264,6 @@ sal_Bool AStringToDoubleCompare ( const sal_Char  *pStr,
 
     return cmp;
 } // AStringToDoubleCompare
-
-//------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------
 
 sal_uInt32 UStringLen( const sal_Unicode *pUStr )
 {
@@ -610,6 +594,4 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
     return  bCopied;
 } // AStringToUStringNCopy
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

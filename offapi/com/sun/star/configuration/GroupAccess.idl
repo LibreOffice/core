@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_configuration_GroupAccess_idl__
 #define __com_sun_star_configuration_GroupAccess_idl__
 
-#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
 #include <com/sun/star/configuration/HierarchyAccess.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_PropertyHierarchy_idl__
 #include <com/sun/star/configuration/PropertyHierarchy.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
-#endif
 
 //=============================================================================
 
@@ -84,7 +73,7 @@ published service GroupAccess
  a view of the tree as a hierarchy of properties and subproperties.
 
  <p>This view is meaningful only for a static fragment of the hierarchy
- Objects' properties may change, but not which properties they have.
+ Object's properties may change, but not which properties they have.
  Therefore, dynamic elements of the hierarchy (see <type>SetAccess</type>)
  do not implement service <type>PropertyHierarchy</type>.
  </p>

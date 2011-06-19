@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 #ifdef __cplusplus
 
@@ -274,6 +273,12 @@ public:
         Return a null terminated unicode character array.
      */
     const sal_Unicode*  getStr() const { return pData->buffer; }
+
+    /**
+        Return a OUString instance reflecting the current content
+        of this OUStringBuffer.
+     */
+    const OUString toString() const { return OUString(pData->buffer); }
 
 
     /**
@@ -772,3 +777,5 @@ private:
 
 #endif  /* __cplusplus */
 #endif  /* _RTL_USTRBUF_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_frame_XDesktop_idl__
 #define __com_sun_star_frame_XDesktop_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XTerminateListener_idl__
 #include <com/sun/star/frame/XTerminateListener.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
 
 
 //=============================================================================
@@ -147,11 +133,11 @@ published interface XDesktop: com::sun::star::uno::XInterface
     com::sun::star::lang::XComponent getCurrentComponent();
 
     //-------------------------------------------------------------------------
-    /** provides read access to the frame wich contains the current component
+    /** provides read access to the frame which contains the current component
 
         @returns
             the frame of the component which has the
-            UI focus within this desktop enviroment
+            UI focus within this desktop environment
 
         @see XDesktop::getCurrentComponent()
      */

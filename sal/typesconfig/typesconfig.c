@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,6 @@
 |*
 |*  Beschreibung        True, wenn CPU BigEndian ist
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int IsBigEndian()
 {
@@ -74,9 +72,6 @@ typedef int (*TestFunc)( Type, void* );
 |*  PrintArgs()
 |*
 |*  Beschreibung        Testfunktion fuer variable Parameter
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void PrintArgs( int p, ... )
@@ -101,9 +96,6 @@ void PrintArgs( int p, ... )
 |*
 |*  Beschreibung        faengt SIGBUS und SIGSEGV in check() ab
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 
 static sigjmp_buf jmpbuf;
@@ -121,9 +113,6 @@ void SignalHdl( int sig )
 |*  check()
 |*
 |*  Beschreibung        Testet MemoryZugriff (read/write)
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 int check( TestFunc func, Type eT, void* p )
@@ -155,9 +144,6 @@ int check( TestFunc func, Type eT, void* p )
 |*  GetAtAddress()
 |*
 |*  Beschreibung        memory read access
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 #if defined(IA64) || defined(ARM32) || defined(HPPA) || defined(AXP)
@@ -215,9 +201,6 @@ int dummy(void* unused)
 |*
 |*  Beschreibung        memory write access
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int SetAtAddress( Type eT, void* p )
 {
@@ -252,9 +235,6 @@ char* TypeName( Type eT )
 |*  Beschreibung        Testet MemoryZugriff (read/write)
 |*                      Zugriffsverletzungen werden abgefangen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int CheckGetAccess( Type eT, void* p )
 {
@@ -286,9 +266,6 @@ int CheckSetAccess( Type eT, void* p )
 |*
 |*  Beschreibung        Bestimmt das Alignment verschiedener Typen
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 int GetAlignment( Type eT )
 {
@@ -313,9 +290,6 @@ int GetAlignment( Type eT )
 |*
 |*  Beschreibung        Beschreibt die Parameter der Architektur
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 struct Description
 {
@@ -328,9 +302,6 @@ struct Description
 |*  Description_Ctor()
 |*
 |*  Beschreibung        Bestimmt die Parameter der Architektur
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Ctor( struct Description* pThis )
@@ -357,9 +328,6 @@ void Description_Ctor( struct Description* pThis )
 |*  Description_Print()
 |*
 |*  Beschreibung        Schreibt die Parameter der Architektur als Header
-|*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void Description_Print( struct Description* pThis, char* name )
@@ -397,9 +365,6 @@ void Description_Print( struct Description* pThis, char* name )
 |*
 |*  Beschreibung        Informeller Bytezugriffstest
 |*
-|*  Ersterstellung      EG 26.06.96
-|*  Letzte Aenderung
-|*
 *************************************************************************/
 void InfoMemoryAccess( char* p )
 {
@@ -419,9 +384,6 @@ void InfoMemoryAccess( char* p )
 |*  InfoMemoryTypeAccess()
 |*
 |*  Beschreibung        Informeller Zugriffstest verschiedener Typen
-|*
-|*  Ersterstellung      EG 15.08.96
-|*  Letzte Aenderung
 |*
 *************************************************************************/
 void InfoMemoryTypeAccess( Type eT )
@@ -488,3 +450,5 @@ int main( int argc, char* argv[] )
 
   exit( 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

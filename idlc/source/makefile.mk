@@ -35,12 +35,13 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 INCPRE=$(MISC)
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
+
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 .INCLUDE :  settings.mk
 

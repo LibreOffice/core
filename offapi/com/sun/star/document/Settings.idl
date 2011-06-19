@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_document_Settings_idl__
 #define __com_sun_star_document_Settings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_i18n_XForbiddenCharacters_idl__
 #include <com/sun/star/i18n/XForbiddenCharacters.idl>
-#endif
 
 //=============================================================================
 
@@ -69,7 +65,7 @@ published service Settings
 
         @return the
             <type scope="com::sun::star::i18n">XForbiddenCharacters</type>
-            interface to allow retreival and modification of the
+            interface to allow retrieval and modification of the
             forbidden characters set.
     */
     [optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
@@ -277,7 +273,7 @@ published service Settings
 
     // Writer, maybe later other applications, too
     //-------------------------------------------------------------------------
-    /** layout engine should add value of a Font's 'external leading'
+    /** layout engine should add value of a Font's "external leading"
      * attribute to the line spacing.
      */
     [optional, property] boolean AddExternalLeading;

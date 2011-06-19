@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ui_dialogs_FilterOptionsDialog_idl__
 #define __com_sun_star_ui_dialogs_FilterOptionsDialog_idl__
 
-#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyAccess_idl__
 #include <com/sun/star/beans/XPropertyAccess.idl>
-#endif
 
 //=============================================================================
 

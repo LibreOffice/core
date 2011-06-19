@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,14 +64,15 @@ using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
 
+#include <vector>
+
 namespace pyuno
 {
 #define USTR_ASCII(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
 static PyTypeObject RuntimeImpl_Type =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT (&PyType_Type, 0)
     const_cast< char * >("pyuno_runtime"),
     sizeof (RuntimeImpl),
     0,
@@ -78,7 +80,7 @@ static PyTypeObject RuntimeImpl_Type =
     (printfunc) 0,
     (getattrfunc) 0,
     (setattrfunc) 0,
-    (cmpfunc) 0,
+    0,
     (reprfunc) 0,
     0,
     0,
@@ -176,17 +178,17 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString::createFromAscii(  SAL_CONFIGFILE("pyuno") );
+    fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(  SAL_CONFIGFILE("pyuno") ));
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
     if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGLEVEL" ), str ) )
     {
-        if( str.equalsAscii( "NONE" ) )
+        if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NONE" ) ) )
             *pLevel = LogLevel::NONE;
-        else if( str.equalsAscii( "CALL" ) )
+        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CALL" ) ) )
             *pLevel = LogLevel::CALL;
-        else if( str.equalsAscii( "ARGS" ) )
+        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ARGS" ) ) )
             *pLevel = LogLevel::ARGS;
         else
         {
@@ -199,9 +201,9 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         *ppFile = stdout;
         if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGTARGET" ), str ) )
         {
-            if( str.equalsAscii( "stdout" ) )
+            if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stdout" ) ) )
                 *ppFile = stdout;
-            else if( str.equalsAscii( "stderr" ) )
+            else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stderr" ) ) )
                 *ppFile = stderr;
             else
             {
@@ -442,7 +444,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     {
         sal_Int32 l = 0;
         a >>= l;
-        return PyRef( PyInt_FromLong (l), SAL_NO_ACQUIRE );
+        return PyRef( PyLong_FromLong (l), SAL_NO_ACQUIRE );
     }
     case typelib_TypeClass_UNSIGNED_LONG:
     {
@@ -663,6 +665,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
 
     }
+    // In Python 3, there is no PyInt type.
+#if PY_MAJOR_VERSION < 3
     else if (PyInt_Check (o))
     {
         if( o == Py_True )
@@ -677,7 +681,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else
         {
-            sal_Int32 l = (sal_Int32) PyInt_AsLong( o );
+            sal_Int32 l = (sal_Int32) PyLong_AsLong( o );
             if( l < 128 && l >= -128 )
             {
                 sal_Int8 b = (sal_Int8 ) l;
@@ -694,8 +698,24 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
         }
     }
+#endif /* PY_MAJOR_VERSION < 3 */
     else if (PyLong_Check (o))
     {
+#if PY_MAJOR_VERSION >= 3
+        // Convert the Python 3 booleans that are actually of type PyLong.
+        if(o == Py_True)
+        {
+            sal_Bool b = sal_True;
+            a = Any(&b, getBooleanCppuType());
+        }
+        else if(o == Py_False)
+        {
+            sal_Bool b = sal_False;
+            a = Any(&b, getBooleanCppuType());
+        }
+        else
+        {
+#endif /* PY_MAJOR_VERSION >= 3 */
         sal_Int64 l = (sal_Int64)PyLong_AsLong (o);
         if( l < 128 && l >= -128 )
         {
@@ -717,16 +737,19 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         {
             a <<= l;
         }
+#if PY_MAJOR_VERSION >= 3
+        }
+#endif
     }
     else if (PyFloat_Check (o))
     {
         double d = PyFloat_AsDouble (o);
         a <<= d;
     }
-    else if (PyString_Check (o))
-    a <<= pyString2ustring(o);
-    else if( PyUnicode_Check( o ) )
-    a <<= pyString2ustring(o);
+    else if (PyString_Check(o) || PyUnicode_Check(o))
+    {
+        a <<= pyString2ustring(o);
+    }
     else if (PyTuple_Check (o))
     {
         Sequence<Any> s (PyTuple_Size (o));
@@ -1056,3 +1079,5 @@ PyRef RuntimeCargo::getUnoModule()
     return dictUnoModule;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

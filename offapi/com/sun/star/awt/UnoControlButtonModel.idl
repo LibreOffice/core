@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_awt_UnoControlButtonModel_idl__
 #define __com_sun_star_awt_UnoControlButtonModel_idl__
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-#ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
-#endif
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 
 //=============================================================================
@@ -201,7 +191,7 @@ published service UnoControlButtonModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies whether the control should show repeating behaviour.
+    /** specifies whether the control should show repeating behavior.
 
         <p>Normally, when you click a button with the mouse, you need to
         release the mouse button, and press it again. With this property

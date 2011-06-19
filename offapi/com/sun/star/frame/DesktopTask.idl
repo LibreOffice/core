@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_frame_DesktopTask_idl__
 #define __com_sun_star_frame_DesktopTask_idl__
 
-#ifndef __com_sun_star_frame_XDesktopTask_idl__
 #include <com/sun/star/frame/XDesktopTask.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFrame_idl__
 #include <com/sun/star/frame/XFrame.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XWindowArranger_idl__
 #include <com/sun/star/frame/XWindowArranger.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XFramesSupplier_idl__
 #include <com/sun/star/frame/XFramesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
 
 //=============================================================================
 

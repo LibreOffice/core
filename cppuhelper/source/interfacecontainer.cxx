@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
@@ -46,10 +47,6 @@ using namespace com::sun::star::lang;
 
 namespace cppu
 {
-
-//===================================================================
-//===================================================================
-//===================================================================
 /**
  * Reallocate the sequence.
  */
@@ -79,17 +76,10 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
     rSeq = aDestSeq;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )
 #endif
 
-//===================================================================
-//===================================================================
-//===================================================================
 OInterfaceIteratorHelper::OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont_ )
     SAL_THROW( () )
     : rCont( rCont_ )
@@ -169,11 +159,6 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&aData.pAsInterface));
     }
 }
-
-//===================================================================
-//===================================================================
-//===================================================================
-
 
 OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
     : rMutex( rMutex_ )
@@ -324,11 +309,11 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
-    // Container freigeben, falls im disposing neue Einträge kommen
+    // Release container, in case new entries come while disposing
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && aData.pAsInterface )
         aData.pAsInterface->release();
-    // set the member to null, the iterator delete the values
+    // set the member to null, use the iterator to delete the values
     aData.pAsInterface = NULL;
     bIsList = sal_False;
     bInUse = sal_False;
@@ -344,7 +329,7 @@ void OInterfaceContainerHelper::disposeAndClear( const EventObject & rEvt ) SAL_
         catch ( RuntimeException & )
         {
             // be robust, if e.g. a remote bridge has disposed already.
-            // there is no way, to delegate the error to the caller :o(.
+            // there is no way to delegate the error to the caller :o(.
         }
     }
 }
@@ -354,21 +339,17 @@ void OInterfaceContainerHelper::clear() SAL_THROW( () )
 {
     ClearableMutexGuard aGuard( rMutex );
     OInterfaceIteratorHelper aIt( *this );
-    // Container freigeben, falls im disposing neue Einträge kommen
+    // Release container, in case new entries come while disposing
     OSL_ENSURE( !bIsList || bInUse, "OInterfaceContainerHelper not in use" );
     if( !bIsList && aData.pAsInterface )
         aData.pAsInterface->release();
-    // set the member to null, the iterator delete the values
+    // set the member to null, use the iterator to delete the values
     aData.pAsInterface = 0;
     bIsList = sal_False;
     bInUse = sal_False;
     // release mutex before aIt destructor call
     aGuard.clear();
 }
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
 
 // specialized class for type
 
@@ -438,7 +419,7 @@ static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
     {
         if (iter->first == rKey)
             break;
-        iter++;
+        ++iter;
     }
     return iter;
 }
@@ -538,11 +519,6 @@ void OMultiTypeInterfaceContainerHelper::clear()
     }
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
 // specialized class for long
 
 typedef ::std::vector< std::pair < sal_Int32 , void* > > t_long2ptr;
@@ -556,7 +532,7 @@ static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
     {
         if (iter->first == nKey)
             break;
-        iter++;
+        ++iter;
     }
     return iter;
 }
@@ -684,7 +660,6 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
-            //ppListenerContainers = new (ListenerContainer*)[nSize];
 
             t_long2ptr::iterator iter = pMap->begin();
             t_long2ptr::iterator end = pMap->end();
@@ -727,3 +702,4 @@ void OMultiTypeInterfaceContainerHelperInt32::clear()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

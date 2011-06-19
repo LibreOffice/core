@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <rtl/alloc.h>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#ifndef _COM_SUN_STAR_UNO_WEAK_HPP_
 #include <com/sun/star/uno/XWeak.hpp>
-#endif
 
 
 namespace cppu
@@ -170,3 +169,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

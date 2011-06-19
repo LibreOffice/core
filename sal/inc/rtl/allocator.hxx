@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,6 +148,7 @@ public:
     void destroy (pointer p)
     {
         p->~T();
+        (void)p; //MSVC2005 annoyingly warns this is unused
     }
 };
 
@@ -190,3 +192,4 @@ namespace _STL
 
 #endif /* INCLUDED_RTL_ALLOCATOR_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

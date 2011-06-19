@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,7 +216,7 @@ namespace testOfHelperFunctions
         rtl::OString sValue("foo bar");
         t_print("a String '%s' (should be 'foo bar')\n", sValue.getStr());
 
-        rtl::OUString suValue(rtl::OUString::createFromAscii("a unicode string"));
+        rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM("a unicode string"));
         sValue <<= suValue;
         t_print("a String '%s'\n", sValue.getStr());
     }
@@ -452,3 +453,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_TimeValues, "
 
 // -----------------------------------------------------------------------------
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

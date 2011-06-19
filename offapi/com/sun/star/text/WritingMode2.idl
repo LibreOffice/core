@@ -71,7 +71,7 @@ published constants WritingMode2
     //-------------------------------------------------------------------------
 
     /** text within a line is written top-to-bottom. Lines and blocks are
-        placed left-ro-right.
+        placed left-to-right.
         <p>
         Typically, this writing mode is used in Mongolian text.
      */

@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_Cookie_idl__
 #define __com_sun_star_ucb_Cookie_idl__
 
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_CookiePolicy_idl__
 #include <com/sun/star/ucb/CookiePolicy.idl>
-#endif
 
 
 //=============================================================================

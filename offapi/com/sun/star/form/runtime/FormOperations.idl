@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_form_runtime_FormOperations_idl__
 #define __com_sun_star_form_runtime_FormOperations_idl__
 
-#ifndef __com_sun_star_form_runtime_XFormOperations_idl__
 #include <com/sun/star/form/runtime/XFormOperations.idl>
-#endif
-#ifndef __com_sun_star_form_runtime_XFormController_idl__
 #include <com/sun/star/form/runtime/XFormController.idl>
-#endif
-#ifndef __com_sun_star_form_XForm_idl__
 #include <com/sun/star/form/XForm.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

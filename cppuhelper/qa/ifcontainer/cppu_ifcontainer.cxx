@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,10 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include <string.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/interfacecontainer.hxx"
@@ -128,7 +132,7 @@ namespace cppu_ifcontainer
             for (i = 0; i < nTests; i++)
             {
                 Reference<XEventListener> xRef = new ContainerListener(&aStats);
-                int nNewLen = pContainer->addInterface(xRef);
+                pContainer->addInterface(xRef);
                 aListeners.push_back(xRef);
             }
             Sequence< Reference< XInterface > > aElements;
@@ -277,7 +281,8 @@ namespace cppu_ifcontainer
     };
 } // namespace cppu_ifcontainer
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(cppu_ifcontainer::IfTest,
-                                      "cppu_ifcontainer");
+CPPUNIT_TEST_SUITE_REGISTRATION(cppu_ifcontainer::IfTest);
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

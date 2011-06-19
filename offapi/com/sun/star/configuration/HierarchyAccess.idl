@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_configuration_HierarchyAccess_idl__
 #define __com_sun_star_configuration_HierarchyAccess_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
 #include <com/sun/star/container/XHierarchicalNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainer_idl__
 #include <com/sun/star/container/XContainer.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XExactName_idl__
 #include <com/sun/star/beans/XExactName.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
 #include <com/sun/star/beans/XPropertySetInfo.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
-#endif
 
 //=============================================================================
 
@@ -111,7 +91,7 @@ published service HierarchyAccess
  any other interfaces that allow access to or manipulation of subnodes
  selected by name or hierarchical name.
  </p>
- <p>If an inexact name could be matched to either a simple or a hierachical
+ <p>If an inexact name could be matched to either a simple or a hierarchical
  name, the simple (immediate child) name is preferred.
  </p>
 */

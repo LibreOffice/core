@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,17 @@
 #ifndef _PYUNO_IMPL_
 #define _PYUNO_IMPL_
 
+#include <Python.h>
+
+//Must define PyVarObject_HEAD_INIT for Python 2.5 or older
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size)  PyObject_HEAD_INIT(type) size,
+#endif
+
 #include <pyuno/pyuno.hxx>
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -46,6 +54,49 @@
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
+
+// In Python 3, the PyString_* functions have been replaced by PyBytes_*
+// and PyUnicode_* functions.
+#if PY_MAJOR_VERSION >= 3
+inline char* PyString_AsString(PyObject *object)
+{
+    // check whether object is already of type "PyBytes"
+    if(PyBytes_Check(object))
+    {
+        return PyBytes_AsString(object);
+    }
+
+    // object is not encoded yet, so encode it to utf-8
+    PyObject *pystring;
+    pystring = PyUnicode_AsUTF8String(object);
+    if(!pystring)
+    {
+       PyErr_SetString(PyExc_ValueError, "cannot utf-8 decode string");
+       return 0;
+    }
+    return PyBytes_AsString(pystring);
+}
+
+inline PyObject* PyString_FromString(const char *string)
+{
+    return PyUnicode_FromString(string);
+}
+
+inline int PyString_Check(PyObject *object)
+{
+    return PyBytes_Check(object);
+}
+
+inline Py_ssize_t PyString_Size(PyObject *object)
+{
+    return PyBytes_Size(object);
+}
+
+inline PyObject* PyString_FromStringAndSize(const char *string, Py_ssize_t len)
+{
+    return PyBytes_FromStringAndSize(string, len);
+}
+#endif /* PY_MAJOR_VERSION >= 3 */
 
 namespace pyuno
 {
@@ -80,7 +131,7 @@ static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 rtl::OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW( () );
 //--------------------------------------------------
 
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     PyRef,
     com::sun::star::uno::WeakReference< com::sun::star::script::XInvocation >,
@@ -89,7 +140,7 @@ typedef ::std::hash_map
 > PyRef2Adapter;
 
 
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
 rtl::OUString,
 PyRef,
@@ -97,7 +148,7 @@ rtl::OUStringHash,
 std::equal_to<rtl::OUString>
 > ExceptionClassMap;
 
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     rtl::OUString,
     com::sun::star::uno::Sequence< sal_Int16 >,
@@ -105,7 +156,7 @@ typedef ::std::hash_map
     std::equal_to< rtl::OUString >
 > MethodOutIndexMap;
 
-typedef ::std::hash_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
+typedef ::boost::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
 PyObject* PyUNO_new(
     const com::sun::star::uno::Any & targetInterface,
@@ -140,9 +191,6 @@ com::sun::star::uno::Any PyObjectToAny (PyObject* o)
 
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( com::sun::star::reflection::InvocationTargetException );
-
-// bool CheckPyObjectTypes (PyObject* o, Sequence<Type> types);
-// bool CheckPyObjectType (PyObject* o, Type type); //Only check 1 object.
 
 com::sun::star::uno::TypeClass StringToTypeClass (char* string);
 
@@ -291,3 +339,5 @@ void decreaseRefCount( PyInterpreterState *interpreter, PyObject *object );
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

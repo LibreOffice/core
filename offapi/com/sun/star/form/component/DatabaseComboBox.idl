@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_form_component_DatabaseComboBox_idl__
 #define __com_sun_star_form_component_DatabaseComboBox_idl__
 
-#ifndef __com_sun_star_form_component_ComboBox_idl__
 #include <com/sun/star/form/component/ComboBox.idl>
-#endif
 
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
 #include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_ListSourceType_idl__
 #include <com/sun/star/form/ListSourceType.idl>
-#endif
 
 
 //=============================================================================
@@ -73,7 +67,7 @@ published service DatabaseComboBox
      */
     [property] boolean ConvertEmptyToNull;
 
-    /** describes the source of items in the combo box' list.
+    /** describes the source of items in the combo box's list.
 
         <p>The concrete meaning of this property depends on the value of <member>ListSourceType</member></p>
      */

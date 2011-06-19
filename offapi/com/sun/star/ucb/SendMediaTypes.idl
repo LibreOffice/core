@@ -33,7 +33,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** contains a list of internet media types (like "text/plain" and "text/html"),
+/** contains a list of Internet media types (like "text/plain" and "text/html"),
     that are related to a send protocol.
 */
 published struct SendMediaTypes
@@ -45,7 +45,7 @@ published struct SendMediaTypes
     string ProtocolType;
 
     //-------------------------------------------------------------------------
-    /** a list of internet media types
+    /** a list of Internet media types
     */
     sequence<string> Value;
 

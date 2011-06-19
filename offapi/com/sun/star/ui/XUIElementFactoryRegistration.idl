@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_frame_XUIElementFactoryRegistration_idl__
 #define __com_sun_star_frame_XUIElementFactoryRegistration_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ui_XUIElementFactory_idl__
 #include <com/sun/star/ui/XUIElementFactory.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 //=============================================================================
 
@@ -63,7 +49,7 @@ module com { module sun { module star { module ui {
         <li><b>Name</b>a string that identifies a single user interface element within a type class.</li>
         <li><b>Module</b>a string that identifies a single module of OpenOffice.</li>
     <ul>
-    A combination of these three property values can uniquely identifiy every user interface
+    A combination of these three property values can uniquely identify every user interface
     element within OpenOffice.
 
     Currently the following user interface element types are defined:
@@ -84,7 +70,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
     /** function to retrieve a list of all registered user interface element factories
 
         @returns
-            a sequence of sequence of propert values which describe every registered
+            a sequence of sequence of property values which describe every registered
             user interface element factory.<br/>
 
             The following properties are defined:
@@ -110,7 +96,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
 
         @param ResourceURL
             a resource URL which identifies a user interface element. A resource URL uses the
-            following syntax: "private:resource/$type/$name". It is only allowed to use ascii
+            following syntax: "private:resource/$type/$name". It is only allowed to use ASCII
             characters for type and name.
 
         @param ModuleName
@@ -163,7 +149,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
 
         @param aModuleName
             an optional module name that can be used to deregister a factory only for a single module. This value
-            can remain empty if not a module based factory should be deregisted. The module identifier can be retrieved
+            can remain empty if not a module based factory should be deregistered. The module identifier can be retrieved
             from the <type scope="com::sun::star::frame">ModuleManager</type> service.
 
         <p>

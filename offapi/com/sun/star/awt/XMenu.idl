@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_XMenu_idl__
 #define __com_sun_star_awt_XMenu_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -123,14 +121,14 @@ published interface XMenu: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** sets the popup menu for a specified menu item.
+    /** sets the pop-up menu for a specified menu item.
      */
     [oneway] void setPopupMenu( [in] short nItemId,
              [in] XPopupMenu aPopupMenu );
 
     //-------------------------------------------------------------------------
 
-    /** returns the popup menu from the menu item.
+    /** returns the pop-up menu from the menu item.
      */
     XPopupMenu getPopupMenu( [in] short nItemId );
 

@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_mozilla_XPluginInstancePeer_idl__
 #define __com_sun_star_mozilla_XPluginInstancePeer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_io_XActiveDataSource_idl__
 #include <com/sun/star/io/XActiveDataSource.idl>
-#endif
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
 
 //=============================================================================
 
@@ -105,7 +97,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
         @param MIMEDesc [in]:   the MIME type of the plug-in to create
         @param target   [in]:   the name of the target window or frame (supports _blank, _self)
-        @param data     [in]:   on success the outputstream will be associated with this instance
+        @param data     [in]:   on success the output stream will be    associated with this instance
 
      */
     [oneway] void newStream(

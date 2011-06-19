@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,8 +51,8 @@ namespace {
 typedef std::vector<rtl::OString, rtl::Allocator<rtl::OString> > OStringVec;
 
 struct StaticDebugBaseAddressFilter
-    : rtl::StaticWithInit<OStringVec const, StaticDebugBaseAddressFilter> {
-    OStringVec const operator()() const {
+    : rtl::StaticWithInit<OStringVec, StaticDebugBaseAddressFilter> {
+    OStringVec operator()() const {
         OStringVec vec;
         rtl_uString * pStr = 0;
         rtl::OUString const name(
@@ -159,3 +160,4 @@ void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
 
 } // extern "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

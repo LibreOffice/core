@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_CIPHER_C_ "$Revision: 1.5 $"
+#define _RTL_CIPHER_C_
 
 #include <sal/types.h>
 #include <rtl/alloc.h>
@@ -905,7 +906,6 @@ static void __rtl_cipherBF_updateCFB (
         sal_uInt8 c = iv[k];
         iv[k] = *pData;
         *pBuffer = *pData ^ c;
-        c = 0;
     }
 
     ctx->m_offset = ((k + 1) & 0x07);
@@ -1361,3 +1361,5 @@ void SAL_CALL rtl_cipher_destroyARCFOUR (rtlCipher Cipher)
             rtl_freeMemory (pImpl);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

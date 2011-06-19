@@ -52,13 +52,13 @@ module com { module sun { module star { module ucb {
                        </td></tr>
     <tr><td>D3</td><td>A folder content F has a set of children H(F) that is a
                        set of content identifiers. For example, an "open"
-                       command will usualy return a subset of the contents
+                       command will usually return a    subset of the contents
                        denoted by H(F).</td></tr>
     </table>
 
     <p>
     The events that can happen to contents (and that are of interest in this
-    context) are listed next.  Note that 'event' here does not mean an
+    context) are listed next.  Note that "event" here does not mean an
     ContentEvent, but rather some event that occurs either because some content
     processes a command, or because a content gets informed about a relevant
     change in the underlying system it represents.
@@ -68,8 +68,8 @@ module com { module sun { module star { module ucb {
     <tr><td>E1</td><td>The identifier of a content C changes from id1(C) == A
                        to id2(C) == B, denoted as E1(C: A->B). For example,
                        this event may occur when content C processes a
-                       "setPropertyValues" command changing its "Title" propery,
-                       or when afolder that hierarchicaly contains C changes
+                       "setPropertyValues" command changing its "Title" property,
+                       or when a folder that hierarchically contains C changes
                        its identity.</td></tr>
     <tr><td>E2</td><td>The state of a content C changes from Alive to Deleted,
                        denoted as E2(C). For example, this event may occur when

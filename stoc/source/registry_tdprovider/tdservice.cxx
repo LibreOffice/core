@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -541,7 +543,7 @@ void ServiceTypeDescriptionImpl::getReferences()
             case RT_REF_NEEDS:
                 break;
             default:
-                OSL_ENSURE( sal_False, "### unsupported reference type!" );
+                OSL_FAIL( "### unsupported reference type!" );
                 break;
             }
         }
@@ -563,3 +565,5 @@ void ServiceTypeDescriptionImpl::getReferences()
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

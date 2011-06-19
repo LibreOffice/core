@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_presentation_XPresentation2_idl__
 #define __com_sun_star_presentation_XPresentation2_idl__
 
-#ifndef __com_sun_star_presentation_XPresentation_idl__
 #include <com/sun/star/presentation/XPresentation.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
 #include <com/sun/star/presentation/XSlideShowListener.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XSlideShowController_idl__
 #include <com/sun/star/presentation/XSlideShowController.idl>
-#endif
 
 //=============================================================================
 
@@ -69,26 +55,26 @@ interface XPresentation2
 
     //-------------------------------------------------------------------------
 
-    /** gives access to the properties of the slideshow.
+    /** gives access to the properties of the slide show.
     */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    /** start the slideshow with the given arguments.
-        All arguments overide the values from <service>Presentation</service>
+    /** start the slide show with the given arguments.
+        All arguments override the values from <service>Presentation</service>
     */
     void startWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
 
     //-------------------------------------------------------------------------
 
-    /** returns true if the slideshow is currently running */
+    /** returns true if the slide show is currently running */
     boolean isRunning();
 
     //-------------------------------------------------------------------------
 
-    /** if the slideshow is running, this returns a controler object to
-        control the running slideshow. */
+    /** if the slide show is running, this returns a controller object to
+        control the running slide show. */
     XSlideShowController getController();
 };
 

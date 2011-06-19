@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -202,7 +203,7 @@ protected:
 private:
     void init( sal_Bool bSorted ) SAL_THROW( () );
 
-    /** The sequence generstet from the pProperties array. */
+    /** The sequence generated from the pProperties array. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aInfos;
 
     /**
@@ -293,8 +294,8 @@ public:
         SAL_THROW( () );
 
     /**
-      Call disposing on all object in the container that
-      support XEventListener. Than clear the container.
+      Call disposing on all objects in the container that
+      support XEventListener. Then clear the container.
      */
     void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW( () );
     /**
@@ -671,3 +672,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

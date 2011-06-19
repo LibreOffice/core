@@ -84,7 +84,7 @@ published constants EmbedStates
     /** "UI active" - the inplace active object that has user interface.
 
         <p>
-        The object is inplace active, allowed to have menues, toolbars,
+        The object is inplace active, allowed to have menus, toolbars,
         keyboard accelerators, and has the focus.
         </p>
      */

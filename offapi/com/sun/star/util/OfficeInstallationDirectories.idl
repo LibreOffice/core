@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_util_OfficeInstallationDirectories_idl__
 #define __com_sun_star_util_OfficeInstallationDirectories_idl__
 
-#ifndef __com_sun_star_util_XOfficeInstallationDirectories_idl__
 #include <com/sun/star/util/XOfficeInstallationDirectories.idl>
-#endif
 
 //============================================================================
 
@@ -48,7 +46,7 @@ module com {  module sun {  module star {  module  util {
     persistent and re-read later. In many cases, storing the reference
     directly would destroy the relocatability of an office installation and the
     possibility to share one office user data directory among parallel office
-    installtions.
+    installations.
 
     @since OOo 2.0
  */

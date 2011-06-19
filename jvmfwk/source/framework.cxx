@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         //Use every plug-in library to get Java installations.
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
-         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule++)
+         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
          {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
@@ -159,10 +160,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             typedef std::vector<rtl::OUString>::const_iterator citLoc;
             //Check every manually added location
             for (citLoc ii = vecJRELocations.begin();
-                ii != vecJRELocations.end(); ii++)
+                ii != vecJRELocations.end(); ++ii)
             {
-//              rtl::OUString sLocation =
-//                  rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
                 jfw::CJavaInfo aInfo;
                 plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                     ii->pData,
@@ -196,9 +195,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         //To obtain the JavaInfos for the manually added JRE locations the function
         //jfw_getJavaInfoByPath is called which can return a JavaInfo of any vendor.
         std::vector<jfw::CJavaInfo> vecInfoManual2;
-        for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ivm++)
+        for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ++ivm)
         {
-            for (ci_pl ii = vecPlugins.begin(); ii != vecPlugins.end(); ii++)
+            for (ci_pl ii = vecPlugins.begin(); ii != vecPlugins.end(); ++ii)
             {
                 if ( ii->sVendor.equals((*ivm)->sVendor))
                 {
@@ -210,7 +209,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         //Check which JavaInfo from vector vecInfoManual2 is already
         //contained in vecInfo. If it already exists then remove it from
         //vecInfoManual2
-        for (it_info j = vecInfo.begin(); j != vecInfo.end(); j++)
+        for (it_info j = vecInfo.begin(); j != vecInfo.end(); ++j)
         {
             it_info it_duplicate =
                 std::find_if(vecInfoManual2.begin(), vecInfoManual2.end(),
@@ -228,10 +227,10 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         typedef std::vector<jfw::CJavaInfo>::iterator it;
         int index = 0;
         //Add the automatically detected JREs
-        for (it k = vecInfo.begin(); k != vecInfo.end(); k++)
+        for (it k = vecInfo.begin(); k != vecInfo.end(); ++k)
             (*pparInfo)[index++] = k->detach();
         //Add the manually detected JREs
-        for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); l++)
+        for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); ++l)
             (*pparInfo)[index++] = l->detach();
 
         *pSize = nSize;
@@ -241,7 +240,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     {
         retVal = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return retVal;
 }
@@ -383,7 +382,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         //add the options set by options dialog
         int index = 2;
         typedef std::vector<rtl::OString>::const_iterator cit;
-        for (cit i = vmParams.begin(); i != vmParams.end(); i ++)
+        for (cit i = vmParams.begin(); i != vmParams.end(); ++i)
         {
             arOpt[index].optionString = const_cast<sal_Char*>(i->getStr());
             arOpt[index].extraInfo = 0;
@@ -419,7 +418,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -461,7 +460,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         //Java the loop will break
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++, cModule++)
+        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
         {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
@@ -543,7 +542,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 settings.getJRELocations();
             //use every plug-in to determine the JavaInfo objects
             bool bInfoFound = false;
-            for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+            for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i)
             {
                 const jfw::PluginLibrary & library = *i;
                 jfw::VersionInfo versionInfo =
@@ -565,7 +564,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 
                 typedef std::vector<rtl::OUString>::const_iterator citLoc;
                 for (citLoc it = vecJRELocations.begin();
-                    it != vecJRELocations.end(); it++)
+                    it != vecJRELocations.end(); ++it)
                 {
                     jfw::CJavaInfo aInfo;
                     javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
@@ -628,7 +627,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -717,7 +716,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -763,7 +762,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
         int cModule = 0;
         for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end();
-             i++, cModule++)
+             ++i, ++cModule)
         {
             const jfw::PluginLibrary & library = *i;
             jfw::VersionInfo versionInfo =
@@ -803,7 +802,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             if (plerr == JFW_PLUGIN_E_NONE)
             {
                 //check if the vendor of the found JRE is supported
-                if (vecVendors.size() == 0)
+                if (vecVendors.empty())
                 {
                     //vendor does not matter
                     *ppInfo = pInfo;
@@ -845,7 +844,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -879,7 +878,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -912,7 +911,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -934,7 +933,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -959,7 +958,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -984,7 +983,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1007,7 +1006,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1030,7 +1029,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 }
@@ -1054,7 +1053,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -1080,7 +1079,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
     return errcode;
 
@@ -1105,7 +1104,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_ENSURE(0, e.message.getStr());
+        OSL_FAIL(e.message.getStr());
     }
 
     return errcode;
@@ -1255,10 +1254,6 @@ CJavaInfo::operator JavaInfo const * () const
 {
     return pInfo;
 }
-// ::JavaInfo** CJavaInfo::operator & ()
-// {
-//     return & pInfo;
-// }
 
 rtl::OUString CJavaInfo::getVendor() const
 {
@@ -1285,3 +1280,5 @@ sal_uInt64 CJavaInfo::getFeatures() const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,15 +43,13 @@ $(BIN)$/javavendors.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_mac
     -$(COPY) javavendors_freebsd.xml $(BIN)$/javavendors.xml
 .ELIF "$(OS)"=="MACOSX"
     -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors.xml
-.ELIF "$(OS)"=="LINUX"
+.ELIF "$(OS)"=="LINUX" || "$(OS)"=="AIX"
     -$(COPY) javavendors_linux.xml $(BIN)$/javavendors.xml
 .ELSE
     -$(COPY) javavendors_unx.xml $(BIN)$/javavendors.xml
 .ENDIF
 .ELIF "$(GUI)"=="WNT"
     -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors.xml	
-.ELIF "$(GUI)"=="OS2"
-    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors.xml	
 .ELSE
     @echo Unsupported platform.
 .ENDIF

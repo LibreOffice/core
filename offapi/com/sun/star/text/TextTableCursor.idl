@@ -27,28 +27,13 @@
 #ifndef __com_sun_star_text_TextTableCursor_idl__
 #define __com_sun_star_text_TextTableCursor_idl__
 
-#ifndef __com_sun_star_text_XTextTableCursor_idl__
 #include <com/sun/star/text/XTextTableCursor.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
-#endif
-#ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#endif
-#ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#endif
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#endif
 
 
 //=============================================================================

@@ -28,19 +28,10 @@
 #ifndef __com_sun_star_sheet_SubTotalDescriptor_idl__
 #define __com_sun_star_sheet_SubTotalDescriptor_idl__
 
-#ifndef __com_sun_star_sheet_XSubTotalDescriptor_idl__
 #include <com/sun/star/sheet/XSubTotalDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +42,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a description of how subtotals are created.
 
     <p>The descriptor contains properties and a collection of subtotal fields
-    which control the behaviour of operation.</p>
+    which control the behavior of operation.</p>
  */
 published service SubTotalDescriptor
 {
@@ -78,7 +69,7 @@ published service SubTotalDescriptor
     //-------------------------------------------------------------------------
 
 //!published service PropertySet
-    /** procides access to the properties.
+    /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 

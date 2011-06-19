@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_frame_ControlEvent_idl__
 #define __com_sun_star_frame_ControlEvent_idl__
 
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
 
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
 
 //=============================================================================
 
@@ -54,7 +50,7 @@ struct ControlEvent
     */
     ::com::sun::star::util::URL aURL;
 
-    /** specifies the event which has occured.
+    /** specifies the event which has occurred.
      */
     string Event;
 
@@ -62,7 +58,7 @@ struct ControlEvent
 
     /** specifies a sequence of named values which are used as
         additional values for the event. The number and types of
-        named values depent on the event.
+        named values depend on the event.
      */
     sequence< com::sun::star::beans::NamedValue > aInformation;
 };

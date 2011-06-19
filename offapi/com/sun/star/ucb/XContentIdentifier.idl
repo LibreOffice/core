@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_XContentIdentifier_idl__
 #define __com_sun_star_ucb_XContentIdentifier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -51,15 +49,15 @@ published interface XContentIdentifier: com::sun::star::uno::XInterface
         @returns
         the content identifier string. This must be a valid URI
         (Uniform Resource Identifier, see RFC 2396). This string
-        is required. If a content provider 'implements' some
+        is required. If a content provider "implements" some
         existent URI scheme (e.g., a content provider offering
-        access to a file system would implement the 'file' scheme,
+        access to a file system would implement the "file" scheme,
         and a content provider offering access to IMAP servers
-        would implement the 'imap' scheme), the content identifier
+        would implement the "imap" scheme), the content identifier
         strings should use that scheme. If on the other hand a
         content provider offers access to content for which no
         appropriate URI scheme exists, a vendor-specific URL scheme
-        starting with 'vnd.' must be created (see the Internet Draft
+        starting with "vnd." must be created (see the Internet Draft
         draft-king-vnd-urlscheme-00.txt).
     */
     string getContentIdentifier();
@@ -68,9 +66,9 @@ published interface XContentIdentifier: com::sun::star::uno::XInterface
     /** returns the content provider scheme string.
 
           <p>This string will   be calculated from the content identifier string
-        and must be lower-cased(!). It is the 'scheme' the content provider is
+        and must be lower-cased(!). It is the "scheme" the content provider is
         registered for. In example, a provider for FTP contents will use
-        ftp-URL's as content identifiers. The content provider scheme for all
+        ftp-URLs as content identifiers. The content provider scheme for all
         contents provided by that provider will be "ftp".
         </p>
 

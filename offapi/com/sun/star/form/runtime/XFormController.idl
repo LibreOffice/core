@@ -90,7 +90,7 @@ interface XFormControllerContext;
     message is shown to the user saying that input is required, the respective control is focused, and
     the update of the record is vetoed.</p>
 
-    <p>Note that you can precent the second check - for database fields containing <NULL/> values - on
+    <p>Note that you can present the second check - for database fields containing <NULL/> values - on
     a per-form and a per-database basis.<br/>
     For the former, you need to add a boolean property <code>FormsCheckRequiredFields</code> to the form
     (aka the <code>FormController</code>'s model), using its
@@ -107,7 +107,7 @@ interface XFormControllerContext;
     functionality to the controller by querying the dispatch interceptor for it.</p>
 
     <p>Below, there's a list of URLs which have a defined meaning - if an implementation supports one of them,
-    there must be a guaranteed semantices. However, concrete implementations may support an arbitrary sub or super
+    there must be a guaranteed semantics. However, concrete implementations may support an arbitrary sub or super
     set of these URLs.</p>
 
     <p>In general, all URLs start with the same prefix, namely <em>.uno:FormController/</em>. To this, a suffix is
@@ -333,7 +333,7 @@ interface XFormController
     */
     [attribute, readonly] XFormOperations FormOperations;
 
-    /** provicdes access to the currently active control
+    /** provides access to the currently active control
       */
     [attribute, readonly] ::com::sun::star::awt::XControl CurrentControl;
 

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_frame_XDispatchRecorderSupplier_idl__
 #define __com_sun_star_frame_XDispatchRecorderSupplier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatch_idl__
 #include <com/sun/star/frame/XDispatch.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchRecorder_idl__
 #include <com/sun/star/frame/XDispatchRecorder.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +43,7 @@
     of <member>XDispatch::dispatch()</member>. The recorded data (may a script)
     can be used to automate recorded dispatch and start it at later time again.
     This supplier provides access to the recorder and supports some functionality
-    to work with the mcaro recording mechanism in an easy manner.
+    to work with the macro recording mechanism in an easy manner.
     </p>
 
     @see XDispatchRecorder
@@ -79,8 +71,8 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
     /** provides access on the recorder of this supplier
 
         <p>
-        Returned recorder can be used to record dispatches manualy or to get
-        recorded data for further using e.g. saving. He is internaly used too
+        Returned recorder can be used to record dispatches manually or to get
+        recorded data for further using e.g. saving. He is internally used too
         due to the method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>.
         </p>
 
@@ -95,7 +87,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
     /** dispatch given URL and record it if recording is enabled
 
         <p>
-        Parameter <var>Dispatcher</var> is used internaly to make the dispatch.
+        Parameter <var>Dispatcher</var> is used internally to make the dispatch.
         If recording isn't enabled it will be a normal <member>XDispatch::dispatch()</member>
         call. Otherwise follow algorithm is used:
         <ul>
@@ -109,7 +101,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
             </li>
             <li>If <var>Dispatcher</var> support the interface
                 <type>XRecordableDispatch</type> it will be used
-                to dispatch and record all neccessary parameters of
+                to dispatch and record all necessary parameters of
                 the whole process.
             </li>
         </ul>

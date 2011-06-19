@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-
 #include <jni.h>
 
-//#include <iostream>
 #include <stdio.h>
 #include <sal/main.h>
 #include <rtl/process.h>
@@ -60,16 +59,19 @@
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <uno/current_context.hxx>
+
 using namespace std;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-//using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 using namespace com::sun::star::task;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define OUSTR( x ) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
@@ -118,9 +120,6 @@ void SAL_CALL InteractionHandler::handle( const Reference< XInteractionRequest >
         if(retry.is())
             break;
     }
-
-//     if( abort.is())
-//         abort->select();
 
     static int cRetry= 0;
 
@@ -203,3 +202,4 @@ SAL_IMPLEMENT_MAIN()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

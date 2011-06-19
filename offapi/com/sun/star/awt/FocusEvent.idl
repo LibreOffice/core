@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_FocusEvent_idl__
 #define __com_sun_star_awt_FocusEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -62,7 +58,7 @@ published struct FocusEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** specifies the reason for the focus change as an arithmentic-or
+    /** specifies the reason for the focus change as an arithmetic-or
         combination of <type>FocusChangeReason</type>.
 
         @see FocusChangeReason

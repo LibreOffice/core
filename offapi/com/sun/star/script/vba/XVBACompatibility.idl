@@ -40,6 +40,7 @@ interface XVBACompatibility
     //-------------------------------------------------------------------------
 
     [attribute] boolean VBACompatibilityMode;
+    [attribute ] string  ProjectName;
 
     //-------------------------------------------------------------------------
 

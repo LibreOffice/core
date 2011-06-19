@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,14 +26,9 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_SOCKET_CONST_H_
 #define _OSL_SOCKET_CONST_H_
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <sal/types.h>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
@@ -58,9 +54,6 @@
 
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
-//define read count
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #ifdef __cplusplus
 extern "C"
@@ -71,7 +64,7 @@ extern "C"
 //------------------------------------------------------------------------
 // OS dependent declaration and includes
 //------------------------------------------------------------------------
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#if ( defined UNX )     //Unix
 #   include <unistd.h>
 #   include <limits.h>
 #   include <string.h>
@@ -88,11 +81,8 @@ extern "C"
 #       include <arpa/inet.h>
 #endif
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
-// #    include <windows.h>
 #   include <winsock.h>
 #   include <string.h>
-#include <tools/postwin.h>
 #endif
 
 
@@ -182,15 +172,10 @@ OSLTEST_DECLARE( HostIpZero,  "0.0.0.0" );
 //------------------------------------------------------------------------
 OSLTEST_DECLARE( NullURL,  "" );
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifdef __cplusplus
 }
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
-
 #endif /* _OSL_SOCKET_CONST_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

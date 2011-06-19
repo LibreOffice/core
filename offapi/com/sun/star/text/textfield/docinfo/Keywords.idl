@@ -48,7 +48,7 @@ published service Keywords
      */
     [property] string Content;
     /** contains the current content of the text field.
-        <p> This property is escpecially useful for import/export purposes. </p>
+        <p> This property is especially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
     /** If this flag is set to <FALSE/> the content updated everytime the document

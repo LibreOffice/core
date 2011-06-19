@@ -28,29 +28,12 @@
 #define __com_sun_star_text_TextPortion_idl__
 
 
-#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContentEnumerationAccess_idl__
 #include <com/sun/star/container/XContentEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextRange_idl__
 #include <com/sun/star/text/TextRange.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextContent_idl__
 #include <com/sun/star/text/XTextContent.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextField_idl__
 #include <com/sun/star/text/XTextField.idl>
-#endif
-
-#ifndef __com_sun_star_text_XFootnote_idl__
 #include <com/sun/star/text/XFootnote.idl>
-#endif
 
 
 //=============================================================================

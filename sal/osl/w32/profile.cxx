@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <osl/file.h>
 #include <osl/util.h>
 #include <rtl/alloc.h>
+#include <sal/macros.h>
 #include <algorithm>
 using std::min;
 static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { rtl_copyMemory(dest, source, length*sizeof(sal_Unicode)); }
@@ -1274,11 +1276,6 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
 
     if (! bWriteable)
     {
-#if 0
-//#ifdef DEBUG_OSL_PROFILE
-        OSL_TRACE("opening '%s' read only\n",pszFilename);
-#endif
-
         pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1506,10 +1503,6 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
-#ifdef DEBUG_OSL_PROFILE
-    int strLen=0;
-#endif
-
     if ( pFile == 0 || pFile->m_Handle < 0 )
     {
         return (sal_False);
@@ -1542,18 +1535,12 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 
 
     memcpy(pFile->m_pWriteBuf + ( pFile->m_nWriteBufLen - pFile->m_nWriteBufFree ),pszLine,Len+1);
-#ifdef DEBUG_OSL_PROFILE
-    strLen = strlen(pFile->m_pWriteBuf);
-#endif
+
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len]='\r';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 1]='\n';
     pFile->m_pWriteBuf[pFile->m_nWriteBufLen - pFile->m_nWriteBufFree + Len + 2]='\0';
 
     pFile->m_nWriteBufFree-=Len+2;
-
-#ifdef DEBUG_OSL_PROFILE
-/*    OSL_TRACE("File Buffer in _putLine '%s' '%i'(%i)\n",pFile->m_pWriteBuf,strlen(pFile->m_pWriteBuf),pFile->m_nWriteBufLen - pFile->m_nWriteBufFree);*/
-#endif
 
     return (sal_True);
 }
@@ -2560,7 +2547,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                 int i = 0;
                 pStr = aTmpPath + nPos;
 
-                for (i = 0; i < (sizeof(SubDirs) / sizeof(SubDirs[0])); i++)
+                for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
                     if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
                     {
                         if ( *strPath == 0)
@@ -2705,3 +2692,4 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,49 +27,25 @@
 #ifndef __com_sun_star_xml_sax_XFastParser_idl__
 #define __com_sun_star_xml_sax_XFastParser_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_InputSource_idl__
 #include <com/sun/star/xml/sax/InputSource.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
-#endif
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__
 #include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XFastTokenHandler_idl__
 #include <com/sun/star/xml/sax/XFastTokenHandler.idl>
-#endif
-
-#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
 #include <com/sun/star/xml/sax/XErrorHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
 #include <com/sun/star/xml/sax/XDTDHandler.idl>
-#endif
 
-#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
 #include <com/sun/star/xml/sax/XEntityResolver.idl>
-#endif
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -77,19 +53,19 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 //=============================================================================
 
-/** specifies a SAX parser that uses integer values for known xml names
+/** specifies a SAX parser that uses integer values for known XML names
     (elements, attributes and attribute values). The parser also handles
-    namespaces and allows to have individual contexts for each xml element.
+    namespaces and allows to have individual contexts for each XML element.
 
     <p>Before parsing is possible you have to set your
     <type>XFastDocumentHandler</type> using <member>setFastDocumentHandler</member>.
 
     <p>Parsing starts with calling <member>parseStream</member>. If the parser
-    finds a valid xml file with the given <type>InputSource</type>, it calls
+    finds a valid XML file with the given <type>InputSource</type>, it calls
     <member>XFastDocumentHandler::startDocument</member> first.
 
-    <p>This parser generates either 'fast' events that use integer token
-    values for namespaces, elements and attributes or 'unknown' events for
+    <p>This parser generates either "fast" events that use integer token
+    values for namespaces, elements and attributes or "unknown" events for
     elements that are unknown.
 
     <p>A namespace is unknown if the namespace URL was not registered with
@@ -102,7 +78,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>Setting a <type>XFastTokenHandler</type> with <member>setTokenHandler</member>
     is optional, but without a <type>XFastTokenHandler</type> you will only
-    get unknown sax events. This can be usefull if you are only interested
+    get unknown sax events. This can be useful if you are only interested
     in the namespace handling and/or the context feature.
 
     <p>For each element the parser sends a create child element event to the
@@ -114,7 +90,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     itself.
 
     <p>If the parent context returns an empty reference, no further events for
-    the element and all of its childs are created.
+    the element and all of its children are created.
 
     <p>If a valid context is returned this context gets a start event by a call to
     <member>XFastContextHandler::startFastElement</member> for known elements or
@@ -153,7 +129,7 @@ interface XFastParser: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** must be registered to translate known xml names to integer tokens.
+    /** must be registered to translate known XML names to integer tokens.
      */
     void setTokenHandler( [in] XFastTokenHandler Handler );
 
@@ -187,6 +163,11 @@ interface XFastParser: com::sun::star::uno::XInterface
         errors will be presented to the user.</p>
      */
     void setLocale( [in] com::sun::star::lang::Locale locale );
+
+    /** Gets the namespace url string.
+      */
+    string getNamespaceURL( [in] string prefix )
+        raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================

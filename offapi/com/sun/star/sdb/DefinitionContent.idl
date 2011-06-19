@@ -52,7 +52,7 @@ service DefinitionContent
         <ul>
             <li><strong>getPropertyValues</strong></li>
             <li><strong>setPropertyValues</strong></li>
-            <li><strong>getPropertysetInfo</strong></li>
+            <li><strong>getPropertySetInfo</strong></li>
         </ul>
         </p>
 

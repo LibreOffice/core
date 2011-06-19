@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_ucb_XCommandProcessor_idl__
 #define __com_sun_star_ucb_XCommandProcessor_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XCommandEnvironment_idl__
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_Command_idl__
 #include <com/sun/star/ucb/Command.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_CommandAbortedException_idl__
 #include <com/sun/star/ucb/CommandAbortedException.idl>
-#endif
 
 //=============================================================================
 
@@ -68,7 +57,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     /** creates a unique identifier for a command.
 
         <p>This identifier can be used to abort the execution of the command
-        accociated with that identifier. Note that it is generally not
+        associated with that identifier. Note that it is generally not
         necessary to obtain a new id for each command, because commands are
         executed synchronously. So the id for a command is valid again after a
         command previously associated with this id has finished. In fact you
@@ -94,7 +83,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** executes a command.
 
-        <p>Common command definitions can be found in the soecification of the
+        <p>Common command definitions can be found in the specification of the
         service <type>Content</type>.
 
         @param aCommand
@@ -124,7 +113,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
         to indicate that two threads tried to use the same command identifier
 
         @throws Exception
-        if an error occured during the execution of the command.
+        if an error occurred during the execution of the command.
     */
     any execute( [in] Command aCommand,
                  [in] long CommandId,

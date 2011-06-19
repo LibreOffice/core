@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_report_inspection__DefaultComponentInspectorModel_idl__
 #define __com_sun_star_report_inspection_DefaultComponentInspectorModel_idl__
 
-#ifndef __com_sun_star_inspection_XObjectInspectorModel_idl__
 #include <com/sun/star/inspection/XObjectInspectorModel.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +43,7 @@ module com {  module sun {  module star {  module report { module inspection {
     <p>A <type>DefaultComponentInspectorModel</type> provides the following handlers by default:
     <ul><li><type>GeometryHandler</type></li>
         <li><type>ReportComponentHandler</type></li>
-        <li><typescope="com::sun::star::form::inspection">EditPropertyHandler</type></li>
+        <li><type scope="com::sun::star::form::inspection">EditPropertyHandler</type></li>
     </ul></p>
 
     @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories

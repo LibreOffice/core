@@ -30,7 +30,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/security/SecurityInfrastructureException.idl>
-
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
 
 module com { module sun { module star { module xml { module crypto {
@@ -44,7 +43,7 @@ module com { module sun { module star { module xml { module crypto {
 published interface XXMLSecurityContext : com::sun::star::uno::XInterface
 {
     /**
-     * Add personal security environment , and return the index of the added env.
+     * Add personal security environment , and return the index of the added environment.
      */
     long addSecurityEnvironment( [in] XSecurityEnvironment aSecurityEnvironment
     ) raises( com::sun::star::security::SecurityInfrastructureException ) ;
@@ -61,7 +60,7 @@ published interface XXMLSecurityContext : com::sun::star::uno::XInterface
 
     /**
      * An handy method to get the first personal security environment.
-     * In xmlsec/nss, the first personal security environment should be the "internal slot"
+     * In XMLSec/NSS, the first personal security environment should be the "internal slot"
      */
     com::sun::star::xml::crypto::XSecurityEnvironment getSecurityEnvironment( ) ;
 

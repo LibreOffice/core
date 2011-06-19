@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_form_validation_XValidatableFormComponent_idl__
 #define __com_sun_star_form_validation_XValidatableFormComponent_idl__
 
-#ifndef __com_sun_star_form_validation_XValidatable_idl__
 #include <com/sun/star/form/validation/XValidatable.idl>
-#endif
-
-#ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_NullPointerException_idl__
 #include <com/sun/star/lang/NullPointerException.idl>
-#endif
 
 //=============================================================================
 
@@ -66,7 +58,7 @@ interface XFormComponentValidityListener;
     <p>An <type>XValidatableFormComponent</type> allows to easily access both of these aspects.</p>
 
     <p>Note that all of the information provided at this interface can also obtained by other means,
-    but much more inconviniently.</p>
+    but much more inconveniently.</p>
 
     @see XValidatable
     @see XValidator

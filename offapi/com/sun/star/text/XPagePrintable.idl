@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_text_XPagePrintable_idl__
 #define __com_sun_star_text_XPagePrintable_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 
 //=============================================================================
@@ -64,7 +56,7 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
                 <LI><P>long BottomMargin - bottom margin of the page</P>
                 <LI><P>long HoriMargin  - margin between rows of pages</P>
                 <LI><P>long VertMargin  - margin between columns of pages</P>
-                <LI><P>boolean IsLandscape - determins if the output page is printed in landscape format</P>
+                <LI><P>boolean IsLandscape - determines if the output page is printed in landscape format</P>
             </UL>
              </p>
      */
@@ -79,7 +71,7 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::text::XPagePrintable::printPages
-    /** prints the pages according to the <typ>PagePrintSettings</type>.
+    /** prints the pages according to the <type>PagePrintSettings</type>.
 
     @see com::sun::star::view::PrintOptions
      */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,9 @@
 #ifndef _IDLC_OPTIONS_HXX_
 #define _IDLC_OPTIONS_HXX_
 
-#ifndef _IDLC_IDLCTYPEs_HXX_
 #include <idlc/idlctypes.hxx>
-#endif
 
-typedef ::std::hash_map< ::rtl::OString,
+typedef ::boost::unordered_map< ::rtl::OString,
                          ::rtl::OString,
                          HashString,
                          EqualString > OptionMap;
@@ -91,3 +90,4 @@ protected:
 
 #endif // _IDLC_OPTIONS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

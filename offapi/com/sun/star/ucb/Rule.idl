@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_Rule_idl__
 #define __com_sun_star_ucb_Rule_idl__
 
-#ifndef __com_sun_star_ucb_RuleTerm_idl__
 #include <com/sun/star/ucb/RuleTerm.idl>
-#endif
 
 
 //=============================================================================
@@ -65,7 +63,7 @@ published struct Rule
         </tr>
         <tr>
             <td>FORWARD</td>
-            <td>The email address of the recepient</td>
+            <td>The email address of the recipient</td>
         </tr>
         <tr>
             <td>All other actions</td>

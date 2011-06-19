@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XAnimation_idl__
 #define __com_sun_star_rendering_XAnimation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_AnimationAttributes_idl__
 #include <com/sun/star/rendering/AnimationAttributes.idl>
-#endif
-#ifndef __com_sun_star_rendering_XCanvas_idl__
 #include <com/sun/star/rendering/XCanvas.idl>
-#endif
 
 
 module com { module sun { module star { module rendering {
@@ -67,7 +57,7 @@ published interface XAnimation : ::com::sun::star::uno::XInterface
 
         Note that it is perfectly legal to e.g. map t in a nonlinear
         fashion to internal frames, for example to achieve
-        acceleration or decceleration effects. It is required that the
+        acceleration or deceleration effects. It is required that the
         render method has const semantics, i.e. when called with the
         same parameter set, identical output must be generated. This
         is because e.g. a Sprite might decide arbitrarily to render an

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 #ifdef WNT
 #include <io.h>
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -204,7 +205,7 @@ GatherFileNames( List<Simstr> &     o_sFiles,
 
     _findclose(hFile);
     delete [] sFilter;
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
     DIR * pDir = opendir( i_sSrcDirectory );
     dirent * pEntry = 0;
     char * sEnding;
@@ -286,7 +287,7 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
     _findclose(hFile);
     delete [] sFilter;
 
-#elif defined(UNX) || defined(OS2)
+#elif defined(UNX)
     DIR * pDir = opendir( i_sParentdDirectory );
     dirent * pEntry = 0;
     struct stat     aEntryStatus;
@@ -312,3 +313,4 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
 #endif
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

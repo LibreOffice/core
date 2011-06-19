@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 #include "sockethelper.hxx"
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#if OSL_DEBUG_LEVEL > 0
+#   define SILENT_TEST 0
+#else
+#   define SILENT_TEST 1
+#endif
+
+#if SILENT_TEST
+#   define t_print(...) { }
+#else
+#   define t_print printf
+#endif
 
 //------------------------------------------------------------------------
 // Ip version definition
@@ -66,24 +81,19 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
     return ( ( sal_True == compareUString( addr1.getHostname( 0 ), addr2.getHostname( 0 ) ) ) && ( addr2.getPort( ) == addr2.getPort( ) ) );
 }
 
-/*char * oustring2char( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("oustring2char %s\n", aString.getStr( ) );
-    sal_Char * sStr = aString.getStr( );
-    return (char *)sStr;
-}*/
-
 /** print a UNI_CODE String. And also print some comments of the string.
 */
 void printUString( const ::rtl::OUString & str, const char* msg)
 {
+#if SILENT_TEST
+    (void)str;
+    (void)msg;
+#else
     t_print("#%s #printUString_u# ", msg );
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    //char * sStr = aString.getStr( );
     t_print("%s\n", aString.getStr( ) );
+#endif
 }
 
 /** get the local host name.
@@ -115,7 +125,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 #else
     char hostname[255];
     if (gethostname(hostname, 255) != 0) {
-        OSL_ENSURE( false, "#Error: gethostname failed."  );
+        OSL_FAIL( "#Error: gethostname failed."  );
     }
 
     struct hostent *hptr;
@@ -174,11 +184,11 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     if ( returnVal.equals( rightVal ) )
         return aUString;
     aUString += ::rtl::OUString::createFromAscii(msg);
-    aUString += ::rtl::OUString::createFromAscii(": the returned value is '");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":  the returned value is '"));
     aUString += returnVal;
-    aUString += ::rtl::OUString::createFromAscii("', but the value should be '");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("', but the value should be '"));
     aUString += rightVal;
-    aUString += ::rtl::OUString::createFromAscii("'.");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'."));
     return aUString;
 }
 
@@ -193,7 +203,7 @@ void thread_sleep( sal_Int32 _nSec )
 #ifdef WNT               //Windows
     Sleep( _nSec * 100 );
 #endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
+#if ( defined UNX )  //Unix
     usleep(_nSec * 100000);
 #endif
     // t_print("# done\n" );
@@ -203,16 +213,23 @@ void thread_sleep( sal_Int32 _nSec )
 */
 void printBool( sal_Bool bOk )
 {
-    t_print("printBool " );
-    ( sal_True == bOk ) ? t_print("YES!" ): t_print("NO!");
-    t_print("\n");
+#if SILENT_TEST
+    (void)bOk;
+#else
+    t_print("#printBool# " );
+    t_print ("%s", (sal_True == bOk) ? "YES!\n" : "NO!\n");
+#endif
 }
 
 /** print content of a ByteSequence.
 */
 void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-    t_print("ByteSequence is: " );
+#if SILENT_TEST
+    (void)bsByteSeq;
+    (void)nLen;
+#else
+    t_print("#ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
         if ( bsByteSeq[i] < 0 )
             t_print("%d ",  256 + bsByteSeq[i] );
@@ -220,6 +237,7 @@ void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen
             t_print("%d ",  bsByteSeq[i] );
     }
     t_print(" .\n" );
+#endif
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.
@@ -287,87 +305,6 @@ sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq
     return sal_False;
 }
 
-/** if the IP or hostname is availble( alive )
-*/
-/*sal_Bool ifAvailable( const char *  stringAddrOrHostName )
-{
-    sal_Bool result;
-    int  p[2];
-    sal_Char buffer[2000];
-    char stringhost[20];
-    strcpy(stringhost, stringAddrOrHostName );
-
-    result = sal_False;
-    if (pipe (p) == 0)
-    {
-    pid_t pid;
-    int nStatus;
-    pid = fork();
-    if (pid == 0)
-    {
-#if ( defined LINUX )
-        char *argv[] =
-        {
-            "/bin/ping",
-            "-c", "3",
-            "-W", "3",
-            stringhost,
-            NULL
-        };
-#endif
-#if ( defined SOLARIS )
-        char *argv[] =
-            {
-                "/usr/sbin/ping",
-                stringhost,
-                "3",
-                NULL
-            };
-#endif
-        close (p[0]);
-        dup2  (p[1], 1);
-        close (p[1]);
-#if ( defined LINUX )
-        execv ("/bin/ping", argv);
-#endif
-#if ( defined SOLARIS )
-        execv ("/usr/sbin/ping", argv);
-#endif
-        // arriving here means exec failed
-        _exit(-1);
-    }
-    else if (pid > 0)
-    {
-        sal_Int32 k = 0, n = 2000;
-        close (p[1]);
-        if ((k = read (p[0], buffer, n - 1)) > 0)
-        {
-            buffer[k] = 0;
-            if (buffer[k - 1] == '\n')
-            buffer[k - 1] = 0;
-#if ( defined LINUX )
-            char strOK[] = "bytes from";
-#endif
-#if ( defined SOLARIS )
-            char strOK[] = "is alive";
-#endif
-            if (strstr( buffer, strOK ) != NULL )
-                result = sal_True;
-            t_print("buffer is %s\n", buffer );
-        }
-        close (p[0]);
-        waitpid (pid, &nStatus, 0);
-    }
-    else
-    {
-        close (p[0]);
-        close (p[1]);
-    }
-
-    }
-    return result;
-}*/
-
 sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
 {
     ::osl::ConnectorSocket aSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
@@ -399,3 +336,5 @@ sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
     }
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

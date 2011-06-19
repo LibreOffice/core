@@ -27,21 +27,12 @@
 #ifndef __com_sun_star_presentation_Shape_idl__
 #define __com_sun_star_presentation_Shape_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_AnimationEffect_idl__
 #include <com/sun/star/presentation/AnimationEffect.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_ClickAction_idl__
 #include <com/sun/star/presentation/ClickAction.idl>
-#endif
 
-#ifndef __com_sun_star_presentation_AnimationSpeed_idl__
 #include <com/sun/star/presentation/AnimationSpeed.idl>
-#endif
 
 
 //=============================================================================
@@ -53,7 +44,7 @@
 /** this service is supported from all shapes inside a <type>PresentationDocument</type>.
 
 
-    This usually enahnces objects of type <type scope="com::sun::star::drawing">Shape</type> with
+    This usually enhances objects of type <type scope="com::sun::star::drawing">Shape</type> with
     presentation properties.
 */
 published service Shape
@@ -140,7 +131,7 @@ published service Shape
 
     //-------------------------------------------------------------------------
 
-    /** This is the URL to a soundfile that is played while the animation
+    /** This is the URL to a sound file that is played while the animation
         effect of this shape is running.
      */
     [property] string Sound;
@@ -166,7 +157,7 @@ published service Shape
 
     //-------------------------------------------------------------------------
 
-    /** specifies an "ole2" verb for the ClickAction VERB in
+    /** specifies an "OLE2" verb for the ClickAction VERB in
         the property <member scope="com::sun::star::drawing">Shape::OnClick</member>.
      */
     [property] long Verb;

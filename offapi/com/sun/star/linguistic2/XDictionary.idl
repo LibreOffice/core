@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_linguistic2_XDictionary_idl__
 #define __com_sun_star_linguistic2_XDictionary_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_DictionaryType_idl__
 #include <com/sun/star/linguistic2/DictionaryType.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryEntry_idl__
 #include <com/sun/star/linguistic2/XDictionaryEntry.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryEventListener_idl__
 #include <com/sun/star/linguistic2/XDictionaryEventListener.idl>
-#endif
 
 //=============================================================================
 
@@ -55,16 +41,16 @@ module com { module sun { module star { module linguistic2 {
 /** This interfaces enables the object to access personal dictionaries.
 
     <P>Personal dictionaries are used to supply additional
-    information for spellchecking and hyphenation (see
+    information for spell checking and hyphenation (see
     <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>).
     Only active dictionaries with an appropriate language are used
     for that purpose.
     The entries of an active, positive dictionary are words that are
-    required to be recognized as correct during the spellchecking
+    required to be recognized as correct during the spell checking
     process. Additionally, they will be used for hyphenation.
     Entries of a negative dictionary are required to be recognized
     as negative words, for example, words that should not be used, during
-    spellcheck. An entry in a negative dictionary may supply a
+    SPELLCHECK. An entry in a negative dictionary may supply a
     proposal for a word to be used instead of the one being used.</P>
 
     @see    <type scope="com::sun::star::linguistic2">XDictionaryEvent</type>
@@ -144,7 +130,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         <P>If an entry already exists, the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>In positive dictionaries only postive entries
+        <P>In positive dictionaries only positive entries
         can be made, and in negative ones only negative entries.</P>
 
         @param  xDicEntry
@@ -165,7 +151,7 @@ published interface XDictionary : com::sun::star::container::XNamed
         <P>If an entry already exists, the dictionary remains unchanged
          and <FALSE/> will be returned.</P>
 
-        <P>In positive dictionaries only postive entries
+        <P>In positive dictionaries only positive entries
         can be made, and in negative ones only negative entries.</P>
 
         @param  aWord

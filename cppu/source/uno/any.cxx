@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,3 +149,5 @@ void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
     CONSTRUCT_EMPTY_ANY( pValue );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

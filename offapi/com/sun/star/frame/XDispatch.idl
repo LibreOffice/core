@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_frame_XDispatch_idl__
 #define __com_sun_star_frame_XDispatch_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStatusListener_idl__
 #include <com/sun/star/frame/XStatusListener.idl>
-#endif
 
 
 //=============================================================================
@@ -79,7 +68,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
 
         <p>
         It is only allowed to dispatch URLs for which this <type>XDispatch</type>
-        was explicitely queried. Additional arguments ("'#..." or "?...") are allowed.
+        was explicitly queried. Additional arguments ("'#..." or "?...") are allowed.
         </p>
 
         @param URL
@@ -87,7 +76,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
 
         @param Arguments
             optional arguments for this request.
-            They depend on the real implementation of the dipsatch object.
+            They depend on the real implementation of the dispatch object.
 
         @example
             <listing>
@@ -121,7 +110,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
 
         <p>
         It is only allowed to register URLs for which this <type>XDispatch</type>
-        was explicitely queried. Additional arguments ("#..." or "?...") will be ignored.
+        was explicitly queried. Additional arguments ("#..." or "?...") will be ignored.
         </p>
         Note: Notifications can't be guaranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
 

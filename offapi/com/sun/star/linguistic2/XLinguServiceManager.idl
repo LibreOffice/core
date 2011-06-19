@@ -28,21 +28,10 @@
 #define __com_sun_star_linguistic2_XLinguServiceManager_idl__
 
 
-#ifndef __com_sun_star_linguistic2_XSpellChecker_idl__
 #include <com/sun/star/linguistic2/XSpellChecker.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
 #include <com/sun/star/linguistic2/XHyphenator.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XThesaurus_idl__
 #include <com/sun/star/linguistic2/XThesaurus.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +40,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** the basic interface to be used to access linguistic functionality.
 
-    <P>This interface is used to access spellchecker, hyphenator, and
+    <P>This interface is used to access spell checker, hyphenator, and
     thesaurus functionality.
     Additionally, it can query what implementations of those services are
     available (for specific languages or in general).
@@ -59,9 +48,9 @@ module com { module sun { module star { module linguistic2 {
     be used for a specific language.</P>
 
     <P>
-    For spellchecking and thesaurus, the order in the list defines the order
+    For spell checking and thesaurus, the order in the list defines the order
     of creation/usage of those services.
-    That is, if the first spellchecker implementation does not recognize
+    That is, if the first spell checker implementation does not recognize
     the given word as correct, the second service implementation for that
     language is created and gets queried. If that one fails, the third one
     gets created and queried and so on.
@@ -82,7 +71,7 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     /**
         @returns
             the <type scope="com::sun::star::linguistic2">XSpellChecker</type>
-            interface to be used for spellchecking.
+            interface to be used for spell checking.
     */
     com::sun::star::linguistic2::XSpellChecker  getSpellChecker();
 
@@ -113,7 +102,7 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
         </P>
 
         @returns
-            <TRUE/> if the listener was succesfully added, <FALSE/> otherwise.
+            <TRUE/> if the listener was successfully added, <FALSE/> otherwise.
 
         @param xListener
             the listener to be added.
@@ -125,7 +114,7 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     /** removes a listener from the list of event listeners.
 
         @returns
-            <TRUE/> if the listener was succesfully removed, <FALSE/> otherwise.
+            <TRUE/> if the listener was successfully removed, <FALSE/> otherwise.
 
         @param xListener
             the listener to be removed.

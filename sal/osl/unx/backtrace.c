@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #endif /* defined SOLARIS */
 
 
-#if defined FREEBSD || defined NETBSD
+#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
@@ -267,10 +268,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
             Dl_info     dli;
-            ptrdiff_t   offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
+                ptrdiff_t offset;
+
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
@@ -333,10 +335,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
             Dl_info     dli;
-            ptrdiff_t   offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
+                ptrdiff_t offset;
+
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
@@ -357,3 +360,16 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 }
 
 #endif /* defined MACOSX */
+
+#if defined(AIX)
+int backtrace( void **buffer, int max_frames )
+{
+    return 0;
+}
+
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+}
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

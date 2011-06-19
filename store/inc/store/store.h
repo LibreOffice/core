@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORE_H_
-#define _STORE_STORE_H_ "$Revision: 1.6 $"
+#define _STORE_STORE_H_
 
 #include <store/types.h>
 
@@ -409,3 +410,4 @@ storeError SAL_CALL store_remove (
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

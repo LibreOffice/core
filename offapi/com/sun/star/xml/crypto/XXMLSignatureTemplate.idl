@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -34,7 +34,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
 #include <com/sun/star/xml/crypto/XUriBinding.idl>
 #include <com/sun/star/xml/crypto/XXMLSecurityTemplate.idl>
@@ -45,11 +44,11 @@ module com { module sun { module star { module xml { module crypto {
  * Interface of XML signature template
  *
  * <p>This interface represents a signature template, which is the same as the
- * desired xml signature element but some of the nodes may be empty. The empty
+ * desired XML signature element but some of the nodes may be empty. The empty
  * entities include digest value and signature value. Empty entities are not
  * allowed in a signature template when performing validation.</p>
  *
- * <p>In some cases, the signer or vertifier can dertermine and locate the
+ * <p>In some cases, the signer or verifier can determine and locate the
  * contents to be signed from the template by dereference the URI.</p>
  *
  * <p>With the help of signature context, the signer or verifier specifies the
@@ -60,7 +59,7 @@ module com { module sun { module star { module xml { module crypto {
 interface XXMLSignatureTemplate : XXMLSecurityTemplate
 {
     /**
-     * Get the target xml element, i.e. the element to be signed
+     * Get the target XML element, i.e. the element to be signed
      */
     sequence< com::sun::star::xml::wrapper::XXMLElementWrapper > getTargets(
     ) ;

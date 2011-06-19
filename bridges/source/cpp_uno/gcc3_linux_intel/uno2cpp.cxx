@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -58,7 +63,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs ) __attribute__((noinline));
 
@@ -66,7 +71,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs )
 {
@@ -119,8 +124,10 @@ void callVirtualMethod(
         : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
           "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
         : "eax", "edx" );
-    switch( eReturnType )
+    switch( pReturnTypeDescr->eTypeClass )
     {
+        case typelib_TypeClass_VOID:
+            break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             ((long*)pRegisterReturn)[1] = edx;
@@ -145,7 +152,21 @@ void callVirtualMethod(
             asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
             break;
         default:
+        {
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
+            sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
+            if (bSimpleReturn && nRetSize <= 8 && nRetSize > 0)
+            {
+                if (nRetSize > 4)
+                    static_cast<long *>(pRegisterReturn)[1] = edx;
+                static_cast<long *>(pRegisterReturn)[0] = eax;
+            }
+#else
+            (void)bSimpleReturn;
+#endif
             break;
+        }
     }
 }
 
@@ -168,10 +189,12 @@ static void cpp_call(
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    bool bSimpleReturn = true;
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        bSimpleReturn = x86::isSimpleReturnType(pReturnTypeDescr);
+        if (bSimpleReturn)
         {
             pCppReturn = pUnoReturn; // direct way for simple types
         }
@@ -268,9 +291,9 @@ static void cpp_call(
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
+            pCppReturn, pReturnTypeDescr, bSimpleReturn,
             (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -325,6 +348,39 @@ static void cpp_call(
     }
 }
 
+}
+
+namespace x86
+{
+    bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive)
+    {
+        if (bridges::cpp_uno::shared::isSimpleType( pTD ))
+            return true;
+#if defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || \
+    defined(MACOSX) || defined(DRAGONFLY)
+        // Only structs of exactly 1, 2, 4, or 8 bytes are returned through
+        // registers, see <http://developer.apple.com/documentation/DeveloperTools/
+        // Conceptual/LowLevelABI/Articles/IA32.html>:
+        if (pTD->eTypeClass == typelib_TypeClass_STRUCT &&
+            (recursive || pTD->nSize <= 2 || pTD->nSize == 4 || pTD->nSize == 8))
+        {
+            typelib_CompoundTypeDescription *const pCompTD =
+                (typelib_CompoundTypeDescription *) pTD;
+            for ( sal_Int32 pos = pCompTD->nMembers; pos--; ) {
+                typelib_TypeDescription * pMemberTD = 0;
+                TYPELIB_DANGER_GET( &pMemberTD, pCompTD->ppTypeRefs[pos] );
+                bool const b = isSimpleReturnType(pMemberTD, true);
+                TYPELIB_DANGER_RELEASE( pMemberTD );
+                if (! b)
+                    return false;
+            }
+            return true;
+        }
+#else
+        (void)recursive;
+#endif
+        return false;
+    }
 }
 
 namespace bridges { namespace cpp_uno { namespace shared {
@@ -449,3 +505,5 @@ void unoInterfaceProxyDispatch(
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,12 +41,12 @@ constants ImageScaleMode
     */
     const short None = 0;
 
-    /** specifies that the image should be scaled up or down to the size of the surrounding area isotropicly,
+    /** specifies that the image should be scaled up or down to the size of the surrounding area isotropically,
         i.e. by keeping its aspect ratio.
     */
     const short Isotropic = 1;
 
-    /** specifies that the image should be scaled up or down to the size of the surrounding area anisotropicly.
+    /** specifies that the image should be scaled up or down to the size of the surrounding area anisotropically.
 
         <p>The image will finally cover all of the surrounding area, but its dimensions might be distorted.</p>
     */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,8 +51,8 @@ class  Simstr
 
       // diverse utility functions
       const char *   str() const                { return sz; }
-      char *         s();   // ATTENTION !!!       // Only to be used, when a function needs a 'char*' but
-                                                   //   nevertheless THAT WILL BE NOT CHANGED!
+      char *         s();   // CAUTION!!!          // Only use when a function needs a 'char*' but
+                                                   //   still will NOT MODIFY THE STRING!
                                                    //   Typecasts to 'const char*' are performed automatically.
       int            l() const;                    // Length of string without '\0' at end.
       Simstr         operator+(
@@ -146,3 +147,4 @@ Simstr::is_empty() const               { return len == 0; }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,30 +27,14 @@
 #ifndef __com_sun_star_rendering_XGraphicDevice_idl__
 #define __com_sun_star_rendering_XGraphicDevice_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
 #include <com/sun/star/geometry/IntegerSize2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealSize2D_idl__
 #include <com/sun/star/geometry/RealSize2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XLinePolyPolygon2D_idl__
 #include <com/sun/star/rendering/XLinePolyPolygon2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XColorSpace_idl__
 #include <com/sun/star/rendering/XColorSpace.idl>
-#endif
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 
@@ -103,7 +87,7 @@ published interface XGraphicDevice : ::com::sun::star::uno::XInterface
         millimeter.
 
         A special floating point value of +infinity here indicates
-        'unknown', i.e. at the time of rendering undetermined or
+        "unknown", i.e. at the time of rendering undetermined or
         possibly infinite resolution along the corresponding
         direction.
      */
@@ -114,7 +98,7 @@ published interface XGraphicDevice : ::com::sun::star::uno::XInterface
     /** Query the physical dimensions of the device in millimeter.
 
         A special floating point value of +infinity here indicates
-        'unknown', i.e. at the time of rendering undetermined or
+        "unknown", i.e. at the time of rendering undetermined or
         possibly infinite resolution along the corresponding
         direction.
 
@@ -134,7 +118,7 @@ published interface XGraphicDevice : ::com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** Create a bezier poly-polygon which can internally use
+    /** Create a Bezier poly-polygon which can internally use
         device-optimized representations already.
 
         @param points

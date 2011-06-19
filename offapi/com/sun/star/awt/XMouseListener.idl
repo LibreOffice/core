@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_awt_XMouseListener_idl__
 #define __com_sun_star_awt_XMouseListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_awt_MouseEvent_idl__
 #include <com/sun/star/awt/MouseEvent.idl>
-#endif
 
 
 //=============================================================================
@@ -50,7 +46,7 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a mouse button has been pressed on a window.
 
-        <p>Since mouse presses are usually also used to indicate requests for popup menus
+        <p>Since mouse presses are usually also used to indicate requests for pop-up menus
         (also known as context menus) on objects, you might receive two events
         for a single mouse press: For example, if, on your operating system,
         pressing the right mouse button indicates the request for a context menu,

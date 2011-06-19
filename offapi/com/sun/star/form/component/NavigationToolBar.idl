@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_form_component_NavigationToolBar_idl__
 #define __com_sun_star_form_component_NavigationToolBar_idl__
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
 
 //=============================================================================
 
@@ -135,7 +131,7 @@ service NavigationToolBar
     //-------------------------------------------------------------------------
     /** specifies a repeat delay for the control
 
-        <p>Some buttons of a NavigationToolBar may show repeating behaviour, e.g. may be
+        <p>Some buttons of a NavigationToolBar may show repeating behavior, e.g. may be
         repeatedly triggered when the user keeps the mouse pressed over such a button.<br/>
         The delay between two such triggers (in milliseconds) is specified with this property.
         </p>

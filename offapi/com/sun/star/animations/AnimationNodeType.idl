@@ -35,7 +35,7 @@
 
 /** This constants defines a type for an animation node.
     <br>
-    It can be used to quickly identify semantic blocks inside an animation hierachy.
+    It can be used to quickly identify semantic blocks inside an animation hierarchy.
 
     @see AnimationNode
 */

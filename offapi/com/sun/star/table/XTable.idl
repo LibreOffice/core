@@ -28,41 +28,15 @@
 #ifndef __com_sun_star_table_XTable_idl__
 #define __com_sun_star_table_XTable_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_table_XCellRange_idl__
 #include <com/sun/star/table/XCellRange.idl>
-#endif
-
-#ifndef __com_sun_star_table_XColumnRowRange_idl__
 #include <com/sun/star/table/XColumnRowRange.idl>
-#endif
-
-#ifndef __com_sun_star_table_XCellCursor_idl__
 #include <com/sun/star/table/XCellCursor.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifiable_idl__
 #include <com/sun/star/util/XModifiable.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XMultiPropertySet_idl__
 #include <com/sun/star/beans/XMultiPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 

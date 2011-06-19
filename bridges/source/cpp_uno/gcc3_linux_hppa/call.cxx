@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 4 * nVtableIndex;
     pMethod = *((sal_uInt32 *)pMethod);
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "this is %p\n", pGPR[0]);
     for (int i = 0; i < hppa::MAX_GPR_REGS ; ++i)
         fprintf(stderr, "normal reg %d is %d %x\n", i, pGPR[i], pGPR[i]);
@@ -139,4 +140,4 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     MapReturn(r28, r29, pReturnTypeDescr, bRegisterReturn, (sal_uInt32*)pRegisterReturn);
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

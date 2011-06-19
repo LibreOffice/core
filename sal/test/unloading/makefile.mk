@@ -30,7 +30,6 @@ PRJNAME=	sal
 TARGET=		unloading
 TARGET1=samplelib1
 TARGET2=samplelib2
-#LIBTARGET=NO
 TARGETTYPE=CUI
 COMP1TYPELIST=$(TARGET1)
 
@@ -65,10 +64,6 @@ INCPRE+=	$(OUT)$/inc$/light
 .ENDIF
 
 
-#SLOFILES=	\
-#		$(SLO)$/samplelib1.obj	\
-#		$(SLO)$/samplelib2.obj
-
 LIB1TARGET=$(SLB)$/$(TARGET1).lib
 LIB1OBJFILES= \
         $(SLO)$/samplelib1.obj
@@ -80,14 +75,12 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-
-
 SHL1DEPN=
-#SHL1IMPLIB=	i$(TARGET1)
 SHL1LIBS=	$(SLB)$/$(TARGET1).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1EXPORTFILE=	exports.dxp
 DEF1NAME=	$(SHL1TARGET)
+
 #-------------------------------------------------------
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib

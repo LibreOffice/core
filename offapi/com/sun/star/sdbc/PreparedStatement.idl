@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_sdbc_PreparedStatement_idl__
 #define __com_sun_star_sdbc_PreparedStatement_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_util_XCancellable_idl__
 #include <com/sun/star/util/XCancellable.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbc {
 
@@ -105,7 +99,7 @@ published service PreparedStatement
     [optional] interface com::sun::star::lang::XComponent;
 
 
-    /** freeing all resources of a statement. A related resultset will be
+    /** freeing all resources of a statement. A related result set will be
              freed as well.
      */
     interface XCloseable;
@@ -113,7 +107,7 @@ published service PreparedStatement
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
-    /** could be used for cancelling the execution of SQL statements, if both
+    /** could be used for canceling the execution of SQL statements, if both
              the DBMS and the driver support aborting an SQL statement.
              The implementation is optional.
      */
@@ -209,7 +203,7 @@ published service PreparedStatement
              the database does not support positioned update/delete, this property is
              a noop. To insure that a cursor has the proper isolation level to support
              updates, the cursor's SELECT statement should be of the form
-             'select for update ...'. If the 'for update' phrase is omitted,
+             "select for update ...". If the "for update" phrase is omitted,
              positioned updates may fail.
              </p>
              <P>

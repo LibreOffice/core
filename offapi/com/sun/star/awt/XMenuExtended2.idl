@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_XMenuExtended2_idl__
 #define __com_sun_star_awt_XMenuExtended2_idl__
 
-#ifndef __com_sun_star_awt_XMenu_idl__
 #include <com/sun/star/awt/XMenu.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMenuExtended_idl__
 #include <com/sun/star/awt/XMenuExtended.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MenuItemType_idl__
 #include <com/sun/star/awt/MenuItemType.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 //=============================================================================
 
@@ -53,7 +42,7 @@ module com {  module sun {  module star {  module awt {
 published interface XMenuExtended2
 {
     /** specifies some extended menu functions, like setting a command URL and a help command for a menu item.<br>
-        These functions are available for both menu bar and popup menu.
+        These functions are available for both menu bar and pop-up menu.
     */
     interface com::sun::star::awt::XMenuExtended;
 

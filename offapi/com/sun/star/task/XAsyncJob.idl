@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_task_XAsyncJob_idl__
 #define __com_sun_star_task_XAsyncJob_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -52,7 +44,7 @@ module com {  module sun {  module star {  module task {
     <p>
     Instead of <type>XJob</type> the implementation of this interface
     must be aware, that execution can be made real asynchronous (e.g. by using
-    threads). Because the environment whish to have creation and using of threads
+    threads). Because the environment wish to have creation and using of threads
     under control, it's not allowed for a real job implementation to use such mechanism
     by itself. The outside code decide, if it's possible and how it can be made
     asynchronous. In some special cases it can be, that asynchronous jobs will be executed

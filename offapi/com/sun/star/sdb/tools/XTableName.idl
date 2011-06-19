@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_sdb_tools_XTableName_idl__
 #define __com_sun_star_sdb_tools_XTableName_idl__
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module sdb { module tools {
@@ -59,7 +51,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     <p>The <type>XTableName</type> interface eases this and other, similar tasks around table
     names.</p>
 
-    <p>The component itself does not have life-time control mechanimns, i.e. you
+    <p>The component itself does not have life-time control mechanisms, i.e. you
     cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
@@ -88,7 +80,7 @@ published interface XTableName
     [attribute] string  TableName;
 
     /** returns the composed table name, including the catalog and schema name,
-        respecting the databases's quoting requirements, plus
+        respecting the database's quoting requirements, plus
 
         @param Type
             the type of name composition to be used.

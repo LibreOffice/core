@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,6 @@
 #include "osl/file.h"
 #include "rtl/ustring.hxx"
 #include  "rtl/ustrbuf.h"
-
-
-
-using namespace rtl;
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 
@@ -139,3 +136,4 @@ static sal_Bool hasOption(char const * szOption, int argc, char** argv)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

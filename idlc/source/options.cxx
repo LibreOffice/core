@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,8 @@
 #include <stdio.h>
 #include <string.h>
 
-using rtl::OString;
-using rtl::OStringBuffer;
-
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 #ifdef SAL_UNX
 #define SEPARATOR '/'
 #else
@@ -389,4 +389,5 @@ const OString& Options::getOption(const OString& option)
     }
     return m_options[option];
 }
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

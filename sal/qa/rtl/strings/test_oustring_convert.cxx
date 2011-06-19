@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include <sal/macros.h>
 
 namespace test { namespace oustring {
 
@@ -47,7 +50,7 @@ private:
 
 } }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Convert, "alltest");
+CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Convert);
 
 namespace {
 
@@ -159,13 +162,12 @@ void test::oustring::Convert::convertToString()
                   | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
               0,
               "" },
-            // the next also tests that a short source produces a long target:
-            { { 0xB800 },
-              1,
+            { { 0x3001,  0xB800 },
+              2,
               RTL_TEXTENCODING_ISO_2022_JP,
               OUSTRING_TO_OSTRING_CVTFLAGS,
-              "\x1B(B?",
-              "\x1B(B?" },
+              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f",
+              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f" },
             { { 0x0041,0x0100,0x0042 },
               3,
               RTL_TEXTENCODING_ISO_8859_1,
@@ -179,6 +181,8 @@ void test::oustring::Convert::convertToString()
               OUSTRING_TO_OSTRING_CVTFLAGS,
               "A?B",
               "A?B" } };
-    for (unsigned int i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
         testConvertToString(aTests[i]);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

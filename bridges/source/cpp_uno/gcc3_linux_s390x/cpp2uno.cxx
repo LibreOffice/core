@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ static typelib_TypeClass cpp2uno_call(
         void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "as far as cpp2uno_call\n");
 #endif
     int ng = 0; //number of gpr registers used
@@ -108,13 +109,13 @@ static typelib_TypeClass cpp2uno_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "arg %d of %d\n", nPos, nParams);
 #endif
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) // value
         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "simple\n");
 #endif
 
@@ -202,7 +203,7 @@ static typelib_TypeClass cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "complex, ng is %d\n", ng);
 #endif
 
@@ -246,7 +247,7 @@ static typelib_TypeClass cpp2uno_call(
         }
     }
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "end of params\n");
 #endif
 
@@ -257,7 +258,7 @@ static typelib_TypeClass cpp2uno_call(
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -276,7 +277,7 @@ static typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )
@@ -332,11 +333,11 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nVtableOffset = (nOffsetAndIndex >> 32);
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "nVTableOffset, nFunctionIndex are %x %x\n", nVtableOffset, nFunctionIndex);
 #endif
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
             fprintf( stderr, "= cpp_mediate () =\nGPR's (%d): ", 5 );
@@ -380,7 +381,7 @@ static typelib_TypeClass cpp_mediate(
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("illegal vtable index!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
             (XInterface *)pCppI );
     }
 
@@ -474,7 +475,7 @@ static typelib_TypeClass cpp_mediate(
     default:
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("no member description found!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pCppI );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;
@@ -505,14 +506,14 @@ long privateSnippetExecutor(long r2, long r3, long r4, long r5, long r6, long fi
     register double f6  asm("f6");  fpreg[3] = f6;
 
     volatile long nRegReturn[1];
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "before mediate with %lx\n",nOffsetAndIndex);
     fprintf(stderr, "doubles are %f %f %f %f\n", fpreg[0], fpreg[1], fpreg[2], fpreg[3]);
 #endif
     typelib_TypeClass aType =
         cpp_mediate( nOffsetAndIndex, (void**)gpreg, (void**)fpreg, (void**)sp,
             (sal_Int64*)nRegReturn );
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "after mediate ret is %lx %ld\n", nRegReturn[0], nRegReturn[0]);
 #endif
 
@@ -605,7 +606,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
     (*slots) -= functionCount;
     Slot * s = *slots;
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in addLocalFunctions functionOffset is %x\n",functionOffset);
     fprintf(stderr, "in addLocalFunctions vtableOffset is %x\n",vtableOffset);
 #endif
@@ -654,4 +655,4 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

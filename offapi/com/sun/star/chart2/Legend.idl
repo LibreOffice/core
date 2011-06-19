@@ -30,7 +30,6 @@
 #include <com/sun/star/chart2/XLegend.idl>
 #include <com/sun/star/chart2/LegendPosition.idl>
 #include <com/sun/star/chart/ChartLegendExpansion.idl>
-
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/drawing/FillProperties.idl>
@@ -70,7 +69,7 @@ service Legend
      */
     [property] ::com::sun::star::chart::ChartLegendExpansion Expansion;
 
-    /** Determines, whether the legend should be redered by the view.
+    /** Determines, whether the legend should be rendered by the view.
      */
     [property] boolean Show;
 

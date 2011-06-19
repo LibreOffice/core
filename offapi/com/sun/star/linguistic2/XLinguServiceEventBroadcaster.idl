@@ -28,13 +28,8 @@
 #define __com_sun_star_linguistic2_XLinguServiceEventBroadcaster_idl__
 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XLinguServiceEventListener_idl__
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.idl>
-#endif
 
 //=============================================================================
 
@@ -43,14 +38,14 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** is used to register a listener for LinguServiceEvents.
 
-    <P>This interface may be used by spellchecker or hyphenator
+    <P>This interface may be used by spell checker or hyphenator
     implementations to allow clients to be registered and informed about
     <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s.
     </P>
 
     <P>Note: The LinguServiceManager forwards the
     <type scope="com::sun::star::linguistic2">LinguServiceEvent</type>s
-    it receives (from spellcheckers or hyphenators) to its own listeners.
+    it receives (from spell checkers or hyphenators) to its own listeners.
     Thus, there should be no need to register
     as a listener for a specific implementation./P>
 
@@ -66,7 +61,7 @@ published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterf
             <FALSE/> otherwise.
 
         @param xLstnr
-            the listener to be addded.
+            the listener to be added.
      */
     boolean addLinguServiceEventListener (
         [in] com::sun::star::linguistic2::XLinguServiceEventListener    xLstnr );

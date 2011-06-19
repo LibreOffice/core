@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_ucb_HierarchyDataReadWriteAccess_idl__
 #define __com_sun_star_ucb_HierarchyDataReadWriteAccess_idl__
 
-#ifndef __com_sun_star_ucb_HierarchyDataReadAccess_idl__
 #include <com/sun/star/ucb/HierarchyDataReadAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-#ifndef __com_sun_star_lang_XSingleServiceFactory_idl__
 #include <com/sun/star/lang/XSingleServiceFactory.idl>
-#endif
-#ifndef __com_sun_star_util_XChangesBatch_idl__
 #include <com/sun/star/util/XChangesBatch.idl>
-#endif
 
 //=============================================================================
 
@@ -57,7 +49,7 @@ published service HierarchyDataReadWriteAccess
     //-------------------------------------------------------------------------
     /** allows adding and removing of hierarchy data nodes, replacing of
         the value of hierarchy data node members, as well as obtaining the
-        value of hieryrchy data node members.
+        value of hierarchy data node members.
 
         <p>Adding and removing must only be supported if the access object
         points to the "Children" data member of a node or to the root node.

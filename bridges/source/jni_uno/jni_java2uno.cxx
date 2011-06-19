@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
-//#include "jni_finalizer.h"
 
 #include <rtl/ustrbuf.hxx>
 
@@ -109,7 +109,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
         {
         OUStringBuffer buf( 128 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("exception occured java->uno: [") );
+            RTL_CONSTASCII_STRINGPARAM("exception occurred java->uno: [") );
         buf.append( OUString::unacquired( &uno_exc->pType->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
         buf.append(
@@ -118,7 +118,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
         OString cstr_msg(
             OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( cstr_msg.getStr() );
+        OSL_TRACE( "%s", cstr_msg.getStr() );
         }
 #endif
         // signal exception
@@ -360,7 +360,7 @@ jobject Bridge::call_uno(
 #endif
         return 0; // void return
     }
-    else // exception occured
+    else // exception occurred
     {
         // destruct uno in args
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -422,7 +422,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         OString cstr_msg(
             OUStringToOString(
                 trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( cstr_msg.getStr() );
+        OSL_TRACE( "%s", cstr_msg.getStr() );
         }
 #endif
 
@@ -630,7 +630,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         OString cstr_msg(
             OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_JAVA_UTF8 ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
         if (jni->ThrowNew(jni_info->m_class_RuntimeException, cstr_msg.getStr())
             != 0)
         {
@@ -646,7 +646,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                 "attaching current thread to java failed!") ) +
             OUStringToOString(
                 jni.get_stack_trace(), RTL_TEXTENCODING_JAVA_UTF8 ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
         if (jni->ThrowNew(jni_info->m_class_RuntimeException, cstr_msg.getStr())
             != 0)
         {
@@ -688,7 +688,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
         OUStringToOString(
             OUSTR("freeing java uno proxy: ") + oid,
             RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
     }
 #endif
     // revoke from uno env; has already been revoked from java env
@@ -702,3 +702,5 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

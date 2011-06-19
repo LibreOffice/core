@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_xsd_String_idl__
 #define __com_sun_star_xsd_String_idl__
 
-#ifndef __com_sun_star_xsd_XDataType_idl__
 #include <com/sun/star/xsd/XDataType.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module xsd {
@@ -46,21 +44,21 @@ service String
 
     /** specifies the length of the string
 
-        <p>Note that you cannot specifiy <member>Length</member> together
+        <p>Note that you cannot specify <member>Length</member> together
         with <member>MinLength</member> or <member>MaxLength</member>.</p>
     */
     [property, maybevoid] long Length;
 
     /** specifies the minimum length of the string
 
-        <p>Note that you cannot specifiy <member>MinLength</member> together
+        <p>Note that you cannot specify <member>MinLength</member> together
         with <member>Length</member>.</p>
     */
     [property, maybevoid] long MinLength;
 
     /** specifies the maximum length of the string
 
-        <p>Note that you cannot specifiy <member>MaxLength</member> together
+        <p>Note that you cannot specify <member>MaxLength</member> together
         with <member>Length</member>.</p>
     */
     [property, maybevoid] long MaxLength;

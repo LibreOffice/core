@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <osl/diagnose.h>
 
-//#include <vos/dynload.hxx>
-
 #include <ModuleA/XIntroTest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -48,21 +47,14 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-//#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
 #include <string.h>
 
-
-using namespace rtl;
 using namespace cppu;
-//using namespace vos;
 using namespace ModuleA;
-//using namespace ModuleB;
-//using namespace ModuleC;
-//using namespace ModuleA::ModuleB;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -70,6 +62,11 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans::PropertyAttribute;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 
 typedef WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess > ImplIntroTestHelper;
@@ -84,10 +81,6 @@ typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 #else
 #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
 #endif
-
-//class IntroTestWritelnOutput;
-
-
 
 //**************************************************************
 //*** Hilfs-Funktion, um vom Type eine XIdlClass zu bekommen ***
@@ -106,7 +99,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         if( !xRefl.is() )
         {
             xRefl = Reference< XIdlReflection >( xMgr->createInstance(
-                OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
@@ -130,32 +123,28 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     OUString aRetStr;
     switch( eType )
     {
-        case TypeClass_TYPE:            aRetStr = OUString::createFromAscii("TYPE TYPE");               break;
-        case TypeClass_INTERFACE:       aRetStr = OUString::createFromAscii("TYPE INTERFACE");      break;
-        case TypeClass_SERVICE:         aRetStr = OUString::createFromAscii("TYPE SERVICE");            break;
-        case TypeClass_STRUCT:          aRetStr = OUString::createFromAscii("TYPE STRUCT");         break;
-        case TypeClass_TYPEDEF:         aRetStr = OUString::createFromAscii("TYPE TYPEDEF");            break;
-        case TypeClass_UNION:           aRetStr = OUString::createFromAscii("TYPE UNION");          break;
-        case TypeClass_ENUM:            aRetStr = OUString::createFromAscii("TYPE ENUM");               break;
-        case TypeClass_EXCEPTION:       aRetStr = OUString::createFromAscii("TYPE EXCEPTION");      break;
-        case TypeClass_ARRAY:           aRetStr = OUString::createFromAscii("TYPE ARRAY");          break;
-        case TypeClass_SEQUENCE:        aRetStr = OUString::createFromAscii("TYPE SEQUENCE");           break;
-        case TypeClass_VOID:            aRetStr = OUString::createFromAscii("TYPE void");               break;
-        case TypeClass_ANY:             aRetStr = OUString::createFromAscii("TYPE any");                break;
-        case TypeClass_UNKNOWN:         aRetStr = OUString::createFromAscii("TYPE unknown");            break;
+        case TypeClass_TYPE:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE TYPE"));               break;
+        case TypeClass_INTERFACE:       aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE INTERFACE"));      break;
+        case TypeClass_SERVICE:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE SERVICE"));            break;
+        case TypeClass_STRUCT:          aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE STRUCT"));         break;
+        case TypeClass_TYPEDEF:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE TYPEDEF"));            break;
+        case TypeClass_UNION:           aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE UNION"));          break;
+        case TypeClass_ENUM:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE ENUM"));               break;
+        case TypeClass_EXCEPTION:       aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE EXCEPTION"));      break;
+        case TypeClass_ARRAY:           aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE ARRAY"));          break;
+        case TypeClass_SEQUENCE:        aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE SEQUENCE"));           break;
+        case TypeClass_VOID:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE void"));               break;
+        case TypeClass_ANY:             aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE any"));                break;
+        case TypeClass_UNKNOWN:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE unknown"));            break;
         case TypeClass_BOOLEAN:
         {
             sal_Bool b = *(sal_Bool*)aValue.getValue();
-            //aRet.setValue( &b, getCppuBooleanType() );
-            //aValue >>= b;
             aRetStr = OUString::valueOf( b );
             break;
         }
         case TypeClass_CHAR:
         {
             sal_Unicode c = *(sal_Unicode*)aValue.getValue();
-            //aValue >>= c;
-            //getCppuCharType()
             aRetStr = OUString::valueOf( c );
             break;
         }
@@ -201,75 +190,16 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
             aRetStr = OUString::valueOf( n );
             break;
         }
-        /*
-        case TypeClass_HYPER:
-        {
-            aRetStr = L"TYPE HYPER";
-            break;
-        }
-        case TypeClass_UNSIGNED_SHORT:
-        {
-            aRetStr = StringToUString(WSString(aValue.getUINT16()), CHARSET_SYSTEM);
-            break;
-        }
-        case TypeClass_UNSIGNED_LONG:
-        {
-            aRetStr = StringToUString(WSString(aValue.getUINT32()), CHARSET_SYSTEM);
-            break;
-        }
-        case TypeClass_UNSIGNED_HYPER:
-        {
-            aRetStr = L"TYPE UNSIGNED_HYPER";
-            break;
-        }
-        */
     default: ;
     }
 
     if( bIncludeType )
     {
         Reference< XIdlClass > xIdlClass = TypeToIdlClass( aValType, xMgr );
-        aRetStr = aRetStr + OUString( OUString::createFromAscii(" (Typ: ") ) + xIdlClass->getName() + OUString::createFromAscii(")");
+        aRetStr = aRetStr + OUString( OUString(RTL_CONSTASCII_USTRINGPARAM(" (Typ: ")) ) + xIdlClass->getName() + OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
     }
     return aRetStr;
 }
-
-/*
-// Hilfs-Funktion, um ein UString in einen Any zu konvertieren
-UsrAny StringToAny( UString aStr, TypeClass eTargetType )
-{
-    UsrAny aRetAny;
-    switch( eTargetType )
-    {
-        case TypeClass_INTERFACE:       break;
-        case TypeClass_SERVICE:         break;
-        case TypeClass_STRUCT:          break;
-        case TypeClass_TYPEDEF:         break;
-        case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
-        case TypeClass_EXCEPTION:       break;
-        case TypeClass_ARRAY:           break;
-        case TypeClass_SEQUENCE:        break;
-        case TypeClass_VOID:            break;
-        case TypeClass_ANY:             break;
-        case TypeClass_UNKNOWN:         break;
-        case TypeClass_BOOLEAN:         aRetAny.setBOOL( short(aStr)!=0 );  break;
-        case TypeClass_CHAR:            aRetAny.setChar( char(aStr) );      break;
-        case TypeClass_STRING:          aRetAny.setString( aStr );          break;
-        case TypeClass_FLOAT:           aRetAny.setFloat( (float)strtod( aStr.GetStr(), NULL ) );   break;
-        case TypeClass_DOUBLE:          aRetAny.setDouble( strtod( aStr.GetStr(), NULL ) ); break;
-        case TypeClass_BYTE:            aRetAny.setBYTE( BYTE(short(aStr)) );   break;
-        case TypeClass_SHORT:           aRetAny.setINT16( short(aStr) );    break;
-        case TypeClass_LONG:            aRetAny.setINT32( long(aStr) );     break;
-        case TypeClass_HYPER:           break;
-        case TypeClass_UNSIGNED_SHORT:  aRetAny.setUINT16( USHORT(aStr) );  break;
-        case TypeClass_UNSIGNED_LONG:   aRetAny.setUINT32( ULONG(aStr) );   break;
-        case TypeClass_UNSIGNED_HYPER:  break;
-    }
-    return aRetAny;
-}
-*/
-
 
 //*****************************************
 //*** XPropertySetInfo fuer Test-Klasse ***
@@ -284,15 +214,6 @@ class ImplPropertySetInfo : public ImplPropertySetInfoHelper
 public:
     ImplPropertySetInfo( const Reference< XMultiServiceFactory > & xMgr )
         : mxMgr( xMgr ) {}
-        //: mxMgr( xMgr ), ImplPropertySetInfoHelper( xMgr ) {}
-
-/*
-    // Methoden von XInterface
-    virtual sal_Bool    SAL_CALL queryInterface( const Uik & rUik, Any & ifc ) throw( RuntimeException );
-    virtual void        SAL_CALL acquire() throw() { OWeakObject::acquire(); }
-    virtual void        SAL_CALL release() throw() { OWeakObject::release(); }
-    //ALT: sal_Bool queryInterface( Uik aUik, Reference<XInterface> & rOut );
-*/
 
     // Methods of XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties(  )
@@ -301,34 +222,8 @@ public:
         throw(UnknownPropertyException, RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
         throw(RuntimeException);
-    //virtual Sequence< Property > SAL_CALL getProperties(void) throw( RuntimeException );
-    //virtual Property SAL_CALL getPropertyByName(const OUString& Name) throw( RuntimeException );
-    //virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name) throw( RuntimeException );
 };
 
-
-/*
-// Methoden von XInterface
-sal_Bool SAL_CALL ImplPropertySetInfo::queryInterface( const Uik & rUik, Any & ifc )
-    throw( RuntimeException )
-{
-    // PropertySet-Implementation
-    if( com::sun::star::uno::queryInterface( rUik, ifc,
-                                             SAL_STATIC_CAST(XPropertySetInfo*, this) ) )
-        return sal_True;
-
-    return OWeakObject::queryInterface( rUik, ifc );
-}
-
-sal_Bool ImplPropertySetInfo::queryInterface( Uik aUik, Reference<XInterface> & rOut )
-{
-    if( aUik == XPropertySetInfo::getSmartUik() )
-        rOut = (XPropertySetInfo *)this;
-    else
-        UsrObject::queryInterface( aUik, rOut );
-    return rOut.is();
-}
-*/
 
 Sequence< Property > ImplPropertySetInfo::getProperties(void)
     throw( RuntimeException )
@@ -341,25 +236,19 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
         pSeq = new Sequence<Property>( 3 );
         Property * pAry = pSeq->getArray();
 
-        pAry[0].Name = OUString::createFromAscii("Factor");
+        pAry[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Factor"));
         pAry[0].Handle = -1;
         pAry[0].Type = getCppuType( (double*) NULL );
-        //pAry[0].Type = TypeToIdlClass( getCppuType( (double*) NULL ), mxMgr );
-        //pAry[0].Type = Double_getReflection()->getIdlClass();
         pAry[0].Attributes = BOUND | TRANSIENT;
 
-        pAry[1].Name = OUString::createFromAscii("MyCount");
+        pAry[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("MyCount"));
         pAry[1].Handle = -1;
         pAry[1].Type = getCppuType( (sal_Int32*) NULL );
-        //pAry[1].Type = TypeToIdlClass( getCppuType( (sal_Int32*) NULL ), mxMgr );
-        //pAry[1].Type = INT32_getReflection()->getIdlClass();
         pAry[1].Attributes = BOUND | TRANSIENT;
 
-        pAry[2].Name = OUString::createFromAscii("Info");
+        pAry[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Info"));
         pAry[2].Handle = -1;
         pAry[2].Type = getCppuType( (OUString*) NULL );
-        //pAry[2].Type = TypeToIdlClass( getCppuType( (OUString*) NULL ), mxMgr );
-        //pAry[2].Type = OUString_getReflection()->getIdlClass();
         pAry[2].Attributes = TRANSIENT;
     }
     // Die Information über alle drei Properties liefern.
@@ -396,13 +285,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
     return sal_False;
 }
 
-
-
-
 //*****************************************************************
-
-
-
 class ImplIntroTest : public ImplIntroTestHelper
 {
       Reference< XMultiServiceFactory > mxMgr;
@@ -411,9 +294,6 @@ class ImplIntroTest : public ImplIntroTestHelper
 
     // Properties fuer das PropertySet
     Any aAnyArray[10];
-
-    // Optionale Schnittstelle fuer die writeln-Ausgabe
-    //IntroTestWritelnOutput* m_pOutput;
 
     Reference< XPropertySetInfo > m_xMyInfo;
 
@@ -454,23 +334,9 @@ class ImplIntroTest : public ImplIntroTestHelper
 public:
     ImplIntroTest( const Reference< XMultiServiceFactory > & xMgr )
         : mxMgr( xMgr )
-        //: mxMgr( xMgr ), ImplIntroTestHelper( xMgr )
     {
         Init();
     }
-
-    /*
-    ImplIntroTest( IntroTestWritelnOutput* pOutput_ )
-    {
-        Init();
-        m_pOutput = pOutput_;
-    }
-    */
-
-    //SMART_UNO_DECLARATION(ImplIntroTest,UsrObject);
-
-    //BOOL queryInterface( Uik aUik, Reference< XInterface > & rOut );
-    //Reference< XIdlClass > getIdlClass();
 
     // Trotz virtual inline, um Schreibarbeit zu sparen (nur fuer Testzwecke)
     // XPropertySet
@@ -493,19 +359,6 @@ public:
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
 
-    /*
-    virtual void setIndexedPropertyValue(const OUString& aPropertyName, INT32 nIndex, const Any& aValue) {}
-    virtual Any getIndexedPropertyValue(const UString& aPropertyName, INT32 nIndex) const { return Any(); }
-    virtual void addPropertyChangeListener(const UString& aPropertyName, const XPropertyChangeListenerRef& aListener)
-        THROWS( (UnknownPropertyException, WrappedTargetException, UsrSystemException) ) {}
-    virtual void removePropertyChangeListener(const UString& aPropertyName, const XPropertyChangeListenerRef& aListener)
-        THROWS( (UnknownPropertyException, WrappedTargetException, UsrSystemException) ) {}
-    virtual void addVetoableChangeListener(const UString& aPropertyName, const XVetoableChangeListenerRef& aListener)
-        THROWS( (UnknownPropertyException, WrappedTargetException, UsrSystemException) ) {}
-    virtual void removeVetoableChangeListener(const UString& aPropertyName, const XVetoableChangeListenerRef& aListener)
-        THROWS( (UnknownPropertyException, WrappedTargetException, UsrSystemException) ) {}
-        */
-
     // XIntroTest-Methoden
     // Attributes
     virtual OUString SAL_CALL getObjectName() throw(RuntimeException)
@@ -515,7 +368,7 @@ public:
     virtual OUString SAL_CALL getFirstName()
         throw(RuntimeException);
     virtual OUString SAL_CALL getLastName() throw(RuntimeException)
-        { return OUString( OUString::createFromAscii("Meyer") ); }
+        { return OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Meyer")) ); }
     virtual sal_Int16 SAL_CALL getAge() throw(RuntimeException)
         { return m_nMarkusAge; }
     virtual sal_Int16 SAL_CALL getChildrenCount() throw(RuntimeException)
@@ -578,8 +431,6 @@ public:
         throw(RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(RuntimeException);
-    //virtual XIdlClassRef getElementType(void) constTHROWS( (UsrSystemException) );
-    //virtual BOOL hasElements(void) const THROWS( (UsrSystemException) );
 
     // XNameAccess-Methoden
     // Methods
@@ -589,10 +440,6 @@ public:
         throw(RuntimeException);
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(RuntimeException);
-    //virtual Any getByName(const UString& Name) const
-        //THROWS( (NoSuchElementException, WrappedTargetException, UsrSystemException) );
-    //virtual Sequence<UString> getElementNames(void) const THROWS( (UsrSystemException) );
-    //virtual BOOL hasByName(const UString& Name) const THROWS( (UsrSystemException) );
 
     // XIndexAccess-Methoden
     // Methods
@@ -600,28 +447,20 @@ public:
         throw(RuntimeException);
     virtual Any SAL_CALL getByIndex( sal_Int32 Index )
         throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
-    //virtual INT32 getCount(void) const THROWS( (UsrSystemException) );
-    //virtual Any getByIndex(INT32 Index) const
-        //THROWS( (IndexOutOfBoundsException, WrappedTargetException, UsrSystemException) );
 };
-
-//SMART_UNO_IMPLEMENTATION(ImplIntroTest,UsrObject)
 
 void ImplIntroTest::Init( void )
 {
     // Eindeutigen Namen verpassen
     static sal_Int32 nObjCount = 0;
-    OUString aName( OUString::createFromAscii("IntroTest-Obj Nr. ") );
+    OUString aName( RTL_CONSTASCII_USTRINGPARAM("IntroTest-Obj Nr. ") );
     aName += OUString::valueOf( nObjCount );
     setObjectName( aName );
 
     // Properties initialisieren
     aAnyArray[0] <<= 3.14;
     aAnyArray[1] <<= (sal_Int32)42;
-    aAnyArray[2] <<= OUString( OUString::createFromAscii("Hallo") );
-
-    // Output-Interface
-    //m_pOutput = NULL;
+    aAnyArray[2] <<= OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo")) );
 
     // Einmal fuer den internen Gebrauch die PropertySetInfo abholen
     m_xMyInfo = getPropertySetInfo();
@@ -640,12 +479,12 @@ void ImplIntroTest::Init( void )
     // String-Sequence intitialisieren
     aStringSeq.realloc( 3 );
     OUString* pStr = aStringSeq.getArray();
-    pStr[ 0 ] = OUString( OUString::createFromAscii("String 0") );
-    pStr[ 1 ] = OUString( OUString::createFromAscii("String 1") );
-    pStr[ 2 ] = OUString( OUString::createFromAscii("String 2") );
+    pStr[ 0 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 0")) );
+    pStr[ 1 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 1")) );
+    pStr[ 2 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 2")) );
 
     // structs initialisieren
-    m_aFirstStruct.Name = OUString::createFromAscii("FirstStruct-Name");
+    m_aFirstStruct.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FirstStruct-Name"));
     m_aFirstStruct.Handle = 77777;
     //XIdlClassRef Type;
     m_aFirstStruct.Attributes = -222;
@@ -663,36 +502,6 @@ void ImplIntroTest::Init( void )
     pNameAccessTab = NULL;
 }
 
-/*
-BOOL ImplIntroTest::queryInterface( Uik aUik, XInterfaceRef & rOut )
-{
-    if( aUik == XIntroTest::getSmartUik() )
-        rOut = (XIntroTest*)this;
-    else if( aUik == XPropertySet::getSmartUik() )
-        rOut = (XPropertySet*)this;
-    else if( aUik == XNameAccess::getSmartUik() )
-        rOut = (XNameAccess*)this;
-    else if( aUik == XIndexAccess::getSmartUik() )
-        rOut = (XIndexAccess*)this;
-    else if( aUik == ((XElementAccess*)NULL)->getSmartUik() )
-        rOut = (XElementAccess*)(XIndexAccess *)this;
-    else
-        UsrObject::queryInterface( aUik, rOut );
-    return rOut.is();
-}
-
-XIdlClassRef ImplIntroTest::getIdlClass()
-{
-    static XIdlClassRef xClass = createStandardClass( L"ImplIntroTest",
-        UsrObject::getUsrObjectIdlClass(), 4,
-            XIntroTest_getReflection(),
-            XPropertySet_getReflection(),
-            XNameAccess_getReflection(),
-            XIndexAccess_getReflection() );
-    return xClass;
-}
-*/
-
 Reference< XPropertySetInfo > ImplIntroTest::getPropertySetInfo()
     throw(RuntimeException)
 {
@@ -700,16 +509,10 @@ Reference< XPropertySetInfo > ImplIntroTest::getPropertySetInfo()
     // Alle Objekt haben die gleichen Properties, deshalb kann
     // die Info für alle gleich sein
     return &aInfo;
-
-    //if( m_xMyInfo == NULL )
-    //  ((ImplIntroTest*)this)->m_xMyInfo = new ImplPropertySetInfo( this );
-    //return m_xMyInfo;
 }
 
 void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
-//void ImplIntroTest::setPropertyValue( const UString& aPropertyName, const Any& aValue )
-//  THROWS( (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, UsrSystemException) )
 {
     if( aPropChangeListener.is() && aPropertyName == aPropChangeListenerStr )
     {
@@ -717,9 +520,6 @@ void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& 
         aEvt.Source = (OWeakObject*)this;
         aEvt.PropertyName = aPropertyName;
         aEvt.PropertyHandle = 0L;
-        //aEvt.OldValue;
-        //aEvt.NewValue;
-        //aEvt.PropagationId;
         aPropChangeListener->propertyChange( aEvt );
     }
     if( aVetoPropChangeListener.is() && aPropertyName == aVetoPropChangeListenerStr )
@@ -728,9 +528,6 @@ void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& 
         aEvt.Source = (OWeakObject*)this;
         aEvt.PropertyName = aVetoPropChangeListenerStr;
         aEvt.PropertyHandle = 0L;
-        //aEvt.OldValue;
-        //aEvt.NewValue;
-        //aEvt.PropagationId;
         aVetoPropChangeListener->vetoableChange( aEvt );
     }
 
@@ -746,8 +543,6 @@ void ImplIntroTest::setPropertyValue( const OUString& aPropertyName, const Any& 
 
 Any ImplIntroTest::getPropertyValue( const OUString& PropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
-//Any ImplIntroTest::getPropertyValue(const UString& aPropertyName) const
-    //THROWS( (UnknownPropertyException, WrappedTargetException, UsrSystemException) )
 {
     Sequence<Property> aPropSeq = m_xMyInfo->getProperties();
     sal_Int32 nLen = aPropSeq.getLength();
@@ -763,7 +558,7 @@ Any ImplIntroTest::getPropertyValue( const OUString& PropertyName )
 OUString ImplIntroTest::getFirstName(void)
     throw(RuntimeException)
 {
-    return OUString( OUString::createFromAscii("Markus") );
+    return OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Markus")) );
 }
 
 void ImplIntroTest::writeln( const OUString& Text )
@@ -771,21 +566,11 @@ void ImplIntroTest::writeln( const OUString& Text )
 {
     OString aStr( Text.getStr(), Text.getLength(), RTL_TEXTENCODING_ASCII_US );
 
-    // Haben wir ein Output?
-    //if( m_pOutput )
-    //{
-        //m_pOutput->doWriteln( TextStr );
-    //}
-    // Sonst einfach rausbraten
-    //else
-    {
-        printf( "%s", aStr.getStr() );
-    }
+    printf( "%s", aStr.getStr() );
 }
 
 Reference< XIntroTest > ImplIntroTest::getIntroTest()
     throw(RuntimeException)
-//XIntroTestRef ImplIntroTest::getIntroTest(void) THROWS( (UsrSystemException) )
 {
     if( !m_xIntroTest.is() )
         m_xIntroTest = new ImplIntroTest( mxMgr );
@@ -795,7 +580,6 @@ Reference< XIntroTest > ImplIntroTest::getIntroTest()
 // Methoden von XElementAccess
 Type ImplIntroTest::getElementType(  )
     throw(RuntimeException)
-//XIdlClassRef ImplIntroTest::getElementType(void) const THROWS( (UsrSystemException) )
 {
     // TODO
     Type aRetType;
@@ -806,7 +590,6 @@ Type ImplIntroTest::getElementType(  )
 
 sal_Bool ImplIntroTest::hasElements(  )
     throw(RuntimeException)
-//BOOL ImplIntroTest::hasElements(void) const THROWS( (UsrSystemException) )
 {
     return sal_True;
 }
@@ -815,7 +598,7 @@ sal_Bool ImplIntroTest::hasElements(  )
 sal_Int32 getIndexForName( const OUString& ItemName )
 {
     OUString aLeftStr = ItemName.copy( 0, 4 );
-    if( aLeftStr == OUString::createFromAscii("Item") )
+    if( aLeftStr == OUString(RTL_CONSTASCII_USTRINGPARAM("Item")) )
     {
         // TODO
         OUString aNumStr = ItemName.copy( 4 );
@@ -829,8 +612,6 @@ sal_Int32 getIndexForName( const OUString& ItemName )
 
 Any ImplIntroTest::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
-//Any ImplIntroTest::getByName(const UString& Name) const
-    //THROWS( (NoSuchElementException, WrappedTargetException, UsrSystemException) )
 {
     Any aRetAny;
 
@@ -843,33 +624,27 @@ Any ImplIntroTest::getByName( const OUString& aName )
         if( !pNameAccessTab[iIndex].is() )
         {
             ImplIntroTest* p = new ImplIntroTest( mxMgr );
-            OUString aName2( OUString::createFromAscii("IntroTest by Name-Access, Index = ") );
+            OUString aName2( RTL_CONSTASCII_USTRINGPARAM("IntroTest by Name-Access, Index = ") );
             aName2 += OUString::valueOf( iIndex );
-            //aName2 = aName2 + StringToUString( String( iIndex ), CHARSET_SYSTEM );
             p->setObjectName( aName2 );
             pNameAccessTab[iIndex] = p;
         }
 
         Reference< XIntroTest > xRet = pNameAccessTab[iIndex];
         aRetAny = makeAny( xRet );
-
-        //aRetAny.set( &xRet, XIntroTest_getReflection() );
-        //return (UsrObject*)(XIntroTest*)pNameAccessTab[iIndex];
     }
     return aRetAny;
 }
 
 Sequence< OUString > ImplIntroTest::getElementNames(  )
     throw(RuntimeException)
-//Sequence<UString> ImplIntroTest::getElementNames(void) const THROWS( (UsrSystemException) )
 {
     Sequence<OUString> aStrSeq( DEFAULT_NAME_ACCESS_COUNT );
     OUString* pStr = aStrSeq.getArray();
     for( sal_Int32 i = 0 ; i < DEFAULT_NAME_ACCESS_COUNT ; i++ )
     {
-        OUString aName( OUString::createFromAscii("Item") );
+        OUString aName( RTL_CONSTASCII_USTRINGPARAM("Item") );
         aName += OUString::valueOf( i );
-        //aName = aName + StringToUString( i, CHARSET_SYSTEM );
         pStr[i] = aName;
     }
     return aStrSeq;
@@ -877,7 +652,6 @@ Sequence< OUString > ImplIntroTest::getElementNames(  )
 
 sal_Bool ImplIntroTest::hasByName( const OUString& aName )
     throw(RuntimeException)
-//BOOL ImplIntroTest::hasByName(const UString& Name) const THROWS( (UsrSystemException) )
 {
     return ( getIndexForName( aName ) != -1 );
 }
@@ -885,15 +659,12 @@ sal_Bool ImplIntroTest::hasByName( const OUString& aName )
 // XIndexAccess-Methoden
 sal_Int32 ImplIntroTest::getCount(  )
     throw(RuntimeException)
-//sal_Int32 ImplIntroTest::getCount(void) const THROWS( (UsrSystemException) )
 {
     return iIndexAccessCount;
 }
 
 Any ImplIntroTest::getByIndex( sal_Int32 Index )
     throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
-//Any ImplIntroTest::getByIndex( sal_Int32 Index ) const
-    //THROWS( (IndexOutOfBoundsException, WrappedTargetException, UsrSystemException) )
 {
     Any aRetAny;
 
@@ -905,9 +676,8 @@ Any ImplIntroTest::getByIndex( sal_Int32 Index )
         if( !pNameAccessTab[Index].is() )
         {
             ImplIntroTest* p = new ImplIntroTest( mxMgr );
-            OUString aName( OUString::createFromAscii("IntroTest by Index-Access, Index = ") );
+            OUString aName( RTL_CONSTASCII_USTRINGPARAM("IntroTest by Index-Access, Index = ") );
             aName += OUString::valueOf( Index );
-            //aName = aName + StringToUString( String( iIndex ), CHARSET_SYSTEM );
             p->setObjectName( aName );
             pIndexAccessTab[Index] = p;
         }
@@ -920,17 +690,12 @@ Any ImplIntroTest::getByIndex( sal_Int32 Index )
 void ImplIntroTest::addPropertiesChangeListener( const Sequence< OUString >& /*PropertyNames*/,
                                                  const Reference< XPropertiesChangeListener >& /*Listener*/ )
         throw(RuntimeException)
-//void ImplIntroTest::addPropertiesChangeListener
-//(const Sequence< UString >& PropertyNames, const XPropertiesChangeListenerRef& Listener)
-    //THROWS( (UsrSystemException) )
 {
 }
 
 void ImplIntroTest::removePropertiesChangeListener
 ( const Reference< XPropertiesChangeListener >& /*Listener*/ )
         throw(RuntimeException)
-//void ImplIntroTest::removePropertiesChangeListener(const XPropertiesChangeListenerRef& Listener)
-    //THROWS( (UsrSystemException) )
 {
 }
 
@@ -985,34 +750,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         { "ImplementationId", PropertyConcept::METHODS },
         { NULL, 0 }
     };
-
-    // Tabelle der Property-Namen, die gefunden werden muessen
-//  char* pDemandedPropNames[] =
-//  {
-//      "Factor",
-//      "MyCount",
-//      "Info",
-//      "ObjectName",
-//      "FirstName",
-//      "LastName",
-//      "Age",
-//      "ChildrenCount",
-//      "FirstStruct",
-//      "SecondStruct",
-//      "Droenk",
-//      "IntroTest",
-//      "Bla",
-//      "Blub",
-//      "Gulp",
-//      "Strings",
-//      "MultiSequence",
-//      "PropertySetInfo",
-//      "ElementType",
-//      "ElementNames",
-//      "Count",
-//      "Types"
-//      "ImplementationId"
-//  };
 
     char const * pDemandedPropVals[] =
     {
@@ -1094,8 +831,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         "[]type",
         "[]byte",
     };
-    //is() nDemandedPropCount = 22;
-
 
     DefItem pMethodDefs[] =
     {
@@ -1149,14 +884,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // Test-Objekt anlegen
     Any aObjAny = getIntrospectionTestObject( xMgr );
 
-    // Introspection-Service holen
-    //Reference< XMultiServiceFactory > xServiceManager(getProcessServiceManager(), USR_QUERY);
-    //Reference< XIntrospection > xIntrospection( xMgr->createInstance(L"com.sun.star.beans.Introspection"), UNO_QUERY );
-    //TEST_ENSHURE( xIntrospection.is(), "Creation of introspection instance failed" );
-    //if( !xIntrospection.is() )
-        //return sal_False;
-
-    // und unspecten
+    // Introspection-Service unspecten
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
     xAccess = xIntrospection->inspect( aObjAny );
@@ -1168,16 +896,9 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     // XPropertySet-UIK ermitteln
     Type aType = getCppuType( (Reference< XPropertySet >*) NULL );
-    //typelib_InterfaceTypeDescription* pTypeDesc = NULL;
-    //aType.getDescription( (typelib_TypeDescription**)&pTypeDesc );
-    //Uik aPropertySetUik = *(Uik*)&pTypeDesc->aUik;
-    //typelib_typedescription_release( (typelib_TypeDescription*)pTypeDesc );
 
     Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aType );
-    //Reference< XInterface > xPropSetIface = xAccess->queryAdapter( aPropertySetUik );
     Reference< XPropertySet > xPropSet( xPropSetIface, UNO_QUERY );
-    //XPropertySetRef xPropSet = (XPropertySet*)xPropSetIface->
-    //  queryInterface( XPropertySet::getSmartUik() );
     TEST_ENSHURE( xPropSet.is(), "Could not get XPropertySet by queryAdapter()" );
 
     // XExactName
@@ -1187,9 +908,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // Schleife ueber alle Kombinationen von Concepts
     for( sal_Int32 nConcepts = 0 ; nConcepts < 16 ; nConcepts++ )
     {
-//printf( "*******************************************************\n" );
-//printf( "nConcepts = %ld\n", nConcepts );
-
         // Wieviele Properties sollten es sein
         sal_Int32 nDemandedPropCount = 0;
         sal_Int32 iList = 0;
@@ -1203,7 +921,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         if( xPropSet.is() )
         {
             Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-            //Sequence<Property> aRetSeq = xPropSetInfo->getProperties();
             Sequence<Property> aRetSeq = xAccess->getProperties( nConcepts );
 
             sal_Int32 nLen = aRetSeq.getLength();
@@ -1213,11 +930,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += " properties but found ";
             aErrorStr += OString::valueOf( nLen );
             TEST_ENSHURE( nLen == nDemandedPropCount, aErrorStr.getStr() );
-
-            // cout << "**********************************\n";
-            // cout << "*** Ergebnis der Introspection ***\n";
-            // cout << "**********************************\n";
-            // cout << "\nIntrospection hat " << nLen << " Properties gefunden:\n";
 
             const Property* pProps = aRetSeq.getConstArray();
             Any aPropVal;
@@ -1239,27 +951,18 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
                 OUString aPropName = aProp.Name;
                 OString aNameStr( aPropName.getStr(), aPropName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    //UStringToString(aPropName, CHARSET_SYSTEM);
-
-//printf( "Property = %s\n", aNameStr.getStr() );
 
                 OString aDemandedName = pPropertyDefs[ iDemanded ].pName;
-                //OString aDemandedName = pDemandedPropNames[ i ];
                 aErrorStr  = "Expected property \"";
                 aErrorStr += aDemandedName;
                 aErrorStr += "\", found \"";
                 aErrorStr += aNameStr;
                 aErrorStr += "\"";
                 TEST_ENSHURE( aNameStr == aDemandedName, aErrorStr.getStr() );
-                // cout << "Property " << (i+1) << ": \"" << (const char*)UStringToString(aPropName, CHARSET_SYSTEM) << "\"";
-
 
                 Type aPropType = aProp.Type;
                 OString aTypeNameStr( OUStringToOString(aPropType.getTypeName(), RTL_TEXTENCODING_ASCII_US) );
-                //Reference< XIdlClass > xPropType = aProp.Type;
-                //OString aTypeNameStr( xPropType->getName(), xPropType->getName().getLength(), RTL_TEXTENCODING_ASCII_US );
                 OString aDemandedTypeNameStr = pDemandedPropTypes[ iDemanded ];
-                //OString aDemandedTypeNameStr = pDemandedPropTypes[ i ];
                 aErrorStr  = "Property \"";
                 aErrorStr += aDemandedName;
                 aErrorStr += "\", expected type >";
@@ -1268,15 +971,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += aTypeNameStr;
                 aErrorStr += "<";
                 TEST_ENSHURE( aTypeNameStr == aDemandedTypeNameStr, aErrorStr.getStr() );
-                // cout << " (Prop-Typ: " << (const char*)UStringToString(xPropType->getName(), CHARSET_SYSTEM) << ")";
 
                 // Wert des Property lesen und ausgeben
                 aPropVal = xPropSet->getPropertyValue( aPropName );
-                // cout << "\n\tWert = " << (const char*)UStringToString(AnyToString( aPropVal, sal_True ), CHARSET_SYSTEM);
 
                 OString aValStr = OUStringToOString( AnyToString( aPropVal, sal_False, xMgr ), RTL_TEXTENCODING_ASCII_US );
                 OString aDemandedValStr = pDemandedPropVals[ iDemanded ];
-                //OString aDemandedValStr = pDemandedPropVals[ i ];
                 aErrorStr  = "Property \"";
                 aErrorStr += aDemandedName;
                 aErrorStr += "\", expected val >";
@@ -1288,8 +988,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
                 // Wert pruefen und typgerecht modifizieren
                 TypeClass eType = aPropVal.getValueType().getTypeClass();
-                //Reference< XIdlClass > xIdlClass = aPropVal.getReflection()->getIdlClass();
-                //TypeClass eType = xIdlClass->getTypeClass();
                 Any aNewVal;
                 sal_Bool bModify = sal_True;
                 switch( eType )
@@ -1298,8 +996,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     {
                         OUString aStr;
                         aPropVal >>= aStr;
-                        //OString aStr = aPropVal.getString();
-                        aStr = aStr + OUString::createFromAscii(" (Modified!)");
+                        aStr = aStr + OUString(RTL_CONSTASCII_USTRINGPARAM(" (Modified!)"));
                         aNewVal <<= aStr;
                         break;
                     }
@@ -1354,9 +1051,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 // Neuen Wert setzen, wieder lesen und ausgeben
                 if( bModify )
                 {
-                    // cout.flush();
-
-                    // 1.7.1999, UnknownPropertyException bei ReadOnly-Properties abfangen
+                    // UnknownPropertyException bei ReadOnly-Properties abfangen
                     try
                     {
                         xPropSet->setPropertyValue( aPropName, aNewVal );
@@ -1366,7 +1061,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     }
 
                     aPropVal = xPropSet->getPropertyValue( aPropName );
-                    // cout << "\n\tModifizierter Wert = " << (const char*) UStringToString(AnyToString( aPropVal, sal_True ), CHARSET_SYSTEM) << "\n";
 
                     OUString aStr = AnyToString( aPropVal, sal_False, xMgr );
                     OString aModifiedValStr = OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US );
@@ -1380,10 +1074,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     aErrorStr += "<";
                     TEST_ENSHURE( aModifiedValStr == aDemandedModifiedValStr, aErrorStr.getStr() );
                 }
-                else
-                {
-                    // cout << "\n\tWert wurde nicht modifiziert\n";
-                }
 
                 // Checken, ob alle Properties auch einzeln gefunden werden
                 aErrorStr  = "property \"";
@@ -1391,7 +1081,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 aErrorStr += "\" not found with hasProperty()";
                 OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
                 sal_Bool bProperty = xAccess->hasProperty( aWDemandedName, nConcepts );
-                //sal_Bool bProperty = xAccess->hasProperty( aWDemandedName, PropertyConcept::ALL - PropertyConcept::DANGEROUS );
                 TEST_ENSHURE( bProperty, aErrorStr.getStr() );
 
                 aErrorStr  = "property \"";
@@ -1400,8 +1089,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 try
                 {
                     Property aGetProp = xAccess->getProperty( aWDemandedName, nConcepts );
-                    //Property aGetProp = xAccess->getProperty( aWDemandedName, PropertyConcept::ALL );
-                    //TEST_ENSHURE( aGetProp == aProp , aErrorStr.getStr() );
                 }
                 catch (RuntimeException e1)
                 {
@@ -1418,9 +1105,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // Schleife ueber alle Kombinationen von Concepts
     for( sal_Int32 nConcepts = 0 ; nConcepts < 128 ; nConcepts++ )
     {
-//printf( "*******************************************************\n" );
-//printf( "nConcepts = %ld\n", nConcepts );
-
         // Das 2^6-Bit steht fuer "den Rest"
         sal_Int32 nRealConcepts = nConcepts;
         if( nConcepts & 0x40 )
@@ -1437,13 +1121,8 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         }
 
         // Methoden-Array ausgeben
-        //aMethodSeq = xAccess->getMethods
         Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( nRealConcepts );
-        //Sequence<XIdlMethodRef> aMethodSeq = xAccess->getMethods
-        //  ( MethodConcept::ALL - MethodConcept::DANGEROUS - MethodConcept::PROPERTY );
         sal_Int32 nLen = aMethodSeq.getLength();
-        // cout << "\n\n*** Methoden ***\n";
-        // cout << "Introspection hat " << nLen << " Methoden gefunden:\n";
 
         aErrorStr  = "Expected to find ";
         aErrorStr += OString::valueOf( nDemandedMethCount );
@@ -1464,8 +1143,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             OUString aMethName = rxMethod->getName();
             OString aNameStr = OUStringToOString(aMethName, RTL_TEXTENCODING_ASCII_US );
 
-//printf( "Method = %s\n", aNameStr.getStr() );
-
             // Naechste Passende Methode in der Liste suchen
             while( pMethodDefs[ iList ].pName )
             {
@@ -1476,15 +1153,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             OString aDemandedName = pMethodDefs[ iList ].pName;
             iList++;
 
-            //OString aDemandedName = pDemandedMethNames[ i ];
             aErrorStr  = "Expected method \"";
             aErrorStr += aDemandedName;
             aErrorStr += "\", found \"";
             aErrorStr += aNameStr;
             aErrorStr += "\"";
             TEST_ENSHURE( aNameStr == aDemandedName, aErrorStr.getStr() );
-            // cout << "Methode " << (i+1) << ": " << (const char*) UStringToString(rxMethod->getReturnType()->getName(), CHARSET_SYSTEM)
-            //   << " " << (const char*) UStringToString(rxMethod->getName(), CHARSET_SYSTEM) << "( ";
 
             // Checken, ob alle Methoden auch einzeln gefunden werden
             aErrorStr  = "method \"";
@@ -1492,7 +1166,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\" not found with hasMethod()";
             OUString aWDemandedName = OStringToOUString(aDemandedName, RTL_TEXTENCODING_ASCII_US );
             sal_Bool bMethod = xAccess->hasMethod( aWDemandedName, nRealConcepts );
-            //sal_Bool bMethod = xAccess->hasMethod( aWDemandedName, MethodConcept::ALL );
             TEST_ENSHURE( bMethod, aErrorStr.getStr() );
 
             aErrorStr  = "method \"";
@@ -1501,7 +1174,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             try
             {
                 Reference< XIdlMethod > xGetMethod = xAccess->getMethod( aWDemandedName, nRealConcepts );
-                //XIdlMethodRef xGetMethod = xAccess->getMethod( aWDemandedName, MethodConcept::ALL );
                 TEST_ENSHURE( xGetMethod == rxMethod , aErrorStr.getStr() );
             }
             catch (RuntimeException e1)
@@ -1517,8 +1189,6 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // Listener-Klassen ausgeben
     Sequence< Type > aClassSeq = xAccess->getSupportedListeners();
     sal_Int32 nLen = aClassSeq.getLength();
-    // cout << "\n\n*** Anmeldbare Listener ***\n";
-    // cout << "Introspection hat " << nLen << " Listener gefunden:\n";
 
     const Type* pListeners = aClassSeq.getConstArray();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
@@ -1528,18 +1198,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
         // Namen besorgen
         OUString aListenerClassName = aListenerType.getTypeName();
-        // cout << "Listener " << (i+1) << ": " << (const char*)UStringToString(aListenerClassName, CHARSET_SYSTEM) << "\n";
     }
-
-
-    // Performance bei hasMethod testen.
-    //CheckMethodPerformance( xAccess, "queryInterface", 100000 );
-    //CheckMethodPerformance( xAccess, "getIdlClasses", 100000 );
-
-    // cout.flush();
-
-
-
 
     return sal_True;
 }
@@ -1547,48 +1206,45 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
+    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb")) ) );
 
     sal_Bool bSucc = sal_False;
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+            xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         // Register services
         OUString libName( RTL_CONSTASCII_USTRINGPARAM(
                               "reflection.uno" SAL_DLLEXTENSION) );
-//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
         fprintf(stderr, "1\n" );
-        xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "2\n" );
-        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
-        libName = OUString::createFromAscii(
-            "introspection.uno" SAL_DLLEXTENSION);
-//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
+        libName = OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "introspection.uno" SAL_DLLEXTENSION));
         fprintf(stderr, "3\n" );
-        xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "4\n" );
-        Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ), UNO_QUERY );
+        Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         fprintf(stderr, "before test_introsp\n" );
         bSucc = test_introsp( xMgr, xRefl, xIntrosp );
         fprintf(stderr, "after test_introsp\n" );
-        //bSucc = test_corefl( xRefl );
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occured!" );
+        OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
+        OSL_TRACE( "### exception occurred: " );
+        OSL_TRACE( "%s", aMsg.getStr() );
         OSL_TRACE( "\n" );
     }
 
@@ -1598,20 +1254,4 @@ SAL_IMPLEMENT_MAIN()
     return (bSucc ? 0 : -1);
 }
 
-
-
-
-
-
-
-//*****************************
-//*** TEST-Implementationen ***
-//*****************************
-// Bleibt auf Dauer nicht drin, dient als exportierbare Test-Klasse
-// z.B. fuer Basic-Anbindung
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

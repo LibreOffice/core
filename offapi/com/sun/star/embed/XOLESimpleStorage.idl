@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_embed_XOLESimpleStorage_idl__
 #define __com_sun_star_embed_XOLESimpleStorage_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XTransactedObject_idl__
 #include <com/sun/star/embed/XTransactedObject.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XClassifiedObject_idl__
 #include <com/sun/star/embed/XClassifiedObject.idl>
-#endif
 
 
 //============================================================================
@@ -55,7 +41,7 @@ module com { module sun { module star { module embed {
 
     <p>
     This is a simple container allowing the access to OLE storages. The
-    subcomponents are either OLE storages themself or streams.
+    subcomponents are either OLE storages themselves or streams.
     </p>
 */
 published interface XOLESimpleStorage
@@ -72,7 +58,7 @@ published interface XOLESimpleStorage
     interface ::com::sun::star::container::XNameContainer;
 
     //------------------------------------------------------------------------
-    /** interface <type>XComponent</type> allows to exclicitly free resources
+    /** interface <type>XComponent</type> allows to explicitly free resources
         and break cyclic references.
     */
     interface ::com::sun::star::lang::XComponent;
@@ -81,7 +67,7 @@ published interface XOLESimpleStorage
     /** interface <type>XTransactedObject</type> allows transacted access to
         an object.
 
-        <p>The storages are always opened in transdacted mode, the
+        <p>The storages are always opened in transacted mode, the
         <type>XTransactedObject</type> interface allows to commit the storage.
         </p>
     */

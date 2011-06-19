@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,14 @@
 #include <stdio.h>
 #include <vector>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 
 using jvmaccess::JavaInfo;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
@@ -370,3 +374,5 @@ void printInfo(const JavaInfo& info)
     printf("\tLibDir: %s \n", sLibLocation.getStr());
     printf("\t%s\n", baccess ? "accessible" : "not accessible");
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

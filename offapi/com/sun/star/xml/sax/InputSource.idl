@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_xml_sax_InputSource_idl__
 #define __com_sun_star_xml_sax_InputSource_idl__
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
 
 //=============================================================================
@@ -58,7 +56,7 @@ published struct InputSource
     //-------------------------------------------------------------------------
 
     /** contains the encoding of the data stream. This is used by the parser
-        to do unicode conversions.
+        to do Unicode conversions.
 
         <p>Note that in general you do not need to specify an encoding.
         Either it is UTF-8 or UTF-16 which is recognized by the parser
@@ -69,14 +67,14 @@ published struct InputSource
 
     //-------------------------------------------------------------------------
 
-    /** constains the public Id of the document, for example, needed in
+    /** contains the public Id of the document, for example, needed in
         exception-message strings.
      */
     string sPublicId;
 
     //-------------------------------------------------------------------------
 
-    /** contains the sytemID of the document.
+    /** contains the system ID of the document.
      */
     string sSystemId;
 };

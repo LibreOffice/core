@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_util_PathSubstitution_idl__
 #define __com_sun_star_util_PathSubstitution_idl__
 
-#ifndef __com_sun_star_util_XStringSubstitution_idl__
 #include <com/sun/star/util/XStringSubstitution.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainerListener_idl__
 #include <com/sun/star/container/XContainerListener.idl>
-#endif
 
 //=============================================================================
 
@@ -49,8 +41,8 @@ module com {  module sun {  module star {  module  util {
 /** A service to support the substitution and resubstitution of path variables.
 
         <p>
-        A path variable must be specified with the following synatx: "$("&lt;variable-name&gt;")".
-        Path variables are not case sensitive and are always provided as a UCB-complient URL's
+        A path variable must be specified with the following syntax: "$("&lt;variable-name&gt;")".
+        Path variables are not case sensitive and are always provided as a UCB-compliant URLs
         (for example: "file:///c:/temp" or "file:///usr/install"). This is mandatory to support an
         optional remote file system.<br>
         A user defined list of path variables is supported. This list is stored in the Office
@@ -79,11 +71,11 @@ module com {  module sun {  module star {  module  util {
     <dt>$(path)</dt>
         <dd>The value of PATH environment variable.</dd>
     <dt>$(lang)</dt>
-        <dd>The country code used by the Office, like 01=english, 49=german.</dd>
+        <dd>The country code used by the Office, like 01=English, 49=German.</dd>
         <dt>$(langid)</dt>
-        <dd>The language code used by the Office, like 0x0009=english, 0x0409=english us.</dd>
+        <dd>The language code used by the Office, like 0x0009=English, 0x0409=English US.</dd>
     <dt>$(vlang)</dt>
-        <dd>The language used by the Office as a string. Like "german" for a german Office.</dd>
+        <dd>The language used by the Office as a string. Like "German" for a German Office.</dd>
         </dl>
         <p>
         Attention: Most predefined variables describe an absolute path.
@@ -103,7 +95,7 @@ published service PathSubstitution
         /** Interface to exchange path variables with defined paths and to resubstitute paths with path variables.
 
                 <p>
-                To resubstitute path variables the caller must provide pathes as UCB-compliant URL's.
+                To resubstitute path variables the caller must provide paths as UCB-compliant URLs.
                 </p>
         */
         interface com::sun::star::util::XStringSubstitution;

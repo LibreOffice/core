@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_rendering_AnimationAttributes_idl__
 #define __com_sun_star_rendering_AnimationAttributes_idl__
 
-#ifndef __com_sun_star_geometry_RealSize2D_idl__
 #include <com/sun/star/geometry/RealSize2D.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 
@@ -47,7 +45,7 @@ published struct AnimationAttributes
     /** Repeat mode of the animation sequence.<p>
 
         This value determines how the [0,1] parameter space of the animation
-        should be sweeped through. Permissible values are given in
+        should be swept through. Permissible values are given in
         <type>AnimationRepeat</type>.<p>
 
         @see AnimationRepeat.
@@ -56,7 +54,7 @@ published struct AnimationAttributes
 
     //-------------------------------------------------------------------------
 
-    /** Size of the untrasnformed animation sequence.<p>
+    /** Size of the untransformed animation sequence.<p>
 
         This value specifies the size of the animation when rendered
         with the identity view transform. This permits

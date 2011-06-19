@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_embed_XTransferableSupplier_idl__
 #define __com_sun_star_embed_XTransferableSupplier_idl__
 
-#ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
-#endif
 
 //============================================================================
 

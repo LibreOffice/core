@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_UnoPatternFieldControl_idl__
 #define __com_sun_star_awt_UnoPatternFieldControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlEdit_idl__
 #include <com/sun/star/awt/UnoControlEdit.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XSpinField_idl__
 #include <com/sun/star/awt/XSpinField.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XPatternField_idl__
 #include <com/sun/star/awt/XPatternField.idl>
-#endif
 
 
 //=============================================================================

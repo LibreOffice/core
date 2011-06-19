@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_awt_tree_XMutableTreeNode_idl__
 #define __com_sun_star_awt_tree_XMutableTreeNode_idl__
 
-#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
 #include <com/sun/star/awt/tree/XTreeNode.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
 
 //=============================================================================
 
@@ -92,10 +85,10 @@ published interface XMutableTreeNode : XTreeNode
     /** sets the display value of this node */
     void setDisplayValue( [in] any Value );
 
-    /** Stores an implementation dependend value.
+    /** Stores an implementation dependent value.
 
         <p>You can use this attribute to store data for this node that
-        is independend of the display value</p>
+        is independent of the display value</p>
     */
     [attribute] any DataValue;
 

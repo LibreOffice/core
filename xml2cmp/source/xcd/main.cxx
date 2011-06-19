@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,16 +128,16 @@ Do_SingleFileCommandLine(const CommandLine & i_rCommandLine)
 int
 Do_IndexCommandLine(const CommandLine & i_rCommandLine)
 {
-    // Parsen files:
+    // Parse files:
     List<Simstr>    aFiles;
     Index           aIndex( i_rCommandLine.OutputDirectory(),
                             i_rCommandLine.IdlRootPath(),
                             i_rCommandLine.IndexedTags() );
 
-    std::cout << "Gather xml-files ..." << std::endl;
+    std::cout << "Gathering xml-files ..." << std::endl;
     GatherFileNames( aFiles, i_rCommandLine.XmlSrcDirectory() );
 
-    std::cout << "Create output ..." << std::endl;
+    std::cout << "Creating output ..." << std::endl;
     aIndex.GatherData(aFiles);
     aIndex.WriteOutput( i_rCommandLine.IndexOutputFile() );
 
@@ -171,73 +172,6 @@ Create_TypeInfo( const char *           o_sOutputFile,
         Put2StdOut_TypeInfo(i_rData);
     else
         Put2File_TypeInfo(o_sOutputFile,i_rData);
-
-#if 0
-    std::ofstream aOut(o_sOutputFile, std::ios::out
-#if defined(WNT) || defined(OS2)
-                                               | std::ios::binary
-#endif
-    );
-    if ( !aOut )
-    {
-        std::cerr << "Error: " << o_sOutputFile << " could not be created." << std::endl;
-        return;
-    }
-
-    Heap    aTypesHeap(12);
-    Simstr  sLibPrefix = i_rData.ModuleName();
-
-    // Gather types:
-    List< const MultipleTextElement * > aTypes;
-    i_rData.Get_Types(aTypes);
-
-    for ( unsigned t = 0; t < aTypes.size(); ++t )
-    {
-        unsigned i_max = aTypes[t]->Size();
-        for ( unsigned  i = 0; i < i_max; ++i )
-        {
-            aTypesHeap.InsertValue( aTypes[t]->Data(i), "" );
-        }  // end for
-    }
-
-    // Write types:
-    WriteStr( aOut, sLibPrefix );
-    WriteStr( aOut, "_XML2CMPTYPES= ");
-
-    HeapItem * pLastHeapTop = 0;
-    for ( HeapItem * pHeapTop = aTypesHeap.ReleaseTop(); pHeapTop != 0; pHeapTop = aTypesHeap.ReleaseTop() )
-    {
-        if (pLastHeapTop != 0)
-        {
-            if ( 0 == strcmp(pHeapTop->Key(), pLastHeapTop->Key()) )
-                continue;
-            delete pLastHeapTop;
-            // pLastHeapTop = 0;
-        }
-        pLastHeapTop = pHeapTop;
-
-        WriteStr( aOut, "\t\\\n\t\t" );
-
-        const char * sEnd = strchr( pHeapTop->Key(), ' ' );
-        if (sEnd != 0)
-        {
-            const char * sQuali = strrchr( pHeapTop->Key(), ' ' )+1;
-            WriteStr( aOut, sQuali );
-            WriteStr( aOut, "." );
-            aOut.write( pHeapTop->Key(), sEnd - pHeapTop->Key() );
-        }
-        else
-            WriteStr( aOut, pHeapTop->Key() );
-    }   // end for
-
-    if (pLastHeapTop != 0)
-    {
-        delete pLastHeapTop;
-        pLastHeapTop = 0;
-    }
-
-    aOut.close();
-#endif // 0
 }
 
 void
@@ -251,7 +185,7 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
                    ModuleDescription &     i_rData )
 {
     std::ofstream aOut(i_sOutputFile, std::ios::out
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                                | std::ios::binary
 #endif
     );
@@ -299,7 +233,6 @@ StreamOut_TypeInfo( std::ostream &               o_rOut,
             if ( 0 == strcmp(pHeapTop->Key(), pLastHeapTop->Key()) )
                 continue;
             delete pLastHeapTop;
-            // pLastHeapTop = 0;
         }
         pLastHeapTop = pHeapTop;
 
@@ -324,3 +257,4 @@ StreamOut_TypeInfo( std::ostream &               o_rOut,
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

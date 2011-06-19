@@ -27,33 +27,18 @@
 #ifndef __com_sun_star_linguistic2_XSpellChecker_idl__
 #define __com_sun_star_linguistic2_XSpellChecker_idl__
 
-#ifndef __com_sun_star_linguistic2_XSupportedLocales_idl__
 #include <com/sun/star/linguistic2/XSupportedLocales.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
 #include <com/sun/star/linguistic2/XDictionaryList.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_XSpellAlternatives_idl__
 #include <com/sun/star/linguistic2/XSpellAlternatives.idl>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_idl_
 #include <com/sun/star/beans/PropertyValues.idl>
-#endif
-
 
 //=============================================================================
 
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** This interface allows for spellchecking.
+/** This interface allows for spell checking.
 
     <P>It is possible to simply check if a word, in a specified language,
     is correct or additionally, if it was misspelled, some proposals

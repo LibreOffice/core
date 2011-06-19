@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,11 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
-#ifdef LINUX
+#if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
+    || defined(NETBSD) || defined(DRAGONFLY)
 #define USE_DOUBLE_MMAP
 #endif
 
@@ -201,7 +203,7 @@ private:
     static void flushCode(
         unsigned char const * begin, unsigned char const * end);
 
-    typedef std::hash_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
 
     osl::Mutex m_mutex;
     Map m_map;
@@ -212,3 +214,5 @@ private:
 } } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

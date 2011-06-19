@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_script_XEngineListener_idl__
 #define __com_sun_star_script_XEngineListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_script_InterruptEngineEvent_idl__
 #include <com/sun/star/script/InterruptEngineEvent.idl>
-#endif
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
-#ifndef __com_sun_star_script_FinishEngineEvent_idl__
 #include <com/sun/star/script/FinishEngineEvent.idl>
-#endif
 
 
 //=============================================================================

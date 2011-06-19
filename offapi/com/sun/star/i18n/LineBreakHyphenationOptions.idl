@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_i18n_LineBreakHyphenationOptions_idl__
 #define __com_sun_star_i18n_LineBreakHyphenationOptions_idl__
 
-#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
 #include <com/sun/star/linguistic2/XHyphenator.idl>
-#endif
 
 //=============================================================================
 

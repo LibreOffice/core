@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_document_XStorageChangeListener_idl__
 #define __com_sun_star_document_XStorageChangeListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_embed_XStorage_idl__
 #include <com/sun/star/embed/XStorage.idl>
-#endif
 
 //=============================================================================
 

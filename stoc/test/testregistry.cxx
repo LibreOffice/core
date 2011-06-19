@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,8 +60,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
@@ -71,35 +75,35 @@ using namespace osl;
 namespace stoc_impreg
 {
 void SAL_CALL mergeKeys(
-    Reference< registry::XRegistryKey > const & xDest,
-    Reference< registry::XRegistryKey > const & xSource )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
+Reference< registry::XRegistryKey > const & xDest,
+Reference< registry::XRegistryKey > const & xSource )
+SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
 }
 static void mergeKeys(
-    Reference< registry::XSimpleRegistry > const & xDest,
-    OUString const & rBaseNode,
-    OUString const & rURL )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
+Reference< registry::XSimpleRegistry > const & xDest,
+OUString const & rBaseNode,
+OUString const & rURL )
+SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
-    Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
-    Reference< registry::XRegistryKey > xDestKey;
-    if (rBaseNode.getLength())
-    {
-        xDestKey = xDestRoot->createKey( rBaseNode );
-        xDestRoot->closeKey();
-    }
-    else
-    {
-        xDestKey = xDestRoot;
-    }
-    Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
-    xSimReg->open( rURL, sal_True, sal_False );
-    OSL_ASSERT( xSimReg->isValid() );
-    Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
-    ::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
-    xSourceKey->closeKey();
-    xSimReg->close();
-    xDestKey->closeKey();
+Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
+Reference< registry::XRegistryKey > xDestKey;
+if (rBaseNode.getLength())
+{
+xDestKey = xDestRoot->createKey( rBaseNode );
+xDestRoot->closeKey();
+}
+else
+{
+xDestKey = xDestRoot;
+}
+Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
+xSimReg->open( rURL, sal_True, sal_False );
+OSL_ASSERT( xSimReg->isValid() );
+Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
+::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
+xSourceKey->closeKey();
+xSimReg->close();
+xDestKey->closeKey();
 }
 
 
@@ -107,33 +111,33 @@ OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-    OUString        exe;
-    OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
-#if defined(WIN32) || defined(__OS2__) || defined(WNT)
-    exe = exe.copy(0, exe.getLength() - 16);
+OUString        exe;
+OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
+#if defined(WIN32) || defined(WNT)
+exe = exe.copy(0, exe.getLength() - 16);
 #else
-    exe = exe.copy(0, exe.getLength() - 12);
+exe = exe.copy(0, exe.getLength() - 12);
 #endif
-    return exe;
+return exe;
 }
 
 void setStarUserRegistry()
 {
-    Registry *myRegistry = new Registry();
+Registry *myRegistry = new Registry();
 
-    RegistryKey rootKey, rKey, rKey2;
+RegistryKey rootKey, rKey, rKey2;
 
-    OUString userReg = getExePath();
-    userReg += OUString::createFromAscii("user.rdb");
-    if(myRegistry->open(userReg, REG_READWRITE))
-    {
-        TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
-    }
+OUString userReg = getExePath();
+userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
+if(myRegistry->open(userReg, REG_READWRITE))
+{
+TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
+}
 
-    TEST_ENSHURE(!myRegistry->close(), "setStarUserRegistry error 9");
-    delete myRegistry;
+TEST_ENSHURE(!myRegistry->close(), "setStarUserRegistry error 9");
+delete myRegistry;
 
-    userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
+userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
     putenv((char *)userRegEnv.getStr());
 }
 
@@ -144,7 +148,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
     RegistryKey rootKey;
 
     OUString appReg = getExePath();
-    appReg += OUString::createFromAscii("stoctest.rdb");
+    appReg += OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb"));
 
     TEST_ENSHURE(!myRegistry->open(appReg, REG_READWRITE), "setLinkInDefaultRegistry error 1");
     TEST_ENSHURE(!myRegistry->openRootKey(rootKey), "setLinkInDefaultRegistry error 2");
@@ -173,7 +177,7 @@ void test_SimpleRegistry(
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getFunctionSymbol( OUString(RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY)) );
 
         if (pCompFactoryFunc)
         {
@@ -457,11 +461,11 @@ void test_DefaultRegistry(
     OUString userRdb(exePath);
     OUString applicatRdb(exePath);
 
-    userRdb += OUString::createFromAscii("user.rdb");
-    applicatRdb += OUString::createFromAscii("stoctest.rdb");
+    userRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
+    applicatRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb"));
 
     Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
-                                                                                      //OUString::createFromAscii("//./e:/src596/stoc/wntmsci3/bin") );
+                                                                                      //OUString(RTL_CONSTASCII_USTRINGPARAM("//./e:/src596/stoc/wntmsci3/bin")) );
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     TEST_ENSHURE( xPropSet.is(), "test_DefaultRegistry error0");
@@ -668,8 +672,8 @@ void test_DefaultRegistry(
 SAL_IMPLEMENT_MAIN()
 {
 //  setStarUserRegistry();
-     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
-                              OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
+     setLinkInDefaultRegistry(OUString(RTL_CONSTASCII_USTRINGPARAM("/Test/DefaultLink")),
+                              OUString(RTL_CONSTASCII_USTRINGPARAM("/Test/FifthKey/MyFirstLink")));
 
     OUString reg1( RTL_CONSTASCII_USTRINGPARAM("testreg1.rdb") );
     OUString reg2( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") );
@@ -694,3 +698,4 @@ SAL_IMPLEMENT_MAIN()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

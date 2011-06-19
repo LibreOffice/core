@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_text_TextDocumentSettings_idl__
 #define __com_sun_star_text_TextDocumentSettings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_document_Settings_idl__
 #include <com/sun/star/document/Settings.idl>
-#endif
-
-#ifndef __com_sun_star_text_PrintSettings_idl__
 #include <com/sun/star/text/PrintSettings.idl>
-#endif
-
-#ifndef __com_sun_star_text_PrintPreviewSettings_idl__
 #include <com/sun/star/text/PrintPreviewSettings.idl>
-#endif
 
 //=============================================================================
 
@@ -68,7 +57,7 @@ published service DocumentSettings
 
     /** specifies if charts in text documents are updated automatically.
 
-        This has no effect if 'FieldAutoUpdate' is <FALSE/>.
+        This has no effect if "FieldAutoUpdate" is <FALSE/>.
     */
     [optional, property] boolean ChartAutoUpdate;
 
@@ -78,7 +67,7 @@ published service DocumentSettings
         <p>If between two paragraphs, two tables, or a paragraph and a
         table, you have defined spacing above and below each object,
         usually only the larger one of the two spaces is used.  If the
-        spacing between hte objects are to be added this property has
+        spacing between the objects are to be added this property has
         to be <TRUE/>.</p>
     */
     [optional, property] boolean AddParaTableSpacing;

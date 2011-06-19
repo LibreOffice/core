@@ -66,6 +66,7 @@ IDLFILES=\
     CellsEnumeration.idl\
     ComplexReference.idl\
     ConditionOperator.idl\
+    ConditionOperator2.idl\
     ConsolidationDescriptor.idl\
     DDEItemInfo.idl\
     DDELink.idl\
@@ -315,6 +316,7 @@ IDLFILES=\
     XSheetCellRangeContainer.idl\
     XSheetCellRanges.idl\
     XSheetCondition.idl\
+    XSheetCondition2.idl\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
     XSheetFilterDescriptor.idl\
@@ -336,6 +338,7 @@ IDLFILES=\
     XSubTotalDescriptor.idl\
     XSubTotalField.idl\
     XUniqueCellFormatRangesSupplier.idl\
+    XUnnamedDatabaseRanges.idl\
     XUsedAreaCursor.idl\
     XViewFreezable.idl\
     XViewPane.idl\

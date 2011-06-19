@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_ucb_XFetchProviderForContentAccess_idl__
 #define __com_sun_star_ucb_XFetchProviderForContentAccess_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_FetchResult_idl__
 #include <com/sun/star/ucb/FetchResult.idl>
-#endif
 
 //=============================================================================
 
@@ -55,7 +50,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains a string.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows
@@ -79,7 +74,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains an <type>XContentIdentifier</type>.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows
@@ -102,7 +97,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains an <type>XContent</type>.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows

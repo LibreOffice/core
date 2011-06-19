@@ -29,13 +29,8 @@
 #ifndef __com_sun_star_datatransfer_XDataFormatTranslator_idl__
 #define __com_sun_star_datatransfer_XDataFormatTranslator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_DataFlavor_idl__
 #include <com/sun/star/datatransfer/DataFlavor.idl>
-#endif
 
 module com { module sun { module star { module datatransfer {
 
@@ -52,7 +47,7 @@ module com { module sun { module star { module datatransfer {
 published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Converts a <type>DataFlavor</type> to system dependend data type.
+    /** Converts a <type>DataFlavor</type> to system dependent data type.
 
         @param aDataFlavor
         Describes the format for which a system dependent data types is requested.
@@ -73,7 +68,7 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 
         @returns
         A <type>DataFlavor</type> for the given system dependent data transfer type.
-        <p>If there is no appropriate mapping for a sytem dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
+        <p>If there is no appropriate mapping for a system dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
     */
     DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };

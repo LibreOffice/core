@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_awt_XSystemDependentWindowPeer_idl__
 #define __com_sun_star_awt_XSystemDependentWindowPeer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 //=============================================================================
@@ -51,7 +49,7 @@ published interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
     /** returns a system-specific window handle.
 
         @returns
-        a sytem-specific handle to a window
+        a system-specific handle to a window
         or 0 if the window is not in the same process.
 
         <p>You must check the machine ID and the process ID.<BR>
@@ -60,8 +58,6 @@ published interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
 
         JAVA: Returns a global reference to a java.awt.Component
         object provided from the JNI-API.<BR>
-
-        OS2: Returns an HWND if possible, otherwise 0.<BR>
 
         MAC: Returns a ptr to the NSView implementing the window.<BR>
 

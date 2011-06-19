@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,13 @@
 
 #define UNICODE
 #define _UNICODE
-#define _WIN32_WINNT_0x0500
+#define _WIN32_WINNT 0x0500
 #include "systools/win32/uwinapi.h"
 
 #include "osl/file.h"
 
 #include "file_url.h"
+#include <sal/macros.h>
 #include "file_error.h"
 
 #include "path_helper.hxx"
@@ -48,8 +50,6 @@
 #endif
 
 //#####################################################
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
 static const wchar_t SLASH = '/';
@@ -145,7 +145,7 @@ namespace /* private */
 
     //#####################################################
     inline bool is_UNC_path(const sal_Unicode* path)
-    { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), ELEMENTS_OF_ARRAY(UNC_PREFIX) - 1)); }
+    { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), SAL_N_ELEMENTS(UNC_PREFIX) - 1)); }
 
     //#####################################################
     inline bool is_UNC_path(const rtl::OUString& path)
@@ -844,15 +844,13 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextNetResource(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint )
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BYTE                buffer[16384];
     LPNETRESOURCEW      lpNetResource = (LPNETRESOURCEW)buffer;
     DWORD               dwError, dwCount, dwBufSize;
-
-    uHint = uHint; /* to get no warning */
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -892,13 +890,11 @@ static oslFileError SAL_CALL osl_getNextNetResource(
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextDrive(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint )
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BOOL                fSuccess;
-
-    uHint = uHint; /* avoid warnings */
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -936,13 +932,11 @@ static oslFileError SAL_CALL osl_getNextDrive(
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextFileItem(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint)
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/)
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BOOL                fFound;
-
-    uHint = uHint; /* avoid warnings */
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -1036,7 +1030,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
             }
             break;
         default:
-            OSL_ENSURE( 0, "Invalid directory type" );
+            OSL_FAIL( "Invalid directory type" );
             break;
         }
 
@@ -1249,16 +1243,16 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     TCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
+    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
     {
         TCHAR vnfloppy[51];
         if (is_floppy_A_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_A, vnfloppy, ELEMENTS_OF_ARRAY(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPoint(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
 
         if (is_floppy_B_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_B, vnfloppy, ELEMENTS_OF_ARRAY(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPoint(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
     }
@@ -1321,7 +1315,7 @@ static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     TCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
+    if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
         return GetDriveType(vn);
 
     return DRIVE_NO_ROOT_DIR;
@@ -1572,7 +1566,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
             case DRIVE_REMOTE:
             {
                 TCHAR szBuffer[1024];
-                DWORD const dwBufsizeConst = ELEMENTS_OF_ARRAY(szBuffer);
+                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szBuffer);
                 DWORD dwBufsize = dwBufsizeConst;
 
                 DWORD dwResult = WNetGetConnection( cDrive, szBuffer, &dwBufsize );
@@ -1591,7 +1585,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
             case DRIVE_FIXED:
             {
                 TCHAR szVolumeNameBuffer[1024];
-                DWORD const dwBufsizeConst = ELEMENTS_OF_ARRAY(szVolumeNameBuffer);
+                DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szVolumeNameBuffer);
 
                 if ( GetVolumeInformation( cRoot, szVolumeNameBuffer, dwBufsizeConst, NULL, NULL, NULL, NULL, 0 ) )
                 {
@@ -1865,3 +1859,5 @@ oslFileError SAL_CALL osl_setFileTime(
     else
         return osl_File_E_None;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

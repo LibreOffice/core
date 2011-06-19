@@ -82,6 +82,8 @@ IDLFILES=\
     XScriptEventsAttacher.idl\
     XDefaultMethod.idl\
     XDefaultProperty.idl\
+	XAutomationInvocation.idl\
+    XErrorQuery.idl\
 
 # ------------------------------------------------------------------
 

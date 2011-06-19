@@ -42,7 +42,7 @@ constants EffectCommands
     */
     const short CUSTOM = 0;
 
-    /** the command is an ole verb.
+    /** the command is an OLE verb.
         Required parameters are
             "Verb" of type long that specifies the verb to execute.
     */
@@ -51,7 +51,7 @@ constants EffectCommands
     /** the command starts playing on a media object.
         Optional parameters are
             "MediaTime" of type double that specifies the start
-            time in mili seconds. If not given, play continues at
+            time in milliseconds. If not given, play continues at
             last position known.
     */
     const short PLAY = 2;

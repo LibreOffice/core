@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_drawing_XDrawPages_idl__
 #define __com_sun_star_drawing_XDrawPages_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
 
 
 //=============================================================================
@@ -47,7 +43,7 @@
     <p>The pages are stored in an index container. The order is determined by
     the index.
 
-    You usualy get this interface if you use the
+    You usually get this interface if you use the
     <type>XDrawPagesSupplier</type> or the <type>XMasterPagesSupplier</type>
     at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
 */

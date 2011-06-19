@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_component_DatabaseTimeField_idl__
 #define __com_sun_star_form_component_DatabaseTimeField_idl__
 
-#ifndef __com_sun_star_form_component_TimeField_idl__
 #include <com/sun/star/form/component/TimeField.idl>
-#endif
 
-#ifndef __com_sun_star_form_DataAwareControlModel_idl__
 #include <com/sun/star/form/DataAwareControlModel.idl>
-#endif
 
 
 //=============================================================================

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,8 +54,6 @@ class XmlElement
                             HtmlCreator &       io_rHC ) const = 0;
     virtual void        Insert2Index(
                             Index &             o_rIndex ) const;           // Default: Does nothing, but can be overwritten.
-
-//  virtual void        Put2Dependy() = 0;
 
     const Simstr &      Name() const            { return sName; }
 
@@ -239,3 +238,4 @@ class MultipleAttrElement : public EmptyElement
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

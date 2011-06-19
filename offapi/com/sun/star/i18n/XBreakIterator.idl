@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_i18n_XBreakIterator_idl__
 #define __com_sun_star_i18n_XBreakIterator_idl__
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_LineBreakUserOptions_idl__
 #include <com/sun/star/i18n/LineBreakUserOptions.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_LineBreakHyphenationOptions_idl__
 #include <com/sun/star/i18n/LineBreakHyphenationOptions.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_LineBreakResults_idl__
 #include <com/sun/star/i18n/LineBreakResults.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_Boundary_idl__
 #include <com/sun/star/i18n/Boundary.idl>
-#endif
 
 //============================================================================
 
@@ -99,7 +85,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
         @param nWordType
             One of <type>WordType</type>, specifies the type of
-            travelling.
+            traveling.
 
         @returns
             The <type>Boundary</type> of the found word. Normally used for
@@ -135,7 +121,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
         @param nWordType
             One of <type>WordType</type>, specifies the type of
-            travelling.
+            traveling.
 
         @returns
             The <type>Boundary</type> of the found word. Normally used for
@@ -175,7 +161,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
         <p> This method is mis-defined, since <type>WordType</type>
         is not an attribute of a word, but a way to break words,
-        like excluding or including tail spaces for spellchecker
+        like excluding or including tail spaces for spell checker
         or cursor traveling. It returns 0 always.
         </p>
      */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,32 +33,15 @@
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
 
-
-// -----------------------------------------------------------------------------
 #include <string.h>
 #include <stdio.h>
 
-// #ifndef _OSL_DIAGNOSE_H_
-// #include <osl/diagnose.h>
-// #endif
-
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
 
 #include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
-
-// #if OSL_DEBUG_LEVEL > 0
-// #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
-// #else
-// #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
-// #endif
-
-using namespace rtl;
-
-// -----------------------------------------------------------------------------
+using ::rtl::OString;
 namespace rtl_OString
 {
     class oldtests : public CppUnit::TestFixture
@@ -122,18 +106,13 @@ void oldtests::test_OString()
     s6 = s5.valueOf(n);
     TEST_ENSURE( s6.compareTo("123456789") == 0, "test_OString error 16");
 
-#ifndef SAL_OS2
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
-#elif defined(SAL_OS2)
-    sal_Int64 m;
-    sal_setInt64(&m, 3965190145L, -750499787L);
 #else
     sal_Int64 m = -3223372036854775807;
 #endif
     s6 = s5.valueOf(m);
     TEST_ENSURE( s6.compareTo("-3223372036854775807") == 0, "test_OString error 17");
-#endif
 
     OString s7("HaLLo");
     s7 = s7.toAsciiLowerCase();
@@ -264,3 +243,4 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_OString::oldtests, "rtl_OString" );
 // -----------------------------------------------------------------------------
 NOADDITIONAL;
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

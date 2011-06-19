@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,3 +280,5 @@ void Dependencies::insert(rtl::OString const & type, bool base) {
         break;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_drawing_AccessibleGraphicShape_idl__
 #define __com_sun_star_drawing_AccessibleGraphicShape_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessible_idl__
 #include <com/sun/star/accessibility/XAccessible.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
 
 module com {  module sun {  module star {  module drawing {
 
@@ -56,7 +50,7 @@ module com {  module sun {  module star {  module drawing {
     <li>Only the current draw page and only the visible shapes are
     accessible.  To switch to another page or to access shapes that lie
     outside the currently visible area, the user has to issue these requests
-    manually or programmatically through the usual chanels, e.g. pressing
+    manually or programmatically through the usual channels, e.g. pressing
     keys or selecting menu entries.</li>
     <li>The hierarchy exposed through the
     <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
@@ -100,7 +94,7 @@ published service AccessibleDrawDocumentView
             mode--the appropriate listeners are called and the user gets
             informed of this.</li>
         <li>Parent: The parent will usually be the window that contains the
-            draw document view.  It has to be set via implementation dependend
+            draw document view.  It has to be set via implementation dependent
             ways.</li>
         <li>Relations: Relations are set and modified from the outside.</li>
         <li>States: <const scope="com::sun::star::accessibility"

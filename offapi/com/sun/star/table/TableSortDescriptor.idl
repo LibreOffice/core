@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_table_TableSortDescriptor_idl__
 #define __com_sun_star_table_TableSortDescriptor_idl__
 
-#ifndef __com_sun_star_util_SortDescriptor_idl__
 #include <com/sun/star/util/SortDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_util_SortField_idl__
 #include <com/sun/star/util/SortField.idl>
-#endif
-
-#ifndef __com_sun_star_table_TableOrientation_idl__
 #include <com/sun/star/table/TableOrientation.idl>
-#endif
 
 //=============================================================================
 

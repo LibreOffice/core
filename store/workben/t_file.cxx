@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,28 +62,6 @@ int SAL_CALL main (int argc, char **argv)
         rtl::OUString aFilename (
             argv[1], rtl_str_getLength(argv[1]),
             osl_getThreadTextEncoding());
-
-#if 0   /* EXP */
-        oslFileError result;
-        rtl::OUString aPath;
-
-        result = osl_getFileURLFromSystemPath(aFilename.pData, &(aPath.pData));
-        if (result != osl_File_E_None)
-        {
-            // not SystemPath, assume FileUrl.
-            aPath = aFilename;
-        }
-        if (rtl_ustr_ascii_shortenedCompare_WithLength(aPath.pData->buffer, aPath.pData->length, "file://", 7) != 0)
-        {
-            // not FileUrl, assume relative path.
-            rtl::OUString aBase;
-            (void) osl_getProcessWorkingDir (&(aBase.pData));
-
-            // absolute FileUrl.
-            (void) osl_getAbsoluteFileURL(aBase.pData, aPath.pData, &(aPath.pData));
-        }
-        aFilename = aPath;
-#endif  /* EXP */
 
         eErrCode = FileLockBytes_createInstance (
             xLockBytes, aFilename.pData, store_AccessReadWrite);
@@ -242,3 +221,5 @@ int SAL_CALL main (int argc, char **argv)
     xLockBytes.clear();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

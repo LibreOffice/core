@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_ComplexReference_idl__
 #define __com_sun_star_sheet_ComplexReference_idl__
 
-#ifndef __com_sun_star_sheet_SingleReference_idl__
 #include <com/sun/star/sheet/SingleReference.idl>
-#endif
 
 //=============================================================================
 

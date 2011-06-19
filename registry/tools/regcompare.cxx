@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1961,7 +1962,7 @@ static sal_uInt32 compareKeys(
     return nError;
 }
 
-#if (defined UNX) || (defined OS2) || defined __MINGW32__
+#if (defined UNX) || defined __MINGW32__
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -2088,3 +2089,5 @@ int _cdecl main( int argc, char * argv[] )
 
     return ((nError > 0) ? 11 : 0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

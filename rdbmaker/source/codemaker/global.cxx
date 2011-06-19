@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,16 +26,14 @@
  *
  ************************************************************************/
 #include <osl/process.h>
-#ifndef _RTL_OSTRINGBUFFER_HXX_
 #include <rtl/strbuf.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include    <osl/thread.h>
 #include    <osl/file.hxx>
 
 #include <stdlib.h>
 #include <stdio.h>
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
 #include <io.h>
 #include <direct.h>
 #include <errno.h>
@@ -134,7 +133,7 @@ void FileStream::open(const OString& name, FileAccessMode mode)
     if ( name.getLength() > 0 )
     {
         m_name = name;
-        m_pFile = fopen(m_name, checkAccessMode(mode));
+        m_pFile = fopen(m_name.getStr(), checkAccessMode(mode));
     }
 }
 
@@ -169,3 +168,4 @@ const sal_Char* FileStream::checkAccessMode(FileAccessMode mode)
     return "w+";
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

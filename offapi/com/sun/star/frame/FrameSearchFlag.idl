@@ -74,7 +74,7 @@ published constants FrameSearchFlag
         /** includes all child frames of the start frame
 
             <p>
-            Note: That means all direct children and of course her childrens too.
+            Note: That means all direct children and of course her children too.
                   Search doesn't stop at the next level inside the tree!
             </p>
          */
@@ -89,7 +89,7 @@ published constants FrameSearchFlag
         /** includes the direct siblings of the start frame
 
             <p>
-            Normaly it's interpreted as search on the direct childs of the parent
+            Normally it's interpreted as search on the direct children of the parent
             only. But in combination with e.g. the CHILDREN flag it can include all
             children of it too.
             </p>
@@ -102,9 +102,9 @@ published constants FrameSearchFlag
         <p>
         If this flag isn't present, any search from bottom to top has to stop, if a top frame
         will be reached. It doesn't influence a search from top to bottom.
-        But it can be used at the root of the frame tree to search on direct childrens of it only.
+        But it can be used at the root of the frame tree to search on direct children of it only.
         Because the direct children of the root node are the root's of the task sub trees, which
-        are top frames too. Instead of using the CHILDREN flag there, it's possible so to supress
+        are top frames too. Instead of using the CHILDREN flag there, it's possible so to suppress
         a deeper search so.
         </p>
      */

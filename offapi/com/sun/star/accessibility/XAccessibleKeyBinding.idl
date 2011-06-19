@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_accessibility_XAccessibleKeyBinding_idl__
 #define __com_sun_star_accessibility_XAccessibleKeyBinding_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_awt_KeyStroke_idl__
 #include <com/sun/star/awt/KeyStroke.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -75,7 +69,7 @@ published interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
         @param nIndex
             The index selects one of alternative key bindings.  It has to
             non-negative and smaller then the number of key bindings as
-            returned by the <member>geetAccessibleKeyBindingCount()</member>
+            returned by the <member>getAccessibleKeyBindingCount()</member>
             method.
         @return
            The returned sequence of key strokes specifies one way to invoke

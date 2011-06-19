@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,13 +36,6 @@
 
 #include <string.h>
 #include <stdio.h>
-
-#ifdef OS2
-#undef OSL_TRACE
-#define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
-#define INCL_DOS
-#include <os2.h>
-#endif
 
 /* ================================================================= *
  *
@@ -99,13 +93,6 @@ rtl_machdep_pagesize (void);
 /** gp_default_arena
  */
 rtl_arena_type * gp_default_arena = 0;
-
-
-/** rtl_arena_init()
- *  @internal
- */
-static int
-rtl_arena_init (void);
 
 
 /* ================================================================= */
@@ -343,20 +330,6 @@ rtl_arena_hash_rescale (
             arena->m_stats.m_free,
             old_size, new_size
         );
-
-#if 0  /* DBG */
-        for (i = 0; i < arena->m_hash_size; i++)
-        {
-            sal_Size k = 0; rtl_arena_segment_type ** segpp = &(arena->m_hash_table[i]);
-            while (*segpp)
-            {
-                k += 1;
-                segpp = &((*segpp)->m_fnext);
-            }
-            fprintf(stdout, "%d, ", k);
-        }
-        fprintf(stdout, "\n");
-#endif /* DBG */
 
         arena->m_hash_table = new_table;
         arena->m_hash_size  = new_size;
@@ -934,6 +907,8 @@ rtl_arena_deactivate (
  *
  * ================================================================= */
 
+extern void ensureArenaSingleton();
+
 /** rtl_arena_create()
  */
 rtl_arena_type *
@@ -986,7 +961,8 @@ try_alloc:
     }
     else if (gp_arena_arena == 0)
     {
-        if (rtl_arena_init())
+        ensureArenaSingleton();
+        if (gp_arena_arena)
         {
             /* try again */
             goto try_alloc;
@@ -1179,7 +1155,7 @@ SAL_CALL rtl_arena_free (
 
 #if defined(SAL_UNX)
 #include <sys/mman.h>
-#elif defined(SAL_W32) || defined(SAL_OS2)
+#elif defined(SAL_W32)
 #define MAP_FAILED 0
 #endif /* SAL_UNX || SAL_W32 */
 
@@ -1215,18 +1191,7 @@ SAL_CALL rtl_machdep_alloc (
     addr = mmap (NULL, (size_t)(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #elif defined(SAL_W32)
     addr = VirtualAlloc (NULL, (SIZE_T)(size), MEM_COMMIT, PAGE_READWRITE);
-#elif defined(SAL_OS2)
-    {
-    APIRET rc;
-    addr = 0;
-    // Use DosAlloc* to get a 4KB page aligned address.
-    rc = DosAllocMem( &addr, size, PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_ANY);
-    if (rc) {
-        fprintf( stderr, "sal3::DosAllocMem failed rc=%d\n", rc);
-        addr = 0;
-    }
-    }
-#endif /* (SAL_UNX || SAL_W32 || SAL_OS2) */
+#endif /* (SAL_UNX || SAL_W32) */
 
     if (addr != MAP_FAILED)
     {
@@ -1259,8 +1224,6 @@ SAL_CALL rtl_machdep_free (
     (void) munmap(pAddr, nSize);
 #elif defined(SAL_W32)
     (void) VirtualFree ((LPVOID)(pAddr), (SIZE_T)(0), MEM_RELEASE);
-#elif defined(SAL_OS2)
-    (void) DosFreeMem( pAddr);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
@@ -1270,7 +1233,7 @@ static sal_Size
 rtl_machdep_pagesize (void)
 {
 #if defined(SAL_UNX)
-#if defined(FREEBSD) || defined(NETBSD)
+#if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
     return ((sal_Size)getpagesize());
 #else  /* POSIX */
     return ((sal_Size)sysconf(_SC_PAGESIZE));
@@ -1279,10 +1242,6 @@ rtl_machdep_pagesize (void)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
     return ((sal_Size)(info.dwPageSize));
-#elif defined(SAL_OS2)
-    ULONG ulPageSize;
-    DosQuerySysInfo(QSV_PAGE_SIZE, QSV_PAGE_SIZE, &ulPageSize, sizeof(ULONG));
-    return ((sal_Size)ulPageSize);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
@@ -1292,8 +1251,8 @@ rtl_machdep_pagesize (void)
  *
  * ================================================================= */
 
-static void
-rtl_arena_once_init (void)
+void
+rtl_arena_init (void)
 {
     {
         /* list of arenas */
@@ -1355,35 +1314,10 @@ rtl_arena_once_init (void)
         );
         OSL_ASSERT(gp_arena_arena != 0);
     }
-}
-
-static int
-rtl_arena_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_arena_once_init);
-    return (gp_arena_arena != 0);
+    OSL_TRACE("rtl_arena_init completed");
 }
 
 /* ================================================================= */
-
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_arena_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
-static void rtl_arena_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_arena_fini)
-static void rtl_arena_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
 
 void
 rtl_arena_fini (void)
@@ -1407,6 +1341,9 @@ rtl_arena_fini (void)
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
+    OSL_TRACE("rtl_arena_fini completed");
 }
 
 /* ================================================================= */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

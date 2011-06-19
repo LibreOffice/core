@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module geometry {
 
     The matrix defined by this structure constitutes an affine mapping
     of a point in 2D to another point in 2D. The last line of a
-    complete 3 by 3 matrix is omitted, since it is implicitely assumed
+    complete 3 by 3 matrix is omitted, since it is implicitly assumed
     to be [0,0,1].<p>
 
     An affine mapping, as performed by this matrix, can be written out

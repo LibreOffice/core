@@ -28,74 +28,23 @@
 #ifndef __com_sun_star_sheet_Spreadsheet_idl__
 #define __com_sun_star_sheet_Spreadsheet_idl__
 
-#ifndef __com_sun_star_sheet_SheetCellRange_idl__
 #include <com/sun/star/sheet/SheetCellRange.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSpreadsheet_idl__
 #include <com/sun/star/sheet/XSpreadsheet.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_util_XProtectable_idl__
 #include <com/sun/star/util/XProtectable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotTablesSupplier_idl__
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XScenariosSupplier_idl__
 #include <com/sun/star/sheet/XScenariosSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetAnnotationsSupplier_idl__
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XDrawPageSupplier_idl__
 #include <com/sun/star/drawing/XDrawPageSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_table_XTableChartsSupplier_idl__
 #include <com/sun/star/table/XTableChartsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
 #include <com/sun/star/sheet/XCellRangeMovement.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XPrintAreas_idl__
 #include <com/sun/star/sheet/XPrintAreas.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetPageBreak_idl__
 #include <com/sun/star/sheet/XSheetPageBreak.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetOutline_idl__
 #include <com/sun/star/sheet/XSheetOutline.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetAuditing_idl__
 #include <com/sun/star/sheet/XSheetAuditing.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XSheetLinkable_idl__
 #include <com/sun/star/sheet/XSheetLinkable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_Scenario_idl__
 #include <com/sun/star/sheet/Scenario.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XExternalSheetName_idl__
 #include <com/sun/star/sheet/XExternalSheetName.idl>
-#endif
-
 #include <com/sun/star/util/Color.idl>
 
 //=============================================================================

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,14 +69,10 @@ struct Bootstrap :
 
 struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
 
-//osl::Mutex * getFwkMutex();
-
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
 rtl::OUString getPlatform();
-
-//const rtl::Bootstrap& getBootstrap();
 
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
@@ -120,7 +117,7 @@ enum FileStatus
     one of the values of FileStatus.
 
     @exception
-    Errors occured during determining if the file exists
+    Errors occurred during determining if the file exists
  */
 FileStatus checkFileURL(const rtl::OUString & path);
 
@@ -136,3 +133,5 @@ rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
 rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,16 +27,9 @@
 #ifndef __com_sun_star_text_TextEmbeddedObject_idl__
 #define __com_sun_star_text_TextEmbeddedObject_idl__
 
-#ifndef __com_sun_star_document_XEmbeddedObjectSupplier_idl__
 #include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_BaseFrame_idl__
 #include <com/sun/star/text/BaseFrame.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
 
 //=============================================================================
@@ -51,7 +44,7 @@
 published service TextEmbeddedObject
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
-     graphic objects and embeddedobjects.
+     graphic objects and embedded objects.
      */
     service BaseFrame;
     // DocMerge: empty anyway
@@ -65,7 +58,7 @@ published service TextEmbeddedObject
         //-------------------------------------------------------------------------
 
         /** This is the model for the OLE2 object.
-            <p>This property if void if the ole2 is not an
+            <p>This property if void if the OLE2 is not an
             Office component.</p>
 
         */

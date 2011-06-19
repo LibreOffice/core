@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,13 @@
 #ifndef _STORE_LOCKBYTE_HXX_
 #define _STORE_LOCKBYTE_HXX_
 
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
-#ifndef _RTL_REF_HXX_
 #include "rtl/ref.hxx"
-#endif
-#ifndef _RTL_USTRING_H_
 #include "rtl/ustring.h"
-#endif
 
-#ifndef _STORE_TYPES_H_
 #include "store/types.h"
-#endif
-#ifndef _STORE_STORBASE_HXX_
 #include "storbase.hxx"
-#endif
 
 namespace store
 {
@@ -182,3 +173,4 @@ MemoryLockBytes_createInstance (
 
 #endif /* !_STORE_LOCKBYTE_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

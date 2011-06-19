@@ -28,25 +28,20 @@
 #ifndef __com_sun_star_auth_XSSOInitiatorContext_idl__
 #define __com_sun_star_auth_XSSOInitiatorContext_idl__
 
-#ifndef __com_sun_star_auth_XSSOContext_idl__
 #include <com/sun/star/auth/XSSOContext.idl>
-#endif
-
-#ifndef __com_sun_star_auth_SSOExceptions_idl__
 #include <com/sun/star/auth/SSOExceptions.idl>
-#endif
 
 module com { module sun { module star { module auth {
 
 /** represents an initiator side security context.
-    <P>This context may be used to initialise authetication tokens to send to
+    <P>This context may be used to initialize authentication tokens to send to
     an acceptor and to authenticate any token sent back in response.
 
     @since OOo 1.1.2
  */
 published interface XSSOInitiatorContext : ::com::sun::star::auth::XSSOContext
 {
-    /** initialises an SSO Token to send to the acceptor side and
+    /** initializes an SSO Token to send to the acceptor side and
         authenticates an SSO Token returned by the acceptor if the
         context supports mutual authentication.
         <P>

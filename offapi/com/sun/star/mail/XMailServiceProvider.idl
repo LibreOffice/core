@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_mail_XMailServiceProvider_idl__
 #define __com_sun_star_mail_XMailServiceProvider_idl__
 
-#ifndef __com_sun_star_mail_XMailService_idl__
 #include <com/sun/star/mail/XMailService.idl>
-#endif
-
-#ifndef __com_sun_star_mail_NoMailServiceProviderException_idl__
 #include <com/sun/star/mail/NoMailServiceProviderException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailServiceType_idl__
 #include <com/sun/star/mail/MailServiceType.idl>
-#endif
 
 module com { module sun { module star { module mail {
 

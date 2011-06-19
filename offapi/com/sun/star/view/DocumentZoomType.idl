@@ -60,7 +60,7 @@ published constants DocumentZoomType
     const short BY_VALUE = 3;
     //-------------------------------------------------------------------------
     /** The page width at the current selection is fit into the view,
-        with zhe view ends exactly at the end of the page.
+        with the view ends exactly at the end of the page.
      */
     const short PAGE_WIDTH_EXACT = 4;
 };

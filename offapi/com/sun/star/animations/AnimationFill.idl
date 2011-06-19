@@ -59,19 +59,35 @@ constants AnimationFill
     /** Specifies that the element will not extend past the end of the last instance of the simple duration.  */
     const short REMOVE = 1;
 
-    /** Specifies that the element will extend past the end of the last instance of the simple duration by "freezing" the element state at that point. The parent time container of the element determines how long the element is frozen (as described immediately below). */
+    /** Specifies that the element will extend past the end of the last instance of the simple duration by
+        "freezing" the element state at that point. The parent time container of the element determines how
+        long the element is frozen (as described immediately below).
+    */
     const short FREEZE = 2;
 
-    /** Setting this to "hold" has the same effect as setting to "freeze", except that the element is always frozen to extend to the end of the simple duration of the parent time container of theelement (independent of the type of time container). For profiles that support a layered layout model (e.g., SMIL 2.0 Language Profile), held elements (elements with fill="hold") will refresh their display area when a layer is added on top then later removed. */
+    /** Setting this to "hold" has the same effect as setting to "freeze", except that the element is always
+        frozen to extend to the end of the simple duration of the parent time container of the element
+        (independent of the type of time container). For profiles that support a layered layout model
+        (e.g., SMIL 2.0 Language Profile), held elements (elements with fill="hold") will refresh their display
+        area when a layer is added on top then later removed.
+    */
     const short HOLD = 3;
 
-    /** Setting this to "transition" has the same effect as setting to "freeze", except that the element is removed at the end of the transition. This value is only allowed on elements with media directly associated with them. If specified on any other element (e.g. a time container element in the SMIL language profile), the attribute is ignored. See the SMIL Transitions module. */
+    /** Setting this to "transition" has the same effect as setting to "freeze", except that the element is
+        removed at the end of the transition. This value is only allowed on elements with media directly
+        associated with them. If specified on any other element (e.g. a time container element in the SMIL
+        language profile), the attribute is ignored. See the SMIL Transitions module.
+    */
     const short TRANSITION = 4;
 
-    /** The fill behavior for this element depends on whether the element specifies any of the attributes that define the simple or active duration:
+    /** The fill behavior for this element depends on whether the element specifies any of the attributes
+        that define the simple or active duration:
         <ul>
-        <li>If none of the attributes duration, end, repeatCount or repeatDuration are specified on the element, then the element will have a fill behavior identical to that if it were specified as <const>AnimationFill::FREEZE</const>.</li>
-        <li>Otherwise, the element will have a fill behavior identical to that if it were specified as <const>AnimationFill::REMOVE</const.</li>
+        <li>If none of the attributes duration, end, repeatCount or repeatDuration are specified on
+        the element, then the element will have a fill behavior identical to that if it were specified
+        as <const>AnimationFill::FREEZE</const>.</li>
+        <li>Otherwise, the element will have a fill behavior identical to that if it were specified as
+        <const>AnimationFill::REMOVE</const.</li>
         </ul>
     */
     const short AUTO = 5;

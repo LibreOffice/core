@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_drawing_XShapeCombiner_idl__
 #define __com_sun_star_drawing_XShapeCombiner_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
 
-#ifndef __com_sun_star_drawing_XShapes_idl__
 #include <com/sun/star/drawing/XShapes.idl>
-#endif
 
 
 //=============================================================================
@@ -75,7 +69,7 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
 
         @param xShapes
             the <type>Shape</type> is converted to a
-            <type>PolyPolygonBezierShape</type>s and then splited into
+            <type>PolyPolygonBezierShape</type>s and then split into
             several <type>PolyPolygonBezierShape</type>s
             The <type>Shape</types>s in xShape will be removed from the
             <type>GenericDrawPage</type> and disposed.

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,20 @@
 
 #include "system.h"
 #include <string.h>
+#if defined(OPENBSD)
+#include <sched.h>
+#endif
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
+#include <sal/macros.h>
 
 #if defined LINUX
 #include <sys/prctl.h>
+#ifndef PR_SET_NAME
+#define PR_SET_NAME 15
+#endif
 #endif
 
 /****************************************************************************
@@ -284,6 +290,9 @@ static oslThread osl_thread_create_Impl (
     short             nFlags)
 {
     Thread_Impl* pImpl;
+#if defined(OPENBSD)
+    pthread_attr_t attr;
+#endif
     int nRet=0;
 
     pImpl = osl_thread_construct_Impl();
@@ -296,9 +305,23 @@ static oslThread osl_thread_create_Impl (
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
+#if defined(OPENBSD)
+    if (pthread_attr_init(&attr) != 0)
+        return (0);
+
+    if (pthread_attr_setstacksize(&attr, 262144) != 0) {
+        pthread_attr_destroy(&attr);
+        return (0);
+    }
+#endif
+
     if ((nRet = pthread_create (
         &(pImpl->m_hThread),
+#if defined(OPENBSD)
+        &attr,
+#else
         PTHREAD_ATTR_DEFAULT,
+#endif
         osl_thread_start_Impl,
         (void*)(pImpl))) != 0)
     {
@@ -310,6 +333,10 @@ static oslThread osl_thread_create_Impl (
 
         return (0);
     }
+
+#if defined(OPENBSD)
+    pthread_attr_destroy(&attr);
+#endif
 
     /* wait for change from STARTUP to ACTIVE state */
     while (pImpl->m_Flags & THREADIMPL_FLAGS_STARTUP)
@@ -596,7 +623,7 @@ typedef struct _HashEntry
 } HashEntry;
 
 static HashEntry* HashTable[31];
-static int HashSize = sizeof(HashTable) / sizeof(HashTable[0]);
+static int HashSize = SAL_N_ELEMENTS(HashTable);
 
 static pthread_mutex_t HashLock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -1049,3 +1076,5 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
 
     return oldThreadEncoding;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

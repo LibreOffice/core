@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_ui_XUIElementFactory_idl__
 #define __com_sun_star_ui_XUIElementFactory_idl__
 
-#ifndef __com_sun_star_ui_XUIElement_idl__
 #include <com/sun/star/ui/XUIElement.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
 
 //=============================================================================
 
@@ -76,8 +65,8 @@ published interface XUIElementFactory : ::com::sun::star::uno::XInterface
 
         @param ResourceURL
             specifies which unique user interface element should be created
-            by the factory. A resourcce URL must meet the following syntax:
-            "private:resource/$type/$name. It is only allowed to use ascii
+            by the factory. A resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
             characters for type and name. This argument must not be empty to
             have a working user interface element instance.The implementation
             can throw an

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include <stdio.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <vector>
 #include <string>
@@ -74,7 +75,7 @@ typedef ::std::list< AstUnionLabel* >   LabelList;
 
 class AstDeclaration;
 
-typedef ::std::hash_map< ::rtl::OString, AstDeclaration*, HashString, EqualString > DeclMap;
+typedef ::boost::unordered_map< ::rtl::OString, AstDeclaration*, HashString, EqualString > DeclMap;
 typedef ::std::list< AstDeclaration* > DeclList;
 
 class AstScope;
@@ -266,3 +267,4 @@ enum ParseState
 
 #endif // _IDLC_IDLCTYPES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

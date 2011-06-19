@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_accessibility_AccessibleRelation_idl__
 #define __com_sun_star_accessibility_AccessibleRelation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -48,7 +46,7 @@ published struct AccessibleRelation
         <p>Its value has to be one of the constants defined by
         <type>AccessibleRelationType</type>.  If that value is INVALID then
         the whole relation is regarded as invalid.  The content of the
-        targetSet is then undefined.</p>
+        TargetSet is then undefined.</p>
 
         @see AccessibleRelationType
     */

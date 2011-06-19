@@ -50,7 +50,7 @@ SHL1LIBS= \
     $(SLB)$/cppu_threadpool.lib	\
     $(SLB)$/cppu_cppu.lib
 
-.IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
+.IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
@@ -60,7 +60,7 @@ SHL1STDLIBS = $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
-.IF "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 .ENDIF
 
@@ -74,8 +74,8 @@ SHL2TARGET  := $(NAMEpurpenv_helper)
 DEF2NAME    := $(SHL2TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
-.ELIF "$(GUI)"=="OS2"
-SHL2VERSIONMAP:=uno_purpenvhelperwntgcc.map
+.ELIF "$(COMNAME)"=="mscx"
+SHL2VERSIONMAP:=$(SHL2TARGET)X.map
 .ELSE
 SHL2VERSIONMAP:=$(SHL2TARGET).map
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
@@ -87,19 +87,10 @@ SHL2OBJS    := \
     $(SLO)$/helper_purpenv_Environment.obj 	\
     $(SLO)$/helper_purpenv_Mapping.obj      \
     $(SLO)$/helper_purpenv_Proxy.obj
-
+SHL2DEPN=$(SHL1TARGETN)
 
 # --- Targets ------------------------------------------------------
-
-.PHONY: ALLTAR
-
-
-ALLTAR:   $(SHL2TARGETN)
-    $(MAKE) $(MAKECMDGOALS) -f extra.mk
-
-
 .INCLUDE :	target.mk
 
-
-$(SHL2TARGETN): $(SHL1TARGETN)
-
+ALLTAR:
+	$(MAKE) $(MAKECMDGOALS) -f extra.mk

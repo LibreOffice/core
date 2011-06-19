@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_configuration_backend_XBackend_idl__
 #define __com_sun_star_configuration_backend_XBackend_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
 #include <com/sun/star/configuration/backend/XUpdateHandler.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XSchema_idl__
 #include <com/sun/star/configuration/backend/XSchema.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_BackendAccessException_idl__
 #include <com/sun/star/configuration/backend/BackendAccessException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
 
 //=============================================================================
 

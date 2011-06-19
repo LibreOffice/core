@@ -48,7 +48,7 @@ published service MediaProperties
         property</p>
 
         <p>In addition to the normal protocols like file:// or http://
-        you can use private URL's as follows to get access to graphics
+        you can use private URLs as follows to get access to graphics
         lying inside the resource system within an Office context:
 
         <ul>
@@ -58,7 +58,7 @@ published service MediaProperties
             <li>private:resource/projectshortname/imagelist/12345</li>
             <li>private:resource/projectshortname/imagelist/12345/12</li>
         </ul>
-And additionally, GraphicObject scheme url's like
+And additionally, GraphicObject scheme URLs like
             <ul> <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li> </ul>
               can be used to access graphics held by the GraphicCache implementation.
         </p>

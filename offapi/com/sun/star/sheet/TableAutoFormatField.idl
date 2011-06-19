@@ -28,41 +28,15 @@
 #ifndef __com_sun_star_sheet_TableAutoFormatField_idl__
 #define __com_sun_star_sheet_TableAutoFormatField_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontSlant_idl__
 #include <com/sun/star/awt/FontSlant.idl>
-#endif
-
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellHoriJustify_idl__
 #include <com/sun/star/table/CellHoriJustify.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellVertJustify_idl__
 #include <com/sun/star/table/CellVertJustify.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellOrientation_idl__
 #include <com/sun/star/table/CellOrientation.idl>
-#endif
-
-#ifndef __com_sun_star_table_TableBorder_idl__
 #include <com/sun/star/table/TableBorder.idl>
-#endif
 
 //=============================================================================
 
@@ -88,7 +62,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontName;
 
-    /** specifies the name of the asian font.
+    /** specifies the name of the Asian font.
      */
     [optional, property] string CharFontNameAsian;
 
@@ -102,7 +76,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontStyleName;
 
-    /** specifies the name of the asian font style.
+    /** specifies the name of the Asian font style.
      */
     [optional, property] string CharFontStyleNameAsian;
 
@@ -116,7 +90,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontCharSet;
 
-    /** contains the value of the character set of the asian font.
+    /** contains the value of the character set of the Asian font.
      */
     [optional, property] string CharFontCharSetAsian;
 
@@ -130,7 +104,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontFamily;
 
-    /** contains the value of the asian font family.
+    /** contains the value of the Asian font family.
      */
     [optional, property] string CharFontFamilyAsian;
 
@@ -144,7 +118,7 @@ published service TableAutoFormatField
      */
     [property] string CharFontPitch;
 
-    /** contains the value of the pitch of the asian font.
+    /** contains the value of the pitch of the Asian font.
      */
     [optional, property] string CharFontPitchAsian;
 
@@ -158,7 +132,7 @@ published service TableAutoFormatField
      */
     [property] float CharHeight;
 
-    /** contains the height of characters of the asian font in point.
+    /** contains the height of characters of the Asian font in point.
      */
     [optional, property] float CharHeightAsian;
 
@@ -172,7 +146,7 @@ published service TableAutoFormatField
      */
     [property] float CharWeight;
 
-    /** contains the value for the weight of characters of the asian font.
+    /** contains the value for the weight of characters of the Asian font.
      */
     [optional, property] float CharWeightAsian;
 
@@ -186,11 +160,11 @@ published service TableAutoFormatField
      */
     [property] com::sun::star::awt::FontSlant CharPosture;
 
-    /** contains the value of the posture of characters of the asian font.
+    /** contains the value of the posture of characters of the Asian font.
      */
     [optional, property] com::sun::star::awt::FontSlant CharPostureAsian;
 
-    /** contains the value of the posture of characters of the comlex font.
+    /** contains the value of the posture of characters of the complex font.
      */
     [optional, property] com::sun::star::awt::FontSlant CharPostureComplex;
 
@@ -278,7 +252,7 @@ published service TableAutoFormatField
 
     //-------------------------------------------------------------------------
 
-    /** contains the reference egde of the cell rotation.
+    /** contains the reference edge of the cell rotation.
      */
     [optional, property] com::sun::star::table::CellVertJustify RotateReference;
 

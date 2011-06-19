@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module geometry {
 
     The matrix defined by this structure constitutes an affine mapping
     of a point in 3D to another point in 3D. The last line of a
-    complete 4 by 4 matrix is omitted, since it is implicitely assumed
+    complete 4 by 4 matrix is omitted, since it is implicitly assumed
     to be [0,0,0,1].<p>
 
     An affine mapping, as performed by this matrix, can be written out
@@ -63,8 +63,8 @@ module com {  module sun {  module star {  module geometry {
     physical dimensions attached to them. This physical measurement
     units are typically only added when using these data types to
     render something onto a physical output device. For 3D coordinates
-    there is also a projection from 3D to 2D device coordiantes needed.
-    Only then the total transformation matrix (oncluding projection to 2D)
+    there is also a projection from 3D to 2D device coordinates needed.
+    Only then the total transformation matrix (including projection to 2D)
     and the device resolution determine the actual measurement unit in 3D.<p>
 
     @since OOo 2.0

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_xml_dom_XCDATASection_idl__
 #define __com_sun_star_xml_dom_XCDATASection_idl__
 
-#ifndef __com_sun_star_xml_dom_XText_idl__
 #include <com/sun/star/xml/dom/XText.idl>
-#endif
 
 module com { module sun { module star { module xml { module dom {
 

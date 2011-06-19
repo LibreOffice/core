@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,6 @@ extern "C"
 struct _typelib_TypeDescription;
 
 #if defined( SAL_W32)
-#pragma pack(push, 8)
-#elif defined(SAL_OS2)
 #pragma pack(push, 8)
 #endif
 
@@ -559,7 +558,7 @@ typedef struct _typelib_Union_Init
     typelib_TypeDescriptionReference* pTypeRef;
 } typelib_Union_Init;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -1158,3 +1157,5 @@ sal_Bool SAL_CALL typelib_typedescription_complete(
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

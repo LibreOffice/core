@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_table_TableSortField_idl__
 #define __com_sun_star_table_TableSortField_idl__
 
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-#ifndef __com_sun_star_table_TableSortFieldType_idl__
 #include <com/sun/star/table/TableSortFieldType.idl>
-#endif
 
 
 //=============================================================================
@@ -72,14 +68,14 @@ published struct TableSortField
         <member scope="com::sun::star::table::TableSortFieldType">AUTOMATIC</member>
         the algorithm used for sorting is application specific.
         Especially it may or may not use the values given by
-        'CollatorLocale' and 'CollatorAlgorithm'.</p>
+        "CollatorLocale" and "CollatorAlgorithm".</p>
      */
     com::sun::star::table::TableSortFieldType FieldType;
 
     //-------------------------------------------------------------------------
     /** the locale used by the collator when comparing/sorting text.
 
-        <p>This property will not be used when the 'FieldType' is
+        <p>This property will not be used when the "FieldType" is
         <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
         </p>
 
@@ -90,7 +86,7 @@ published struct TableSortField
     //-------------------------------------------------------------------------
     /** the algorithm used by the collator when comparing/sorting text.
 
-        <p>This property will not be used when the 'FieldType' is
+        <p>This property will not be used when the "FieldType" is
         <member scope="com::sun::star::table::TableSortFieldType">NUMERIC</member>
         </p>
 

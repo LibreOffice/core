@@ -37,7 +37,7 @@
 /** This abstract service specifies the general characteristics of an optional
     rotation and shearing for a <type>Shape</type>.
 
-    This service is depricated, instead please use the <code>Transformation</code>
+    This service is deprecated, instead please use the <code>Transformation</code>
     property of the service <type>Shape</type>.
 
     @deprecated

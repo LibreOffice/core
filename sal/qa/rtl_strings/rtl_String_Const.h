@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _RTL_STRING_CONST_H_
 #define _RTL_STRING_CONST_H_
 
@@ -35,13 +33,7 @@
     #include <rtl_String_Utils.hxx>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #include <limits.h>
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #ifndef _SAL_TYPES_H_
     #include <sal/types.h>
@@ -55,27 +47,15 @@
     #include <rtl/ustring.h>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 static const rtl_TextEncoding kEncodingRTLTextUSASCII = RTL_TEXTENCODING_ASCII_US;
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_uInt32 kConvertFlagsOUStringToOString = OUSTRING_TO_OSTRING_CVTFLAGS;
 static const sal_uInt32 kConvertFlagsOStringToOUString = OSTRING_TO_OUSTRING_CVTFLAGS;
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_Char *kTestStr1  = "Sun Microsystems";
 static const sal_Char *kTestStr2  = "Sun Microsystems Java Technology";
@@ -136,8 +116,6 @@ static const sal_Char *kTestStr56 = "\50\3\5\7\11\13\15\17suns";
 //static const sal_Char *kTestStr57 = "\50\3\5\7\11\13\15\17sun\77777";
 //static const sal_Char *kTestStr58 = "\50\3\5\7\11\13\15\17sun\10000";
 static const sal_Char *kTestStr1PlusStr6  = "Sun Microsystems" "Java Technology";
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_Int32 kTestStr1Len  = 16;
 static const sal_Int32 kTestStr2Len  = 32;
@@ -199,8 +177,6 @@ static const sal_Int32 kTestStr57Len = 12;
 static const sal_Int32 kTestStr58Len = 12;
 static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
  static sal_Unicode aUStr1[kTestStr1Len+1];
  static sal_Unicode aUStr2[kTestStr2Len+1];
  static sal_Unicode aUStr3[kTestStr3Len+1];
@@ -400,23 +376,11 @@ static const sal_Int32 uTestStr5Len  = 16;
 static const sal_Int32 uTestStr9Len  = 32;
 static const sal_Int32 uTestStr22Len = 32;
 
-
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 const sal_Unicode uTestStr31[]= {0x400,0x410,0x4DF};
 const sal_Unicode uTestStr32[]= {0x9F9F,0xA000,0x8F80,0x9AD9};
 
-
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 static const sal_Int32 uTestStr31Len  = 3;
 static const sal_Int32 uTestStr32Len  = 4;
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_Int16 kRadixBinary     = 2;
 static const sal_Int16 kRadixOctol      = 8;
@@ -424,16 +388,13 @@ static const sal_Int16 kRadixDecimal    = 10;
 static const sal_Int16 kRadixHexdecimal = 16;
 static const sal_Int16 kRadixBase36     = 36;
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 static const sal_Int8  kSInt8Max  = SCHAR_MAX;
 static const sal_Int16 kUInt8Max  = UCHAR_MAX;
 static const sal_Int16 kSInt16Max = SHRT_MAX;
 static const sal_Int32 kUInt16Max = USHRT_MAX;
 static const sal_Int32 kSInt32Max = INT_MAX;
 static const sal_Int64 kUInt32Max = UINT_MAX;
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 static const sal_Int64 kSInt64Max = 9223372036854775807LL;
 #else
 static const sal_Int64 kSInt64Max = 9223372036854775807;
@@ -458,9 +419,6 @@ static const sal_Int64 kInt64MaxNums[kInt64MaxNumsCount] =
                             kSInt32Max, kUInt32Max,
                             kSInt64Max
                         };
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_Char *kSInt8MaxBinaryStr  = "1111111";
 static const sal_Char *kUInt8MaxBinaryStr  = "11111111";
@@ -512,9 +470,6 @@ static const sal_Char *kUInt16MaxBase36Str = "1ekf";
 static const sal_Char *kSInt32MaxBase36Str = "zik0zj";
 static const sal_Char *kUInt32MaxBase36Str = "1z141z3";
 static const sal_Char *kSInt64MaxBase36Str = "1y2p0ij32e8e7";
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 static const sal_Int32 kBinaryNumsCount = 16;
 
@@ -644,8 +599,6 @@ static const sal_Char *kBase36MaxNumsStr[kBase36MaxNumsCount] =
                             kSInt64MaxBase36Str
                         };
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 static const sal_Int32 nDoubleCount=24;
 // static const sal_Char *inputDouble[nDoubleCount] =
 //  {
@@ -878,8 +831,6 @@ static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 }
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #endif /* _RTL_STRING_CONST_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

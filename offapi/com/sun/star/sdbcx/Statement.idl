@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbcx_Statement_idl__
 #define __com_sun_star_sdbcx_Statement_idl__
 
-#ifndef __com_sun_star_sdbc_Statement_idl__
 #include <com/sun/star/sdbc/Statement.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 
@@ -47,7 +45,7 @@ published service Statement
 
     /** returns
         <TRUE/>
-        if a resultset should allow navigation with bookmarks or not.
+        if a result set should allow navigation with bookmarks or not.
         The default is
         <FALSE/>
         .

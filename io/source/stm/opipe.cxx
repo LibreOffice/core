@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,9 +120,6 @@ public: // XServiceInfo
 
 private:
 
-    // DEBUG
-    inline void checkInvariant();
-
     Reference < XConnectable >  m_succ;
     Reference < XConnectable >  m_pred;
 
@@ -134,7 +132,7 @@ private:
 
     oslCondition m_conditionBytesAvail;
     Mutex     m_mutexAccess;
-    IFIFO       *m_pFIFO;
+    I_FIFO      *m_pFIFO;
 };
 
 
@@ -158,12 +156,6 @@ OPipeImpl::~OPipeImpl()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-
-// These invariants must hold when entering a guarded method or leaving a guarded method.
-void OPipeImpl::checkInvariant()
-{
-
-}
 
 sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw( NotConnectedException, BufferSizeExceededException,RuntimeException )
@@ -277,7 +269,6 @@ sal_Int32 OPipeImpl::available(void)
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::available NotConnectedException" ) ),
             *this );
     }
-    checkInvariant();
     return m_pFIFO->getSize();
 }
 
@@ -306,7 +297,6 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
            RuntimeException)
 {
     MutexGuard guard( m_mutexAccess );
-    checkInvariant();
 
     if( m_bOutputStreamClosed )
     {
@@ -346,13 +336,13 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
         }
         m_nBytesToSkip = 0;
     }
-    catch ( IFIFO_OutOfBoundsException & )
+    catch ( I_FIFO_OutOfBoundsException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
             *this );
     }
-    catch ( IFIFO_OutOfMemoryException & )
+    catch ( I_FIFO_OutOfMemoryException & )
     {
         throw BufferSizeExceededException(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::writeBytes BufferSizeExceededException" )),
@@ -361,8 +351,6 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
 
     // readBytes may check again if enough bytes are available
     osl_setCondition( m_conditionBytesAvail );
-
-    checkInvariant();
 }
 
 
@@ -490,3 +478,4 @@ Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

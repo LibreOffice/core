@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_presentation_XCustomPresentationSupplier_idl__
 #define __com_sun_star_presentation_XCustomPresentationSupplier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 
 //=============================================================================

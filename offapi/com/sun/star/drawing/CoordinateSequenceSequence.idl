@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_CoordinateSequenceSequence_idl__
 #define __com_sun_star_drawing_CoordinateSequenceSequence_idl__
 
-#ifndef __com_sun_star_drawing_CoordinateSequence_idl__
 #include <com/sun/star/drawing/CoordinateSequence.idl>
-#endif
 
 //=============================================================================
 

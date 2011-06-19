@@ -28,16 +28,14 @@
 #ifndef __com_sun_star_datatransfer_clipboard_XClipboardNotifier_idl__
 #define __com_sun_star_datatransfer_clipboard_XClipboardNotifier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
 module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
-/** Provides the ability to request notifiations on clipboard content changes.
+/** Provides the ability to request notifications on clipboard content changes.
 
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
 */

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_GluePoint_idl__
 #define __com_sun_star_drawing_GluePoint_idl__
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
 
 
 //=============================================================================

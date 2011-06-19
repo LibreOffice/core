@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,13 @@
 
 #include <sal/types.h>
 
-#include "preextstl.h"
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #undef CPPUNIT_PLUGIN_EXPORT
 #define CPPUNIT_PLUGIN_EXPORT extern "C" SAL_DLLPUBLIC_EXPORT
-#include "postextstl.h"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

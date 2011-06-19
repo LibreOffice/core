@@ -39,7 +39,7 @@ published enum ScanError
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanErrorNone,
-    /** ScanErrorNone: no error occured
+    /** ScanErrorNone: no error occurred
      */
     ScanErrorNone,
 
@@ -51,7 +51,7 @@ published enum ScanError
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR ScanError::    ScanFailed,
-    /** ScanFailed: an error occured during scanning
+    /** ScanFailed: an error occurred during scanning
      */
     ScanFailed,
 

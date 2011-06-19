@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_ui_dialogs_FilePicker_idl__
 #define __com_sun_star_ui_dialogs_FilePicker_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XTypeProvider_idl__
 #include <com/sun/star/lang/XTypeProvider.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCancellable_idl__
 #include <com/sun/star/util/XCancellable.idl>
-#endif
 
 //=============================================================================
 
@@ -59,8 +45,8 @@ module com { module sun { module star { module ui { module dialogs {
 
     It is <strong>NOT</strong> recommended to cache a reference to a file
     picker instance. Due to restrictions by the underlying system there can
-    be specific limitations possible. To overcome these problems it'
-    s recommended to create a new instance on demand.
+    be specific limitations possible. To overcome these problems it's
+    recommended to create a new instance on demand.
 
     @see XFilePicker
 */
@@ -129,7 +115,7 @@ published service FilePicker
         <br/><br/>
         <p><strong>Notes for the implementation of a FileSave dialog:</strong>
         The implementation of a FileSave dialog should automatically check
-        for existens of a file and issue a warning if a file with the same
+        for existence of a file and issue a warning if a file with the same
         name already exist.</p>
 
         @see com::sun::star::ui::dialogs::TemplateDescription
@@ -138,7 +124,7 @@ published service FilePicker
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
-        <p>This may be usefull for automatic test tools for instance.</p>
+        <p>This may be useful for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 

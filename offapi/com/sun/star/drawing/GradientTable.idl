@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_GradientTable_idl__
 #define __com_sun_star_drawing_GradientTable_idl__
 
-#ifndef __com_sun_star_container_XNameContainer_idl__
 #include <com/sun/star/container/XNameContainer.idl>
-#endif
 
 //=============================================================================
 

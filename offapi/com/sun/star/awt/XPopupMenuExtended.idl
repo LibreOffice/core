@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_awt_XPopupMenuExtended_idl__
 #define __com_sun_star_awt_XPopupMenuExtended_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XPopupMenu_idl__
 #include <com/sun/star/awt/XPopupMenu.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMenuExtended2_idl__
 #include <com/sun/star/awt/XMenuExtended2.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MenuLogo_idl__
 #include <com/sun/star/awt/MenuLogo.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#ifndef __com_sun_star_awt_KeyEvent_idl__
 #include <com/sun/star/awt/KeyEvent.idl>
-#endif
-
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 
@@ -65,7 +45,7 @@ module com {  module sun {  module star {  module awt {
  */
 published interface XPopupMenuExtended
 {
-    /** specifies basic functions for a popup menu.
+    /** specifies basic functions for a pop-up menu.
     */
     interface ::com::sun::star::awt::XPopupMenu;
 
@@ -139,9 +119,9 @@ published interface XPopupMenuExtended
     /** sets the <type>KeyEvent</type> for the menu item.
 
         <p>The <type>KeyEvent</type> is <b>only</b> used as a container to transport
-        the shortcut information, this methods only draws the text corresponding to
+        the shortcut information, this method only draws the text corresponding to
         this keyboard shortcut. The client code is responsible for listening to
-        keyboard events (typicaly done via <type>XUserInputInterception</type>),
+        keyboard events (typically done via <type>XUserInputInterception</type>),
         and dispatch the respective command.</p>
 
         @param nItemId

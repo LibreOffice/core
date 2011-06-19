@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sdb_ErrorMessageDialog_idl__
 #define __com_sun_star_sdb_ErrorMessageDialog_idl__
 
-#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 
@@ -152,7 +141,7 @@ published service ErrorMessageDialog
             </li>
             <li><b>SQLException</b><br/>
                 <type scope="com::sun::star::sdbc">SQLException</type>
-                describing the error which is beeing displayed.<br/>
+                describing the error which is being displayed.<br/>
                 When initializing this value, you may use any derivative of
                 <type scope="com::sun::star::sdbc">SQLException</type>
                 .

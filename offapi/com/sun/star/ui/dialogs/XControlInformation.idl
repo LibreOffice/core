@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_dialogs_XControlInformation_idl__
 #define __com_sun_star_ui_dialogs_XControlInformation_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -61,7 +56,7 @@ sequence<string> getSupportedControls( );
 
     @param aControlName
         The name of the control. Common control names are for
-        instance 'OkButton' or 'CancelButton'.
+        instance "OkButton" or "CancelButton".
 
     @returns
         <TRUE/> if the specified control is supported.
@@ -75,7 +70,7 @@ boolean isControlSupported( [in] string aControlName );
 
     @param aControlName
         The name of the control. Common control names are for
-        instance 'OkButton' or 'CancelButton'.
+        instance "OkButton" or "CancelButton".
 
     @returns
         a sequence of control properties supported by the specified control.

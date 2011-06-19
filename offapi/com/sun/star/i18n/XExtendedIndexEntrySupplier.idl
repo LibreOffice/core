@@ -47,7 +47,7 @@ module com { module sun { module star { module i18n {
     <ul>
     <li>Provide supported language/locale list.
     <li>Provide supported algorithm list.
-    <li>Provide phonetic entry support for CJK languge.
+    <li>Provide phonetic entry support for CJK language.
     <li>Provide method to compare index entry.
     </ul>
 

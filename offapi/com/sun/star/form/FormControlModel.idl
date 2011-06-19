@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_form_FormControlModel_idl__
 #define __com_sun_star_form_FormControlModel_idl__
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_FormComponent_idl__
 #include <com/sun/star/form/FormComponent.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertyState_idl__
 #include <com/sun/star/beans/XPropertyState.idl>
-#endif
 
 
 //=============================================================================

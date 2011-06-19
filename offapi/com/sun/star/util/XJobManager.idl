@@ -28,29 +28,24 @@
 #ifndef __com_sun_star_util_XJobManager_idl__
 #define __com_sun_star_util_XJobManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_util_XCancellable_idl__
 #include <com/sun/star/util/XCancellable.idl>
-#endif
 
 module com { module sun { module star { module util {
 
 //============================================================================
-/** Manage cancellable jobs.
+/** Manage cancelable jobs.
 
  */
 published interface XJobManager: com::sun::star::uno::XInterface
 {
         //-------------------------------------------------------------------------
-        /** registers a cancellable job.
+        /** registers a cancelable job.
          */
         void registerJob( [in] com::sun::star::util::XCancellable Job );
 
         //-------------------------------------------------------------------------
-        /** deregisters a cancellable jobs.
+        /** deregisters a cancelable jobs.
          */
         void releaseJob( [in] com::sun::star::util::XCancellable Job );
 

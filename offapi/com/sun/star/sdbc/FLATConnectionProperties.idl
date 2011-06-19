@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbc_FLATConnectionProperties_idl__
 #define __com_sun_star_sdbc_FLATConnectionProperties_idl__
 
-#ifndef __com_sun_star_sdbc_FILEConnectionProperties_idl__
 #include <com/sun/star/sdbc/FILEConnectionProperties.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 
@@ -39,7 +37,7 @@ module com {  module sun {  module star {  module sdbc {
     <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo()</member>.
 
     <p>
-    The properties for a connection contain additonal information about how to connect to a database and
+    The properties for a connection contain additional information about how to connect to a database and
     how to control the behavior of the resulting connection should be.
 
     </p>
@@ -55,19 +53,19 @@ service FLATConnectionProperties
     */
     [optional, property] boolean HeaderLine;
 
-    /** A one character delimiter to seperate the fields.
+    /** A one character delimiter to separate the fields.
     */
     [optional, property] string FieldDelimiter;
 
-    /** A one character delimiter to seperate the strings.
+    /** A one character delimiter to separate the strings.
     */
     [optional, property] string StringDelimiter;
 
-    /** A one character delimiter to seperate the decimal.
+    /** A one character delimiter to separate the decimal.
     */
     [optional, property] string DecimalDelimiter;
 
-    /** A one character delimiter to seperate the thousands.
+    /** A one character delimiter to separate the thousands.
     */
     [optional, property] string ThousandDelimiter;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.h>
-#ifndef _TYPELIB_TYPEDESCRIPTION_H
 #include <typelib/typedescription.h>
-#endif
 
 
 namespace com
@@ -224,3 +223,5 @@ inline void TypeDescription::makeComplete() const SAL_THROW( () )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,10 +38,6 @@ PROJECTPCHSOURCE=cont_pch
 
 MULTITHREAD_OBJ=TRUE
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -58,9 +54,6 @@ SLOFILES=	\
             $(SLO)$/loadmodulerelative.obj \
             $(SLO)/printtrace.obj
 
-#			$(SLO)$/readline.obj\
-
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/filepath.obj\
@@ -68,11 +61,6 @@ OBJFILES=	\
             $(OBJ)$/loadmodulerelative.obj \
             $(OBJ)/printtrace.obj
 
-#			$(OBJ)$/readline.obj\
-#.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-

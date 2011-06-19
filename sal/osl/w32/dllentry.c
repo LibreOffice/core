@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,17 +90,9 @@ extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
 #endif
 
 //------------------------------------------------------------------------------
-// globales
-//------------------------------------------------------------------------------
-
-DWORD         g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS; // remember plattform
-
-//------------------------------------------------------------------------------
 // DllMain
 //------------------------------------------------------------------------------
-#ifdef _M_IX86
 int osl_isSingleCPU = 0;
-#endif
 
 #ifdef __MINGW32__
 
@@ -176,9 +169,7 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
         case DLL_PROCESS_ATTACH:
             {
 #endif
-                OSVERSIONINFO aInfo;
 
-#ifdef _M_IX86
                 SYSTEM_INFO SystemInfo;
 
                 GetSystemInfo(&SystemInfo);
@@ -192,22 +183,17 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 if ( SystemInfo.dwNumberOfProcessors == 1 ) {
                     osl_isSingleCPU = 1;
                 }
-#endif
+
+#if OSL_DEBUG_LEVEL < 2
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
                 SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
+#endif
 
                 /* initialize global mutex */
                 g_Mutex = osl_createMutex();
 
                 /* initialize "current directory" mutex */
                 g_CurrentDirectoryMutex = osl_createMutex();
-
-
-                /* initialize Win9x unicode functions */
-                aInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
-
-                if ( GetVersionEx(&aInfo) )
-                    g_dwPlatformId = aInfo.dwPlatformId;
 
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
@@ -368,3 +354,5 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 
     return TRUE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

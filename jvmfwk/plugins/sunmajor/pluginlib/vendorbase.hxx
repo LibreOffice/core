@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ class VendorBase: public salhelper::SimpleReferenceObject
 {
 public:
     VendorBase();
-    /* returns relativ paths to the java executable as
+    /* returns relative paths to the java executable as
        file URLs.
 
        For example "bin/java.exe". You need
@@ -183,3 +184,5 @@ protected:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

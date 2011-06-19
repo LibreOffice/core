@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _RTL_TRES_H_
 #define _RTL_TRES_H_
 
@@ -104,3 +105,5 @@ void SAL_CALL rtl_tres_destroy( rtl_TestResult* res );
 #endif
 
 #endif  /* _RTL_TRES_H_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

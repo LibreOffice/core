@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -45,58 +47,35 @@ CXXFLAGS+= $(LFS_CFLAGS)
     CFLAGS+=/Ob1
 .ENDIF
 
-SHL1OBJS=  \
-    $(SLO)$/osl_Thread.obj
-
-SHL1TARGET= osl_Thread
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-
-# DEF1EXPORTFILE= export.exp
+SHL1OBJS=$(SLO)$/osl_Thread.obj
+SHL1TARGET=osl_Thread
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+SHL1IMPLIB=i$(SHL1TARGET)
+DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END ------------------------------------------------------------------
 
-#.IF "$(GUI)" == "WNT"
-
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=export.exp
+SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END ------------------------------------------------------------------
 
 OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
-
-# .IF "$(GUI)" == "UNX"
-# APP3STDLIBS=$(LB)$/libsal.so
-# .ENDIF
-# .IF "$(GUI)" == "WNT"
-# APP3STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
-# .ENDIF
 APP3STDLIBS=$(SALLIB)
 
-#.ENDIF # "$(GUI)" == "WNT"
+SHL2DEPN=$(APP3TARGETN) \
+         $(BIN)/batch.sh \
+         $(BIN)/batch.bat
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-
-.IF "$(GUI)" == "OS2"
-
-SLOFILES=$(SHL2OBJS)
-
-.ELSE
 
 SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 
@@ -105,4 +84,11 @@ SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+$(BIN)/batch.sh: batch.sh
+    $(COPY) $< $@
+
+$(BIN)/batch.bat: batch.bat
+    $(COPY) $< $@
+
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

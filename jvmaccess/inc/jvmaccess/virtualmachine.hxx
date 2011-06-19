@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,10 @@
 #ifdef SOLAR_JAVA
 #include "jni.h"
 #else
-struct JNIEnv;
-struct JavaVM;
+struct JNIEnv_;
+typedef JNIEnv_ JNIEnv;
+struct JavaVM_;
+typedef JavaVM_ JavaVM;
 typedef int jint;
 typedef void * jobject;
 #endif
@@ -161,3 +164,5 @@ private:
 }
 
 #endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

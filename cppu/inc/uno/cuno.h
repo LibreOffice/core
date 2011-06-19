@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,10 @@
 
     @param return_code return code of call
 */
-#define CUNO_EXCEPTION_OCCURED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
+#define CUNO_EXCEPTION_OCCURRED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
 
 typedef sal_Int32 cuno_ErrorCode;
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_presentation_XSlideShowController_idl__
 #define __com_sun_star_presentation_XSlideShowController_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
-#endif
-
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_presentation_XSlideShow_idl__
 #include <com/sun/star/presentation/XSlideShow.idl>
-#endif
 
 //=============================================================================
 
@@ -49,7 +38,7 @@
 
 //=============================================================================
 
-/** interface to control a running slideshow.
+/** interface to control a running slide show.
 
     @see XPresentation2
     @since OOo 3.0
@@ -58,9 +47,9 @@ interface XSlideShowController
 {
     //-------------------------------------------------------------------------
 
-    /** returns true if the slideshow is still running.
+    /** returns true if the slide show is still running.
         If this returns false, this component is already disposed.
-        You can start a new slideshow and get a new instance
+        You can start a new slide show and get a new instance
         of <type>XSlideShowController</type> from <type>XPresentation2</type>
     */
     boolean isRunning();
@@ -68,7 +57,7 @@ interface XSlideShowController
     //-------------------------------------------------------------------------
 
     /** @returns
-                the number of slides in this slideshow.
+                the number of slides in this slide show.
 
         @see getSlideByIndex
      */
@@ -76,7 +65,7 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** gives access to the slides that will be shown in this slideshow.
+    /** gives access to the slides that will be shown in this slide show.
 
         <p>Slides are returned in the order they will be displayed in the
         presentation which can be different than the orders of slides in
@@ -88,7 +77,7 @@ interface XSlideShowController
 
         @param Index
             specifies the position in the list of slides that are displayed
-            in this slideshow. The first index is 0.
+            in this slide show. The first index is 0.
 
         @throws com::sun::star::lang::IndexOutOfBoundException
             if the index is not valid.
@@ -99,7 +88,7 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** addes a listener that recieves events while the slideshow is running. */
+    /** adds a listener that receives events while the slide show is running. */
     void addSlideShowListener( [in] XSlideShowListener Listener );
 
     //-------------------------------------------------------------------------
@@ -131,19 +120,19 @@ interface XSlideShowController
     //-------------------------------------------------------------------------
 
     /** goto and display next slide.
-        <p>Remaining effects on the current slide will be skiped.*/
+        <p>Remaining effects on the current slide will be skipped.*/
     void gotoNextSlide();
 
     //-------------------------------------------------------------------------
 
     /** goto and display previous slide.
-        <p>Remaining effects on the current slide will be skiped.*/
+        <p>Remaining effects on the current slide will be skipped.*/
     void gotoPreviousSlide();
 
     //-------------------------------------------------------------------------
 
     /** goto and display last slide.
-        <p>Remaining effects on the current slide will be skiped.*/
+        <p>Remaining effects on the current slide will be skipped.*/
     void gotoLastSlide();
 
     //-------------------------------------------------------------------------
@@ -154,12 +143,12 @@ interface XSlideShowController
     //-------------------------------------------------------------------------
 
     /** jumps to the given slide.
-        <p>The slide can also be a slide that would normaly not be shown during
-        the current slideshow.
+        <p>The slide can also be a slide that would normally not be shown during
+        the current slide show.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the given page is not a valid slide of the document for
-            which this slideshow is started. Also not allowed are master,
+            which this slide show is started. Also not allowed are master,
             notes and handout pages.
     */
     void gotoSlide( [in] com::sun::star::drawing::XDrawPage Page )
@@ -178,21 +167,21 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** pauses the slideshow. All effects are paused.
-        <p>The slideshow continues on next user input or if
+    /** pauses the slide show. All effects are paused.
+        <p>The slide show continues on next user input or if
         <member>resume</member> is called.
     */
     void pause();
 
     //-------------------------------------------------------------------------
 
-    /** resumes a paused slideshow.
+    /** resumes a paused slide show.
     */
     void resume();
 
     //-------------------------------------------------------------------------
 
-    /** returns <TRUE/> if the slideshow is currently paused.
+    /** returns <TRUE/> if the slide show is currently paused.
 
         @see <member>pause</member>
         @see <member>resume</member>
@@ -201,15 +190,15 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** pauses the slideshow and blanks the screen in the given color.
+    /** pauses the slide show and blanks the screen in the given color.
         <p>Change attribute <member>Pause</member> to false to unpause
-        the slideshow.
+        the slide show.
     */
     void blankScreen( [in] long Color );
 
     //-------------------------------------------------------------------------
 
-    /** activates the user interface of this slideshow.
+    /** activates the user interface of this slide show.
 
         @see <member>deactivate()</member>
         @see <member>isActive()</member>
@@ -217,7 +206,7 @@ interface XSlideShowController
     void activate();
 
     //-------------------------------------------------------------------------
-    /** can be called to deactivate the user interface of this slideshow.
+    /** can be called to deactivate the user interface of this slide show.
 
         <p>A deactivated
         @see <member>activate()</member>
@@ -227,10 +216,10 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** determines if the slideshow is active.
+    /** determines if the slide show is active.
 
         @return
-            <TRUE/> for UI active slideshow
+            <TRUE/> for UI active slide show
             <br>
             <FALSE/> otherwise
      */
@@ -253,19 +242,19 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** returns <TRUE/> if the slideshow was started to run endlessly.
+    /** returns <TRUE/> if the slide show was started to run endlessly.
      */
     boolean isEndless();
 
     //-------------------------------------------------------------------------
 
-    /** Returns <TRUE/> if the slideshow was started in full-screen mode.
+    /** Returns <TRUE/> if the slide show was started in full-screen mode.
      */
     boolean isFullScreen();
 
     //-------------------------------------------------------------------------
 
-    /** If this attribute is set to <TRUE/>, the window of the slideshow is
+    /** If this attribute is set to <TRUE/>, the window of the slide show is
         always on top of all other windows.
      */
     [attribute] boolean AlwaysOnTop;
@@ -273,7 +262,7 @@ interface XSlideShowController
     //-------------------------------------------------------------------------
 
     /** If this attribute is <TRUE/>, the mouse is visible during the
-        slideshow.
+        slide show.
      */
     [attribute] boolean MouseVisible;
 
@@ -292,9 +281,9 @@ interface XSlideShowController
 
     //-------------------------------------------------------------------------
 
-    /** returns the actuall <type>XSlideShow</type> instance that runs the
-        slideshow.
-        <br>Normaly all navigation should be done using this controller and
+    /** returns the actual <type>XSlideShow</type> instance that runs the
+        slide show.
+        <br>Normally all navigation should be done using this controller and
         not the <type>XSlideShow</type> itself. */
     XSlideShow getSlideShow();
 

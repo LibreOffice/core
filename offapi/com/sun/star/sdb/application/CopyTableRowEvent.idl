@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_sdb_application_CopyTableRowEvent_idl__
 #define __com_sun_star_sdb_application_CopyTableRowEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
 
 //=============================================================================
 

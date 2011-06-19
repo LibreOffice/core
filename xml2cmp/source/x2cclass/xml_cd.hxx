@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 #include <tools/string.hxx>
-#include "x2cstl.hxx"
+#include <vector>
 
 
 
@@ -83,3 +84,4 @@ class ComponentDescription
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

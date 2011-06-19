@@ -115,6 +115,8 @@ IDLFILES=\
     DocumentRevisionListPersistence.idl \
     XDocumentLanguages.idl \
     XCodeNameQuery.idl \
+    XCompatWriterDocProperties.idl \
+    XVbaMethodParameter.idl \
     XUndoAction.idl \
     XUndoManager.idl \
     XUndoManagerListener.idl \

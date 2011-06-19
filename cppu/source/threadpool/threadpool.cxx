@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
-#include <hash_set>
+#include <boost/unordered_map.hpp>
 #include <stdio.h>
 
 #include <osl/diagnose.h>
@@ -118,7 +119,7 @@ namespace cppu_threadpool
 
     ThreadPool::ThreadPool()
     {
-            m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
+        m_DisposedCallerAdmin = DisposedCallerAdmin::getInstance();
     }
 
     ThreadPool::~ThreadPool()
@@ -302,7 +303,7 @@ namespace cppu_threadpool
 
             if( ii == m_mapQueue.end() )
             {
-                m_mapQueue[ aThreadId ] = pair < JobQueue * , JobQueue * > ( 0 , 0 );
+                m_mapQueue[ aThreadId ] = pair < JobQueue * , JobQueue * > ( (JobQueue *)0 , (JobQueue*)0 );
                 ii = m_mapQueue.find( aThreadId );
                 OSL_ASSERT( ii != m_mapQueue.end() );
             }
@@ -348,7 +349,7 @@ namespace cppu_threadpool
         if( ii == m_mapQueue.end() )
         {
             JobQueue *p = new JobQueue();
-            m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , 0 );
+            m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , (JobQueue*)0 );
         }
         else if( 0 == (*ii).second.first )
         {
@@ -404,7 +405,7 @@ struct uno_ThreadPool_Hash
 
 
 
-typedef ::std::hash_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
+typedef ::boost::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 
 static ThreadpoolHashSet *g_pThreadpoolHashSet;
 
@@ -504,3 +505,5 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

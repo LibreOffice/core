@@ -48,8 +48,8 @@ service RoadmapItem
     */
      [property] short ID;
 
-    /** The Label of the RoadmapItem does not include its Prefix that is auto
-     * matically set after the following algorithm:
+    /** The Label of the RoadmapItem does not include its Prefix that is automatically
+     * set after the following algorithm:
      * (Index + 1) + ". " + Label
      */
     [property] string Label;
@@ -57,9 +57,9 @@ service RoadmapItem
 
     /** When "Interactive" is true the RoadmapItem supports a certain "HyperLabel
      *  functionality":
-     *  Moving the Mousepointer over the RoadmapItem will change it to a Refhand and
-     *  underline the Label for the time the mousepointer resides over the RoadmapItem.
-     *  Clicking the mousepointer will then notify the Roadmap Container.
+     *  Moving the mouse pointer over the RoadmapItem will change it to a Refhand and
+     *  underline the Label for the time the mouse pointer resides over the RoadmapItem.
+     *  Clicking with mouse pointer will then notify the Roadmap Container.
      *  The property Interactive" is readonly because it is adapted from the container of the
      *  RoadmapItem.
      */

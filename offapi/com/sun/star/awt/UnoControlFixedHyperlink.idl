@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_UnoFixedHyperlinkControl_idl__
 #define __com_sun_star_awt_UnoFixedHyperlinkControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
 #include <com/sun/star/awt/UnoControl.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XFixedHyperlink_idl__
 #include <com/sun/star/awt/XFixedHyperlink.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XLayoutConstrains_idl__
 #include <com/sun/star/awt/XLayoutConstrains.idl>
-#endif
 
 
 //=============================================================================

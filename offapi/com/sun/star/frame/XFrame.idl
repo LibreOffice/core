@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_XFrame_idl__
 #define __com_sun_star_frame_XFrame_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
 
 //=============================================================================
 
@@ -48,8 +43,8 @@
     can be attached to.
 
     <p>
-    A frame can be (it's not a must!) a part of a frame tree. If not this frame willn't be
-    accessible by using the api. This mode make sense for previews.
+    A frame can be (it's not a must!) a part of a frame tree. If not this frame won't be
+    accessible by using the API. This mode make sense for previews.
     The root node of the tree can be a <type>Desktop</type> implementation.
     </p>
 
@@ -67,7 +62,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         It's designed for initializing - not for setting.
         </p>
 
-        <p>This frame will take over ownership of the window refered from
+        <p>This frame will take over ownership of the window referred from
         <var>xWindow</var>.  Thus, the previous owner is not allowed to
         dispose this window anymore. </p>
 
@@ -100,8 +95,8 @@ published interface XFrame: com::sun::star::lang::XComponent
         Only the creator is allowed to call this method.
         But creator doesn't mean the implementation which creates this instance ...
         it means the parent frame of the frame hierarchy.
-        Because; normaly a frame should be created by using the api
-        and is neccessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
+        Because; normally a frame should be created by using the API
+        and is necessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
         </p>
 
         @param Creator
@@ -291,7 +286,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @return
             <TRUE/>if setting of new component or release of an existing one was successfully
             <br>
-            <FALSE/> otherwise (especialy, if an existing controller disagree within his
+            <FALSE/> otherwise (especially, if an existing controller disagree within his
             <member>XController::suspend()</member> call)
 
         @see XFrame::getComponentWindow()
@@ -374,7 +369,7 @@ published interface XFrame: com::sun::star::lang::XComponent
     /** unregisters an event listener
 
         @param xListener
-            specifies the listener which willn't be informed any longer
+            specifies the listener which won't be informed any longer
 
         @see XFrame::addFrameActionListener()
      */

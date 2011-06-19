@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_GlobalTransferCommandArgument_idl__
 #define __com_sun_star_ucb_GlobalTransferCommandArgument_idl__
 
-#ifndef __com_sun_star_ucb_TransferCommandOperation_idl__
 #include <com/sun/star/ucb/TransferCommandOperation.idl>
-#endif
 
 //=============================================================================
 

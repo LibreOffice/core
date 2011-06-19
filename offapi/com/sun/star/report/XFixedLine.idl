@@ -27,23 +27,12 @@
 #ifndef __com_sun_star_report_XFixedLine_idl__
 #define __com_sun_star_report_XFixedLine_idl__
 
-#ifndef __com_sun_star_report_XReportControlModel_idl__
 #include <com/sun/star/report/XReportControlModel.idl>
-#endif
-#ifndef __com_sun_star_drawing_CircleKind_idl__
 #include <com/sun/star/drawing/CircleKind.idl>
-#endif
-#ifndef __com_sun_star_drawing_LineStyle_idl__
 #include <com/sun/star/drawing/LineStyle.idl>
-#endif
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineDash_idl__
 #include <com/sun/star/drawing/LineDash.idl>
-#endif
 //=============================================================================
 
  module com {  module sun {  module star {  module report {

@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_mozilla_XProfileDiscover_idl__
 #define __com_sun_star_mozilla_XProfileDiscover_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_mozilla_MozillaProductType_idl__
 #include <com/sun/star/mozilla/MozillaProductType.idl>
-#endif
 
 
  module com {  module sun {  module star {  module mozilla {

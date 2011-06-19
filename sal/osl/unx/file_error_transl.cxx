@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -206,27 +207,25 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
            osl_error = osl_File_E_NOSYS;
             break;
 
+#if !defined(AIX) || !(defined(_ALL_SOURCE) && !defined(_LINUX_SOURCE_COMPAT))
         case ENOTEMPTY:
             osl_error = osl_File_E_NOTEMPTY;
             break;
+#endif
 
         case ELOOP:
             osl_error = osl_File_E_LOOP;
             break;
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY))
         case EILSEQ:
             osl_error = osl_File_E_ILSEQ;
             break;
-#endif /* MACOSX */
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
         case ENOLINK:
             osl_error = osl_File_E_NOLINK;
             break;
-#endif /* MACOSX */
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
         case EMULTIHOP:
             osl_error = osl_File_E_MULTIHOP;
             break;
@@ -253,3 +252,5 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
     return osl_error;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

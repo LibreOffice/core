@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 #define UNICODE
 #define _UNICODE
-#define _WIN32_WINNT_0x0500
+#define _WIN32_WINNT 0x0500
 #include "systools/win32/uwinapi.h"
 
 #include "osl/file.h"
@@ -42,8 +43,6 @@
 #include <tchar.h>
 
 //#####################################################
-#define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
-
 // Allocate n number of t's on the stack return a pointer to it in p
 #ifdef __MINGW32__
 #define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
@@ -272,3 +271,4 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
     return error;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

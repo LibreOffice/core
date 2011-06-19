@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_text_XRelativeTextContentInsert_idl__
 #define __com_sun_star_text_XRelativeTextContentInsert_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -71,7 +67,7 @@ published interface XRelativeTextContentInsert: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::text::XRelativeTextContentInsert::insertTextContentAfter
     /** inserts text the new text content after the predecessor argument.
 
-        <p> This is helpful to insert paragraphs after text tables escpecially in
+        <p> This is helpful to insert paragraphs after text tables especially in
         headers, footers or text frames. </p>
      */
     void insertTextContentAfter(

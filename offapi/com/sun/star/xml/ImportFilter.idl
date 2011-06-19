@@ -28,9 +28,7 @@
 #ifndef _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
 #define _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
 
-#ifndef _COM_SUN_STAR_XML_XIMPORTFILTER_IDL__
 #include <com/sun/star/xml/XImportFilter.idl>
-#endif
 
 
 module com { module sun { module star { module xml {

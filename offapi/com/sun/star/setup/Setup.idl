@@ -24,14 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_setup_Setup_idl__
+#define __com_sun_star_setup_Setup_idl__
 
-#ifndef __com_sun_star_setup_XSetup_idl__
 #include <com/sun/star/setup/XSetup.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
 
 module com {  module sun {  module star {  module setup {
 
@@ -46,4 +43,4 @@ published service Setup
     };
 
 }; }; }; };
-
+#endif

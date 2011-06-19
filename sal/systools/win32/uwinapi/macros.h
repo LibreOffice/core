@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #   ifdef UNICODE
 #       define _UNICODE
 #   endif
-#   include <TCHAR.H>
+#   include <tchar.h>
 #endif
 
 // Globally disable "warning C4100: unreferenced formal parameter" caused by
@@ -230,3 +231,5 @@ static rettype calltype func##_##Failure params \
     return (rettype)0; \
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

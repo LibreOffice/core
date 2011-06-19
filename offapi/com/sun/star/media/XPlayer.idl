@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_media_XPlayer_idl__
 #define __com_sun_star_media_XPlayer_idl__
 
-#ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
-#endif
-#ifndef __com_sun_star_media_XPlayerWindow_idl__
 #include <com/sun/star/media/XPlayerWindow.idl>
-#endif
-#ifndef __com_sun_star_media_XFrameGrabber_idl__
 #include <com/sun/star/media/XFrameGrabber.idl>
-#endif
 
 module com {  module sun {  module star {  module media {
 

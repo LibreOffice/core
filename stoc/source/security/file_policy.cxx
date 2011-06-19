@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <osl/diagnose.h>
 #include <osl/file.h>
@@ -48,10 +49,11 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 
+#include "bootstrapservices.hxx"
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.security.Policy"
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
-
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -63,13 +65,6 @@ extern ::rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_sec
 {
-// static stuff initialized when loading lib
-static OUString s_implName = OUSTR(IMPL_NAME);
-static OUString s_serviceName = OUSTR(SERVICE_NAME);
-
-static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-//##################################################################################################
-
 //--------------------------------------------------------------------------------------------------
 static inline void dispose( Reference< XInterface > const & x )
     SAL_THROW( (RuntimeException) )
@@ -98,7 +93,7 @@ class FilePolicy
     AccessControl m_ac;
 
     Sequence< Any > m_defaultPermissions;
-    typedef std::hash_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
+    typedef boost::unordered_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
     t_permissions m_userPermissions;
     bool m_init;
 
@@ -204,12 +199,12 @@ class PolicyReader
     inline void back( sal_Unicode c ) SAL_THROW( () )
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) SAL_THROW( () )
+    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW( () )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
 
-    inline bool isCharToken( sal_Unicode c ) SAL_THROW( () )
+    inline bool isCharToken( sal_Unicode c ) const SAL_THROW( () )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
@@ -439,16 +434,16 @@ PolicyReader::~PolicyReader()
     }
 }
 
-static OUString s_grant = OUSTR("grant");
-static OUString s_user = OUSTR("user");
-static OUString s_permission = OUSTR("permission");
-static OUString s_openBrace = OUSTR("{");
-static OUString s_closingBrace = OUSTR("}");
+#define s_grant "grant"
+#define s_user "user"
+#define s_permission "permission"
+#define s_openBrace "{"
+#define s_closingBrace "}"
 
-static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
-static OUString s_socketPermission = OUSTR("com.sun.star.connection.SocketPermission");
-static OUString s_runtimePermission = OUSTR("com.sun.star.security.RuntimePermission");
-static OUString s_allPermission = OUSTR("com.sun.star.security.AllPermission");
+#define s_filePermission "com.sun.star.io.FilePermission"
+#define s_socketPermission "com.sun.star.connection.SocketPermission"
+#define s_runtimePermission "com.sun.star.security.RuntimePermission"
+#define s_allPermission "com.sun.star.security.AllPermission"
 
 //__________________________________________________________________________________________________
 void FilePolicy::refresh()
@@ -474,46 +469,46 @@ void FilePolicy::refresh()
     OUString token( reader.getToken() );
     while (token.getLength())
     {
-        if (! token.equals( s_grant ))
+        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_grant)))
             reader.error( OUSTR("expected >grant< token!") );
         OUString userId;
         token = reader.assureToken();
-        if (token.equals( s_user )) // next token is user-id
+        if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_user))) // next token is user-id
         {
             userId = reader.assureQuotedToken();
             token = reader.assureToken();
         }
-        if (! token.equals( s_openBrace ))
+        if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_openBrace)))
             reader.error( OUSTR("expected opening brace >{<!") );
         token = reader.assureToken();
         // permissions list
-        while (! token.equals( s_closingBrace ))
+        while (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_closingBrace)))
         {
-            if (! token.equals( s_permission ))
+            if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_permission)))
                 reader.error( OUSTR("expected >permission< or closing brace >}<!") );
 
             token = reader.assureToken(); // permission type
             Any perm;
-            if (token.equals( s_filePermission )) // FilePermission
+            if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_filePermission))) // FilePermission
             {
                 OUString url( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= io::FilePermission( url, actions );
             }
-            else if (token.equals( s_socketPermission )) // SocketPermission
+            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_socketPermission))) // SocketPermission
             {
                 OUString host( reader.assureQuotedToken() );
                 reader.assureToken( ',' );
                 OUString actions( reader.assureQuotedToken() );
                 perm <<= connection::SocketPermission( host, actions );
             }
-            else if (token.equals( s_runtimePermission )) // RuntimePermission
+            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_runtimePermission))) // RuntimePermission
             {
                 OUString name( reader.assureQuotedToken() );
                 perm <<= security::RuntimePermission( name );
             }
-            else if (token.equals( s_allPermission )) // AllPermission
+            else if (token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_allPermission))) // AllPermission
             {
                 perm <<= security::AllPermission();
             }
@@ -557,14 +552,15 @@ void FilePolicy::refresh()
 OUString FilePolicy::getImplementationName()
     throw (RuntimeException)
 {
-    return s_implName;
+    return stoc_bootstrap::filepolicy_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    OUString const * pNames = s_serviceNames.getConstArray();
-    for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pNames = aSNL.getConstArray();
+    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
     {
         if (serviceName.equals( pNames[ nPos ] ))
         {
@@ -577,7 +573,7 @@ sal_Bool FilePolicy::supportsService( OUString const & serviceName )
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return s_serviceNames;
+    return stoc_bootstrap::filepolicy_getSupportedServiceNames();
 }
 }
 //##################################################################################################
@@ -593,11 +589,16 @@ Reference< XInterface > SAL_CALL filepolicy_create(
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () )
 {
-    return stoc_sec::s_serviceNames;
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+    return aSNS;
 }
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () )
 {
-    return stoc_sec::s_implName;
+    static OUString s_implName = OUSTR(IMPL_NAME);
+    return s_implName;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

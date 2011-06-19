@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_util_XOfficeInstallationDirectories_idl__
 #define __com_sun_star_util_XOfficeInstallationDirectories_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com { module sun { module star { module util {
 
@@ -99,8 +97,8 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
         current office installation directory or office user data directory.
 
         @param URL
-        The URL for that an absolaute URL is requested. In case the URL does
-        not contain the opaque relocation placholder used by
+        The URL for that an absolute URL is requested. In case the URL does
+        not contain the opaque relocation placeholder used by
         <code>makeRelocatableURL</code>, the input URL will be returned
         unchanged.
 

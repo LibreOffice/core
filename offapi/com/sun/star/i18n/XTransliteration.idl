@@ -74,7 +74,7 @@ module com { module sun { module star { module i18n {
  * 0.
  * All the IGNORE-type functionalities (Range, equals) are based on mapping.
  * except equals() method in IGNORE_CASE, which is based on Locale-independent
- * casefolding
+ * case folding
  * ( This second assumption is very complicated and may cause confusion of use)
  *
  * 1.
@@ -94,7 +94,7 @@ module com { module sun { module star { module i18n {
  *
  * 4.
  * Implementation name in the methods below is not the same as
- * the true implemenation name registered.
+ * the true implementation name registered.
  * In particular, for generic modules:"UPPERCASE_LOWERCASE",
  * "LOWERCASE_UPPERCASE", "IGNORE_CASE", there is no registered name.
  */
@@ -112,7 +112,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     string  getName();
 
     //------------------------------------------------------------------------
-    /** Return the attribute(s) associated with this transliterator
+    /** Return the attribute(s) associated with this transliteration
         object, as defined in <type>TransliterationType</type>. The
         value is determined by the transliteration modules. For example,
         for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
@@ -158,7 +158,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** Load a sequence of instances of transliteration modules.
-        Output of one module is feeded as input to the next module in
+        Output of one module is fed as input to the next module in
         the sequence. The object created by this call has
         <type>TransliterationType</type> CASCADE and IGNORE types.
 
@@ -193,7 +193,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
             Start position within aStr from where transliteration starts.
 
         @param nCount
-            Number of codepoints to be transliterated.
+            Number of code points to be transliterated.
 
         @param rOffset
             To find the grapheme of input string corresponding to the
@@ -273,7 +273,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         returns {"A","I","a","i"}, transliterateRange( "a", "a" )
         returns {"A","A","a","a"}. </p>
 
-        <p> Use this transliteration to create regular expresssions like
+        <p> Use this transliteration to create regular expressions like
         [a-i] --> [A-Ia-i]. </p>
 
         @returns

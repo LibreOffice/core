@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -207,7 +208,7 @@ MultipleTextElement::Data( unsigned i_nNr ) const
 {
     static const Simstr sNull_;
 
-    if (aContent.is_valid_index(i_nNr))
+    if (i_nNr < aContent.size())
         return aContent[i_nNr];
     return sNull_;
 }
@@ -262,3 +263,4 @@ MultipleAttrElement::Write2Html(    HtmlCreator & io_rHC ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

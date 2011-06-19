@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/diagnose.h>
+#include <rtl/instance.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -40,22 +42,17 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
+    class theImplHelperInitMutex : public rtl::Static<Mutex, theImplHelperInitMutex>{};
+}
+
 namespace cppu
 {
 //==================================================================================================
 Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () )
 {
-    static Mutex * s_pMutex = 0;
-    if (! s_pMutex)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pMutex)
-        {
-            static Mutex s_aMutex;
-            s_pMutex = & s_aMutex;
-        }
-    }
-    return * s_pMutex;
+    return theImplHelperInitMutex::get();
 }
 
 // ClassDataBase
@@ -107,7 +104,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
     {
         OString msg( "### cannot get type description for " );
         msg += OUStringToOString( rType.getTypeName(), RTL_TEXTENCODING_ASCII_US );
-        OSL_ENSURE( sal_False, msg.getStr() );
+        OSL_FAIL( msg.getStr() );
     }
 #endif
 }
@@ -253,8 +250,8 @@ void WeakComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_ENSURE(
-                    false, OUStringToOString(
+                OSL_FAIL(
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }
@@ -389,8 +386,8 @@ void WeakAggComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_ENSURE(
-                    false, OUStringToOString(
+                OSL_FAIL(
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }
@@ -469,3 +466,5 @@ void WeakAggComponentImplHelperBase::removeEventListener(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

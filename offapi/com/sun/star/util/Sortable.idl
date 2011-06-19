@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_util_Sortable_idl__
 #define __com_sun_star_util_Sortable_idl__
 
-#ifndef __com_sun_star_util_SortDescriptor_idl__
 #include <com/sun/star/util/SortDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSortable_idl__
 #include <com/sun/star/util/XSortable.idl>
-#endif
 
 
 //=============================================================================
@@ -51,9 +46,9 @@ module com {  module sun {  module star {  module util {
  */
 published service Sortable
 {
-        /** the properties returned by a call to the 'createSortDescriptor' method
+        /** the properties returned by a call to the "createSortDescriptor" method
             of this interfaces implementation are those of the
-            'com.sun.star.util.SortDescriptor' service.
+            "com.sun.star.util.SortDescriptor" service.
 
            @see <type scope="com::sun::star::util">SortDescriptor</type>
          */

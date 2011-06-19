@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 #ifndef _STOC_SEC_LRU_CACHE_H_
 #define _STOC_SEC_LRU_CACHE_H_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // __CACHE_DIAGNOSE works only for OUString keys
 #ifdef __CACHE_DIAGNOSE
@@ -53,7 +54,7 @@ class lru_cache
         Entry * m_pred;
         Entry * m_succ;
     };
-    typedef ::std::hash_map< t_key, Entry *, t_hashKey, t_equalKey > t_key2element;
+    typedef ::boost::unordered_map< t_key, Entry *, t_hashKey, t_equalKey > t_key2element;
     t_key2element m_key2element;
     ::std::size_t m_size;
 
@@ -202,7 +203,7 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
             ::rtl::OString str( ::rtl::OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
+            OSL_TRACE( "%s", str.getStr() );
 #endif
             return &entry->m_val;
         }
@@ -231,7 +232,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
                 ::rtl::OString str( ::rtl::OUStringToOString(
                     buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( str.getStr() );
+                OSL_TRACE( "%s", str.getStr() );
             }
 #endif
             m_key2element.erase( entry->m_key );
@@ -252,7 +253,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" in cache") );
             ::rtl::OString str( ::rtl::OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( str.getStr() );
+            OSL_TRACE( "%s", str.getStr() );
 #endif
         }
         entry->m_val = val;
@@ -277,3 +278,5 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear() SAL_THROW(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

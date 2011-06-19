@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,10 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
@@ -48,7 +51,7 @@ Reference<VendorBase> SunInfo::createInstance()
 char const* const* SunInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "java.exe",
         "bin/java.exe",
         "jre/bin/java.exe"
@@ -68,9 +71,9 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 #if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
-        "/bin/classic/jvm.dll"
-#elif defined(OS2)
         "/bin/classic/jvm.dll",
+        // The 64-bit JRE has the jvm in bin/server
+        "/bin/server/jvm.dll"
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
@@ -88,6 +91,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
     static char const * ar[] = {
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
+        "/lib/" JFW_PLUGIN_ARCH "/server",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
 
@@ -122,3 +126,5 @@ int SunInfo::compareVersions(const rtl::OUString& sSecond) const
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

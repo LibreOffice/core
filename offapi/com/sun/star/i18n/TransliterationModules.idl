@@ -53,21 +53,21 @@ published enum TransliterationModules
     FULLWIDTH_HALFWIDTH            = 4,
     /// Transliterate a Japanese string from Katakana to Hiragana
     KATAKANA_HIRAGANA              = 5,
-    /// Transliterate a Japanese string from Hiragnan to Katakana
+    /// Transliterate a Japanese string from Hiragana to Katakana
     HIRAGANA_KATAKANA              = 6,
-    /// Transliterate an ascii number string to Simplified Chinese lower case number string in spellout format
+    /// Transliterate an ASCII number string to Simplified Chinese lower case number string in spellout format
     NumToTextLower_zh_CN           = 7,
-    /// Transliterate an ascii number string to Simplified Chinese upper case number string in spellout format
+    /// Transliterate an ASCII number string to Simplified Chinese upper case number string in spellout format
     NumToTextUpper_zh_CN           = 8,
-    /// Transliterate an ascii number string to Traditional Chinese lower case number string in spellout format
+    /// Transliterate an ASCII number string to Traditional Chinese lower case number string in spellout format
     NumToTextLower_zh_TW           = 9,
-    /// Transliterate an ascii number string to Traditional Chinese upper case number string in spellout format
+    /// Transliterate an ASCII number string to Traditional Chinese upper case number string in spellout format
     NumToTextUpper_zh_TW           = 10,
-    /// Transliterate an ascii number string to formal Korean Hangul number string in spellout format
+    /// Transliterate an ASCII number string to formal Korean Hangul number string in spellout format
     NumToTextFormalHangul_ko       = 11,
-    /// Transliterate an ascii number string to formal Korean Hanja lower case number string in spellout format
+    /// Transliterate an ASCII number string to formal Korean Hanja lower case number string in spellout format
     NumToTextFormalLower_ko        = 12,
-    /// Transliterate an ascii number string to formal Korean Hanja upper case number string in spellout format
+    /// Transliterate an ASCII number string to formal Korean Hanja upper case number string in spellout format
     NumToTextFormalUpper_ko        = 13,
     NON_IGNORE_MASK                = 0x000000ff,
     IGNORE_MASK                    = -0x100,

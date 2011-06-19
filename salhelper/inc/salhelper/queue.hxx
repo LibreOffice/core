@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#ifndef _OSL_SEMAPHOR_HXX_
 #include <osl/semaphor.hxx>
-#endif
 
 #ifndef __LIST__
 #include <list>
@@ -184,3 +183,5 @@ public:
 } // namespace salhelper
 
 #endif /* !_SALHELPER_QUEUE_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

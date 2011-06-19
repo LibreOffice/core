@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include "IdentityMapping.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 #include <algorithm>
 
@@ -56,9 +57,11 @@
 
 using namespace std;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star::uno;
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 namespace cppu
 {
@@ -68,7 +71,7 @@ class Mapping
     uno_Mapping * _pMapping;
 
 public:
-    inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
+    inline explicit Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
     inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
     inline ~Mapping() SAL_THROW( () );
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
@@ -129,21 +132,21 @@ struct MappingEntry
         {}
 };
 //--------------------------------------------------------------------------------------------------
-struct FctOUStringHash : public unary_function< const OUString &, size_t >
+struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 {
     size_t operator()( const OUString & rKey ) const SAL_THROW( () )
         { return (size_t)rKey.hashCode(); }
 };
 //--------------------------------------------------------------------------------------------------
-struct FctPtrHash : public unary_function< uno_Mapping *, size_t >
+struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const SAL_THROW( () )
         { return (size_t)pKey; }
 };
 
-typedef hash_map<
+typedef boost::unordered_map<
     OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
-typedef hash_map<
+typedef boost::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
@@ -690,3 +693,4 @@ void SAL_CALL uno_revokeMappingCallback(
 }
 } // extern "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

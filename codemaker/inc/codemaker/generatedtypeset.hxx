@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include "rtl/string.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 /// @HTML
 
@@ -71,9 +72,11 @@ private:
     GeneratedTypeSet(GeneratedTypeSet &); // not implemented
     void operator =(GeneratedTypeSet); // not implemented
 
-    std::hash_set< rtl::OString, rtl::OStringHash > m_set;
+    boost::unordered_set< rtl::OString, rtl::OStringHash > m_set;
 };
 
 }
 
 #endif // INCLUDED_CODEMAKER_GENERATEDTYPESET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

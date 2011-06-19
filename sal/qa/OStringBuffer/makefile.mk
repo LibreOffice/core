@@ -25,10 +25,6 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ=..$/..
 
 PRJNAME=sal
@@ -40,15 +36,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES= \
-#	  $(SLO)$/OStringBuffer.obj
 
 #----------------------------------- OStringBuffer -----------------------------------
 
@@ -70,9 +63,9 @@ SHL1RPATH = NONE
 # do this here, so we get right dependencies
 SLOFILES=$(SHL1OBJS)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
-.END
+.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk

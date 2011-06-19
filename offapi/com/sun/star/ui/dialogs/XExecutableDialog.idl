@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 #define __com_sun_star_ui_dialogs_XExecutableDialog_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +46,7 @@ published interface XExecutableDialog: com::sun::star::uno::XInterface
     /** Sets the title of the dialog.
 
         @param aTitle
-        Set an abitrary title for the dialog,
+        Set an arbitrary title for the dialog,
         may be an empty string if the dialog should not
         have a title.
     */

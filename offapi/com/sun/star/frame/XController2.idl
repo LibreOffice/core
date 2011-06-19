@@ -63,7 +63,7 @@ published interface XController2 : XController
     /** denotes the arguments used to create the instance.
 
         <p>Usually, controllers are created via <member>XModel2::createViewController</member>, where the
-        caller can pass not only a controller name, but also arguments parametrizing the to-be-created instance.
+        caller can pass not only a controller name, but also arguments parameterizing the to-be-created instance.
         Those arguments used at creation time can subsequently be retrieved using the <code>CreationArguments</code>
         member.</p>
     */

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_backend_xml_LayerWriter_idl__
 #define __com_sun_star_configuration_backend_xml_LayerWriter_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_io_XActiveDataSource_idl__
 #include <com/sun/star/io/XActiveDataSource.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XLayerHandler_idl__
 #include <com/sun/star/configuration/backend/XLayerHandler.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +39,7 @@ module xml {
 //=============================================================================
 
 /**
-    can be used to parse a stream of configuration layer xml.
+    can be used to parse a stream of configuration layer XML.
 
     <p> The configuration layer data described to a
     <type scope="com::sun::star::configuration::backend">XLayerHandler</type>
@@ -55,7 +47,7 @@ module xml {
     </p>
 
     @see com::sun::star::configuration::backend::xml::LayerParser
-        Service that parses configuration layer xml.
+        Service that parses configuration layer XML.
 
     @since OOo 1.1.2
 */

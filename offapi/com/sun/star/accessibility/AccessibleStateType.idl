@@ -123,7 +123,7 @@ published constants AccessibleStateType
         (given by the event) should be not transient to make it possible
         to add listener to this object and recognize changes in this object.
 
-        The state is added to make a performance improvment. Now it is no
+        The state is added to make a performance improvement. Now it is no
         longer necessary to iterate over all children to find out whether
         they are transient or not to decide whether to add listener or not.
         If there is a object with this state no one should iterate over the
@@ -189,7 +189,7 @@ published constants AccessibleStateType
         all of its parents have set the <const>VISIBLE</const> state and it
         lies at least partly inside the visible area of its parent.  It is,
         though, not necessarily visible on the screen because it may be
-        ocluded by other objects.</p>
+        occluded by other objects.</p>
     */
     const short SHOWING = 25;
 

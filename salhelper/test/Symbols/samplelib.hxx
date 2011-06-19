@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __SAMPLELIB_HXX_
 #define __SAMPLELIB_HXX_
 
@@ -20,3 +21,5 @@ double SAL_CALL funcB( double a);
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

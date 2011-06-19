@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,12 +50,15 @@
 
 #include "testhelper.hxx"
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -96,9 +100,11 @@ SAL_IMPLEMENT_MAIN()
     catch (Exception & exc)
     {
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( ! "exception occured: ", cstr_msg.getStr() );
+        OSL_ENSURE( ! "exception occurred: ", cstr_msg.getStr() );
     }
 
     printf( "Test finished\n" );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

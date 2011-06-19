@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XSheetAnnotations_idl__
 #define __com_sun_star_sheet_XSheetAnnotations_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
 
 //=============================================================================
 
@@ -58,7 +53,7 @@ published interface XSheetAnnotations: com::sun::star::container::XIndexAccess
         specified cell and inserts it into the collection.</p>
 
         @param aPosition
-            contains the address of the cell thta will contain the
+            contains the address of the cell that will contain the
             annotation.
 
         @param aText

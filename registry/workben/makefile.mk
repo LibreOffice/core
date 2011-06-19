@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS := TRUE
 CDEFS += -DDLL_VERSION=$(EMQ)"$(DLLPOSTFIX)$(EMQ)"
 
 RGTLIB = rgt.lib
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
+.IF "$(GUI)"=="UNX"
 RGTLIB = -lrgt$(DLLPOSTFIX)
 .ENDIF
 

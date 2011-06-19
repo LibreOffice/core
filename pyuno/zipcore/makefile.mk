@@ -35,9 +35,9 @@ LIBTARGET=NO
 .IF "$(L10N_framework)"==""
 UWINAPILIB =
 
-.IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
+.IF "$(SYSTEM_PYTHON)" == "YES"
 systempython:
-        @echo "Not building python-core because system python is being used"
+	@echo "Not building python-core because system python is being used"
 .ELSE
 
 .INCLUDE : pyversion.mk
@@ -54,12 +54,13 @@ PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
 .ENDIF
 .ENDIF
 
+.IF "$(OS)" != "MACOSX"
 FINDLIBFILES_TMP:=$(subst,/,$/ \
     $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\
-    $(PYTHONBINARY)	\
+    $(PYTHONBINARY) \
     $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
 
 .IF "$(OS)" == "WNT"
@@ -75,15 +76,18 @@ OBJFILES = $(OBJ)$/python.obj
 
 ALLTAR: \
     $(BIN)$/$(PYDIRNAME).zip
+.ENDIF
 
 .IF "$(GUI)" == "UNX"
 ALLTAR : $(BIN)$/python.sh
+
+STRIPMAC=-e '/^NONMACSECTION/d' -e '/^MACSECTION/,$$d'
+STRIPNONMAC=-e '/^NONMACSECTION/,/^MACSECTION/d'
+
 $(BIN)$/python.sh : python.sh
-    -rm -f $@
-    cat $? > $@
-    sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $@ > $@.new
-    mv $@.new $@
-    chmod +x $@
+	$(COMMAND_ECHO)sed -e 's/%%PYVERSION%%/$(eq,$(OS),MACOSX $(PYMAJOR).$(PYMINOR) $(PYVERSION))/g' -e 's/%%OOO_LIBRARY_PATH_VAR%%/$(OOO_LIBRARY_PATH_VAR)/g' \
+		$(eq,$(OS),MACOSX $(STRIPNONMAC) $(STRIPMAC)) < $? > $@
+	@chmod +x $@
 .ENDIF
 
 $(OBJ)$/python.obj: $(OUT)$/inc$/pyversion.hxx
@@ -93,7 +97,7 @@ $(OUT)$/inc$/pyversion.hxx: pyversion.inc
 
 $(BIN)$/$(PYDIRNAME).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "AIX"
     cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
@@ -110,7 +114,7 @@ $(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
     -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
     strip $@
 .ENDIF
     chmod +x $@
@@ -127,6 +131,4 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
 
 .ENDIF
 .ELSE
-ivo:
-    $(ECHO)
 .ENDIF # L10N_framework

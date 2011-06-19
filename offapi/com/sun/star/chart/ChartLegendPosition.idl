@@ -62,7 +62,7 @@ published enum ChartLegendPosition
 
     /** displays the chart legend above the diagram.
 
-        <p>The second entry in the legend is placed an the right hand
+        <p>The second entry in the legend is placed on the right hand
         side of the first one.</p>
      */
     TOP,
@@ -80,7 +80,7 @@ published enum ChartLegendPosition
 
     /** displays the chart legend beneath the diagram.
 
-        <p>The second entry in the legend is placed an the right hand
+        <p>The second entry in the legend is placed on the right hand
         side of the first one.</p>
      */
     BOTTOM

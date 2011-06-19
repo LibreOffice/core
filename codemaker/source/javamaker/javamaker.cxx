@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,8 @@
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
                          TypeManager const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
@@ -245,3 +246,4 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

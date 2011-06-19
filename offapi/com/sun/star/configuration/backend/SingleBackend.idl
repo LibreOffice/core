@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_backend_SingleBackend_idl__
 #define __com_sun_star_configuration_backend_SingleBackend_idl__
 
-#ifndef __com_sun_star_configuration_backend_XBackendEntities_idl__
 #include <com/sun/star/configuration/backend/XBackendEntities.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XSchemaSupplier_idl__
 #include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XMultiLayerStratum_idl__
 #include <com/sun/star/configuration/backend/XMultiLayerStratum.idl>
-#endif
 
 //=============================================================================
 
@@ -58,7 +50,7 @@ module com { module sun { module star { module configuration { module backend {
         A component contains configuration data for a particular
         application domain or software module.
     </p>
-    <p> Entities are organised hierarchically in organisations,
+    <p> Entities are organized hierarchically in organizations,
         groups, roles and individual users. Each element of the associated
         hierarchy corresponds to a layer that applies to an entity.
     </p>

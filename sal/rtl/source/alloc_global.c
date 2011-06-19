@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,15 +26,38 @@
  *
  ************************************************************************/
 
-#include "rtl/alloc.h"
 #include "alloc_impl.h"
+#include "rtl/alloc.h"
+#include <sal/macros.h>
+#include <osl/diagnose.h>
 
-#ifndef INCLUDED_STRING_H
 #include <string.h>
-#define INCLUDED_STRING_H
-#endif
+#include <stdio.h>
 
 #if !defined(FORCE_SYSALLOC)
+
+typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
+
+static AllocMode alloc_mode = AMode_UNSET;
+
+static void determine_alloc_mode(void)
+{
+   /* This shouldn't happen, but still ... */
+    if (alloc_mode != AMode_UNSET)
+        return;
+
+    if (getenv("G_SLICE") != NULL)
+    {
+        alloc_mode = AMode_SYSTEM;
+        fprintf(stderr, "LibreOffice: Using system memory allocator.\n");
+        fprintf(stderr, "LibreOffice: This is for debugging only.  To disable,\n");
+        fprintf(stderr, "LibreOffice: unset the environment variable G_SLICE.\n");
+    }
+    else
+    {
+        alloc_mode = AMode_CUSTOM;
+    }
+}
 
 /* ================================================================= *
  *
@@ -41,13 +65,8 @@
  *
  * ================================================================= */
 
-#ifndef INCLUDED_STDIO_H
-#include <stdio.h>
-#define INCLUDED_STDIO_H
-#endif
 #include "internal/once.h"
 #include "sal/macros.h"
-#include "osl/diagnose.h"
 
 /* ================================================================= *
  *
@@ -72,7 +91,7 @@ static const sal_Size g_alloc_sizes[] =
 };
 
 #define RTL_MEMORY_CACHED_LIMIT 4 * 4096
-#define RTL_MEMORY_CACHED_SIZES (sizeof(g_alloc_sizes) / sizeof(g_alloc_sizes[0]))
+#define RTL_MEMORY_CACHED_SIZES (SAL_N_ELEMENTS(g_alloc_sizes))
 
 static rtl_cache_type * g_alloc_caches[RTL_MEMORY_CACHED_SIZES] =
 {
@@ -89,15 +108,111 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 
 static rtl_arena_type * gp_alloc_arena = 0;
 
+extern void ensureMemorySingleton();
+
+/* ================================================================= *
+ *
+ * custom allocator implemenation.
+ *
+ * ================================================================= */
+
+void *
+SAL_CALL rtl_allocateMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
+{
+    void * p = 0;
+    if (n > 0)
+    {
+        char *     addr;
+        sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
+
+        OSL_ASSERT(RTL_MEMALIGN >= sizeof(sal_Size));
+        if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
+        {
+            /* requested size too large for roundup alignment */
+            return 0;
+        }
+
+try_alloc:
+        if (size <= RTL_MEMORY_CACHED_LIMIT)
+            addr = (char*)rtl_cache_alloc(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT]);
+        else
+            addr = (char*)rtl_arena_alloc (gp_alloc_arena, &size);
+
+        if (addr != 0)
+        {
+            ((sal_Size*)(addr))[0] = size;
+            p = addr + RTL_MEMALIGN;
+        }
+        else if (gp_alloc_arena == 0)
+        {
+            ensureMemorySingleton();
+            if (gp_alloc_arena)
+            {
+                /* try again */
+                goto try_alloc;
+            }
+        }
+    }
+    return (p);
+}
+
+/* ================================================================= */
+
+void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
+{
+    if (p != 0)
+    {
+        char *   addr = (char*)(p) - RTL_MEMALIGN;
+        sal_Size size = ((sal_Size*)(addr))[0];
+
+        if (size <= RTL_MEMORY_CACHED_LIMIT)
+            rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
+        else
+            rtl_arena_free (gp_alloc_arena, addr, size);
+    }
+}
+
+/* ================================================================= */
+
+void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+{
+    if (n > 0)
+    {
+        if (p != 0)
+        {
+            void *   p_old = p;
+            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
+
+            p = rtl_allocateMemory (n);
+            if (p != 0)
+            {
+                memcpy (p, p_old, SAL_MIN(n, n_old));
+                rtl_freeMemory (p_old);
+            }
+        }
+        else
+        {
+            p = rtl_allocateMemory (n);
+        }
+    }
+    else if (p != 0)
+    {
+        rtl_freeMemory (p), p = 0;
+    }
+    return (p);
+}
+
+#endif
+
 /* ================================================================= *
  *
  * custom allocator initialization / finalization.
  *
  * ================================================================= */
 
-static void
-rtl_memory_once_init (void)
+void rtl_memory_init (void)
 {
+#if !defined(FORCE_SYSALLOC)
     {
         /* global memory arena */
         OSL_ASSERT(gp_alloc_arena == 0);
@@ -134,39 +249,15 @@ rtl_memory_once_init (void)
             }
         }
     }
-}
-
-static int
-rtl_memory_init (void)
-{
-    static sal_once_type g_once = SAL_ONCE_INIT;
-    SAL_ONCE(&g_once, rtl_memory_once_init);
-    return (gp_alloc_arena != 0);
+#endif
+    OSL_TRACE("rtl_memory_init completed");
 }
 
 /* ================================================================= */
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
-
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_{memory|cache|arena}_fini") become called
-  _before_ global C++ object d'tors.
-
-  Delegated the call to "rtl_memory_fini()" into a dummy C++ object,
-  see alloc_fini.cxx .
-*/
-#if defined(__GNUC__) && !defined(MACOSX)
-static void rtl_memory_fini (void) __attribute__((destructor));
-#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma fini(rtl_memory_fini)
-static void rtl_memory_fini (void);
-#endif /* __GNUC__ || __SUNPRO_C */
-
-void
-rtl_memory_fini (void)
+void rtl_memory_fini (void)
 {
+#if !defined(FORCE_SYSALLOC)
     int i, n;
 
     /* clear g_alloc_table */
@@ -188,111 +279,9 @@ rtl_memory_fini (void)
         rtl_arena_destroy (gp_alloc_arena);
         gp_alloc_arena = 0;
     }
-}
-
-/* ================================================================= *
- *
- * custom allocator implemenation.
- *
- * ================================================================= */
-
-void *
-SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
-{
-    void * p = 0;
-    if (n > 0)
-    {
-        char *     addr;
-        sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
-
-        OSL_ASSERT(RTL_MEMALIGN >= sizeof(sal_Size));
-        if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
-        {
-            /* requested size too large for roundup alignment */
-            return 0;
-        }
-
-try_alloc:
-        if (size <= RTL_MEMORY_CACHED_LIMIT)
-            addr = (char*)rtl_cache_alloc(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT]);
-        else
-            addr = (char*)rtl_arena_alloc (gp_alloc_arena, &size);
-
-        if (addr != 0)
-        {
-            ((sal_Size*)(addr))[0] = size;
-            p = addr + RTL_MEMALIGN;
-        }
-        else if (gp_alloc_arena == 0)
-        {
-            if (rtl_memory_init())
-            {
-                /* try again */
-                goto try_alloc;
-            }
-        }
-    }
-    return (p);
-}
-
-/* ================================================================= */
-
-void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
-{
-    if (p != 0)
-    {
-        char *   addr = (char*)(p) - RTL_MEMALIGN;
-        sal_Size size = ((sal_Size*)(addr))[0];
-
-        if (size <= RTL_MEMORY_CACHED_LIMIT)
-            rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
-        else
-            rtl_arena_free (gp_alloc_arena, addr, size);
-    }
-}
-
-/* ================================================================= */
-
-void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
-{
-    if (n > 0)
-    {
-        if (p != 0)
-        {
-            void *   p_old = p;
-            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
-
-            p = rtl_allocateMemory (n);
-            if (p != 0)
-            {
-                memcpy (p, p_old, SAL_MIN(n, n_old));
-                rtl_freeMemory (p_old);
-            }
-        }
-        else
-        {
-            p = rtl_allocateMemory (n);
-        }
-    }
-    else if (p != 0)
-    {
-        rtl_freeMemory (p), p = 0;
-    }
-    return (p);
-}
-
-#else  /* FORCE_SYSALLOC */
-
-/* ================================================================= *
- *
- * system allocator includes.
- *
- * ================================================================= */
-
-#ifndef INCLUDED_STDLIB_H
-#include <stdlib.h>
-#define INCLUDED_STDLIB_H
 #endif
+    OSL_TRACE("rtl_memory_fini completed");
+}
 
 /* ================================================================= *
  *
@@ -300,34 +289,88 @@ void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
  *
  * ================================================================= */
 
-void * SAL_CALL rtl_allocateMemory (sal_Size n)
+void * SAL_CALL rtl_allocateMemory_SYSTEM (sal_Size n)
 {
     return malloc (n);
 }
 
 /* ================================================================= */
 
-void SAL_CALL rtl_freeMemory (void * p)
+void SAL_CALL rtl_freeMemory_SYSTEM (void * p)
 {
     free (p);
 }
 
 /* ================================================================= */
 
-void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n)
+void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n)
 {
     return realloc (p, n);
 }
 
 /* ================================================================= */
 
-void
-rtl_memory_fini (void)
+void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
-    /* nothing to do */
+#if !defined(FORCE_SYSALLOC)
+    while (1)
+    {
+        if (alloc_mode == AMode_CUSTOM)
+        {
+            return rtl_allocateMemory_CUSTOM(n);
+        }
+        if (alloc_mode == AMode_SYSTEM)
+        {
+            return rtl_allocateMemory_SYSTEM(n);
+        }
+        determine_alloc_mode();
+    }
+#else
+    return rtl_allocateMemory_SYSTEM(n);
+#endif
 }
 
-#endif /* FORCE_SYSALLOC */
+void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+{
+#if !defined(FORCE_SYSALLOC)
+    while (1)
+    {
+        if (alloc_mode == AMode_CUSTOM)
+        {
+            return rtl_reallocateMemory_CUSTOM(p,n);
+        }
+        if (alloc_mode == AMode_SYSTEM)
+        {
+            return rtl_reallocateMemory_SYSTEM(p,n);
+        }
+        determine_alloc_mode();
+    }
+#else
+    return rtl_reallocateMemory_SYSTEM(p,n);
+#endif
+}
+
+void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
+{
+#if !defined(FORCE_SYSALLOC)
+    while (1)
+    {
+        if (alloc_mode == AMode_CUSTOM)
+        {
+            rtl_freeMemory_CUSTOM(p);
+            return;
+        }
+        if (alloc_mode == AMode_SYSTEM)
+        {
+            rtl_freeMemory_SYSTEM(p);
+            return;
+        }
+        determine_alloc_mode();
+    }
+#else
+    rtl_freeMemory_SYSTEM(p);
+#endif
+}
 
 /* ================================================================= *
  *
@@ -355,3 +398,5 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 }
 
 /* ================================================================= */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

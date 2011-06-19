@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_DataPilotSource_idl__
 #define __com_sun_star_sheet_DataPilotSource_idl__
 
-#ifndef __com_sun_star_sheet_XDimensionsSupplier_idl__
 #include <com/sun/star/sheet/XDimensionsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDataPilotResults_idl__
 #include <com/sun/star/sheet/XDataPilotResults.idl>
-#endif
-
-#ifndef __com_sun_star_util_XRefreshable_idl__
 #include <com/sun/star/util/XRefreshable.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
 //=============================================================================
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbcx_Descriptor_idl__
 #define __com_sun_star_sdbcx_Descriptor_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
  module com {  module sun {  module star {  module sdbcx {
 
@@ -40,10 +38,10 @@
     A descriptor is commonly created by the container of a specific object, such as, tables or views.
     After the creation of the descriptor the properties have to be filled.
     Afterwards, you append the descriptor to the container and the container creates a new object based
-    on the informations of the descriptor. The descriptor can be used to create serveral objects.
+    on the informations of the descriptor. The descriptor can be used to create several objects.
     </p>
     <p>
-    A descriptor containes at least the informations of the name of an object.
+    A descriptor contains at least the informations of the name of an object.
     </p>
     @see com::sun::star::sdbcx::XAppend
  */

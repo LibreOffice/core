@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,13 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 namespace cppu
 {
@@ -102,7 +106,7 @@ void OComponentHelper::release() throw()
                     // release should not throw exceptions
 #if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_ENSURE( 0, msg.getStr() );
+                    OSL_FAIL( msg.getStr() );
 #else
                     (void) exc; // avoid warning about unused variable
 #endif
@@ -211,7 +215,7 @@ void OComponentHelper::dispose()
     }
     else
     {
-        // in a multithreaded environment, it can't be avoided,
+        // in a multithreaded environment, it can't be avoided
         // that dispose is called twice.
         // However this condition is traced, because it MAY indicate an error.
         OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
@@ -246,3 +250,4 @@ void OComponentHelper::removeEventListener(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

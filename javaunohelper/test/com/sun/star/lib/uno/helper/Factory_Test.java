@@ -198,7 +198,7 @@ public class Factory_Test
         }
         catch (Exception exc)
         {
-            System.err.println( ">>>>>>>>>> exc occured: " + exc.toString() );
+            System.err.println( ">>>>>>>>>> exc occurred: " + exc.toString() );
             exc.printStackTrace();
         }
         System.exit( 0 );

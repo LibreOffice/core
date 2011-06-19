@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,13 +135,6 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     }
     case typelib_TypeClass_UNION:
     {
-//          typelib_TypeDescription * pTypeDescr = 0;
-//          TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-//          buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
-//          buf.append( val2str( (char *)pVal + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
-//                               union_getSetType( pVal, pTypeDescr ) ) );
-//          buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
-//          TYPELIB_DANGER_RELEASE( pTypeDescr );
         break;
     }
     case typelib_TypeClass_STRUCT:
@@ -192,7 +186,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         TYPELIB_DANGER_GET( &pElementTypeDescr, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
 
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
-        sal_Int32 nElements    = pSequence->nElements;
+        sal_Int32 nElements = pSequence->nElements;
 
         if (nElements)
         {
@@ -599,11 +593,17 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
 }
 
 // ensure object identity and struct equality
-static int PyUNO_cmp( PyObject *self, PyObject *that )
+static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 {
-    if( self == that )
+    if(op != Py_EQ && op != Py_NE)
+    {
+        PyErr_SetString(PyExc_TypeError, "only '==' and '!=' comparisions are defined");
         return 0;
-    int retDefault = self > that ? 1 : -1;
+    }
+    if( self == that )
+    {
+        return (op == Py_EQ ? Py_True : Py_False);
+    }
     try
     {
         Runtime runtime;
@@ -623,13 +623,16 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
                     Reference< XMaterialHolder > xMe( me->members->xInvocation,UNO_QUERY);
                     Reference< XMaterialHolder > xOther( other->members->xInvocation,UNO_QUERY );
                     if( xMe->getMaterial() == xOther->getMaterial() )
-                        return 0;
+                    {
+                        return (op == Py_EQ ? Py_True : Py_False);
+                    }
                 }
                 else if( tcMe == com::sun::star::uno::TypeClass_INTERFACE )
                 {
                     if( me->members->wrappedObject == other->members->wrappedObject )
-//                     if( me->members->xInvocation == other->members->xInvocation )
-                        return 0;
+                    {
+                        return (op == Py_EQ ? Py_True : Py_False);
+                    }
                 }
             }
         }
@@ -638,13 +641,12 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    return retDefault;
+    return Py_False;
 }
 
 static PyTypeObject PyUNOType =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT( &PyType_Type, 0 )
     const_cast< char * >("pyuno"),
     sizeof (PyUNO),
     0,
@@ -652,7 +654,7 @@ static PyTypeObject PyUNOType =
     (printfunc) 0,
     (getattrfunc) PyUNO_getattr,
     (setattrfunc) PyUNO_setattr,
-    (cmpfunc) PyUNO_cmp,
+    0,
     (reprfunc) PyUNO_repr,
     0,
     0,
@@ -667,7 +669,7 @@ static PyTypeObject PyUNOType =
     NULL,
     (traverseproc)0,
     (inquiry)0,
-    (richcmpfunc)0,
+    (richcmpfunc) PyUNO_cmp,
     0,
     (getiterfunc)0,
     (iternextfunc)0,
@@ -706,14 +708,14 @@ PyObject* PyUNO_new (
     Reference<XInterface> tmp_interface;
 
     targetInterface >>= tmp_interface;
+
     if (!tmp_interface.is ())
     {
         // empty reference !
         Py_INCREF( Py_None );
         return Py_None;
     }
-
-    return PyUNO_new_UNCHECKED (targetInterface, ssf);
+   return PyUNO_new_UNCHECKED (targetInterface, ssf);
 }
 
 
@@ -727,14 +729,27 @@ PyObject* PyUNO_new_UNCHECKED (
 
     self = PyObject_New (PyUNO, &PyUNOType);
     if (self == NULL)
-        return NULL; //NULL == error
+        return NULL; // == error
     self->members = new PyUNOInternals();
 
     arguments[0] <<= targetInterface;
     {
         PyThreadDetach antiguard;
         tmp_interface = ssf->createInstanceWithArguments (arguments);
+
+        if (!tmp_interface.is ())
+        {
+            Py_INCREF( Py_None );
+            return Py_None;
+        }
+
         Reference<XInvocation2> tmp_invocation (tmp_interface, UNO_QUERY);
+        if (!tmp_invocation.is()) {
+            throw RuntimeException (rtl::OUString::createFromAscii (
+                "XInvocation2 not implemented, cannot interact with object"),
+                Reference< XInterface > ());
+        }
+
         self->members->xInvocation = tmp_invocation;
         self->members->wrappedObject = targetInterface;
     }
@@ -742,3 +757,5 @@ PyObject* PyUNO_new_UNCHECKED (
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

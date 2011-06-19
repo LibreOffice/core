@@ -28,45 +28,35 @@
 #ifndef __com_sun_star_awt_AccessiblePopupMenu_idl__
 #define __com_sun_star_awt_AccessiblePopupMenu_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
-#endif
-#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
 #include <com/sun/star/accessibility/XAccessibleSelection.idl>
-#endif
 
 module com { module sun { module star { module awt {
 
-/** specifies accessibility support for a popup menu.
+/** specifies accessibility support for a pop-up menu.
 
     @since OOo 1.1.2
  */
 published service AccessiblePopupMenu
 {
     /** This interface gives access to the structural information of a
-        popup menu:
+        pop-up menu:
 
         <ul>
-        <li>Role: The role of a popup menu is <const
+        <li>Role: The role of a pop-up menu is <const
             scope="com::sun::star::accessibility"
             >AccessibleRole::POPUP_MENU</const>.</li>
         <li>Name: There is no name.</li>
-        <li>Description: The description of a popup menu is its localized
+        <li>Description: The description of a pop-up menu is its localized
             help text.</li>
-        <li>Children: The children of a popup menu are menus, menu items or
+        <li>Children: The children of a pop-up menu are menus, menu items or
             menu separators, whose accessible context supports the services
             <type>AccessibleMenu</type>, <type>AccessibleMenuItem</type> or
             <type>AccessibleMenuSeparator</type>.</li>
-        <li>Parent: The parent is the window that contains the popup menu.</li>
+        <li>Parent: The parent is the window that contains the pop-up menu.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>
@@ -104,7 +94,7 @@ published service AccessiblePopupMenu
     interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
 
     /** This interface gives access to the selectable children of a
-        popup menu.
+        pop-up menu.
      */
     interface ::com::sun::star::accessibility::XAccessibleSelection;
 

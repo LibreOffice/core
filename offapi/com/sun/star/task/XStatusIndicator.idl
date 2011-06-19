@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_task_XStatusIndicator_idl__
 #define __com_sun_star_task_XStatusIndicator_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +49,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
     /** initialize and start the progress
 
         <p>
-        It activates a new created or reactivate an already used inidicator
+        It activates a new created or reactivate an already used indicator
         (must be finished by calling <member>XStatusIndicator::end()</member>
         before!). By the way it's possible to set first progress description
         and the possible range of progress value. That means that a progress
@@ -63,7 +61,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
             Value can be updated by calling <member>XStatusIndicator::setText()</member>.
 
         @param Range
-            mewns the maximum value of the progress which can be setted by
+            means the maximum value of the progress which can be set by
             calling <member>XStatusIndicator::setValue()</member>.
      */
     [oneway] void start(
@@ -104,7 +102,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         <p>
         Wrong values must be ignored and stopped indicators must ignore this
-        call generaly.
+        call generally.
         </p>
 
         @param Value

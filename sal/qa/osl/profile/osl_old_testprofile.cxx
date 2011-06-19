@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
-
 // LLA:
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx
@@ -36,11 +34,8 @@
 // -----------------------------------------------------------------------------
 #include <stdio.h>
 #include <osl/profile.h>
+#include <sal/cppunit.h>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
 
 //==================================================================================================
 // -----------------------------------------------------------------------------
@@ -97,3 +92,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
 
 // -----------------------------------------------------------------------------
 CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

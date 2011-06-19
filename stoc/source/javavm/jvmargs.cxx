@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,7 @@
 
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace stoc_javavm {
 
 JVM::JVM() throw()//: _enabled(sal_False)
@@ -64,3 +64,5 @@ const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

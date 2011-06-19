@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_report_XShape_idl__
 #define __com_sun_star_report_XShape_idl__
 
-#ifndef __com_sun_star_report_XReportControlModel_idl__
 #include <com/sun/star/report/XReportControlModel.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
-#ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
 #include <com/sun/star/drawing/HomogenMatrix3.idl>
-#endif
 //=============================================================================
 
  module com {  module sun {  module star {  module report {
@@ -54,7 +46,7 @@ published interface XShape
     /** this property lets you get and set the transformation matrix
         for this shape.
 
-        The transformation is a 3x3 homogen matrix and can contain
+        The transformation is a 3x3 homogeneous matrix and can contain
         translation, rotation, shearing and scaling.
      */
     [attribute,bound] com::sun::star::drawing::HomogenMatrix3 Transformation;

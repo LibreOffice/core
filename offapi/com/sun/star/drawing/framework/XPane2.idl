@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_drawing_framework_XPane2_idl__
 #define __com_sun_star_drawing_framework_XPane2_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessible_idl__
 #include <com/sun/star/accessibility/XAccessible.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 

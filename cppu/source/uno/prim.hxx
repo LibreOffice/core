@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,22 +29,16 @@
 #define PRIM_HXX
 
 #include "typelib/typedescription.h"
-#ifndef _typelib_TypeClass_H_
 #include "typelib/typeclass.h"
-#endif
 #include "uno/sequence2.h"
 #include "uno/any2.h"
 #include "uno/data.h"
 #include "uno/mapping.h"
 #include "uno/dispatcher.h"
 
-#ifndef _OSL_INTERLCK_H
 #include "osl/interlck.h"
-#endif
 #include "osl/diagnose.h"
-#ifndef _RTL_USTRING_HXX
 #include "rtl/ustring.hxx"
-#endif
 #include "rtl/alloc.h"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -204,3 +199,5 @@ inline sal_Bool _type_equals(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

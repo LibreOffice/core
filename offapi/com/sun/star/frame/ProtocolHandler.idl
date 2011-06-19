@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_ProtocolHandler_idl__
 #define __com_sun_star_frame_ProtocolHandler_idl__
 
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +46,7 @@
     <p>
     Supported URLs must match follow format: <protocol scheme>:<protocol specific part>
     If a handler provides optional arguments ("?") or jump marks ("#") depends from his
-    defintion and implementation. The generic dispatch provider will use registered
+    definition and implementation. The generic dispatch provider will use registered
     URL pattern to detect right handler.
     </p>
  */
@@ -72,8 +67,8 @@ published service ProtocolHandler
         /** initialize the new handler instance with some context informations
 
         <p>
-        Sometimes it can be usefull for a handler object, to know something about the
-        environment, in which it runs - especily the frame. For this case the generic
+        Sometimes it can be useful for a handler object, to know something about the
+        environment, in which it runs - especially the frame. For this case the generic
         code (which uses the handler) will ask for this optional interface and use it, if it exist.
         Following parameters are passed to the service:
         <ul>
@@ -82,8 +77,8 @@ published service ProtocolHandler
         </p>
 
         <p>
-        Please note: if this mechanism is used it seams not usefull (nor possible) to implement a ProtocolHandler
-        as a singleton. Otherwhise the implementation can't distinguish between different environments
+        Please note: if this mechanism is used it seams not useful (nor possible) to implement a ProtocolHandler
+        as a singleton. Otherwise the implementation can't distinguish between different environments
         and her corresponding dispatch requests.
         </p>
         */

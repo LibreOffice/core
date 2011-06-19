@@ -27,29 +27,17 @@
 #ifndef __com_sun_star_awt_XControl_idl__
 #define __com_sun_star_awt_XControl_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XToolkit_idl__
 #include <com/sun/star/awt/XToolkit.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XWindowPeer_idl__
 #include <com/sun/star/awt/XWindowPeer.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XControlModel_idl__
 #include <com/sun/star/awt/XControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XView_idl__
 #include <com/sun/star/awt/XView.idl>
-#endif
 
 
 //=============================================================================

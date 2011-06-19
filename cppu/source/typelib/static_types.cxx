@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,9 @@
 
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 extern "C"
 {
@@ -67,8 +70,6 @@ void SAL_CALL typelib_typedescriptionreference_getByName(
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(8)
 #endif
 
 /**
@@ -79,14 +80,19 @@ void SAL_CALL typelib_typedescriptionreference_getByName(
  */
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16 nInt16;
+#ifdef AIX
+    //double: doubleword aligned if -qalign=natural/-malign=natural
+    //which isn't the default ABI. Otherwise word aligned, While a long long int
+    //is always doubleword aligned, so use that instead.
+    sal_Int64   dDouble;
+#else
+    double dDouble;
+#endif
 };
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // the value of the maximal alignment
@@ -647,3 +653,5 @@ void SAL_CALL typelib_static_array_type_init(
 } // extern "C"
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

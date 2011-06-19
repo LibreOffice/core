@@ -33,18 +33,18 @@ TARGETTYPE=CUI
 
 LIBTARGET=NO
 
-
-
 # --- Settings -----------------------------------------------------
 
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
 
 # --- Files --------------------------------------------------------
-
 
 LIBONLYFILES=\
     $(OBJ)$/cr_html.obj		\
@@ -55,25 +55,18 @@ LIBONLYFILES=\
     $(OBJ)$/xmlelem.obj		\
     $(OBJ)$/xmltree.obj
 
-
 OBJFILES=\
     $(OBJ)$/main.obj		\
     $(LIBONLYFILES)
-
 
 LIB1TARGET=$(LB)$/$(TARGET).lib
 LIB1OBJFILES=\
     $(OBJFILES)
 
-
 LIB2TARGET=$(LB)$/$(TARGET)l.lib
 LIB2OBJFILES=\
     $(LIBONLYFILES)
 
-
-
-
 # --- Targets ------------------------------------------------------
-
 
 .INCLUDE :  target.mk

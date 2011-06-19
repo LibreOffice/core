@@ -34,15 +34,15 @@
 
 //=============================================================================
 
-/** defines which gluepoints are being offered by the EnhancedCustomShape
+/** defines which glue points are being offered by the EnhancedCustomShape
  */
 constants EnhancedCustomShapeGluePointType
 {
-    /** no gluepoints are offered
+    /** no glue points are offered
      */
     const short NONE = 0;
 
-    /** gluepoints are offered for each segment
+    /** glue points are offered for each segment
      */
     const short SEGMENTS = 1;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 #include <osl/mutex.hxx>
 #include "rtl/ustrbuf.hxx"
 #include <cppuhelper/factory.hxx>
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
-#endif
 #include <cppuhelper/implbase1.hxx>
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include "tdmgr_common.hxx"
 #include "tdmgr_tdenumeration.hxx"
 #include "lrucache.hxx"
@@ -65,7 +62,6 @@
 
 using namespace std;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -74,7 +70,8 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 static const sal_Int32 CACHE_SIZE = 512;
 
@@ -89,33 +86,14 @@ namespace stoc_bootstrap
 {
 Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    return seqNames;
 }
 
 OUString SAL_CALL tdmgr_getImplementationName()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
 }
 }
 
@@ -479,7 +457,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     catch (container::NoSuchElementException & exc)
                     {
                         throw lang::IllegalArgumentException(
-                            OUSTR("NoSuchElementException occured: ") +
+                            OUSTR("NoSuchElementException occurred: ") +
                             exc.Message, static_cast<OWeakObject *>(this),
                             -1 /* unknown */ );
                     }
@@ -515,13 +493,13 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             catch (reflection::NoSuchTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("NoSuchTypeNameException occured: ") + exc.Message,
+                    OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
             catch (reflection::InvalidTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("InvalidTypeNameException occured: ") + exc.Message,
+                    OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
         }
@@ -588,7 +566,7 @@ ManagerImpl::createTypeDescriptionEnumeration(
         if ( xEnumAccess.is() )
             aStack.push( xEnumAccess );
 
-        it++;
+        ++it;
     }
 
     return Reference< XTypeDescriptionEnumeration >(
@@ -1161,3 +1139,4 @@ Reference< XInterface > SAL_CALL ManagerImpl_create(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

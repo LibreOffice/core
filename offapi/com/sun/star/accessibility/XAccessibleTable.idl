@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_accessibility_XAccessibleTable_idl__
 #define __com_sun_star_accessibility_XAccessibleTable_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
 #include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -102,7 +98,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
             returned.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
 
     */
@@ -121,7 +117,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
             returned.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
     */
     string getAccessibleColumnDescription ([in] long nColumn)
@@ -146,7 +142,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
     */
     long getAccessibleRowExtentAt ([in] long nRow, [in] long nColumn)
@@ -171,7 +167,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
     */
     long getAccessibleColumnExtentAt ([in] long nRow, [in] long nColumn)
@@ -184,7 +180,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
         dependent.</p>
 
         @return
-            Returns allways a valid reference to an
+            Returns always a valid reference to an
             <type>XAccessibleTable</type> object.
     */
     XAccessibleTable getAccessibleRowHeaders ();
@@ -196,7 +192,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
         dependent.</p>
 
         @return
-            Returns allways a valid reference to an
+            Returns always a valid reference to an
             <type>XAccessibleTable</type> object.
     */
     XAccessibleTable getAccessibleColumnHeaders ();
@@ -233,7 +229,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
     */
     boolean isAccessibleRowSelected ([in] long nRow)
@@ -252,7 +248,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
     */
     boolean isAccessibleColumnSelected ([in] long nColumn)
@@ -282,7 +278,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column and/or row index is not valid, i.e. lies not inside
-            the valide range of 0 up to
+            the valid range of 0 up to
             <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
     */
     XAccessible getAccessibleCellAt ([in] long nRow, [in] long nColumn)

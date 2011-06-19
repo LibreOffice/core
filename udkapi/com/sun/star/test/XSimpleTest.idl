@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_test_XSimpleTest_idl__
 #define __com_sun_star_test_XSimpleTest_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 
 //=============================================================================
@@ -95,7 +90,7 @@ published interface XSimpleTest: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /**States if one of the last test has failed. This is cumulative.
-        @return true if all test have been passed succesfully. false if an error has occured.
+        @return true if all test have been passed succesfully. false if an error has occurred.
 
     */
     boolean testPassed();

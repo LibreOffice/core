@@ -35,34 +35,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"!="YES"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:jobfile by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/rtl_alloc.obj
+SHL1OBJS= $(SLO)$/rtl_alloc.obj
 
 SHL1TARGET= rtl_Alloc
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
-# auto generated Target:jobfile
-# END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 # SLOFILES=$(SHL1OBJS)
 
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE :  _cppunit.mk
-
+.INCLUDE :  $(PRJ)$/qa$/cppunit_local.mk

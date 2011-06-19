@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,11 +119,11 @@ namespace stoc_connector
                 }
                 else
                 {
-                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to pipe " );
+                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to pipe "));
                     sMessage += aName;
-                    sMessage += OUString::createFromAscii( "(" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM("("));
                     sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
-                    sMessage += OUString::createFromAscii( ")" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                     delete pConn;
                     throw NoConnectException( sMessage ,Reference< XInterface > () );
                 }
@@ -152,10 +153,10 @@ namespace stoc_connector
                 SocketAddr AddrTarget( aHost.pData, nPort );
                 if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
                 {
-                    OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to socket (" );
+                    OUString sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Connector : couldn't connect to socket ("));
                     OUString sError = pConn->m_socket.getErrorAsString();
                     sMessage += sError;
-                    sMessage += OUString::createFromAscii( ")" );
+                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                     delete pConn;
                     throw NoConnectException( sMessage, Reference < XInterface > () );
                 }
@@ -203,18 +204,9 @@ namespace stoc_connector
 
     Sequence< OUString > connector_getSupportedServiceNames()
     {
-        static Sequence < OUString > *pNames = 0;
-        if( ! pNames )
-        {
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( !pNames )
-            {
-                static Sequence< OUString > seqNames(1);
-                seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
-                pNames = &seqNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > seqNames(1);
+        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+        return seqNames;
     }
 
     OUString connector_getImplementationName()
@@ -272,13 +264,13 @@ sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
 }
 
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
@@ -287,3 +279,4 @@ void * SAL_CALL component_getFactory(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

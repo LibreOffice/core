@@ -28,10 +28,7 @@
 #ifndef __com_sun_star_xml_crypto_xsecurityenvironment_idl_
 #define __com_sun_star_xml_crypto_xsecurityenvironment_idl_
 
-#ifndef __com_sun_star_uno_SecurityException_idl__
 #include <com/sun/star/uno/SecurityException.idl>
-#endif
-
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/security/XCertificate.idl>
@@ -66,7 +63,7 @@ published interface XSecurityEnvironment : com::sun::star::uno::XInterface
     com::sun::star::security::XCertificate createCertificateFromRaw( [in] sequence< byte > rawCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
-     * Create certificate interface from a BASE64 encoded certificate.
+     * Create certificate interface from a Base64 encoded certificate.
      */
     com::sun::star::security::XCertificate createCertificateFromAscii( [in] string asciiCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_XDockableWindow_idl__
 #define __com_sun_star_awt_XDockableWindow_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XDockableWindowListener_idl__
 #include <com/sun/star/awt/XDockableWindowListener.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
 
 //=============================================================================
 
@@ -125,16 +117,16 @@ interface XDockableWindow : com::sun::star::uno::XInterface
         see <type scope="com::sun::star::awt">XDockableWindowListener</type> for
         the corresponding events
         @param WindowRect
-            specifies the position and size of the popup window in frame coordinates
+            specifies the position and size of the pop-up window in frame coordinates
      */
     void startPopupMode( [in] com::sun::star::awt::Rectangle WindowRect );
 
     //-------------------------------------------------------------------------
 
-    /** queries the current popup mode
+    /** queries the current pop-up mode
         @returns
-            <TRUE/> if the window is in popup mode
-            <FALSE/> if the window is not in popup mode
+            <TRUE/> if the window is in pop-up mode
+            <FALSE/> if the window is not in pop-up mode
      */
     boolean isInPopupMode();
 };

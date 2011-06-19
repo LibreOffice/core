@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include <sal/macros.h>
 
 #include <cstdlib>
 
@@ -204,7 +206,7 @@ void Test::testParse() {
           "/", false, 1, "", "", "", "", "", 0, 0 },
         { "////", 0, "////", true, "",
           "//", false, 2, "", "", "", "", "", 0, 0 } };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
@@ -251,7 +253,7 @@ void Test::testParse() {
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(-1));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(-1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].pathSegment0),
@@ -274,7 +276,7 @@ void Test::testParse() {
                 uriRef->getPathSegment(4));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(5));
+                rtl::OUString(), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].query != 0, uriRef->hasQuery());
@@ -594,7 +596,7 @@ void Test::testMakeAbsolute() {
           css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a#s" },
         { "scheme://a#s1", "#s2", true,
           css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a#s2" } };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].baseUriReference)));
@@ -699,7 +701,7 @@ void Test::testMakeRelative() {
           0 },
         { "scheme://auth/a/b", "scheme://auth/c/d", true, false, false,
           "../c/d", 0 } };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].baseUriReference)));
@@ -752,7 +754,7 @@ void Test::testVndSunStarExpand() {
                   RTL_CONSTASCII_USTRINGPARAM(
                       "/singletons/com.sun.star.util.theMacroExpander"))),
         css::uno::UNO_QUERY_THROW);
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
@@ -792,7 +794,7 @@ void Test::testVndSunStarScript() {
         { "vnd.sun.star.script:name?a=&", 0, true, {} },
         { "vnd.sun.star.script:name?key1=&%26=%3D&key1=hello", "name", true,
           { { "key1", "" }, { "key2", 0 }, { "&", "=" } } } };
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
@@ -848,7 +850,7 @@ void Test::testVndSunStarScript() {
                                 "testVndSunStarScript",
                                 static_cast< double >(i)
                                 + static_cast< double >(j) / 10.0,
-                                ::rtl::OUString::createFromAscii("setParameter"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParameter")),
                                 originalReference,
                                 uriRef->getUriReference());
                         }
@@ -860,7 +862,7 @@ void Test::testVndSunStarScript() {
                 TEST_ASSERT_EQUAL(
                     "testVndSunStarScript",
                     i,
-                    ::rtl::OUString::createFromAscii("setName"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setName")),
                     originalReference,
                     uriRef->getUriReference());
             }
@@ -902,8 +904,8 @@ void Test::testVndSunStarScript() {
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString::createFromAscii("illegal arguments"),
-        ::rtl::OUString::createFromAscii("name"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")),
         caughtExpected,
         true);
 
@@ -911,15 +913,15 @@ void Test::testVndSunStarScript() {
     try {
         scriptUrl->setParameter(
             ::rtl::OUString(),
-            ::rtl::OUString::createFromAscii("non-empty"));
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("non-empty")));
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString::createFromAscii("illegal arguments"),
-        ::rtl::OUString::createFromAscii("parameter"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("parameter")),
         caughtExpected,
         true);
 }
@@ -949,7 +951,7 @@ void Test::testTranslator() {
         { "file:///abc/%25ef", "file:///abc/%25ef", true } };
     css::uno::Reference< css::uri::XExternalUriReferenceTranslator >
         translator(css::uri::ExternalUriReferenceTranslator::create(m_context));
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         if (data[i].toInternal) {
             TEST_ASSERT_EQUAL(
                 "testTranslator, translateToInternal", i,
@@ -980,7 +982,7 @@ void Test::testPkgUrlFactory() {
           "vnd.sun.star.pkg://file:%2F%2F%2Fa%2525b%252fc%2Fd~e&f@g%3Fh" } };
     css::uno::Reference< css::uri::XVndSunStarPkgUrlReferenceFactory > factory(
         css::uri::VndSunStarPkgUrlReferenceFactory::create(m_context));
-    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > url(
             factory->createVndSunStarPkgUrlReference(
                 m_uriFactory->parse(
@@ -1002,3 +1004,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,26 +28,11 @@
 #ifndef __com_sun_star_frame_PopupMenuController_idl__
 #define __com_sun_star_frame_PopupMenuController_idl__
 
-#ifndef __com_sun_star_frame_XPopupMenuController_idl__
 #include <com/sun/star/frame/XPopupMenuController.idl>
-#endif
-
-#ifndef _com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStatusListener_idl__
 #include <com/sun/star/frame/XStatusListener.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
 
 //=============================================================================
 
@@ -55,12 +40,12 @@ module com { module sun { module star { module frame {
 
 //=============================================================================
 
-/** provides access to a popup menu controller.
+/** provides access to a pop-up menu controller.
 
     <p>
-    A popup menu controller is used to make special functions available to
+    A pop-up menu controller is used to make special functions available to
     users, which depend on runtime or context specific conditions.<br/>
-    A typical example for a popup menu controller can be a recent file list
+    A typical example for a pop-up menu controller can be a recent file list
     implementation which provides a list of latest files that a user has
     worked on. This list gets changes consistently during a work session.
     </p>
@@ -71,32 +56,32 @@ module com { module sun { module star { module frame {
 service PopupMenuController
 {
     //-------------------------------------------------------------------------
-    /** supports functions to initialize and update a popup menu controller
+    /** supports functions to initialize and update a pop-up menu controller
         implementation.
 
         <p>
-        A popup menu controller implementation gets initialized with a
+        A pop-up menu controller implementation gets initialized with a
         <type scope="com::sun::star::awt">XPopupMenu</type> object. This assures
-        that a popup menu controller can be implemented with any UNO based
+        that a pop-up menu controller can be implemented with any UNO based
         language.
         </p>
     */
     interface com::sun::star::frame::XPopupMenuController;
 
     //-------------------------------------------------------------------------
-    /** provides functions to initialize a popup menu controller with
+    /** provides functions to initialize a pop-up menu controller with
         specific data which are needed.
 
         <p>
         This interface should not directly used. A factory service is responsible to
         initialize every controller correctly.<br/>
 
-        A popup menu controller needs at least two additional arguments
+        A pop-up menu controller needs at least two additional arguments
         provided as <type scope="com::sun::star::beans">PropertyValue</type>:
         <ul>
             <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
-                   instance to which the popup menu controller belongs to.</li>
-            <li><b>CommandURL</b><br>specifies which popup menu controller should be created.</li>
+                   instance to which the pop-up menu controller belongs to.</li>
+            <li><b>CommandURL</b><br>specifies which pop-up menu controller should be created.</li>
         </ul>
         </p>
 
@@ -105,10 +90,10 @@ service PopupMenuController
     interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** used to brief the popup menu controller with new status information.
+    /** used to brief the pop-up menu controller with new status information.
 
         <p>
-        A popup menu controller makes special functions available to users which
+        A pop-up menu controller makes special functions available to users which
         normally depend on the state of other data. This interface is used to
         send this data to a controller implementation.
         </p>
@@ -116,15 +101,15 @@ service PopupMenuController
     interface com::sun::star::frame::XStatusListener;
 
     //-------------------------------------------------------------------------
-    /** used to query for commands supported by the popup menu controller to
+    /** used to query for commands supported by the pop-up menu controller to
         execute them directly.
 
         <p>
-        A popup menu controller provides special functions which should be
+        A pop-up menu controller provides special functions which should be
         available by the normal dispatch API. This optional interface enables
-        popup menu controller to be normal dispatch providers.<br/>
+        pop-up menu controller to be normal dispatch providers.<br/>
         <b>Attention:</b><br/>
-        Popup menu controller functions must be specified using the following
+        Po-pup menu controller functions must be specified using the following
         the dispatch URL scheme: "vnd.sun.star.popup:" opaque_part [ "?" query ].
         </p>
 
@@ -133,11 +118,11 @@ service PopupMenuController
     [optional] interface com::sun::star::frame::XDispatchProvider;
 
     //-------------------------------------------------------------------------
-    /** used to dispose popup menu controller by the owner instance.
+    /** used to dispose pop-up menu controller by the owner instance.
 
         <p>
-        A popup menu controller resides in a menu which has a limited
-        life-time. For correct life-time handling a popup menu
+        A pop-up menu controller resides in a menu which has a limited
+        life-time. For correct life-time handling a pop-up menu
         controller should support this interface.
         </p>
 

@@ -27,36 +27,14 @@
 #ifndef __com_sun_star_document_DocumentInfo_idl__
 #define __com_sun_star_document_DocumentInfo_idl__
 
-#ifndef __com_sun_star_document_XDocumentInfo_idl__
 #include <com/sun/star/document/XDocumentInfo.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertyContainer_idl__
 #include <com/sun/star/beans/XPropertyContainer.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
-#ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 //=============================================================================
 
@@ -68,8 +46,8 @@
 
     <p>
     Contrary to the service <type>StandaloneDocumentInfo</type> the document - which
-    contains such informations - must be loaded completly. As a result of that this
-    DocumengInfo service is available on an open document via the interface
+    contains such informations - must be loaded completely. As a result of that this
+    DocumentInfo service is available on an open document via the interface
     <type>XDocumentInfoSupplier</type> only.
     </p>
 
@@ -92,7 +70,7 @@ published service DocumentInfo
     interface XDocumentInfo;
 
     //-------------------------------------------------------------------------
-    /** neccessary to support normal properties
+    /** necessary to support normal properties
      */
     interface com::sun::star::beans::XPropertySet;
 
@@ -113,7 +91,7 @@ published service DocumentInfo
     [optional] interface com::sun::star::beans::XPropertyContainer;
 
     //-------------------------------------------------------------------------
-    /** contains the intial author of the document
+    /** contains the initial author of the document
      */
     [property] string Author;
 

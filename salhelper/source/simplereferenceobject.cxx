@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,20 @@ void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
     ::operator delete(pPtr, std::nothrow);
 #endif // WNT
 }
+
+#ifdef _MSC_VER
+
+/* This operator is supposed to be unimplemented, but that now leads
+ * to compilation and/or linking errors with MSVC2008. (Don't know
+ * about MSVC2010.) As it can be left unimplemented just fine with
+ * gcc, presumably it is never called. So do implement it then to
+ * avoid the compilation and/or linking errors, but make it crash
+ * intentionally if called.
+ */
+void SimpleReferenceObject::operator delete[](void * /* pPtr */)
+{
+    free(NULL);
+}
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

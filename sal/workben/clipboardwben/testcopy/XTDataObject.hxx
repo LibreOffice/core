@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,11 +44,6 @@
 #include <windows.h>
 #include <ole2.h>
 #include <objidl.h>
-
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
 
 class EnumFormatEtc;
 
@@ -98,10 +94,6 @@ private:
     friend class CEnumFormatEtc;
 };
 
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 class CEnumFormatEtc : public IEnumFORMATETC
 {
 public:
@@ -130,3 +122,5 @@ private:
 typedef CEnumFormatEtc *PCEnumFormatEtc;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

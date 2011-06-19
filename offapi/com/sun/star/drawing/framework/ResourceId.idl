@@ -28,15 +28,13 @@
 #ifndef __com_sun_star_drawing_framework_ResourceId_idl__
 #define __com_sun_star_drawing_framework_ResourceId_idl__
 
-#ifndef __com_sun_star_drawing_framework_XResourceId_idl__
 #include <com/sun/star/drawing/framework/XResourceId.idl>
-#endif
 
 module com { module sun { module star { module drawing { module framework {
 
 /** The <type>ResourceId</type> service provides several constructors for
     resource ids.
-    <p>They mainly differe in how the anchor is specified.</p>
+    <p>They mainly differ in how the anchor is specified.</p>
 */
 service ResourceId
     : XResourceId
@@ -52,7 +50,7 @@ service ResourceId
     create ([in] string sResourceURL);
 
     /** Create a resource id for an anchor that is given as
-        <type>XResourceId</type> object.  This is the mose general of the
+        <type>XResourceId</type> object.  This is the most general of the
         constructor variants.
     */
     createWithAnchor ([in] string sResourceURL, [in] XResourceId xAnchor);

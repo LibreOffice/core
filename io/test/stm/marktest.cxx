@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -141,7 +142,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
             }
             else
             {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe"));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 
@@ -508,7 +509,7 @@ sal_Int32 OMarkableInputStreamTest::test(
                 testInvariant( TestName , TestObject );
             }
             else  {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe"));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 
@@ -675,3 +676,5 @@ OUString    OMarkableInputStreamTest_getImplementationName() throw ()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM("test.com.sun.star.extensions.stm.MarkableInputStream" ));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

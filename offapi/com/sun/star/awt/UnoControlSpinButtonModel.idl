@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_UnoControlSpinButtonModel_idl__
 #define __com_sun_star_awt_UnoControlSpinButtonModel_idl__
 
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 
 //=============================================================================
@@ -150,7 +145,7 @@ service UnoControlSpinButtonModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies whether the mouse should show repeating behaviour, i.e.
+    /** specifies whether the mouse should show repeating behavior, i.e.
         repeatedly trigger an action when keeping pressed.
     */
     [property] boolean Repeat;

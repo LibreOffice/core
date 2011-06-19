@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_mozilla_XProxyRunner_idl__
 #define __com_sun_star_mozilla_XProxyRunner_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_mozilla_XCodeProxy_idl__
 #include <com/sun/star/mozilla/XCodeProxy.idl>
-#endif
 
 
  module com {  module sun {  module star {  module mozilla {
@@ -41,7 +36,7 @@
 
 published interface XCodeProxy;
 // DocMerge from xml: interface com::sun::star::mozilla::XProxyRunner
-/** is the interface run Mozilla XPCOM code in a managered environment
+/** is the interface run Mozilla XPCOM code in a managed environment
 
     @see com::sun::star::mozilla::XProfileDiscover
     @see com::sun::star::mozilla::MozillaBootstrap
@@ -50,7 +45,7 @@ published interface XProxyRunner: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::mozilla::XProxyRunner::Run
-    /** attempts to Run XPCOM code in a managered environment
+    /** attempts to Run XPCOM code in a managed environment
 
         @param aCode
             is a com:sun:star:mozilla:XCodeProxy object to be run.

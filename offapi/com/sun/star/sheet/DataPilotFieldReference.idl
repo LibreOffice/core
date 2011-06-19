@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldReference_idl__
 #define __com_sun_star_sheet_DataPilotFieldReference_idl__
 
-#ifndef __com_sun_star_sheet_DataPilotFieldReferenceItemType_idl__
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.idl>
-#endif
 
 //=============================================================================
 

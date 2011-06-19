@@ -1,4 +1,4 @@
-xc  xml2cmp : soltools stlport NULL
+xc  xml2cmp : soltools NULL
 xc  xml2cmp                         usr1    -	all	xc_mkout NULL
 xc  xml2cmp\prj                     get -	all	xc_prj NULL
 xc  xml2cmp\source\support                  nmake   -   all	xc_supp NULL

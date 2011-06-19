@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,11 +81,14 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 
 using namespace test;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 //==================================================================================================
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
@@ -554,7 +558,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
         }
         catch (lang::IllegalAccessException &)
         {
-            OSL_ENSURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
+            OSL_FAIL( "### unexpected IllegalAccessException exception caught!" );
         }
         catch (Exception & rExc2)
         {
@@ -576,6 +580,7 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & /*xSF*/ )
     catch (...)
     {
     }
-    OSL_ENSURE( sal_False, "### exception test failed!" );
+    OSL_FAIL( "### exception test failed!" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

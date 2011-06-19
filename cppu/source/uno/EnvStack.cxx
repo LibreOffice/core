@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,12 @@
 #include "cppu/EnvDcp.hxx"
 #include "cppu/Enterable.hxx"
 
+#include "rtl/instance.hxx"
+
 #include "osl/thread.h"
 #include "osl/mutex.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace com::sun::star;
@@ -62,14 +65,16 @@ size_t oslThreadIdentifier_hash::operator()(oslThreadIdentifier s1) const
     return s1;
 }
 
-typedef ::std::hash_map<oslThreadIdentifier,
+typedef ::boost::unordered_map<oslThreadIdentifier,
                         uno_Environment *,
                         oslThreadIdentifier_hash,
                         oslThreadIdentifier_equal>  ThreadMap;
 
-static osl::Mutex s_threadMap_mutex;
-static ThreadMap  s_threadMap;
-
+namespace
+{
+    struct s_threadMap_mutex : public rtl::Static< osl::Mutex, s_threadMap_mutex > {};
+    struct s_threadMap : public rtl::Static< ThreadMap, s_threadMap > {};
+}
 
 static rtl::OUString s_uno_envDcp(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO));
 
@@ -77,15 +82,13 @@ static void s_setCurrent(uno_Environment * pEnv)
 {
     oslThreadIdentifier threadId = osl_getThreadIdentifier(NULL);
 
-    osl::MutexGuard guard(s_threadMap_mutex);
+    osl::MutexGuard guard(s_threadMap_mutex::get());
+    ThreadMap &rThreadMap = s_threadMap::get();
     if (pEnv)
-        s_threadMap[threadId] = pEnv;
+        rThreadMap[threadId] = pEnv;
 
     else
-    {
-        ThreadMap::iterator iEnv = s_threadMap.find(threadId);
-        s_threadMap.erase(iEnv);
-    }
+        rThreadMap.erase(threadId);
 }
 
 static uno_Environment * s_getCurrent(void)
@@ -94,9 +97,10 @@ static uno_Environment * s_getCurrent(void)
 
     oslThreadIdentifier threadId = osl_getThreadIdentifier(NULL);
 
-    osl::MutexGuard guard(s_threadMap_mutex);
-    ThreadMap::iterator iEnv = s_threadMap.find(threadId);
-    if(iEnv != s_threadMap.end())
+    osl::MutexGuard guard(s_threadMap_mutex::get());
+    ThreadMap &rThreadMap = s_threadMap::get();
+    ThreadMap::iterator iEnv = rThreadMap.find(threadId);
+    if(iEnv != rThreadMap.end())
         pEnv = iEnv->second;
 
     return pEnv;
@@ -378,3 +382,5 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
 
     return result;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

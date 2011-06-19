@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,8 @@ typedef void* oslSecurity;
 */
 oslSecurity SAL_CALL osl_getCurrentSecurity(void);
 
-/** Create a security handle for the denoted user.
+/** Deprecated API
+    Create a security handle for the denoted user.
     Try to log in the user on the local system.
     @param strzUserName [in] denotes the name of the user to logg in.
     @param strPasswd [in] the password for this user.
@@ -156,3 +158,4 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security);
 
 #endif  /* _OSL_SECURITY_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

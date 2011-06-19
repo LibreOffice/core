@@ -1,13 +1,8 @@
 #ifndef __com_sun_star_configuration_backend_LayerDescriber_idl__
 #define __com_sun_star_configuration_backend_LayerDescriber_idl__
 
-#ifndef __com_sun_star_configuration_backend_XLayerContentDescriber_idl__
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 
 
@@ -18,7 +13,7 @@ module com { module sun { module star { module configuration { module backend {
 //=============================================================================
 
 /**
-   describe the contents of a layer to an XLayerHander object. The contents of
+   describe the contents of a layer to an XLayerHandler object. The contents of
    the layer is contained in the sequence of PropertyInfo structures
    @see PropertyInfo
 

@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_awt_XTabListener_idl__
 #define __com_sun_star_awt_XTabListener_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
-
-#ifndef __com_sun_star_beans_NamedValue_idl__
 #include <com/sun/star/beans/NamedValue.idl>
-#endif
 
 //=============================================================================
 
@@ -85,7 +77,7 @@ published interface XTabListener : com::sun::star::lang::XEventListener
     void activated( [in] long ID );
 
     //-------------------------------------------------------------------------
-    /** a tab was deactivated, because another tab becames the new active state.
+    /** a tab was deactivated, because another tab became the new active state.
      */
     void deactivated( [in] long ID );
 };

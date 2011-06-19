@@ -38,7 +38,7 @@ module com { module sun { module star { module embed {
 published constants Actions
 {
     //------------------------------------------------------------------------
-    /** "Prevent Close" - throws veto excetion if target object is going to
+    /** "Prevent Close" - throws veto exception if target object is going to
         close.
 
         <p>
@@ -50,7 +50,7 @@ published constants Actions
     const long PREVENT_CLOSE = 1;
 
     //------------------------------------------------------------------------
-    /** "Prevent Termination" - throws veto excetion if target object is going
+    /** "Prevent Termination" - throws veto exception if target object is going
         to terminate.
 
         <p>

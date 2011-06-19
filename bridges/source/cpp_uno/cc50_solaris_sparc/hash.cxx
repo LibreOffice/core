@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 
 #ifndef TEST
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 #else
 typedef unsigned int sal_uInt32;
 #endif
@@ -262,3 +261,5 @@ int main( int argc, const char** argv )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

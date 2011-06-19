@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_form_binding_XValueBinding_idl__
 #define __com_sun_star_form_binding_XValueBinding_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_NoSupportException_idl__
 #include <com/sun/star/lang/NoSupportException.idl>
-#endif
-#ifndef __com_sun_star_form_binding_IncompatibleTypesException_idl__
 #include <com/sun/star/form/binding/IncompatibleTypesException.idl>
-#endif
-#ifndef __com_sun_star_form_binding_InvalidBindingStateException_idl__
 #include <com/sun/star/form/binding/InvalidBindingStateException.idl>
-#endif
 
 //=============================================================================
 

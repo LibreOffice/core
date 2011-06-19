@@ -28,26 +28,12 @@
 #ifndef __com_sun_star_auth_SSOExceptions_idl__
 #define __com_sun_star_auth_SSOExceptions_idl__
 
-#ifndef __com_sun_star_auth_AuthenticationFailedException_idl__
 #include <com/sun/star/auth/AuthenticationFailedException.idl>
-#endif
-#ifndef __com_sun_star_auth_InvalidArgumentException_idl__
 #include <com/sun/star/auth/InvalidArgumentException.idl>
-#endif
-#ifndef __com_sun_star_auth_InvalidContextException_idl__
 #include <com/sun/star/auth/InvalidContextException.idl>
-#endif
-#ifndef __com_sun_star_auth_InvalidCredentialException_idl__
 #include <com/sun/star/auth/InvalidCredentialException.idl>
-#endif
-#ifndef __com_sun_star_auth_InvalidPrincipalException_idl__
 #include <com/sun/star/auth/InvalidPrincipalException.idl>
-#endif
-#ifndef __com_sun_star_auth_PersistenceFailureException_idl__
 #include <com/sun/star/auth/PersistenceFailureException.idl>
-#endif
-#ifndef __com_sun_star_auth_UnsupportedException_idl__
 #include <com/sun/star/auth/UnsupportedException.idl>
-#endif
 
 #endif

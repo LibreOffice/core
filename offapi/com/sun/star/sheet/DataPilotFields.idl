@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_sheet_DataPilotFields_idl__
 #define __com_sun_star_sheet_DataPilotFields_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 //=============================================================================
 
@@ -47,7 +41,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a collection of fields in a data pilot table.
 
     <p>If the data pilot table is based on a spreadsheet cell range, the
-    fields are representred by the columns of the range and are named using
+    fields are represented by the columns of the range and are named using
     the first row of the range.</p>
 
     @see com::sun::star::sheet::DataPilotField

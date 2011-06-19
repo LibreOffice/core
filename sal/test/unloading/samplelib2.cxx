@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -125,7 +126,7 @@ static Reference<XInterface> SAL_CALL test23_createInstance(const Reference<XMul
 
 // Standard UNO library interface -------------------------------------------------
 extern "C" {
-    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv){
+    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv){
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
@@ -137,18 +138,18 @@ extern "C" {
             {
                 Reference< XRegistryKey > xNewKey(
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME1 "/UNO/SERVICES" ) ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME1 "/UNO/SERVICES" )) ) );
 
                 xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1)));
 
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME2 "/UNO/SERVICES" ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME2 "/UNO/SERVICES" )) );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2)));
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME3 "/UNO/SERVICES" )   );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME3 "/UNO/SERVICES" ))   );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3)));
 
@@ -156,13 +157,13 @@ extern "C" {
             }
             catch (InvalidRegistryException &)
             {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                OSL_FAIL( "### InvalidRegistryException!" );
             }
         }
         return sal_False;
     }
 
-    void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey) throw()
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey) throw()
     {
         void * pRet = 0;
 
@@ -234,3 +235,5 @@ extern "C" {
         return globalModuleCount.canUnload( &globalModuleCount, libUnused);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

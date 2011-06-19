@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 
 #define UNICODE
 #include "system.h"
+#include <string.h>
 #ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
 #endif
@@ -418,7 +420,15 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
+    {
+        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + wcslen(lpValue) + 1];
+        wcscpy(buffer, lpName);
+        wcscat(buffer, L"=");
+        wcscat(buffer, lpValue);
+        _wputenv(buffer);
+        delete[] buffer;
         return osl_Process_E_None;
+    }
     return osl_Process_E_Unknown;
 }
 
@@ -428,7 +438,14 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
     //process's environment.
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, NULL))
+    {
+        wchar_t *buffer = new wchar_t[wcslen(lpName) + 1 + 1];
+        wcscpy(buffer, lpName);
+        wcscat(buffer, L"=");
+        _wputenv(buffer);
+        delete[] buffer;
         return osl_Process_E_None;
+    }
     return osl_Process_E_Unknown;
 }
 
@@ -637,3 +654,5 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 
     return pSocket;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

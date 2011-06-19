@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,7 +100,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     if ( nGPR > ppc64::MAX_GPR_REGS )
         nGPR = ppc64::MAX_GPR_REGS;
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         // Let's figure out what is really going on here
         {
                 fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
@@ -266,13 +267,13 @@ static void cpp_call(
 
     if (pReturnTypeDescr)
     {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "return type is %d\n", pReturnTypeDescr->eTypeClass);
 #endif
         if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
         {
             pCppReturn = pUnoReturn; // direct way for simple types
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "simple return\n");
 #endif
         }
@@ -281,7 +282,7 @@ static void cpp_call(
             // complex return via ptr
             pCppReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                    ? alloca( pReturnTypeDescr->nSize ) : pUnoReturn);
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
 #endif
             INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverFlow );
@@ -289,7 +290,7 @@ static void cpp_call(
     }
     // push "this" pointer
         void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "this pointer is %p\n", pAdjustedThisPtr);
 #endif
     INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverFlow );
@@ -303,7 +304,7 @@ static void cpp_call(
 
     sal_Int32 nTempIndizes   = 0;
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "n params is %d\n", nParams);
 #endif
 
@@ -313,7 +314,7 @@ static void cpp_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "param %d is %d %d %d\n", nPos, rParam.bOut, bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ),
             pParamTypeDescr->eTypeClass);
 #endif
@@ -327,7 +328,7 @@ static void cpp_call(
                         {
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
@@ -335,7 +336,7 @@ static void cpp_call(
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
@@ -363,12 +364,12 @@ static void cpp_call(
         }
         else // ptr to complex value | ref
         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "complex type again %d\n", rParam.bIn);
 #endif
                         if (! rParam.bIn) // is pure out
                         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "complex size is %d\n", pParamTypeDescr->nSize );
 #endif
                                 // cpp out is constructed mem, uno out is not!
@@ -382,7 +383,7 @@ static void cpp_call(
                         // is in/inout
                         else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
                         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "this one\n");
 #endif
                                 uno_copyAndConvertData(
@@ -395,7 +396,7 @@ static void cpp_call(
                         }
                         else // direct way
                         {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "that one, passing %lx through\n", pUnoArgs[nPos]);
 #endif
                                 pCppArgs[nPos] = pUnoArgs[nPos];
@@ -414,7 +415,7 @@ static void cpp_call(
                         pStackStart, ( pStack - pStackStart ),
                         pGPR, nGPR,
                         pFPR, nFPR );
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -479,9 +480,8 @@ void unoInterfaceProxyDispatch(
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // is my surrogate
-        bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
-            = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+    bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
+        = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
 
     switch (pMemberDescr->eTypeClass)
     {
@@ -598,3 +598,5 @@ void unoInterfaceProxyDispatch(
 }
 
 } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

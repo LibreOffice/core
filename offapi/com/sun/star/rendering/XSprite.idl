@@ -27,24 +27,12 @@
 #ifndef __com_sun_star_rendering_XSprite_idl__
 #define __com_sun_star_rendering_XSprite_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
-#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
 #include <com/sun/star/geometry/AffineMatrix2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_ViewState_idl__
 #include <com/sun/star/rendering/ViewState.idl>
-#endif
-#ifndef __com_sun_star_rendering_RenderState_idl__
 #include <com/sun/star/rendering/RenderState.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 
@@ -93,13 +81,13 @@ published interface XSprite : ::com::sun::star::uno::XInterface
         The new position, in user coordinate space, to move the sprite to.
 
         @param aViewState
-        The viewstate to be used when interpreting aNewPos.
+        The view state to be used when interpreting aNewPos.
 
         @param aRenderState
-        The renderstate to be used when interpreting aNewPos.
+        The render state to be used when interpreting aNewPos.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and renderstate parameters are outside the
+        if one of the view and render state parameters are outside the
         specified range.
      */
     void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )

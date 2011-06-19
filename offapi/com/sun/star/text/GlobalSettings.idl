@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_text_BaseFrame_idl__
 #define __com_sun_star_text_BaseFrame_idl__
 
-#ifndef __com_sun_star_view_XPrintSettingsSupplier_idl__
 #include <com/sun/star/view/XPrintSettingsSupplier.idl>
-#endif
-#ifndef __com_sun_star_view_XViewSettingsSupplier_idl__
 #include <com/sun/star/view/XViewSettingsSupplier.idl>
-#endif
 
 
 
@@ -42,7 +38,7 @@
 
 //=============================================================================
 
-/** specifies a service that provides acces to the settings of a text module.
+/** specifies a service that provides access to the settings of a text module.
  */
 published service GlobalSettings
 {

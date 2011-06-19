@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,23 +105,4 @@
     #   define NSPROTO_SPXII    1257
 #endif // #ifdef GCC
 
-#ifdef _DLL_
-
-#ifdef __cplusplus
-    extern "C" DWORD g_dwPlatformId;
-#else
-    extern DWORD g_dwPlatformId;
-#endif // #ifdef __cplusplus
-
-    #define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
-#else
-
-#ifdef __cplusplus
-    extern "C" DWORD GetPlatformId(void);
-#else
-    extern DWORD GetPlatformId(void);
-#endif // #ifdef __cplusplus
-
-    #define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
-#endif // #ifdef _DLL_
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

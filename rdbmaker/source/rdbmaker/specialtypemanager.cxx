@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,7 @@ sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName );
 sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop);
 }
 
-using namespace rtl;
-
+using ::rtl::OString;
 SpecialTypeManager::SpecialTypeManager()
 {
     m_pImpl = new SpecialTypeManagerImpl();
@@ -99,3 +99,5 @@ RTTypeClass SpecialTypeManager::getTypeClass(const OString& name)
 }
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

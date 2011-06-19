@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_TablePageStyle_idl__
 #define __com_sun_star_sheet_TablePageStyle_idl__
 
-#ifndef __com_sun_star_style_PageStyle_idl__
 #include <com/sun/star/style/PageStyle.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XHeaderFooterContent_idl__
 #include <com/sun/star/sheet/XHeaderFooterContent.idl>
-#endif
 
 //=============================================================================
 

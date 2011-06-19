@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,7 +216,7 @@ X2CParser::Parse_SglAttr( Simstr &          o_sAttrValue,
 
     Pass_White();
     if (*text == '>')
-        SyntaxError("no attribute found, where one was expected");
+        SyntaxError("no attribute found where one was expected");
     Simstr sAttrName;
     Get_Attribute(o_sAttrValue, sAttrName);
     if (sAttrName != i_sAttrName)
@@ -441,12 +442,9 @@ X2CParser::SyntaxError( const char * i_sText )
 void
 X2CParser::TestCurChar()
 {
-//  if (*text == '\0')
-//      SyntaxError("unexpected end of file");
-//  else
-
     if (*text == '\n')
         nFileLine++;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

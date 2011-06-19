@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_awt_XMenuBarExtended_idl__
 #define __com_sun_star_awt_XMenuBarExtended_idl__
 
-#ifndef __com_sun_star_awt_XMenuBar_idl__
 #include <com/sun/star/awt/XMenuBar.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XMenuExtended2_idl__
 #include <com/sun/star/awt/XMenuExtended2.idl>
-#endif
-
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
 
 //=============================================================================
 

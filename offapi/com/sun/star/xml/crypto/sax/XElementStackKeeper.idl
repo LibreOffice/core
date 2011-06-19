@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -62,7 +62,7 @@ struct ElementStackItem
 /**
  * Manipulate the "key SAX events" in a SAX event stream.
  *
- * @see   XSecController
+ * @see   XSecurityController
  */
 interface XElementStackKeeper : com::sun::star::uno::XInterface
 {
@@ -77,7 +77,7 @@ interface XElementStackKeeper : com::sun::star::uno::XInterface
     void stop();
 
     /**
-     * Transfers the bufferred key SAX events to a document handler.
+     * Transfers the buffered key SAX events to a document handler.
      * <p>
      * All transferred events are removed from the buffer.
      *

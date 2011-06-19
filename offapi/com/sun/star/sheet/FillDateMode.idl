@@ -48,7 +48,7 @@ published enum FillDateMode
 
     //-------------------------------------------------------------------------
 
-    /** for evey new value a single day is added, but Saturdays and
+    /** for every new value a single day is added, but Saturdays and
         Sundays are skipped.
      */
     FILL_DATE_WEEKDAY,

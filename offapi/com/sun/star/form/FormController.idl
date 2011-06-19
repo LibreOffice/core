@@ -27,49 +27,23 @@
 #ifndef __com_sun_star_form_FormController_idl__
 #define __com_sun_star_form_FormController_idl__
 
-#ifndef __com_sun_star_form_XFormController_idl__
 #include <com/sun/star/form/XFormController.idl>
-#endif
 
-#ifndef __com_sun_star_awt_XTabController_idl__
 #include <com/sun/star/awt/XTabController.idl>
-#endif
 
-#ifndef __com_sun_star_container_XChild_idl__
 #include <com/sun/star/container/XChild.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
 
-#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
 #include <com/sun/star/util/XModifyBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_form_XConfirmDeleteBroadcaster_idl__
 #include <com/sun/star/form/XConfirmDeleteBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XSQLErrorBroadcaster_idl__
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XRowSetApproveBroadcaster_idl__
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
-#endif
 
-#ifndef __com_sun_star_form_XDatabaseParameterBroadcaster_idl__
 #include <com/sun/star/form/XDatabaseParameterBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_form_FormControllerDispatcher_idl__
 #include <com/sun/star/form/FormControllerDispatcher.idl>
-#endif
 
 //=============================================================================
 

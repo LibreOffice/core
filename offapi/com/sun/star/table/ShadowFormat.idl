@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_table_ShadowFormat_idl__
 #define __com_sun_star_table_ShadowFormat_idl__
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_table_ShadowLocation_idl__
 #include <com/sun/star/table/ShadowLocation.idl>
-#endif
 
 //=============================================================================
 

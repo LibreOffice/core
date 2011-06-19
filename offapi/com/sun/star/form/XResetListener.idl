@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XResetListener_idl__
 #define __com_sun_star_form_XResetListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
-#endif
 
 
 //=============================================================================
@@ -42,7 +38,7 @@
 
 //=============================================================================
 
-/** is the interface for receiving notificaions about reset events.
+/** is the interface for receiving notifications about reset events.
 
     <p>The listener is called if a component implementing the
     <type>XReset</type> interface performs a reset.</br>
@@ -63,10 +59,10 @@ published interface XResetListener: com::sun::star::lang::XEventListener
     /** is invoked before a component is reset.
 
         @param rEvent
-            the event happend.
+            the event happened.
 
         @returns
-            <TRUE/> when reset was approved, <FALSE/> when the reset operation should be cancelled.
+            <TRUE/> when reset was approved, <FALSE/> when the reset operation should be canceled.
      */
     boolean approveReset( [in] com::sun::star::lang::EventObject rEvent );
 
@@ -75,7 +71,7 @@ published interface XResetListener: com::sun::star::lang::XEventListener
     /** is invoked when a component has been reset.
 
         @param rEvent
-            the event happend.
+            the event happened.
      */
     [oneway] void resetted( [in] com::sun::star::lang::EventObject rEvent );
 

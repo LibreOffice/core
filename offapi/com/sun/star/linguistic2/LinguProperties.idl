@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_linguistic2_LinguProperties_idl__
 #define __com_sun_star_linguistic2_LinguProperties_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_beans_XFastPropertySet_idl__
 #include <com/sun/star/beans/XFastPropertySet.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_lang_XServiceInfo_idl__
 #include <com/sun/star/lang/XServiceInfo.idl>
-#endif
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
 
 //=============================================================================
 
@@ -60,7 +50,7 @@ published service LinguProperties
 
     //-------------------------------------------------------------------------
     /** defines whether new German spelling rules should be used for German
-         text or not when doing spellchecking or hyphenation, or using the
+         text or not when doing spell checking or hyphenation, or using the
          thesaurus.
 
         @deprecated since OOo 3.0.1
@@ -68,31 +58,31 @@ published service LinguProperties
     [property, maybevoid] boolean IsGermanPreReform;
 
     //-------------------------------------------------------------------------
-    /** defines if the dictionary-list should be used for spellchecking
+    /** defines if the dictionary-list should be used for spell checking
          and hyphenation or not.
     */
     [property] boolean IsUseDictionaryList;
 
     //-------------------------------------------------------------------------
     /** defines if control characters should be ignored or not, by the linguistic
-         (i.e., spellchecker, hyphenator and thesaurus).
+         (i.e., spell checker, hyphenator and thesaurus).
     */
     [property] boolean IsIgnoreControlCharacters;
 
     //-------------------------------------------------------------------------
     /** defines if words with only uppercase letters should be
-         subject to spellchecking or not.
+         subject to spell checking or not.
     */
     [property] boolean IsSpellUpperCase;
 
     //-------------------------------------------------------------------------
     /** defines if words containing digits (or numbers) should be
-         subject to spellchecking or not.
+         subject to spell checking or not.
     */
     [property] boolean IsSpellWithDigits;
 
     //-------------------------------------------------------------------------
-    /** defines if the captitalization of words should be checked or not.
+    /** defines if the capitalization of words should be checked or not.
     */
     [property] boolean IsSpellCapitalization;
 
@@ -132,7 +122,7 @@ published service LinguProperties
     [property] boolean IsHyphSpecial;
 
     //-------------------------------------------------------------------------
-    /** indicates whether spellchecking should be done automatically or not.
+    /** indicates whether spell checking should be done automatically or not.
     */
     [property] boolean IsSpellAuto;
 
@@ -145,7 +135,7 @@ published service LinguProperties
     [property, maybevoid] boolean IsSpellHide;
 
     //-------------------------------------------------------------------------
-    /** indicates if spellchecking should be performed in all available
+    /** indicates if spell checking should be performed in all available
          languages.
 
         @deprecated since OOo 3.0.1
@@ -153,13 +143,13 @@ published service LinguProperties
     [property, maybevoid] boolean IsSpellInAllLanguages;
 
     //-------------------------------------------------------------------------
-    /** defines whether spellchecking should be done in special regions of
+    /** defines whether spell checking should be done in special regions of
          documents or not.
     */
     [property] boolean IsSpellSpecial;
 
     //-------------------------------------------------------------------------
-    /** defines whether spellchecking should be done in reverse
+    /** defines whether spell checking should be done in reverse
          direction or not.
     */
     [property] boolean IsWrapReverse;

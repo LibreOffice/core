@@ -27,17 +27,9 @@
 #ifndef com_sun_star_chart2_data_XRangeHighlighter_idl
 #define com_sun_star_chart2_data_XRangeHighlighter_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_view_XSelectionChangeListener_idl__
 #include <com/sun/star/view/XSelectionChangeListener.idl>
-#endif
-
-#ifndef com_sun_star_chart2_data_HighlightedRange_idl
 #include <com/sun/star/chart2/data/HighlightedRange.idl>
-#endif
 
 module com
 {

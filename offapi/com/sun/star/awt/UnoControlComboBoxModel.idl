@@ -27,17 +27,10 @@
 #ifndef __com_sun_star_awt_UnoControlComboBoxModel_idl__
 #define __com_sun_star_awt_UnoControlComboBoxModel_idl__
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
 #include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
 
 #include <com/sun/star/awt/XItemList.idl>
 
@@ -221,13 +214,13 @@ published service UnoControlComboBoxModel
 
     /** defines how the mouse wheel can be used to scroll through the control's content.
 
-        <p>Usually, the mouse wheel scrool through the control's entry list. Using this property,
+        <p>Usually, the mouse wheel scroll through the control's entry list. Using this property,
         and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;
 
-    /** allows mmanipulating the list of items in the combo box more fine-grained than the
+    /** allows manipulating the list of items in the combo box more fine-grained than the
         <member>StringItemList</member> property.
     */
     [optional] interface XItemList;

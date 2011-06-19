@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,17 +35,14 @@
 
 #include <rtl/logfile.h>
 #include <osl/process.h>
-#ifndef _OSL_FILE_H_
 #include <osl/time.h>
-#endif
 #include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
-#ifndef _RTL_STRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <rtl/alloc.h>
+#include <rtl/instance.hxx>
 #include "osl/thread.h"
 
 #include <algorithm>
@@ -53,9 +51,11 @@
 #define vsnprintf _vsnprintf
 #endif
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -91,19 +91,14 @@ LoggerGuard::~LoggerGuard()
 // g_buffer in init():
 LoggerGuard loggerGuard;
 
-Mutex & getLogMutex()
+namespace
 {
-    static Mutex *pMutex = 0;
-    if( !pMutex )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pMutex )
-        {
-            static Mutex mutex;
-            pMutex = &mutex;
-        }
-    }
-    return *pMutex;
+    class theLogMutex : public rtl::Static<osl::Mutex, theLogMutex>{};
+}
+
+static Mutex & getLogMutex()
+{
+    return theLogMutex::get();
 }
 
 OUString getFileUrl( const OUString &name )
@@ -252,3 +247,5 @@ extern "C" sal_Bool SAL_CALL rtl_logfile_hasLogFile( void ) {
     init();
     return g_buffer != 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

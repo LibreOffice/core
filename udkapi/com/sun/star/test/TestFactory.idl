@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_test_TestFactory_idl__
 #define __com_sun_star_test_TestFactory_idl__
 
-#ifndef __com_sun_star_lang_MultiServiceFactory_idl__
 #include <com/sun/star/lang/MultiServiceFactory.idl>
-#endif
 
 
 //=============================================================================

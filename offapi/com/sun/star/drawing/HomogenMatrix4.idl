@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_drawing_HomogenMatrix4_idl__
 #define __com_sun_star_drawing_HomogenMatrix4_idl__
 
-#ifndef __com_sun_star_drawing_HomogenMatrixLine4_idl__
 #include <com/sun/star/drawing/HomogenMatrixLine4.idl>
-#endif
 
 
 //=============================================================================
@@ -39,7 +37,7 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
-/** specifies a homogenous matrix by four homogenous lines.
+/** specifies a homogeneous matrix by four homogeneous lines.
  */
 published struct HomogenMatrix4
 {

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sdbc_ODBCConnectionProperties_idl__
 #define __com_sun_star_sdbc_ODBCConnectionProperties_idl__
 
-#ifndef __com_sun_star_sdbc_ConnectionProperties_idl__
 #include <com/sun/star/sdbc/ConnectionProperties.idl>
-#endif
 
 module com {  module sun {  module star {  module sdbc {
 
@@ -39,7 +37,7 @@ module com {  module sun {  module star {  module sdbc {
     <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo()</member>.
 
     <p>
-    The properties for a connection contain additonal information about how to connect to a database and
+    The properties for a connection contain additional information about how to connect to a database and
     how to control the behavior of the resulting connection should be.
 
     </p>
@@ -50,7 +48,7 @@ module com {  module sun {  module star {  module sdbc {
 service ODBCConnectionProperties
 {
     service com::sun::star::sdbc::ConnectionProperties;
-    /** should the parameter '?' in prepared statement be substituated with an distinct name
+    /** should the parameter "?" in prepared statement be substituted with an distinct name
     */
     [optional, property] boolean ParameterNameSubstitution;
 

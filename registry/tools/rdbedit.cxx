@@ -120,15 +120,15 @@ public:
     OString prepareHelp();
     OString prepareVersion();
 
-    const OString& getProgramName()
+    const OString& getProgramName() const
         { return m_program; }
-    const OString& getTypeReg()
+    const OString& getTypeReg() const
         { return m_typeRegName; }
-    const OString& getKeyName()
+    const OString& getKeyName() const
         { return m_keyName; }
-    const Command getCommand()
+    Command getCommand() const
         { return m_command; }
-    bool verbose()
+    bool verbose() const
         { return m_bVerbose; }
 protected:
     OString     m_program;
@@ -262,7 +262,7 @@ OString Options::prepareVersion()
 static Options options;
 
 
-#if (defined UNX) || (defined OS2) || (defined __MINGW32__)
+#if (defined UNX) || (defined __MINGW32__)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,3 +135,5 @@ sal_uInt32 ImplCombineSurrogates(sal_uInt32 nHigh, sal_uInt32 nLow)
                "specification violation");
     return (((nHigh & 0x3FF) << 10) | (nLow & 0x3FF)) + 0x10000;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

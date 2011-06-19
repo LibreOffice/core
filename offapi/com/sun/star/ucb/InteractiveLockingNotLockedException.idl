@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_InteractiveLockingNotLockedException_idl__
 #define __com_sun_star_ucb_InteractiveLockingNotLockedException_idl__
 
-#ifndef __com_sun_star_ucb_InteractiveLockingException_idl__
 #include <com/sun/star/ucb/InteractiveLockingException.idl>
-#endif
 
 
 //=============================================================================
@@ -39,7 +37,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** An error indicating that the resource is not locked.
 
-    <p>This error for instance can occure when trying to unlock a resource
+    <p>This error for instance can occur when trying to unlock a resource
        that is not locked.
     </p>
 

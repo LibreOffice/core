@@ -28,15 +28,13 @@
 #ifndef __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
 #define __com_sun_star_accessibility_IllegalAccessibleComponentStateException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
 #include <com/sun/star/uno/Exception.idl>
-#endif
 
 module com {  module sun {  module star {  module accessibility {
 
 /** Indicates invalid or unavailable state information.
 
-    <p>This exception is thrown to indicate the an accessibilty component
+    <p>This exception is thrown to indicate the an accessibility component
     has been queried for state information that it can not provide.  Used by
     <member>XAccessibleContext::getLocale</member>.</p>
 

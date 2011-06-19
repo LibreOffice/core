@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_drawing_LineProperties_idl__
 #define __com_sun_star_drawing_LineProperties_idl__
 
-#ifndef __com_sun_star_drawing_LineStyle_idl__
 #include <com/sun/star/drawing/LineStyle.idl>
-#endif
-
-#ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineDash_idl__
 #include <com/sun/star/drawing/LineDash.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_LineJoint_idl__
 #include <com/sun/star/drawing/LineJoint.idl>
-#endif
 
 
 //=============================================================================
@@ -102,27 +88,27 @@ published service LineProperties
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the name of the line start poly polygon bezier.
+    /** This property contains the name of the line start poly polygon Bezier.
         <p>If this string is empty, no line start polygon is rendered.
      */
     [optional, property] string LineStartName;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the name of the line end poly polygon bezier.
+    /** This property contains the name of the line end poly polygon Bezier.
         <p>If this string is empty, no line end polygon is rendered.
      */
     [optional, property] string LineEndName;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the line start in the form of a poly polygon bezier.
+    /** This property contains the line start in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineStart;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the line end in the form of a poly polygon bezier.
+    /** This property contains the line end in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineEnd;
 

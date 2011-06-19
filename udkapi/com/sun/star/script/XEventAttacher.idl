@@ -27,33 +27,19 @@
 #ifndef __com_sun_star_script_XEventAttacher_idl__
 #define __com_sun_star_script_XEventAttacher_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_script_XAllListener_idl__
 #include <com/sun/star/script/XAllListener.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_beans_IntrospectionException_idl__
 #include <com/sun/star/beans/IntrospectionException.idl>
-#endif
 
-#ifndef __com_sun_star_script_CannotCreateAdapterException_idl__
 #include <com/sun/star/script/CannotCreateAdapterException.idl>
-#endif
 
-#ifndef __com_sun_star_lang_ServiceNotRegisteredException_idl__
 #include <com/sun/star/lang/ServiceNotRegisteredException.idl>
-#endif
 
 
 //=============================================================================

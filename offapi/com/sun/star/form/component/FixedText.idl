@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_component_FixedText_idl__
 #define __com_sun_star_form_component_FixedText_idl__
 
-#ifndef __com_sun_star_awt_UnoControlFixedTextModel_idl__
 #include <com/sun/star/awt/UnoControlFixedTextModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
 
 
 //=============================================================================

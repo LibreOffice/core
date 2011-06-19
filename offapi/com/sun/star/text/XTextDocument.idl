@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_text_XTextDocument_idl__
 #define __com_sun_star_text_XTextDocument_idl__
 
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
 
-#ifndef __com_sun_star_text_XText_idl__
 #include <com/sun/star/text/XText.idl>
-#endif
 
 
 //=============================================================================

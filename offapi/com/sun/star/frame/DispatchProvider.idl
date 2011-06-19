@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_frame_DispatchProvider_idl__
 #define __com_sun_star_frame_DispatchProvider_idl__
 
-#ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
 #include <com/sun/star/frame/XDispatchProviderInterception.idl>
-#endif
 
 //=============================================================================
 
@@ -61,7 +56,7 @@ published service DispatchProvider
 
         <p>
         Base interface of <type>XNotifyingDispatch</type> is <type>XDispatch</type>
-        and can be called for requests if result isn't neccessary for dispatch operation.
+        and can be called for requests if result isn't necessary for dispatch operation.
         </p>
 
         @see XDispatch

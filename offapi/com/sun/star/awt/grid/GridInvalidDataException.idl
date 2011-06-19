@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: GridInvalidDataException.idl,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,9 +27,7 @@
 #ifndef __com_sun_star_awt_grid_GridInvalidDataException_idl__
 #define __com_sun_star_awt_grid_GridInvalidDataException_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
 
 
 //=============================================================================

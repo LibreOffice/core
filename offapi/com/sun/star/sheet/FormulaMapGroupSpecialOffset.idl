@@ -90,9 +90,9 @@ constants FormulaMapGroupSpecialOffset
         used in formulas.
 
         <p>The <member>FormulaToken::Data</member> member shall contain a
-        <atom>string</atom> with the programmatical name of the function, e.g.
+        <atom>string</atom> with the programmatic name of the function, e.g.
         "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
-        function from the Analsysis add-in.</p>
+        function from the Analysis add-in.</p>
      */
     const long EXTERNAL = 3;
 

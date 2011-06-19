@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_ui_ContextMenuExecuteEvent_idl__
 #define __com_sun_star_ui_ContextMenuExecuteEvent_idl__
 
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-#ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
-#endif
-#ifndef __com_sun_star_view_XSelectionSupplier_idl__
 #include <com/sun/star/view/XSelectionSupplier.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 

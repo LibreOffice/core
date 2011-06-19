@@ -28,17 +28,9 @@
 #ifndef __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
 #define __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
 
-#ifndef __com_sun_star_datatransfer_dnd_DragSourceDragEvent_idl__
 #include <com/sun/star/datatransfer/dnd/DragSourceDragEvent.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_dnd_DragSourceDropEvent_idl__
 #include <com/sun/star/datatransfer/dnd/DragSourceDropEvent.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
 //=============================================================================
 

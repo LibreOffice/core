@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_frame_ContentHandlerFactory_idl__
 #define __com_sun_star_frame_ContentHandlerFactory_idl__
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-
-#ifndef __com_sun_star_container_XContainerQuery_idl__
 #include <com/sun/star/container/XContainerQuery.idl>
-#endif
 
 //=============================================================================
 
@@ -62,7 +54,7 @@ published service ContentHandlerFactory
 
         <p>
         Returned objects must support the service specification of a <type>ContentHandler</type>.
-        They can be created by using of his internal name, which must be unambigous everytime, only.
+        They can be created by using of his internal name, which must be unambiguous everytime, only.
         To get this name use further specified interfaces of this factory for access on
         the flat configuration.
         </p>

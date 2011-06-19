@@ -58,7 +58,7 @@ published constants Command
 
     //-------------------------------------------------------------------------
 
-    /** specifies the begining of an auto scroll operation.
+    /** specifies the beginning of an auto scroll operation.
     */
     const short STARTAUTOSCROLL = 4;
 
@@ -118,7 +118,7 @@ published constants Command
 
     //-------------------------------------------------------------------------
 
-    /** specifies a hangual hanja conversion command.
+    /** specifies a Hangul hanja conversion command.
     */
     const short HANGUL_HANJA_CONVERSION = 14;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         {
             Sequence < sal_Int8 > seq(10);
             r->write( seq );
-            OSL_ENSURE( 0 , "expected exception not thrown" );
+            OSL_FAIL( "expected exception not thrown" );
         }
         catch ( IOException & )
         {
@@ -170,7 +171,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         }
         catch ( ... )
         {
-            OSL_ENSURE( 0 , "wrong exception was thrown" );
+            OSL_FAIL( "wrong exception was thrown" );
         }
 
         thread.join();
@@ -178,59 +179,55 @@ void testConnection( const OUString &sConnectionDescription  ,
 }
 
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+int SAL_CALL main( int argc, char * argv[] )
 {
     Reference< XMultiServiceFactory > xMgr(
         createRegistryServiceFactory( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")) ) );
 
     Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) ), UNO_QUERY );
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
     OUString aLibName =
-        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "connector.uno" SAL_DLLEXTENSION ));
     xImplReg->registerImplementation(
-        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
-    aLibName = OUString::createFromAscii( "acceptor.uno" SAL_DLLEXTENSION );
+    aLibName = OUString(RTL_CONSTASCII_USTRINGPARAM( "acceptor.uno" SAL_DLLEXTENSION ));
     xImplReg->registerImplementation(
-        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
     Reference < XAcceptor >  rAcceptor(
         xMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ) , UNO_QUERY );
 
     Reference < XAcceptor >  rAcceptorPipe(
         xMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ) , UNO_QUERY );
 
     Reference < XConnector >  rConnector(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.connection.Connector") ) , UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")) ) , UNO_QUERY );
 
 
     printf( "Testing sockets" );
     fflush( stdout );
-    testConnection( OUString::createFromAscii("socket,host=localhost,port=2001"), rAcceptor , rConnector );
+    testConnection( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")), rAcceptor , rConnector );
     printf( " Done\n" );
 
     printf( "Testing pipe" );
     fflush( stdout );
-    testConnection( OUString::createFromAscii("pipe,name=bla") , rAcceptorPipe , rConnector );
+    testConnection( OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=bla")) , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
     // check, if errornous strings make any problem
     rAcceptor = Reference< XAcceptor > (
-        xMgr->createInstance( OUString::createFromAscii( "com.sun.star.connection.Acceptor" ) ),
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ),
         UNO_QUERY );
 
     try
     {
         rAcceptor->accept( OUString() );
-        OSL_ENSURE( 0 , "empty connection string" );
+        OSL_FAIL( "empty connection string" );
     }
     catch( IllegalArgumentException & )
     {
@@ -238,13 +235,13 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unexpected akexception with empty connection string" );
+        OSL_FAIL( "unexpected akexception with empty connection string" );
     }
 
     try
     {
         rConnector->connect( OUString() );
-        OSL_ENSURE( 0 , "empty connection string" );
+        OSL_FAIL( "empty connection string" );
     }
     catch( ConnectionSetupException & )
     {
@@ -252,19 +249,19 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unexpected exception with empty connection string" );
+        OSL_FAIL( "unexpected exception with empty connection string" );
     }
 
 
-    MyThread thread( rAcceptor , OUString::createFromAscii("socket,host=localhost,port=2001") );
+    MyThread thread( rAcceptor , OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
     thread.create();
 
     TimeValue value = {0,1};
     osl_waitThread( &value );
     try
     {
-        rAcceptor->accept( OUString::createFromAscii("socket,host=localhost,port=2001") );
-        OSL_ENSURE( 0 , "already existing exception expected" );
+        rAcceptor->accept( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
+        OSL_FAIL( "already existing exception expected" );
     }
     catch( AlreadyAcceptingException & e)
     {
@@ -272,7 +269,7 @@ int __cdecl main( int argc, char * argv[] )
     }
     catch( ... )
     {
-        OSL_ENSURE( 0, "unknown exception, already existing existing expected" );
+        OSL_FAIL( "unknown exception, already existing existing expected" );
     }
 
     rAcceptor->stopAccepting();
@@ -284,3 +281,5 @@ int __cdecl main( int argc, char * argv[] )
         rComp->dispose();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

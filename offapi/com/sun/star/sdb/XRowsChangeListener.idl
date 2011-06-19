@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XRowsChangeListener.idl,v $
- * $Revision: 1.11 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,16 +27,14 @@
 #ifndef __com_sun_star_sdb_XRowsChangeListener_idl__
 #define __com_sun_star_sdb_XRowsChangeListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 #include <com/sun/star/sdb/RowsChangeEvent.idl>
 
  module com {  module sun {  module star {  module sdb {
 
 
 /** is used for receiving "rowsChanged" events
-    posted by, for example, a rowset.
+    posted by, for example, a row set.
  */
 interface XRowsChangeListener: com::sun::star::lang::XEventListener
 {

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #ifdef __cplusplus
 
-#ifndef _RTL_DIAGNOSE_H_
 #include "osl/diagnose.h"
-#endif
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/memory.h>
@@ -50,7 +49,7 @@ namespace rtl
 /**
   This String class provide base functionality for C++ like Unicode
   character array handling. The advantage of this class is, that it
-  handle all the memory managament for you - and it do it
+  handle all the memory management for you - and it do it
   more efficient. If you assign a string to another string, the
   data of both strings are shared (without any copy operation or
   memory allocation) as long as you do not change the string. This class
@@ -277,6 +276,22 @@ public:
                 object.
     */
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
+
+    /**
+      Checks if a string is empty.
+
+      @return   sal_True if the string is empty;
+                sal_False, otherwise.
+
+      @since LibreOffice 3.4
+    */
+    sal_Bool isEmpty() const SAL_THROW(())
+    {
+        if ( pData->length )
+            return sal_False;
+        else
+            return sal_True;
+    }
 
     /**
       Returns a pointer to the Unicode character buffer from this string.
@@ -733,7 +748,7 @@ public:
 
       @return   a hash code value for this object.
 
-      @see rtl::OUStringHash for convenient use of STLPort's hash_map
+      @see rtl::OUStringHash for convenient use of boost::unordered_map
     */
     sal_Int32 hashCode() const SAL_THROW(())
     {
@@ -949,8 +964,7 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength()
-                   && count >= 0 && count <= getLength() - beginIndex);
+        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
@@ -1464,7 +1478,7 @@ public:
 /** A helper to use OUStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
-    hash function arguments to STLPort's hash_map and similar constructs.
+    hash function arguments to boost::unordered_map and similar constructs.
  */
 struct OUStringHash
 {
@@ -1538,3 +1552,5 @@ inline OString OUStringToOString( const OUString & rUnicode,
 #endif /* __cplusplus */
 
 #endif /* _RTL_USTRING_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

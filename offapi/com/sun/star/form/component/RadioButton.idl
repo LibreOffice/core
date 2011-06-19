@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_form_component_RadioButton_idl__
 #define __com_sun_star_form_component_RadioButton_idl__
 
-#ifndef __com_sun_star_awt_UnoControlRadioButtonModel_idl__
 #include <com/sun/star/awt/UnoControlRadioButtonModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_FormControlModel_idl__
 #include <com/sun/star/form/FormControlModel.idl>
-#endif
 
-#ifndef __com_sun_star_form_XReset_idl__
 #include <com/sun/star/form/XReset.idl>
-#endif
 
 
 //=============================================================================

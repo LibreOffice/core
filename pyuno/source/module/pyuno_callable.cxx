@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -195,8 +196,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
 
 static PyTypeObject PyUNO_callable_Type =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT( &PyType_Type, 0 )
     const_cast< char * >("PyUNO_callable"),
     sizeof (PyUNO_callable),
     0,
@@ -204,7 +204,7 @@ static PyTypeObject PyUNO_callable_Type =
     (printfunc) 0,
     (getattrfunc) 0,
     (setattrfunc) 0,
-    (cmpfunc) 0,
+    0,
     (reprfunc) 0,
     0,
     0,
@@ -212,7 +212,7 @@ static PyTypeObject PyUNO_callable_Type =
     (hashfunc) 0,
     (ternaryfunc) ::pyuno::PyUNO_callable_call,
     (reprfunc) 0,
-        (getattrofunc)0,
+    (getattrofunc)0,
     (setattrofunc)0,
     NULL,
     0,
@@ -256,6 +256,8 @@ PyRef PyUNO_callable_new (
 {
     PyUNO_callable* self;
 
+    OSL_ENSURE (my_inv.is(), "XInvocation must be valid");
+
     self = PyObject_New (PyUNO_callable, &PyUNO_callable_Type);
     if (self == NULL)
         return NULL; //NULL == Error!
@@ -271,3 +273,5 @@ PyRef PyUNO_callable_new (
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

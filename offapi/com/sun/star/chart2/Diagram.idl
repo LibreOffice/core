@@ -27,10 +27,7 @@
 #ifndef com_sun_star_chart_Diagram_idl
 #define com_sun_star_chart_Diagram_idl
 
-#ifndef com_sun_star_chart2_XDiagram_idl__
 #include <com/sun/star/chart2/XDiagram.idl>
-#endif
-
 #include <com/sun/star/chart2/XCoordinateSystemContainer.idl>
 #include <com/sun/star/chart2/XTitled.idl>
 #include <com/sun/star/chart2/RelativePosition.idl>
@@ -62,13 +59,13 @@ service Diagram
      */
     interface  XTitled;
 
-    /** makes it easy to set suiteable defaults for illumination and rotation for 3D charts
+    /** makes it easy to set suitable defaults for illumination and rotation for 3D charts
      */
     [optional] interface ::com::sun::star::chart::X3DDefaultSetter;
 
     /** The position is as a relative position on the page.
 
-        <p>If a relative position is given the diagam is not automatically placed,
+        <p>If a relative position is given the diagram is not automatically placed,
         but instead is placed relative on the page.</p>
      */
     [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;

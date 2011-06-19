@@ -27,27 +27,13 @@
 #ifndef __com_sun_star_text_MailMerge_idl__
 #define __com_sun_star_text_MailMerge_idl__
 
-#ifndef __com_sun_star_task_XJob_idl__
 #include <com/sun/star/task/XJob.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XConnection_idl__
 #include <com/sun/star/sdbc/XConnection.idl>
-#endif
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_text_XMailMergeBroadcaster_idl__
 #include <com/sun/star/text/XMailMergeBroadcaster.idl>
-#endif
-#ifndef __com_sun_star_sdb_DataAccessDescriptor_idl__
 #include <com/sun/star/sdb/DataAccessDescriptor.idl>
-#endif
 
 //=============================================================================
 
@@ -273,7 +259,7 @@ published service MailMerge
     //=============================================================================
 
     /** Contains the password of the incoming mail server. It is necessary to set this
-        if the mail server configuration is set to 'SMTP after POP' authentication and
+        if the mail server configuration is set to "SMTP after POP" authentication and
         the password is not already stored in the configuration for security reasons.
 
         <p>This property is only evaluated for e-Mail output.</p>
@@ -304,7 +290,7 @@ published service MailMerge
     //=============================================================================
 
     /** determines that the created mail merge document is sent as body in HTML format.
-        This property is only valid if the propery "SendAsAttachment" is set to <false/>.
+        This property is only valid if the property "SendAsAttachment" is set to <false/>.
 
         <p>This property is only evaluated for e-Mail output.</p>
 

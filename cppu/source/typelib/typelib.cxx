@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 
-#include <hash_map>
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
+
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <set>
 #include <vector>
@@ -48,17 +53,15 @@
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #ifdef SAL_W32
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(8)
 #endif
 
 /**
@@ -69,14 +72,19 @@ using namespace osl;
  */
 struct AlignSize_Impl
 {
-    sal_Int16   nInt16;
-    double      dDouble;
+    sal_Int16 nInt16;
+#ifdef AIX
+    //double: doubleword aligned if -qalign=natural/-malign=natural
+    //which isn't the default ABI. Otherwise word aligned, While a long long int
+    //is always doubleword aligned, so use that instead.
+    sal_Int64 dDouble;
+#else
+    double dDouble;
+#endif
 };
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // the value of the maximal alignment
@@ -183,7 +191,7 @@ struct hashStr_Impl
 
 //-----------------------------------------------------------------------------
 // Heavy hack, the const sal_Unicode * is hold by the typedescription reference
-typedef hash_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
+typedef boost::unordered_map< const sal_Unicode *, typelib_TypeDescriptionReference *,
                   hashStr_Impl, equalStr_Impl > WeakMap_Impl;
 
 typedef pair< void *, typelib_typedescription_Callback > CallbackEntry;
@@ -273,7 +281,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         while( aIt != pCache->end() )
         {
             typelib_typedescription_release( (*aIt) );
-            aIt++;
+            ++aIt;
         }
         delete pCache;
         pCache = 0;
@@ -330,6 +338,21 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         delete pWeakMap;
         pWeakMap = 0;
     }
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !nTypeDescriptionCount );
+    OSL_ENSURE( !nCompoundTypeDescriptionCount );
+    OSL_ENSURE( !nUnionTypeDescriptionCount );
+    OSL_ENSURE( !nIndirectTypeDescriptionCount );
+    OSL_ENSURE( !nArrayTypeDescriptionCount );
+    OSL_ENSURE( !nEnumTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceMethodTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceAttributeTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceTypeDescriptionCount );
+    OSL_ENSURE( !nTypeDescriptionReferenceCount );
+
+    OSL_ENSURE( !pCallbacks || pCallbacks->empty() );
+#endif
+
     delete pCallbacks;
     pCallbacks = 0;
 
@@ -342,10 +365,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 
 namespace { struct Init : public rtl::Static< TypeDescriptor_Init_Impl, Init > {}; }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" void SAL_CALL typelib_typedescription_registerCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
@@ -385,10 +404,6 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
     }
 }
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset, sal_Int32 & rMaxIntegralTypeSize )
@@ -1276,7 +1291,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
         pTypeName->buffer, pTypeName->length, ':');
     if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
-        OSL_ENSURE(false, "Bad interface method type name");
+        OSL_FAIL("Bad interface method type name");
         return;
     }
     rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
@@ -1289,7 +1304,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         || !complete(
             reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
     {
-        OSL_ENSURE(false, "No interface corresponding to interface method");
+        OSL_FAIL("No interface corresponding to interface method");
         return;
     }
 
@@ -1369,7 +1384,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
         pTypeName->buffer, pTypeName->length, ':');
     if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
-        OSL_ENSURE(false, "Bad interface attribute type name");
+        OSL_FAIL("Bad interface attribute type name");
         return;
     }
     rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
@@ -1382,7 +1397,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
         || !complete(
             reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
     {
-        OSL_ENSURE(false, "No interface corresponding to interface attribute");
+        OSL_FAIL("No interface corresponding to interface attribute");
         return;
     }
 
@@ -1927,7 +1942,13 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( float ));
                 break;
             case typelib_TypeClass_DOUBLE:
+#ifdef AIX
+                //See previous AIX ifdef comment for an explanation
+                nSize = (sal_Int32)(sizeof(double));
+                rMaxIntegralTypeSize = (sal_Int32)(sizeof(void*));
+#else
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( double ));
+#endif
                 break;
             case typelib_TypeClass_BYTE:
                 nSize = rMaxIntegralTypeSize = (sal_Int32)(sizeof( sal_Int8 ));
@@ -1948,7 +1969,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
             case typelib_TypeClass_SERVICE:
             case typelib_TypeClass_MODULE:
             default:
-                OSL_ENSURE( sal_False, "not convertable type" );
+                OSL_FAIL( "not convertable type" );
         };
     }
 
@@ -2174,7 +2195,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
         {
             // Check for derived interface member type:
             sal_Int32 i1 = name.lastIndexOf(
-                rtl::OUString::createFromAscii(":@"));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":@")));
             if (i1 >= 0) {
                 sal_Int32 i2 = i1 + RTL_CONSTASCII_LENGTH(":@");
                 sal_Int32 i3 = name.indexOf(',', i2);
@@ -2254,10 +2275,6 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
     }
 }
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
@@ -2644,3 +2661,5 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
 {
     return complete(ppTypeDescr, true);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

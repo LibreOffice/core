@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_script_browse_BrowseNodeFactory_idl__
 #define __com_sun_star_script_browse_BrowseNodeFactory_idl__
 
-#ifndef __com_sun_star_script_browse_XBrowseNodeFactory_idl__
 #include <com/sun/star/script/browse/XBrowseNodeFactory.idl>
-#endif
 
 module com { module sun { module star { module script { module browse {
 

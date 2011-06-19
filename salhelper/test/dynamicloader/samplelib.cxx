@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "samplelib.hxx"
 #include <sal/types.h>
 /*
@@ -35,3 +36,4 @@ double SAL_CALL funcB( double a)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

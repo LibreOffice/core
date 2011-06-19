@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,43 +46,26 @@ public:
     ~Includes();
 
     void add(rtl::OString const & registryType);
-
     void addAny() { m_includeAny = true; }
-
     void addReference() { m_includeReference = true; }
-
     void addSequence() { m_includeSequence = true; }
-
     void addType() { m_includeType = true; }
-
     void addCppuMacrosHxx() { m_includeCppuMacrosHxx = true; }
-
     void addCppuUnotypeHxx() { m_includeCppuUnotypeHxx = true; }
-
     void addOslDoublecheckedlockingH()
-    { m_includeOslDoublecheckedlockingH = true; }
-
+        { m_includeOslDoublecheckedlockingH = true; }
     void addOslMutexHxx() { m_includeOslMutexHxx = true; }
-
     void addRtlStrbufHxx() { m_includeRtlStrbufHxx = true; }
-
     void addRtlStringH() { m_includeRtlStringH = true; }
-
     void addRtlTextencH() { m_includeRtlTextencH = true; }
-
     void addRtlUstrbufHxx() { m_includeRtlUstrbufHxx = true; }
-
     void addRtlUstringH() { m_includeRtlUstringH = true; }
-
     void addRtlUstringHxx() { m_includeRtlUstringHxx = true; }
-
+    void addRtlInstanceHxx() { m_includeRtlInstanceHxx = true; }
     void addSalTypesH() { m_includeSalTypesH = true; }
-
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
-
     void addTypelibTypedescriptionH()
-    { m_includeTypelibTypedescriptionH = true; }
-
+        { m_includeTypelibTypedescriptionH = true; }
     void dump(FileStream & out, rtl::OString const * companionHdl);
 
     static void dumpInclude(
@@ -111,6 +95,7 @@ private:
     bool m_includeRtlUstrbufHxx;
     bool m_includeRtlUstringH;
     bool m_includeRtlUstringHxx;
+    bool m_includeRtlInstanceHxx;
     bool m_includeSalTypesH;
     bool m_includeTypelibTypeclassH;
     bool m_includeTypelibTypedescriptionH;
@@ -119,3 +104,5 @@ private:
 } }
 
 #endif // INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

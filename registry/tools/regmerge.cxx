@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
     return true;
 }
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
@@ -177,3 +178,5 @@ int _cdecl main( int argc, char * argv[] )
 
     return(0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

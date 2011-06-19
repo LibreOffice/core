@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_logging_XLogger_idl__
 #define __com_sun_star_logging_XLogger_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -46,7 +44,7 @@ published interface XLogHandler;
     <a href="http://java.sun.com/javase/6/docs/api/java/util/logging/package-summary.html">Java
     Logging API</a>. However, there are some differences, the major ones being:
     <ul><li>There's no support (yet) for filtering log events.</li>
-        <li>There ain't no convenience menthods for logging.</li>
+        <li>There ain't no convenience methods for logging.</li>
         <li>There's no localization support.</li>
         <li>Logger instances do not form a hierarchy.</li>
     </ul></p>
@@ -87,7 +85,7 @@ published interface XLogger
 
         @param LogHandler
             the handler to remove from the list of handlers. The call is ignored if this
-            parameter is <NULL/>, or if the handler has not previously beed added.
+            parameter is <NULL/>, or if the handler has not previously been added.
     */
     void    removeLogHandler( [in] XLogHandler LogHandler );
 
@@ -121,17 +119,17 @@ published interface XLogger
     void    log( [in] long Level, [in] string Message );
 
     /** logs a given message, detailing the source class and method at which the logged
-        event occured.
+        event occurred.
 
         @param Level
             the log level of this message. If this level is smaller than the logger's <member>Level</member>
             attribute, then the call will be ignored.
 
         @param SourceClass
-            the source class at which the logged event occured.
+            the source class at which the logged event occurred.
 
         @param SourceMethod
-            the source class at which the logged event occured.
+            the source class at which the logged event occurred.
 
         @param Message
             the message to log

@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_table_XTableColumns_idl__
 #define __com_sun_star_table_XTableColumns_idl__
 
-#ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
-#endif
 
 //=============================================================================
 

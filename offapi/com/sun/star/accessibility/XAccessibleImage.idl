@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_accessibility_XAccessibleImage_idl__
 #define __com_sun_star_accessibility_XAccessibleImage_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com { module sun { module star { module accessibility {
 
@@ -53,7 +51,7 @@ published interface XAccessibleImage : ::com::sun::star::uno::XInterface
         embedded into a document.)</p>
 
         @return
-            Returns a localized string that describes the images's function
+            Returns a localized string that describes the image's function
             or content.
     */
     string getAccessibleImageDescription ();

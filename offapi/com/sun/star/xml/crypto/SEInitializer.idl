@@ -29,8 +29,8 @@
 #define __com_sun_star_xml_crypto_seinitializer_idl_
 
 #include <com/sun/star/xml/crypto/XSEInitializer.idl>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
 #include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
 
 module com { module sun { module star { module xml { module crypto {
 

@@ -27,37 +27,14 @@
 #ifndef __com_sun_star_ucb_ContentResultSet_idl__
 #define __com_sun_star_ucb_ContentResultSet_idl__
 
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSet_idl__
 #include <com/sun/star/sdbc/XResultSet.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XResultSetMetaDataSupplier_idl__
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XRow_idl__
 #include <com/sun/star/sdbc/XRow.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_XCloseable_idl__
 #include <com/sun/star/sdbc/XCloseable.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_XContentAccess_idl__
 #include <com/sun/star/ucb/XContentAccess.idl>
-#endif
-
-#ifndef __com_sun_star_sdbc_ResultSet_idl__
 #include <com/sun/star/sdbc/ResultSet.idl>
-#endif
 
 //=============================================================================
 
@@ -92,7 +69,7 @@ published service ContentResultSet
     interface com::sun::star::sdbc::XResultSetMetaDataSupplier;
 
     //-------------------------------------------------------------------------
-    /** enables travelling through the result set members ( the contents ).
+    /** enables traveling through the result set members ( the contents ).
         This interface mainly provides a cursor for the result set.
 
         <p>Note that every method of this interface implementation additionally
@@ -133,20 +110,20 @@ published service ContentResultSet
     interface com::sun::star::sdbc::XCloseable;
 
     //-------------------------------------------------------------------------
-    /** holds properties of the resultset.
+    /** holds properties of the result set.
 
         <p>This interface is required.
      */
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
-    /** controls the travel mode of the resultset cursor.
+    /** controls the travel mode of the result set cursor.
 
         <p>There are two possible travel modes:
 
         <p><table border=1>
         <tr><td><member>CursorTravelMode::BLOCKING</member></td>
-            <td>Each travel method of the resultset will not return until the
+            <td>Each travel method of the result set will not return until the
                 data for the new position were retrieved.</td></tr>
         <tr><td><member>CursorTravelMode::NONBLOCKING</member></td>
             <td>The implementation will throw a
@@ -206,7 +183,7 @@ published service ContentResultSet
     /** contains the number of rows obtained (so far) from the data source. */
     [readonly, property] long RowCount;
 
-    /** indicates that all rows of te resultset have been obtained. */
+    /** indicates that all rows of the result set have been obtained. */
     [readonly, property] boolean IsRowCountFinal;
 
     //-------------------------------------------------------------------------
@@ -221,7 +198,7 @@ published service ContentResultSet
     /** can be implemented to provide a complete JDBC conform result set
         interface for the implementation of this service.
 
-        <p>The implememtation of this service is optional.
+        <p>The implementation of this service is optional.
      */
     service com::sun::star::sdbc::ResultSet;
 };

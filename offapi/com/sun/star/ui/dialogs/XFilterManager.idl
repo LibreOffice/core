@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_ui_dialogs_XFilterManager_idl__
 #define __com_sun_star_ui_dialogs_XFilterManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -57,7 +52,7 @@ published interface XFilterManager: com::sun::star::uno::XInterface
         @param aFilter
         Specifies the extensions of the filter. Multiple filters should be
         semicolon separated. The semicolon may not be used as character in
-        a filter expresion. A typical filter is for instance '*.txt'.
+        a filter expression. A typical filter is for instance "*.txt".
 
         @throws ::com::sun::star::lang::IllegalArgumentException
         If a filter with the specified title already exists.

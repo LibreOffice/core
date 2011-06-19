@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,17 +64,11 @@ public:
         ~Code();
 
         void instrAastore();
-
         void instrAconstNull();
-
         void instrAnewarray(rtl::OString const & type);
-
         void instrAreturn();
-
         void instrAthrow();
-
         void instrCheckcast(rtl::OString const & type);
-
         void instrDup();
 
         void instrGetstatic(
@@ -81,9 +76,7 @@ public:
             rtl::OString const & descriptor);
 
         Branch instrIfAcmpne();
-
         Branch instrIfeq();
-
         Branch instrIfnull();
 
         void instrInstanceof(rtl::OString const & type);
@@ -109,9 +102,7 @@ public:
             std::list< std::pair< sal_Int32, Code * > > const & blocks);
 
         void instrNew(rtl::OString const & type);
-
         void instrNewarray(codemaker::UnoType::Sort sort);
-
         void instrPop();
 
         void instrPutfield(
@@ -123,7 +114,6 @@ public:
             rtl::OString const & descriptor);
 
         void instrReturn();
-
         void instrSwap();
 
         void instrTableswitch(
@@ -131,21 +121,13 @@ public:
             std::list< Code * > const & blocks);
 
         void loadIntegerConstant(sal_Int32 value);
-
         void loadStringConstant(rtl::OString const & value);
-
         void loadLocalInteger(sal_uInt16 index);
-
         void loadLocalLong(sal_uInt16 index);
-
         void loadLocalFloat(sal_uInt16 index);
-
         void loadLocalDouble(sal_uInt16 index);
-
         void loadLocalReference(sal_uInt16 index);
-
         void storeLocalReference(sal_uInt16 index);
-
         void branchHere(Branch branch);
 
         void addException(
@@ -187,11 +169,8 @@ public:
     Code * newCode();
 
     sal_uInt16 addIntegerInfo(sal_Int32 value);
-
     sal_uInt16 addFloatInfo(float value);
-
     sal_uInt16 addLongInfo(sal_Int64 value);
-
     sal_uInt16 addDoubleInfo(double value);
 
     void addInterface(rtl::OString const & interface);
@@ -216,11 +195,8 @@ private:
     void operator =(ClassFile); // not implemented
 
     sal_uInt16 nextConstantPoolIndex(sal_uInt16 width);
-
     sal_uInt16 addUtf8Info(rtl::OString const & value);
-
     sal_uInt16 addClassInfo(rtl::OString const & type);
-
     sal_uInt16 addStringInfo(rtl::OString const & value);
 
     sal_uInt16 addFieldrefInfo(
@@ -272,3 +248,5 @@ private:
 } }
 
 #endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

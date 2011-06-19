@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_sheet_ExternalLinkInfo_idl__
 #define __com_sun_star_sheet_ExternalLinkInfo_idl__
 
-#ifndef __com_sun_star_sheet_ExternalLinkType_idl__
 #include <com/sun/star/sheet/ExternalLinkType.idl>
-#endif
 
 //=============================================================================
 

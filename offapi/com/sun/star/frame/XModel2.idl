@@ -40,7 +40,7 @@
 //=============================================================================
 /** extends interface XModel.
 
-    The foloowing functions are added:
+    The following functions are added:
 
     - enumeration of all currently connected controller objects.
       (not getCurrentController() only, which depends on focus)

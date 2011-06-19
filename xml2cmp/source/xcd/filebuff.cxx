@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +26,10 @@
  *
  ************************************************************************/
 
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
+
 #include "filebuff.hxx"
 
 #include <string.h>
@@ -39,7 +44,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
     std::ifstream aXmlFile;
 
     aXmlFile.open(i_sXmlFilePath, std::ios::in
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
                                           | std::ios::binary
 #endif // WNT
     );
@@ -61,3 +66,4 @@ LoadXmlFile( Buffer &           o_rBuffer,
     return ret;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,21 +28,10 @@
 #ifndef __com_sun_star_sheet_DDELink_idl__
 #define __com_sun_star_sheet_DDELink_idl__
 
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDDELink_idl__
 #include <com/sun/star/sheet/XDDELink.idl>
-#endif
-
-#ifndef __com_sun_star_util_XRefreshable_idl__
 #include <com/sun/star/util/XRefreshable.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XDDELinkResults_idl__
 #include <com/sun/star/sheet/XDDELinkResults.idl>
-#endif
 
 //=============================================================================
 

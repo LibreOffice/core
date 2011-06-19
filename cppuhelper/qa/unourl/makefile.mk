@@ -35,6 +35,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(CROSS_COMPILING)"=="YES"
+all:
+    @echo Nothing done when cross-compiling
+.ENDIF
+
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
@@ -46,7 +51,6 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(SALLIB) \
     $(CPPULIB) \
-    $(TESTSHL2LIB)\
     $(CPPUNITLIB)
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)

@@ -27,33 +27,13 @@
 #ifndef __com_sun_star_form_component_DataForm_idl__
 #define __com_sun_star_form_component_DataForm_idl__
 
-#ifndef __com_sun_star_form_component_Form_idl__
 #include <com/sun/star/form/component/Form.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_RowSet_idl__
 #include <com/sun/star/sdb/RowSet.idl>
-#endif
-
-#ifndef __com_sun_star_form_TabulatorCycle_idl__
 #include <com/sun/star/form/TabulatorCycle.idl>
-#endif
-
-#ifndef __com_sun_star_form_NavigationBarMode_idl__
 #include <com/sun/star/form/NavigationBarMode.idl>
-#endif
-
-#ifndef __com_sun_star_form_XLoadable_idl__
 #include <com/sun/star/form/XLoadable.idl>
-#endif
-
-#ifndef __com_sun_star_sdb_XCompletedExecution_idl__
 #include <com/sun/star/sdb/XCompletedExecution.idl>
-#endif
-
-#ifndef __com_sun_star_awt_TabControllerModel_idl__
 #include <com/sun/star/awt/TabControllerModel.idl>
-#endif
 
 //=============================================================================
 
@@ -65,7 +45,7 @@ module com { module sun { module star { module form {
 module component {
 //=============================================================================
 /** This service specifies a form which is connected to a database and
-    displays the results of SQL queries. It provides the possiblity of
+    displays the results of SQL queries. It provides the possibility of
     adding new data records, modifying existing ones, or deleting them.
 
     <p>A database form is a special kind of enhanced database row set
@@ -133,7 +113,7 @@ published service DataForm
         (if any). All values which can't be filled are then passed to all listeners, which can
         fill them by their own choice.</p>
 
-        <p>This is sligtly changed if the form is loaded using the
+        <p>This is slightly changed if the form is loaded using the
         <member scope="com::sun::star::sdb">XCompletedExecution::connectWithCompletion</member> method. In this case, the parameters
         are obtained from the interaction handler, not from the listeners</p>
 
@@ -161,7 +141,7 @@ published service DataForm
         which are related to the master fields of the parent form.
 
         <p>Entries in this sequence can either denote column names in the sub form,
-        or paramater names.<br/>
+        or parameter names.<br/>
         For instance, you could base the form on the SQL statement
         <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
         to the DetailFields property. In this case, the parameter will be filled from
@@ -173,7 +153,7 @@ published service DataForm
         master field.<br/>
         If a string in this property denotes both a column name and a parameter name, it
         is undefined which way it is interpreted, but implementations of the service are required
-        to either decide for the paramter or the column, and proceed as usual.
+        to either decide for the parameter or the column, and proceed as usual.
         </p>
 
         <p>The columns specified herein typically represent a part of the primary key

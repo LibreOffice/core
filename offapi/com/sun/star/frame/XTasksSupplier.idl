@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_frame_XTasksSupplier_idl__
 #define __com_sun_star_frame_XTasksSupplier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XTask_idl__
 #include <com/sun/star/frame/XTask.idl>
-#endif
 
 
 //=============================================================================

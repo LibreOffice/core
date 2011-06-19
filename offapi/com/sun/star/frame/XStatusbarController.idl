@@ -27,21 +27,10 @@
 #ifndef __com_sun_star_frame_XStatusbarController_idl__
 #define __com_sun_star_frame_XStatusbarController_idl__
 
-#ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_MouseEvent_idl__
 #include <com/sun/star/awt/MouseEvent.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XGraphics_idl__
 #include <com/sun/star/awt/XGraphics.idl>
-#endif
 
 //=============================================================================
 
@@ -56,7 +45,7 @@ module com {  module sun {  module star {  module frame {
     bar controller can be added to a Statusbar and provide information or
     functions with a more sophisticated user interface.<br/>
     A typical example for status bar controller is a zoom chooser. It shows
-    the current zoom and provides general zoom levels on a popup menu
+    the current zoom and provides general zoom levels on a pop-up menu
     that can be activated by a mouse action for context menus.
     <p>
 

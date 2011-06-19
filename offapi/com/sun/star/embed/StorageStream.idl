@@ -28,25 +28,11 @@
 #ifndef __com_sun_star_embed_StorageStream_idl__
 #define __com_sun_star_embed_StorageStream_idl__
 
-#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
 #include <com/sun/star/embed/XEncryptionProtectedSource.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_io_XStream_idl__
 #include <com/sun/star/io/XStream.idl>
-#endif
-
-#ifndef __com_sun_star_io_XSeekable_idl__
 #include <com/sun/star/io/XSeekable.idl>
-#endif
 
 
 
@@ -60,7 +46,7 @@
     <type>Storage</type> service.
 
     <p>
-    In case a stream is open with readwrite access only one instance
+    In case a stream is open with read-write access only one instance
     of the stream can exist.
     </p>
  */
@@ -90,7 +76,7 @@ published service StorageStream
         <p>
         In case a stream is opened with read-write access only one instance of
         the stream can exist. It means that the stream can not be reopened
-        even for readonly access until the readwrite instance is disposed.
+        even for readonly access until the read-write instance is disposed.
         From the other side it is possible to open multiple streams for
         readonly access. But because of the rule mentioned above it will not
         be possible to open the stream for read-write access until all the
@@ -146,7 +132,7 @@ published service StorageStream
     /** allows to set password to the stream.
 
         <p>
-        This interface must be supported by a stream with readwrite access
+        This interface must be supported by a stream with read-write access
         to allow to set a password that should be used next time the
         stream is stored.
         </p>
@@ -201,7 +187,7 @@ published service StorageStream
 
         <p>
         In case stream is not encrypted and the property is set to <TRUE/>,
-        the stream will stay nonencrypted until the closest storage
+        the stream will stay non-encrypted until the closest storage
         in the parent hierarchy, that has common storage password, is commited.
         On the commit the stream will be encrypted with the common storage
         password. If there is no such storage in the hierarchy the stream
@@ -213,14 +199,14 @@ published service StorageStream
         If somebody sets a password explicitly by using
         <type>XEncryptionProtectedSource</type> interface the value is
         automatically set to <FALSE/> and the stream becomes encrypted
-        with specified password immediatelly.
+        with specified password immediately.
         </p>
 
         <p>
         In case stream is encrypted one and the value is set to <TRUE/>
-        the stream becomes nonencrypted until the common storage password
+        the stream becomes non-encrypted until the common storage password
         holder is commited. The data about previously set password ( if any )
-        will be removed and the stream can be accessed as nonencrypted stream.
+        will be removed and the stream can be accessed as non-encrypted stream.
         </p>
      */
     [property] boolean UseCommonStoragePasswordEncryption;

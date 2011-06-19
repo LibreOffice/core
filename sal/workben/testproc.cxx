@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,9 @@
     #define MAIN main
 #endif
 
-void MAIN (void)
+int MAIN (void)
 {
-    oslProcess Process;
+    //oslProcess Process;
     oslProcessError  ProcessError;
     sal_uInt32 nArgCount;
     sal_uInt32 index;
@@ -58,7 +59,7 @@ void MAIN (void)
 
         osl_getCommandArg(index,&ustrArg);
 
-        fprintf(stderr,"done ...\n\n",index);
+        fprintf(stderr,"done ...\n\n");
     }
 
     ProcessError = osl_getExecutableFile(&ustrExeFile);
@@ -72,6 +73,8 @@ void MAIN (void)
                         NULL,
                         NULL,
                         &Process );*/
+    return 0;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

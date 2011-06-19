@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.6.8.2 $"
+#define _STORE_STORTREE_HXX
 
 #include "sal/types.h"
 
@@ -221,12 +222,6 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     void       insert (sal_uInt16 i, const T& t);
     void       remove (sal_uInt16 i);
 
-#if 0  /* NYI */
-    /** merge (with right page).
-     */
-    void merge (const self& rPageR);
-#endif
-
     /** split (left half copied from right half of left page).
     */
     void split (const self& rPageL);
@@ -343,3 +338,5 @@ private:
 } // namespace store
 
 #endif /* !_STORE_STORTREE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_SheetRangesQuery_idl__
 #define __com_sun_star_sheet_SheetRangesQuery_idl__
 
-#ifndef __com_sun_star_sheet_XCellRangesQuery_idl__
 #include <com/sun/star/sheet/XCellRangesQuery.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_XFormulaQuery_idl__
 #include <com/sun/star/sheet/XFormulaQuery.idl>
-#endif
 
 //=============================================================================
 

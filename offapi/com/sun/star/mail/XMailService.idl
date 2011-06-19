@@ -28,53 +28,18 @@
 #ifndef __com_sun_star_mail_XMailService_idl__
 #define __com_sun_star_mail_XMailService_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XAuthenticator_idl__
 #include <com/sun/star/mail/XAuthenticator.idl>
-#endif
-
-#ifndef __com_sun_star_auth_AuthenticationFailedException_idl__
 #include <com/sun/star/auth/AuthenticationFailedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_AlreadyConnectedException_idl__
 #include <com/sun/star/io/AlreadyConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NotConnectedException_idl__
 #include <com/sun/star/io/NotConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_UnknownHostException_idl__
 #include <com/sun/star/io/UnknownHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NoRouteToHostException_idl__
 #include <com/sun/star/io/NoRouteToHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_ConnectException_idl__
 #include <com/sun/star/io/ConnectException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XConnectionListener_idl__
 #include <com/sun/star/mail/XConnectionListener.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailException_idl__
 #include <com/sun/star/mail/MailException.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XCurrentContext_idl__
 #include <com/sun/star/uno/XCurrentContext.idl>
-#endif
 
 
 module com { module sun { module star { module mail {
@@ -93,7 +58,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         connection types are (the values should be handled
         case insensitive):
         "Insecure" - insecure connections
-        "Ssl" - Secure Socket Layer 2.0/3.0 based connection
+        "SSL" - Secure Socket Layer 2.0/3.0 based connection
 
         @returns
         a sequence of supported connection types.
@@ -121,7 +86,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
     void removeConnectionListener([in] XConnectionListener xListener);
 
     /**
-        Return the context of the current connnection. The context
+        Return the context of the current connection. The context
         contains information like the server name, port, connection type
         etc.
 
@@ -147,8 +112,8 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         @param xConnectionContext
         [in] an interface used to query for connection related information.
         The context must contain the following values:
-        "ServerName" of type 'string', "Port" of type 'long', "ConnectionType"
-        of type 'string'. A list of supported connection types can be queried
+        "ServerName" of type "string", "Port" of type "long", "ConnectionType"
+        of type "string". A list of supported connection types can be queried
         using <code>getSupportedConnectionTypes</code>.
 
         @param xAuthenticator
@@ -169,13 +134,13 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         a wrong server name, an unreachable DNS server, etc.
 
         @throws com::sun::star::io::NoRouteToHostException
-        if an error occured to connect to the remote mail server.
+        if an error occurred to connect to the remote mail server.
         Typically the remote mail server cannot be reach because of an
         intervening firewall, or if an intermediate router is down,
         the network connection is broken, etc.
 
         @throws com::sun::star::io::ConnectException
-        if an error occured while attempting to connect to the remote
+        if an error occurred while attempting to connect to the remote
         mail server. Typically the connection was refused remotely,
         because the mail server is not listening on the remote address/port.
 

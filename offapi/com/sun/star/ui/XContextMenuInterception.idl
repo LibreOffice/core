@@ -27,16 +27,14 @@
 #ifndef __com_sun_star_ui_XContextMenuInterception_idl__
 #define __com_sun_star_ui_XContextMenuInterception_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 module com {  module sun {  module star {  module ui {
 
 
  published interface XContextMenuInterceptor;
 /** This interface enables an object to get interceptors registered that
- change context menue or prevent them from beeing executed.
+ change context menus or prevent them from being executed.
  */
 published interface XContextMenuInterception : ::com::sun::star::uno::XInterface
 {

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_ucb_RuleSet_idl__
 #define __com_sun_star_ucb_RuleSet_idl__
 
-#ifndef __com_sun_star_ucb_Rule_idl__
 #include <com/sun/star/ucb/Rule.idl>
-#endif
 
 
 //=============================================================================
@@ -47,7 +45,7 @@ module com { module sun { module star { module ucb {
 published struct RuleSet
 {
     //-------------------------------------------------------------------------
-    /** conatains a number of rules.
+    /** contains a number of rules.
     */
     sequence<com::sun::star::ucb::Rule> Rules;
 

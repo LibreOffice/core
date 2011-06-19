@@ -34,6 +34,7 @@ TARGET  := com_sun_star_demo
 RDB=$(SOLARBINDIR)$/applicat.rdb
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 #Files --------------------------------------------------------
@@ -52,6 +53,5 @@ GENJAVAFILES = {$(subst,.class,.java $(subst,$/class, $(GENJAVACLASSFILES)))}
 JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) $(GENJAVAFILES) 
 
 # --- Targets ------------------------------------------------------
-
 
 .INCLUDE :  target.mk

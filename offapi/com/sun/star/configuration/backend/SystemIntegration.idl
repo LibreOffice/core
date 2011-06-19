@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_SystemIntegration_idl__
 #define __com_sun_star_configuration_backend_SystemIntegration_idl__
 
-#ifndef __com_sun_star_configuration_backend_Backend_idl__
 #include <com/sun/star/configuration/backend/Backend.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 //=============================================================================
 
 module com { module sun { module star { module configuration { module backend {
@@ -56,8 +51,8 @@ service SystemIntegration
     /**
        allows initialization of backend data sources
 
-       <p>no parameters need to be passed as backends are initialised
-          using the service registration database 'services.rdb'.
+       <p>no parameters need to be passed as backends are initialized
+          using the service registration database "services.rdb".
        </p>
 
     */

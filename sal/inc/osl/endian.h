@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,8 @@ extern "C" {
 #ifdef _WIN32
 #   if defined(_M_IX86)
 #       define _LITTLE_ENDIAN
+#   elif defined(_M_AMD64)
+#       define _LITTLE_ENDIAN
 #   elif defined(_M_MRX000)
 #       define _LITTLE_ENDIAN
 #   elif defined(_M_ALPHA)
@@ -63,14 +66,32 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef ANDROID
+#   include <endian.h>
+#   if __BYTE_ORDER == __LITTLE_ENDIAN
+#           ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#           endif
+#   elif __BYTE_ORDER == __BIG_ENDIAN
+#           ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#           endif
+#   elif __BYTE_ORDER == __PDP_ENDIAN
+#       define _PDP_ENDIAN
+#   endif
+#endif
+
 #ifdef NETBSD
 #   include <machine/endian.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _PDP_ENDIAN
 #   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
+#   undef _LITTLE_ENDIAN
+#   undef _BIG_ENDIAN
 #   endif
 #endif
 
@@ -88,39 +109,19 @@ extern "C" {
 #endif
 #endif
 
-#ifdef SCO
-#   include <sys/types.h>
-#   include <sys/byteorder.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#endif
-
 #ifdef AIX
 #   include <sys/machine.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#           define _LITTLE_ENDIAN
+#       endif
 #   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#           define _BIG_ENDIAN
+#       endif
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
-#endif
-
-#ifdef HPUX
-#   include <machine/param.h>
-#endif
-
-#ifdef _WIN16
-#   define  _LITTLE_ENDIAN
-#endif
-
-#ifdef OS2
-#   include <machine/endian.h>
 #endif
 
 #ifdef SOLARIS
@@ -144,12 +145,31 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef IOS
+#   include <machine/endian.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       ifndef _LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#       endif
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       ifndef _BIG_ENDIAN
+#       define _BIG_ENDIAN
+#       endif
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       ifndef _PDP_ENDIAN
+#       define _PDP_ENDIAN
+#       endif
+#   endif
+#endif
+
 /** Check supported platform.
  */
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)   && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)   && \
-    !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD)
+#if !defined(_WIN32)  && \
+    !defined(LINUX)   && !defined(NETBSD) && \
+    !defined(AIX)     && !defined(OPENBSD) && \
+    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
+    !defined(DRAGONFLY) && \
+    !defined(IOS)     && !defined(ANDROID)
 #   error "Target platform not specified !"
 #endif
 
@@ -233,3 +253,4 @@ extern "C" {
 
 #endif /*_OSL_ENDIAN_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

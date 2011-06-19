@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_frame_Components_idl__
 #define __com_sun_star_frame_Components_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
 
 //=============================================================================
 
@@ -49,7 +47,7 @@ module com {  module sun {  module star {  module frame {
 published service Components
 {
     //-------------------------------------------------------------------------
-    /** use it to get snapshot of current avaliable components as an enumeration
+    /** use it to get snapshot of current available components as an enumeration
      */
     interface com::sun::star::container::XEnumerationAccess;
 };

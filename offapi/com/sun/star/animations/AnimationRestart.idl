@@ -33,7 +33,7 @@
 
 //=============================================================================
 
-/** defines the restart behaviour
+/** defines the restart behavior
 
     @see <member>XTiming::Restart</member>
     @see <member>XTiming::RestartDefault</member>

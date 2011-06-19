@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_mozilla_XProfileManager_idl__
 #define __com_sun_star_mozilla_XProfileManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_mozilla_MozillaProductType_idl__
 #include <com/sun/star/mozilla/MozillaProductType.idl>
-#endif
 
 
 
@@ -40,7 +36,7 @@
 
 
 
-/** is the interface to bootup and switch Mozilla/Thunderbird profiles
+/** is the interface to boot up and switch Mozilla/Thunderbird profiles
 
     @see com::sun::star::mozilla::MozillaProductType
     @see com::sun::star::mozilla::XProfileDiscover
@@ -50,14 +46,14 @@ published interface XProfileManager: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::mozilla::XProfileManager::bootupProfile
-    /** attempts to init xpcom runtime using given profile.
+    /** attempts to init XPCOM runtime using given profile.
 
         @param product
             is the product to start up.
         @param profileName
             the profile name to be used.
         @returns
-            the current refrence count for the given profile.
+            the current reference count for the given profile.
 
      */
     long bootupProfile( [in]MozillaProductType product,[in]string profileName);
@@ -65,7 +61,7 @@ published interface XProfileManager: com::sun::star::uno::XInterface
     /** attempts to shutdown the current profile.
 
         @returns
-            the current refrence count for the current profile.
+            the current reference count for the current profile.
 
      */
     long shutdownProfile();

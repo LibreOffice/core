@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,17 +72,17 @@ rtl::OUString   file_not_exist;
 
 
 
-void print_error(::rtl::OString& str, FileBase::RC rc);
+void print_error(const ::rtl::OString& str, FileBase::RC rc);
 
 void PressKey()
 {
     printf("\nPress Return !\n");
-    int i=getchar();
+    getchar();
 }
 
-void printFileName(::rtl::OUString& str)
+void printFileName(const ::rtl::OUString& str)
 {
-    rtl::OString        aString;
+    rtl::OString aString;
 
     aString = rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
 
@@ -128,7 +129,7 @@ sal_Bool testLineBreak( sal_Char *pCount , sal_uInt64 nLen , sal_uInt32 *cLineBr
 sal_Bool Initialize( void )
 {
     DirectoryItem   aItem;
-    FileStatus      aStatus( FileStatusMask_All );
+    FileStatus      aStatus( osl_FileStatus_Mask_All );
     rtl_uString     *strExeFileURL=NULL;
     oslProcessError ProcessError;
 
@@ -162,11 +163,11 @@ sal_Bool Initialize( void )
         iniFileURL=rtl::OUString( rtl_uString_getStr(strExeFileURL) ,(int) (pExeFileCount-rtl_uString_getStr(strExeFileURL)) );
 
         // add "/testfile.ini" to iniFileURL
-        iniFileURL+=rtl::OUString::createFromAscii("/testfile.ini");
+        iniFileURL+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testfile.ini"));
 
         // Open the ini-File
         pFile=new File( iniFileURL );
-        rc=pFile->open( OpenFlag_Read | OpenFlag_Write );
+        rc=pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
         if ( rc!=FileBase::E_None )
         {
             rtl_uString_release(strExeFileURL);
@@ -192,7 +193,7 @@ sal_Bool Initialize( void )
     uBytesRequested=aStatus.getFileSize();
 
     // read ini-File
-    rc=pFile->setPos( Pos_Absolut, 0 );
+    rc=pFile->setPos( osl_Pos_Absolut, 0 );
     pBuffer=(sal_Char*) rtl_allocateMemory( (sal_uInt32) (uBytesRequested+1)*sizeof(sal_Char) );
     rtl_zeroMemory( pBuffer, (sal_uInt32)(uBytesRequested+1)*sizeof(sal_Char) );
 
@@ -207,13 +208,13 @@ sal_Bool Initialize( void )
     for ( int i=0 ; i<12 ; i++ )
     {
         sal_uInt32      cLineBrake=0;
-        while ( (pCount-pBuffer < uBytesRead) && *pCount!='=')
+        while ( (static_cast<sal_uInt64>(pCount-pBuffer) < uBytesRead) && *pCount!='=')
             pCount++;
 
         pCount++;
         pBegin=pCount;
 
-        while ( (pCount-pBuffer < uBytesRead) && !testLineBreak(pCount,uBytesRead-(pCount-pBuffer), &cLineBrake))
+        while ( (static_cast<sal_uInt64>(pCount-pBuffer) < uBytesRead) && !testLineBreak(pCount,uBytesRead-(pCount-pBuffer), &cLineBrake))
             pCount++;
 
         dir[i]=rtl::OUString(pBegin, pCount-pBegin, RTL_TEXTENCODING_ASCII_US);
@@ -256,21 +257,21 @@ sal_Bool Initialize( void )
         return sal_False;
 
     pFile=new File( file1 );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
     delete pFile;
 
     pFile=new File( file2 );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
     delete pFile;
 
     pFile=new File( file_on_server );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
@@ -353,29 +354,29 @@ void showAttributes( sal_uInt64 uAttributes )
 {
     if ( uAttributes==0 )
         printf( "No Attributes \n" );
-    if ( uAttributes & Attribute_ReadOnly )
+    if ( uAttributes & osl_File_Attribute_ReadOnly )
         printf( "Attribute: ReadOnly \n" );
-    if ( uAttributes & Attribute_Hidden )
+    if ( uAttributes & osl_File_Attribute_Hidden )
         printf( "Attribute: Hidden \n" );
-    if ( uAttributes & Attribute_Executable )
+    if ( uAttributes & osl_File_Attribute_Executable )
         printf( "Attribute: Executable \n");
-    if ( uAttributes & Attribute_GrpWrite )
+    if ( uAttributes & osl_File_Attribute_GrpWrite )
         printf( "Attribute: GrpWrite \n");
-    if ( uAttributes & Attribute_GrpRead )
+    if ( uAttributes & osl_File_Attribute_GrpRead )
         printf( "Attribute: GrpRead \n" );
-    if ( uAttributes & Attribute_GrpExe )
+    if ( uAttributes & osl_File_Attribute_GrpExe )
         printf( "Attribute: GrpExe \n" );
-    if ( uAttributes & Attribute_OwnWrite )
+    if ( uAttributes & osl_File_Attribute_OwnWrite )
         printf( "Attribute: OwnWrite \n");
-    if ( uAttributes & Attribute_OwnRead )
+    if ( uAttributes & osl_File_Attribute_OwnRead )
         printf( "Attribute: OwnRead \n" );
-    if ( uAttributes & Attribute_OwnExe )
+    if ( uAttributes & osl_File_Attribute_OwnExe )
         printf( "Attribute: OwnExe \n" );
-    if ( uAttributes & Attribute_OthWrite )
+    if ( uAttributes & osl_File_Attribute_OthWrite )
         printf( "Attribute: OthWrite \n" );
-    if ( uAttributes & Attribute_OthRead )
+    if ( uAttributes & osl_File_Attribute_OthRead )
         printf( "Attribute: OthRead \n");
-    if ( uAttributes & Attribute_OthExe )
+    if ( uAttributes & osl_File_Attribute_OthExe )
         printf( "Attribute: OthExe \n" );
 
     return;
@@ -459,7 +460,6 @@ TimeValue getSystemTime()
 void DirectoryOpenAndCloseTest( void )
 {
     FileBase::RC    rc;
-    int i=0;
     Directory   *pDir;
 
     printf( "--------------------------------------------\n");
@@ -584,7 +584,6 @@ void DirectoryOpenAndCloseTest( void )
 void DirectoryCreateAndRemoveTest( void )
 {
     FileBase::RC    rc,rc1;
-    int i=0;
     Directory   *pDir;
 
     printf( "--------------------------------------------\n" );
@@ -672,7 +671,6 @@ void DirectoryCreateAndRemoveTest( void )
 static void FileOpenAndCloseTest( void )
 {
     FileBase::RC    rc;
-    int i=0;
 
     printf( "--------------------------------------------\n" );
     printf( "File-Open-And-Close-Test\n" );
@@ -690,7 +688,7 @@ static void FileOpenAndCloseTest( void )
     // open an existing file (Read)
     //--------------------------------------------------
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     print_error( rtl::OString( "Open File (Read)" ), rc );
 
     //--------------------------------------------------
@@ -706,7 +704,7 @@ static void FileOpenAndCloseTest( void )
     // open an existing file (Write)
     //--------------------------------------------------
 
-    rc=pFile->open( OpenFlag_Write );
+    rc=pFile->open( osl_File_OpenFlag_Write );
     print_error( rtl::OString( "Open File (Write)" ), rc );
 
     //--------------------------------------------------
@@ -752,7 +750,7 @@ void FileCreateAndRemoveTest()
     // open (create) a not existing file (Read and write)
     //----------------------------------------------------
 
-    rc = pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
 
@@ -782,7 +780,7 @@ void FileCreateAndRemoveTest()
     // remove an open file
     //----------------------------------------------------
 
-    pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     rc=pFile->remove( file_not_exist );
     print_error( rtl::OString( "Remove an open File" ), rc );
@@ -805,7 +803,7 @@ void FileWriteAndReadTest( void )
 
     sal_uInt64 uWritten;
     sal_uInt64 uRead;
-    sal_Char    *pWriteBuffer="Hier kommt der Osterhase !";
+    const sal_Char *pWriteBuffer="Hier kommt der Osterhase !";
     sal_uInt64  nLen=strlen( pWriteBuffer );
     sal_Char *pReadBuffer;
 
@@ -825,7 +823,7 @@ void FileWriteAndReadTest( void )
     // open (create) a not existing file (Read and write)
     //----------------------------------------------------
 
-    rc = pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
 
@@ -848,7 +846,7 @@ void FileWriteAndReadTest( void )
     // move the filepointer to the beginning
     //----------------------------------------------------
 
-    rc=pFile->setPos( Pos_Absolut , 0 );
+    rc=pFile->setPos( osl_Pos_Absolut , 0 );
     print_error( rtl::OString( "Set FilePointer to the beginning of the file" ), rc );
 
     printf( "\n" );
@@ -908,7 +906,7 @@ void FileCopyAndMoveTest( void )
     // FileCopyTest
     //--------------------------------------------------
 
-    destPath+=rtl::OUString::createFromAscii("/");
+    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     destPath+=file3;
 
     printf( "Copy the file ");
@@ -923,7 +921,7 @@ void FileCopyAndMoveTest( void )
 
     pFile=new File( destPath );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc == FileBase::E_None)
     {
         printf( "Verify: OK!\n" );
@@ -942,11 +940,13 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir_not_exist );
-    destPath+=rtl::OUString::createFromAscii("/");
+    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     destPath+=file3;
 
     printf( "Copy a file to a not existing directory \n");
-    printf( "Copy the file  %s to %s\n", file1.getStr(), destPath.getStr() );
+    printf( "Copy the file %s to %s\n",
+        rtl::OUStringToOString( file1, RTL_TEXTENCODING_ASCII_US ).getStr(),
+        rtl::OUStringToOString( destPath, RTL_TEXTENCODING_ASCII_US ).getStr() );
 
     rc=File::copy( file1, destPath );
     print_error( rtl::OString( "FileCopy" ), rc );
@@ -973,7 +973,7 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir2 );
-    destPath+=rtl::OUString::createFromAscii("/");
+    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     destPath+=file3;
 
     printf( "Move the file ");
@@ -987,7 +987,7 @@ void FileCopyAndMoveTest( void )
 
     pFile=new File( destPath );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc==FileBase::E_None )
     {
         pFile->close();
@@ -995,7 +995,7 @@ void FileCopyAndMoveTest( void )
         delete pFile;
         pFile=new File( file1 );
 
-        rc=pFile->open( OpenFlag_Read );
+        rc=pFile->open( osl_File_OpenFlag_Read );
 
         if ( rc!=FileBase::E_None )
         {
@@ -1022,7 +1022,7 @@ void FileCopyAndMoveTest( void )
     //--------------------------------------------------
 
     destPath=rtl::OUString( dir_not_exist );
-    destPath+=rtl::OUString::createFromAscii("/");
+    destPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     destPath+=file3;
 
     printf( "Move a file to a not existing directory: \n");
@@ -1084,7 +1084,7 @@ void FileSizeTest( void )
     printFileName( file_not_exist );
     printf( "\n\n");
 
-    rc = aFile.open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
     printf( "\n" );
 
@@ -1110,7 +1110,7 @@ void FileSizeTest( void )
 
         if ( rc == FileBase::E_None )
         {
-            FileStatus rStatus( FileStatusMask_FileSize  );
+            FileStatus rStatus( osl_FileStatus_Mask_FileSize  );
             rc=aItem.getFileStatus( rStatus );
             print_error( rtl::OString( "Get FileStatus" ), rc );
 
@@ -1119,9 +1119,9 @@ void FileSizeTest( void )
                 filesize=rStatus.getFileSize();
 
                 if ( filesize == 5000 )
-                    printf( "\nOK : FileSize: %i\n", filesize );
+                    printf( "\nOK : FileSize: %" SAL_PRIuUINT64 "\n", filesize );
                 else
-                    printf( "\nError : FileSize: %i\n", filesize );
+                    printf( "\nError : FileSize: %" SAL_PRIuUINT64 "\n", filesize );
             }
         }
 
@@ -1172,7 +1172,7 @@ void FilePointerTest( void )
     printFileName( file_not_exist );
     printf( "\n\n");
 
-    rc = rFile.open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = rFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     print_error( rtl::OString( "Create and Open File (Read & Write) "), rc );
     printf( "\n" );
 
@@ -1185,7 +1185,7 @@ void FilePointerTest( void )
 
         rc =rFile.getPos( filepointer );
         print_error( rtl::OString( "GetPos" ), rc );
-        printf( "Position of the FilePointer: %i\n", filepointer );
+        printf( "Position of the FilePointer: %" SAL_PRIuUINT64 "\n", filepointer );
 
         printf( "\n" );
 
@@ -1197,7 +1197,7 @@ void FilePointerTest( void )
         rFile.setSize( 5000 );
 
         printf( "Set the FilePointer at the end of the file (5000)\n" );
-        rc=rFile.setPos( Pos_End,0 );
+        rc=rFile.setPos( osl_Pos_End,0 );
         print_error( rtl::OString( "SetPos" ), rc );
 
         rc=rFile.getPos( filepointer );
@@ -1206,13 +1206,13 @@ void FilePointerTest( void )
         {
             print_error( rtl::OString( "GetPos" ), rc );
             printf( "\nVerify: OK !\n" );
-            printf( "Filepointer-Position: %llu\n",filepointer );
+            printf( "Filepointer-Position: %" SAL_PRIuUINT64 "\n",filepointer );
         }
         else
         {
             print_error( rtl::OString( "GetPos" ), rc );
             printf( "\nFilePointer-Test: Error\n" );
-            printf( "Filepointer-Position: %i != 5000 \n",filepointer );
+            printf( "Filepointer-Position: %" SAL_PRIuUINT64 " != 5000 \n",filepointer );
         }
 
         printf( "\n" );
@@ -1239,7 +1239,7 @@ void verifyFileAttributes( void )
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
-    FileStatus rStatus( FileStatusMask_Attributes  );
+    FileStatus rStatus( osl_FileStatus_Mask_Attributes  );
 
     printf( "\nVerify:\n" );
 
@@ -1278,7 +1278,7 @@ void FileAttributesTest( void )
     printf( "\n\n" );
 
 
-    rc=File::setAttributes( file1, Attribute_GrpWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpWrite );
     print_error( rtl::OString( "Set Attribute: GrpWrite" ), rc );
 
     verifyFileAttributes();
@@ -1287,7 +1287,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_GrpRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpRead );
     print_error( rtl::OString( "Set Attribute: GrpRead" ), rc );
 
     verifyFileAttributes();
@@ -1296,7 +1296,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_GrpExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpExe );
     print_error( rtl::OString( "Set Attribute: GrpExe" ), rc );
 
     verifyFileAttributes();
@@ -1305,7 +1305,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnWrite );
     print_error( rtl::OString( "Set Attribute: OwnWrite" ), rc );
 
     verifyFileAttributes();
@@ -1314,7 +1314,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnRead );
     print_error( rtl::OString( "Set Attribute: OwnRead" ), rc );
 
     verifyFileAttributes();
@@ -1323,7 +1323,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OwnExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_OwnExe );
     print_error( rtl::OString( "Set Attribute: OwnExe" ), rc );
 
     verifyFileAttributes();
@@ -1332,7 +1332,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthWrite );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthWrite );
     print_error( rtl::OString( "Set Attribute: OthWrite" ), rc );
 
     verifyFileAttributes();
@@ -1341,7 +1341,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthRead );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthRead );
     print_error( rtl::OString( "Set Attribute: OthRead" ), rc );
 
     verifyFileAttributes();
@@ -1350,7 +1350,7 @@ void FileAttributesTest( void )
     if ( rc!=FileBase::E_None )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
-    rc=File::setAttributes( file1, Attribute_OthExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_OthExe );
     print_error( rtl::OString( "Set Attribute: OthExe" ), rc );
 
     verifyFileAttributes();
@@ -1360,7 +1360,7 @@ void FileAttributesTest( void )
         print_error( rtl::OString( "Reset Attributes" ), rc );
 
 
-    rc=File::setAttributes( file1, Attribute_GrpWrite | Attribute_GrpRead | Attribute_GrpExe | Attribute_OwnWrite | Attribute_OwnRead | Attribute_OwnExe | Attribute_OthWrite | Attribute_OthRead | Attribute_OthExe );
+    rc=File::setAttributes( file1, osl_File_Attribute_GrpWrite | osl_File_Attribute_GrpRead | osl_File_Attribute_GrpExe | osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead | osl_File_Attribute_OwnExe | osl_File_Attribute_OthWrite | osl_File_Attribute_OthRead | osl_File_Attribute_OthExe );
     print_error( rtl::OString( "Set all Attributes" ), rc );
 
     verifyFileAttributes();
@@ -1385,7 +1385,7 @@ void FileAttributesTest( void )
     printf( "\n\n" );
 
 
-    rc=File::setAttributes( file1, Attribute_ReadOnly );
+    rc=File::setAttributes( file1, osl_File_Attribute_ReadOnly );
     print_error( rtl::OString( "Set Attribute: ReadOnly" ), rc );
 
     verifyFileAttributes();
@@ -1395,7 +1395,7 @@ void FileAttributesTest( void )
 
     verifyFileAttributes();
 
-    rc=File::setAttributes( file1, Attribute_Hidden );
+    rc=File::setAttributes( file1, osl_File_Attribute_Hidden );
     print_error( rtl::OString( "Set Attribute: Hidden" ), rc );
 
     verifyFileAttributes();
@@ -1405,7 +1405,7 @@ void FileAttributesTest( void )
 
     verifyFileAttributes();
 
-    rc=File::setAttributes( file1, Attribute_Hidden | Attribute_ReadOnly );
+    rc=File::setAttributes( file1, osl_File_Attribute_Hidden | osl_File_Attribute_ReadOnly );
     print_error( rtl::OString( "Set Attribute: Hidden & ReadOnly" ), rc );
 
     verifyFileAttributes();
@@ -1431,17 +1431,37 @@ void FileTimeTest( void )
 
     DirectoryItem   aItem;
 
-    struct tm sSysCreationTime = { 0, 20, 12, 4, 9, 100 };
-    struct tm sSysAccessTime = { 0, 40, 1, 6, 5, 98 };
-    struct tm sSysModifyTime = { 0, 1, 24, 13, 11, 95 };
+    struct tm sSysCreationTime;
+    sSysCreationTime.tm_sec = 0;
+    sSysCreationTime.tm_min = 20;
+    sSysCreationTime.tm_hour = 12;
+    sSysCreationTime.tm_mday = 4;
+    sSysCreationTime.tm_mon = 9;
+    sSysCreationTime.tm_year = 99;
 
-    time_t aSysCreationTime =  mktime( &sSysCreationTime );
-    time_t aSysAccessTime =  mktime( &sSysAccessTime );
-    time_t aSysModifyTime =  mktime( &sSysModifyTime );
+    struct tm sSysAccessTime;
+    sSysAccessTime.tm_sec = 0;
+    sSysAccessTime.tm_min = 40;
+    sSysAccessTime.tm_hour = 1;
+    sSysAccessTime.tm_mday = 6;
+    sSysAccessTime.tm_mon = 5;
+    sSysAccessTime.tm_year = 98;
+
+    struct tm sSysModifyTime;
+    sSysModifyTime.tm_sec = 0;
+    sSysModifyTime.tm_min = 1;
+    sSysModifyTime.tm_hour = 24;
+    sSysModifyTime.tm_mday = 13;
+    sSysModifyTime.tm_mon = 11;
+    sSysModifyTime.tm_year = 95;
+
+    sal_uInt32 aSysCreationTime = mktime( &sSysCreationTime );
+    sal_uInt32 aSysAccessTime =  mktime( &sSysAccessTime );
+    sal_uInt32 aSysModifyTime =  mktime( &sSysModifyTime );
 
     TimeValue       aCreationTime   = { aSysCreationTime, 0};
-    TimeValue       aAccessTime     = { aSysAccessTime, 0};
-    TimeValue       aModifyTime     = { aSysModifyTime, 0};
+    TimeValue       aAccessTime = { aSysAccessTime, 0};
+    TimeValue       aModifyTime = { aSysModifyTime, 0};
 
     TimeValue       aCreationTimeRead;
     TimeValue       aAccessTimeRead;
@@ -1477,7 +1497,7 @@ void FileTimeTest( void )
     // Verify
     //--------------------------------------------------
 
-    FileStatus rStatus( FileStatusMask_CreationTime | FileStatusMask_AccessTime | FileStatusMask_ModifyTime);
+    FileStatus rStatus( osl_FileStatus_Mask_CreationTime | osl_FileStatus_Mask_AccessTime | osl_FileStatus_Mask_ModifyTime);
 
     printf( "\nVerify:\n" );
 
@@ -1568,7 +1588,7 @@ void DirectoryItemTest( void )
     rc=DirectoryItem::get( dir1 , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-    pStatus=new FileStatus( FileStatusMask_All );
+    pStatus=new FileStatus( osl_FileStatus_Mask_All );
     rc=aItem.getFileStatus( *pStatus );
 
     if ( rc==FileBase::E_None )
@@ -1606,7 +1626,7 @@ void DirectoryItemTest( void )
     rc=DirectoryItem::get( file1 , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-    pStatus=new FileStatus( FileStatusMask_All );
+    pStatus=new FileStatus( osl_FileStatus_Mask_All );
     rc=aItem.getFileStatus( *pStatus );
 
     if ( rc==FileBase::E_None )
@@ -1652,17 +1672,17 @@ void DirectoryItemTest( void )
 
     pFile=new File( file1 );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc==FileBase::E_None )
     {
         printf( "Get DirectoryItem from a File-Handle: ");
         printFileName( file1 );
         printf( "\n" );
 
-        rc=DirectoryItem::get( *pFile , aItem );
+        rc=DirectoryItem::get( file1 , aItem );
         print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         if ( rc==FileBase::E_None )
@@ -1682,16 +1702,12 @@ void DirectoryItemTest( void )
     printf( "\n" );
 
     //---------------------------------------------------
-    // get DirectoryItem from an empty file-handle
+    // get DirectoryItem
     //--------------------------------------------------
 
-    pFile=new File( file1 );
-
     printf( "Get DirectoryItem from an empty File-Handle\n" );
-    rc=DirectoryItem::get( *pFile , aItem );
+    rc=DirectoryItem::get( file1 , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
-
-    delete pFile;
 
     printf( "\n" );
 
@@ -1725,7 +1741,7 @@ void DirectoryItemTest( void )
         while( rc==FileBase::E_None )
         {
 
-            FileStatus rStatus( FileStatusMask_All );
+            FileStatus rStatus( osl_FileStatus_Mask_All );
             aItem.getFileStatus( rStatus );
 
             str=rStatus.getFileName();
@@ -1750,7 +1766,7 @@ void DirectoryItemTest( void )
             rc=pDir->reset();
             rc=pDir->getNextItem( aItem );
 
-            FileStatus rStatus( FileStatusMask_All );
+            FileStatus rStatus( osl_FileStatus_Mask_All );
             aItem.getFileStatus( rStatus );
 
             str1[i]=rStatus.getFileName();
@@ -1860,7 +1876,7 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "\ngetFileSize:\n" );
 
     FileSize=pStatus->getFileSize();
-    printf( "FileSize: %i\n", FileSize);
+    printf( "FileSize: %" SAL_PRIuUINT64 "\n", FileSize);
 
     //--------------------------------------------------
     // GetFileName
@@ -1929,7 +1945,7 @@ void DirectoryFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -1968,7 +1984,7 @@ void FileFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All );
+        pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -2007,7 +2023,7 @@ void VolumeFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( FileStatusMask_All) ;
+        pStatus=new FileStatus( osl_FileStatus_Mask_All) ;
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -2039,7 +2055,7 @@ void VolumeInfoTest( void )
 
     printf( "\n" );
 
-    VolumeInfo rInfo( VolumeInfoMask_FreeSpace );
+    VolumeInfo rInfo( osl_VolumeInfo_Mask_FreeSpace );
     rc=Directory::getVolumeInfo( root , rInfo );
     print_error( rtl::OString( "GetVolumeInfo" ),rc );
 
@@ -2069,7 +2085,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  TotalSpace;
     TotalSpace=rInfo.getTotalSpace();
-    printf( "Total Space: %i\n",TotalSpace );
+    printf( "Total Space: %" SAL_PRIuUINT64 "\n",TotalSpace );
 
     //--------------------------------------------------
     // getFreeSpace
@@ -2077,7 +2093,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  FreeSpace;
     FreeSpace=rInfo.getFreeSpace();
-    printf( "Free Space: %i\n",FreeSpace );
+    printf( "Free Space: %" SAL_PRIuUINT64 "\n",FreeSpace );
 
     //--------------------------------------------------
     // getUsedSpace
@@ -2085,7 +2101,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  UsedSpace;
     UsedSpace=rInfo.getUsedSpace();
-    printf( "Used Space: %i\n",UsedSpace );
+    printf( "Used Space: %" SAL_PRIuUINT64 "\n",UsedSpace );
 
     //--------------------------------------------------
     // getMaxNameLength
@@ -2093,7 +2109,7 @@ void VolumeInfoTest( void )
 
     sal_uInt32  MaxNameLength;
     MaxNameLength=rInfo.getMaxNameLength();
-    printf( "MaxNameLength: %i\n",MaxNameLength );
+    printf( "MaxNameLength: %" SAL_PRIuUINT32 "\n",MaxNameLength );
 
     //--------------------------------------------------
     // getMaxPathLength
@@ -2101,7 +2117,7 @@ void VolumeInfoTest( void )
 
     sal_uInt32  MaxPathLength;
     MaxPathLength=rInfo.getMaxPathLength();
-    printf( "MaxPathLength: %i\n",MaxPathLength );
+    printf( "MaxPathLength: %" SAL_PRIuUINT32 "\n",MaxPathLength );
 
     //--------------------------------------------------
     // getFileSystemName
@@ -2286,15 +2302,15 @@ void AbsolutePathTest(void)
     printf( "AbsolutePath-Test\n" );
     printf( "--------------------------------------------\n\n" );
 
-    DoAbsolutePathTest(dir1, rtl::OUString::createFromAscii("."));
-    DoAbsolutePathTest(dir1, rtl::OUString::createFromAscii(".."));
-    DoAbsolutePathTest(dir1, rtl::OUString::createFromAscii("../.."));
-    DoAbsolutePathTest(dir1, rtl::OUString::createFromAscii("../HUHU"));
+    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
+    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
+    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../..")));
+    DoAbsolutePathTest(dir1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../HUHU")));
 
-    DoAbsolutePathTest(dir_on_server, rtl::OUString::createFromAscii("."));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString::createFromAscii(".."));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString::createFromAscii("../.."));
-    DoAbsolutePathTest(dir_on_server, rtl::OUString::createFromAscii("../HUHU"));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..")));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../..")));
+    DoAbsolutePathTest(dir_on_server, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("../HUHU")));
 
     PressKey();
     return;
@@ -2404,7 +2420,7 @@ void SearchPathTest(void)
     printFileName( file3 );
     printf( "\n" );
 
-    rc=FileBase::searchFileURL( file3 , rtl::OUString::createFromAscii("") , strResultPath );
+    rc=FileBase::searchFileURL( file3 , rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) , strResultPath );
 
     if ( rc == FileBase::E_None )
     {
@@ -2441,7 +2457,7 @@ void SearchPathTest(void)
     //------------------------------------------------------------
 
     rtl::OUString       strSearchPath( dir_not_exist );
-    strSearchPath+=rtl::OUString::createFromAscii(";");
+    strSearchPath+=rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
     strSearchPath+=dir_on_server;
 
     printf( "\nsearchFileURL:  File : ");
@@ -2532,10 +2548,10 @@ void CanonicalNameTest(void)
 // print_error
 //--------------------------------------------------
 
-void print_error( ::rtl::OString& str, FileBase::RC rc )
+void print_error( const ::rtl::OString& str, FileBase::RC rc )
 {
 
-    printf( "%s : ",str.getStr() );
+    printf( "%s : ", str.getStr() );
     switch(rc)
     {
     case FileBase::E_None:
@@ -2784,3 +2800,4 @@ int MAIN( int argc, char* argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

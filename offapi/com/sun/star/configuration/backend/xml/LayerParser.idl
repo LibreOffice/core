@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_configuration_backend_xml_LayerParser_idl__
 #define __com_sun_star_configuration_backend_xml_LayerParser_idl__
 
-#ifndef __com_sun_star_configuration_backend_XLayer_idl__
 #include <com/sun/star/configuration/backend/XLayer.idl>
-#endif
-
-#ifndef __com_sun_star_io_XActiveDataSink_idl__
 #include <com/sun/star/io/XActiveDataSink.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 //=============================================================================
 
@@ -50,12 +42,12 @@ module xml {
     represents a configuration data layer that is stored in a stream in
     OOR Update XML format.
 
-    <p> The configuration layer xml from a given stream is parsed and fed to a
+    <p> The configuration layer XML from a given stream is parsed and fed to a
     <type scope="com::sun::star::configuration::backend">XLayerHandler</type>.
     </p>
 
     @see com::sun::star::configuration::backend::xml::SchemaParser
-        Service that represents a configuration schema stored in xml.
+        Service that represents a configuration schema stored in XML.
 
     @see com::sun::star::configuration::backend::xml::LayerWriter
         Service that writes OOR Update XML for data described via
@@ -73,7 +65,7 @@ published service LayerParser
 
     //-------------------------------------------------------------------------
 
-    /** provides access to the source xml stream.
+    /** provides access to the source XML stream.
       */
     interface com::sun::star::io::XActiveDataSink ;
 

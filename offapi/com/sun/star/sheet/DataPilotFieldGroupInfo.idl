@@ -28,12 +28,8 @@
 #ifndef __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
 #define __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
 
-#ifndef __com_sun_star_sheet_XDataPilotField_idl__
 #include <com/sun/star/sheet/XDataPilotField.idl>
-#endif
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
 
 //=============================================================================
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include <cstring>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
 
@@ -46,7 +52,8 @@ rtl::OString createHex(sal_uInt8 *_pKeyBuffer, sal_uInt32 _nKeyLen)
         sal_Int32 nValue = (sal_Int32)_pKeyBuffer[i];
         if (nValue < 16)                         // maximul hex value for 1 byte
         {
-            aBuffer.append( sal_Int32(0), 16 /* radix */ );
+            sal_Int32 nil = sal_Int32(0);
+            aBuffer.append( nil, 16 /* radix */ );
         }
         aBuffer.append( nValue, 16 /* radix */ );
     }
@@ -204,9 +211,6 @@ public:
             memset(pArgBuffer, 0, nArgLen);
             pArgBuffer[0] = _nArgValue;
 
-            t_print(T_VERBOSE, "  init Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "  init Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
 
@@ -222,11 +226,6 @@ public:
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
             CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
 
-            t_print(T_VERBOSE, "       Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "       Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-            t_print(T_VERBOSE, "     Plain: %s\n", createHex(pPlainTextBuffer, nPlainTextLen).getStr());
-            t_print(           "Cipher Buf: %s\n", createHex(pCipherBuffer, nCipherLen).getStr());
-
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
             memset(pPlainText2Buffer, 0, nPlainText2Len);
@@ -234,25 +233,15 @@ public:
             /* rtlCipherError */ aError = rtl_cipher_decode(aCipher, pCipherBuffer, nCipherLen, pPlainText2Buffer, nPlainText2Len);
             CPPUNIT_ASSERT_MESSAGE("decode should not work", aError != rtl_Cipher_E_None);
 
-            // rtl::OString sPlainText2Str((char*)pPlainText2Buffer, nPlainText2Len);
-            // t_print(T_VERBOSE, " Plain: %s\n", createHex(pPlainText2Buffer, nPlainText2Len).getStr());
-            // t_print(T_VERBOSE, " ascii: %s\n", sPlainText2Str.getStr());
-            //
-            // // t_print("   Buf: %s\n", createHex(pCipherBuffer, nCipherLen).getStr());
-            //
-            // sal_Int32 nCompare = memcmp(pPlainTextBuffer, pPlainText2Buffer, 16);
-            //
-            // CPPUNIT_ASSERT_MESSAGE("compare between plain and decoded plain failed", nCompare == 0);
-            //
-            // delete [] pPlainText2Buffer;
-            //
-            // delete [] pCipherBuffer;
-            // delete [] pPlainTextBuffer;
-            //
-            // delete [] pArgBuffer;
-            // delete [] pKeyBuffer;
-            //
-            // rtl_cipher_destroy(aCipher);
+            delete [] pPlainText2Buffer;
+
+            delete [] pCipherBuffer;
+            delete [] pPlainTextBuffer;
+
+            delete [] pArgBuffer;
+            delete [] pKeyBuffer;
+
+            rtl_cipher_destroy(aCipher);
         }
 
     void test_encode_and_decode(sal_uInt8 _nKeyValue, sal_uInt8 _nArgValue, rtl::OString const& _sPlainTextStr)
@@ -270,9 +259,6 @@ public:
             memset(pArgBuffer, 0, nArgLen);
             pArgBuffer[0] = _nArgValue;
 
-            t_print(T_VERBOSE, "  init Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "  init Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionBoth, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
 
@@ -288,11 +274,6 @@ public:
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pPlainTextBuffer, nPlainTextLen, pCipherBuffer, nCipherLen);
             CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
 
-            t_print(T_VERBOSE, "       Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "       Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-            t_print(T_VERBOSE, "     Plain: %s\n", createHex(pPlainTextBuffer, nPlainTextLen).getStr());
-            t_print(           "Cipher Buf: %s\n", createHex(pCipherBuffer, nCipherLen).getStr());
-
             sal_uInt32     nPlainText2Len = 16;
             sal_uInt8     *pPlainText2Buffer = new sal_uInt8[ nPlainText2Len ];
             memset(pPlainText2Buffer, 0, nPlainText2Len);
@@ -301,10 +282,6 @@ public:
             CPPUNIT_ASSERT_MESSAGE("wrong decode", aError == rtl_Cipher_E_None);
 
             rtl::OString sPlainText2Str((char*)pPlainText2Buffer, nPlainText2Len);
-            t_print(T_VERBOSE, "     Plain: %s\n", createHex(pPlainText2Buffer, nPlainText2Len).getStr());
-            t_print(T_VERBOSE, "  as ascii: %s\n", sPlainText2Str.getStr());
-
-            // t_print("   Buf: %s\n", createHex(pCipherBuffer, nCipherLen).getStr());
 
             sal_Int32 nCompare = memcmp(pPlainTextBuffer, pPlainText2Buffer, 16);
 
@@ -453,9 +430,6 @@ public:
             memset(pArgBuffer, 0, nArgLen);
             pArgBuffer[0] = _nArgValue;
 
-            t_print(T_VERBOSE, "init Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "init Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
 
@@ -470,11 +444,6 @@ public:
 
             /* rtlCipherError */ aError = rtl_cipher_encode(aCipher, pDataBuffer, nDataLen, pBuffer, nLen);
             CPPUNIT_ASSERT_MESSAGE("wrong encode", aError == rtl_Cipher_E_None);
-
-            t_print(T_VERBOSE, " Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, " Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-            t_print(T_VERBOSE, "Data: %s\n", createHex(pDataBuffer, nDataLen).getStr());
-            t_print(T_VERBOSE, " Buf: %s\n", createHex(pBuffer, nLen).getStr());
 
             delete [] pBuffer;
             delete [] pDataBuffer;
@@ -556,14 +525,8 @@ public:
             sal_uInt8     *pArgBuffer = new sal_uInt8[ nArgLen ];
             memset(pArgBuffer, 0, nArgLen);
 
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
-
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -585,14 +548,8 @@ public:
             sal_uInt8     *pArgBuffer = new sal_uInt8[ nArgLen ];
             memset(pArgBuffer, 0, nArgLen);
 
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
-
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -613,14 +570,8 @@ public:
             memset(pArgBuffer, 0, nArgLen);
             pArgBuffer[0] = 1;
 
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
-
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -642,14 +593,8 @@ public:
             memset(pArgBuffer, 0, nArgLen);
             pArgBuffer[0] = 1;
 
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
-
             rtlCipherError aError = rtl_cipher_init(aCipher, rtl_Cipher_DirectionEncode, pKeyBuffer, nKeyLen, pArgBuffer, nArgLen);
             CPPUNIT_ASSERT_MESSAGE("wrong init", aError == rtl_Cipher_E_None);
-
-            t_print(T_VERBOSE, "Key: %s\n", createHex(pKeyBuffer, nKeyLen).getStr());
-            t_print(T_VERBOSE, "Arg: %s\n", createHex(pArgBuffer, nArgLen).getStr());
 
             delete [] pArgBuffer;
             delete [] pKeyBuffer;
@@ -696,16 +641,16 @@ public:
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::create, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::createBF, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::decode, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::decodeBF, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::destroy, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::destroyBF, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::encode, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::encodeBF, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::init, "rtl_cipher");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::initBF, "rtl_cipher");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::create);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::createBF);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::decode);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::decodeBF);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::destroy);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::destroyBF);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::encode);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::encodeBF);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::init);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::initBF);
 
 } // namespace rtl_cipher
 
@@ -714,4 +659,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_cipher::initBF, "rtl_cipher");
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

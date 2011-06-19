@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ namespace testOfHelperFunctions
     void test_valueequal::valueequal_001( )
     {
         rtl::OString sValue;
-        rtl::OUString suValue(rtl::OUString::createFromAscii("This is only a test of some helper functions"));
+        rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM("This is only a test of some helper functions"));
         sValue <<= suValue;
         t_print("'%s'\n", sValue.getStr());
     }
@@ -59,3 +60,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_valueequal, "
 // -----------------------------------------------------------------------------
 // This is only allowed to be in one file!
 // NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

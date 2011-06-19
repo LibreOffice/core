@@ -28,33 +28,13 @@
 #define __com_sun_star_linguistic2_XConversionDictionary_idl__
 
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_ConversionDictionaryType_idl__
 #include <com/sun/star/linguistic2/ConversionDictionaryType.idl>
-#endif
-
-#ifndef __com_sun_star_linguistic2_ConversionDirection_idl__
 #include <com/sun/star/linguistic2/ConversionDirection.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 
 //=============================================================================

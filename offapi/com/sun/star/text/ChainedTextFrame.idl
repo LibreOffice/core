@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_text_ChainedTextFrame_idl__
 #define __com_sun_star_text_ChainedTextFrame_idl__
 
-#ifndef __com_sun_star_text_TextFrame_idl__
 #include <com/sun/star/text/TextFrame.idl>
-#endif
 
-#ifndef __com_sun_star_util_XChainable_idl__
 #include <com/sun/star/util/XChainable.idl>
-#endif
 
 
 //=============================================================================

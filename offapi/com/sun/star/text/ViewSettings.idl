@@ -27,15 +27,9 @@
 #ifndef __com_sun_star_text_ViewSettings_idl__
 #define __com_sun_star_text_ViewSettings_idl__
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_view_DocumentZoomType_idl__
 #include <com/sun/star/view/DocumentZoomType.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -97,7 +91,7 @@ published service ViewSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenParagraphs
-    /** If this property is <TRUE/>, hidden paragraghs are displayed.
+    /** If this property is <TRUE/>, hidden paragraphs are displayed.
      */
     [property] boolean ShowHiddenParagraphs;
 
@@ -329,7 +323,7 @@ published service ViewSettings
      */
     [optional, property] boolean ShowHiddenCharacters;
     //-------------------------------------------------------------------------
-    /** If this proeperty is <TRUE/>, the settings of nonprinting characters are applied.
+    /** If this property is <TRUE/>, the settings of non-printing characters are applied.
 
         <p>This option controls the use of the settings ShowHiddenCharacters,
         ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>

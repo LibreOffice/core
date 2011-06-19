@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_ucb_NameClashResolveRequest_idl__
 #define __com_sun_star_ucb_NameClashResolveRequest_idl__
 
-#ifndef __com_sun_star_task_ClassifiedInteractionRequest_idl__
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
-#endif
 
 
 //=============================================================================
@@ -40,7 +38,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** This request is used to indicate a name clash.
 
-    <p>For example, when copying a file there migth be another file in the
+    <p>For example, when copying a file there might be another file in the
     target folder that has the same file name as the source file.
 
     <p>If this exception is passed to an

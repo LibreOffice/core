@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,6 @@ extern "C"
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(push, 8)
 #endif
 
 struct _typelib_TypeDescriptionReference;
@@ -62,7 +61,7 @@ typedef struct _uno_Any
     void * pReserved;
 } uno_Any;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined( SAL_W32)
 #pragma pack(pop)
 #endif
 
@@ -176,3 +175,5 @@ void SAL_CALL uno_any_clear(
 #endif
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

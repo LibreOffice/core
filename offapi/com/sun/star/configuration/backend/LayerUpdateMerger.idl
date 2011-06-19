@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_configuration_backend_LayerUpdateMerger_idl__
 #define __com_sun_star_configuration_backend_LayerUpdateMerger_idl__
 
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
-
-#ifndef __com_sun_star_configuration_backend_XUpdateHandler_idl__
 #include <com/sun/star/configuration/backend/XUpdateHandler.idl>
-#endif
 
 //=============================================================================
 
@@ -72,7 +67,7 @@ published service LayerUpdateMerger
             data source and an <type>XLayerHandler</type> object to receive the
             updated data.
         </p>
-        <p> Implementations can provide more arguments to finetune the behavior.
+        <p> Implementations can provide more arguments to fine tune the behavior.
             Such arguments are provided as
             <type scope="com::sun::star::beans">NamedValue</type>.
             Implementations should support the following named arguments:

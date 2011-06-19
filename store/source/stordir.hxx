@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,29 +29,15 @@
 #ifndef _STORE_STORDIR_HXX_
 #define _STORE_STORDIR_HXX_
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
-#ifndef _RTL_TEXTCVT_H_
 #include <rtl/textcvt.h>
-#endif
-#ifndef _RTL_STRING_H_
 #include <rtl/string.h>
-#endif
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
 
-#ifndef _STORE_OBJECT_HXX_
 #include "object.hxx"
-#endif
-#ifndef _STORE_STORBASE_HXX_
 #include "storbase.hxx"
-#endif
-#ifndef _STORE_STORPAGE_HXX_
 #include "storpage.hxx"
-#endif
 
 namespace store
 {
@@ -147,3 +134,4 @@ SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory_Impl*)
 
 #endif /* !_STORE_STORDIR_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

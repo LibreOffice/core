@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_idlc.hxx"
 #include <idlc/astscope.hxx>
 #include <idlc/astbasetype.hxx>
-#ifndef _IDLC_ASTINERFACE_HXX_
 #include <idlc/astinterface.hxx>
-#endif
 #include <idlc/errorhandler.hxx>
 
 
@@ -354,3 +353,5 @@ AstDeclaration* AstScope::lookupForAdd(AstDeclaration* pDecl)
 
    return pRetDecl;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

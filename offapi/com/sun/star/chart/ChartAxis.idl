@@ -27,49 +27,20 @@
 #ifndef __com_sun_star_chart_ChartAxis_idl__
 #define __com_sun_star_chart_ChartAxis_idl__
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
 #include <com/sun/star/drawing/LineProperties.idl>
-#endif
 
-#ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
-#endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
 
-#ifndef __com_sun_star_chart_ChartAxisArrangeOrderType_idl__
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisPosition_idl__
 #include <com/sun/star/chart/ChartAxisPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisLabelPosition_idl__
 #include <com/sun/star/chart/ChartAxisLabelPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisMarkPosition_idl__
 #include <com/sun/star/chart/ChartAxisMarkPosition.idl>
-#endif
-
-#ifndef __com_sun_star_chart_ChartAxisType_idl__
 #include <com/sun/star/chart/ChartAxisType.idl>
-#endif
-
-#ifndef __com_sun_star_chart_TimeIncrement_idl__
 #include <com/sun/star/chart/TimeIncrement.idl>
-#endif
-
-#ifndef __com_sun_star_chart_XAxis_idl__
 #include <com/sun/star/chart/XAxis.idl>
-#endif
-
-#ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
-#endif
 
 //=============================================================================
 
@@ -134,7 +105,7 @@ published service ChartAxis
 
     /**
     Contains the number of help intervals within a main interval. E.g. a StepHelpCount of 5 divides
-    the main interval into 5 pieces and thus producces 4 help tick marks.
+    the main interval into 5 pieces and thus produces 4 help tick marks.
     */
     [optional, property] long StepHelpCount;
 
@@ -148,7 +119,7 @@ published service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    /** The maximium value of the axis scale is calculated by the chart if
+    /** The maximum value of the axis scale is calculated by the chart if
         this property is <TRUE/>.
      */
     [optional, property] boolean AutoMax;
@@ -217,8 +188,8 @@ published service ChartAxis
     //-------------------------------------------------------------------------
 
     /** Indicates the reference value where bars or areas have their grounding.
-        This property has only an effect when the used odf fileformat does not allow for
-        further axis posiioning or the axis is a secondary y-axis.
+        This property has only an effect when the used ODF file format does not allow for
+        further axis positioning or the axis is a secondary y-axis.
      */
     [optional, property] double Origin;
 

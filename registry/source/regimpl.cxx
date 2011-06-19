@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,20 +35,16 @@
 #include    <string.h>
 #include    <stdio.h>
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #include    <unistd.h>
 #endif
 #ifdef __MINGW32__
 #include    <unistd.h>
 #endif
 
-#ifndef __REGISTRY_REFLREAD_HXX__
 #include    <registry/reflread.hxx>
-#endif
 
-#ifndef __REGISTRY_REFLWRIT_HXX__
 #include    <registry/reflwrit.hxx>
-#endif
 
 #include "registry/reader.hxx"
 #include "registry/refltype.hxx"
@@ -64,13 +61,13 @@
 #include    <rtl/ustrbuf.hxx>
 #include    <osl/file.hxx>
 
-using namespace rtl;
 using namespace osl;
 using namespace store;
 
-#if defined ( GCC ) && ( defined ( SCO ) )
-sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
-#endif
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 namespace {
 
@@ -471,6 +468,7 @@ ORegistry::~ORegistry()
 //
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode)
 {
+    RegError eRet = REG_INVALID_REGISTRY;
     OStoreFile      rRegFile;
     storeAccessMode sAccessMode = REG_MODE_OPEN;
     storeError      errCode;
@@ -478,8 +476,8 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     if (accessMode & REG_CREATE)
     {
         sAccessMode = REG_MODE_CREATE;
-    } else
-    if (accessMode & REG_READONLY)
+    }
+    else if (accessMode & REG_READONLY)
     {
         sAccessMode = REG_MODE_OPENREAD;
         m_readOnly = sal_True;
@@ -499,17 +497,21 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     {
         switch (errCode)
         {
-            case  store_E_NotExists:
-                return REG_REGISTRY_NOT_EXISTS;
+            case store_E_NotExists:
+                eRet = REG_REGISTRY_NOT_EXISTS;
+                break;
             case store_E_LockingViolation:
-                return REG_CANNOT_OPEN_FOR_READWRITE;
+                eRet = REG_CANNOT_OPEN_FOR_READWRITE;
+                break;
             default:
-                return REG_INVALID_REGISTRY;
+                eRet = REG_INVALID_REGISTRY;
+                break;
         }
-    } else
+    }
+    else
     {
         OStoreDirectory rStoreDir;
-        storeError      _err = rStoreDir.create(rRegFile, OUString(), OUString(), sAccessMode);
+        storeError _err = rStoreDir.create(rRegFile, OUString(), OUString(), sAccessMode);
 
         if ( _err == store_E_None )
         {
@@ -518,10 +520,13 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
             m_isOpen = sal_True;
 
             m_openKeyTable[ROOT] = new ORegKey(ROOT, this);
-            return REG_NO_ERROR;
-        } else
-            return REG_INVALID_REGISTRY;
+            eRet = REG_NO_ERROR;
+        }
+        else
+            eRet = REG_INVALID_REGISTRY;
     }
+
+    return eRet;
 }
 
 
@@ -1758,3 +1763,5 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
     return REG_NO_ERROR;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

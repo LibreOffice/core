@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-/** specifiest the type of the regression curve to be displayed.
+/** specifies the type of the regression curve to be displayed.
  */
 published enum ChartRegressionCurveType
 {

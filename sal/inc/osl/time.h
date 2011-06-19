@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,8 +41,6 @@ extern "C" {
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#   pragma pack(push, 4)
 #endif
 
 /* Time since Jan-01-1970 */
@@ -51,7 +50,7 @@ typedef struct {
     sal_uInt32 Nanosec;
 } TimeValue;
 
-#if defined( SAL_W32) ||  defined(SAL_OS2)
+#if defined(SAL_W32)
 #   pragma pack(pop)
 #endif
 
@@ -158,3 +157,4 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
 
 #endif  /* _OSL_TIME_H_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -251,7 +252,7 @@ inline void _copyConstructAnyFromData(
         *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = *(typelib_TypeDescriptionReference **)pSource;
         break;
     case typelib_TypeClass_ANY:
-        OSL_ENSURE( 0, "### unexpected nested any!" );
+        OSL_FAIL( "### unexpected nested any!" );
         break;
     case typelib_TypeClass_ENUM:
         pDestAny->pData = &pDestAny->pReserved;
@@ -728,7 +729,7 @@ inline uno_Sequence * icopyConstructSequence(
                 break;
             }
             default:
-                OSL_ENSURE( 0, "### unexepcted sequence element type!" );
+                OSL_FAIL( "### unexepcted sequence element type!" );
                 pDest = 0;
                 break;
             }
@@ -884,3 +885,5 @@ inline void _copyConstructData(
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

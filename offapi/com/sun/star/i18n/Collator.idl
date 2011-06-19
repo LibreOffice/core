@@ -28,10 +28,7 @@
 #define __com_sun_star_i18n_Collator_idl__
 
 #include <com/sun/star/lang/XServiceInfo.idl>
-
-#ifndef __com_sun_star_i18n_XCollator_idl__
 #include <com/sun/star/i18n/XCollator.idl>
-#endif
 
 //============================================================================
 

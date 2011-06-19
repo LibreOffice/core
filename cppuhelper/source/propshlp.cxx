@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,10 @@ using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 namespace cppu {
 
@@ -237,8 +240,8 @@ void OPropertySetHelper::disposing() SAL_THROW( () )
     EventObject aEvt;
     aEvt.Source = rSource;
 
-    // inform all listeners to reelease this object
-    // The listener container are automaticly cleared
+    // inform all listeners to release this object
+    // The listener containers are automatically cleared
     aBoundLC.disposeAndClear( aEvt );
     aVetoableLC.disposeAndClear( aEvt );
 }
@@ -305,7 +308,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & ::com::sun::star::beans::PropertyAttribute::BOUND) )
             {
-                OSL_ENSURE( sal_False, "add listener to an unbound property" );
+                OSL_FAIL( "add listener to an unbound property" );
                 // silent ignore this
                 return;
             }
@@ -387,7 +390,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & PropertyAttribute::CONSTRAINED) )
             {
-                OSL_ENSURE( sal_False, "addVetoableChangeListener, and property is not constrained" );
+                OSL_FAIL( "addVetoableChangeListener, and property is not constrained" );
                 // silent ignore this
                 return;
             }
@@ -1001,11 +1004,11 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     Sequence<PropertyChangeEvent> aChanges( nFireLen );
     PropertyChangeEvent* pChanges = aChanges.getArray();
 
-    sal_Int32 nFirePos = 0;
     {
     // must lock the mutex outside the loop. So all values are consistent.
     MutexGuard aGuard( rBHelper.rMutex );
     Reference < XInterface > xSource( (XPropertySet *)this, UNO_QUERY );
+    sal_Int32 nFirePos = 0;
     for( i = 0; i < nLen; i++ )
     {
         if( pHandles[i] != -1 )
@@ -1038,7 +1041,6 @@ PropertyState OPropertySetHelper::getPropertyState( const OUString& PropertyName
 Sequence< PropertyState > OPropertySetHelper::getPropertyStates( const Sequence< OUString >& PropertyNames )
 {
     ULONG nNames = PropertyNames.getLength();
-    const OUString* pNames = PropertyNames.getConstArray();
 
     Sequence< PropertyState > aStates( nNames );
     return aStates;
@@ -1105,11 +1107,9 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
     {
         if(  pProperties[i-1].Name >= pProperties[i].Name )
         {
-#ifndef OS2 // YD disabled, too many troubles with debug builds!
             if (bSorted) {
-                OSL_ENSURE( false, "Property array is not sorted" );
+                OSL_FAIL( "Property array is not sorted" );
             }
-#endif
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );
@@ -1261,7 +1261,7 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
 
     for( sal_Int32 i = 0; i < nReqLen; i++ )
     {
-        // Logarithmus ermitteln
+        // Calculate logarithm
         sal_Int32 n = (sal_Int32)(pEnd - pCur);
         sal_Int32 nLog = 0;
         while( n )
@@ -1270,8 +1270,8 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
             n = n >> 1;
         }
 
-        // Anzahl der noch zu suchenden Properties * dem Log2 der verbleibenden
-        // zu dursuchenden Properties.
+        // Number of properties to search for * Log2 of the number of remaining
+        // properties to search in.
         if( (nReqLen - i) * nLog >= pEnd - pCur )
         {
             // linear search is better
@@ -1332,3 +1332,4 @@ sal_Int32 OPropertyArrayHelper::fillHandles( sal_Int32 * pHandles, const Sequenc
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

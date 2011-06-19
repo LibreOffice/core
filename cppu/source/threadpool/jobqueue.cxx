@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -187,10 +188,12 @@ namespace cppu_threadpool {
         return m_lstCallstack.empty();
     }
 
-    sal_Bool JobQueue::isBusy()
+    sal_Bool JobQueue::isBusy() const
     {
         return m_nToDo > 0;
     }
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

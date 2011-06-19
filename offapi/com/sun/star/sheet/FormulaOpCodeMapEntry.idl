@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #define __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 
-#ifndef __com_sun_star_sheet_FormulaToken_idl__
 #include <com/sun/star/sheet/FormulaToken.idl>
-#endif
 
 //=============================================================================
 

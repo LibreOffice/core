@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,10 +47,10 @@ namespace cppu {
 
 
 /**
-   Standardfunction to create an XIdlClass for a component.
+   Standard function to create an XIdlClass for a component.
    There is a function for each number of supported interfaces up to 10.
 
-   Since the switch to the final component model, there are no use cases anymore, where
+   Since the switch to the final component model, there are no use cases anymore where
    these functions should be used. Instead use the implementation helpers directly
    (see cppuhelper/implbase1.hxx).
 
@@ -387,3 +388,5 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
 } // end namespace cppu
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

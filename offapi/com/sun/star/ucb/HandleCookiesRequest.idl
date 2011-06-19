@@ -27,17 +27,9 @@
 #ifndef __com_sun_star_ucb_HandleCookiesRequest_idl__
 #define __com_sun_star_ucb_HandleCookiesRequest_idl__
 
-#ifndef __com_sun_star_task_ClassifiedInteractionRequest_idl__
 #include <com/sun/star/task/ClassifiedInteractionRequest.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_Cookie_idl__
 #include <com/sun/star/ucb/Cookie.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_CookieRequest_idl__
 #include <com/sun/star/ucb/CookieRequest.idl>
-#endif
 
 
 //=============================================================================

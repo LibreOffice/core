@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_ucb_Lock_idl__
 #define __com_sun_star_ucb_Lock_idl__
 
-#ifndef __com_sun_star_ucb_LockEntry_idl__
 #include <com/sun/star/ucb/LockEntry.idl>
-#endif
-#ifndef __com_sun_star_ucb_LockDepth_idl__
 #include <com/sun/star/ucb/LockDepth.idl>
-#endif
 
 //=============================================================================
 
@@ -51,7 +47,7 @@ published struct Lock : LockEntry
     //-------------------------------------------------------------------------
     /** the owner of the lock.
 
-        <p>This element providfes information sufficient for either directly
+        <p>This element provides information sufficient for either directly
         contacting a principal (such as a telephone number or email URI), or
         for discovering the principal (such as the URL of a homepage) who
         owns the lock.
@@ -64,7 +60,7 @@ published struct Lock : LockEntry
         <p>This element specifies the number of seconds between granting
         of the lock and the automatic removal of that lock. The value
         must not be greater than <code>2^32-1</code>. A value of <code>-1</code>
-        stands for an infinit lock, that will never be removed automatically.
+        stands for an infinite lock, that will never be removed automatically.
     */
     hyper Timeout;
 

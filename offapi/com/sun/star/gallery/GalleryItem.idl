@@ -28,18 +28,10 @@
 #ifndef __com_sun_star_gallery_GalleryItem_idl__
 #define __com_sun_star_gallery_GalleryItem_idl__
 
-#ifndef __com_sun_star_gallery_XGalleryItem_idl__
 #include <com/sun/star/gallery/XGalleryItem.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_graphic_XGraphic_idl__
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
 //=============================================================================
 
@@ -65,7 +57,7 @@ service GalleryItem
 
         <p>The interpretation of the URL depends on the type
         of the Gallery item. In case of graphic and media items,
-        the URL is a 'real' URL, in case of drawings it is a private
+        the URL is a "real" URL, in case of drawings it is a private
         URL</p>
      */
     [readonly, property] string URL;

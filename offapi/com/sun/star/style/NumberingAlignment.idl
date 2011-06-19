@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_style_NumberingAlignment_idl__
 #define __com_sun_star_style_NumberingAlignment_idl__
 
-#ifndef __com_sun_star_style_HorizontalAlignment_idl__
 #include <com/sun/star/style/HorizontalAlignment.idl>
-#endif
 
 
 //=============================================================================

@@ -36,10 +36,6 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
 
-.IF "$(GUI)" == "OS2"
-STL_OS2_BUILDING=1
-.ENDIF
-
 TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
@@ -60,13 +56,11 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-# safe that way: gen_makefile doesn't want it,
-# no other link target here
-UWINAPILIB:=
-
 .IF "$(header)" == ""
 
+.IF "$(OS)" != "AIX"
 ALWAYSDBGFILES=$(SLO)$/debugprint.obj
+.ENDIF
 
 .IF "$(ALWAYSDBGFILES)" != ""
 ALWAYSDBGTARGET=do_it_alwaysdebug
@@ -98,14 +92,9 @@ SLOFILES=   \
             $(SLO)$/math.obj        \
             $(SLO)$/alloc_global.obj\
             $(SLO)$/alloc_cache.obj \
-            $(SLO)$/alloc_arena.obj
+            $(SLO)$/alloc_arena.obj \
+            $(SLO)$/alloc_fini.obj
 
-.IF "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/alloc_fini.obj
-.ENDIF
-
-
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=   \
             $(OBJ)$/memory.obj      \
             $(OBJ)$/cipher.obj      \
@@ -131,36 +120,9 @@ OBJFILES=   \
             $(OBJ)$/math.obj \
             $(OBJ)$/alloc_global.obj\
             $(OBJ)$/alloc_cache.obj \
-            $(OBJ)$/alloc_arena.obj
+            $(OBJ)$/alloc_arena.obj \
+            $(OBJ)$/alloc_fini.obj
 
-.IF "$(OS)"=="MACOSX"
-OBJFILES+=$(OBJ)$/alloc_fini.obj
-.ENDIF
-
-
-APP1TARGET=gen_makefile
-APP1OBJS=$(SLO)$/gen_makefile.obj
-APP1LIBSALCPPRT=
-APP1RPATH=NONE
-
-# --- Extra objs ----------------------------------------------------
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="OS2"
-
-#
-# This part builds a second version of alloc.c, with 
-# FORCE_SYSALLOC defined. Is later used in util/makefile.mk
-# to build a tiny replacement lib to LD_PRELOAD into the 
-# office, enabling e.g. proper valgrinding.
-#
-
-SECOND_BUILD=SYSALLOC
-SYSALLOC_SLOFILES=	$(SLO)$/alloc_global.obj
-SYSALLOCCDEFS+=-DFORCE_SYSALLOC
-
-.ENDIF # .IF "$(OS)"=="LINUX"
-
-#.ENDIF
 
 .ENDIF
 
@@ -198,6 +160,6 @@ $(ALWAYSDBGFILES):
 
 ALLTAR : $(BOOTSTRAPMK)
 
-$(BOOTSTRAPMK) : $(APP1TARGETN)
-    $(AUGMENT_LIBRARY_PATH) $< > $@
-
+$(BOOTSTRAPMK) :
+    (echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) >$(BOOTSTRAPMK).c
+    $(CC) -E $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(BOOTSTRAPMK).c | $(GREP) '^RTL_' | $(SED) -e 's/"//g' >$@

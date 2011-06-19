@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,9 +224,9 @@ namespace Stringtest
         void test_UTF8_files()
             {
 #ifdef UNX
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/atestdir")));
 #else /* Windows */
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///c:/temp/atestdir")));
 #endif
                 osl::Directory aDir(suDirURL);
                 aDir.open();
@@ -295,3 +296,5 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Stringtest::Convert, "Stringtest" );
 // LLA: doku anpassen!!!
 
 NOADDITIONAL;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

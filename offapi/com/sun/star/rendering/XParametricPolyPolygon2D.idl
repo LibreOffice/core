@@ -27,21 +27,11 @@
 #ifndef __com_sun_star_rendering_XParametricPolyPolygon2D_idl__
 #define __com_sun_star_rendering_XParametricPolyPolygon2D_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_geometry_RealPoint2D_idl__
 #include <com/sun/star/geometry/RealPoint2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
 #include <com/sun/star/rendering/XPolyPolygon2D.idl>
-#endif
-#ifndef __com_sun_star_rendering_XColorSpace_idl__
 #include <com/sun/star/rendering/XColorSpace.idl>
-#endif
 
 module com { module sun { module star { module rendering {
 
@@ -61,8 +51,8 @@ published interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
 
         @param t
         Parameter value in the range [0,1]. During painting, this
-        range is sweeped through starting from 0. When using such a
-        parametric polypolygon for gradients, the area covered by the
+        range is swept through starting from 0. When using such a
+        parametric poly-polygon for gradients, the area covered by the
         returned XPolyPolygon2D should be monotonically decreasing
         with t (unless singularities in e.g. the resulting gradient
         are desired).

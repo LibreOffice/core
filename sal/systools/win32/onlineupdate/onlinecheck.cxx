@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #endif
 
 #include <sal/types.h>
+#include <sal/macros.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -41,11 +43,6 @@
 #define _UNICODE
 #endif
 #include <tchar.h>
-#ifdef __MINGW32__
-#include <excpt.h>
-#endif
-
-#define elementsof(a) (sizeof(a)/sizeof((a)[0]))
 
 // #i71984
 extern "C" sal_Bool SAL_CALL hasInternetConnection()
@@ -53,30 +50,22 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
 
-#ifdef __MINGW32__
-        jmp_buf jmpbuf;
-        __SEHandler han;
-        if (__builtin_setjmp(jmpbuf) == 0)
-        {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
+#ifndef __MINGW32__
     __try {
 #endif
     BOOL fIsConnected = InternetGetConnectedStateEx(
         &dwFlags,
         szConnectionName,
-        elementsof(szConnectionName),
+        SAL_N_ELEMENTS(szConnectionName),
         0 );
 
     return fIsConnected ? sal_True : sal_False;
 
-#ifdef __MINGW32__
-        }
-        else return sal_False;
-        han.Reset();
-#else
+#ifndef __MINGW32__
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
         return sal_False;
     }
 #endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

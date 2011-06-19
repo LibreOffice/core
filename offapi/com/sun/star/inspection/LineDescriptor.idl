@@ -28,9 +28,7 @@
 #ifndef __com_sun_star_inspection_LineDescriptor_idl__
 #define __com_sun_star_inspection_LineDescriptor_idl__
 
-#ifndef com_sun_star_graphic_XGraphic_idl
 #include <com/sun/star/graphic/XGraphic.idl>
-#endif
 
 //=============================================================================
 module com {  module sun {  module star {  module inspection {
@@ -71,7 +69,7 @@ published struct LineDescriptor
     */
     string HelpURL;
 
-    /** detetrmines whether a button exists which can be used for a more complex, interactive
+    /** determines whether a button exists which can be used for a more complex, interactive
         property value input.
 
         <p>If no image for the primary button is specified, but a primary button is present,
@@ -121,7 +119,7 @@ published struct LineDescriptor
     */
     com::sun::star::graphic::XGraphic PrimaryButtonImage;
 
-    /** detetrmines whether a secondary button exists which can be used for a more complex, interactive
+    /** determines whether a secondary button exists which can be used for a more complex, interactive
         property value input.
 
         <p>A secondary button subordinated to the primary button. If no primary button exists

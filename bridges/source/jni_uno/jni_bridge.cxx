@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,15 +115,14 @@ void SAL_CALL Mapping_map_to_uno(
                 OUStringToOString(
                     OUSTR("[jni_uno bridge error] ") + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr_msg.getStr() );
+            OSL_FAIL( cstr_msg.getStr() );
 #else
             (void) err; // unused
 #endif
         }
         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
-            OSL_ENSURE(
-                0,
+            OSL_FAIL(
                 "[jni_uno bridge error] attaching current thread "
                 "to java failed!" );
         }
@@ -184,15 +184,14 @@ void SAL_CALL Mapping_map_to_java(
             OUStringToOString(
                 OUSTR("[jni_uno bridge error] ") + err.m_message,
                 RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
 #else
             (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_ENSURE(
-            0,
+        OSL_FAIL(
             "[jni_uno bridge error] attaching current thread to java failed!" );
     }
 }
@@ -291,7 +290,7 @@ Bridge::~Bridge() SAL_THROW( () )
 
 
 //______________________________________________________________________________
-void JNI_context::java_exc_occured() const
+void JNI_context::java_exc_occurred() const
 {
     // !don't rely on JNI_info!
 
@@ -301,7 +300,7 @@ void JNI_context::java_exc_occured() const
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occured, but not available!?") +
+            OUSTR("java exception occurred, but not available!?") +
             get_stack_trace() );
     }
 
@@ -543,15 +542,14 @@ void SAL_CALL uno_ext_getMapping(
                 OUStringToOString(
                     OUSTR("[jni_uno bridge error] ") + err.m_message,
                     RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr_msg.getStr() );
+            OSL_FAIL( cstr_msg.getStr() );
 #else
             (void) err; // unused
 #endif
         }
         catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
-            OSL_ENSURE(
-                0,
+            OSL_FAIL(
                 "[jni_uno bridge error] attaching current thread "
                 "to java failed!" );
         }
@@ -567,3 +565,5 @@ sal_Bool SAL_CALL component_canUnload( TimeValue * pTime )
     return (*g_moduleCount.canUnload)( &g_moduleCount, pTime );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,65 +28,21 @@
 #ifndef __com_sun_star_mail_XMailServer_idl__
 #define __com_sun_star_mail_XMailServer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XAuthenticator_idl__
 #include <com/sun/star/mail/XAuthenticator.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XMailMessage_idl__
 #include <com/sun/star/mail/XMailMessage.idl>
-#endif
-
-#ifndef __com_sun_star_auth_AuthenticationFailedException_idl__
 #include <com/sun/star/auth/AuthenticationFailedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_AlreadyConnectedException_idl__
 #include <com/sun/star/io/AlreadyConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NotConnectedException_idl__
 #include <com/sun/star/io/NotConnectedException.idl>
-#endif
-
-#ifndef __com_sun_star_io_UnknownHostException_idl__
 #include <com/sun/star/io/UnknownHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_NoRouteToHostException_idl__
 #include <com/sun/star/io/NoRouteToHostException.idl>
-#endif
-
-#ifndef __com_sun_star_io_ConnectException_idl__
 #include <com/sun/star/io/ConnectException.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-
-#ifndef __com_sun_star_ucb_InteractiveIOException_idl__
 #include <com/sun/star/ucb/InteractiveIOException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_MailException_idl__
 #include <com/sun/star/mail/MailException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_SendMailMessageFailedException_idl__
 #include <com/sun/star/mail/SendMailMessageFailedException.idl>
-#endif
-
-#ifndef __com_sun_star_mail_XConnectionListener_idl__
 #include <com/sun/star/mail/XConnectionListener.idl>
-#endif
-
-#ifndef __com_sun_star_datatransfer_UnsupportedFlavorException_idl__
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
-#endif
 
 module com { module sun { module star { module mail {
 
@@ -114,7 +70,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
     /**
         Returns all connection types which are supported by the
         mail server. Possible connection types are for instance
-        secure connections like 'SSL' or 'TLS'.
+        secure connections like "SSL" or "TLS".
 
         @returns
         a sequence of supported connection types.
@@ -191,13 +147,13 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         a wrong server name, an unreachable DNS server, etc.
 
         @throws com::sun::star::io::NoRouteToHostException
-        if an error occured to connect to the remote mail server.
+        if an error occurred to connect to the remote mail server.
         Typically the remote mail server cannot be reach because of an
         intervening firewall, or if an intermediate router is down,
         the network connection is broken, etc.
 
         @throws com::sun::star::io::ConnectException
-        if an error occured while attempting to connect to the remote
+        if an error occurred while attempting to connect to the remote
         mail server. Typically the connection was refused remotely,
         because the mail server is not listening on the remote address/port.
 
@@ -228,7 +184,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
                com::sun::star::mail::MailException);
 
     /**
-        Logoff the currently logged in user.
+        Log off the currently logged in user.
 
         @throws com::sun::star::mail::MessagingException
         if errors occur during logoff.
@@ -263,7 +219,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
         is thrown when the body of the mail message is provided in an
         unsupported mime content type or may be thrown if one of the file
-        attachments specifies an unspupported mime content type.
+        attachments specifies an unsupported mime content type.
 
         @see com::sun::star::io::NotConnectedExceptionException
         @see com::sun::star::mail::SendMailMessageFailedException

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define INCL_DOSPROCESS
 #include <osl/pipe.h>
-#include <os2.h>
 
 // eindeutiger Name fÅr die Pipe
 const char pszPipeName[] = "TestPipe";
@@ -57,13 +56,13 @@ void fail( const char * pszText, int retval )
 int main (void)
 {
     char    szBuffer[ 256 ];
-    sSize_t nChars;
+    rtl_uString* ustrPipeName=0;
+    sal_Int32 nChars;
 
-    // gib dem Server die Chance, die Pipe zu îffnen
-    DosSleep( 1000 );
+    rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
 
     // erzeuge die Pipe
-    Pipe = osl_createPipe( pszPipeName, osl_Pipe_OPEN, 0 );
+    Pipe = osl_createPipe( ustrPipeName, osl_Pipe_OPEN, 0 );
 
     if( !Pipe )
         fail( "unable to open pipe.\n",
@@ -87,7 +86,7 @@ int main (void)
               osl_getLastPipeError( Pipe ) );
 
     // schliesse die Pipe
-    osl_destroyPipe( Pipe );
+    osl_releasePipe( Pipe );
 
     printf( "TestPipe Client: test passed.\n" );
     return 0;
@@ -95,3 +94,4 @@ int main (void)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

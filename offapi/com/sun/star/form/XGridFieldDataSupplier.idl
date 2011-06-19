@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_form_XGridFieldDataSupplier_idl__
 #define __com_sun_star_form_XGridFieldDataSupplier_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_reflection_XIdlClass_idl__
 #include <com/sun/star/reflection/XIdlClass.idl>
-#endif
 
 
 //=============================================================================
@@ -46,7 +42,7 @@
 
     <p>You can retrieve the data type information and the data in a row.</p>
 
-    <p>This interface allows to retrieve data even for rows which are not current, which is quite usefull,
+    <p>This interface allows to retrieve data even for rows which are not current, which is quite useful,
     as normally, you can't affect the current row in a grid control without moving the cursor of the underlying
     <type scope="com::sun::star::form::component">DataForm</type>.</p>
 

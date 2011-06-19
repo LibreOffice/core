@@ -27,37 +27,15 @@
 #ifndef __com_sun_star_text_BaseFrame_idl__
 #define __com_sun_star_text_BaseFrame_idl__
 
-#ifndef __com_sun_star_text_BaseFrameProperties_idl__
 #include <com/sun/star/text/BaseFrameProperties.idl>
-#endif
-
-#ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
 #include <com/sun/star/style/GraphicLocation.idl>
-#endif
-#ifndef __com_sun_star_table_BorderLine_idl__
 #include <com/sun/star/table/BorderLine.idl>
-#endif
-#ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
-#endif
-#ifndef __com_sun_star_text_XTextFrame_idl__
 #include <com/sun/star/text/XTextFrame.idl>
-#endif
 
 //=============================================================================
 

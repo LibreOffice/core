@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
 #define __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleTable_idl__
 #include <com/sun/star/accessibility/XAccessibleTable.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
 #include <com/sun/star/accessibility/XAccessibleSelection.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
 
 
 //=============================================================================
@@ -71,7 +57,7 @@ published service AccessibleTableView
             <method scope="::com::sun::star::accessibility"
             >XAccessibleContext::getAccessibleParent</method>
             is the accessible text document view, a page of the accessible
-            text documenent page preview, or the accessible spreadsheet
+            text document page preview, or the accessible spreadsheet
             page preview.</li>
         <li>The children returned by
             <method scope="::com::sun::star::accessibility"
@@ -92,7 +78,7 @@ published service AccessibleTableView
             the order on the screen. This means that the first cell is the
             cell in the left top edge of the table and the last one is the
             cell in the right bottom edge of the table. The second is the
-            cell in the first row and second xolumn and so on.</li>
+            cell in the first row and second column and so on.</li>
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name and a number to make it non-ambiguous.</li>
@@ -107,7 +93,7 @@ published service AccessibleTableView
                     >AccessibleStateType::DEFUNC</const> is always false if the
                     table is not deleted, the document is open. Also it is
                     false if the table was showed in a page preview and the
-                    page preview is allready opend, otherwise it is true.</li>
+                    page preview is already opened, otherwise it is true.</li>
                 <li><const scope="::com::sun::star::accessibility"
                     >AccessibleStateType::EDITABLE</const> is false if the
                     table is showed in a page preview or the table is

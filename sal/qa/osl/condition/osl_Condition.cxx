@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 // include files
 //------------------------------------------------------------------------
 #include <osl_Condition_Const.h>
+#include <stdlib.h>
 
 using namespace osl;
 using namespace rtl;
@@ -45,8 +47,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("TRUE!\n" ): printf("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -55,26 +57,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
-}
-
-/** wait _nSec seconds.
-*/
-void thread_sleep( sal_Int32 _nSec )
-{
-    /// print statement in thread process must use fflush() to force display.
-    t_print("# wait %d seconds. ", _nSec );
-    fflush( stdout );
-
-#ifdef WNT                               //Windows
-    Sleep( _nSec * 1000 );
-#endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
-    sleep( _nSec );
-#endif
-    t_print("# done\n" );
+    printf("%s\n", aString.getStr( ) );
 }
 
 enum ConditionType
@@ -187,11 +172,10 @@ namespace osl_Condition
 
             ConditionThread myThread2( aCond, thread_type_set );
             myThread2.create();
-            thread_sleep(1);
-            bRes1 = myThread1.isRunning( );
-            bRes2 = aCond.check( );
 
             myThread1.join( );
+            bRes1 = myThread1.isRunning( );
+            bRes2 = aCond.check( );
             myThread2.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
@@ -262,14 +246,15 @@ namespace osl_Condition
 
         void setUp( )
         {
-            tv1 = (TimeValue*)malloc(sizeof(TimeValue));
+            tv1 = new TimeValue;
             tv1->Seconds = 1;
+            tv1->Nanosec = 0;
 
         }
 
         void tearDown( )
         {
-            free( tv1 );
+            delete tv1;
         }
 
 
@@ -282,15 +267,14 @@ namespace osl_Condition
             cond1.set();
             cond2.set();
 
-osl::Condition::Result r1=cond1.wait(tv1);
-osl::Condition::Result r2=cond2.wait();
-osl::Condition::Result r3=cond3.wait(tv1);
-fprintf(stderr,"%d %d %d\n",r1,r2,r3);
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
-                                    (cond1.wait(tv1) == ::osl::Condition::result_ok) &&
-                                    (cond2.wait() == ::osl::Condition::result_ok) &&
-                                    (cond3.wait(tv1) == ::osl::Condition::result_timeout) );
+            osl::Condition::Result r1=cond1.wait(tv1);
+            osl::Condition::Result r2=cond2.wait();
+            osl::Condition::Result r3=cond3.wait(tv1);
 
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
+                                    (r1 == ::osl::Condition::result_ok) &&
+                                    (r2 == ::osl::Condition::result_ok) &&
+                                    (r3 == ::osl::Condition::result_timeout) );
         }
 
         void wait_002( )
@@ -367,11 +351,11 @@ fprintf(stderr,"%d %d %d\n",r1,r2,r3);
 
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::ctors, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::set, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::reset, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::wait, "osl_Condition");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::check, "osl_Condition");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Condition
@@ -379,6 +363,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Condition::check, "osl_Condition");
 
 // -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

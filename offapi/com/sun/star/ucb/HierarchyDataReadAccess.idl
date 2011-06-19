@@ -27,18 +27,10 @@
 #ifndef __com_sun_star_ucb_HierarchyDataReadAccess_idl__
 #define __com_sun_star_ucb_HierarchyDataReadAccess_idl__
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
 #include <com/sun/star/container/XNameAccess.idl>
-#endif
-#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
 #include <com/sun/star/container/XHierarchicalNameAccess.idl>
-#endif
-#ifndef __com_sun_star_util_XChangesNotifier_idl__
 #include <com/sun/star/util/XChangesNotifier.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
 
 //=============================================================================
 
@@ -90,12 +82,12 @@ published service HierarchyDataReadAccess
         hierarchical name.
 
         <p>A hierarchical name consists of segments that are separated by a
-        single slash ('/'). There is neither a leading nor a trailing slash
+        single slash ("/"). There is neither a leading nor a trailing slash
         allowed.
 
         <ul>
         <li>
-        path = segment ( '/' segement )*
+        path = segment ( '/' segment )*
         </li>
         <li>
         segment = '[' quoted-string ']'
@@ -104,7 +96,7 @@ published service HierarchyDataReadAccess
         quoted-string = "'" escaped-string "'"
         </li>
         <li>
-        escaped-string = escaped accoding to XML attribute naming conventions
+        escaped-string = escaped according to XML attribute naming conventions
         </li>
         </ul>
 
@@ -134,7 +126,7 @@ published service HierarchyDataReadAccess
         <code>getByHierarchicalName( "Children/['subnode3']/Children" )</code>
         will give direct access to the "Children" data member of the child node
         named "subnode3" of the node. It will return an <atom>any</atom>
-        conntaining an implementation of service
+        containing an implementation of service
         <type>HierarchyDataReadAccess</type>, if it was called on a read-only
         node. It will return an implementation of service
         <type>HierarchyDataReadWriteAccess</type> if it was called on a

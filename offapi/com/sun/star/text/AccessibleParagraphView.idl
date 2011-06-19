@@ -27,25 +27,11 @@
 #ifndef __com_sun_star_text_AccessibleParagraphView_idl__
 #define __com_sun_star_text_AccessibleParagraphView_idl__
 
-#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
 #include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEditableText_idl__
 #include <com/sun/star/accessibility/XAccessibleEditableText.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.idl>
-#endif
 
 //=============================================================================
 
@@ -126,7 +112,7 @@ published service AccessibleParagraphView
                         >AccessibleStateType::FOCUSED</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, asian or complex language of the paragraph.
+                the western, Asian or complex language of the paragraph.
         </ul>
 
      */
@@ -149,8 +135,8 @@ published service AccessibleParagraphView
         >XAccessibleText::getCharacterAttributes</method>
         are a sub set of the properties described by the service
         <type scope="::com::sun::star::style">CharacterProperties</type>. For
-        properties that have asian and complex counterparts, the value that
-        is visible is returned. This can be in fact the western, asian or
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
         complex value.  Its not possible to change the value of any property
         by using
         <method scope="::com::sun::star::accessibility"
@@ -176,8 +162,8 @@ published service AccessibleParagraphView
         >XAccessibleText::getCharacterAttributes</method> are a sub set of the properties
         described by the service
         <type scope="::com::sun::star::style">CharacterProperties</type>. For
-        properties that have asian and complex counterparts, the value that
-        is visible is returned. This can be in fact the western, asian or
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
         complex value.
         <p><em>TODO: If there is a demand, some attributes might be added
         that tells whether the character at a certain index is changeable or
