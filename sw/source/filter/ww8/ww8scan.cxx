@@ -1372,9 +1372,14 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
     if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
+    bool bIsUnicode;
+    if (pWw8Fib->nVersion >= 8)
+        bIsUnicode = false;
+    else
+        bIsUnicode = pWw8Fib->fExtChar ? true : false;
+
     if( pPieceIter )    // Complex File ?
     {
-        bool bIsUnicode = false;
         sal_uLong nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
@@ -1388,15 +1393,14 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 break;
             }
             sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
-            if( 8 <= pWw8Fib->nVersion )
+            if (pWw8Fib->nVersion >= 8)
             {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
             }
             else
             {
-                if (pWw8Fib->fExtChar)
-                    bIsUnicode=true;
+                bIsUnicode = pWw8Fib->fExtChar ? true : false;
             }
             sal_Int32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
@@ -1431,11 +1435,13 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         */
         return nFallBackCpEnd;
     }
+
     // No complex file
-    if (!pWw8Fib->fExtChar)
+    if (!bIsUnicode)
         nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin);
     else
         nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin + 1) / 2;
+
     return nFallBackCpEnd;
 }
 
@@ -1451,8 +1457,14 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     if( !pIsUnicode )
         pIsUnicode = &bIsUnicode;
 
+    if (pWw8Fib->nVersion >= 8)
+        *pIsUnicode = false;
+    else
+        *pIsUnicode = pWw8Fib->fExtChar ? true : false;
+
     if( pPieceIter )
-    {   // Complex File
+    {
+        // Complex File
         if( pNextPieceCp )
             *pNextPieceCp = WW8_CP_MAX;
 
@@ -1480,16 +1492,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             *pNextPieceCp = nCpEnd;
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
-        if (8 > pWw8Fib->nVersion)
-        {
-            if (pWw8Fib->fExtChar)
-                *pIsUnicode=true;
-            else
-                *pIsUnicode = false;
-        }
-        else
+        if (pWw8Fib->nVersion >= 8)
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
-
+        else
+            *pIsUnicode = pWw8Fib->fExtChar ? true : false;
 
         nRet += (nCpPos - nCpStart) * (*pIsUnicode ? 2 : 1);
 
@@ -1497,10 +1503,6 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
     }
 
     // No complex file
-    if (pWw8Fib->fExtChar)
-        *pIsUnicode = true;
-    else
-        *pIsUnicode = false;
     return pWw8Fib->fcMin + nCpPos * (*pIsUnicode ? 2 : 1);
 }
 
