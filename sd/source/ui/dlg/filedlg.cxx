@@ -142,7 +142,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 
             mbLabelPlaying = sal_False;
         }
-        catch( css::lang::IllegalArgumentException )
+        catch(const css::lang::IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
             OSL_FAIL( "Cannot access play button" );
@@ -161,9 +161,8 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
                 maUpdateTimer.SetTimeout( 100 );
                 maUpdateTimer.Start();
             }
-            catch( css::uno::Exception& e )
+            catch (const css::uno::Exception&)
             {
-                (void)e;
                 mxPlayer.clear();
             }
 
@@ -176,7 +175,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
 
                     mbLabelPlaying = sal_True;
                 }
-                catch( css::lang::IllegalArgumentException )
+                catch (const css::lang::IllegalArgumentException&)
                 {
 #ifdef DBG_UTIL
                     OSL_FAIL( "Cannot access play button" );
@@ -212,7 +211,7 @@ IMPL_LINK( SdFileDialog_Imp, IsMusicStoppedHdl, void *, EMPTYARG )
                                        String( SdResId( STR_PLAY ) ) );
             mbLabelPlaying = sal_False;
         }
-        catch( css::lang::IllegalArgumentException )
+        catch (const css::lang::IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
             OSL_FAIL( "Cannot access play button" );
@@ -237,7 +236,7 @@ void SdFileDialog_Imp::CheckSelectionState()
             else
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, sal_True );
         }
-        catch( css::lang::IllegalArgumentException )
+        catch (const css::lang::IllegalArgumentException&)
         {
 #ifdef DBG_UTIL
             OSL_FAIL( "Cannot access \"selection\" checkbox" );
@@ -271,7 +270,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                 mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                            String( SdResId( STR_PLAY ) ) );
             }
-            catch( css::lang::IllegalArgumentException )
+            catch (const css::lang::IllegalArgumentException&)
             {
 #ifdef DBG_UTIL
                 OSL_FAIL( "Cannot set play button label" );
@@ -284,7 +283,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             {
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, sal_False );
             }
-            catch( css::lang::IllegalArgumentException )
+            catch (const css::lang::IllegalArgumentException&)
             {
 #ifdef DBG_UTIL
                 OSL_FAIL( "Cannot disable selection checkbox" );

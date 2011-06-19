@@ -825,7 +825,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
         }
         while (false); // One 'loop'.
     }
-    catch (uno::Exception e)
+    catch (const uno::Exception&)
     {
         // When there is an exception then simply use the default value of
         // bIsEnabled and disable the controls.

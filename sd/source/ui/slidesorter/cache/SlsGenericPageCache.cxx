@@ -285,7 +285,7 @@ void GenericPageCache::ReleasePreviewBitmap (const CacheKey aKey)
             {
                 mpQueueProcessor->Start(maRequestQueue.GetFrontPriorityClass());
             }
-            catch (::com::sun::star::uno::RuntimeException)
+            catch (const ::com::sun::star::uno::RuntimeException&)
             {
             }
         }

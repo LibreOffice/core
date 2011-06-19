@@ -116,14 +116,14 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
             aEvent.UserData = iListener->maUserData;
             iListener->mxListener->notifyConfigurationChange(aEvent);
         }
-        catch (lang::DisposedException& rException)
+        catch (const lang::DisposedException& rException)
         {
             // When the exception comes from the listener itself then
             // unregister it.
             if (rException.Context == iListener->mxListener)
                 RemoveListener(iListener->mxListener);
         }
-        catch(RuntimeException&)
+        catch (const RuntimeException&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -172,7 +172,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     {
         NotifyListeners(aEvent);
     }
-    catch (lang::DisposedException)
+    catch (const lang::DisposedException&)
     {
     }
 }
@@ -211,7 +211,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
                     RemoveListener(iMap->second.front().mxListener);
                     xListener->disposing(aEvent);
                 }
-                catch (RuntimeException&)
+                catch (const RuntimeException&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }

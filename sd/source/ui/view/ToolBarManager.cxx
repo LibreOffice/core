@@ -676,7 +676,7 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
                 Any aValue (xFrameProperties->getPropertyValue(OUSTRING("LayoutManager")));
                 aValue >>= mxLayouter;
             }
-            catch (RuntimeException aException)
+            catch (const RuntimeException&)
             {
             }
 

@@ -89,9 +89,8 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
             if (xFrame.is() && xFrame->isActive())
                 bIgnoreFrame = false;
         }
-        catch (uno::RuntimeException e)
+        catch (const uno::RuntimeException&)
         {
-            (void) e;
         }
         if (bIgnoreFrame)
             continue;

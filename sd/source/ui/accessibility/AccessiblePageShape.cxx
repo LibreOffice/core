@@ -200,7 +200,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
             aColor >>= nColor;
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException&)
     {
         // Ignore exception and return default color.
     }
@@ -254,7 +254,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
                 OSL_TRACE ("no Background property in page");
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException&)
     {
         OSL_TRACE ("caught excption due to unknown property");
         // Ignore exception and return default color.
@@ -351,7 +351,7 @@ void AccessiblePageShape::dispose (void)
             xPageProperties->getPropertyValue(A2S("LinkDisplayName")) >>= sCurrentSlideName;
         }
     }
-    catch (beans::UnknownPropertyException&)
+    catch (const beans::UnknownPropertyException&)
     {
     }
 

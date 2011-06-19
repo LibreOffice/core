@@ -91,7 +91,7 @@ void TimerBasedTaskExecution::ReleaseTask (
             ::boost::shared_ptr<tools::TimerBasedTaskExecution> pExecution (rpExecution);
             pExecution->Release();
         }
-        catch (::boost::bad_weak_ptr)
+        catch (const ::boost::bad_weak_ptr&)
         {
             // When a bad_weak_ptr has been thrown then the object pointed
             // to by rpTask has been released right after we checked that it

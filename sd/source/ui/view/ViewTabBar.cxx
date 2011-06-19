@@ -136,8 +136,9 @@ ViewTabBar::ViewTabBar (
             xTunnel->getSomething(DrawController::getUnoTunnelId()));
         mpViewShellBase = pController->GetViewShellBase();
     }
-    catch(RuntimeException&)
-    {}
+    catch (const RuntimeException&)
+    {
+    }
 
     // Register as listener at XConfigurationController.
     Reference<XControllerManager> xControllerManager (mxController, UNO_QUERY);
@@ -189,7 +190,7 @@ void ViewTabBar::disposing (void)
         {
             mxConfigurationController->removeConfigurationChangeListener(this);
         }
-        catch (lang::DisposedException e)
+        catch (const lang::DisposedException&)
         {
             // Receiving a disposed exception is the normal case.  Is there
             // a way to avoid it?
@@ -236,8 +237,9 @@ void ViewTabBar::disposing (void)
             xTunnel->getSomething(DrawController::getUnoTunnelId()));
         pBase = pController->GetViewShellBase();
     }
-    catch(RuntimeException&)
-    {}
+    catch (const RuntimeException&)
+    {
+    }
 
     // The ViewTabBar supports at the moment only the center pane.
     if (rxViewTabBarId.is()
@@ -260,8 +262,9 @@ void ViewTabBar::disposing (void)
             if (xCC.is())
                 xPane = Reference<XPane>(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
         }
-        catch (RuntimeException&)
-        {}
+        catch (const RuntimeException&)
+        {
+        }
 
         // Tunnel through the XWindow to the VCL side.
         try
@@ -272,8 +275,9 @@ void ViewTabBar::disposing (void)
             if (pPane != NULL)
                 pWindow = pPane->GetWindow()->GetParent();
         }
-        catch (RuntimeException&)
-        {}
+        catch (const RuntimeException&)
+        {
+        }
     }
 
     return pWindow;
@@ -437,7 +441,7 @@ bool ViewTabBar::ActivatePage (void)
                     FrameworkHelper::msCenterPaneURL)),
                 UNO_QUERY);
         }
-        catch (DeploymentException)
+        catch (const DeploymentException&)
         {
         }
 
@@ -464,7 +468,7 @@ bool ViewTabBar::ActivatePage (void)
             UpdateActiveButton();
         }
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
